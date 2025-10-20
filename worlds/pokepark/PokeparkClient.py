@@ -9,6 +9,7 @@ from worlds.pokepark import PokeparkItem, LOCATION_TABLE
 from worlds.pokepark.adresses import POWER_MAP, MemoryAddress
 from worlds.pokepark.dme_helper import read_memory
 from worlds.pokepark.items import LOOKUP_ID_TO_NAME, ITEM_TABLE, PokeparkPowerItemClientData
+from worlds.pokepark.locations import MEW_GOAL_CODE, POSTGAME_PRISMA_GOAL_CODE
 from worlds.pokepark.options import Goal
 
 ModuleUpdate.update()
@@ -19,8 +20,6 @@ from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
     CommonContext, server_loop
 
-MEW_GOAL_CODE = 523
-POSTGAME_PRISMA_GOAL_CODE = 526
 
 SLOT_NAME_ADDR = 0x80001820
 GLOBAL_MANGAER_PARAMETER1_ADDR = 0x80001800
@@ -140,6 +139,8 @@ class PokeparkContext(CommonContext):
             self.last_rcvd_index = -1
             if self.slot_data["goal"] == Goal.option_mew:
                 self.goal_code = MEW_GOAL_CODE
+            if self.slot_data["goal"] == Goal.option_postgame:
+                self.goal_code = POSTGAME_PRISMA_GOAL_CODE
             # Request the connected slot's dictionary (used as a set) of visited stages.
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))

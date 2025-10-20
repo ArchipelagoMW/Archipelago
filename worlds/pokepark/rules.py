@@ -265,7 +265,10 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Leafeon Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player, options) and state.count_group("Friendship Items", player) >= 20
+        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
+            "Friendship Items",
+            player
+        ) >= 20
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Torterra Power Competition -- Friendship",
@@ -1157,6 +1160,13 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Cavern Zone Main Area - Mawile Power Competition -- Friendship",
         lambda state: can_play_catch(state, player, options)
     )
+    set_rule_if_exists(
+        "Cavern Zone Main Area - Bastiodon -- Friendship",
+        lambda state: state.has("Bastiodon Prisma", player) and state.count_group(
+            "Friendship Items",
+            player
+        ) >= 50
+    )
     # Bastiodon's Panel Crush
 
     set_rule_if_exists(
@@ -1312,12 +1322,16 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_battle_intermediate(state, player, options) and state.has("Magmortar Unlock", player)
     )
     set_rule_if_exists(
-        "Magma Zone Main Area - Blaziken Power Competition -- Friendship",
+        "Magma Zone Blaziken Area - Blaziken -- Friendship",
         lambda state: state.has("Rayquaza Prisma", player)
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Rhyperior Iron Disc -- Quest",
         lambda state: can_dash_overworld(state, player)
+    )
+    set_rule_if_exists(
+        "Magma Zone Circle Area - Rhyperior -- Friendship",
+        lambda state: state.has("Rhyperior Prisma", player)
     )
     set_rule_if_exists(
         "Magma Zone Main Area - Baltoy Crate -- Baltoy Unlocked",
@@ -1702,7 +1716,7 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.has("Elekid Unlock", player)
     )
     set_rule_if_exists(
-        "Haunted Zone Mansion Area - Elekid Power Competition --  Electabuzz Unlocked",
+        "Haunted Zone Mansion Area - Elekid Power Competition -- Electabuzz Unlocked",
         lambda state: state.has("Elekid Unlock", player)
     )
     set_rule_if_exists(
@@ -2017,7 +2031,10 @@ def set_rules(world: "PokeparkWorld") -> None:
 
     set_rule_if_exists(
         "Granite Zone Salamence Area - Salamence -- Friendship",
-        lambda state: state.has("Salamence Prisma", player)
+        lambda state: state.has("Salamence Prisma", player) and state.count_group(
+            "Friendship Items",
+            player
+        ) >= 80
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Absol -- Friendship",
@@ -2940,13 +2957,13 @@ def can_battle(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
 
         return state.has("Progressive Health", player) and state.has_any_count(
-            {"Progressive Dash": 1,
+            {
              "Progressive Iron Tail": 1,
              "Progressive Thunderbolt": 1
              }, player
         )
     return state.has_any_count(
-        {"Progressive Dash": 1,
+        {
          "Progressive Iron Tail": 1,
          "Progressive Thunderbolt": 1
          }, player
@@ -2956,13 +2973,13 @@ def can_battle(state: CollectionState, player: int, options: "PokeparkOptions"):
 def can_battle_intermediate(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
         return state.has("Progressive Health", player, 2) and state.has_any_count(
-            {"Progressive Dash": 3,
+            {
              "Progressive Iron Tail": 2,
              "Progressive Thunderbolt": 2
              }, player
         )
     return state.has("Progressive Health", player, 2) and state.has_any_count(
-        {"Progressive Dash": 2,
+        {
          "Progressive Iron Tail": 1,
          "Progressive Thunderbolt": 1
          }, player
@@ -2973,13 +2990,13 @@ def can_battle_intermediate(state: CollectionState, player: int, options: "Pokep
 def can_battle_advanced(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.harder_enemy_ai.value:
         return state.has("Progressive Health", player, 3) and state.has_any_count(
-            {"Progressive Dash": 4,
+            {
              "Progressive Iron Tail": 3,
              "Progressive Thunderbolt": 3
              }, player
         )
     return state.has("Progressive Health", player, 3) and state.has_any_count(
-        {"Progressive Dash": 3,
+        {
          "Progressive Iron Tail": 2,
          "Progressive Thunderbolt": 2
          }, player
@@ -3056,9 +3073,7 @@ def can_destroy_objects_overworld(state: CollectionState, player: int):
 
 
 def can_farm_berries_intermediate(state: CollectionState, player: int):
-    return (state.can_reach_region("Magma Zone Main Area", player) or
-            state.can_reach_region("Granite Zone Main Area", player) or
-            state.can_reach_region("Flower Zone Main Area", player))
+    return state.can_reach_region("Beach Zone Recycle Area", player)
 
 
 def can_farm_berries_advanced(state: CollectionState, player: int):
