@@ -246,6 +246,9 @@ def create_triforce_pieces(world: "SohWorld") -> None:
     world.options.triforce_hunt_pieces_total.value = total_triforce_pieces
     world.triforce_pieces_required = triforce_pieces_to_win
 
+    if world.using_ut:
+        world.triforce_pieces_required = world.passthrough["triforce_hunt_pieces_required"]
+
 
 def create_filler_item_pool(world: "SohWorld") -> None:
     filler_item_count = get_open_location_count(world)

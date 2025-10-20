@@ -15,6 +15,7 @@ from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
+from .UniversalTracker import setup_options_from_slot_data
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -48,6 +49,11 @@ class SohWorld(World):
     item_name_to_id = item_table
     item_name_groups = item_name_groups
 
+    # Universal Tracker stuff, does not do anything in normal gen
+    using_ut: bool  # so we can check if we're using UT only once
+    passthrough: dict[str, Any]  # slot data that got passed through
+    ut_can_gen_without_yaml = True  # class var that tells it to ignore the player yaml
+
     def __init__(self, multiworld, player):
         super().__init__(multiworld, player)
         self.item_pool = list[SohItem]()
@@ -64,6 +70,9 @@ class SohWorld(World):
         # slot_data["apworld_version"] = self.world_version
 
     def generate_early(self) -> None:
+        # for use with Universal Tracker, doesn't do anything otherwise
+        setup_options_from_slot_data(self)
+
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
             self.options.starting_age.value = 0
@@ -151,6 +160,11 @@ class SohWorld(World):
                              dungeon_reward_items, single_player_placement=True, lock=True)
 
         fill_shop_items(self)
+
+        if self.using_ut:
+            self.shop_prices = self.passthrough["shop_prices"]
+            self.shop_vanilla_items = self.passthrough["shop_vanilla_items"]
+
         set_price_rules(self)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
