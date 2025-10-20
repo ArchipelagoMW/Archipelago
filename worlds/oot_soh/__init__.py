@@ -15,7 +15,7 @@ from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
-from .ut_stuff import setup_options_from_slot_data
+from .UniversalTracker import setup_options_from_slot_data
 
 import logging
 logger = logging.getLogger("SOH_OOT")
