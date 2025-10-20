@@ -75,6 +75,7 @@ class ClairObscurWorld(World):
             "Healing Tint Shard": 10,
             "Energy Tint Shard": 10,
             "Revive Tint Shard": 10,
+            "Chroma Elixir Shard": 4,
 
             #Only 10 are possible to get in a normal playthrough
             "Perfect Chroma Catalyst": 10
