@@ -1,6 +1,7 @@
 import base64
 import os
 import socket
+import typing
 import uuid
 
 from flask import Flask
@@ -61,20 +62,21 @@ cache = Cache()
 Compress(app)
 
 
-def to_python(value):
+def to_python(value: str) -> uuid.UUID:
     return uuid.UUID(bytes=base64.urlsafe_b64decode(value + '=='))
 
 
-def to_url(value):
+def to_url(value: uuid.UUID) -> str:
     return base64.urlsafe_b64encode(value.bytes).rstrip(b'=').decode('ascii')
 
 
 class B64UUIDConverter(BaseConverter):
 
-    def to_python(self, value):
+    def to_python(self, value: str) -> uuid.UUID:
         return to_python(value)
 
-    def to_url(self, value):
+    def to_url(self, value: typing.Any) -> str:
+        assert isinstance(value, uuid.UUID)
         return to_url(value)
 
 
@@ -84,7 +86,7 @@ app.jinja_env.filters["suuid"] = to_url
 app.jinja_env.filters["title_sorted"] = title_sorted
 
 
-def register():
+def register() -> None:
     """Import submodules, triggering their registering on flask routing.
     Note: initializes worlds subsystem."""
     import importlib

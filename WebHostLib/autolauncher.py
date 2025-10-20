@@ -17,7 +17,7 @@ from .locker import Locker, AlreadyRunningException
 _stop_event = Event()
 
 
-def stop():
+def stop() -> None:
     """Stops previously launched threads"""
     global _stop_event
     stop_event = _stop_event
