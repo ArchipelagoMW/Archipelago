@@ -10,7 +10,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces
+from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item
 from .LogicHelpers import increment_current_count
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
@@ -99,10 +99,14 @@ class SohWorld(World):
         item_entry = Items(name)
         return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
 
+    def get_filler_item_name(self) -> str:
+        return get_filler_item(self)
+
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
         # when adding another progressive item that is option-dependent like these,
         # be sure to also update LogicHelpers.increment_current_count with it too
+        self.push_precollected(self.create_item(Items.BOTTLE_WITH_MILK))
         if not self.options.shuffle_swim:
             self.push_precollected(self.create_item(Items.BRONZE_SCALE))
         if not self.options.shuffle_deku_stick_bag:
