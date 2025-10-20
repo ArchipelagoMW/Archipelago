@@ -189,26 +189,6 @@ required_technologies: Dict[str, FrozenSet[Technology]] = (
                            frozenset(all_ingredients[ingredient_name].all_unlocking_technologies())))
 required_technologies["water"] = frozenset()
 
-
-
-def get_rocket_requirements(silo_recipe: Optional[Recipe], part_recipe: Recipe,
-                            satellite_recipe: Optional[Recipe], cargo_landing_pad_recipe: Optional[Recipe]) -> Set[str]:
-    techs = set()
-    if silo_recipe:
-        for ingredient in silo_recipe.ingredients:
-            techs |= ingredient.all_unlocking_technologies()
-    for ingredient in part_recipe.ingredients:
-        techs |= ingredient.all_unlocking_technologies()
-    if cargo_landing_pad_recipe:
-        for ingredient in cargo_landing_pad_recipe.ingredients:
-            techs |= ingredient.all_unlocking_technologies()
-    if satellite_recipe:
-        techs |= satellite_recipe.unlocking_technologies
-        for ingredient in satellite_recipe.ingredients:
-            techs |= ingredient.all_unlocking_technologies()
-    return {tech.name for tech in techs}
-
-
 free_sample_exclusions: Set[str] = all_science_packs | {"rocket-part"}
 
 # progressive technologies

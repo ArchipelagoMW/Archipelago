@@ -16,7 +16,7 @@ from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, 
                               TechCostDistribution, option_groups)
 from .Shapes import get_shapes
 from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
-    base_tech_table, tech_to_progressive_lookup, get_rocket_requirements, progressive_technology_table, \
+    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
     get_ordered_items, base_technology_table, technology_table
 from .FactorioSettings import FactorioSettings
 
@@ -290,16 +290,14 @@ class FactorioBobs(World):
                 Rules.add_rule(location, lambda state, locations=frozenset(prerequisites):
                     all(state.can_reach(loc) for loc in locations))
 
-        silo_recipe = None
-        cargo_pad_recipe = None
+        victory_tech: set[Technology] = set()
         if self.options.silo != Silo.option_spawn:
-            silo_recipe = self.get_internal_item("rocket-silo").best_recipe
-            cargo_pad_recipe = self.get_internal_item("cargo-landing-pad").best_recipe
-        part_recipe = self.get_internal_item("rocket-part").best_recipe
-        satellite_recipe = None
+            victory_tech |= self.get_internal_item("rocket-silo").all_unlocking_technologies()
+            victory_tech |= self.get_internal_item("cargo-landing-pad").all_unlocking_technologies()
+        victory_tech |= self.get_internal_item("rocket-part").all_unlocking_technologies()
         if self.options.goal == Goal.option_satellite:
-            satellite_recipe = self.get_internal_item("satellite").best_recipe
-        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe, cargo_pad_recipe)
+            victory_tech |= self.get_internal_item("satellite").all_unlocking_technologies()
+        victory_tech_names = set(tech.name for tech in victory_tech)
         if self.options.silo == Silo.option_spawn:
             victory_tech_names -= {"rocket-silo"}
         else:
