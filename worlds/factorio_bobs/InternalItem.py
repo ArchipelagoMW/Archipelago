@@ -659,7 +659,8 @@ rel_cost = {
 invalid_ingredients = {"raw-fish",
                        "depleted-uranium-fuel-cell",
                        "bob-depleted-thorium-fuel-cell",
-                       "bob-depleted-deuterium-fuel-cell"}
+                       "bob-depleted-deuterium-fuel-cell",
+                       "bob-fusion-catalyst"}
 
 artifacts = {"bob-small-alien-artifact",
              "bob-small-alien-artifact-red",
