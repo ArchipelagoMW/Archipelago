@@ -108,26 +108,8 @@ class FactorioBobs(World):
     generate_output = generate_mod
 
 
-    def interpret_slot_data(self, slot_data: dict[str, typing.Any]) -> tuple[dict[str, InternalItem], dict[str, Recipe]]:
-        slot_custom_items = {}
-        slot_custom_recipes = {}
-        for product_name, ingredients_name in slot_data.items():
-            product = all_ingredients[product_name]
-            new_ingredients = {}
-            liquids_used = 0
-            for ingredient_name in ingredients_name:
-                ingredient = all_ingredients[ingredient_name]
-                if ingredient.is_fluid:
-                    liquids_used += 1
-                new_ingredients[ingredient] = 1
-
-            custom_products = {}
-            if product.name not in slot_custom_items:
-                slot_custom_items[product.name] = InternalItem(product.name, product.is_fluid)
-            custom_products[slot_custom_items[product.name]] = 1
-            slot_custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
-                                                       custom_products, 1)
-        return slot_custom_items, slot_custom_recipes
+    def interpret_slot_data(self, slot_data: dict[str, typing.Any]) -> dict[str, dict[str, InternalItem] | dict[str, Recipe]]:
+        return slot_data
 
     # and this is how we tell Universal Tracker we don't need the yaml
     ut_can_gen_without_yaml = True
@@ -146,11 +128,24 @@ class FactorioBobs(World):
         if not hasattr(self.multiworld, "generation_is_fake"):
             self.set_custom_recipes()
         elif hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
-            true_data = self.multiworld.re_gen_passthrough[self.game]
-            self.custom_products.update(true_data[0])
-            self.custom_recipes.update(true_data[1])
-            self.options.max_science_pack.value = len([x for x in true_data[0]
-                                                      if true_data[0].name in FactorioOptions.max_science_pack.get_ordered_science_packs]) - 1
+            for product_name, ingredients_name in self.multiworld.re_gen_passthrough[self.game].items():
+                new_ingredients = {}
+                liquids_used = 0
+                for ingredient_name in ingredients_name:
+                    ingredient = all_ingredients[ingredient_name]
+                    if ingredient.is_fluid:
+                        liquids_used += 1
+                    new_ingredients[ingredient] = 1
+
+                custom_products = {}
+                if product_name not in self.custom_products:
+                    self.custom_products[product_name] = InternalItem(product_name, False)
+                custom_products[self.custom_products[product_name]] = 1
+                self.custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
+                                                           custom_products, 1)
+                # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
+            self.options.max_science_pack.value = len([x for x in self.custom_products.keys()
+                                                      if x in MaxSciencePack.get_ordered_science_packs()]) - 1
         else:
             return
 
