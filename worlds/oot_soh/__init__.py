@@ -161,7 +161,6 @@ class SohWorld(World):
 
         fill_shop_items(self)
 
-        # Universal Tracker does not run pre_fill, so we need to do this here instead
         if self.using_ut:
             self.shop_prices = self.passthrough["shop_prices"]
             self.shop_vanilla_items = self.passthrough["shop_vanilla_items"]
