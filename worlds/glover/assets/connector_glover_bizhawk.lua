@@ -11660,8 +11660,8 @@ GLOVERHACK = {
         potion_id = 0x4,
         potion_collected = 0x6,
       potion_size = 0x8,
-      goal = 0x5A8,
-    ap_world_offset = 0x5AC,
+      goal = 0x5C0,
+    ap_world_offset = 0x5C4,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
     settings = 0x96,
@@ -11678,7 +11678,8 @@ GLOVERHACK = {
     n64_taglink = 0x70D,
     ROM_MAJOR_VERSION = 0x76A,
     ROM_MINOR_VERSION = 0x76B,
-    ROM_PATCH_VERSION = 0x76C
+    ROM_PATCH_VERSION = 0x76C,
+
 }
 
 function GLOVERHACK:new(t)
