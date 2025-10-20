@@ -128,15 +128,6 @@ class RemovePowerUpLocations(Toggle):
     """
     default = False
 
-
-class RemoveQuestLocations(Toggle):
-    """
-    Remove Quest Locations (e.g., Bidoof Housing).
-    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
-    """
-    default = False
-
-
 class RemoveAttractionLocations(Toggle):
     """
     Remove non-Prisma clear Attraction Locations.
@@ -202,7 +193,6 @@ class PokeparkOptions(PerGameCommonOptions):
     remove_errand_power_comp_locations: RemoveErrandPowerCompLocations
     remove_misc_power_comp_locations: RemoveMiscPowerCompLocations
     remove_power_training_locations: RemovePowerUpLocations
-    remove_quest_locations: RemoveQuestLocations
     remove_attraction_locations: RemoveAttractionLocations
     remove_attraction_prisma_locations: RemoveAttractionPrismaLocations
     remove_pokemon_unlock_locations: RemovePokemonUnlockLocations
@@ -256,7 +246,6 @@ pokepark_option_groups = [
             RemoveErrandPowerCompLocations,
             RemoveMiscPowerCompLocations,
             RemovePowerUpLocations,
-            RemoveQuestLocations,
             RemoveAttractionLocations,
             RemoveAttractionPrismaLocations,
             RemovePokemonUnlockLocations,

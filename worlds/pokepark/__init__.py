@@ -98,6 +98,16 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Tropius Unlock",
         "Phanpy Unlock",
         "Progressive Thunderbolt",
+        "Mankey Friendship",
+        "Delibird Unlock",
+        "Spheal Friendship",
+        "Teddiursa Friendship",
+        "Squirtle Unlock",
+        "Squirtle Friendship",
+        "Smoochum Friendship",
+        "Delibird Friendship",
+        "Smoochum Unlock",
+        "Glalie Unlock"
     ]),
     ("remove_misc_power_comp_locations", 0): (0, [
         "Magnemite Unlock",
@@ -111,17 +121,6 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Rayquaza Unlock",
 
     ]),
-    ("remove_quest_locations", 0): (0, [
-        "Mankey Friendship",
-        "Delibird Unlock",
-        "Spheal Friendship",
-        "Teddiursa Friendship",
-        "Squirtle Unlock",
-        "Squirtle Friendship",
-        "Smoochum Friendship",
-        "Delibird Friendship",
-        "Smoochum Unlock",
-        "Glalie Unlock"]),
     ("goal", 1): (193, []),
     ("remove_attraction_locations", 0): (80, [
         "Turtwig Friendship",
@@ -475,7 +474,6 @@ class PokeparkWorld(World):
             (PokeparkFlag.ERRAND, self.options.remove_errand_power_comp_locations),
             (PokeparkFlag.FRIENDSHIP, self.options.remove_misc_power_comp_locations),
             (PokeparkFlag.POWER_UP, self.options.remove_power_training_locations),
-            (PokeparkFlag.QUEST, self.options.remove_quest_locations),
             (PokeparkFlag.ATTRACTION, self.options.remove_attraction_locations),
             (PokeparkFlag.ATTRACTION_PRISMA, self.options.remove_attraction_prisma_locations),
             (PokeparkFlag.POKEMON_UNLOCK, self.options.remove_pokemon_unlock_locations)
@@ -821,7 +819,6 @@ class PokeparkWorld(World):
             "remove_errand_power_comp_locations",
             "remove_misc_power_comp_locations",
             "remove_power_training_locations",
-            "remove_quest_locations",
             "remove_attraction_locations",
             "remove_attraction_prisma_locations",
             "remove_pokemon_unlock_locations"

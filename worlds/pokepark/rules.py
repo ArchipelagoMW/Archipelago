@@ -862,38 +862,38 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.has("Delibird Friendship", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Igloo Quest -- Stage 1",
+        "Ice Zone Main Area - Igloo Housing -- Stage 1",
         lambda state: state.has("Glalie Unlock", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Igloo Quest -- Stage 1 -- Primeape Unlocked",
+        "Ice Zone Main Area - Igloo Housing -- Stage 1 -- Primeape Unlocked",
         lambda state: state.has("Glalie Unlock", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Igloo Quest -- Stage 2",
+        "Ice Zone Main Area - Igloo Housing -- Stage 2",
         lambda state: state.has("Glalie Unlock", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Igloo Quest -- Stage 2 -- Ursaring Unlocked",
+        "Ice Zone Main Area - Igloo Housing -- Stage 2 -- Ursaring Unlocked",
         lambda state: state.has("Glalie Unlock", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Igloo Quest -- Stage 3",
+        "Ice Zone Main Area - Igloo Housing -- Stage 3",
         lambda state: state.has("Glalie Unlock", player)
     )
 
     set_rule_if_exists(
-        "Ice Zone Main Area - Christmas Tree Present Quest -- Stage 1",
+        "Ice Zone Main Area - Christmas Tree Present -- Stage 1",
         lambda state: state.has("Delibird Unlock", player) and state.has("Spheal Friendship", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Christmas Tree Present Quest -- Stage 2",
+        "Ice Zone Main Area - Christmas Tree Present -- Stage 2",
         lambda state: state.has("Delibird Unlock", player) and
                       state.has("Spheal Friendship", player) and
                       state.has("Teddiursa Friendship", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Christmas Tree Present Quest -- Stage 3",
+        "Ice Zone Main Area - Christmas Tree Present -- Stage 3",
         lambda state: state.has("Delibird Unlock", player) and
                       state.has("Spheal Friendship", player) and
                       state.has("Teddiursa Friendship", player) and
@@ -901,7 +901,7 @@ def set_rules(world: "PokeparkWorld") -> None:
                       state.has("Squirtle Friendship", player)
     )
     set_rule_if_exists(
-        "Ice Zone Main Area - Christmas Tree Present Quest -- Stage 4",
+        "Ice Zone Main Area - Christmas Tree Present -- Stage 4",
         lambda state: state.has("Delibird Unlock", player) and
                       state.has("Spheal Friendship", player) and
                       state.has("Teddiursa Friendship", player) and
@@ -1326,7 +1326,7 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.has("Rayquaza Prisma", player)
     )
     set_rule_if_exists(
-        "Magma Zone Circle Area - Rhyperior Iron Disc -- Quest",
+        "Magma Zone Circle Area - Rhyperior Iron Disc -- Errand",
         lambda state: can_dash_overworld(state, player)
     )
     set_rule_if_exists(
