@@ -42,6 +42,13 @@ def set_region_rules(world: "SohWorld") -> None:
             (Regions.HC_GARDEN_SONG_FROM_IMPA, lambda bundle: True)
         ])
 
+    # Connection for Master Sword as you start with it when starting age is adult and MS is not shuffled.
+    if (world.options.starting_age == "adult" and not world.options.shuffle_master_sword):
+        # Connections
+        connect_regions(Regions.ROOT, world, [
+            (Regions.MASTER_SWORD_PEDESTAL, lambda bundle: True)
+        ])
+
     # Root Exits
     # Connections
     connect_regions(Regions.ROOT_EXITS, world, [

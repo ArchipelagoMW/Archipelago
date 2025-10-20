@@ -122,6 +122,7 @@ class Regions(StrEnum):
     TOT_ENTRANCE = "ToT Entrance"
     TEMPLE_OF_TIME = "Temple of Time"
     BEYOND_DOOR_OF_TIME = "Beyond Door of Time"
+    MASTER_SWORD_PEDESTAL = "Master Sword Pedestal"
     CASTLE_GROUNDS = "Castle Grounds"
     CASTLE_GROUNDS_FROM_GANONS_CASTLE = "Castle Grounds From Ganon's Castle"
     HYRULE_CASTLE_GROUNDS = "Hyrule Castle Grounds"
