@@ -127,6 +127,7 @@ if __name__ == "__main__":
                     print(f"\nTesting [{n}] {game} in {multidata} on customserver with {collected_items} items collected")
                     prev_host_adr: str
                     with WebHostServeGame(webhost_client, room) as host:
+                        sleep(.1)  # wait for the server to fully start before doing anything
                         prev_host_adr = host.address
                         with Client(host.address, game, "Player1") as client:
                             web_data_packages = client.games_packages
@@ -140,6 +141,7 @@ if __name__ == "__main__":
                                 autohost(webapp.config)  # this will spin the room right up again
                                 sleep(1)  # make log less annoying
                                 # if saving failed, the next iteration will fail below
+                        sleep(2)  # work around issue #5571
 
                     # verify server shut down
                     try:
@@ -207,10 +209,12 @@ if __name__ == "__main__":
             print(f"Restoring multidata for {room}")
             set_multidata_for_room(webhost_client, room, old_data)
             with WebHostServeGame(webhost_client, room) as host:
+                sleep(.1)  # wait for the server to fully start before doing anything
                 with Client(host.address, game, "Player1") as client:
                     assert_equal(len(client.checked_locations), 2,
                                  "Save was destroyed during exception in customserver")
                     print("Save file is not busted 🥳")
+                sleep(2)  # work around issue #5571
 
         finally:
             print("Stopping autohost")

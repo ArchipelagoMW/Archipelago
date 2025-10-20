@@ -247,7 +247,13 @@ def _stop_webhost_mp(name_filter: str, graceful: bool = True) -> None:
         else:
             proc.kill()
         try:
-            proc.join(30)
+            try:
+                proc.join(30)
+            except TimeoutError:
+                raise
+            except KeyboardInterrupt:
+                # on Windows, the MP exception may be forwarded to the host, so ignore once and retry
+                proc.join(30)
         except TimeoutError:
             proc.kill()
             proc.join()
