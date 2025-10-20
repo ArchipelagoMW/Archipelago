@@ -63,6 +63,8 @@ class FactorioBobs(World):
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
     research new technologies, and become more efficient in your quest to build a rocket and return home.
     """
+    logger: logging.Logger
+
     game = "Factorio Bob's"
     special_nodes = {"automation", "electronics", "rocket-silo"}
     location_pool: typing.List[FactorioScienceLocation]
@@ -100,6 +102,8 @@ class FactorioBobs(World):
         self.custom_products: dict[str, InternalItem] = {}
         self.science_locations = []
         self.tech_tree_layout_prerequisites = {}
+
+        self.logger = logging.getLogger(f"{self.game}:{self.player}")
 
     generate_output = generate_mod
 
@@ -400,7 +404,7 @@ class FactorioBobs(World):
                     ingredient_raw = sum((count for ingredient, count in ingredient_recipe.get_raw_ingredients().items()))
                     ingredient_energy = ingredient_recipe.total_energy
                 else:
-                    print("no best recipe for ingredient", ingredient.name)
+                    self.logger.warning("no best recipe for ingredient", ingredient.name)
             else:
                 # assume simple ore TODO: remove if tree when mining data is harvested from Factorio
                 ingredient_energy = 2
@@ -444,7 +448,7 @@ class FactorioBobs(World):
 
             ingredient_recipe = ingredient.best_recipe
             if not ingredient_recipe:
-                logging.warning(f"missing recipe for {ingredient}")
+                self.logger.warning(f"missing recipe for {ingredient}")
                 continue
             ingredient_raw = sum((count for ingredient, count in ingredient.get_raw_ingredients().items()))
             ingredient_energy = ingredient_recipe.total_energy
@@ -464,7 +468,7 @@ class FactorioBobs(World):
 
 
         if remaining_num_ingredients > 1:
-            logging.warning("could not randomize recipe")
+            self.logger.warning("could not randomize recipe")
 
         pool.extend(fallback_pool)
 
