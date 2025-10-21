@@ -159,6 +159,7 @@ class SohWorld(World):
                                         for location in dungeon_reward_item_mapping.keys()]
             dungeon_reward_items = [self.create_item(
                 item.value) for item in dungeon_reward_item_mapping.values()]
+            self.multiworld.random.shuffle(dungeon_reward_items)
 
             # Place dungeon rewards
             fill_restrictive(self.multiworld, prefill_state, dungeon_reward_locations,

@@ -182,6 +182,7 @@ def fill_shop_items(world: "SohWorld") -> None:
     vanilla_shop_locations = [world.get_location(
         slot) for slot in vanilla_shop_slots]
     vanilla_items = [world.create_item(item) for item in vanilla_pool]
+    world.multiworld.random.shuffle(vanilla_items)
 
     # create a filled copy of the state so the multiworld can place the vanilla shop items using logic
     prefill_state = CollectionState(world.multiworld)
