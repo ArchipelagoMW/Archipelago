@@ -67,11 +67,11 @@ def set_region_rules(world: "SohWorld") -> None:
     # Spirit Temple Child Climb
     # Locations
     add_locations(Regions.SPIRIT_TEMPLE_CHILD_CLIMB, world, [
-        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_NORTH_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(
+        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_NORTH_CHEST, lambda bundle: has_projectile(bundle) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(
             Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
-        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_EAST_CHEST, lambda bundle: has_projectile(bundle, Ages.BOTH) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(
+        (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_EAST_CHEST, lambda bundle: has_projectile(bundle) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(
             Items.SILVER_GAUNTLETS, bundle) and has_projectile(bundle, Ages.ADULT)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and is_child(bundle) and has_projectile(bundle, Ages.CHILD))),
-        (Locations.SPIRIT_TEMPLE_GS_SUN_ON_FLOOR_ROOM, lambda bundle: has_projectile(bundle, Ages.BOTH) or can_use(Items.DINS_FIRE, bundle) or (take_damage(bundle) and (can_jump_slash_except_hammer(bundle) or has_projectile(bundle, Ages.CHILD))) or (is_child(bundle) and small_keys(
+        (Locations.SPIRIT_TEMPLE_GS_SUN_ON_FLOOR_ROOM, lambda bundle: has_projectile(bundle) or can_use(Items.DINS_FIRE, bundle) or (take_damage(bundle) and (can_jump_slash_except_hammer(bundle) or has_projectile(bundle, Ages.CHILD))) or (is_child(bundle) and small_keys(
             Items.SPIRIT_TEMPLE_SMALL_KEY, 5, bundle) and has_projectile(bundle, Ages.CHILD)) or (small_keys(Items.SPIRIT_TEMPLE_SMALL_KEY, 2, bundle) and can_use(Items.SILVER_GAUNTLETS, bundle) and (has_projectile(bundle, Ages.ADULT) or (take_damage(bundle) and can_jump_slash_except_hammer(bundle))))),
         (Locations.SPIRIT_TEMPLE_CHILD_CLIMB_POT1,
          lambda bundle: can_break_pots(bundle))

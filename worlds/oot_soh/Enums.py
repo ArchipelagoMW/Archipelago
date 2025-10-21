@@ -3560,7 +3560,6 @@ class Events(StrEnum):
 class Ages(StrEnum):
     CHILD = "child"
     ADULT = "adult"
-    BOTH = "both"
     null = "none"
 
 

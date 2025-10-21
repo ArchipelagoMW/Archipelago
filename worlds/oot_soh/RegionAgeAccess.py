@@ -79,17 +79,11 @@ class SohAgeLogic(LogicMixin):
                         connection, None))  # type: ignore
 
     def _soh_can_reach_as_age(self, region: Regions, age: Ages, player: int):
-        if self._soh_age[player] is Ages.null:
+        if self._soh_age[player] == Ages.null:
             # first layer of recursion
             self._soh_age[player] = age
             can_reach = self.multiworld.get_region(
                 region.value, player).can_reach(self)  # type: ignore
             self._soh_age[player] = Ages.null
             return can_reach
-        if age is Ages.BOTH:
-            stored_age = self._soh_age[player]
-            self._soh_age[player] = age
-            can_reach = self.multiworld.get_region(
-                region.value, player).can_reach(self)  # type: ignore
-            self._soh_age[player] = stored_age
         return self._soh_age[player] == age

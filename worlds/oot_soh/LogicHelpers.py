@@ -310,8 +310,6 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Age
         return child_projectiles
     elif age == Ages.ADULT:
         return adult_projectiles
-    elif age == Ages.BOTH:
-        return child_projectiles and adult_projectiles
     else:  # "either"
         return child_projectiles or adult_projectiles
 
