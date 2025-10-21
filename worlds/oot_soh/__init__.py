@@ -106,7 +106,6 @@ class SohWorld(World):
         # these are for making the progressive items collect/remove work properly
         # when adding another progressive item that is option-dependent like these,
         # be sure to also update LogicHelpers.increment_current_count with it too
-        self.push_precollected(self.create_item(Items.BOTTLE_WITH_MILK))
         if not self.options.shuffle_swim:
             self.push_precollected(self.create_item(Items.BRONZE_SCALE))
         if not self.options.shuffle_deku_stick_bag:
