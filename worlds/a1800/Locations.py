@@ -22,7 +22,7 @@ class A1800LocationData:
     ap_code: Optional[int] = None
     """Archipelago's internal ID for this location (also known as its "address")."""
 
-    is_event: Optional[bool] = False
+    is_event: bool = False
     """Whether this location is an event location with no ID."""
 
     def __post_init__(self):

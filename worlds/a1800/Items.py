@@ -1,6 +1,6 @@
 # import logging
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar, TYPE_CHECKING, Optional
 from BaseClasses import Item, ItemClassification
 
@@ -36,10 +36,10 @@ class A1800ItemData:
     __item_id: ClassVar[int] = 1
     name: str
     classification: ItemClassification
-    anno_GUIDs: list[int] = []
+    anno_GUIDs: list[int] = field(default_factory=lambda: [])
     ap_code: Optional[int] = None
     is_event: Optional[bool] = False
-    event_locations: list[str] = []
+    event_locations: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
         if not self.ap_code and not self.is_event:
