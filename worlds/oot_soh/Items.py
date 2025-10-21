@@ -362,7 +362,6 @@ progressive_items: dict[str, tuple[str, ...]] = {
     Items.PROGRESSIVE_BOMB_BAG: (Items.BOMB_BAG,),
     Items.PROGRESSIVE_STICK_CAPACITY: (Items.DEKU_STICK_BAG,),
     Items.PROGRESSIVE_NUT_CAPACITY: (Items.DEKU_NUT_BAG,),
-    Items.PROGRESSIVE_BOMBCHU: (Items.BOMBCHU_BAG,),
 }
 
 item_name_groups: dict[str, set[str]] = {}

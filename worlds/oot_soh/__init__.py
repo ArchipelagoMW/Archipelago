@@ -105,15 +105,17 @@ class SohWorld(World):
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
         if not self.options.shuffle_swim:
-            self.push_precollected(self.create_item(Items.PROGRESSIVE_SCALE, create_as_event=True))
+            self.push_precollected(self.create_item(
+                Items.PROGRESSIVE_SCALE, create_as_event=True))
         if not self.options.shuffle_deku_stick_bag:
-            self.push_precollected(self.create_item(Items.PROGRESSIVE_STICK_CAPACITY, create_as_event=True))
+            self.push_precollected(self.create_item(
+                Items.PROGRESSIVE_STICK_CAPACITY, create_as_event=True))
         if not self.options.shuffle_deku_nut_bag:
-            self.push_precollected(self.create_item(Items.PROGRESSIVE_NUT_CAPACITY, create_as_event=True))
-        if not self.options.bombchu_bag:
-            self.push_precollected(self.create_item(Items.PROGRESSIVE_BOMBCHU, create_as_event=True))
+            self.push_precollected(self.create_item(
+                Items.PROGRESSIVE_NUT_CAPACITY, create_as_event=True))
         if not self.options.shuffle_childs_wallet:
-            self.push_precollected(self.create_item(Items.PROGRESSIVE_WALLET, create_as_event=True))
+            self.push_precollected(self.create_item(
+                Items.PROGRESSIVE_WALLET, create_as_event=True))
 
         create_item_pool(self)
 

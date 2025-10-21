@@ -241,7 +241,7 @@ def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
     if world.options.bombchu_bag.value:
-        return has_item(Items.BOMBCHU_BAG, bundle)
+        return has_item(Items.PROGRESSIVE_BOMBCHU, bundle)
     return has_item(Items.BOMB_BAG, bundle)
 
 
