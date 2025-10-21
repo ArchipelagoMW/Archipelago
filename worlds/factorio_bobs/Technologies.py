@@ -262,7 +262,7 @@ progressive_rows["progressive-personal-battery"] = ("battery-equipment", "batter
 progressive_rows["progressive-energy-shield"] = ("energy-shield-equipment", "energy-shield-mk2-equipment",
                                                  "bob-energy-shield-equipment-3", "bob-energy-shield-equipment-4",
                                                  "bob-energy-shield-equipment-5", "bob-energy-shield-equipment-6")
-progressive_rows["progressive-wall"] = ("stone-wall", "gate")
+progressive_rows["progressive-wall"] = ("stone-wall", "gate", "bob-reinforced-wall")
 progressive_rows["progressive-follower"] = ("defender", "distractor", "destroyer", "bob-laser-robot")
 # progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
