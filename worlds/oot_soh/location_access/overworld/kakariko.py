@@ -325,7 +325,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.KAK_SHOOTING_GALLERY, world, [
         (Locations.KAK_SHOOTING_GALLERY_REWARD,
-         lambda bundle: has_item(Items.CHILD_WALLET, bundle)),
+         lambda bundle: has_item(Items.CHILD_WALLET, bundle) and is_adult(bundle) and can_use(Items.FAIRY_BOW, bundle)),
     ])
     # Connections
     connect_regions(Regions.KAK_SHOOTING_GALLERY, world, [
