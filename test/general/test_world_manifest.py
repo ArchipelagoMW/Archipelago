@@ -69,6 +69,7 @@ class TestWorldManifest(unittest.TestCase):
         )
 
     def test_world_version(self) -> None:
+        """Test that world_version matches the requirements in apworld specification.md""" 
         if "world_version" in self.manifest:
             world_version: str = self.manifest["world_version"]
             self.assertIsInstance(
@@ -92,10 +93,10 @@ class TestWorldManifest(unittest.TestCase):
         self.assertNotIn(
             "version",
             self.manifest,
-            f"archipelago.json for '{self.game}' may not define 'version', see apworld specification.md.",
+            f"archipelago.json for '{self.game}' must not define 'version', see apworld specification.md.",
         )
         self.assertNotIn(
             "compatible_version",
             self.manifest,
-            f"archipelago.json for '{self.game}' may not define 'compatible_version', see apworld specification.md.",
+            f"archipelago.json for '{self.game}' must not define 'compatible_version', see apworld specification.md.",
         )
