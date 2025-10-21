@@ -305,8 +305,8 @@ item_data_table: dict[Items, SohItemData] = {
     Items.HYLIA_LAB_KEY: SohItemData(273, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.FISHING_HOLE_KEY: SohItemData(274, IC.progression, 0, item_groups=["Overworld Keys"]),
     Items.DISTANT_SCARECROW: SohItemData(275, IC.progression, 0, adult_only=True),
-    Items.STICKS: SohItemData(276, IC.filler, 0, child_only=True),
-    Items.NUTS: SohItemData(277, IC.filler, 0),
+    Items.STICKS: SohItemData(None, child_only=True),
+    Items.NUTS: SohItemData(None),
     Items.EPONA: SohItemData(None),
     # Items.MAX: SohItemData( 279, IC.filler, 0 ),
 }

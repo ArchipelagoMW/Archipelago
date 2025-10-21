@@ -27,9 +27,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.LLR_GS_RAIN_SHED, lambda bundle: is_child(
             bundle) and can_get_nighttime_gs(bundle)),
         (Locations.LLR_GS_HOUSE_WINDOW, lambda bundle: is_child(bundle)
-         and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         and can_use(Items.BOOMERANG, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.LLR_GS_BACK_WALL, lambda bundle: is_child(bundle)
-         and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         and can_use(Items.BOOMERANG, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.LLR_FRONT_POT1, lambda bundle: is_child(
             bundle) and can_break_pots(bundle)),
         (Locations.LLR_FRONT_POT2, lambda bundle: is_child(

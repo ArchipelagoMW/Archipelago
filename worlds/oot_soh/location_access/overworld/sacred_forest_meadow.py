@@ -31,7 +31,7 @@ def set_region_rules(world: "SohWorld") -> None:
             bundle) and has_item(Items.ZELDAS_LETTER, bundle)),
         (Locations.SHEIK_IN_FOREST, lambda bundle: is_adult(bundle)),
         (Locations.SFM_GS, lambda bundle: is_adult(bundle)
-         and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         and can_use(Items.HOOKSHOT, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.SFM_MAZE_LOWER_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.SFM_MAZE_LOWER_GOSSIP_STONE_BIG_FAIRY,

@@ -23,7 +23,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.ZF_GS_TREE, lambda bundle: is_child(
             bundle) and can_bonk_trees(bundle)),
         (Locations.ZF_GS_ABOVE_THE_LOG,
-         lambda bundle: is_child(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         lambda bundle: is_child(bundle) and can_use(Items.BOOMERANG, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.ZF_FAIRY_GOSSIP_STONE_FAIRY,
          lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.ZF_FAIRY_GOSSIP_STONE_BIG_FAIRY,

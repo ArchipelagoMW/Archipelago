@@ -25,7 +25,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Locations
     add_locations(Regions.GERUDO_VALLEY, world, [
         (Locations.GV_GS_SMALL_BRIDGE,
-         lambda bundle: is_child(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         lambda bundle: is_child(bundle) and can_use(Items.BOOMERANG, bundle) and can_get_nighttime_gs(bundle)),
     ])
     # Connection
     connect_regions(Regions.GERUDO_VALLEY, world, [
@@ -124,9 +124,9 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.GV_TRADE_SAW, lambda bundle: is_adult(
             bundle) and can_use(Items.POACHERS_SAW, bundle)),
         (Locations.GV_GS_BEHIND_TENT,
-         lambda bundle: is_adult(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         lambda bundle: is_adult(bundle) and can_use(Items.HOOKSHOT, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.GV_GS_PILLAR,
-         lambda bundle: is_adult(bundle) and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         lambda bundle: is_adult(bundle) and can_use(Items.HOOKSHOT, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.GV_NEAR_BRIDGE_CRATE1, lambda bundle: is_child(
             bundle) and can_break_crates(bundle)),
         (Locations.GV_NEAR_BRIDGE_CRATE2, lambda bundle: is_child(

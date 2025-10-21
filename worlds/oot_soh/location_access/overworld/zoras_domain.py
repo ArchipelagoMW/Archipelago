@@ -51,13 +51,8 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_adult(bundle) and has_item(LocalEvents.KING_ZORA_THAWED, bundle) and can_use(
              Items.PRESCRIPTION, bundle)),
         (Locations.ZD_GS_FROZEN_WATERFALL, lambda bundle: is_adult(bundle) and (
-            hookshot_or_boomerang(bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW,
-                                                                                               bundle) or (
-                can_use(Items.MAGIC_SINGLE, bundle) and (can_use(Items.MASTER_SWORD, bundle) or can_use(
-                    Items.KOKIRI_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle)))) or (
-            can_do_trick(Tricks.ZD_GS,
-                         bundle) and can_jump_slash_except_hammer(
-                bundle)) and can_get_nighttime_gs(bundle)),
+            can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or (
+                can_use(Items.MAGIC_SINGLE, bundle) and (can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle)))) and can_get_nighttime_gs(bundle)),
         (Locations.ZD_FISH1, lambda bundle: is_child(bundle) and has_bottle(bundle)),
         (Locations.ZD_FISH2, lambda bundle: is_child(bundle) and has_bottle(bundle)),
         (Locations.ZD_FISH3, lambda bundle: is_child(bundle) and has_bottle(bundle)),

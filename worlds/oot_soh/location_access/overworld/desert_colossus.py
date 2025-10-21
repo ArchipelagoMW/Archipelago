@@ -33,7 +33,7 @@ def set_region_rules(world: "SohWorld") -> None:
         (Locations.COLOSSUS_GS_BEAN_PATCH,
          lambda bundle: can_spawn_soil_skull(bundle) and can_attack(bundle)),
         (Locations.COLOSSUS_GS_TREE, lambda bundle: is_adult(bundle)
-         and hookshot_or_boomerang(bundle) and can_get_nighttime_gs(bundle)),
+         and can_use(Items.HOOKSHOT, bundle) and can_get_nighttime_gs(bundle)),
         (Locations.COLOSSUS_GS_HILL, lambda bundle: is_adult(bundle) and ((has_item(LocalEvents.DESERT_COLOSSUS_BEAN_PLANTED, bundle) and can_attack(bundle))
          or can_use(Items.LONGSHOT, bundle) or (can_do_trick(Tricks.COLOSSUS_GS, bundle) and can_use(Items.HOOKSHOT, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.COLOSSUS_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle) and can_use(
