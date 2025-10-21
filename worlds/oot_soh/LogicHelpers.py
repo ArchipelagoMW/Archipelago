@@ -92,7 +92,7 @@ def can_use(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
         return can_use(Items.FAIRY_BOW, bundle)
 
     if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return bombchu_refill(bundle) and bombchus_enabled(bundle)
+        return bombchu_refill(bundle)
 
     if item == Items.FISHING_POLE:
         return has_item(Items.CHILD_WALLET, bundle)
@@ -119,10 +119,7 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
         return state.has_all((Events.CAN_FARM_STICKS, Items.DEKU_STICK_BAG), player)
 
     if item in (Items.PROGRESSIVE_BOMBCHU, Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20):
-        return (state.has_any((Items.BOMBCHUS_5, Items.BOMBCHUS_10, Items.BOMBCHUS_20,
-                               Items.PROGRESSIVE_BOMBCHU), world.player)
-                or (bombchus_enabled(bundle)
-                    and state.has_any((Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT), world.player)))
+        return bombchus_enabled(bundle)
 
     if item == Items.NUTS:
         return state.has_all((Events.CAN_FARM_NUTS, Items.DEKU_NUT_BAG), player)
@@ -239,10 +236,11 @@ def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    state = bundle[0]
     world = bundle[2]
     if world.options.bombchu_bag.value:
-        return has_item(Items.PROGRESSIVE_BOMBCHU, bundle)
-    return has_item(Items.BOMB_BAG, bundle)
+        return state.has(Items.PROGRESSIVE_BOMBCHU.value, world.player)
+    return state.has(Items.BOMB_BAG.value, world.player)
 
 
 ocarina_buttons_required: dict[str, list[str]] = {
