@@ -385,7 +385,7 @@ class ShuffleFish(Choice):
 
 class ShuffleScrubs(Toggle):
     """
-    Shuffles all Deku Scrub merchants in the game. Randomized items cost 10 rupees.
+    Shuffles all Deku Scrub merchants in the game.
     """
     display_name = "Shuffle Scrubs"
 
