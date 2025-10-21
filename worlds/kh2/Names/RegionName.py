@@ -25,6 +25,7 @@ DataLarxene = "Data Larxene"
 
 # pr
 Pr = "Port Royal"
+PrMinute = "Port Royal: Minute Fight"
 Barbosa = "Barbosa"
 Pr2 = "Port Royal 2"
 GrimReaper1 = "Grim Reaper 1"
@@ -110,6 +111,7 @@ DataSaix = "Data Saix"
 # hb
 Hb = "Hollow Bastion"
 Hb2 = "Hollow Bastion 2"
+Hb2Corridors = "Hollow Bastion 2:Corridors Fight"
 HBDemyx = "Hollow Bastion Demyx"
 ThousandHeartless = "Thousand Heartless"
 Mushroom13 = "Mushroom 13"
