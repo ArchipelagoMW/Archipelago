@@ -205,7 +205,7 @@ def set_region_rules(world: "SohWorld") -> None:
             ((has_item(Items.GOLDEN_SCALE, bundle) or
               can_use(Items.IRON_BOOTS, bundle)) or
              has_item(LocalEvents.DRAINED_WELL, bundle))),
-        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: True),
+        (Regions.FOREST_TEMPLE_FALLING_ROOM, lambda bundle: False),
         (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND,
          lambda bundle: (can_use(Items.HOOKSHOT, bundle))),
         (Regions.FOREST_TEMPLE_NE_COURTYARD_SKULLTULA_ISLAND_GS, lambda bundle: (can_use(Items.HOOKSHOT, bundle) or
