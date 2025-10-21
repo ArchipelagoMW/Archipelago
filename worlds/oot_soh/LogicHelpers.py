@@ -1054,17 +1054,3 @@ def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
     return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
-
-
-def increment_current_count(world: "SohWorld", item: Item, current_count: int) -> int:
-    """
-    If the progressive item count should be increased because of an option (like shuffle_swim), this will increase its current count by 1.
-    Does nothing otherwise.
-    """
-    if ((item.name == Items.PROGRESSIVE_SCALE and not world.options.shuffle_swim)
-            or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not world.options.shuffle_deku_stick_bag)
-            or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not world.options.shuffle_deku_nut_bag)
-            or (item.name == Items.PROGRESSIVE_BOMBCHU and not world.options.bombchu_bag)
-            or (item.name == Items.PROGRESSIVE_WALLET and not world.options.shuffle_childs_wallet)):
-        current_count += 1
-    return current_count
