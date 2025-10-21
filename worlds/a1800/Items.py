@@ -1,10 +1,11 @@
 # import logging
 
 from dataclasses import dataclass
-from typing import ClassVar, Optional
+from typing import ClassVar, TYPE_CHECKING, Optional
 from BaseClasses import Item, ItemClassification
 
-from . import A1800World
+if TYPE_CHECKING:
+    from . import A1800World
 
 
 services: list[str] = ["Market", "Pub", "Church", "School"]
@@ -60,7 +61,7 @@ class A1800Item(Item):
         self.data = data
 
 
-def create_itempool(world: A1800World) -> list[Item]:
+def create_itempool(world: "A1800World") -> list[Item]:
     itempool: list[Item] = []
 
     for data in _item_list:
@@ -76,7 +77,7 @@ def create_itempool(world: A1800World) -> list[Item]:
     return itempool
 
 
-def create_item(world: A1800World, item: str | A1800ItemData) -> Item:
+def create_item(world: "A1800World", item: str | A1800ItemData) -> Item:
     if isinstance(item, A1800ItemData):
         data = item
     else:
@@ -84,7 +85,7 @@ def create_item(world: A1800World, item: str | A1800ItemData) -> Item:
     return A1800Item(world.player, data)
 
 
-def create_and_push_starting_items(world: A1800World) -> None:
+def create_and_push_starting_items(world: "A1800World") -> None:
     for item in _starting_items:
         world.multiworld.push_precollected(create_item(world, item))
 

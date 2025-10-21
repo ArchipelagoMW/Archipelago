@@ -1,14 +1,17 @@
+from typing import TYPE_CHECKING
+
 from BaseClasses import Region
 from .Locations import A1800Location, location_list
 
-from . import A1800World
+if TYPE_CHECKING:
+    from . import A1800World
 
 
-def create_regions(world: A1800World) -> None:
+def create_regions(world: "A1800World") -> None:
     _create_region(world, "Old World")
 
 
-def _create_region(world: A1800World, name: str) -> Region:
+def _create_region(world: "A1800World", name: str) -> Region:
     region = Region(name, world.player, world.multiworld)
 
     for data in location_list:

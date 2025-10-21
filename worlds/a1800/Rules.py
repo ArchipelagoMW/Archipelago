@@ -1,8 +1,12 @@
+from typing import TYPE_CHECKING
+
 from worlds.generic.Rules import set_rule, CollectionRule
 
-from . import A1800World
 from .Items import get_event_item_name
 from .Locations import unlock_location_list
+
+if TYPE_CHECKING:
+    from . import A1800World
 
 
 def _has(player: int, *requirements: str) -> CollectionRule:
@@ -10,7 +14,7 @@ def _has(player: int, *requirements: str) -> CollectionRule:
 
 
 class _Rules:
-    def __init__(self, world: A1800World) -> None:
+    def __init__(self, world: "A1800World") -> None:
         self.world = world
 
     def create_rule(self, location_name: str, *requirements: str) -> None:
@@ -18,7 +22,7 @@ class _Rules:
                  self.world.player), _has(self.world.player, f"Unlock: {location_name}", *requirements))
 
 
-def set_rules(world: A1800World) -> None:
+def set_rules(world: "A1800World") -> None:
     rules = _Rules(world)
 
     for data in unlock_location_list:
