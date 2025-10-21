@@ -178,7 +178,15 @@ class SohWorld(World):
         if item.name in progressive_items:
             current_count = state.prog_items[self.player][item.name] + 1
             current_count = increment_current_count(self, item, current_count)
-            for non_prog_version in progressive_items[item.name]:
+            for i, non_prog_version in enumerate(progressive_items[item.name]):
+                # this is a hacky thing to get around weird AP shenanigans with new collection states
+                if (i == 0
+                        and ((item.name == Items.PROGRESSIVE_SCALE and not self.options.shuffle_swim)
+                             or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not self.options.shuffle_deku_stick_bag)
+                             or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not self.options.shuffle_deku_nut_bag)
+                             or (item.name == Items.PROGRESSIVE_BOMBCHU and not self.options.bombchu_bag)
+                             or (item.name == Items.PROGRESSIVE_WALLET and not self.options.shuffle_childs_wallet))):
+                    continue
                 state.prog_items[self.player][non_prog_version] = 1
                 current_count -= 1
                 if not current_count:
@@ -195,6 +203,14 @@ class SohWorld(World):
             current_count = state.prog_items[self.player][item.name]
             current_count = increment_current_count(self, item, current_count)
             for i, non_prog_version in enumerate(progressive_items[item.name]):
+                # this is a hacky thing to get around weird AP shenanigans with new collection states
+                if (i == 0
+                        and ((item.name == Items.PROGRESSIVE_SCALE and not self.options.shuffle_swim)
+                             or (item.name == Items.PROGRESSIVE_STICK_CAPACITY and not self.options.shuffle_deku_stick_bag)
+                             or (item.name == Items.PROGRESSIVE_NUT_CAPACITY and not self.options.shuffle_deku_nut_bag)
+                             or (item.name == Items.PROGRESSIVE_BOMBCHU and not self.options.bombchu_bag)
+                             or (item.name == Items.PROGRESSIVE_WALLET and not self.options.shuffle_childs_wallet))):
+                    continue
                 if i + 1 > current_count:
                     state.prog_items[self.player][non_prog_version] = 0
 
