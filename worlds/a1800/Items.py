@@ -74,6 +74,11 @@ def create_itempool(world: "A1800World") -> list[Item]:
         else:
             itempool.append(item)
 
+    world.multiworld.local_early_items[world.player]["Unlock: OW: Fishery"] = 1
+    world.multiworld.local_early_items[world.player]["Unlock: OW: Sheep Farm"] = 1
+    world.multiworld.local_early_items[world.player]["Unlock: OW: Framework Knitters"] = 1
+    world.multiworld.local_early_items[world.player]["Unlock: OW: Worker Residence"] = 1
+
     return itempool
 
 
@@ -104,11 +109,11 @@ _anno_1800_unlock_items: list[A1800ItemData] = [
     A1800ItemData("OW: Fishery", ItemClassification.progression, anno_GUIDs=[1010278, 1010200]),
     A1800ItemData("OW: Sheep Farm", ItemClassification.progression, anno_GUIDs=[1010267, 1010197, 500505]),
     A1800ItemData("OW: Framework Knitters", ItemClassification.progression, anno_GUIDs=[1010315, 1010237, 500505]),
-    A1800ItemData("OW: Potato Farm", ItemClassification.filler, anno_GUIDs=[1010265, 1010195, 500002]),
-    A1800ItemData("OW: Schnapps Distillery", ItemClassification.filler, anno_GUIDs=[1010294, 1010216, 500002]),
+    A1800ItemData("OW: Potato Farm", ItemClassification.progression, anno_GUIDs=[1010265, 1010195, 500002]),
+    A1800ItemData("OW: Schnapps Distillery", ItemClassification.progression, anno_GUIDs=[1010294, 1010216, 500002]),
     A1800ItemData("OW: Worker Residence", ItemClassification.progression, anno_GUIDs=[1010344]),
-    A1800ItemData("OW: Fire Station", ItemClassification.filler, anno_GUIDs=[1010463]),
-    A1800ItemData("OW: Pub", ItemClassification.filler, anno_GUIDs=[1010358, 1010358]),
+    A1800ItemData("OW: Fire Station", ItemClassification.progression, anno_GUIDs=[1010463]),
+    A1800ItemData("OW: Pub", ItemClassification.progression, anno_GUIDs=[1010358, 1010358]),
     A1800ItemData("OW: Paved Street", ItemClassification.filler, anno_GUIDs=[1010035]),
     A1800ItemData("OW: Clay Pit", ItemClassification.progression, anno_GUIDs=[100416, 1010201, 500024]),
     A1800ItemData("OW: Brick Factory", ItemClassification.progression, anno_GUIDs=[1010283, 1010205, 500024]),
@@ -120,7 +125,7 @@ _anno_1800_unlock_items: list[A1800ItemData] = [
     A1800ItemData("OW: Grain Farm", ItemClassification.progression, anno_GUIDs=[1010262, 1010192, 500004]),
     A1800ItemData("OW: Flour Mill", ItemClassification.progression, anno_GUIDs=[1010313, 1010235, 500004]),
     A1800ItemData("OW: Bakery", ItemClassification.progression, anno_GUIDs=[1010291, 1010213, 500004]),
-    A1800ItemData("OW: Church", ItemClassification.filler, anno_GUIDs=[1010359, 1010350]),
+    A1800ItemData("OW: Church", ItemClassification.progression, anno_GUIDs=[1010359, 1010350]),
     A1800ItemData("OW: Sailmakers", ItemClassification.progression, anno_GUIDs=[1010288, 1010288, 500009]),
     A1800ItemData("OW: Sailing Shipyard", ItemClassification.progression, anno_GUIDs=[1010520]),
     A1800ItemData("OW: Mounted Guns", ItemClassification.filler, anno_GUIDs=[1010522]),
@@ -133,12 +138,12 @@ _anno_1800_unlock_items: list[A1800ItemData] = [
     A1800ItemData("OW: Steelworks", ItemClassification.progression, anno_GUIDs=[1010296, 1010218, 500005]),
     A1800ItemData("OW: Rendering Works", ItemClassification.progression, anno_GUIDs=[1010312, 1010234, 25000220]),
     A1800ItemData("OW: Soap Factory", ItemClassification.progression, anno_GUIDs=[1010281, 1010203, 25000220]),
-    A1800ItemData("OW: Weapon Factory", ItemClassification.filler, anno_GUIDs=[1010299, 1010221, 500145]),
+    A1800ItemData("OW: Weapon Factory", ItemClassification.progression, anno_GUIDs=[1010299, 1010221, 500145]),
     A1800ItemData("OW: Cannon Tower", ItemClassification.filler, anno_GUIDs=[1010523]),
-    A1800ItemData("OW: Hop Farm", ItemClassification.filler, anno_GUIDs=[1010264, 1010194, 500006]),
-    A1800ItemData("OW: Malthouse", ItemClassification.filler, anno_GUIDs=[1010314, 1010236, 500006]),
-    A1800ItemData("OW: Brewery", ItemClassification.filler, anno_GUIDs=[1010292, 1010214, 500006]),
-    A1800ItemData("OW: Police Station", ItemClassification.filler, anno_GUIDs=[1010462]),
+    A1800ItemData("OW: Hop Farm", ItemClassification.progression, anno_GUIDs=[1010264, 1010194, 500006]),
+    A1800ItemData("OW: Malthouse", ItemClassification.progression, anno_GUIDs=[1010314, 1010236, 500006]),
+    A1800ItemData("OW: Brewery", ItemClassification.progression, anno_GUIDs=[1010292, 1010214, 500006]),
+    A1800ItemData("OW: Police Station", ItemClassification.progression, anno_GUIDs=[1010462]),
     A1800ItemData("OW: School", ItemClassification.progression, anno_GUIDs=[1010360, 1010351]),
     A1800ItemData("OW: Artisan Residence", ItemClassification.progression, anno_GUIDs=[1010345]),
 ]
@@ -152,11 +157,13 @@ _anno_1800_event_items: list[A1800ItemData] = [
     A1800ItemData("Wool", ItemClassification.progression, is_event=True, event_locations=["OW: Sheep Farm"]),
     A1800ItemData("Work Clothes", ItemClassification.progression,
                   is_event=True, event_locations=["OW: Framework Knitters"]),
-    A1800ItemData("Potatoes", ItemClassification.filler, is_event=True, event_locations=["OW: Potato Farm"]),
-    A1800ItemData("Schnapps", ItemClassification.filler, is_event=True, event_locations=["OW: Schnapps Distillery"]),
+    A1800ItemData("Potatoes", ItemClassification.progression, is_event=True, event_locations=["OW: Potato Farm"]),
+    A1800ItemData("Schnapps", ItemClassification.progression, is_event=True,
+                  event_locations=["OW: Schnapps Distillery"]),
     A1800ItemData("Workers", ItemClassification.progression, is_event=True, event_locations=["OW: Worker Residence"]),
-    A1800ItemData("OW Fire Station", ItemClassification.filler, is_event=True, event_locations=["OW: Fire Station"]),
-    A1800ItemData("Pub", ItemClassification.filler, is_event=True, event_locations=["OW: Pub"]),
+    A1800ItemData("OW Fire Station", ItemClassification.progression,
+                  is_event=True, event_locations=["OW: Fire Station"]),
+    A1800ItemData("Pub", ItemClassification.progression, is_event=True, event_locations=["OW: Pub"]),
     A1800ItemData("Clay", ItemClassification.progression, is_event=True, event_locations=["OW: Clay Pit"]),
     A1800ItemData("Bricks", ItemClassification.progression, is_event=True, event_locations=["OW: Brick Factory"]),
     A1800ItemData("Pigs", ItemClassification.progression, is_event=True, event_locations=["OW: Pig Farm"]),
@@ -164,7 +171,7 @@ _anno_1800_event_items: list[A1800ItemData] = [
     A1800ItemData("Grain", ItemClassification.progression, is_event=True, event_locations=["OW: Grain Farm"]),
     A1800ItemData("Flour", ItemClassification.progression, is_event=True, event_locations=["OW: Flour Mill"]),
     A1800ItemData("Bread", ItemClassification.progression, is_event=True, event_locations=["OW: Bakery"]),
-    A1800ItemData("Church", ItemClassification.filler, is_event=True, event_locations=["OW: Church"]),
+    A1800ItemData("Church", ItemClassification.progression, is_event=True, event_locations=["OW: Church"]),
     A1800ItemData("Sails", ItemClassification.progression, is_event=True, event_locations=["OW: Sailmakers"]),
     A1800ItemData("Ships", ItemClassification.progression, is_event=True, event_locations=["OW: Sailing Shipyard"]),
     A1800ItemData("Coal", ItemClassification.progression, is_event=True, event_locations=["OW: Charcoal Kiln"]),
@@ -174,10 +181,10 @@ _anno_1800_event_items: list[A1800ItemData] = [
     A1800ItemData("Tallow", ItemClassification.progression, is_event=True, event_locations=["OW: Rendering Works"]),
     A1800ItemData("Soap", ItemClassification.progression, is_event=True, event_locations=["OW: Soap Factory"]),
     A1800ItemData("Weapons", ItemClassification.filler, is_event=True, event_locations=["OW: Weapon Factory"]),
-    A1800ItemData("Hops", ItemClassification.filler, is_event=True, event_locations=["OW: Hop Farm"]),
-    A1800ItemData("Malt", ItemClassification.filler, is_event=True, event_locations=["OW: Malthouse"]),
-    A1800ItemData("Beer", ItemClassification.filler, is_event=True, event_locations=["OW: Brewery"]),
-    A1800ItemData("OW Police Station", ItemClassification.filler,
+    A1800ItemData("Hops", ItemClassification.progression, is_event=True, event_locations=["OW: Hop Farm"]),
+    A1800ItemData("Malt", ItemClassification.progression, is_event=True, event_locations=["OW: Malthouse"]),
+    A1800ItemData("Beer", ItemClassification.progression, is_event=True, event_locations=["OW: Brewery"]),
+    A1800ItemData("OW Police Station", ItemClassification.progression,
                   is_event=True, event_locations=["OW: Police Station"]),
     A1800ItemData("School", ItemClassification.progression, is_event=True, event_locations=["OW: School"]),
     A1800ItemData("Artisans", ItemClassification.progression,

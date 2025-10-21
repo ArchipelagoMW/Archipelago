@@ -37,11 +37,12 @@ class A1800Location(Location):
 
     def __init__(self, player: int, data: A1800LocationData, parent: Region):
         super().__init__(player, data.name, None if data.is_event else data.ap_code, parent)
+        self.show_in_spoiler = not data.is_event
         self.data = data
 
 
 _anno_1800_unlock_locations: list[A1800LocationData] = [
-    A1800LocationData("50 Farmers - Fishery", "Old World"),
+    A1800LocationData("050 Farmers - Fishery", "Old World"),
     A1800LocationData("100 Farmers - Sheep Farm", "Old World"),
     A1800LocationData("100 Farmers - Framework Knitters", "Old World"),
     A1800LocationData("100 Farmers - Potato Farm", "Old World"),
@@ -49,14 +50,14 @@ _anno_1800_unlock_locations: list[A1800LocationData] = [
     A1800LocationData("100 Farmers - Worker Residence", "Old World"),
     A1800LocationData("150 Farmers - Fire Station", "Old World"),
     A1800LocationData("150 Farmers - Pub", "Old World"),
-    A1800LocationData("1 Worker - Paved Street", "Old World"),
-    A1800LocationData("1 Worker - Clay Pit", "Old World"),
-    A1800LocationData("1 Worker - Brick Factory", "Old World"),
-    A1800LocationData("1 Worker - Pig Farm", "Old World"),
-    A1800LocationData("1 Worker - Slaugherhouse", "Old World"),
-    A1800LocationData("1 Worker - Medium Warehouse", "Old World"),
-    A1800LocationData("1 Worker - Medium Trading Post", "Old World"),
-    A1800LocationData("1 Worker - Trade Union", "Old World"),
+    A1800LocationData("001 Worker - Paved Street", "Old World"),
+    A1800LocationData("001 Worker - Clay Pit", "Old World"),
+    A1800LocationData("001 Worker - Brick Factory", "Old World"),
+    A1800LocationData("001 Worker - Pig Farm", "Old World"),
+    A1800LocationData("001 Worker - Slaugherhouse", "Old World"),
+    A1800LocationData("001 Worker - Medium Warehouse", "Old World"),
+    A1800LocationData("001 Worker - Medium Trading Post", "Old World"),
+    A1800LocationData("001 Worker - Trade Union", "Old World"),
     A1800LocationData("150 Workers - Grain Farm", "Old World"),
     A1800LocationData("150 Workers - Flour Mill", "Old World"),
     A1800LocationData("150 Workers - Bakery", "Old World"),
