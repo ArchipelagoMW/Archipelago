@@ -118,30 +118,32 @@ def create_items(world: "TrackmaniaWorld", name: str, count: int) -> list[Item]:
     return itemlist
 
 def get_filler_item_name(world: "TrackmaniaWorld") -> str:
-    return filler_item_names[world.random.randint(0, len(filler_item_names)-1)]
+    return world.random.choice(filler_item_names)
+
 
 def get_medal_enabled(world: "TrackmaniaWorld", medal: str) -> bool:
     match medal:
         case "Bronze Medal":
-            return world.options.disable_bronze_medals <= 0
+            return not world.options.disable_bronze_medals
         case "Silver Medal":
-            return world.options.disable_silver_medals <= 0
+            return not world.options.disable_silver_medals
         case "Gold Medal":
-            return world.options.disable_gold_medals <= 0
+            return not world.options.disable_gold_medals
         case "Author Medal":
             return True
         case _:
             return True
 
+
 def get_locations_per_map(world: "TrackmaniaWorld") -> int:
     checks: int = 1
-    if world.options.target_time < 100 or world.options.disable_bronze_locations <= 0:
+    if world.options.target_time < 100 or not world.options.disable_bronze_locations:
         checks += 1
-    if world.options.target_time >=100 and world.options.disable_silver_locations <= 0:
+    if world.options.target_time >= 100 and not world.options.disable_silver_locations:
         checks += 1
-    if world.options.target_time >=200 and world.options.disable_gold_locations <= 0:
+    if world.options.target_time >= 200 and not world.options.disable_gold_locations:
         checks += 1
-    if world.options.target_time >=300 and world.options.disable_author_locations <= 0:
+    if world.options.target_time >= 300 and not world.options.disable_author_locations:
         checks += 1
     return checks
     
@@ -151,9 +153,7 @@ def build_items() -> dict[str,int]:
     items: dict[str, int] = trackmania_items
 
     # filler items
-    filler_id:int = base_filler_id
-    for x in range(len(filler_item_names)):
-        items[filler_item_names[x]] = filler_id
-        filler_id += 1
+    for x, name in enumerate(filler_item_names):
+        items[name] = base_filler_id + x
 
     return items

@@ -81,7 +81,7 @@ class TrackmaniaWorld(World):
             self.options.series_maximum_map_number.value = temp
 
         if self.options.map_min_length > self.options.map_max_length:
-            self.options.map_max_length = self.options.map_min_length+1
+            self.options.map_max_length.value = self.options.map_min_length.value + 1
 
         for series in range(1, self.options.series_number.value + 1):
             map_count: int = self.random.randint(self.options.series_minimum_map_number.value,

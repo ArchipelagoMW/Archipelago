@@ -20,5 +20,5 @@ def set_rules(world: "TrackmaniaWorld"):
 
 def set_series_rules(world: "TrackmaniaWorld", series_index : int, medal_total: int):
     entrance_name: str = f"{get_series_name(series_index - 1)} -> {get_series_name(series_index)}"
-    set_rule(world.multiworld.get_entrance(entrance_name, world.player),
+    set_rule(world.get_entrance(entrance_name),
              lambda state: state.has(get_progression_medal(world), world.player, medal_total))
