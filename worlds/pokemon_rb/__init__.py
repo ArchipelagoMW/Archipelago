@@ -653,17 +653,10 @@ class PokemonRedBlueWorld(World):
     def extend_hint_information(self, hint_data):
         if self.options.dexsanity or self.options.door_shuffle:
             hint_data[self.player] = {}
-        randomized_encounter_types = []
-        if self.options.randomize_wild_pokemon:
-            randomized_encounter_types.append("Wild Encounter")
-        if self.options.randomize_static_pokemon:
-            randomized_encounter_types.append("Static Pokemon")
-        if self.options.randomize_legendary_pokemon:
-            randomized_encounter_types.append("Legendary Pokemon")
-        if self.options.dexsanity and randomized_encounter_types:
+        if self.options.dexsanity:
             mon_locations = {mon: set() for mon in poke_data.pokemon_data.keys()}
             for loc in location_data:
-                if loc.type in randomized_encounter_types:
+                if loc.type in ["Wild Encounter", "Static Pokemon", "Legendary Pokemon"]:
                     mon = self.multiworld.get_location(loc.name, self.player).item.name
                     if mon.startswith("Static "):
                         mon = " ".join(mon.split(" ")[1:])
