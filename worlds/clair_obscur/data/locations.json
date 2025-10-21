@@ -1713,7 +1713,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_38",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Left before Chromatic Miniboss",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Left side up stairs",
         "location": "Lumiere",
         "original_item": "GradientFighter",
         "condition": {},
@@ -1745,7 +1745,7 @@
     },
     {
         "internal_name": "Chest_Lumiere_42",
-        "name": "Lumiere (Act 3): Lumiere's Garden - Right side up stairs",
+        "name": "Lumiere (Act 3): Lumiere's Garden - Left before Chromatic Miniboss",
         "location": "Lumiere",
         "original_item": "ChromaPack_Regular",
         "condition": {},
