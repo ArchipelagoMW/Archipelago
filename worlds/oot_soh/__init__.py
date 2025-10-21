@@ -10,8 +10,7 @@ from .Locations import location_table
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
-from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces
-from .LogicHelpers import increment_current_count
+from .ItemPool import create_item_pool, create_filler_item_pool, create_triforce_pieces, get_filler_item
 from . import RegionAgeAccess
 from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, all_shop_locations
 from Fill import fill_restrictive
@@ -95,24 +94,26 @@ class SohWorld(World):
         for region in self.get_regions():
             region.name = str(region.name)
 
-    def create_item(self, name: str) -> SohItem:
+    def create_item(self, name: str, create_as_event: bool = False) -> SohItem:
         item_entry = Items(name)
-        return SohItem(name, item_data_table[item_entry].classification, item_data_table[item_entry].item_id, self.player)
+        return SohItem(name, item_data_table[item_entry].classification,
+                       None if create_as_event else item_data_table[item_entry].item_id, self.player)
+
+    def get_filler_item_name(self) -> str:
+        return get_filler_item(self)
 
     def create_items(self) -> None:
         # these are for making the progressive items collect/remove work properly
-        # when adding another progressive item that is option-dependent like these,
-        # be sure to also update LogicHelpers.increment_current_count with it too
         if not self.options.shuffle_swim:
-            self.push_precollected(self.create_item(Items.BRONZE_SCALE))
+            self.push_precollected(self.create_item(Items.PROGRESSIVE_SCALE, create_as_event=True))
         if not self.options.shuffle_deku_stick_bag:
-            self.push_precollected(self.create_item(Items.DEKU_STICK_BAG))
+            self.push_precollected(self.create_item(Items.PROGRESSIVE_STICK_CAPACITY, create_as_event=True))
         if not self.options.shuffle_deku_nut_bag:
-            self.push_precollected(self.create_item(Items.DEKU_NUT_BAG))
+            self.push_precollected(self.create_item(Items.PROGRESSIVE_NUT_CAPACITY, create_as_event=True))
         if not self.options.bombchu_bag:
-            self.push_precollected(self.create_item(Items.BOMBCHU_BAG))
+            self.push_precollected(self.create_item(Items.PROGRESSIVE_BOMBCHU, create_as_event=True))
         if not self.options.shuffle_childs_wallet:
-            self.push_precollected(self.create_item(Items.CHILD_WALLET))
+            self.push_precollected(self.create_item(Items.PROGRESSIVE_WALLET, create_as_event=True))
 
         create_item_pool(self)
 
@@ -170,18 +171,18 @@ class SohWorld(World):
         set_price_rules(self)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
+        changed = super().collect(state, item)
         state._soh_stale[self.player] = True  # type: ignore
 
         if item.name in progressive_items:
-            current_count = state.prog_items[self.player][item.name] + 1
-            current_count = increment_current_count(self, item, current_count)
+            current_count = state.prog_items[self.player][item.name]
             for non_prog_version in progressive_items[item.name]:
                 state.prog_items[self.player][non_prog_version] = 1
                 current_count -= 1
                 if not current_count:
                     break
 
-        return super().collect(state, item)
+        return changed
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         changed = super().remove(state, item)
@@ -190,7 +191,6 @@ class SohWorld(World):
 
         if item.name in progressive_items:
             current_count = state.prog_items[self.player][item.name]
-            current_count = increment_current_count(self, item, current_count)
             for i, non_prog_version in enumerate(progressive_items[item.name]):
                 if i + 1 > current_count:
                     state.prog_items[self.player][non_prog_version] = 0
