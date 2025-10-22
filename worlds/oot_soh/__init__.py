@@ -129,6 +129,12 @@ class SohWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(
             Events.GAME_COMPLETED.value, self.player)
 
+        # UT doesn't run pre_fill, so we're doing this here instead
+        if self.using_ut:
+            self.shop_prices = self.passthrough["shop_prices"]
+            self.shop_vanilla_items = self.passthrough["shop_vanilla_items"]
+            set_price_rules(self)
+
     def get_pre_fill_items(self) -> List["Item"]:
         pre_fill_items = []
 
@@ -167,9 +173,9 @@ class SohWorld(World):
 
         fill_shop_items(self)
 
+        # if UT ever does start running pre_fill, this will stop it from overwriting the shop price rules
         if self.using_ut:
-            self.shop_prices = self.passthrough["shop_prices"]
-            self.shop_vanilla_items = self.passthrough["shop_vanilla_items"]
+            return
 
         set_price_rules(self)
 
