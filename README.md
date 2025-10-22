@@ -20,7 +20,6 @@ Currently, the following games are supported:
 * Meritous
 * Super Metroid/Link to the Past combo randomizer (SMZ3)
 * ChecksFinder
-* ArchipIDLE
 * Hollow Knight
 * The Witness
 * Sonic Adventure 2: Battle
@@ -80,6 +79,9 @@ Currently, the following games are supported:
 * Jak and Daxter: The Precursor Legacy
 * Super Mario Land 2: 6 Golden Coins
 * shapez
+* Paint
+* Celeste (Open World)
+* Choo-Choo Charles
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

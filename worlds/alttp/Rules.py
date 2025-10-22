@@ -147,7 +147,6 @@ def set_defeat_dungeon_boss_rule(location):
     add_rule(location, lambda state: location.parent_region.dungeon.boss.can_defeat(state))
 
 
-
 def set_always_allow(spot, rule):
     spot.always_allow = rule
 
@@ -463,12 +462,15 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Misery Mire - Big Chest', player), lambda state: state.has('Big Key (Misery Mire)', player))
     set_rule(multiworld.get_location('Misery Mire - Spike Chest', player), lambda state: (world.can_take_damage and has_hearts(state, player, 4)) or state.has('Cane of Byrna', player) or state.has('Cape', player))
     set_rule(multiworld.get_entrance('Misery Mire Big Key Door', player), lambda state: state.has('Big Key (Misery Mire)', player))
-    # How to access crystal switch:
-    # If have big key: then you will need 2 small keys to be able to hit switch and return to main area, as you can burn key in dark room
-    # If not big key: cannot burn key in dark room, hence need only 1 key. all doors immediately available lead to a crystal switch.
-    # The listed chests are those which can be reached if you can reach a crystal switch.
-    set_rule(multiworld.get_location('Misery Mire - Map Chest', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
-    set_rule(multiworld.get_location('Misery Mire - Main Lobby', player), lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 2))
+
+    # The most number of keys you can burn without opening the map chest and without reaching a crystal switch is 1,
+    # but if you cannot activate a crystal switch except by throwing a pot, you could burn another two going through
+    # the conveyor crystal room.
+    set_rule(multiworld.get_location('Misery Mire - Map Chest', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 2) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 4))
+    # Using a key on the map door chest will get you the map chest but not a crystal switch. Main Lobby should require
+    # one more key.
+    set_rule(multiworld.get_location('Misery Mire - Main Lobby', player), lambda state: (state._lttp_has_key('Small Key (Misery Mire)', player, 3) and can_activate_crystal_switch(state, player)) or state._lttp_has_key('Small Key (Misery Mire)', player, 5))
+
     # we can place a small key in the West wing iff it also contains/blocks the Big Key, as we cannot reach and softlock with the basement key door yet
     set_rule(multiworld.get_location('Misery Mire - Conveyor Crystal Key Drop', player),
              lambda state: state._lttp_has_key('Small Key (Misery Mire)', player, 4)
@@ -542,6 +544,8 @@ def global_rules(multiworld: MultiWorld, player: int):
     set_rule(multiworld.get_location('Ganons Tower - Bob\'s Torch', player), lambda state: state.has('Pegasus Boots', player))
     set_rule(multiworld.get_entrance('Ganons Tower (Tile Room)', player), lambda state: state.has('Cane of Somaria', player))
     set_rule(multiworld.get_entrance('Ganons Tower (Hookshot Room)', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
+    set_rule(multiworld.get_location('Ganons Tower - Double Switch Pot Key', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
+    set_rule(multiworld.get_entrance('Ganons Tower (Double Switch Room)', player), lambda state: state.has('Cane of Somaria', player) or can_use_bombs(state, player))
     if world.options.pot_shuffle:
         set_rule(multiworld.get_location('Ganons Tower - Conveyor Cross Pot Key', player), lambda state: state.has('Hammer', player) and (state.has('Hookshot', player) or state.has('Pegasus Boots', player)))
     set_rule(multiworld.get_entrance('Ganons Tower (Map Room)', player), lambda state: state._lttp_has_key('Small Key (Ganons Tower)', player, 8) or (
@@ -975,18 +979,19 @@ def check_is_dark_world(region):
     return False
 
 
-def add_conditional_lamps(world, player):
+def add_conditional_lamps(multiworld, player):
     # Light cones in standard depend on which world we actually are in, not which one the location would normally be
     # We add Lamp requirements only to those locations which lie in the dark world (or everything if open
+    local_world = multiworld.worlds[player]
 
     def add_conditional_lamp(spot, region, spottype='Location', accessible_torch=False):
-        if (not world.dark_world_light_cone and check_is_dark_world(world.get_region(region, player))) or (
-                not world.light_world_light_cone and not check_is_dark_world(world.get_region(region, player))):
+        if (not local_world.dark_world_light_cone and check_is_dark_world(local_world.get_region(region))) or (
+                not local_world.light_world_light_cone and not check_is_dark_world(local_world.get_region(region))):
             if spottype == 'Location':
-                spot = world.get_location(spot, player)
+                spot = local_world.get_location(spot)
             else:
-                spot = world.get_entrance(spot, player)
-            add_lamp_requirement(world, spot, player, accessible_torch)
+                spot = local_world.get_entrance(spot)
+            add_lamp_requirement(multiworld, spot, player, accessible_torch)
 
     add_conditional_lamp('Misery Mire (Vitreous)', 'Misery Mire (Entrance)', 'Entrance')
     add_conditional_lamp('Turtle Rock (Dark Room) (North)', 'Turtle Rock (Entrance)', 'Entrance')
@@ -997,7 +1002,7 @@ def add_conditional_lamps(world, player):
                          'Location', True)
     add_conditional_lamp('Palace of Darkness - Dark Basement - Right', 'Palace of Darkness (Entrance)',
                          'Location', True)
-    if world.worlds[player].options.mode != 'inverted':
+    if multiworld.worlds[player].options.mode != 'inverted':
         add_conditional_lamp('Agahnim 1', 'Agahnims Tower', 'Entrance')
         add_conditional_lamp('Castle Tower - Dark Maze', 'Agahnims Tower')
         add_conditional_lamp('Castle Tower - Dark Archer Key Drop', 'Agahnims Tower')
@@ -1019,10 +1024,10 @@ def add_conditional_lamps(world, player):
     add_conditional_lamp('Eastern Palace - Boss', 'Eastern Palace', 'Location', True)
     add_conditional_lamp('Eastern Palace - Prize', 'Eastern Palace', 'Location', True)
 
-    if not world.worlds[player].options.mode == "standard":
-        add_lamp_requirement(world, world.get_location('Sewers - Dark Cross', player), player)
-        add_lamp_requirement(world, world.get_entrance('Sewers Back Door', player), player)
-        add_lamp_requirement(world, world.get_entrance('Throne Room', player), player)
+    if not multiworld.worlds[player].options.mode == "standard":
+        add_lamp_requirement(multiworld, local_world.get_location("Sewers - Dark Cross"), player)
+        add_lamp_requirement(multiworld, local_world.get_entrance("Sewers Back Door"), player)
+        add_lamp_requirement(multiworld, local_world.get_entrance("Throne Room"), player)
 
 
 def open_rules(world, player):
