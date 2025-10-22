@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import os.path
 import typing
 import logging
-from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed
+from Options import Choice, Toggle, DefaultOnToggle, Range, FreeText, PerGameCommonOptions, OptionGroup, Removed, StartInventoryPool
 from collections import defaultdict
 import Utils
 
@@ -665,6 +665,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     tarins_gift: TarinsGift
     overworld: Overworld
     stabilize_item_pool: StabilizeItemPool
+    start_inventory_from_pool: StartInventoryPool
 
     warp_improvements: Removed
     additional_warp_points: Removed
