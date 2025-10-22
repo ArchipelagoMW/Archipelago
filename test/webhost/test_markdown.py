@@ -1,9 +1,11 @@
+import os
 import unittest
 from tempfile import NamedTemporaryFile
 
 from mistune import HTMLRenderer, Markdown
 
 from WebHostLib.markdown import ImgUrlRewriteInlineParser, render_markdown
+
 
 class ImgUrlRewriteTest(unittest.TestCase):
     markdown: Markdown
@@ -55,16 +57,22 @@ class RenderMarkdownTest(unittest.TestCase):
     base_url = "/static/generated/docs/some_game"
 
     def test_relative_img_rewrite(self) -> None:
-        with NamedTemporaryFile() as f:
+        f = NamedTemporaryFile(delete=False)
+        try:
             f.write("![Image](image.png)".encode("utf-8"))
-            f.flush()
+            f.close()
             html = render_markdown(f.name, self.base_url)
             self.assertIn(f'src="{self.base_url}/image.png"', html)
+        finally:
+            os.unlink(f.name)
 
     def test_mo_img_rewrite(self) -> None:
-        with NamedTemporaryFile() as f:
+        f = NamedTemporaryFile(delete=False)
+        try:
             f.write("![Image](image.png)".encode("utf-8"))
-            f.flush()
+            f.close()
             html = render_markdown(f.name)
             self.assertIn(f'src="image.png"', html)
             self.assertNotIn(self.base_url, html)
+        finally:
+            os.unlink(f.name)
