@@ -439,12 +439,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.DODONGOS_CAVERN_BOSS_ROOM, world, [
         (EventLocations.DODONGOS_CAVERN_KING_DODONGO, Events.DODONGOS_CAVERN_COMPLETED,
-         lambda bundle: (has_explosives(bundle) or
-                         (can_do_trick(Tricks.DC_HAMMER_FLOOR, bundle) and (can_use(Items.MEGATON_HAMMER, bundle) or (
-                             can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and blue_fire(bundle)))) or
-                         (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and can_use(Items.BOTTLE_WITH_BLUE_FIRE,
-                                                                                       bundle)) and
-                         can_kill_enemy(bundle, Enemies.KING_DODONGO)))
+         lambda bundle: has_explosives(bundle) or (can_use(Items.MEGATON_HAMMER, bundle) or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and blue_fire(bundle)) if can_do_trick(Tricks.DC_HAMMER_FLOOR, bundle) else can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle) and can_use(Items.BOTTLE_WITH_BLUE_FIRE, bundle)) and can_kill_enemy(bundle, Enemies.KING_DODONGO))
     ])
     # Locations
     add_locations(Regions.DODONGOS_CAVERN_BOSS_ROOM, world, [
