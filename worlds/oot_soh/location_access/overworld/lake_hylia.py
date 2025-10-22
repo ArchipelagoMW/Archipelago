@@ -171,7 +171,7 @@ def set_region_rules(world: "SohWorld") -> None:
          has_item(Items.BOTTLE_WITH_FAIRY, bundle) or
          has_item(Items.BRONZE_SCALE, bundle) or
          can_use(Items.IRON_BOOTS, bundle)),
-        (Regions.ZORAS_DOMAIN, lambda bundle: is_child and
+        (Regions.ZORAS_DOMAIN, lambda bundle: is_child(bundle) and
          (has_item(Items.SILVER_SCALE, bundle) or
           can_use(Items.IRON_BOOTS, bundle))),
     ])
