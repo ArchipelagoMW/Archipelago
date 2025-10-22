@@ -66,7 +66,7 @@ class RenderMarkdownTest(unittest.TestCase):
         finally:
             os.unlink(f.name)
 
-    def test_mo_img_rewrite(self) -> None:
+    def test_no_img_rewrite(self) -> None:
         f = NamedTemporaryFile(delete=False)
         try:
             f.write("![Image](image.png)".encode("utf-8"))
