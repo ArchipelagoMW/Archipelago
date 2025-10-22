@@ -1,38 +1,46 @@
 import binascii
 import dataclasses
 import os
-import pkgutil
-import tempfile
 import typing
 import logging
 import re
 
-import bsdiff4
-
 import settings
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial, MultiWorld
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch, icon_paths
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
                     ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name,
                     links_awakening_item_name_groups)
-from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
-from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
-from .Rom import LADXDeltaPatch, get_base_rom_path
+from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
+
+
+def launch_client(*args):
+    from .LinksAwakeningClient import launch as ladx_launch
+    launch(ladx_launch, name=f"{LINKS_AWAKENING} Client", args=args)
+
+components.append(Component(f"{LINKS_AWAKENING} Client",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            icon=LINKS_AWAKENING,
+                            file_identifier=SuffixIdentifier('.apladx')))
+
+icon_paths[LINKS_AWAKENING] = "ap:worlds.ladx/assets/MarinV-3_small.png"
 
 
 class LinksAwakeningSettings(settings.Group):
@@ -40,7 +48,7 @@ class LinksAwakeningSettings(settings.Group):
         """File name of the Link's Awakening DX rom"""
         copy_to = "Legend of Zelda, The - Link's Awakening DX (USA, Europe) (SGB Enhanced).gbc"
         description = "LADX ROM File"
-        md5s = [LADXDeltaPatch.hash]
+        md5s = [LADXProcedurePatch.hash]
 
     class RomStart(str):
         """
@@ -57,8 +65,16 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class GfxModFile(settings.FilePath):
+        """
+        Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
+        Only .bin or .bdiff files
+        The same directory will be checked for a matching text modification file
+        """
+
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: typing.Union[RomStart, bool] = True
+    gfx_mod_file: GfxModFile = GfxModFile()
 
 class LinksAwakeningWebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -69,7 +85,7 @@ class LinksAwakeningWebWorld(WebWorld):
         "setup/en",
         ["zig"]
     )]
-    theme = "dirt"
+    theme = "ocean"
     option_groups = ladx_option_groups
     options_presets: typing.Dict[str, typing.Dict[str, typing.Any]] = {
         "Keysanity": {
@@ -179,10 +195,10 @@ class LinksAwakeningWorld(World):
 
         assert(start)
 
-        menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)
+        menu_region = LinksAwakeningRegion("Menu", None, "Menu", self.player, self.multiworld)        
         menu_region.exits = [Entrance(self.player, "Start Game", menu_region)]
         menu_region.exits[0].connect(start)
-
+        
         self.multiworld.regions.append(menu_region)
 
         # Place RAFT, other access events
@@ -190,14 +206,14 @@ class LinksAwakeningWorld(World):
             for loc in region.locations:
                 if loc.address is None:
                     loc.place_locked_item(self.create_event(loc.ladxr_item.event))
-
+        
         # Connect Windfish -> Victory
         windfish = self.multiworld.get_region("Windfish", self.player)
         l = Location(self.player, "Windfish", parent=windfish)
         windfish.locations = [l]
-
+                
         l.place_locked_item(self.create_event("An Alarm Clock"))
-
+        
         self.multiworld.completion_condition[self.player] = lambda state: state.has("An Alarm Clock", player=self.player)
 
     def create_item(self, item_name: str):
@@ -208,8 +224,6 @@ class LinksAwakeningWorld(World):
 
     def create_items(self) -> None:
         itempool = []
-
-        exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
 
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
         self.prefill_own_dungeons = []
@@ -227,50 +241,46 @@ class LinksAwakeningWorld(World):
                 continue
             item_name = ladxr_item_to_la_item_name[ladx_item_name]
             for _ in range(count):
-                if item_name in exclude:
-                    exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
-                else:
-                    item = self.create_item(item_name)
+                item = self.create_item(item_name)
 
-                    if not self.options.tradequest and isinstance(item.item_data, TradeItemData):
-                        location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
-                        location.place_locked_item(item)
-                        location.show_in_spoiler = False
-                        continue
+                if not self.options.tradequest and isinstance(item.item_data, TradeItemData):
+                    location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
+                    location.place_locked_item(item)
+                    location.show_in_spoiler = False
+                    continue
 
-                    if isinstance(item.item_data, DungeonItemData):
-                        item_type = item.item_data.ladxr_id[:-1]
-                        shuffle_type = self.dungeon_item_types[item_type]
+                if isinstance(item.item_data, DungeonItemData):
+                    item_type = item.item_data.ladxr_id[:-1]
+                    shuffle_type = self.dungeon_item_types[item_type]
 
-                        if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT and shuffle_type == ShuffleInstruments.option_vanilla:
-                            # Find instrument, lock
-                            # TODO: we should be able to pinpoint the region we want, save a lookup table please
-                            found = False
-                            for r in self.multiworld.get_regions(self.player):
-                                if r.dungeon_index != item.item_data.dungeon_index:
+                    if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT and shuffle_type == ShuffleInstruments.option_vanilla:
+                        # Find instrument, lock
+                        # TODO: we should be able to pinpoint the region we want, save a lookup table please
+                        found = False
+                        for r in self.multiworld.get_regions(self.player):
+                            if r.dungeon_index != item.item_data.dungeon_index:
+                                continue
+                            for loc in r.locations:
+                                if not isinstance(loc, LinksAwakeningLocation):
                                     continue
-                                for loc in r.locations:
-                                    if not isinstance(loc, LinksAwakeningLocation):
-                                        continue
-                                    if not isinstance(loc.ladxr_item, Instrument):
-                                        continue
-                                    loc.place_locked_item(item)
-                                    found = True
-                                    break
-                                if found:
-                                    break
-                        else:
-                            if shuffle_type == DungeonItemShuffle.option_original_dungeon:
-                                self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
-                                self.pre_fill_items.append(item)
-                            elif shuffle_type == DungeonItemShuffle.option_own_dungeons:
-                                self.prefill_own_dungeons.append(item)
-                                self.pre_fill_items.append(item)
-                            else:
-                                itempool.append(item)
+                                if not isinstance(loc.ladxr_item, Instrument):
+                                    continue
+                                loc.place_locked_item(item)
+                                found = True
+                                break
+                            if found:
+                                break
                     else:
-                        itempool.append(item)
+                        if shuffle_type == DungeonItemShuffle.option_original_dungeon:
+                            self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
+                            self.pre_fill_items.append(item)
+                        elif shuffle_type == DungeonItemShuffle.option_own_dungeons:
+                            self.prefill_own_dungeons.append(item)
+                            self.pre_fill_items.append(item)
+                        else:
+                            itempool.append(item)
+                else:
+                    itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
@@ -279,8 +289,8 @@ class LinksAwakeningWorld(World):
         event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
         trendy_region.locations.insert(0, event_location)
         event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
-
-        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]
+       
+        self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions(self.player):
             # Set aside dungeon locations
             if r.dungeon_index:
@@ -335,7 +345,9 @@ class LinksAwakeningWorld(World):
                 start_item = next((item for item in start_items if opens_new_regions(item)), None)
 
             if start_item:
-                itempool.remove(start_item)
+                # Make sure we're removing the same copy of the item that we're placing
+                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
+                start_item = itempool.pop(itempool.index(start_item))
                 start_loc.place_locked_item(start_item)
             else:
                 logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
@@ -352,7 +364,7 @@ class LinksAwakeningWorld(World):
 
         # set containing the list of all possible dungeon locations for the player
         all_dungeon_locs = set()
-
+        
         # Do dungeon specific things
         for dungeon_index in range(0, 9):
             # set up allow-list for dungeon specific items
@@ -365,7 +377,7 @@ class LinksAwakeningWorld(World):
             # ...also set the rules for the dungeon
             for location in locs:
                 orig_rule = location.item_rule
-                # If an item is about to be placed on a dungeon location, it can go there iff
+                # If an item is about to be placed on a dungeon location, it can go there iff 
                 # 1. it fits the general rules for that location (probably 'return True' for most places)
                 # 2. Either
                 #    2a. it's not a restricted dungeon item
@@ -419,7 +431,7 @@ class LinksAwakeningWorld(World):
         partial_all_state.sweep_for_advancements()
 
         fill_restrictive(self.multiworld, partial_all_state, all_dungeon_locs_to_fill, all_dungeon_items_to_fill, lock=True, single_player_placement=True, allow_partial=False)
-
+        
 
     name_cache = {}
     # Tries to associate an icon from another game with an icon we have
@@ -456,14 +468,8 @@ class LinksAwakeningWorld(World):
         for name in possibles:
             if name in self.name_cache:
                 return self.name_cache[name]
-
+        
         return "TRADING_ITEM_LETTER"
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
 
     def generate_output(self, output_directory: str):
         # copy items back to locations
@@ -471,7 +477,7 @@ class LinksAwakeningWorld(World):
             for loc in r.locations:
                 if isinstance(loc, LinksAwakeningLocation):
                     assert(loc.item)
-
+                        
                     # If we're a links awakening item, just use the item
                     if isinstance(loc.item, LinksAwakeningItem):
                         loc.ladxr_item.item = loc.item.item_data.ladxr_id
@@ -497,31 +503,13 @@ class LinksAwakeningWorld(World):
                     # Kind of kludge, make it possible for the location to differentiate between local and remote items
                     loc.ladxr_item.location_owner = self.player
 
-        rom_name = Rom.get_base_rom_path()
-        out_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.player_name}.gbc"
-        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.gbc")
+        
+        patch = LADXProcedurePatch(player=self.player, player_name=self.player_name)
+        write_patch_data(self, patch)
+        out_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}"
+                                                  f"{patch.patch_file_ending}")
 
-        parser = get_parser()
-        args = parser.parse_args([rom_name, "-o", out_name, "--dump"])
-
-        rom = generator.generateRom(args, self)
-
-        with open(out_path, "wb") as handle:
-            rom.save(handle, name="LADXR")
-
-        # Write title screen after everything else is done - full gfxmods may stomp over the egg tiles
-        if self.options.ap_title_screen:
-            with tempfile.NamedTemporaryFile(delete=False) as title_patch:
-                title_patch.write(pkgutil.get_data(__name__, "LADXR/patches/title_screen.bdiff4"))
-
-            bsdiff4.file_patch_inplace(out_path, title_patch.name)
-            os.unlink(title_patch.name)
-
-        patch = LADXDeltaPatch(os.path.splitext(out_path)[0]+LADXDeltaPatch.patch_file_ending, player=self.player,
-                               player_name=self.player_name, patched_path=out_path)
-        patch.write()
-        if not DEVELOPER_MODE:
-            os.unlink(out_path)
+        patch.write(out_path)
 
     def generate_multi_key(self):
         return bytearray(self.random.getrandbits(8) for _ in range(10)) + self.player.to_bytes(2, 'big')

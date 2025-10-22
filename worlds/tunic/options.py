@@ -1,12 +1,13 @@
-import logging
 from dataclasses import dataclass
-from typing import Dict, Any, TYPE_CHECKING
-
 from decimal import Decimal, ROUND_HALF_UP
+import logging
+from typing import Any, TYPE_CHECKING
 
 from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
-                     PerGameCommonOptions, OptionGroup, Visibility, NamedRange)
+                     PerGameCommonOptions, OptionGroup, Removed, Visibility, NamedRange)
+
 from .er_data import portal_mapping
+
 if TYPE_CHECKING:
     from . import TunicWorld
 
@@ -145,14 +146,31 @@ class EntranceRando(TextChoice):
     default = 0
 
 
-class FixedShop(Toggle):
+class EntranceLayout(Choice):
     """
-    Forces the Windmill entrance to lead to a shop, and removes the remaining shops from the pool.
+    Decide how the Entrance Randomizer chooses how to pair the entrances.
+    Standard: Entrances are randomly connected. There are 6 shops in the pool with this option.
+    Fixed Shop: Forces the Windmill entrance to lead to a shop, and removes the other shops from the pool.
     Adds another entrance in Rooted Ziggurat Lower to keep an even number of entrances.
-    Has no effect if Entrance Rando is not enabled.
+    Direction Pairs: Entrances facing opposite directions are paired together. There are 8 shops in the pool with this option.
+    Note: For seed groups, if one player in a group chooses Fixed Shop and another chooses Direction Pairs, it will error out.
+    Either of these options will override Standard within a seed group.
     """
-    internal_name = "fixed_shop"
-    display_name = "Fewer Shops in Entrance Rando"
+    internal_name = "entrance_layout"
+    display_name = "Entrance Layout"
+    option_standard = 0
+    option_fixed_shop = 1
+    option_direction_pairs = 2
+    default = 0
+
+
+class Decoupled(Toggle):
+    """
+    Decouple the entrances, so that when you go from one entrance to another, the return trip won't necessarily bring you back to the same place.
+    Note: For seed groups, all players in the group must have this option enabled or disabled.
+    """
+    internal_name = "decoupled"
+    display_name = "Decoupled Entrances"
 
 
 class LaurelsLocation(Choice):
@@ -180,6 +198,24 @@ class ShuffleLadders(Toggle):
     display_name = "Shuffle Ladders"
 
 
+class ShuffleFuses(Toggle):
+    """
+    Praying at a fuse will reward a check instead of turning on the power. The power from each fuse gets turned into an
+    item that must be found in order to restore power for that part of the path.
+    """
+    internal_name = "shuffle_fuses"
+    display_name = "Shuffle Fuses"
+
+
+class ShuffleBells(Toggle):
+    """
+    The East and West bells are shuffled into the item pool and must be found in order to unlock the Sealed Temple.
+    Ringing the bells will instead now reward a check.
+    """
+    internal_name = "shuffle_bells"
+    display_name = "Shuffle Bells"
+
+
 class GrassRandomizer(Toggle):
     """
     Turns over 6,000 blades of grass and bushes in the game into checks.
@@ -191,8 +227,9 @@ class GrassRandomizer(Toggle):
 class LocalFill(NamedRange):
     """
     Choose the percentage of your filler/trap items that will be kept local or distributed to other TUNIC players with this option enabled.
-    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool. The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml.
-    This option defaults to 95% if you have Grass Randomizer enabled, and to 0% otherwise.
+    If you have Grass Randomizer enabled, this defaults to 95%. If you have Breakable Shuffle enabled, this defaults to 40%. If you have both enabled, this defaults to 96%.
+    If you have Grass Randomizer enabled, this option must be set to 95% or higher to avoid flooding the item pool.
+    The host can remove this restriction by turning off the limit_grass_rando setting in host.yaml. This setting can only be changed with local generation, it cannot be changed on the website.
     This option ignores items placed in your local_items or non_local_items.
     This option does nothing in single player games.
     """
@@ -204,19 +241,27 @@ class LocalFill(NamedRange):
         "default": -1
     }
     default = -1
-    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
 
 class TunicPlandoConnections(PlandoConnections):
     """
     Generic connection plando. Format is:
-    - entrance: "Entrance Name"
-      exit: "Exit Name"
+    - entrance: Entrance Name
+      exit: Exit Name
+      direction: Direction
       percentage: 100
+    Direction must be one of entrance, exit, or both, and defaults to both if omitted.
+    Direction entrance means the entrance leads to the exit. Direction exit means the exit leads to the entrance.
+    If you do not have Decoupled enabled, you do not need the direction line, as it will only use both.
     Percentage is an integer from 0 to 100 which determines whether that connection will be made. Defaults to 100 if omitted.
+    If the Entrance Layout option is set to Standard or Fixed Shop, you can plando multiple shops.
+    If the Entrance Layout option is set to Direction Pairs, your plando connections must be facing opposite directions.
+    Shop Portal 1-6 are South portals, and Shop Portal 7-8 are West portals.
+    This option does nothing if Entrance Rando is disabled.
     """
-    entrances = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
-    exits = {*(portal.name for portal in portal_mapping), "Shop", "Shop Portal"}
+    shops = {f"Shop Portal {i + 1}" for i in range(500)}
+    entrances = {portal.name for portal in portal_mapping}.union(shops)
+    exits = {portal.name for portal in portal_mapping}.union(shops)
 
     duplicate_exits = True
 
@@ -295,24 +340,6 @@ class LadderStorageWithoutItems(Toggle):
     display_name = "Ladder Storage without Items"
 
 
-class LogicRules(Choice):
-    """
-    This option has been superseded by the individual trick options.
-    If set to nmg, it will set Ice Grappling to medium and Laurels Zips on.
-    If set to ur, it will do nmg as well as set Ladder Storage to medium.
-    It is here to avoid breaking old yamls, and will be removed at a later date.
-    """
-    visibility = Visibility.none
-    internal_name = "logic_rules"
-    display_name = "Logic Rules"
-    option_restricted = 0
-    option_no_major_glitches = 1
-    alias_nmg = 1
-    option_unrestricted = 2
-    alias_ur = 2
-    default = 0
-
-
 class BreakableShuffle(Toggle):
     """
     Turns approximately 250 breakable objects in the game into checks.
@@ -321,14 +348,24 @@ class BreakableShuffle(Toggle):
     display_name = "Breakable Shuffle"
 
 
+class HiddenAllRandom(Toggle):
+    """
+    Sets all options that can be random to random.
+    For test gens.
+    """
+    internal_name = "all_random"
+    display_name = "All Random Debug"
+    visibility = Visibility.none
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
-
     sword_progression: SwordProgression
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
+
     fool_traps: FoolTraps
     laurels_location: LaurelsLocation
 
@@ -338,12 +375,15 @@ class TunicOptions(PerGameCommonOptions):
     hexagon_quest_ability_type: HexagonQuestAbilityUnlockType
 
     shuffle_ladders: ShuffleLadders
+    shuffle_fuses: ShuffleFuses
+    shuffle_bells: ShuffleBells
     grass_randomizer: GrassRandomizer
     breakable_shuffle: BreakableShuffle
     local_fill: LocalFill
 
     entrance_rando: EntranceRando
-    fixed_shop: FixedShop
+    entrance_layout: EntranceLayout
+    decoupled: Decoupled
 
     combat_logic: CombatLogic
     lanternless: Lanternless
@@ -355,7 +395,10 @@ class TunicOptions(PerGameCommonOptions):
 
     plando_connections: TunicPlandoConnections
 
-    logic_rules: LogicRules
+    all_random: HiddenAllRandom
+
+    fixed_shop: Removed
+    logic_rules: Removed
 
 
 tunic_option_groups = [
@@ -372,11 +415,17 @@ tunic_option_groups = [
         LaurelsZips,
         IceGrappling,
         LadderStorage,
-        LadderStorageWithoutItems
-    ])
+        LadderStorageWithoutItems,
+    ]),
+    OptionGroup("Entrance Randomizer", [
+        EntranceRando,
+        EntranceLayout,
+        Decoupled,
+        TunicPlandoConnections,
+    ]),
 ]
 
-tunic_option_presets: Dict[str, Dict[str, Any]] = {
+tunic_option_presets: dict[str, dict[str, Any]] = {
     "Sync": {
         "ability_shuffling": True,
     },
@@ -403,14 +452,16 @@ tunic_option_presets: Dict[str, Dict[str, Any]] = {
 
 def check_options(world: "TunicWorld"):
     options = world.options
-    if options.hexagon_quest and options.ability_shuffling and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons:
+    if (options.hexagon_quest and options.ability_shuffling
+            and options.hexagon_quest_ability_type == HexagonQuestAbilityUnlockType.option_hexagons):
         total_hexes = get_hexagons_in_pool(world)
         min_hexes = 3
 
         if options.keys_behind_bosses:
             min_hexes = 15
         if total_hexes < min_hexes:
-            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
+            logging.warning(f"TUNIC: Not enough Gold Hexagons in {world.player_name}'s item pool for Hexagon Ability "
+                            "Shuffle with the selected options. Ability Shuffle mode will be switched to Pages.")
             options.hexagon_quest_ability_type.value = HexagonQuestAbilityUnlockType.option_pages
 
 
@@ -418,4 +469,4 @@ def get_hexagons_in_pool(world: "TunicWorld"):
     # Calculate number of hexagons in item pool
     options = world.options
     return min(int((Decimal(100 + options.extra_hexagon_percentage) / 100 * options.hexagon_goal)
-                    .to_integral_value(rounding=ROUND_HALF_UP)), 100)
+                   .to_integral_value(rounding=ROUND_HALF_UP)), 100)
