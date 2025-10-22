@@ -12,31 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Archive
-        run: |
-          cd worlds
-          zip -r candybox2.apworld candybox2/
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - run: sudo apt-get install -y jq
+      - run: pip install
+      - run: worlds/candybox2/ci_scripts/update_world_version.sh
+      - run: python Launcher.py "Build APWorlds" -- "Candy Box 2"
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          path: "worlds/candybox2.apworld"
+          path: "build/apworlds/candybox2.apworld"
           name: 'candybox2.apworld'
-#  release:
-#    runs-on: ubuntu-latest
-#    if: ${{ github.event_name == 'push' }}
-#    needs:
-#      - archive
-#    steps:
-#      - uses: actions/download-artifact@v4
-#        with:
-#          name: 'candybox2.apworld'
-#      - uses: "marvinpinto/action-automatic-releases@latest"
-#        with:
-#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#          automatic_release_tag: "latest"
-#          prerelease: true
-#          title: "Latest Development Build"
-#          files: candybox2.apworld
   release-to-created-release:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'release' }}
