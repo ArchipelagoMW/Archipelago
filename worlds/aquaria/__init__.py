@@ -7,11 +7,13 @@ Description: Main module for Aquaria game multiworld randomizer
 from typing import List, Dict, ClassVar, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, MultiWorld, ItemClassification
-from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames
+from .Items import item_table, AquariaItem, ItemType, ItemGroup, ItemNames, four_gods_excludes
 from .Locations import location_table, AquariaLocationNames
 from .Options import (AquariaOptions, IngredientRandomizer, TurtleRandomizer, EarlyBindSong, EarlyEnergyForm,
                       UnconfineHomeWater, Objective)
 from .Regions import AquariaRegions
+
+CLIENT_MINIMAL_COMPATIBILITY = [1, 4, 1]
 
 
 class AquariaWeb(WebWorld):
@@ -98,6 +100,7 @@ class AquariaWorld(World):
     "Used to manage Regions"
 
     exclude: List[str]
+    "The items that should not be added to the multiworld item pool"
 
     def __init__(self, multiworld: MultiWorld, player: int):
         """Initialisation of the Aquaria World"""
@@ -111,15 +114,15 @@ class AquariaWorld(World):
         Run before any general steps of the MultiWorld other than options. Useful for getting and adjusting option
         results and determining layouts for entrance rando etc. start inventory gets pushed after this step.
         """
-        self.regions = AquariaRegions(self.multiworld, self.player)
+        self.regions = AquariaRegions(self.multiworld, self.player, self.options)
 
     def create_regions(self) -> None:
         """
         Create every Region in `regions`
         """
-        self.regions.add_regions_to_world()
-        self.regions.connect_regions()
-        self.regions.add_event_locations()
+        self.regions.add_regions_to_world(self.options)
+        self.regions.connect_regions(self.options)
+        self.regions.add_event_locations(self.options)
 
     def create_item(self, name: str) -> AquariaItem:
         """
@@ -157,8 +160,17 @@ class AquariaWorld(World):
     def create_items(self) -> None:
         """Create every item in the world"""
         precollected = [item.name for item in self.multiworld.precollected_items[self.player]]
+        if (self.options.objective.value == Objective.option_killing_the_four_gods or
+                self.options.objective.value == Objective.option_gods_and_creator):
+            self.exclude.extend(four_gods_excludes)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
+                                 precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                 precollected)
         if self.options.turtle_randomizer.value != TurtleRandomizer.option_none:
-            if self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final:
+            if (self.options.turtle_randomizer.value == TurtleRandomizer.option_all_except_final and
+                    self.options.objective.value != Objective.option_killing_the_four_gods and
+                    self.options.objective.value != Objective.option_gods_and_creator):
                 self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
                                      precollected)
         else:
@@ -167,25 +179,29 @@ class AquariaWorld(World):
             self.__pre_fill_item(ItemNames.TRANSTURTLE_VEIL_TOP_RIGHT,
                                  AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_OPEN_WATERS,
-                                 AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE,
-                                 precollected)
+                                 AquariaLocationNames.OPEN_WATERS_TOP_RIGHT_AREA_TRANSTURTLE, precollected)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_KELP_FOREST,
-                                 AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE,
-                                 precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE,
-                                 precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
-                                 precollected)
-            self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
-                                 precollected)
+                                 AquariaLocationNames.KELP_FOREST_BOTTOM_LEFT_AREA_TRANSTURTLE, precollected)
+            self.__pre_fill_item(ItemNames.TRANSTURTLE_HOME_WATERS, AquariaLocationNames.HOME_WATERS_TRANSTURTLE, precollected)
+            if (self.options.objective.value != Objective.option_killing_the_four_gods and
+                    self.options.objective.value != Objective.option_gods_and_creator):
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_ABYSS, AquariaLocationNames.ABYSS_RIGHT_AREA_TRANSTURTLE,
+                                     precollected)
+                self.__pre_fill_item(ItemNames.TRANSTURTLE_BODY, AquariaLocationNames.FINAL_BOSS_AREA_TRANSTURTLE,
+                                     precollected)
             # The last two are inverted because in the original game, they are special turtle that communicate directly
             self.__pre_fill_item(ItemNames.TRANSTURTLE_SIMON_SAYS, AquariaLocationNames.ARNASSI_RUINS_TRANSTURTLE,
                                  precollected, ItemClassification.progression)
             self.__pre_fill_item(ItemNames.TRANSTURTLE_ARNASSI_RUINS, AquariaLocationNames.SIMON_SAYS_AREA_TRANSTURTLE,
                                  precollected)
+        if not self.options.throne_as_location:
+            self.__pre_fill_item(ItemNames.DOOR_TO_CATHEDRAL, AquariaLocationNames.SITTING_ON_THRONE,
+                                 precollected, ItemClassification.progression)
         for name, data in item_table.items():
-            if name not in self.exclude:
-                for i in range(data.count):
+            for i in range(data.count):
+                if name in self.exclude:
+                    self.exclude.remove(name)
+                else:
                     item = self.create_item(name)
                     self.multiworld.itempool.append(item)
 
@@ -227,22 +243,41 @@ class AquariaWorld(World):
         self.ingredients_substitution.extend(dishes_substitution)
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        """
+        Send some useful information to the client.
+        """
         return {"ingredientReplacement": self.ingredients_substitution,
                 "aquarian_translate": bool(self.options.aquarian_translation.value),
                 "blind_goal": bool(self.options.blind_goal.value),
-                "secret_needed":
-                    self.options.objective.value == Objective.option_obtain_secrets_and_kill_the_creator,
+                "goal": self.options.objective.value,
                 "minibosses_to_kill": self.options.mini_bosses_to_beat.value,
                 "bigbosses_to_kill": self.options.big_bosses_to_beat.value,
                 "skip_first_vision": bool(self.options.skip_first_vision.value),
+                "skip_final_boss_3rd_form": bool(self.options.skip_final_boss_3rd_form.value),
+                "infinite_hot_soup": bool(self.options.infinite_hot_soup.value),
+                "open_body_tongue": bool(self.options.open_body_tongue.value),
                 "unconfine_home_water_energy_door":
                     self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_energy_door
                     or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
                 "unconfine_home_water_transturtle":
                     self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_transturtle
                     or self.options.unconfine_home_water.value == UnconfineHomeWater.option_via_both,
+                "maximum_ingredient_amount": self.options.maximum_ingredient_amount.value,
                 "bind_song_needed_to_get_under_rock_bulb": bool(self.options.bind_song_needed_to_get_under_rock_bulb),
                 "no_progression_hard_or_hidden_locations": bool(self.options.no_progression_hard_or_hidden_locations),
                 "light_needed_to_get_to_dark_places": bool(self.options.light_needed_to_get_to_dark_places),
-                "turtle_randomizer": self.options.turtle_randomizer.value
+                "turtle_randomizer": self.options.turtle_randomizer.value,
+                "no_progression_simon_says": bool(self.options.no_progression_simon_says),
+                "no_progression_kelp_forest": bool(self.options.no_progression_kelp_forest),
+                "no_progression_veil": bool(self.options.no_progression_veil),
+                "no_progression_mithalas": bool(self.options.no_progression_mithalas),
+                "no_progression_energy_temple": bool(self.options.no_progression_energy_temple),
+                "no_progression_arnassi_ruins": bool(self.options.no_progression_arnassi_ruins),
+                "no_progression_frozen_veil": bool(self.options.no_progression_frozen_veil),
+                "no_progression_abyss": bool(self.options.no_progression_abyss),
+                "no_progression_sunken_city": bool(self.options.no_progression_sunken_city),
+                "no_progression_body": bool(self.options.no_progression_body),
+                "save_healing": bool(self.options.save_healing),
+                "throne_as_location": bool(self.options.throne_as_location),
+                "required_client_version": CLIENT_MINIMAL_COMPATIBILITY,
                 }
