@@ -109,7 +109,7 @@ class CandyBox2LocationName(StrEnum):
     LOLLIPOP_FARM_EXTRA_4 = "Lollipop Farm: Planted 60000 Lollipops"
     LOLLIPOP_FARM_EXTRA_5 = "Lollipop Farm: Planted 70000 Lollipops"
 
-location_descriptions = {
+location_descriptions: dict[CandyBox2LocationName, str] = {
     CandyBox2LocationName.HP_BAR_UNLOCK: ""
 }
 

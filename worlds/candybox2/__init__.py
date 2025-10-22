@@ -24,7 +24,7 @@ class CandyBox2WebWorld(WebWorld):
         ["Victor Tran"]
     )]
 
-    location_descriptions = location_descriptions
+    location_descriptions = {location.value: description for location, description in location_descriptions.items()}
     option_groups = candy_box_2_options_groups
     bug_report_page = "https://github.com/vicr123/candy-box-2/issues"
 
