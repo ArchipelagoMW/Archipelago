@@ -21,7 +21,7 @@ The materials required for constructing Assemblers and Foundries is altered to i
 The player can choose from a number of goals using their YAML settings:
 
 - Complete the selected number of **[Space Elevator](https://satisfactory.wiki.gg/wiki/Space_Elevator) Phases**.
-  - The goal completes upon submitting the final Space Elevator Phase. Any other progression you may have access to (HUB, MAM, AWESOME Shop) is not required for goal completion.
+  - The goal completes upon submitting your selected Space Elevator Phase. Any other progression you may have access to (HUB, MAM, AWESOME Shop) is not required for goal completion.
   - Selecting Phase 5 is equivalent to beating the vanilla game by launching Project Assembly.
   - Expect Phase 1 to take ~3 hours to finish, Phase 2 to take ~8 hours, Phase 3 to take ~2 days, Phase 4 to take ~1 week, and Phase 5 to take ~1.5 weeks on default settings.
 - Supply items to the [AWESOME Sink](https://satisfactory.wiki.gg/wiki/AWESOME_Sink) **totalling a configurable amount of points** to finish.
@@ -39,7 +39,6 @@ The player can choose from a number of goals using their YAML settings:
   - Time to finish this goal varies significantly depending on your map knowledge, equipment, and movement skills.
 
 You can also configure whether completing your slot requires *any one* goal or *all* goals to be met.
-
 
 ## What Satisfactory items can appear in other players' worlds?
 
