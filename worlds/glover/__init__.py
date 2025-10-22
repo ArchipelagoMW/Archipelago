@@ -125,13 +125,10 @@ class GloverWorld(World):
             garibs_number : int = self.get_garib_group_size(name)
             if garibs_number >= 0:
                 state.add_item("Total Garibs", self.player, garibs_number)
-        #Level events
-        if name == "Crn1 Rocket":
-            rockets_count = state.count("Crn1 Rocket", self.player)
-            state.add_item("Crn1 Rocket " + str(rockets_count), self.player)
-        if name == "Pht3 Lower Monolith":
-            rockets_count = state.count("Pht3 Lower Monolith", self.player)
-            state.add_item("Pht3 Lower Monolith " + str(rockets_count), self.player)
+        #Progressive Events
+        if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway"]:
+            progressive_count = state.count(name, self.player)
+            state.add_item(name + " " + str(progressive_count), self.player)
         return output
 
     def remove(self, state, item):
@@ -149,13 +146,10 @@ class GloverWorld(World):
             garibs_number : int = self.get_garib_group_size(name)
             if garibs_number >= 0:
                 state.remove_item("Total Garibs", self.player, garibs_number)
-        #Level events
-        if name == "Crn1 Rocket":
-            rockets_count = state.count("Crn1 Rocket", self.player)
-            state.remove_item("Crn1 Rocket " + str(rockets_count), self.player)
-        if name == "Pht3 Lower Monolith":
-            rockets_count = state.count("Pht3 Lower Monolith", self.player)
-            state.remove_item("Pht3 Lower Monolith " + str(rockets_count), self.player)
+        #Progressive Events
+        if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway"]:
+            progressive_count = state.count(name, self.player)
+            state.remove_item(name + " " + str(progressive_count), self.player)
         return output
 
     def get_garib_group_size(self, garibName : str):

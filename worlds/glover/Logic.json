@@ -4475,9 +4475,7 @@
 				},
 				{
 					"ballRequirement": true,
-					"ck0": "Rocket 1",
-					"ck1": "Rocket 2",
-					"ck2": "Rocket 3",
+					"ck0": "Rocket 3",
 					"regionIndex": 11,
 					"trickDifficulty": 0
 				}
@@ -22338,8 +22336,7 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Doorway Key 1",
-						"ck1": "Doorway Key 2",
+						"ck0": "Progressive Doorway 2",
 						"regionIndex": 12,
 						"trickDifficulty": 0
 					}
@@ -22354,8 +22351,7 @@
 					},
 					{
 						"ballRequirement": false,
-						"ck0": "Doorway Key 1",
-						"ck1": "Doorway Key 2",
+						"ck0": "Progressive Doorway 2",
 						"regionIndex": 11,
 						"trickDifficulty": 0
 					}
