@@ -75,6 +75,7 @@ class ClairObscurWorld(World):
             "Healing Tint Shard": 10,
             "Energy Tint Shard": 10,
             "Revive Tint Shard": 10,
+            "Chroma Elixir Shard": 4,
 
             #Only 10 are possible to get in a normal playthrough
             "Perfect Chroma Catalyst": 10
@@ -155,6 +156,7 @@ class ClairObscurWorld(World):
                 spheres = self.multiworld.get_spheres()
                 for sphere in spheres:
                     for loc in sphere:
+                        if loc.item.player != self.player: continue
                         if loc.item.name in self.item_name_groups["Picto"]:
                             slot_data["pictos"].append(loc.item.code)
                         elif loc.item.name in self.item_name_groups["Weapon"]:
