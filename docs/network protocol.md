@@ -79,7 +79,7 @@ Sent to clients when they connect to an Archipelago server.
 | generator_version     | [NetworkVersion](#NetworkVersion)             | Object denoting the version of Archipelago which generated the multiworld.                                                                                                                                                            |
 | tags                  | list\[str\]                                   | Denotes special features or capabilities that the sender is capable of. Example: `WebHost`                                                                                                                                            |
 | password              | bool                                          | Denoted whether a password is required to join this room.                                                                                                                                                                             |
-| permissions           | dict\[str, [Permission](#Permission)\[int\]\] | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
+| permissions           | dict\[str, [Permission](#Permission)\]        | Mapping of permission name to [Permission](#Permission), keys are: "release", "collect" and "remaining".                                                                                                                              |
 | hint_cost             | int                                           | The percentage of total locations that need to be checked to receive a hint from the server.                                                                                                                                          |
 | location_check_points | int                                           | The amount of hint points you receive per item/location check completed.                                                                                                                                                              |
 | games                 | list\[str\]                                   | List of games present in this multiworld.                                                                                                                                                                                             |
@@ -340,7 +340,8 @@ Sent to the server to retrieve the items that are on a specified list of locatio
 Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
-This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.  
+Note that LocationScouts with a non-zero `create_as_hint` value will _always_ create a **persistent** hint (listed in the Hints tab of concerning players' TextClients), even if the location was already found. If this is not desired behavior, you need to prevent sending LocationScouts with `create_as_hint` for already found locations in your client-side code.
 
 #### Arguments
 | Name | Type | Notes |
@@ -661,13 +662,14 @@ class SlotType(enum.IntFlag):
 An object representing static information about a slot.
 
 ```python
-import typing
+from collections.abc import Sequence
+from typing import NamedTuple
 from NetUtils import SlotType
-class NetworkSlot(typing.NamedTuple):
+class NetworkSlot(NamedTuple):
    name: str
    game: str
    type: SlotType
-   group_members: typing.List[int] = []  # only populated if type == group
+   group_members: Sequence[int] = []  # only populated if type == group
 ```
 
 ### Permission
@@ -685,8 +687,8 @@ class Permission(enum.IntEnum):
 ### Hint
 An object representing a Hint.
 ```python
-import typing
-class Hint(typing.NamedTuple):
+from typing import NamedTuple
+class Hint(NamedTuple):
     receiving_player: int
     finding_player: int
     location: int
