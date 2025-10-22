@@ -193,5 +193,5 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.GANONS_CASTLE_LEDGE, world, [
         (Regions.GANONS_CASTLE_GROUNDS, lambda bundle: has_item(
             LocalEvents.HC_OGC_RAINBOW_BRIDGE_BUILT, bundle)),
-        (Regions.GANONS_TOWER_ENTRYWAY, lambda bundle: is_adult(bundle))
+        (Regions.GANONS_CASTLE_ENTRYWAY, lambda bundle: is_adult(bundle))
     ])
