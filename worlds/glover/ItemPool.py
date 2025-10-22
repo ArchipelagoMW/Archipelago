@@ -441,7 +441,7 @@ def construct_blank_world_garibs(world_prefixes : list[str], level_prefixes : li
 ability_table = {
 	"Jump" : 									ItemData(BASE_ID + 329, 1, "Progression", None),
 	"Cartwheel" : 								ItemData(BASE_ID + 330, 1, "Progression", None),
-	"Crawl" : 									ItemData(BASE_ID + 331, 1, "Useful", None),
+	"Crawl" : 									ItemData(BASE_ID + 331, 1, "Progression", None),
 	"Double Jump" : 							ItemData(BASE_ID + 332, 1, "Progression", None),
 	"Fist Slam" : 								ItemData(BASE_ID + 333, 1, "Progression", None),
 	"Ledge Grab" : 								ItemData(BASE_ID + 334, 1, "Progression", None),
