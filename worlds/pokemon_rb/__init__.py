@@ -1,4 +1,3 @@
-import os
 import settings
 import typing
 import threading
@@ -8,12 +7,12 @@ from copy import deepcopy
 from typing import TextIO
 
 from Utils import __version__
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 from .items import item_table, item_groups
-from .locations import location_data, PokemonRBLocation
+from .locations import location_data, PokemonRBLocation, location_groups
 from .regions import create_regions
 from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
@@ -86,6 +85,7 @@ class PokemonRedBlueWorld(World):
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
                            and location.address is not None}
     item_name_groups = item_groups
+    location_name_groups = location_groups
 
     web = PokemonWebWorld()
 
@@ -112,6 +112,9 @@ class PokemonRedBlueWorld(World):
         self.trainersanity_table = []
         self.local_locs = []
         self.pc_item = None
+        self.rock_tunnel_1f_data = None
+        self.rock_tunnel_b1f_data = None
+        self.rock_tunnel_seed = None
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld):
@@ -231,12 +234,6 @@ class PokemonRedBlueWorld(World):
         if not self.options.badgesanity:
             self.options.non_local_items.value -= self.item_name_groups["Badges"]
 
-        if self.options.key_items_only:
-            self.options.trainersanity.value = 0
-            self.options.dexsanity.value = 0
-            self.options.randomize_hidden_items = \
-                self.options.randomize_hidden_items.from_text("off")
-
         if self.options.badges_needed_for_hm_moves.value >= 2:
             badges_to_add = ["Marsh Badge", "Volcano Badge", "Earth Badge"]
             if self.options.badges_needed_for_hm_moves.value == 3:
@@ -349,9 +346,6 @@ class PokemonRedBlueWorld(World):
                     raise FillError(f"Failed to place badges for player {self.player}")
             verify_hm_moves(self.multiworld, self, self.player)
 
-        if self.options.key_items_only:
-            return
-
         tms = [item for item in usefulitempool + filleritempool if item.name.startswith("TM") and (item.player ==
                self.player or (item.player in self.multiworld.groups and self.player in
                                self.multiworld.groups[item.player]["players"]))]
@@ -415,17 +409,16 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        if not self.options.key_items_only:
-            rule = None
-            if self.options.fossil_check_item_types == "key_items":
-                rule = lambda i: i.advancement
-            elif self.options.fossil_check_item_types == "unique_items":
-                rule = lambda i: i.name in item_groups["Unique"]
-            elif self.options.fossil_check_item_types == "no_key_items":
-                rule = lambda i: not i.advancement
-            if rule:
-                for loc in locs:
-                    add_item_rule(loc, rule)
+        rule = None
+        if self.options.fossil_check_item_types == "key_items":
+            rule = lambda i: i.advancement
+        elif self.options.fossil_check_item_types == "unique_items":
+            rule = lambda i: i.name in item_groups["Unique"]
+        elif self.options.fossil_check_item_types == "no_key_items":
+            rule = lambda i: not i.advancement
+        if rule:
+            for loc in locs:
+                add_item_rule(loc, rule)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -508,13 +501,12 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-        if not self.options.key_items_only:
-            loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
-            # Absolutely cannot have another player's item
-            if loc.item is not None and loc.item.player != self.player:
-                self.multiworld.itempool.append(loc.item)
-                loc.item = None
-            loc.place_locked_item(self.pc_item)
+        loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
+        # Absolutely cannot have another player's item
+        if loc.item is not None and loc.item.player != self.player:
+            self.multiworld.itempool.append(loc.item)
+            loc.item = None
+        loc.place_locked_item(self.pc_item)
 
     def get_pre_fill_items(self) -> typing.List["Item"]:
         pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
@@ -701,7 +693,6 @@ class PokemonRedBlueWorld(World):
             "trainersanity": self.options.trainersanity.value,
             "death_link": self.options.death_link.value,
             "prizesanity": self.options.prizesanity.value,
-            "key_items_only": self.options.key_items_only.value,
             "poke_doll_skip": self.options.poke_doll_skip.value,
             "bicycle_gate_skips": self.options.bicycle_gate_skips.value,
             "stonesanity": self.options.stonesanity.value,
