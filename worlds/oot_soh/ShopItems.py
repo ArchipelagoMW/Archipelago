@@ -235,7 +235,6 @@ def generate_scrub_prices(world: "SohWorld") -> None:
 
 
 def create_random_price(min_price: int, max_price: int, world: "SohWorld") -> int:
-    price = 0
     # randrange needs an actual range to work, so just pick the price directly if min/max are the same.
     if min_price == max_price:
         price = min_price
@@ -251,7 +250,7 @@ def set_price_rules(world: "SohWorld") -> None:
     for region, shop in all_shop_locations:
         for slot in shop.keys():
             price = world.shop_prices[slot]
-            def price_rule(bundle): return can_afford(price, bundle)
+            def price_rule(bundle, p=price): return can_afford(p, bundle)
             location = world.get_location(slot)
             add_rule(location, rule_wrapper.wrap(region, price_rule, world))
 
@@ -259,7 +258,7 @@ def set_price_rules(world: "SohWorld") -> None:
     if world.options.shuffle_scrubs:
         for slot in scrubs_location_table.keys():
             price = world.scrub_prices[slot]
-            def price_rule(bundle): return can_afford(price, bundle)
+            def price_rule(bundle, p=price): return can_afford(p, bundle)
             location = world.get_location(slot)
             # Parent region shouldn't matter at all here, so just add ROOT so we don't have to make a list of all scrubs and their regions.
             add_rule(location, rule_wrapper.wrap(
