@@ -17,7 +17,7 @@ Anything that lands in your inventory and any single-shot action that gives you 
 randomized. Additionally, the world map must progressively be unlocked.
 
 ## Which items can be in another player's world?
-Any of the items which can be shuffled my end up in another player's world.
+Any of the items which can be shuffled may end up in another player's world.
 
 ## What does another world's item look like in Candy Box 2?
 - When purchasing an item from a merchant, the merchant will tell you exactly what you will be buying.
