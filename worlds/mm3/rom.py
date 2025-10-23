@@ -298,13 +298,13 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
 
     if world.options.music_shuffle:
         if world.options.music_shuffle.current_key == "no_music":
-            pool = [0] * 18
+            pool = [0xF0] * 18
         elif world.options.music_shuffle.current_key == "randomized":
             pool = world.random.choices(range(1, 0xC), k=18)
         else:
             pool = [1, 2, 3, 4, 5, 6, 7, 8, 1, 3, 7, 8, 9, 9, 10, 10, 11, 11]
         world.random.shuffle(pool)
-        patch.write_bytes(0x3CD1C, pool)
+        patch.write_bytes(0x7CD1C, pool)
 
     from Utils import __version__
     patch.name = bytearray(f'MM3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
