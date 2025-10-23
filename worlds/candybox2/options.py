@@ -201,8 +201,6 @@ candy_box_2_options_groups = [
 
 @dataclass
 class CandyBox2Options(PerGameCommonOptions):
-    progression_balancing = True
-
     quest_randomisation: QuestRandomisation
     randomise_tower: RandomiseTowerEntrance
     randomise_x_potion: RandomiseXPotion
