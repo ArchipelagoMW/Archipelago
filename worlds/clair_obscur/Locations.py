@@ -47,10 +47,14 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
     if not world.options.shuffle_free_aim: excluded_conditions.append("Free Aim")
     if not world.options.gestral_shuffle: excluded_conditions.append("Lost Gestral")
 
-    exclusion_level = 99
-    if world.options.exclude_endgame_locations < 2 and world.options.goal < 2:
-        exclusion_level = 16 + world.options.goal
-        #Conveniently, the Monolith and Lumiere are 1 pictos_level apart.
+    exclusion_level = 33
+    if world.options.exclude_endgame_locations < 2:
+        match world.options.goal:
+            case 0: exclusion_level = 15
+            case 1: exclusion_level = 16
+            case 4: exclusion_level = 28
+
+        world.highest_location_level = exclusion_level
 
     if not world.options.gestral_shuffle:
         excluded_types.append("Lost Gestral")
@@ -60,14 +64,14 @@ def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> N
         if world.options.exclude_endless_tower == 0 and region_name.startswith("Endless Tower"): continue
         region_data = data.regions[region_name]
         region_level = region_data.pictos_level
-        if world.options.exclude_endgame_locations == 0 and region_level >= exclusion_level: continue
+        if world.options.exclude_endgame_locations == 0 and region_level > exclusion_level: continue
 
         for location_name in region_data.locations:
 
             location_data = data.locations[location_name]
             location_level = max(location_data.pictos_level, region_level)
             if (location_data.type in excluded_types or
-                    (world.options.exclude_endgame_locations == 0 and location_level >= exclusion_level)):
+                    (world.options.exclude_endgame_locations == 0 and location_level > exclusion_level)):
                 continue
 
             loc_id = world.location_name_to_id[location_data.name]

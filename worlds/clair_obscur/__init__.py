@@ -56,6 +56,7 @@ class ClairObscurWorld(World):
     required_client_version = (0, 5, 4)
 
     settings: typing.ClassVar[ClairObscurSettings]
+    highest_location_level = 33
 
     def convert_pictos(self, pictos_level: int) -> int:
         #Converts the connection destination's pictos level into an amount of pictos required to reach that level with
@@ -63,7 +64,6 @@ class ClairObscurWorld(World):
         return ceil((pictos_level - 1) * 5.8)
 
     def create_items(self) -> None:
-
         #Amounts of each item to generate (anything else will be added once).
         amounts = {
             "Progressive Rock": 5,
@@ -114,10 +114,10 @@ class ClairObscurWorld(World):
         remaining_items_to_generate = len(self.multiworld.get_unfilled_locations(self.player)) - len(self.item_pool)
 
         filler_amounts = {
-            "Chroma Catalyst (5)": 1,
-            "Polished Chroma Catalyst (5)": 2,
-            "Resplendent Chroma Catalyst (5)": 3,
-            "Grandiose Chroma Catalyst (5)": 4,
+            "Chroma Catalyst (5)": 2,
+            "Polished Chroma Catalyst (5)": 3,
+            "Resplendent Chroma Catalyst (5)": 4,
+            "Grandiose Chroma Catalyst (5)": 5,
             "Colour of Lumina (5)": 10
         }
 
@@ -139,33 +139,47 @@ class ClairObscurWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {}
+
+        #Options
         slot_data["options"] = self.options.as_dict(
             "goal", "char_shuffle", "starting_char", "gestral_shuffle", "gear_scaling", "shuffle_free_aim",
             "exclude_endgame_locations", "exclude_endless_tower"
         )
 
+        #Total counts for pictos and weapons. Currently static, but can support adding multiple copies later on.
         slot_data["totals"]: Dict[str, int] = {}
         slot_data["totals"]["pictos"] = len(self.item_name_groups["Picto"])
         slot_data["totals"]["weapons"] = len(self.item_name_groups["Weapon"])
 
+        #Max gear level
+        max_gear_level = 33
+        if self.options.max_equip_level == 0:
+            max_gear_level = self.highest_location_level
+        elif self.options.max_equip_level == 1:
+            max_gear_level = int(self.options.custom_max_equip_level)
+        slot_data["max_gear_level"] = max_gear_level
+
+        #Gear scaling option
         match self.options.gear_scaling:
             case 0:
                 #Scale by sphere placement
                 slot_data["pictos"]: List[int] = []
                 slot_data["weapons"]: List[int] = []
+                x = 0
                 spheres = self.multiworld.get_spheres()
                 for sphere in spheres:
                     for loc in sphere:
                         if loc.item.player != self.player: continue
                         if loc.item.name in self.item_name_groups["Picto"]:
                             slot_data["pictos"].append(loc.item.code)
+                            x += 1
                         elif loc.item.name in self.item_name_groups["Weapon"]:
                             slot_data["weapons"].append(loc.item.code)
             case 1:
                 # Scale by order received (handled entirely by client)
                 return slot_data
             case 2:
-                #Random scaling
+                #Balanced random scaling
                 slot_data["pictos"]: List[int] = []
                 slot_data["weapons"]: List[int] = []
                 for picto in self.item_name_groups["Picto"]:

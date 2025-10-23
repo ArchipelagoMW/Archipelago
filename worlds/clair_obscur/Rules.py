@@ -17,6 +17,8 @@ def set_rules(world):
             goal_reg = "Endless Tower Stage 11"
         case 3:
             goal_reg = "Renoir's Drafts"
+        case 4:
+            goal_reg = "Flying Manor"
 
     mw.completion_condition[player] = (
         lambda state: state.can_reach_region(goal_reg, player)
@@ -53,22 +55,6 @@ def set_rules(world):
         add_rule(major_connection_1, lambda state: state.has_group("Character", player, 3))
         add_rule(major_connection_2, lambda state: state.has_group("Character", player, 4))
 
-    #Lost Gestral access
-    # if world.options.gestral_shuffle:
-    #     gestral_rewards_locations = ["Lost Gestral reward 1",
-    #                                  "Lost Gestral reward 2",
-    #                                  "Lost Gestral reward 3",
-    #                                  "Lost Gestral reward 4",
-    #                                  "Lost Gestral reward 5",
-    #                                  "Lost Gestral reward 6",
-    #                                  "Lost Gestral reward 7",
-    #                                  "Lost Gestral reward 8",
-    #                                  "Lost Gestral reward 9"]
-    #     for i in range(0, 9):
-    #         loc = mw.get_location(gestral_rewards_locations[i], player)
-    #         add_rule(loc, lambda state, pl=player, x=i: state.has("Lost Gestral", pl, x + 1))
-    #
-    # else:
     if not world.options.gestral_shuffle:
         #2 gestrals in First Continent North
         add_rule(mw.get_location("Lost Gestral reward 1", player),
@@ -111,4 +97,8 @@ def set_rules(world):
         add_rule(mw.get_entrance("WM: Sky -> Sirene's Dress", player),
                  lambda state: state.has("Sciel", player))
         add_rule(mw.get_entrance("WM: Sky -> The Chosen Path", player),
-                 lambda state: state.has_group("Character", player, 5))
+                 lambda state: state.has_all(["Lune", "Sciel", "Monoco", "Maelle", "Verso"], player))
+    else:
+        add_rule(mw.get_entrance("WM: Sky -> The Chosen Path", player),
+                 lambda state: state.has_all(["Area - Flying Waters", "Area - Gestral Village",
+                                             "Area - Stone Wave Cliffs", "Area - Monoco's Station"], player))
