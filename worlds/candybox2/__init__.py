@@ -1,6 +1,7 @@
 import logging
 import typing
 import uuid
+from textwrap import dedent
 from typing import TextIO
 
 from BaseClasses import CollectionState, MultiWorld, Tutorial
@@ -72,13 +73,14 @@ class CandyBox2World(World):
     def stage_generate_early(multiworld: MultiWorld):
         logging.info(f"Candy Box 2: Client Version: {EXPECTED_CLIENT_VERSION}")
         if EXPECTED_CLIENT_VERSION.endswith("+"):
-            logging.warning("""
+            warning = """
             Candy Box 2: <!> Warning! You are generating this game using a non-stable version of the apworld.
                              If you plan to play this game with an async, it is recommended that you go back
                              and use the stable version. If you decide to continue anyway, when you start
                              the game, bookmark the "Permalink to this version" in the bottom left corner of
                              the game, and ensure you use this version to play.
-             """)
+                      """
+            logging.warning(dedent(warning))
 
     def is_ut_regen(self):
         return hasattr(self.multiworld, "re_gen_passthrough")
