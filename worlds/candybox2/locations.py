@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from enum import StrEnum
-from typing import NamedTuple, Callable, TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
 from BaseClasses import Location
 

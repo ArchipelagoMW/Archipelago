@@ -1,18 +1,21 @@
 import typing
 import uuid
-from typing import TextIO, Dict
+from typing import TextIO
 
-from BaseClasses import CollectionState, Tutorial, MultiWorld
+from BaseClasses import CollectionState, MultiWorld, Tutorial
 from entrance_rando import ERPlacementState
-from worlds.AutoWorld import World, WebWorld
+
+from worlds.AutoWorld import WebWorld, World
+
 from .component import setup_candy_box_2_component
 from .expected_client_version import EXPECTED_CLIENT_VERSION
-from .locations import location_descriptions, locations, CandyBox2LocationName
-from .items import items, CandyBox2Item, candy_box_2_base_id, filler_items, CandyBox2ItemName
+from .items import CandyBox2Item, CandyBox2ItemName, candy_box_2_base_id, filler_items, items
+from .locations import CandyBox2LocationName, location_descriptions, locations
 from .options import CandyBox2Options, candy_box_2_options_groups
-from .regions import create_regions, connect_entrances, can_reach_room
-from .rooms import entrance_friendly_names, CandyBox2Room
+from .regions import can_reach_room, connect_entrances, create_regions
+from .rooms import CandyBox2Room, entrance_friendly_names
 from .rules import CandyBox2RulesPackage, generate_rules_package
+
 
 class CandyBox2WebWorld(WebWorld):
     tutorials = [Tutorial(
@@ -54,7 +57,7 @@ class CandyBox2World(World):
     rules_package: CandyBox2RulesPackage = generate_rules_package()
 
     def __init__(self, multiworld, player):
-        super(CandyBox2World, self).__init__(multiworld, player)
+        super().__init__(multiworld, player)
         self.should_randomize_hp_bar = False
         self.starting_weapon = 0
         self.progressive_jump = False
@@ -68,7 +71,7 @@ class CandyBox2World(World):
             print("Candy Box 2: <!> Warning! You are generating this game using a non-stable version of the apworld.")
             print("                 If you plan to play this game with an async, it is recommended that you go back")
             print("                 and use the stable version. If you decide to continue anyway, when you start")
-            print("                 the game, bookmark the \"Permalink to this version\" in the bottom left corner of")
+            print('                 the game, bookmark the "Permalink to this version" in the bottom left corner of')
             print("                 the game, and ensure you use this version to play.")
 
     def is_ut_regen(self):
@@ -87,15 +90,13 @@ class CandyBox2World(World):
 
     def create_item(self, name: str) -> CandyBox2Item:
         data = items[name]
-        item = CandyBox2Item(name, data.classification, data.code, self.player)
-
-        return item
+        return CandyBox2Item(name, data.classification, data.code, self.player)
 
     def create_items(self):
         for name, data in items.items():
             required_amount = data.required_amount(self)
             if required_amount > 0:
-                for i in range(required_amount):
+                for _i in range(required_amount):
                     self.multiworld.itempool += [self.create_item(name.value)]
 
     def get_filler_item_name(self) -> str:
@@ -107,7 +108,7 @@ class CandyBox2World(World):
     def interpret_slot_data(self, slot):
         return slot
 
-    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
+    def fill_slot_data(self) -> dict[str, typing.Any]:
         return {
             "uuid": str(uuid.uuid4()),
             "entranceInformation": self.calculated_entrances,
@@ -163,7 +164,7 @@ class CandyBox2World(World):
         if not self.should_randomize_hp_bar:
             self.multiworld.get_location(CandyBox2LocationName.HP_BAR_UNLOCK, self.player).place_locked_item(self.create_item(CandyBox2ItemName.HP_BAR))
 
-    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
+    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         er_hint_data = {}
 
         for entrance, destination in self.calculated_entrances:

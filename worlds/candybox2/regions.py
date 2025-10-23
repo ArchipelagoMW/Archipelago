@@ -1,12 +1,11 @@
 from enum import IntEnum
-from typing import Callable, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from BaseClasses import Region, MultiWorld, Entrance, CollectionState, EntranceType
-from Utils import visualize_regions
-from entrance_rando import disconnect_entrance_for_randomization, randomize_entrances, ERPlacementState
-from .items import CandyBox2ItemName, items, candy_box_2_base_id
-from .locations import CandyBox2Location, CandyBox2LocationName
-from .rooms import CandyBox2Room, quests, rooms, entrance_friendly_names, lollipop_farm
+from BaseClasses import CollectionState, Entrance, EntranceType, MultiWorld, Region
+from entrance_rando import ERPlacementState, disconnect_entrance_for_randomization, randomize_entrances
+
+from .items import CandyBox2ItemName
+from .rooms import CandyBox2Room, entrance_friendly_names, lollipop_farm, quests, rooms
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -21,7 +20,7 @@ class CandyBox2RandomizationGroup(IntEnum):
 class CandyBox2Entrance(Entrance):
     is_exit: bool = False
 
-    def __init__(self, player: int, name: str = "", parent: Optional[Region] = None, randomization_group: int = 0,
+    def __init__(self, player: int, name: str = "", parent: Region | None = None, randomization_group: int = 0,
                  randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
         super().__init__(player, name, parent, randomization_group, randomization_type)
         self.is_exit = False
@@ -38,7 +37,7 @@ class CandyBox2Entrance(Entrance):
 
 class CandyBox2Region(Region):
     entrance_type = CandyBox2Entrance
-    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: str | None = None):
         super().__init__(name, player, multiworld, hint)
 
     def create_er_target(self, name: str):
@@ -126,14 +125,14 @@ def connect_entrances(world: "CandyBox2World"):
         return world.original_entrances
 
     if hasattr(world.multiworld, "re_gen_passthrough"):
-        placements = getattr(world.multiworld, "re_gen_passthrough")["Candy Box 2"]["entranceInformation"]
+        placements = world.multiworld.re_gen_passthrough["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, False)
 
-        er_targets = dict([(entrance.name, entrance) for region in world.multiworld.get_regions(world.player)
-                             for entrance in region.entrances if not entrance.parent_region])
+        er_targets = {entrance.name: entrance for region in world.multiworld.get_regions(world.player)
+                         for entrance in region.entrances if not entrance.parent_region}
 
-        exits = dict([(ex.name, ex) for region in world.multiworld.get_regions(world.player)
-                        for ex in region.exits if not ex.connected_region])
+        exits = {ex.name: ex for region in world.multiworld.get_regions(world.player)
+                        for ex in region.exits if not ex.connected_region}
 
         for x in placements:
             placement_state.connect(exits[x[0]], er_targets[x[1]])

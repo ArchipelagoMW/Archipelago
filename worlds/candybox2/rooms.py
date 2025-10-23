@@ -1,5 +1,4 @@
 from enum import StrEnum
-from typing import Dict
 
 
 class CandyBox2Room(StrEnum):
@@ -50,7 +49,7 @@ class CandyBox2Room(StrEnum):
     WORLD_MAP = "WORLD_MAP"
 
 
-entrance_friendly_names: Dict[CandyBox2Room, str] = {
+entrance_friendly_names: dict[CandyBox2Room, str] = {
     CandyBox2Room.QUEST_THE_CELLAR: "Quest: The Cellar",
     CandyBox2Room.QUEST_THE_DESERT: "Quest: The Desert",
     CandyBox2Room.QUEST_THE_BRIDGE: "Quest: The Bridge",

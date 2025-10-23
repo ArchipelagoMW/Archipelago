@@ -1,7 +1,7 @@
 import json
 
 if __name__ == "__main__":
-    from worlds.candybox2.rules import generate_rules_package, CandyBox2RulesPackage
+    from worlds.candybox2.rules import CandyBox2RulesPackage, generate_rules_package
 
     rules_package = generate_rules_package()
     rules_package_json = json.dumps(rules_package, cls=CandyBox2RulesPackage, indent=2)

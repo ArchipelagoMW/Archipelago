@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Choice, DeathLink, Range, Toggle, DefaultOnToggle, OptionGroup
+from Options import Choice, DeathLink, DefaultOnToggle, OptionGroup, PerGameCommonOptions, Range, Toggle
 
 
 class QuestRandomisation(Choice):

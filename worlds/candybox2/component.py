@@ -1,6 +1,8 @@
-import webbrowser
 import re
-from worlds.LauncherComponents import components, Component, Type
+import webbrowser
+
+from worlds.LauncherComponents import Component, Type, components
+
 
 def open_page(url):
     # Extract slot, pass, host, and port from the URL

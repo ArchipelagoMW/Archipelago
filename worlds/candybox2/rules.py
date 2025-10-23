@@ -1,16 +1,17 @@
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 from enum import IntEnum
 from json import JSONEncoder
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
-import worlds
 from BaseClasses import CollectionState
-from .locations import locations, CandyBox2LocationName, CandyBox2Location, CandyBox2LocationData
+
+from worlds.generic.Rules import add_rule
+
+from .expected_client_version import EXPECTED_CLIENT_VERSION
+from .items import CandyBox2ItemName, candy_box_2_base_id, items
+from .locations import CandyBox2Location, CandyBox2LocationData, CandyBox2LocationName, locations
 from .regions import CandyBox2Region, CandyBox2RoomRegion
 from .rooms import CandyBox2Room, entrance_friendly_names
-from .items import CandyBox2ItemName, items, candy_box_2_base_id
-from worlds.generic.Rules import add_rule
-from .expected_client_version import EXPECTED_CLIENT_VERSION
 
 if TYPE_CHECKING:
     from . import CandyBox2World
@@ -101,6 +102,7 @@ class CandyBox2RulesPackageRuleExpression(ABC):
     def default(self):
         pass
 
+    @abstractmethod
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         pass
 
@@ -124,10 +126,10 @@ class CandyBox2RulesPackageRuleConstantExpression(CandyBox2RulesPackageRuleExpre
         self.constant = constant
 
     def __and__(self, other):
-        return self if self.constant == False else other
+        return self if self.constant == False else other # noqa: E712
 
     def __or__(self, other):
-        return self if self.constant == True else other
+        return self if self.constant == True else other # noqa: E712
 
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         return self.constant
@@ -207,20 +209,22 @@ class CandyBox2RulesPackageRuleCountExpression(CandyBox2RulesPackageRuleExpressi
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         if self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.EQUAL_TO:
             return self.item_count(state, player) == self.required
-        elif self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.LESS_THAN:
+        if self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.LESS_THAN:
             return self.item_count(state, player) < self.required
-        elif self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.LESS_THAN_OR_EQUAL_TO:
+        if self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.LESS_THAN_OR_EQUAL_TO:
             return self.item_count(state, player) <= self.required
-        elif self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.GREATER_THAN:
+        if self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.GREATER_THAN:
             return self.item_count(state, player) > self.required
-        elif self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.GREATER_THAN_OR_EQUAL_TO:
+        if self.inequality == CandyBox2RulesPackageRuleCountExpression.RuleCountInequality.GREATER_THAN_OR_EQUAL_TO:
             return self.item_count(state, player) >= self.required
+        raise Exception("Tried to evaluate a count expression with invalid inequality operator")
 
     def item_count(self, state: CollectionState, player: int):
         if self.item == "chocolate":
             return state.count(CandyBox2ItemName.CHOCOLATE_BAR, player) + (4 * state.count(CandyBox2ItemName.FOUR_CHOCOLATE_BARS, player)) + (3 * state.count(CandyBox2ItemName.THREE_CHOCOLATE_BARS, player))
         if self.item == "lollipop":
            return state.count(CandyBox2ItemName.THREE_LOLLIPOPS, player) * 3 + state.count(CandyBox2ItemName.LOLLIPOP, player)
+        raise Exception("Tried to evaluate a count expression with invalid item name")
 
     def default(self):
         return ["count", self.item, self.inequality, self.required]
@@ -255,8 +259,9 @@ class CandyBox2RulesPackageRuleBooleanExpression(CandyBox2RulesPackageRuleExpres
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         if self.expr == "and":
             return self.op1.evaluate(world, state, player) and self.op2.evaluate(world, state, player)
-        elif self.expr == "or":
+        if self.expr == "or":
             return self.op1.evaluate(world, state, player) or self.op2.evaluate(world, state, player)
+        raise Exception("Tried to evaluate a boolean expression with invalid operator")
 
     def default(self):
         return [self.expr, self.op1.default(), self.op2.default()]
@@ -276,6 +281,7 @@ class CandyBox2RulesPackageRuleUnaryExpression(CandyBox2RulesPackageRuleExpressi
     def evaluate(self, world: "CandyBox2World", state: CollectionState, player: int) -> bool:
         if self.expr == "not":
             return not self.op.evaluate(world, state, player)
+        raise Exception("Tried to evaluate a unary expression with invalid operator")
 
     def indirection_required(self):
         return self.op.indirection_required()
@@ -333,7 +339,7 @@ class CandyBox2RulesPackage(JSONEncoder):
             except KeyError:
                 pass
 
-    def apply_room_rules(self, rooms: Dict[str, CandyBox2Region], world: "CandyBox2World", player: int):
+    def apply_room_rules(self, rooms: dict[str, CandyBox2Region], world: "CandyBox2World", player: int):
         generated_entrances = []
 
         for target, region in rooms.items():
@@ -443,7 +449,7 @@ def can_escape_hole():
 def can_brew(also_require_lollipops: bool):
     if also_require_lollipops:
         return rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & can_farm_candies() & can_farm_lollipops()
-    
+
     return rule_item(CandyBox2ItemName.SORCERESS_CAULDRON) & can_farm_candies()
 
 def can_heal():
