@@ -112,10 +112,6 @@ supplémentaires données au début des missions, la capacité de contrôler les
 * `/disable_mission_check` Désactive les requit pour lancer les missions.
 Cette option a pour but de permettre de jouer en mode coopératif en permettant à un joueur de jouer à la prochaine 
 mission de la chaîne qu'un autre joueur est en train d'entamer.
-* `/play [mission_id]` Lance la mission correspondant à l'identifiant donné.
-* `/available` Affiche les missions qui sont présentement accessibles.
-* `/unfinished` Affiche les missions qui sont présentement accessibles et dont certains des objectifs permettant 
-l'accès à un *item* n'ont pas été accomplis.
 * `/set_path [path]` Permet de définir manuellement où *StarCraft 2* est installé ce qui est pertinent seulement si la 
 détection automatique de cette dernière échoue.
 
