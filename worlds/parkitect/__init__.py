@@ -267,8 +267,8 @@ class ParkitectWorld(World):
             if item in item_info["trap_items"]:
                 unlock["item"] = Statistics(thing, 1).to_dict()
 
-            # --- Tier 1: -> first 6 items ---
-            elif number <= 6:
+            # --- Tier 1: -> first 3 items ---
+            elif number <= 3:
                 # max: 2
                 max = 2
 
@@ -536,6 +536,7 @@ class ParkitectWorld(World):
         slot_data["rules"] = self.options.as_dict(
             "difficulty",
             "guests_money_flux",
+            "progressive_speedups"
         )
         
         slot_data["seed"] = seed

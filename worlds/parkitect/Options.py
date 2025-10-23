@@ -6,6 +6,8 @@ from dataclasses import dataclass
 class Scenario(IntEnum):
     lakeside_gardens = 0
     dusty_ridge_ranch = 1
+    the_broken_atoll = 2
+    magma_falls = 3
 
 class Difficulty(IntEnum):
     easy = 0
@@ -25,6 +27,8 @@ class SelectedScenario(Choice):
     display_name = "Scenario"
     option_lakeside_gardens = Scenario.lakeside_gardens.value
     option_dusty_ridge_ranch = Scenario.dusty_ridge_ranch.value
+    option_the_broken_atoll = Scenario.the_broken_atoll.value
+    option_magma_falls = Scenario.magma_falls.value
 
 class SelectedDifficulty(Choice):
     """
@@ -132,7 +136,8 @@ class GoalShopProfit(Range): # ShopProfitGoal
 
 # Challenge
 class ChallengeMaximumExcitement(Range):
-    """If a challenge determines you need a rollercoaster with a maximum excitement, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum excitement, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Excitement"
@@ -141,7 +146,8 @@ class ChallengeMaximumExcitement(Range):
     default = 0
 
 class ChallengeMaximumIntensity(Range):
-    """If a challenge determines you need a rollercoaster with a maximum intensity, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum intensity, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Intensity"
@@ -150,7 +156,8 @@ class ChallengeMaximumIntensity(Range):
     default = 0
 
 class ChallengeMaximumNausea(Range):
-    """If a challenge determines you need a rollercoaster with a maximum nausea, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum nausea, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Nausea"
@@ -159,7 +166,8 @@ class ChallengeMaximumNausea(Range):
     default = 0
 
 class ChallengeMaximumSatisfaction(Range):
-    """If a challenge determines you need a rollercoaster with a maximum satisfaction, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a maximum satisfaction, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Ride Satisfaction"
@@ -168,7 +176,8 @@ class ChallengeMaximumSatisfaction(Range):
     default = 0
 
 class ChallengeCustomers(Range):
-    """If a challenge determines you need a ride or shop with a maximum amount of customers, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a ride or shop with a maximum amount of customers, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Maximum Customers"
@@ -177,7 +186,8 @@ class ChallengeCustomers(Range):
     default = 0
 
 class ChallengeMaximumRideRevenue(Range):
-    """If a challenge determines you need a rollercoaster with a total revenue, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a rollercoaster with a total revenue, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Total Ride Revenue"
@@ -186,13 +196,23 @@ class ChallengeMaximumRideRevenue(Range):
     default = 0
 
 class ChallengeMaximumShopRevenue(Range):
-    """If a challenge determines you need a shop with a total revenue, this value will be the lowest it can ask for.
+    """
+    If a challenge determines you need a shop with a total revenue, this value will be the lowest it can ask for.
     If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
     """
     display_name = "Challenge: Total Shop Revenue"
     range_start = 0
     range_end = 2500
     default = 0
+
+class ChallengeSkips(Range):
+    """
+    by default, every game start with 5 skips to, well, skip a challenge. This will add additional skips to be found in the item pool.
+    """
+    display_name = "Skips"
+    range_start = 0
+    range_end = 15
+    default = 5
 
 # Traps
 # Traps - Player
@@ -208,7 +228,7 @@ class TrapPlayerMoney(Range):
 # Traps - Attraction
 class TrapAttractionBreakdown(Range):
     """
-    When found, instantly break 1 Attraction! Adding traps will increase the total number of items in the world.
+    When found, instantly break specific amount of Attraction/s! Adding traps will increase the total number of items in the world.
     """
     display_name = "Attraction Breakdown Trap"
     range_start = 0
@@ -227,7 +247,7 @@ class TrapAttractionVoucher(Range):
 # Traps - Shop
 class TrapShopsIngredient(Range):
     """
-    When found, few Shops has molded Ingredients, Get new ones! Adding traps will increase the total number of items in the world.
+    When found, ProductShops ingredients needs to be restocked! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Ingredients Trap"
     range_start = 0
@@ -236,7 +256,7 @@ class TrapShopsIngredient(Range):
 
 class TrapShopsClean(Range):
     """
-    When found, few Shops has are very dirty and needs to be cleaned! Adding traps will increase the total number of items in the world.
+    When found, Shops needs to be cleaned! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Cleaning Trap"
     range_start = 0
@@ -245,7 +265,7 @@ class TrapShopsClean(Range):
 
 class TrapShopsVoucher(Range):
     """
-    When found, few Guests will receive a Shop Voucher in your Park! Adding traps will increase the total number of items in the world.
+    When found, some Guests will receive a Shop Voucher in your Park! Adding traps will increase the total number of items in the world.
     """
     display_name = "Shop Voucher Trap"
     range_start = 0
@@ -324,7 +344,7 @@ class TrapGuestsMoney(Range):
 class TrapGuestsMoneyFlux(Choice):
     f"""
     (If Guest Money Trap is enabled!)
-    Decides if the Guest receive or lose money.
+    Decides if the Guest receive or/and lose money.
     """
     display_name = "Guest Money Flux"
     default = 2
@@ -334,7 +354,7 @@ class TrapGuestsMoneyFlux(Choice):
 
 class TrapGuestsHunger(Range):
     """
-    When found, few Guests will be very hungry! Adding traps will increase the total number of items in the world.
+    When found, Guests will be hungry! Adding traps will increase the total number of items in the world.
     """
     display_name = "Guest Hunger Trap"
     range_start = 0
@@ -343,7 +363,7 @@ class TrapGuestsHunger(Range):
 
 class TrapGuestsThirst(Range):
     """
-    When found, few Guests will be very thirsty! Adding traps will increase the total number of items in the world.
+    When found, Guests will be thirsty! Adding traps will increase the total number of items in the world.
     """
     display_name = "Guest Thirst Trap"
     range_start = 0
@@ -395,6 +415,16 @@ class TrapGuestsVandal(Range):
     range_start = 0
     range_end = 30
     default = 10
+    
+class SelectedProgressiveSpeedups(Choice):
+    """
+    If included, the ability to use the speedups at the window will be restricted behind an item. 6 items total will be added, each progressively unlocking a faster speed.
+    Game Speedups (0x, 1x, 2x, 3x) are always usable.
+    """
+    display_name = "Progressive Speedups"
+    option_no = 0
+    option_yes = 1
+    default = 0
 
 parkitect_option_groups = [
     OptionGroup("Scenario Options", [
@@ -443,9 +473,11 @@ parkitect_option_groups = [
         ChallengeMaximumSatisfaction,
         ChallengeMaximumRideRevenue,
         ChallengeMaximumShopRevenue,
+        ChallengeSkips,
     ]),
     OptionGroup("Rules", [
-        TrapGuestsMoneyFlux
+        TrapGuestsMoneyFlux,
+        SelectedProgressiveSpeedups
     ]),
 ]
 
@@ -477,8 +509,9 @@ class ParkitectOptions(PerGameCommonOptions):
     trap_guests_tiredness: TrapGuestsTiredness
     trap_guests_vandal: TrapGuestsVandal
 
-    # in-game options.
+    # Parkitect Mod rules.
     guests_money_flux: TrapGuestsMoneyFlux
+    progressive_speedups: SelectedProgressiveSpeedups
 
     # challenges
     challenge_customers: ChallengeCustomers
@@ -488,6 +521,7 @@ class ParkitectOptions(PerGameCommonOptions):
     challenge_maximum_satisfaction: ChallengeMaximumSatisfaction
     challenge_maximum_ride_revenue: ChallengeMaximumRideRevenue
     challenge_maximum_shop_revenue: ChallengeMaximumShopRevenue
+    challenge_skips: ChallengeSkips
     
     # the obvious
     goal_guests: GoalGuests

@@ -95,6 +95,8 @@ Currently included scenarios:
 |----------------|--------------|-------|
 | **Lakeside Green** | A relaxing park by the lake. Great starter map with balanced challenges. | Recommended for first-time AP runs |
 | **Dusty Ridge Ranch** | A dry, rugged landscape perfect for testing weather effects. | More challenging terrain |
+| **The Broken Atoll** | Small Island and everything is broken. Really, anything!. | Cleanup before you start! :D |
+| **Magma Falls** | Volcanic Theme Park. For the more experienced :). | More challenging terrain and less space |
 
 > 💡 More maps will be added over time — including community submissions!  
 > You can request or submit new scenarios in the [GitHub repository](https://github.com/CrusherRL/AP_Parkitect_World/issues) or on Discord.
@@ -121,7 +123,7 @@ If you want to submit your own Parkitect scenario for the AP World:
 |-----------|---------|-------|
 | **Operating Systems** | ✅ Tested on **Windows 10** | Not yet tested on **Linux** or **macOS** |
 | **Multiplayer** | ⚠️ Not Tested / Likely Unsupported | Designed for single-player randomization |
-| **Game Version** | ✅ Latest Steam build (as of Oct 2025) | Previous versions unverified |
+| **Game Version** | ✅ Latest Steam build (1.12b2 - as of Oct 2025) | Previous versions unverified |
 | **Other Mods** | ⚙️ Tested with **Perspective Camera** | No known conflicts |
 | **Performance** | ✅ Stable | No major FPS or crash issues detected |
 | **Archipelago Connection** | ✅ Works with local & remote servers | Auto-connect supported |
@@ -133,7 +135,6 @@ If you want to submit your own Parkitect scenario for the AP World:
 
 - Proper **Delivery System** for AP items  
 - Additional **Scenario maps** and themed challenges  
-- Optional **“Skip Items”** for QoL progression  
 
 ---
 
