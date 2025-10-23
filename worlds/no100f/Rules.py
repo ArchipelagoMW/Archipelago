@@ -426,6 +426,7 @@ snack_rules = [
             LocationNames.e003_SNACK__032: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.e003_SNACK__033: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.e003_SNACK__034: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
+            LocationNames.e003_DIG__2__POWERUP: lambda player: lambda state: state.has(ItemNames.ShovelPower, player, 1),
 
             LocationNames.e004_SNACK21301: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
             LocationNames.e004_SNACK21303: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 1),
@@ -1166,6 +1167,7 @@ snack_rules = [
             LocationNames.f010_UPPERDECK_SSBOX06: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_CRATE_SNACK01: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_CRATE_SSBOX07: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.BootsPower, player, 1),
+            LocationNames.f010_LOW__BOX: lambda player: lambda state: state.has(ItemNames.ProgressiveJump, player, 2) and state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_BP_SS03: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_BP_SS04: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
             LocationNames.f010_BP_SS05: lambda player: lambda state: state.has(ItemNames.BootsPower, player, 1),
