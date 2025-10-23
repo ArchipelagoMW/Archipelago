@@ -2,7 +2,7 @@ from enum import IntEnum
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState, Entrance, EntranceType, MultiWorld, Region
-from entrance_rando import ERPlacementState, disconnect_entrance_for_randomization, randomize_entrances
+from entrance_rando import EntranceLookup, ERPlacementState, disconnect_entrance_for_randomization, randomize_entrances
 
 from .items import CandyBox2ItemName
 from .rooms import CandyBox2Room, entrance_friendly_names, lollipop_farm, quests, rooms
@@ -165,7 +165,7 @@ def connect_entrances(world: "CandyBox2World"):
 
     if hasattr(world.multiworld, "re_gen_passthrough"):
         placements = world.multiworld.re_gen_passthrough["Candy Box 2"]["entranceInformation"]
-        placement_state = ERPlacementState(world, False)
+        placement_state = ERPlacementState(world, EntranceLookup(world.random, False, set(), []), False)
 
         er_targets = {
             entrance.name: entrance

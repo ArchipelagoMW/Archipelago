@@ -18,7 +18,7 @@ class CandyBox2Item(Item):
 
 class CandyBox2ItemData(NamedTuple):
     code: int | None = None
-    required_amount: Callable[["CandyBox2World"], int] = lambda: 0
+    required_amount: Callable[["CandyBox2World"], int] = lambda _: 0
     classification: ItemClassification = ItemClassification.filler
     description: str | None = None
 
