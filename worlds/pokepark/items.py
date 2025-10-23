@@ -1758,6 +1758,7 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Tyranitar Unlock",
         "Garchomp Unlock",
         "Claydol Unlock",
+        "Glalie Unlock",
 
         "Progressive Thunderbolt",
         "Progressive Iron Tail",

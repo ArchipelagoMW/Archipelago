@@ -221,39 +221,39 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Stage 1",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Bidoof 1 Unlocked",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Stage 2",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Bidoof 2 Unlocked",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Stage 3",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Bidoof 3 Unlocked",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Stage 4",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing -- Bibarel Unlocked",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing Completed -- Friendship",
-        lambda state: state.has("Mankey Friendship", player)
+        lambda state: state.has("Mankey Friendship", player) and can_destroy_objects_overworld(state, player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bidoof Housing Completed -- Beach Bidoof Unlocked",
@@ -809,13 +809,9 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Delibird -- Friendship",
-        lambda state: state.has("Delibird Unlock", player) and
-                      state.has("Spheal Friendship", player) and
-                      state.has("Teddiursa Friendship", player) and
-                      state.has("Squirtle Unlock", player) and
-                      state.has("Squirtle Friendship", player) and
-                      state.has("Smoochum Friendship", player) and
-                      state.has("Smoochum Unlock", player)
+        lambda state: state.can_reach_location(
+            "Ice Zone Main Area - Christmas Tree Present -- Stage 4", player
+        )
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Smoochum Power Competition -- Friendship",
@@ -859,7 +855,9 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Kirlia -- Friendship",
-        lambda state: state.has("Delibird Friendship", player)
+        lambda state: state.has("Delibird Friendship", player) and state.can_reach_location(
+            "Ice Zone Main Area - Christmas Tree Present -- Stage 4", player
+        )
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Igloo Housing -- Stage 1",
@@ -888,25 +886,23 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 2",
-        lambda state: state.has("Delibird Unlock", player) and
-                      state.has("Spheal Friendship", player) and
-                      state.has("Teddiursa Friendship", player)
+        lambda state: state.can_reach_location(
+            "Ice Zone Main Area - Christmas Tree Present -- Stage 1", player
+        ) and state.has("Teddiursa Friendship", player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 3",
-        lambda state: state.has("Delibird Unlock", player) and
-                      state.has("Spheal Friendship", player) and
-                      state.has("Teddiursa Friendship", player) and
+        lambda state: state.can_reach_location(
+            "Ice Zone Main Area - Christmas Tree Present -- Stage 2", player
+        ) and
                       state.has("Squirtle Unlock", player) and
                       state.has("Squirtle Friendship", player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 4",
-        lambda state: state.has("Delibird Unlock", player) and
-                      state.has("Spheal Friendship", player) and
-                      state.has("Teddiursa Friendship", player) and
-                      state.has("Squirtle Unlock", player) and
-                      state.has("Squirtle Friendship", player) and
+        lambda state: state.can_reach_location(
+            "Ice Zone Main Area - Christmas Tree Present -- Stage 3", player
+        ) and
                       state.has("Smoochum Friendship", player) and
                       state.has("Smoochum Unlock", player)
     )
@@ -1978,7 +1974,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Skorupi Power Competition -- Friendship",
-        lambda state: True
+        lambda state: can_dash_overworld(state, player)
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Porygon-Z Power Competition -- Friendship",
