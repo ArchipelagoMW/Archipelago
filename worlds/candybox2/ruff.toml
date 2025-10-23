@@ -15,5 +15,8 @@ ignore = [
     "UP015",  # Explicit is better than implicit, so we'd prefer to keep "r" in open() calls.
 
     "T201", # We use print to print stuff.
-    "E501"
 ]
+
+[lint.per-file-ignores]
+# The way options definitions work right now, I am forced to break line length requirements.
+"options.py" = ["E501"]

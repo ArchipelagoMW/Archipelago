@@ -15,16 +15,13 @@ def open_page(url):
     if password == "None":
         webbrowser.open(f"https://candybox2-ap.vicr123.com/latest-blueprint?hostport={host}:{port}&name={slot}")
     else:
-        webbrowser.open(f"https://candybox2-ap.vicr123.com/latest-blueprint?hostport={host}:{port}&name={slot}&password={password}")
+        webbrowser.open(
+            f"https://candybox2-ap.vicr123.com/latest-blueprint?hostport={host}:{port}&name={slot}&password={password}"
+        )
     pass
+
 
 def setup_candy_box_2_component():
     components.append(
-        Component(
-            "Candy Box 2",
-            func=open_page,
-            component_type=Type.HIDDEN,
-            supports_uri=True,
-            game_name="Candy Box 2"
-        )
+        Component("Candy Box 2", func=open_page, component_type=Type.HIDDEN, supports_uri=True, game_name="Candy Box 2")
     )

@@ -16,6 +16,7 @@ class CandyBox2LocationData(NamedTuple):
 class CandyBox2Location(Location):
     game: str = "Candy Box 2"
 
+
 class CandyBox2LocationName(StrEnum):
     HP_BAR_UNLOCK = "Candy Box: HP Bar Unlock"
     DISAPPOINTED_EMOTE_CHOCOLATE_BAR = "Candy Box: Throw 1630 candies"
@@ -110,9 +111,8 @@ class CandyBox2LocationName(StrEnum):
     LOLLIPOP_FARM_EXTRA_4 = "Lollipop Farm: Planted 60000 Lollipops"
     LOLLIPOP_FARM_EXTRA_5 = "Lollipop Farm: Planted 70000 Lollipops"
 
-location_descriptions: dict[CandyBox2LocationName, str] = {
-    CandyBox2LocationName.HP_BAR_UNLOCK: ""
-}
+
+location_descriptions: dict[CandyBox2LocationName, str] = {CandyBox2LocationName.HP_BAR_UNLOCK: ""}
 
 locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
     CandyBox2LocationName.HP_BAR_UNLOCK: CandyBox2LocationData(1),
@@ -141,15 +141,29 @@ locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
     CandyBox2LocationName.KNIGHT_BODY_ARMOUR_ACQUIRED: CandyBox2LocationData(1501),
     CandyBox2LocationName.GIANT_NOUGAT_MONSTER_DEFEATED: CandyBox2LocationData(1600),
     CandyBox2LocationName.SORCERESS_HUT_LOLLIPOP_ON_THE_SHELVES: CandyBox2LocationData(1800),
-    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE: CandyBox2LocationData(1801, lambda world: grimoire_location_count(world)),
-    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE: CandyBox2LocationData(1802, lambda world: grimoire_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE: CandyBox2LocationData(
+        1801, lambda world: grimoire_location_count(world)
+    ),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE: CandyBox2LocationData(
+        1802, lambda world: grimoire_location_count(world)
+    ),
     CandyBox2LocationName.SORCERESS_HUT_CAULDRON: CandyBox2LocationData(1803),
     CandyBox2LocationName.SORCERESS_HUT_HAT: CandyBox2LocationData(1804),
-    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_ACID_RAIN: CandyBox2LocationData(1805, lambda world: spell_location_count(world)),
-    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_FIREBALL: CandyBox2LocationData(1806, lambda world: spell_location_count(world)),
-    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_TELEPORT: CandyBox2LocationData(1807, lambda world: spell_location_count(world)),
-    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_ERASE_MAGIC: CandyBox2LocationData(1808, lambda world: spell_location_count(world)),
-    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_THORNS_SHIELD: CandyBox2LocationData(1809, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_ACID_RAIN: CandyBox2LocationData(
+        1805, lambda world: spell_location_count(world)
+    ),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_FIREBALL: CandyBox2LocationData(
+        1806, lambda world: spell_location_count(world)
+    ),
+    CandyBox2LocationName.SORCERESS_HUT_BEGINNERS_GRIMOIRE_TELEPORT: CandyBox2LocationData(
+        1807, lambda world: spell_location_count(world)
+    ),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_ERASE_MAGIC: CandyBox2LocationData(
+        1808, lambda world: spell_location_count(world)
+    ),
+    CandyBox2LocationName.SORCERESS_HUT_ADVANCED_GRIMOIRE_THORNS_SHIELD: CandyBox2LocationData(
+        1809, lambda world: spell_location_count(world)
+    ),
     CandyBox2LocationName.OCTOPUS_KING_DEFEATED: CandyBox2LocationData(1900),
     CandyBox2LocationName.MONKEY_WIZARD_DEFEATED: CandyBox2LocationData(2000),
     CandyBox2LocationName.EGG_ROOM_QUEST_CLEARED: CandyBox2LocationData(2100),
@@ -173,10 +187,16 @@ locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
     CandyBox2LocationName.THE_HOLE_TRIBAL_WARRIOR_DEFEATED: CandyBox2LocationData(3700),
     CandyBox2LocationName.THE_HOLE_DESERT_FORTRESS_KEY_ACQUIRED: CandyBox2LocationData(3701),
     CandyBox2LocationName.THE_HOLE_HEART_PENDANT_ACQUIRED: CandyBox2LocationData(3702),
-    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED: CandyBox2LocationData(3703, lambda world: grimoire_location_count(world)),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED: CandyBox2LocationData(
+        3703, lambda world: grimoire_location_count(world)
+    ),
     CandyBox2LocationName.THE_HOLE_FOUR_CHOCOLATE_BARS_ACQUIRED: CandyBox2LocationData(3704),
-    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_OBSIDIAN_WALL: CandyBox2LocationData(3705, lambda world: spell_location_count(world)),
-    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_BLACK_DEMONS: CandyBox2LocationData(3706, lambda world: spell_location_count(world)),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_OBSIDIAN_WALL: CandyBox2LocationData(
+        3705, lambda world: spell_location_count(world)
+    ),
+    CandyBox2LocationName.THE_HOLE_BLACK_MAGIC_GRIMOIRE_ACQUIRED_BLACK_DEMONS: CandyBox2LocationData(
+        3706, lambda world: spell_location_count(world)
+    ),
     CandyBox2LocationName.TEAPOT_DEFEATED: CandyBox2LocationData(3900),
     CandyBox2LocationName.XINOPHERYDON_DEFEATED: CandyBox2LocationData(4000),
     CandyBox2LocationName.XINOPHERYDON_QUEST_UNICORN_HORN_ACQUIRED: CandyBox2LocationData(4001),
@@ -202,24 +222,37 @@ locations: dict[CandyBox2LocationName, CandyBox2LocationData] = {
     CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_4: CandyBox2LocationData(4903),
     CandyBox2LocationName.BAKE_PAIN_AU_CHOCOLAT_5: CandyBox2LocationData(4904),
     CandyBox2LocationName.POGO_STICK: CandyBox2LocationData(500),
-    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_1: CandyBox2LocationData(5000, lambda world: extra_location_count(world, 1)),
-    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_2: CandyBox2LocationData(5001, lambda world: extra_location_count(world, 2)),
-    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_3: CandyBox2LocationData(5002, lambda world: extra_location_count(world, 3)),
-    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_4: CandyBox2LocationData(5003, lambda world: extra_location_count(world, 4)),
-    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_5: CandyBox2LocationData(5004, lambda world: extra_location_count(world, 5)),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_1: CandyBox2LocationData(
+        5000, lambda world: extra_location_count(world, 1)
+    ),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_2: CandyBox2LocationData(
+        5001, lambda world: extra_location_count(world, 2)
+    ),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_3: CandyBox2LocationData(
+        5002, lambda world: extra_location_count(world, 3)
+    ),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_4: CandyBox2LocationData(
+        5003, lambda world: extra_location_count(world, 4)
+    ),
+    CandyBox2LocationName.LOLLIPOP_FARM_EXTRA_5: CandyBox2LocationData(
+        5004, lambda world: extra_location_count(world, 5)
+    ),
 }
 
+
 def grimoire_location_count(world: "CandyBox2World"):
-    if world.grimoires == 0 or world.grimoires == 1: # Grimoires
+    if world.grimoires == 0 or world.grimoires == 1:  # Grimoires
         return True
 
     return False
+
 
 def spell_location_count(world: "CandyBox2World"):
     if world.grimoires == 2:
         return True
 
     return False
+
 
 def extra_location_count(world: "CandyBox2World", required: int):
     return world.font_traps >= required

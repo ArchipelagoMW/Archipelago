@@ -35,17 +35,17 @@ class CandyBox2Room(StrEnum):
     WISHING_WELL = "WISHING_WELL"
     CAVE = "CAVE"
     PIER = "PIER"
-    LIGHTHOUSE = "LIGHTHOUSE",
+    LIGHTHOUSE = "LIGHTHOUSE"
     HOLE = "HOLE"
-    CASTLE = "CASTLE",
-    CASTLE_BAKEHOUSE = "CASTLE_BAKEHOUSE",
-    CASTLE_DARK_ROOM = "CASTLE_DARK_ROOM",
-    DRAGON = "DRAGON",
-    TOWER = "TOWER",
-    LOLLIPOP_FARM = "LOLLIPOP_FARM",
+    CASTLE = "CASTLE"
+    CASTLE_BAKEHOUSE = "CASTLE_BAKEHOUSE"
+    CASTLE_DARK_ROOM = "CASTLE_DARK_ROOM"
+    DRAGON = "DRAGON"
+    TOWER = "TOWER"
+    LOLLIPOP_FARM = "LOLLIPOP_FARM"
 
     # These do not participate in ER
-    VILLAGE = "VILLAGE",
+    VILLAGE = "VILLAGE"
     WORLD_MAP = "WORLD_MAP"
 
 
@@ -90,10 +90,9 @@ entrance_friendly_names: dict[CandyBox2Room, str] = {
     CandyBox2Room.DRAGON: "World Map: The Dragon",
     CandyBox2Room.TOWER: "The Castle: The Tower",
     CandyBox2Room.LOLLIPOP_FARM: "World Map: The Lollipop Farm",
-
     # Not required, just here to make logic easier
     CandyBox2Room.VILLAGE: "The Village",
-    CandyBox2Room.WORLD_MAP: "The World Map"
+    CandyBox2Room.WORLD_MAP: "The World Map",
 }
 quests: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_CELLAR,
@@ -113,7 +112,7 @@ quests: list[CandyBox2Room] = [
     CandyBox2Room.QUEST_THE_XINOPHERYDON,
     CandyBox2Room.QUEST_THE_TEAPOT,
     CandyBox2Room.QUEST_THE_LEDGE_ROOM,
-    CandyBox2Room.QUEST_THE_X_POTION
+    CandyBox2Room.QUEST_THE_X_POTION,
 ]
 
 rooms: list[CandyBox2Room] = [
@@ -139,6 +138,4 @@ rooms: list[CandyBox2Room] = [
     CandyBox2Room.DRAGON,
     CandyBox2Room.TOWER,
 ]
-lollipop_farm: list[CandyBox2Room] = [
-    CandyBox2Room.LOLLIPOP_FARM
-]
+lollipop_farm: list[CandyBox2Room] = [CandyBox2Room.LOLLIPOP_FARM]

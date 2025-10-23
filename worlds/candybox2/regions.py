@@ -20,8 +20,14 @@ class CandyBox2RandomizationGroup(IntEnum):
 class CandyBox2Entrance(Entrance):
     is_exit: bool = False
 
-    def __init__(self, player: int, name: str = "", parent: Region | None = None, randomization_group: int = 0,
-                 randomization_type: EntranceType = EntranceType.ONE_WAY) -> None:
+    def __init__(
+        self,
+        player: int,
+        name: str = "",
+        parent: Region | None = None,
+        randomization_group: int = 0,
+        randomization_type: EntranceType = EntranceType.ONE_WAY,
+    ) -> None:
         super().__init__(player, name, parent, randomization_group, randomization_type)
         self.is_exit = False
 
@@ -29,7 +35,11 @@ class CandyBox2Entrance(Entrance):
         self.is_exit = True
 
     def can_connect_to(self, other: Entrance, dead_end: bool, er_state: "ERPlacementState") -> bool:
-        return super().can_connect_to(other, dead_end, er_state) and self.randomization_type == other.randomization_type and not (er_state.coupled and self.is_same_exit(other))
+        return (
+            super().can_connect_to(other, dead_end, er_state)
+            and self.randomization_type == other.randomization_type
+            and not (er_state.coupled and self.is_same_exit(other))
+        )
 
     def is_same_exit(self, other: Entrance):
         return self.name == other.name and self.is_exit == other.is_exit
@@ -37,6 +47,7 @@ class CandyBox2Entrance(Entrance):
 
 class CandyBox2Region(Region):
     entrance_type = CandyBox2Entrance
+
     def __init__(self, name: str, player: int, multiworld: MultiWorld, hint: str | None = None):
         super().__init__(name, player, multiworld, hint)
 
@@ -60,25 +71,50 @@ class CandyBox2RoomRegion(CandyBox2Region):
         if room in lollipop_farm:
             self.randomization_group = CandyBox2RandomizationGroup.LOLLIPOP_FARM
 
+
 def can_reach_room(state: CollectionState, room: CandyBox2Room, player: int):
     return state.can_reach_region(entrance_friendly_names[room], player)
 
+
 def can_brew(state: CollectionState, player: int, also_require_lollipops: bool):
-    return (state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player) and can_farm_candies(state, player) and (not also_require_lollipops or can_farm_lollipops(state, player)))
+    return (
+        state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player)
+        and can_farm_candies(state, player)
+        and (not also_require_lollipops or can_farm_lollipops(state, player))
+    )
+
 
 # Allows the player to plant enough lollipops at the farm for 1/minute
 def can_grow_lollipops(state: CollectionState, player: int):
-    return lollipop_count(state, player) >= 9 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return (
+        lollipop_count(state, player) >= 9
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    )
+
 
 def can_farm_lollipops(state: CollectionState, player: int):
-    return can_grow_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and state.has(CandyBox2ItemName.PITCHFORK, player) and state.has(CandyBox2ItemName.SHELL_POWDER, player) and state.has(CandyBox2ItemName.GREEN_FIN, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return (
+        can_grow_lollipops(state, player)
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+        and state.has(CandyBox2ItemName.PITCHFORK, player)
+        and state.has(CandyBox2ItemName.SHELL_POWDER, player)
+        and state.has(CandyBox2ItemName.GREEN_FIN, player)
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    )
+
 
 # Ideally allows the player to stumble upon a quest they can use to farm candies
 def can_farm_candies(state: CollectionState, player: int):
-    return can_farm_lollipops(state, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player) and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return (
+        can_farm_lollipops(state, player)
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    )
+
 
 def lollipop_count(state: CollectionState, player: int):
-    return state.count(CandyBox2ItemName.THREE_LOLLIPOPS, player)*3 + state.count(CandyBox2ItemName.LOLLIPOP, player)
+    return state.count(CandyBox2ItemName.THREE_LOLLIPOPS, player) * 3 + state.count(CandyBox2ItemName.LOLLIPOP, player)
 
 
 def create_regions(world: "CandyBox2World"):
@@ -92,12 +128,13 @@ def create_regions(world: "CandyBox2World"):
     for room in [room for room in CandyBox2Room if room != CandyBox2Room.VILLAGE and room != CandyBox2Room.WORLD_MAP]:
         room_regions[room.value] = CandyBox2RoomRegion(room, player, multiworld)
 
-    for region in  room_regions.values():
+    for region in room_regions.values():
         world.multiworld.regions.append(region)
 
     generated_entrances = world.rules_package.apply_room_rules(room_regions, world, player)
     for entrance in generated_entrances:
         mark_room_entrance(world, entrance)
+
 
 def mark_room_entrance(world: "CandyBox2World", entrance: Entrance):
     name = entrance.connected_region.room
@@ -111,6 +148,7 @@ def mark_room_entrance(world: "CandyBox2World", entrance: Entrance):
     if entrance_participates_in_er(world, entrance):
         disconnect_entrance_for_randomization(entrance, entrance.connected_region.randomization_group, name)
 
+
 def entrance_participates_in_er(world: "CandyBox2World", entrance: Entrance):
     if not world.options.randomise_tower.value and entrance.name == CandyBox2Room.TOWER.value:
         return False
@@ -120,6 +158,7 @@ def entrance_participates_in_er(world: "CandyBox2World", entrance: Entrance):
 
     return True
 
+
 def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return world.original_entrances
@@ -128,11 +167,19 @@ def connect_entrances(world: "CandyBox2World"):
         placements = world.multiworld.re_gen_passthrough["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, False)
 
-        er_targets = {entrance.name: entrance for region in world.multiworld.get_regions(world.player)
-                         for entrance in region.entrances if not entrance.parent_region}
+        er_targets = {
+            entrance.name: entrance
+            for region in world.multiworld.get_regions(world.player)
+            for entrance in region.entrances
+            if not entrance.parent_region
+        }
 
-        exits = {ex.name: ex for region in world.multiworld.get_regions(world.player)
-                        for ex in region.exits if not ex.connected_region}
+        exits = {
+            ex.name: ex
+            for region in world.multiworld.get_regions(world.player)
+            for ex in region.exits
+            if not ex.connected_region
+        }
 
         for x in placements:
             placement_state.connect(exits[x[0]], er_targets[x[1]])
@@ -140,39 +187,83 @@ def connect_entrances(world: "CandyBox2World"):
         return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_only":
-        world.entrance_randomisation = randomize_entrances(world, False, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
-        })
+        world.entrance_randomisation = randomize_entrances(
+            world,
+            False,
+            {
+                CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
+            },
+        )
         return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
-        world.entrance_randomisation = randomize_entrances(world, False, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
-            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.LOLLIPOP_FARM: [CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-        })
+        world.entrance_randomisation = randomize_entrances(
+            world,
+            False,
+            {
+                CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value],
+                CandyBox2RandomizationGroup.ROOM.value: [
+                    CandyBox2RandomizationGroup.ROOM.value,
+                    CandyBox2RandomizationGroup.LOLLIPOP_FARM.value,
+                ],
+                CandyBox2RandomizationGroup.LOLLIPOP_FARM: [
+                    CandyBox2RandomizationGroup.ROOM.value,
+                    CandyBox2RandomizationGroup.LOLLIPOP_FARM.value,
+                ],
+            },
+        )
         return world.entrance_randomisation.pairings
 
     if world.options.quest_randomisation == "everything":
         # Place the lollipop farm first to avoid condition where ER places everything but the lollipop farm and X potion
-        lollipop_farm = next(entrance for region in world.multiworld.get_regions(world.player) for entrance in region.entrances if entrance.name == CandyBox2Room.LOLLIPOP_FARM)
-        lollipop_farm_entrance = world.random.choice([ex for region in world.multiworld.get_regions(world.player) for ex in region.exits if not ex.connected_region])
+        lollipop_farm = next(
+            entrance
+            for region in world.multiworld.get_regions(world.player)
+            for entrance in region.entrances
+            if entrance.name == CandyBox2Room.LOLLIPOP_FARM
+        )
+        lollipop_farm_entrance = world.random.choice(
+            [
+                ex
+                for region in world.multiworld.get_regions(world.player)
+                for ex in region.exits
+                if not ex.connected_region
+            ]
+        )
         entrance_randomisation_entry_lollipop_farm = manual_connect_entrances(lollipop_farm_entrance, lollipop_farm)
 
-        world.entrance_randomisation = randomize_entrances(world, False, {
-            CandyBox2RandomizationGroup.QUEST.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.ROOM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-            CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [CandyBox2RandomizationGroup.QUEST.value, CandyBox2RandomizationGroup.ROOM.value, CandyBox2RandomizationGroup.LOLLIPOP_FARM.value],
-        })
+        world.entrance_randomisation = randomize_entrances(
+            world,
+            False,
+            {
+                CandyBox2RandomizationGroup.QUEST.value: [
+                    CandyBox2RandomizationGroup.QUEST.value,
+                    CandyBox2RandomizationGroup.ROOM.value,
+                    CandyBox2RandomizationGroup.LOLLIPOP_FARM.value,
+                ],
+                CandyBox2RandomizationGroup.ROOM.value: [
+                    CandyBox2RandomizationGroup.QUEST.value,
+                    CandyBox2RandomizationGroup.ROOM.value,
+                    CandyBox2RandomizationGroup.LOLLIPOP_FARM.value,
+                ],
+                CandyBox2RandomizationGroup.LOLLIPOP_FARM.value: [
+                    CandyBox2RandomizationGroup.QUEST.value,
+                    CandyBox2RandomizationGroup.ROOM.value,
+                    CandyBox2RandomizationGroup.LOLLIPOP_FARM.value,
+                ],
+            },
+        )
         return [entrance_randomisation_entry_lollipop_farm, *world.entrance_randomisation.pairings]
 
     return None
+
 
 def manual_connect_entrances(entrance_from: Entrance, entrance_to: Entrance):
     entrance_to_parent_region = entrance_to.connected_region
     entrance_to_parent_region.entrances.remove(entrance_to)
     entrance_from.connect(entrance_to_parent_region)
     return entrance_from.name, entrance_to.name
+
 
 def entrances_to_add_to_pool(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
@@ -182,9 +273,17 @@ def entrances_to_add_to_pool(world: "CandyBox2World"):
         return [CandyBox2RandomizationGroup.QUEST]
 
     if world.options.quest_randomisation == "quests_and_rooms_separate":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
+        return [
+            CandyBox2RandomizationGroup.QUEST,
+            CandyBox2RandomizationGroup.ROOM,
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM,
+        ]
 
     if world.options.quest_randomisation == "everything":
-        return [CandyBox2RandomizationGroup.QUEST, CandyBox2RandomizationGroup.ROOM, CandyBox2RandomizationGroup.LOLLIPOP_FARM]
+        return [
+            CandyBox2RandomizationGroup.QUEST,
+            CandyBox2RandomizationGroup.ROOM,
+            CandyBox2RandomizationGroup.LOLLIPOP_FARM,
+        ]
 
     return None

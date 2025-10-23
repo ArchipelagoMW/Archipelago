@@ -18,18 +18,21 @@ from .rules import CandyBox2RulesPackage, generate_rules_package
 
 
 class CandyBox2WebWorld(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up Candy Box 2 for Archipelago.",
-        "English",
-        "guide_en.md",
-        "guide/en",
-        ["Victor Tran"]
-    )]
+    tutorials = [
+        Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up Candy Box 2 for Archipelago.",
+            "English",
+            "guide_en.md",
+            "guide/en",
+            ["Victor Tran"],
+        )
+    ]
 
     location_descriptions = {location.value: description for location, description in location_descriptions.items()}
     option_groups = candy_box_2_options_groups
     bug_report_page = "https://github.com/vicr123/candy-box-2/issues"
+
 
 class CandyBox2World(World):
     """Candy Box 2 is a text-based browser RPG that features beautiful ASCII art"""
@@ -78,12 +81,36 @@ class CandyBox2World(World):
         return hasattr(self.multiworld, "re_gen_passthrough")
 
     def generate_early(self) -> None:
-        self.should_randomize_hp_bar = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["hpBarRandomized"] if self.is_ut_regen() else self.options.randomise_hp_bar.value
-        self.starting_weapon = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["weapon"] if self.is_ut_regen() else self.options.starting_weapon.value
-        self.progressive_jump = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["progressiveJump"] if self.is_ut_regen() else self.options.progressive_jump.value
-        self.grimoires = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["grimoires"] if self.is_ut_regen() else self.options.grimoires.value
-        self.pains_au_chocolat = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["painsAuChocolat"] if self.is_ut_regen() else self.options.pain_au_chocolat_count.value
-        self.font_traps = self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["fontTraps"] if self.is_ut_regen() else self.options.font_traps.value
+        self.should_randomize_hp_bar = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["hpBarRandomized"]
+            if self.is_ut_regen()
+            else self.options.randomise_hp_bar.value
+        )
+        self.starting_weapon = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["weapon"]
+            if self.is_ut_regen()
+            else self.options.starting_weapon.value
+        )
+        self.progressive_jump = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["progressiveJump"]
+            if self.is_ut_regen()
+            else self.options.progressive_jump.value
+        )
+        self.grimoires = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["grimoires"]
+            if self.is_ut_regen()
+            else self.options.grimoires.value
+        )
+        self.pains_au_chocolat = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["painsAuChocolat"]
+            if self.is_ut_regen()
+            else self.options.pain_au_chocolat_count.value
+        )
+        self.font_traps = (
+            self.multiworld.re_gen_passthrough["Candy Box 2"]["defaults"]["fontTraps"]
+            if self.is_ut_regen()
+            else self.options.font_traps.value
+        )
 
     def create_regions(self) -> None:
         return create_regions(self)
@@ -122,15 +149,13 @@ class CandyBox2World(World):
             "multipliers": {
                 "candies": self.options.candy_production_multiplier.value,
                 "candyDrops": self.options.candy_drop_multiplier.value,
-                "lollipops": self.options.lollipop_production_multiplier.value
+                "lollipops": self.options.lollipop_production_multiplier.value,
             },
             "prices": {
                 "candyMerchantHat": self.options.candy_merchant_hat_price.value * 1000,
                 "sorceressHat": self.options.sorceress_hat_price.value * 1000,
             },
-            "health": {
-                "teapot": self.options.teapot_hp.value
-            },
+            "health": {"teapot": self.options.teapot_hp.value},
             "defaults": {
                 "weapon": self.options.starting_weapon.value,
                 "hpBarRandomized": self.options.randomise_hp_bar.value,
@@ -138,7 +163,7 @@ class CandyBox2World(World):
                 "grimoires": self.options.grimoires.value,
                 "painsAuChocolat": self.options.pain_au_chocolat_count.value,
                 "fontTraps": self.options.font_traps.value,
-            }
+            },
         }
 
     def set_rules(self) -> None:
@@ -147,12 +172,14 @@ class CandyBox2World(World):
         self.rules_package.apply_location_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
-        return can_reach_room(state, CandyBox2Room.TOWER, self.player) and \
-            state.has(CandyBox2ItemName.P_STONE, self.player) and \
-            state.has(CandyBox2ItemName.L_STONE, self.player) and \
-            state.has(CandyBox2ItemName.A_STONE, self.player) and \
-            state.has(CandyBox2ItemName.Y_STONE, self.player) and \
-            state.has(CandyBox2ItemName.LOCKED_CANDY_BOX, self.player)
+        return (
+            can_reach_room(state, CandyBox2Room.TOWER, self.player)
+            and state.has(CandyBox2ItemName.P_STONE, self.player)
+            and state.has(CandyBox2ItemName.L_STONE, self.player)
+            and state.has(CandyBox2ItemName.A_STONE, self.player)
+            and state.has(CandyBox2ItemName.Y_STONE, self.player)
+            and state.has(CandyBox2ItemName.LOCKED_CANDY_BOX, self.player)
+        )
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"\nCandy Box 2 Entrance randomisation for {self.player_name}:\n")
@@ -162,7 +189,9 @@ class CandyBox2World(World):
 
     def generate_basic(self) -> None:
         if not self.should_randomize_hp_bar:
-            self.multiworld.get_location(CandyBox2LocationName.HP_BAR_UNLOCK, self.player).place_locked_item(self.create_item(CandyBox2ItemName.HP_BAR))
+            self.multiworld.get_location(CandyBox2LocationName.HP_BAR_UNLOCK, self.player).place_locked_item(
+                self.create_item(CandyBox2ItemName.HP_BAR)
+            )
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]):
         er_hint_data = {}
@@ -173,5 +202,6 @@ class CandyBox2World(World):
                 er_hint_data[location.address] = entrance_friendly_names[entrance]
 
         hint_data[self.player] = er_hint_data
+
 
 setup_candy_box_2_component()
