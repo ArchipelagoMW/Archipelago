@@ -134,7 +134,7 @@ const addRangeRow = (optionName) => {
       }
       break;
     case 'text':
-      if(newValue === "") {
+      if (newValue === "") {
         alert('Range values for text must be a non-empty string!');
         return;
       }
