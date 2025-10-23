@@ -272,7 +272,7 @@ def patch_rom(world: "MM3World", patch: MM3ProcedurePatch) -> None:
         value_a = 0x64
         value_b = 0x6A
         if world.options.consumables in (Consumables.option_none, Consumables.option_1up_etank):
-            value_a = 0x67
+            value_a = 0x68
         if world.options.consumables in (Consumables.option_none, Consumables.option_weapon_health):
             value_b = 0x67
         patch.write_byte(consumables_ptr - 3, value_a)
