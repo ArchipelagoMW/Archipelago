@@ -6,6 +6,8 @@ from dataclasses import dataclass
 class Scenario(IntEnum):
     lakeside_gardens = 0
     dusty_ridge_ranch = 1
+    the_broken_atoll = 2
+    magma_falls = 3
 
 class Difficulty(IntEnum):
     easy = 0
@@ -25,6 +27,8 @@ class SelectedScenario(Choice):
     display_name = "Scenario"
     option_lakeside_gardens = Scenario.lakeside_gardens.value
     option_dusty_ridge_ranch = Scenario.dusty_ridge_ranch.value
+    option_the_broken_atoll = Scenario.the_broken_atoll.value
+    option_magma_falls = Scenario.magma_falls.value
 
 class SelectedDifficulty(Choice):
     """
