@@ -364,8 +364,18 @@ class SC2Manager(GameManager):
         text = mission_obj.mission_name
         tooltip: str = ""
         mission_remaining_locations, plando_locations, remaining_count = self.sort_unfinished_locations(mission_id)
-        remaining_goal_missions_locations_by_mission = [mission_locations for mission_locations, _, _ in [self.sort_unfinished_locations(mission_id) for mission_id in self.ctx.final_mission_ids]]
-        remaining_goal_missions_locations = [location for mission_locations in remaining_goal_missions_locations_by_mission for location in mission_locations]
+        remaining_goal_missions_locations_by_mission = [
+            mission_locations for mission_locations, _, _ in [
+                self.sort_unfinished_locations(final_mission_id)
+                for final_mission_id in self.ctx.final_mission_ids
+            ]
+        ]
+        remaining_goal_victory_locations = [
+            location for mission_locations
+            in remaining_goal_missions_locations_by_mission
+            for location in mission_locations
+            if location[0] == LocationType.VICTORY
+        ]
         campaign_locked = campaign_id not in available_campaigns
         layout_locked = layout_id not in available_layouts[campaign_id]
 
@@ -434,7 +444,7 @@ class SC2Manager(GameManager):
             if any(location_type == LocationType.VICTORY for (location_type, _, _) in mission_remaining_locations):
                 tooltip += f"[color={COLOR_FINAL_MISSION_REMINDER}]Required to beat the world[/color]"
             else:
-                if any(location_type == LocationType.VICTORY for (location_type, _, _) in remaining_goal_missions_locations):
+                if len(remaining_goal_victory_locations) > 0:
                     tooltip += inspect.cleandoc("""
                         This goal mission is already beaten.
                         Beat the remaining goal missions to beat the world.
