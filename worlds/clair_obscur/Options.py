@@ -11,9 +11,9 @@ class Goal(Choice):
     display_name = "Goal"
     option_paintress = 0
     option_curator = 1
+    option_clea = 4
     option_painted_love = 2
     option_simon = 3
-
     default = 1
 
 class ExcludeEndgameLocations(Choice):
@@ -42,7 +42,7 @@ class ExcludeEndlessTower(Choice):
     option_excluded = 0
     option_filler = 1
     option_included = 2
-    default = 2
+    default = 0
 
 class ShuffleLostGestrals(Toggle):
     """
@@ -102,7 +102,30 @@ class GearScaling(Choice):
     option_order_received = 1
     option_balanced_random = 2
     option_full_random = 3
-    default = 0
+    default = 1
+
+class MaxEquipLevel(Choice):
+    """
+    What level pictos and weapons received though Archipelago will go up to. Weapons can still be upgraded past this.
+    Highest Included Location: The highest level equipment will match the gear you would normally get from the most
+    difficult location included in the pool. With endgame locations excluded, this will be 15 with Paintress as your
+    goal, 16 for Curator, 28 for Clea, or 33 for Simon or Painted Love.
+    Custom: Set a specific level.
+    """
+    internal_name = "max_level_choice"
+    display_name = "Max Equipment Level"
+    option_highest_included_location = 0
+    option_custom = 1
+
+class CustomMaxEquipLevel(Range):
+    """
+    What level pictos and weapons received through Archipelago will go up to if Max Equip Level is set to Custom.
+    """
+    internal_name = "custom_max_equip_level"
+    display_name = "Custom Max Equipment Level"
+    range_start = 1
+    range_end = 33
+    default = 33
 
 class TrapChance(Range):
     """
@@ -130,6 +153,8 @@ class ClairObscurOptions(DeathLinkMixin, PerGameCommonOptions):
     gestral_shuffle: ShuffleLostGestrals
     starting_char: StartingCharacter
     gear_scaling: GearScaling
+    max_equip_level: MaxEquipLevel
+    custom_max_equip_level: CustomMaxEquipLevel
     area_logic: AreaLogic
     trap_chance: TrapChance
 
