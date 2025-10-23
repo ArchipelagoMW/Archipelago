@@ -209,19 +209,18 @@ class RandomiseXPotion(DefaultOnToggle):
 
 candy_box_2_options_groups = [
     OptionGroup("Entrances", [QuestRandomisation, RandomiseTowerEntrance, RandomiseXPotion]),
-    OptionGroup("Inventory Customisation", [StartingWeapon, ProgressiveJump, Grimoire, PainAuChocolatCount]),
     OptionGroup(
-        "Multipliers",
-        [
-            CandyProductionMultiplier,
-            LollipopProductionMultiplier,
-        ],
+        "Inventory Customisation", [StartingWeapon, ProgressiveJump, Grimoire, PainAuChocolatCount, RandomiseHpBar]
     ),
     OptionGroup(
-        "Item Pricing",
+        "Scaling",
         [
+            CandyProductionMultiplier,
+            CandyDropMultiplier,
+            LollipopProductionMultiplier,
             CandyMerchantHatPrice,
             SorceressHatPrice,
+            TeapotHP,
         ],
     ),
     OptionGroup("Inter-game Features", [DeathLink, EnergyLink, Gifting]),
