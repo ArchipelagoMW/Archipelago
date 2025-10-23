@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from . import MM3World
 
 MM3LCHASH = "5266687de215e790b2008284402f3917"
-PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
+PROTEUSHASH = "b69fff40212b80c94f19e786d1efbf61"
 MM3NESHASH = "4a53b6f58067d62c9a43404fe835dd5c"
 MM3VCHASH = "c50008f1ac86fae8d083232cdd3001a5"
 
@@ -384,9 +384,9 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-prg_offset = 0xCEDB0
+prg_offset = 0xCF1B0
 prg_size = 0x40000
-chr_offset = 0x10EDB0
+chr_offset = 0x10F1B0
 chr_size = 0x20000
 
 
