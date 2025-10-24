@@ -2581,3 +2581,11 @@ location_data_table: dict[str, int] = {
 
 location_table = {name: address for name,
                   address in location_data_table.items()}
+
+
+# For making priority locations or excluded locations easier
+# contributions to add more location groups are welcome
+location_name_groups: dict[str, set[str]] = {
+    "Bosses": {Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON, 
+               Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA, Locations.GANON},
+}
