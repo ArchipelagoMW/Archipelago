@@ -2,8 +2,6 @@ from typing import Dict, Set, cast
 
 from . import static_logic as static_witness_logic
 
-ID_START = 158000
-
 GENERAL_LOCATIONS = {
     "Tutorial Front Left",
     "Tutorial Back Left",
@@ -409,10 +407,6 @@ GENERAL_LOCATIONS = {
     "Mountain Bottom Floor Discard",
 }
 
-GENERAL_LOCATION_HEXES = {
-    static_witness_logic.ENTITIES_BY_NAME[entity_name]["entity_hex"] for entity_name in GENERAL_LOCATIONS
-}
-
 OBELISK_SIDES = {
     "Desert Obelisk Side 1",
     "Desert Obelisk Side 2",
@@ -450,42 +444,27 @@ OBELISK_SIDES = {
     "Town Obelisk Side 6",
 }
 
-ALL_LOCATIONS_TO_ID: Dict[str, int] = {}
-
 AREA_LOCATION_GROUPS: Dict[str, Set[str]] = {}
 
 
-def get_id(entity_hex: str) -> int:
-    """
-    Calculates the location ID for any given location
-    """
-
-    return cast(int, static_witness_logic.ENTITIES_BY_HEX[entity_hex]["id"])
-
-
-def get_event_name(entity_hex: str) -> str:
+def get_event_name(entity_id: int) -> str:
     """
     Returns the event name of any given panel.
     """
 
-    action = " Opened" if static_witness_logic.ENTITIES_BY_HEX[entity_hex]["entityType"] == "Door" else " Solved"
+    action = " Opened" if static_witness_logic.ENTITIES_BY_ID[entity_id].entity_type == "Door" else " Solved"
 
-    return cast(str, static_witness_logic.ENTITIES_BY_HEX[entity_hex]["checkName"]) + action
+    return cast(str, static_witness_logic.ENTITIES_BY_ID[entity_id].entity_name) + action
 
 
-ALL_LOCATIONS_TO_IDS = {
-    panel_obj["checkName"]: get_id(chex)
-    for chex, panel_obj in static_witness_logic.ENTITIES_BY_HEX.items()
-    if panel_obj["id"]
+ALL_LOCATIONS_TO_ID = {
+    panel_obj.entity_name: entity_id
+    for entity_id, panel_obj in static_witness_logic.ENTITIES_BY_ID.items()
+    if panel_obj.location_type is not None
 }
 
-ALL_LOCATIONS_TO_IDS = dict(
-    sorted(ALL_LOCATIONS_TO_IDS.items(), key=lambda loc: loc[1])
-)
+ALL_LOCATIONS_TO_ID = dict(sorted(ALL_LOCATIONS_TO_ID.items(), key=lambda item: item[1]))
 
-for key, item in ALL_LOCATIONS_TO_IDS.items():
-    ALL_LOCATIONS_TO_ID[key] = item
-
-for loc in ALL_LOCATIONS_TO_IDS:
-    area = static_witness_logic.ENTITIES_BY_NAME[loc]["area"].name
-    AREA_LOCATION_GROUPS.setdefault(area, set()).add(loc)
+for location_name in ALL_LOCATIONS_TO_ID:
+    area = static_witness_logic.ENTITIES_BY_NAME[location_name].area.name
+    AREA_LOCATION_GROUPS.setdefault(area, set()).add(location_name)
