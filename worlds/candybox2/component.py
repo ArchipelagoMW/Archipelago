@@ -13,10 +13,10 @@ def open_page(url):
 
     slot, password, host, port = match.groups()
     if password == "None":
-        webbrowser.open(f"https://candybox2-ap.vicr123.com/latest-blueprint?hostport={host}:{port}&name={slot}")
+        webbrowser.open(f"https://candybox2-ap.vicr123.com/latest?hostport={host}:{port}&name={slot}")
     else:
         webbrowser.open(
-            f"https://candybox2-ap.vicr123.com/latest-blueprint?hostport={host}:{port}&name={slot}&password={password}"
+            f"https://candybox2-ap.vicr123.com/latest?hostport={host}:{port}&name={slot}&password={password}"
         )
     pass
 
