@@ -86,7 +86,7 @@ Example:
 <a name="datapackagestringchecksum"></a>
 
 Fetches a single datapackage by checksum.  
-**Cache timer: 3600 seconds**
+**Cache timer: None**
 
 Returns a dict of the game's data with:
 - A checksum `checksum`
