@@ -16,7 +16,7 @@ from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
 from .aesthetics import renon_item_dialogue, get_item_text_color
 from .locations import get_location_info
 from .options import CharacterStages, VincentFightCondition, RenonFightCondition, PostBehemothBoss, RoomOfClocksBoss, \
-    BadEndingCondition, DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
+    BadEndingCondition, CV64DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -356,7 +356,7 @@ class CV64PatchExtensions(APPatchExtension):
         rom_data.write_int32s(0xBFE190, patches.subweapon_surface_checker)
 
         # Make received DeathLinks blow you to smithereens instead of kill you normally.
-        if options["death_link"] == DeathLink.option_explosive:
+        if options["death_link"] == CV64DeathLink.option_explosive:
             rom_data.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
             rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
             rom_data.write_int32(0x27AA0, 0x0C0FFA78)  # JAL	0x803FE9E0
@@ -365,7 +365,7 @@ class CV64PatchExtensions(APPatchExtension):
             rom_data.write_int32(0x32DBC, 0x00000000)
 
         # Set the DeathLink ROM flag if it's on at all.
-        if options["death_link"] != DeathLink.option_off:
+        if options["death_link"] != CV64DeathLink.option_off:
             rom_data.write_byte(0xBFBFDE, 0x01)
 
         # DeathLink counter decrementer code
@@ -607,9 +607,10 @@ class CV64PatchExtensions(APPatchExtension):
         rom_data.write_int32(0xAA530, 0x080FF880)  # J 0x803FE200
         rom_data.write_int32s(0xBFE200, patches.coffin_cutscene_skipper)
 
-        # Increase shimmy speed
+        # Shimmy speed increase hack
         if options["increase_shimmy_speed"]:
-            rom_data.write_byte(0xA4241, 0x5A)
+            rom_data.write_int32(0x97EB4, 0x803FE9F0)
+            rom_data.write_int32s(0xBFE9F0, patches.shimmy_speed_modifier)
 
         # Disable landing fall damage
         if options["fall_guard"]:
@@ -644,6 +645,9 @@ class CV64PatchExtensions(APPatchExtension):
             # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
             if not options["multi_hit_breakables"]:
                 rom_data.write_byte(0x10C7A1, 0x03)
+            # Replace the PowerUp in one of the lizard lockers if the lizard locker items aren't randomized.
+            if not options["lizard_locker_items"]:
+                rom_data.write_byte(0xBFCA07, 0x03)
         # Change the appearance of the Pot-Pourri to that of a larger PowerUp regardless of the above setting, so other
         # game PermaUps are distinguishable.
         rom_data.write_int32s(0xEE558, [0x06005F08, 0x3FB00000, 0xFFFFFF00])
@@ -714,7 +718,11 @@ class CV64PatchExtensions(APPatchExtension):
         rom_data.write_int32(0x10CF38, 0x8000FF4D)  # CT final room door slab
         rom_data.write_int32(0x10CF44, 0x1000FF4D)  # CT Renon slab
         rom_data.write_int32(0x10C908, 0x0008FF4D)  # Villa foyer chandelier
-        rom_data.write_byte(0x10CF37, 0x04)  # pointer for CT final room door slab item data
+
+        # Change the pointer to the Clock Tower final room 3HB door slab drops to not share its values with those of the
+        # 3HB slab near Renon at the top of the room.
+        if options["multi_hit_breakables"]:
+            rom_data.write_byte(0x10CF37, 0x04)
 
         # Once-per-frame gameplay checks
         rom_data.write_int32(0x6C848, 0x080FF40D)  # J 0x803FD034
@@ -1000,6 +1008,7 @@ def write_patch(world: "CV64World", patch: CV64ProcedurePatch, offset_data: Dict
         "multi_hit_breakables": world.options.multi_hit_breakables.value,
         "drop_previous_sub_weapon": world.options.drop_previous_sub_weapon.value,
         "countdown": world.options.countdown.value,
+        "lizard_locker_items": world.options.lizard_locker_items.value,
         "shopsanity": world.options.shopsanity.value,
         "panther_dash": world.options.panther_dash.value,
         "big_toss": world.options.big_toss.value,

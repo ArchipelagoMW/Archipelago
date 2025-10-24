@@ -1,7 +1,8 @@
 {% extends 'pageWrapper.html' %}
 
 {% block head %}
-    {% include 'header/grassHeader.html' %}
+    {% set theme_name = theme|default("grass", true) %}
+    {% include "header/"+theme_name+"Header.html" %}
     <title>{{ title }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
 {% endblock %}

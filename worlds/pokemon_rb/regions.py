@@ -1237,7 +1237,7 @@ saffron_gym_warps = [
 
 entrance_only = [
     "Route 4-W to Mt Moon 1F", "Saffron City-G to Saffron Gym-S", "Saffron City-Copycat to Saffron Copycat's House 1F",
-    "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F"
+    "Saffron City-Pidgey to Saffron Pidgey House", "Celadon Game Corner-Hidden Stairs to Rocket Hideout B1F",
     "Cinnabar Island-M to Pokemon Mansion 1F", "Mt Moon B2F to Mt Moon B1F-W", "Silph Co 7F-NW to Silph Co 11F-W",
     "Viridian City-G", "Cerulean City-Cave to Cerulean Cave 1F-SE", "Cerulean City-T to Cerulean Trashed House",
     "Route 10-P to Power Plant", "S.S. Anne 2F to S.S. Anne Captain's Room", "Pewter City-M to Pewter Museum 1F-E",
@@ -1580,16 +1580,22 @@ def create_regions(world):
 
     world.random.shuffle(world.item_pool)
     if not world.options.key_items_only:
-        if "Player's House 2F - Player's PC" in world.options.exclude_locations:
-            acceptable_item = lambda item: item.excludable
-        elif "Player's House 2F - Player's PC" in world.options.priority_locations:
-            acceptable_item = lambda item: item.advancement
-        else:
-            acceptable_item = lambda item: True
+        def acceptable_item(item):
+            return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
+                    and "Coins" not in item.name and "Progressive" not in item.name
+                    and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
+                    and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                         "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
         for i, item in enumerate(world.item_pool):
-            if acceptable_item(item):
+            if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
                 world.pc_item = world.item_pool.pop(i)
                 break
+        else:
+            for i, item in enumerate(world.item_pool):
+                if acceptable_item(item):
+                    world.pc_item = world.item_pool.pop(i)
+                    break
+
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -2414,6 +2420,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 loc.place_locked_item(badge)
 
         state = multiworld.state.copy()
+        state.allow_partial_entrances = True
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
                     and ("Badge" not in item or world.options.badgesanity):
@@ -2633,9 +2640,13 @@ class PokemonRBWarp(Entrance):
         self.warp_id = warp_id
         self.address = address
         self.flags = flags
+        self.addresses = None
+        self.target = None
 
     def connect(self, entrance):
-        super().connect(entrance.parent_region, None, target=entrance.warp_id)
+        super().connect(entrance.parent_region)
+        self.addresses = None
+        self.target = entrance.warp_id
 
     def access_rule(self, state):
         if self.connected_region is None:

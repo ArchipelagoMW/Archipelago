@@ -262,6 +262,10 @@ def is_easter_time() -> bool:
     # Thus, we just take a range from the earliest to latest possible easter dates.
 
     today = date.today()
+
+    if today < date(2025, 3, 31): # Don't go live early if 0.6.0 RC3 happens, with a little leeway
+        return False
+
     earliest_easter_day = date(today.year, 3, 20)  # Earliest possible is 3/22 + 2 day buffer for Good Friday
     last_easter_day = date(today.year, 4, 26)  # Latest possible is 4/25 + 1 day buffer for Easter Monday
 

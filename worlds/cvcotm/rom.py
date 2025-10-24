@@ -335,8 +335,8 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.write_bytes(0x679A60, patches.kickless_roc_height_shortener)
 
         # Give the player their Start Inventory upon entering their name on a new file.
-        rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x68, 0x08])
-        rom_data.write_bytes(0x680000, patches.start_inventory_giver)
+        rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x69, 0x08])
+        rom_data.write_bytes(0x690000, patches.start_inventory_giver)
 
         # Prevent Max Ups from exceeding 255.
         rom_data.write_bytes(0x5E170, [0x00, 0x4A, 0x97, 0x46, 0x00, 0x00, 0x6A, 0x08])

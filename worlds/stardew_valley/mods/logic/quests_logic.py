@@ -1,15 +1,7 @@
-from typing import Dict, Union
+from typing import Dict
 
 from ..mod_data import ModNames
 from ...logic.base_logic import BaseLogic, BaseLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.monster_logic import MonsterLogicMixin
-from ...logic.quest_logic import QuestLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogicMixin
-from ...logic.season_logic import SeasonLogicMixin
-from ...logic.time_logic import TimeLogicMixin
 from ...stardew_rule import StardewRule
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.ap_names.mods.mod_items import SVEQuestItem
@@ -34,8 +26,7 @@ class ModQuestLogicMixin(BaseLogicMixin):
         self.quest = ModQuestLogic(*args, **kwargs)
 
 
-class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin,
-TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
+class ModQuestLogic(BaseLogic):
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
         quests = dict()
         quests.update(self._get_juna_quest_rules())

@@ -1,7 +1,6 @@
 from functools import cached_property
 
 from .base_logic import BaseLogic, BaseLogicMixin
-from .has_logic import HasLogicMixin
 from ..stardew_rule import StardewRule
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.gift_names import Gift
@@ -13,7 +12,7 @@ class GiftLogicMixin(BaseLogicMixin):
         self.gifts = GiftLogic(*args, **kwargs)
 
 
-class GiftLogic(BaseLogic[HasLogicMixin]):
+class GiftLogic(BaseLogic):
 
     @cached_property
     def has_any_universal_love(self) -> StardewRule:

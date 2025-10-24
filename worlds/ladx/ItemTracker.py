@@ -151,8 +151,7 @@ class ItemTracker:
     def __init__(self, gameboy) -> None:
         self.gameboy = gameboy
         self.loadItems()
-        pass
-    extraItems = {}
+        self.extraItems = {}
 
     async def readRamByte(self, byte):
         return (await self.gameboy.read_memory_cache([byte]))[byte]
