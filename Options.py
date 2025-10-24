@@ -1729,8 +1729,13 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
                 data[sub_option] = 0
-
-        notes = {}
+        random_range_key = f"random-range-{option.range_start}-{option.range_end}"
+        data[random_range_key] = 0
+        notes = {
+            "random-low": "random weighted towards lower values",
+            "random-high": "random weighted towards higher values",
+            random_range_key: f"random value between {option.range_start} and {option.range_end}"
+        }
         for name, number in getattr(option, "special_range_names", {}).items():
             notes[name] = f"equivalent to {number}"
             if number in data:
