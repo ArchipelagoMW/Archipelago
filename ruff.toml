@@ -11,6 +11,6 @@ ignore = [
     "PLC0415",  # In AP, we consider local imports totally fine & necessary
     "PLC1802",  # Author agrees with this rule, but it literally changes the functionality of the code, which is unsafe.
     "PLC1901",  # This is just not equivalent
-    "PLE1141",  # Ruff is not meant for error checking. If the code author meant .items(), they will realize soon enough
+    "PLE1141",  # Gives false positives when the dict keys are tuples, but does not mention this in the suggested fix.
     "UP015",  # Explicit is better than implicit, so we'd prefer to keep "r" in open() calls.
 ]
