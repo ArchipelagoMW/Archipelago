@@ -2380,7 +2380,7 @@ def can_beat_all_rayquaza_balloon_panic_records(state: CollectionState, player: 
 
 def can_beat_any_rayquaza_balloon_panic_record(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
-        return True
+        return state.has("Deoxys Friendship", player)
     else:
         return (
             state.has("Lucario Friendship", player) or
@@ -2513,7 +2513,8 @@ def can_beat_all_rotom_spooky_shoot_records(state: CollectionState, player: int)
 
 def can_beat_any_rotom_spooky_shoot_record(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.remove_attraction_locations.value == options.remove_attraction_locations.option_true:
-        return True
+        return state.has("Rotom Friendship", player)
+
     else:
         return (
             state.has("Magnemite Friendship", player) or

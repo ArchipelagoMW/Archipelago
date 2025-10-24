@@ -2064,7 +2064,11 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Pikachu Snowboard",
         "Pikachu Balloon",
         "Dusknoir Unlock",
-        "Rayquaza Unlock"
+        "Rayquaza Unlock",
+
+        "Deoxys Friendship",
+        "Rotom Friendship",
+
     ]),
     ("remove_pokemon_unlock_locations", 0): (85, [
         "Progressive Dash",
