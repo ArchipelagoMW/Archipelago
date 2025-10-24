@@ -183,7 +183,7 @@ level_event_table = {
 	"FoF1 Coffin Lightning" : 				ItemData(BASE_ID + 92, 1, "Progression", "FoF1: Push Blocks"),
 	"FoF1 Drawbridge" : 					ItemData(BASE_ID + 93, 1, "Progression", "FoF1: Coffin Glover Switch"),
 	"FoF2 Garibs Fall" : 					ItemData(BASE_ID + 94, 1, "Progression", "FoF2: Push Target"),
-	"FoF2 Checkpoint Gates" : 				ItemData(BASE_ID + 95, 1, "Progression", "FoF2: Push Switch"),
+	"FoF2 Progressive Gate" : 				ItemData(BASE_ID + 95, 2, "Progression", ""),
 	"FoF2 Mummy Gate" : 					ItemData(BASE_ID + 96, 1, "Progression", "FoF2: Mummy"),
 	"FoF3 Gate" : 							ItemData(BASE_ID + 97, 1, "Progression", "FoF3: Target"),
 	"FoF3 Spikes" : 						ItemData(BASE_ID + 98, 1, "Progression", "FoF3: Ball Switch"),

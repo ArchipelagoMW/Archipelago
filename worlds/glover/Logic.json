@@ -23271,7 +23271,7 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 2",
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					},
@@ -23303,7 +23303,7 @@
 					},
 					{
 						"ballRequirement": false,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 2",
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					},
@@ -23437,7 +23437,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x5D5"
+						"0x5D6"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -23521,14 +23521,14 @@
 			"Mummy": [
 				{
 					"AP_IDS": [
-						"0x5D6"
+						"0x5D2"
 					],
 					"IDS": [
 						"0x1D6"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 9,
-					"TYPE": 9
+					"TYPE": 0
 				},
 				{
 					"ballRequirement": false,
@@ -23601,7 +23601,7 @@
 			"Push Switch": [
 				{
 					"AP_IDS": [
-						"0x5D2"
+						"0x5D3"
 					],
 					"IDS": [
 						"0x146/0x148(?)"
@@ -23649,7 +23649,7 @@
 			"Push Target": [
 				{
 					"AP_IDS": [
-						"0x5D3"
+						"0x5D4"
 					],
 					"IDS": [
 						"0x1FB"
@@ -23772,7 +23772,7 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 1",
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					}
@@ -23802,7 +23802,7 @@
 					},
 					{
 						"ballRequirement": false,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 1",
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					}
@@ -23877,7 +23877,7 @@
 			"Slope Target": [
 				{
 					"AP_IDS": [
-						"0x5D4"
+						"0x5D5"
 					],
 					"IDS": [
 						"0x193"
@@ -23885,6 +23885,11 @@
 					"NEEDS_BALL": true,
 					"REGION": 4,
 					"TYPE": 0
+				},
+				{
+					"ballRequirement": true,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Spawn": {
@@ -23956,13 +23961,13 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 1",
 						"regionIndex": 4,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 2",
 						"regionIndex": 8,
 						"trickDifficulty": 0
 					}
@@ -23977,13 +23982,13 @@
 					},
 					{
 						"ballRequirement": false,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 1",
 						"regionIndex": 4,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": false,
-						"ck0": "Checkpoint Gates",
+						"ck0": "Progressive Gate 2",
 						"regionIndex": 8,
 						"trickDifficulty": 0
 					}
@@ -29106,7 +29111,9 @@
 						"0x6EC"
 					],
 					"COUNT": 1,
-					"IDS": [],
+					"IDS": [
+						"0x1C6"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 10
@@ -30131,7 +30138,9 @@
 						"0x746"
 					],
 					"COUNT": 1,
-					"IDS": [],
+					"IDS": [
+						"0x263"
+					],
 					"NEEDS_BALL": false,
 					"REGION": 16,
 					"TYPE": 10
