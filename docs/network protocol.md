@@ -226,6 +226,7 @@ Sent to clients after a client requested this message be sent to them, more info
 | slots | list\[int\] | Optional. Player slot IDs that this message is targeting |
 | tags | list\[str\] | Optional. Client [Tags](#Tags) this message is targeting |
 | data | dict | The data in the [Bounce](#Bounce) package copied |
+| slot | int | The slot that originally sent the Bounce package |
 
 ### InvalidPacket
 Sent to clients if the server caught a problem with a packet. This only occurs for errors that are explicitly checked for.
