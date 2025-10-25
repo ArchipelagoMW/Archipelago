@@ -3,9 +3,10 @@ import pkgutil
 from asyncio import Task
 from pathlib import Path
 
-from CommonClient import logger
 from kivy import Config
 from kivy.core.audio import Sound, SoundLoader
+
+from CommonClient import logger
 
 from .. import game
 from .item_quality import ItemQuality
