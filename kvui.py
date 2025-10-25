@@ -41,6 +41,8 @@ Config.set("graphics", "multisamples", "0")  # multisamples crash old intel driv
 # No longer necessary when we switch to kivy 3.0.0, which fixes this issue.
 from kivy.core.audio import SoundLoader
 for classobj in SoundLoader._classes:
+    # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
+    # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
     classobj.extensions()
 
 from kivymd.uix.divider import MDDivider
