@@ -351,6 +351,7 @@ class TunicWorld(World):
         # if there's 6 or less in the pool, then I could see them landing on priority locations being desireable
         if name == "Gold Questagon" and self.options.hexagon_goal > 6:
             itemclass = itemclass | ItemClassification.deprioritized
+        # remove deprioritized from Fairies and Coins if Laurels are there
         if name == "Fairy" and self.options.laurels_location == LaurelsLocation.option_10_fairies:
             itemclass = ItemClassification.progression
         if (name == "Golden Coin" and self.options.laurels_location in
