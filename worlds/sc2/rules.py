@@ -116,7 +116,7 @@ class SC2Logic:
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
         return state.has_group("Missions", self.player, 0)
 
-    def get_very_hard_required_upgrade_level(self) -> bool:
+    def get_very_hard_required_upgrade_level(self) -> int:
         return 2 if self.advanced_tactics else 3
 
     def weapon_armor_upgrade_count(self, upgrade_item: str, state: CollectionState) -> int:
@@ -140,7 +140,7 @@ class SC2Logic:
             count += 1
         return count
 
-    def soa_power_rating(self, state: CollectionState) -> bool:
+    def soa_power_rating(self, state: CollectionState) -> int:
         power_rating = 0
         # Spear of Adun Ultimates (Strongest)
         for item, rating in soa_ultimate_ratings.items():
