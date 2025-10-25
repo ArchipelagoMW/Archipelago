@@ -169,7 +169,7 @@ grinch_locations = {
         "WL - Mayor's Villa - GC BP in Pirate's Cave": GrinchLocationData("Mayor's Villa", ["Grinch Copter Blueprints", "Blueprints", "Who Lake", "Who Lake Blueprints", "Mayor's Villa", "Mayor's Villa Blueprints"], 1215, [GrinchRamData(0x010275, binary_bit_pos=6)]),
 #Sleigh Room Locations
         "MC - Sleigh Ride - Stealing All Gifts": GrinchLocationData("Sleigh Room", ["Sleigh Ride"], 1300, [GrinchRamData(0x0100BF, binary_bit_pos=6)]),
-        "MC - Sleigh Ride - Neutralizing Santa": GrinchLocationData("Sleigh Room", None, None, [GrinchRamData(0x010000, value=0x3E)]),#[GrinchRamData(0x0100BF, binary_bit_pos=7)]),
+        "MC - Sleigh Ride - Neutralizing Santa": GrinchLocationData("Sleigh Room", None, None, [GrinchRamData(0x0100BF, binary_bit_pos=7)]),#[GrinchRamData(0x010000, value=0x3E)]),
 #Heart of Stones
         "WV - Post Office - Heart of Stone": GrinchLocationData("Post Office", ["Heart of Stones", "Whoville", "Post Office"], 1400, [GrinchRamData(0x0101FA, binary_bit_pos=6)]),
         "WF - Ski Resort - Heart of Stone": GrinchLocationData("Ski Resort", ["Heart of Stones", "Who Forest", "Ski Resort"], 1401, [GrinchRamData(0x0101FA, binary_bit_pos=7)]),
