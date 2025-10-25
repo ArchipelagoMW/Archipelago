@@ -351,6 +351,11 @@ class TunicWorld(World):
         # if there's 6 or less in the pool, then I could see them landing on priority locations being desireable
         if name == "Gold Questagon" and self.options.hexagon_goal > 6:
             itemclass = itemclass | ItemClassification.deprioritized
+        if name == "Fairy" and self.options.laurels_location == LaurelsLocation.option_10_fairies:
+            itemclass = ItemClassification.progression
+        if (name == "Golden Coin" and self.options.laurels_location in
+                (LaurelsLocation.option_10_coins, LaurelsLocation.option_6_coins)):
+            itemclass = ItemClassification.progression
         return TunicItem(name, itemclass, self.item_name_to_id[name], self.player)
 
     def create_items(self) -> None:

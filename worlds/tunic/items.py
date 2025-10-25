@@ -56,7 +56,7 @@ item_table: dict[str, TunicItemData] = {
     "Fortress Vault Key": TunicItemData(IC.progression, 1, 36, "Keys"),
     "Flask Shard": TunicItemData(IC.useful, 12, 37, combat_ic=IC.progression | IC.deprioritized),
     "Potion Flask": TunicItemData(IC.useful, 5, 38, "Flask", combat_ic=IC.progression),
-    "Golden Coin": TunicItemData(IC.progression, 17, 39),
+    "Golden Coin": TunicItemData(IC.progression | IC.deprioritized, 17, 39),
     "Card Slot": TunicItemData(IC.useful, 4, 40),
     "Red Questagon": TunicItemData(IC.progression_skip_balancing, 1, 41, "Hexagons"),
     "Green Questagon": TunicItemData(IC.progression_skip_balancing, 1, 42, "Hexagons"),
