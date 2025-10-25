@@ -147,6 +147,9 @@ class PokeparkWorld(World):
 
         # setup locations
         self.locations = self._determine_locations()
+        for item_name, data in ITEM_TABLE.items():
+            if data.type == "Item":
+                self.progressive_pool.extend([item_name] * data.quantity)
         self._update_pool_with_precollected_items()
 
         self._determine_classification_dynamic()
@@ -207,6 +210,10 @@ class PokeparkWorld(World):
             "Progressive Iron Tail",
             "Progressive Health"
         ]
+        useful_items = {
+            "Double Dash",
+            "Meadow Zone Fast Travel"
+        }
 
         options = self.options
         option_names = [option_name for option_name, _ in option_to_progression.keys()]
@@ -234,24 +241,20 @@ class PokeparkWorld(World):
         max_removable_friendship = 193 - min_required_friendship_count
         friendship_to_remove = friendship_removable[:max_removable_friendship]
 
-        items_to_remove = set(friendship_to_remove + other_removable)
+        removable_items = set(friendship_to_remove + other_removable)
 
-        overlap = progressive_set & items_to_remove
+        overlap = progressive_set & removable_items
         assert not overlap, f"Items marked as both needed and removable: {overlap}"
 
-        for name in self.progressive_pool:
-            if name in progressive_set or name not in items_to_remove:
-                self.item_classification_overrides[name] = IC.progression
+        for name, data in ITEM_TABLE.items():
+            if data.type != "Item":
+                continue
 
-        useful_items = [
-                        "Double Dash",
-                        "Meadow Zone Fast Travel"
-                        ]
-        for name in items_to_remove:
-            if name in useful_items:
-                self.item_classification_overrides[name] = IC.useful
+            if name in progressive_set or name not in removable_items:
+                self.item_classification_overrides[name] = IC.progression
             else:
-                self.item_classification_overrides[name] = IC.filler
+                classification = IC.useful if name in useful_items else IC.filler
+                self.item_classification_overrides[name] = classification
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -331,9 +334,6 @@ class PokeparkWorld(World):
 
     def _update_pool_with_precollected_items(self):
         options = self.options
-        for item_name, data in ITEM_TABLE.items():
-            if data.type == "Item":
-                self.progressive_pool.extend([item_name] * data.quantity)
 
         if options.power_randomizer.value == options.power_randomizer.option_dash:
             self.precollected_pool.append("Progressive Dash")
