@@ -43,13 +43,16 @@ REGION_TO_ENTRANCES: dict[str, List[str]] = {
                                "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction"],
     "Magma Zone Blaziken Area": ["Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction"],
     "Haunted Zone Main Area": ["Haunted Zone Main Area - Tangrowth's Swing-Along Attraction",
-                               "Haunted Zone Mansion Entrance"],
+                               "Haunted Zone Mansion Entrance", "Haunted Zone Main Area Riolu",
+                               "Haunted Zone Main Area Drifloon"],
     "Haunted Zone Mansion Area": ["Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction",
                                   "Haunted Zone Mansion White Gem Door",
                                   "Haunted Zone Mansion Red Gem Door",
                                   "Haunted Zone Mansion Blue Gem Door",
                                   "Haunted Zone Mansion Green Gem Door",
+                                  "Haunted Zone Mansion Area Riolu"
                                   ],
+    "Haunted Zone Mansion Ballroom Area": ["Haunted Zone Ballroom Area Drifloon"],
     "Haunted Zone Mansion Study Area": ["Haunted Zone Mansion Rotom's Hidden Entrance"],
     "Haunted Zone Rotom Area": ["Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction"],
     "Granite Zone Main Area": [
@@ -198,6 +201,10 @@ VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
 
     "Treehouse Piplup Air Balloon": "Skygarden",
 
+    "Haunted Zone Main Area Riolu": "Riolu",
+    "Haunted Zone Mansion Area Riolu": "Riolu",
+    "Haunted Zone Main Area Drifloon": "Drifloon",
+    "Haunted Zone Ballroom Area Drifloon": "Drifloon",
 }
 ATTRACTION_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",
@@ -478,6 +485,12 @@ class EntranceRandomizer:
             "Meadow Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
             "Haunted Zone Aipom": lambda state: can_play_catch(state, player, options),
             "Haunted Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
+
+            "Haunted Zone Main Area Riolu": lambda state: True,
+            "Haunted Zone Mansion Area Riolu": lambda state: True,
+
+            "Haunted Zone Main Area Drifloon": lambda state: True,
+            "Haunted Zone Ballroom Area Drifloon": lambda state: True,
 
             "Meadow Zone Ambipom": lambda state: state.has("Ambipom Unlock", player) and can_battle(
                 state,

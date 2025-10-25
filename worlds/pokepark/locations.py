@@ -2769,7 +2769,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.MULTI
     ),
     "Haunted Zone Main Area - Drifloon Power Competition -- Friendship": PokeparkLocationData(
-        372, PokeparkFlag.FRIENDSHIP, "Haunted Zone Main Area", PokeparkFriendshipClientLocationData(
+        372, PokeparkFlag.FRIENDSHIP, "Drifloon", PokeparkFriendshipClientLocationData(
             structure_position=175
         ),
         each_zone=MultiZoneFlag.MULTI
@@ -2932,7 +2932,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Haunted Zone Main Area - Riolu Power Competition -- Friendship": PokeparkLocationData(
-        399, PokeparkFlag.BATTLE, "Haunted Zone Main Area", PokeparkFriendshipClientLocationData(
+        399, PokeparkFlag.BATTLE, "Riolu", PokeparkFriendshipClientLocationData(
             structure_position=151
         ),
     ),
