@@ -16,6 +16,22 @@
     RelativeLayout:
         id: game_container
 
+<APQuestControlsView>:
+    Label:
+        markup: True
+        font_size: "20sp"
+        valign: "middle"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        text:
+            """[b]Controls:[/b]
+
+            WASD or Arrow Keys to move
+            Space to attack or interact
+            C to fire available Confetti Cannons
+            Number Keys + Backspace for Math Trap\n
+
+            Rebinding controls might be added in the future :)"""
+
 <VolumeSliderView>:
     orientation: "horizontal"
     size_hint: 1, None

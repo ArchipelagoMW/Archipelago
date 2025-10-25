@@ -4,7 +4,6 @@ from math import sqrt
 from random import choice, random
 from typing import TYPE_CHECKING
 
-from CommonClient import logger
 from kivy.core.window import Keyboard, Window
 from kivy.graphics import Color, Triangle
 from kivy.graphics.instructions import Canvas
@@ -12,6 +11,8 @@ from kivy.input import MotionEvent
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivymd.uix.recycleview import MDRecycleView
+
+from CommonClient import logger
 
 from ..game.inputs import Input
 
@@ -251,4 +252,8 @@ class ConfettiView(MDRecycleView):
 
 
 class VolumeSliderView(BoxLayout):
+    pass
+
+
+class APQuestControlsView(BoxLayout):
     pass

@@ -6,16 +6,17 @@ from kvui import GameManager, MDNavigationItemBase
 # isort: on
 from typing import TYPE_CHECKING
 
-from CommonClient import logger
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
+from CommonClient import logger
+
 from ..game.game import Game
 from ..game.graphics import Graphic
-from .custom_views import APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
+from .custom_views import APQuestControlsView, APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
 from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
 
@@ -180,6 +181,10 @@ class APQuestManager(GameManager):
         self.game_view = APQuestGameView(self.ctx.input_and_rerender)
 
         self.game_view_tab = self.add_client_tab("APQuest", self.game_view)
+
+        controls = APQuestControlsView()
+
+        self.add_client_tab("Controls", controls)
 
         game_container = self.game_view.ids["game_container"]
         self.lower_game_grid = APQuestGrid()
