@@ -13,3 +13,7 @@
     min-height: 360px;
     text-align: center;
 }
+
+h2, h4 {
+    color: #ffffff;
+}
