@@ -131,7 +131,7 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
         "Criminal Caterpillar": ["fire", "fire", "fire", "fire"],
         "Evil Eye": ["null", "diamond_eyes", "paralysis", "null"],
         "Master Criminal Worm": ["fire", "fire", "fire", "fire"],
-        "Giygas (4)": ["giygas_phase2_thunder", "giygas_phase2_freeze", "giygas_phase2_flash", "null"],
+        "Giygas": ["giygas_phase2_thunder", "giygas_phase2_freeze", "giygas_phase2_flash", "null"],
         "Giygas (5)": ["giygas_phase3_thunder", "giygas_phase3_freeze", "giygas_phase3_flash", "null"],
         "Giygas (6)": ["giygas_phase4_thunder", "giygas_phase4_freeze", "giygas_phase4_flash", "null"],
         "Starman Junior": ["fire", "null", "freeze", "fire"],
@@ -483,7 +483,7 @@ def initialize_enemies(world: "EarthBoundWorld") -> None:
         # "Heavily Armed Pokey": EarthBoundEnemy("Heavily Armed Pokey", 0x15e537, 1746, 999, 0, 0, 51, 150, 274, 72, False), Cutscene?
         "Giygas (2)": EarthBoundEnemy("Giygas (2)", 0x15e595, 9999, 999, 70000, 0, 80, 255, 255, 80, 5, 255, False),
         "Giygas (3)": EarthBoundEnemy("Giygas (3)", 0x15e5f3, 9999, 0, 0, 0, 80, 255, 255, 80, 5, 255, False),
-        "Giygas (4)": EarthBoundEnemy("Giygas (4)", 0x15e651, 2000, 0, 0, 0, 80, 255, 255, 80, 5, 255, False),
+        "Giygas": EarthBoundEnemy("Giygas", 0x15e651, 2000, 0, 0, 0, 80, 255, 255, 80, 5, 255, False),
         "Giygas (5)": EarthBoundEnemy("Giygas (5)", 0x15e6af, 9999, 0, 0, 0, 80, 255, 255, 80, 5, 255, False),
         "Farm Zombie": EarthBoundEnemy("Farm Zombie", 0x15e70d, 171, 0, 700, 58, 10, 31, 24, 19, 15, 24, False),
         "Criminal Caterpillar": EarthBoundEnemy("Criminal Caterpillar", 0x15e76b, 250, 168, 30384, 0, 134, 37, 16, 23, 0, 0, False),

@@ -34,12 +34,77 @@ boss_sprite_pointers = {
     "Heavily Armed Pokey": 0xEF49AA,
     "Starman Junior": 0xEF3A59,
     "Diamond Dog": 0xEF3D08,
-    "Giygas (4)": 0xEF40F2
+    "Giygas": 0xEF40F2
 
 }
 
+boss_plando_keys = {
+    "Frank",
+    "Frankystein Mark II",
+    "Frankystein",
+    "Captain Strong",
+    "Strong",
+    "Everdred",
+    "Mr. Carpainter",
+    "Mr Carpainter",
+    "Carpainter",
+    "Mondo Mole",
+    "Boogey Tent",
+    "Mini Barf",
+    "Master Belch",
+    "Belch",
+    "Trillionage Sprout",
+    "Guardian Digger",
+    "Dept. Store Spook",
+    "Dept Store Spook",
+    "Evil Mani Mani",
+    "Mani Mani",
+    "Clumsy Robot",
+    "Shrooom!",
+    "Shrooom",
+    "Shroom!",
+    "Shroooooom!",
+    "Shroom",
+    "Plague Rat of Doom",
+    "Thunder and Storm",
+    "Kraken",
+    "The Kraken",
+    "Guardian General",
+    "Master Barf",
+    "Starman Deluxe",
+    "Starman DX",
+    "Electro Specter",
+    "Carbon Dog",
+    "Ness's Nightmare",
+    "Nesss Nightmare",
+    "Heavily Armed Pokey",
+    "Pokey"
+    "Starman Junior",
+    "Diamond Dog",
+    "Giygas"
+}
+
+boss_typo_key = {
+    "Frankystein": "Frankystein Mark II",
+    "Strong": "Captain Strong",
+    "Mr Carpainter": "Mr. Carpainter",
+    "Carpainter": "Mr. Carpainter",
+    "Belch": "Master Belch",
+    "Dept Store Spook": "Dept. Store Spook",
+    "Evil Mani Mani": "Evil Mani-Mani",
+    "Mani Mani": "Evil Mani-Mani",
+    "Shroom": "Shrooom!",
+    "Shrooom": "Shrooom!",
+    "Shroom!": "Shrooom!",
+    "Shroooooom!": "Shrooom!",
+    "The Kraken": "Kraken",
+    "Starman DX": "Starman Deluxe",
+    "Nesss Nightmare": "Ness's Nightmare",
+    "Pokey": "Heavily Armed Pokey"
+}
+
 banned_transformations = ["Master Belch", "Master Barf", "Kraken", "Heavily Armed Pokey"]
-hard_final_bosses = ["Carbon Dog", "Kraken", "Clumsy Robot", "Starman Junior", "Starman Deluxe", "Giygas (4)", "Thunder and Storm", "Electro Specter",
+hard_final_bosses = ["Carbon Dog", "Kraken", "Clumsy Robot", "Starman Junior", "Starman Deluxe", "Giygas", "Thunder and Storm", "Electro Specter",
                      "Evil Mani-Mani", "Ness's Nightmare", "Shrooom!", "Master Belch"]
 
 
@@ -60,6 +125,11 @@ class BossData(NamedTuple):
 
 
 def initialize_bosses(world: "EarthBoundWorld") -> None:
+    from ..Options import BossShuffle
+
+    world.spoil_dog_shuffle = world.options.decouple_diamond_dog.value
+    world.spoil_giygas_shuffle = world.options.boss_shuffle_add_giygas.value
+     
     world.boss_list = [
         "Frank",
         "Frankystein Mark II",
@@ -89,7 +159,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         "Heavily Armed Pokey",
         "Starman Junior",
         "Diamond Dog",
-        "Giygas (4)"
+        "Giygas"
     ]
 
     world.boss_slots = {
@@ -138,7 +208,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         "Heavily Armed Pokey": SlotInfo([0x09C2EC], [0x2EEEC3, 0x2EEECC], [], []),
         "Starman Junior": SlotInfo([], [], [], []),
         "Diamond Dog": SlotInfo([], [], [], []),
-        "Giygas (4)": SlotInfo([0x09C2BF, 0x09C2E5], [0x2EF0A9], [0x2EF09F], [])
+        "Giygas": SlotInfo([0x09C2BF, 0x09C2E5], [0x2EF0A9], [0x2EF09F], [])
     }
 
     world.boss_info = {
@@ -170,29 +240,32 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         "Heavily Armed Pokey": BossData(0x01CA, 0xEEF064, 0xEEF056, 0x000E, 0xD8, 0x69),
         "Starman Junior": BossData(0x012F, 0xEEF082, 0xEEF07A, 0x01DA, 0xD6, 0x94),
         "Diamond Dog": BossData(0x014A, 0xEEF052, 0xEEF089, 0x01D9, 0x53, 0x61),
-        "Giygas (4)": BossData(0x0172, 0xEEF095, 0xEEF095, 0x01DD, 0xDC, 0x49)
+        "Giygas": BossData(0x0172, 0xEEF095, 0xEEF095, 0x01DD, 0xDC, 0x49)
     }
 
     if world.options.skip_prayer_sequences:
         # Boss shuffle sprites needs to apply to the skip prayer cleanup too
-        world.boss_slots["Giygas (4)"].sprite_addrs.append(0x07B9AC)
+        world.boss_slots["Giygas"].sprite_addrs.append(0x07B9AC)
         world.boss_slots["Heavily Armed Pokey"].sprite_addrs.append(0x07B9A7)
 
     # mole/rat text
     # todo; Giygas sprites/text
 
     world.boss_slot_order = world.boss_list.copy()
+    boss_plando = world.options.boss_shuffle.value.split(";")
+    shuffle_result = boss_plando.pop()
 
-    if world.options.boss_shuffle:
+    if shuffle_result:
         world.random.shuffle(world.boss_list)
 
         if not world.options.decouple_diamond_dog:
             world.boss_list.remove("Diamond Dog")
             insert_index = 28 if not world.options.boss_shuffle_add_giygas else 27
             world.boss_list.insert(insert_index, "Diamond Dog")
+
         if not world.options.boss_shuffle_add_giygas:
-            world.boss_list.remove("Giygas (4)")
-            world.boss_list.insert(29, "Giygas (4)")
+            world.boss_list.remove("Giygas")
+            world.boss_list.insert(29, "Giygas")
 
     if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
         original_boss = world.boss_list[27]
@@ -204,10 +277,35 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         while world.boss_list[25] in hard_final_bosses:
             i = world.random.randrange(len(world.boss_list))
             if (world.boss_list[i] == "Diamond Dog" and not world.options.decouple_diamond_dog) or (
-                world.boss_list[i] == "Giygas (4)" and not world.options.boss_shuffle_add_giygas
+                world.boss_list[i] == "Giygas" and not world.options.boss_shuffle_add_giygas
             ):
                 continue
             world.boss_list[25], world.boss_list[i] = world.boss_list[i], world.boss_list[25]
+
+    print(f"Old: {world.boss_list}")
+    for item in boss_plando:
+        boss_block = item.split("-")
+        boss = boss_block[0].title()
+        slot = boss_block[1].title()
+        if boss in boss_typo_key:
+            boss = boss_typo_key[boss]
+
+        if slot in boss_typo_key:
+            slot = boss_typo_key[boss]
+
+        if slot == "Diamond Dog":
+            world.spoil_dog_shuffle = True
+
+        if slot == "Giygas":
+            world.spoil_dog_shuffle = True
+
+        world.boss_list.remove(boss)
+        world.boss_list.insert(world.boss_slot_order.index(slot), boss)
+
+
+    print(f"New {world.boss_list}")
+
+    
 
 def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     rom.write_bytes(0x15E527, bytearray([0x00, 0x00]))  # Blank out Pokey's end battle action
@@ -298,7 +396,7 @@ def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
         rom.write_bytes(0x2FFF17, struct.pack("H", world.boss_info[world.boss_list[27]].enemy_id))  # Add diamond dog
         rom.write_bytes(0x2FFF19, bytearray([0xFF]))
         rom.write_bytes(world.enemies[world.boss_list[27]].address + 91, bytearray([0x00]))  # Force to front row
-    elif world.boss_list[25] == "Giygas (4)":
+    elif world.boss_list[25] == "Giygas":
         rom.write_bytes(0x0121DF, bytearray([0x00]))
         rom.write_bytes(0x2FFF16, bytearray([0xFF]))
     else:

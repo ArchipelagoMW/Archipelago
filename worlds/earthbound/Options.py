@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from Options import (Toggle, DefaultOnToggle, DeathLink, Choice, Range, PerGameCommonOptions, StartInventoryPool,
-                     OptionGroup, FreeText, Visibility)
+                     OptionGroup, FreeText, Visibility, PlandoBosses)
+from .modules.boss_shuffle import boss_plando_keys 
 
 
 class GiygasRequired(DefaultOnToggle):
@@ -90,9 +91,20 @@ class PSIShuffle(Choice):
     option_extended = 2
 
 
-class BossShuffle(Toggle):
+class BossShuffle(PlandoBosses):
     """Shuffles boss encounters amongst each other."""
     display_name = "Boss Shuffle"
+
+    option_false = 0
+    option_true = 1
+    default = 0
+    bosses = boss_plando_keys
+    locations = boss_plando_keys
+    duplicate_bosses = False
+
+    @classmethod
+    def can_place_boss(cls, boss: str, location: str) -> bool:
+        return True
 
 
 class DecoupleDiamondDog(Toggle):
