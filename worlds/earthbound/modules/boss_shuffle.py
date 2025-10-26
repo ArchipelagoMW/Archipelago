@@ -252,8 +252,12 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
     # todo; Giygas sprites/text
 
     world.boss_slot_order = world.boss_list.copy()
-    boss_plando = world.options.boss_shuffle.value.split(";")
-    shuffle_result = boss_plando.pop()
+    if type(world.options.boss_shuffle.value) == str:
+        boss_plando = world.options.boss_shuffle.value.split(";")
+        shuffle_result = boss_plando.pop()
+    else:
+        boss_plando = []
+        shuffle_result = world.options.boss_shuffle.value
 
     if shuffle_result:
         world.random.shuffle(world.boss_list)

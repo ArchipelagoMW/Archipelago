@@ -1,1 +1,4 @@
-{"compatible_version": 7, "world_version": "4.2.7", "game": "EarthBound"}
+{"game": "EarthBound",
+"authors": ["Pink Switch"],
+"minimum_ap_version": "0.6.3",
+"world_version": "4.3.0"}
