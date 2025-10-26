@@ -186,10 +186,6 @@ wallet_capacities: dict[Items, int] = {
 
 
 def can_afford(price: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    world = bundle[2]
-    player = world.player
-
     for wallet, amount in wallet_capacities.items():
         if amount >= price:
             return has_item(wallet, bundle)
@@ -327,8 +323,7 @@ def is_adult(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    # type: ignore
-    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)  # type: ignore
 
 
 def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -347,8 +342,7 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    # type: ignore
-    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)
+    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)  # type: ignore
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -360,16 +354,13 @@ def can_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can deal damage to enemies."""
     return (can_jump_slash(bundle) or
             has_explosives(bundle) or
-            can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW,
-                        Items.DINS_FIRE], bundle)
-            )
+            can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW, Items.DINS_FIRE], bundle))
 
 
 def can_attack(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can attack enemies (damage or stun)."""
     return (can_damage(bundle) or
-            can_use(Items.BOOMERANG, bundle) or
-            can_use(Items.HOOKSHOT, bundle))
+            can_use_any([Items.BOOMERANG, Items.HOOKSHOT], bundle))
 
 
 def can_standing_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
