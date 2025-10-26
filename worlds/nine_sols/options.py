@@ -142,6 +142,24 @@ class FirstRootNode(Choice):
     option_sky_tower = 11
 
 
+class ShuffleGrapple(Toggle):
+    """Takes away Yi's grapple hook and zipline sliding abilities until you collect the 'Grapple' item."""
+    display_name = "Shuffle Grapple"
+
+
+class ShuffleWallClimb(Toggle):
+    """Takes away Yi's ability to climb glowing green walls until you collect the 'Wall Climb' item."""
+    display_name = "Shuffle Wall Climb"
+
+
+class ShuffleLedgeGrab(Toggle):
+    """Takes away Yi's ability to grab onto ledges and pull himself up until you collect the 'Ledge Grab' item.
+
+    This is more impactful than it might sound because of 'ledge storage' glitches.
+    See logic_level (whenever I implement that)."""
+    display_name = "Shuffle Ledge Grab"
+
+
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -155,4 +173,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     jade_cost_max: JadeCostMax
     # logic_difficulty: LogicDifficulty
     first_root_node: FirstRootNode
+    shuffle_grapple: ShuffleGrapple
+    shuffle_wall_climb: ShuffleWallClimb
+    shuffle_ledge_grab: ShuffleLedgeGrab
 

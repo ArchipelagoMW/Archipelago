@@ -114,13 +114,21 @@ def create_items(world: "NineSolsWorld") -> None:
             multiworld.get_location(name, player).place_locked_item(create_item(player, name))
         elif name.startswith("Seal of ") and not options.shuffle_sol_seals:
             continue  # we'll place these as a group later
-        # TODO: options to shuffle these 3 abilities, after logic's been updated and we have alt spawns
-        elif name == "Wall Climb":
-            multiworld.push_precollected(create_item(player, name))
         elif name == "Grapple":
-            multiworld.push_precollected(create_item(player, name))
+            if options.shuffle_grapple:
+                prog_and_useful_items.append(create_item(player, name))
+            else:
+                multiworld.push_precollected(create_item(player, name))
+        elif name == "Wall Climb":
+            if options.shuffle_wall_climb:
+                prog_and_useful_items.append(create_item(player, name))
+            else:
+                multiworld.push_precollected(create_item(player, name))
         elif name == "Ledge Grab":
-            multiworld.push_precollected(create_item(player, name))
+            if options.shuffle_ledge_grab:
+                prog_and_useful_items.append(create_item(player, name))
+            else:
+                multiworld.push_precollected(create_item(player, name))
         elif item.type == ItemClassification.filler:
             if name not in repeatable_filler_weights:
                 unique_filler.append(create_item(player, name))
