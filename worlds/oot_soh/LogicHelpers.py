@@ -484,6 +484,29 @@ def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
 
 
+def can_hit_at_range(bundle: tuple[CollectionState, Regions, "SohWorld"],
+                     distance: EnemyDistance = EnemyDistance.CLOSE,
+                     wall_or_floor: bool = True, in_water: bool = False) -> bool:
+    if distance == EnemyDistance.CLOSE and can_use(Items.MEGATON_HAMMER, bundle):
+        return True
+    if distance <= EnemyDistance.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, bundle):
+        return True
+    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, bundle):
+        return True
+    if distance <= EnemyDistance.LONG_JUMPSLASH and can_use_any([Items.BIGGORONS_SWORD, Items.STICKS], bundle):
+        return True
+    if distance <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, bundle)):
+        return True
+    if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, bundle)
+                                               or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))):
+        return True
+    if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, bundle):
+        return True
+    if distance <= EnemyDistance.FAR and can_use_any([Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle):
+        return True
+    return False
+
+
 def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
@@ -500,25 +523,6 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         timer: Whether there's a timer constraint
         in_water: Whether the fight is underwater
     """
-    # Define what weapons work at each range
-    def can_hit_at_range() -> bool:
-        if distance == EnemyDistance.CLOSE and can_use(Items.MEGATON_HAMMER, bundle):
-            return True
-        if distance <= EnemyDistance.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, bundle):
-            return True
-        if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, bundle):
-            return True
-        if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)):
-            return True
-        if distance <= EnemyDistance.BOMB_THROW and (not in_water and can_use(Items.BOMB_BAG, bundle)):
-            return True
-        if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, bundle) or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))):
-            return True
-        if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, bundle):
-            return True
-        if distance <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle)):
-            return True
-        return False
 
     # Enemy-specific logic based on C++ implementation
 
@@ -526,28 +530,33 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return False
 
     if enemy == Enemies.GOLD_SKULLTULA:
-        return can_hit_at_range(distance) or (distance <= EnemyDistance.LONGSHOT and (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))) or \
-            (distance <= EnemyDistance.BOOMERANG and (
-                can_use_any([Items.DINS_FIRE, Items.BOOMERANG], bundle)))
+        return (can_hit_at_range(bundle, distance, wall_or_floor, in_water)
+                or (distance <= EnemyDistance.LONGSHOT and wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))
+                or (distance <= EnemyDistance.BOOMERANG and can_use_any([Items.DINS_FIRE, Items.BOOMERANG], bundle)))
 
     if enemy == Enemies.BIG_SKULLTULA:
-        return can_hit_at_range(distance) or (distance <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, bundle))
+        return (can_hit_at_range(bundle, distance, wall_or_floor, in_water)
+                or (distance <= EnemyDistance.BOOMERANG and can_use(Items.DINS_FIRE, bundle)))
 
     if enemy in [Enemies.GOHMA_LARVA, Enemies.MAD_SCRUB, Enemies.DEKU_BABA]:
         return can_attack(bundle)
 
     if enemy == Enemies.DODONGO:
-        return can_use_sword(bundle) or can_use(Items.MEGATON_HAMMER, bundle) or (quantity <= 5 and can_use(Items.STICKS, bundle)) or \
-            has_explosives(bundle) or can_use(
-                Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle)
+        return (can_use_sword(bundle)
+                or can_use_any([Items.MEGATON_HAMMER, Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+                or (quantity <= 5 and can_use(Items.STICKS, bundle))
+                or has_explosives(bundle))
 
     if enemy == Enemies.LIZALFOS:
-        return (can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or has_explosives(bundle)) \
-            or can_use(Items.FAIRY_SLINGSHOT, bundle)
+        return (can_jump_slash(bundle)
+                or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
+                or has_explosives(bundle))
 
     if enemy in [Enemies.KEESE, Enemies.FIRE_KEESE]:
-        return can_hit_at_range(distance) or (distance == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, bundle)) \
-            or (distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle) or (distance == EnemyDistance.SHORT_JUMPSLASH and can_use(Items.MEGATON_HAMMER, bundle)))
+        return (can_hit_at_range(bundle, distance, wall_or_floor, in_water)
+                or (distance == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, bundle))
+                or (distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle))
+                or (distance == EnemyDistance.SHORT_JUMPSLASH and can_use(Items.MEGATON_HAMMER, bundle)))
 
     if enemy == Enemies.BLUE_BUBBLE:
         return blast_or_smash(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
@@ -564,11 +573,12 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         return can_damage(bundle)
 
     if enemy == Enemies.STALFOS:
-        if distance <= EnemyDistance.SHORT_JUMPSLASH and (can_use(Items.MEGATON_HAMMER, bundle) or can_use(Items.KOKIRI_SWORD, bundle)):
+        if distance <= EnemyDistance.SHORT_JUMPSLASH and can_use_any([Items.MEGATON_HAMMER, Items.KOKIRI_SWORD], bundle):
             return True
         if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, bundle):
             return True
-        if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or (quantity <= 1 and can_use(Items.STICKS, bundle))):
+        if (distance <= EnemyDistance.LONG_JUMPSLASH
+                and (can_use(Items.BIGGORONS_SWORD, bundle) or (quantity <= 1 and can_use(Items.STICKS, bundle)))):
             return True
         if distance <= EnemyDistance.BOMB_THROW and quantity <= 2 and not timer and not in_water and \
                 (can_use(Items.NUTS, bundle) or hookshot_or_boomerang(bundle)) and can_use(Items.BOMB_BAG, bundle):
@@ -585,94 +595,107 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
                 has_explosives(bundle))
 
     if enemy == Enemies.FLARE_DANCER:
-        return can_use(Items.MEGATON_HAMMER, bundle) or \
-            can_use(Items.HOOKSHOT, bundle) or \
-            (has_explosives(bundle) and (can_jump_slash_except_hammer(bundle) or can_use(Items.FAIRY_BOW, bundle) or
-                                         can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.BOOMERANG, bundle)))
+        return (can_use_any([Items.MEGATON_HAMMER, Items.HOOKSHOT], bundle)
+                or (has_explosives(bundle)
+                    and (can_jump_slash_except_hammer(bundle)
+                         or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOOMERANG], bundle))))
 
     if enemy in [Enemies.WOLFOS, Enemies.WHITE_WOLFOS, Enemies.WALLMASTER]:
-        return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
-            can_use(Items.BOMBCHUS_5, bundle) or can_use(Items.DINS_FIRE, bundle) or \
-            (can_use(Items.BOMB_BAG, bundle) and (can_use(Items.NUTS, bundle) or can_use(
-                Items.HOOKSHOT, bundle) or can_use(Items.BOOMERANG, bundle)))
+        return (can_jump_slash(bundle)
+                or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5, Items.DINS_FIRE], bundle)
+                or (can_use(Items.BOMB_BAG, bundle)
+                    and can_use_any([Items.NUTS, Items.HOOKSHOT, Items.BOOMERANG], bundle)))
 
     if enemy == Enemies.GERUDO_WARRIOR:
         return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or \
             (can_do_trick(Tricks.GF_WARRIOR_WITH_DIFFICULT_WEAPON, bundle) and
-             (can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.BOMBCHUS_5, bundle)))
+             can_use_any([Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5], bundle))
 
     if enemy in [Enemies.GIBDO, Enemies.REDEAD]:
-        return can_jump_slash(bundle) or \
-            can_use(Items.DINS_FIRE, bundle)
+        return can_jump_slash(bundle) or can_use(Items.DINS_FIRE, bundle)
 
     if enemy == Enemies.MEG:
-        return can_use(Items.FAIRY_BOW, bundle) or can_use(Items.HOOKSHOT, bundle) or has_explosives(bundle)
+        return can_use_any([Items.FAIRY_BOW, Items.HOOKSHOT], bundle) or has_explosives(bundle)
 
     if enemy == Enemies.ARMOS:
-        return blast_or_smash(bundle) or can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle) or \
-            can_use(Items.FAIRY_BOW, bundle) or \
-            ((can_use(Items.NUTS, bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.BOOMERANG, bundle)) and
-             (can_use(Items.KOKIRI_SWORD, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)))
+        return (blast_or_smash(bundle)
+                or can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.STICKS, Items.FAIRY_BOW], bundle)
+                or (can_use_any([Items.NUTS, Items.HOOKSHOT, Items.BOOMERANG], bundle)
+                    and can_use_any([Items.KOKIRI_SWORD, Items.FAIRY_SLINGSHOT], bundle)))
 
     if enemy == Enemies.GREEN_BUBBLE:
-        return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or has_explosives(bundle)
+        return (can_jump_slash(bundle)
+                or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle)
+                or has_explosives(bundle))
 
     if enemy == Enemies.DINOLFOS:
-        return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
+        return can_jump_slash(bundle) or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle) or \
             (not timer and can_use(Items.BOMBCHUS_5, bundle))
 
     if enemy == Enemies.TORCH_SLUG:
         return can_jump_slash(bundle) or has_explosives(bundle) or can_use(Items.FAIRY_BOW, bundle)
 
     if enemy == Enemies.FREEZARD:
-        return can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.MEGATON_HAMMER, bundle) or \
-            can_use(Items.STICKS, bundle) or has_explosives(bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.DINS_FIRE, bundle) or \
-            can_use(Items.FIRE_ARROW, bundle)
+        return (can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.MEGATON_HAMMER, Items.STICKS,
+                             Items.HOOKSHOT, Items.DINS_FIRE, Items.FIRE_ARROW], bundle)
+                or has_explosives(bundle))
 
     if enemy == Enemies.SHELL_BLADE:
-        return can_jump_slash(bundle) or has_explosives(bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.DINS_FIRE, bundle)
+        return (can_jump_slash(bundle) or has_explosives(bundle)
+                or can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.DINS_FIRE], bundle))
 
     if enemy == Enemies.SPIKE:
-        return can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.MEGATON_HAMMER, bundle) or \
-            can_use(Items.STICKS, bundle) or has_explosives(bundle) or can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or \
-            can_use(Items.DINS_FIRE, bundle)
+        return (can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.MEGATON_HAMMER, Items.STICKS,
+                            Items.HOOKSHOT, Items.FAIRY_BOW, Items.DINS_FIRE], bundle)
+                or has_explosives(bundle))
 
     if enemy == Enemies.STINGER:
-        return can_hit_at_range(distance) or (distance == EnemyDistance.CLOSE and can_use(Items.KOKIRI_SWORD, bundle)) or (distance == EnemyDistance.SHORT_JUMPSLASH and can_use(Items.MEGATON_HAMMER, bundle))
+        return (can_hit_at_range(bundle, distance, wall_or_floor, in_water)
+                or (distance == EnemyDistance.SHORT_JUMPSLASH and can_use(Items.MEGATON_HAMMER, bundle)))
 
     if enemy == Enemies.BIG_OCTO:
         # If chasing octo is annoying but with rolls you can catch him, and you need rang to get into this room
         # without shenanigans anyway. Bunny makes it free
-        return can_use(Items.KOKIRI_SWORD, bundle) or can_use(Items.STICKS, bundle) or can_use(Items.MASTER_SWORD, bundle)
+        # todo: should this have biggoron sword too?
+        return can_use_any([Items.KOKIRI_SWORD, Items.STICKS, Items.MASTER_SWORD], bundle)
+
     if enemy == Enemies.GOHMA:
         return has_boss_soul(Items.GOHMAS_SOUL, bundle) and can_jump_slash(bundle) and \
-            (can_use(Items.NUTS, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle)
-             or can_use(Items.FAIRY_BOW, bundle) or hookshot_or_boomerang(bundle))
+            (can_use_any([Items.NUTS, Items.FAIRY_SLINGSHOT, Items.FAIRY_BOW], bundle)
+             or hookshot_or_boomerang(bundle))
+
     if enemy == Enemies.KING_DODONGO:
         return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) and can_jump_slash(bundle) and
-                (can_use(Items.BOMB_BAG, bundle) or has_item(Items.GORONS_BRACELET, bundle) or
+                (can_use_any([Items.BOMB_BAG, bundle, Items.GORONS_BRACELET], bundle) or
                  (can_do_trick(Tricks.DC_DODONGO_CHU, bundle) and is_adult(bundle) and can_use(Items.BOMBCHUS_5, bundle))))
+
     if enemy == Enemies.BARINADE:
-        return has_boss_soul(Items.BARINADES_SOUL, bundle) and can_use(Items.BOOMERANG, bundle) and can_jump_slash_except_hammer(bundle)
+        return (has_boss_soul(Items.BARINADES_SOUL, bundle)
+                and can_use(Items.BOOMERANG, bundle) and can_jump_slash_except_hammer(bundle))
+
     if enemy == Enemies.PHANTOM_GANON:
-        return has_boss_soul(Items.PHANTOM_GANONS_SOUL, bundle) and can_use_sword(bundle) and \
-            (can_use(Items.HOOKSHOT, bundle) or can_use(
-                Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))
+        return (has_boss_soul(Items.PHANTOM_GANONS_SOUL, bundle) and can_use_sword(bundle)
+                and can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))
+
     if enemy == Enemies.VOLVAGIA:
         return has_boss_soul(Items.VOLVAGIAS_SOUL, bundle) and can_use(Items.MEGATON_HAMMER, bundle)
+
     if enemy == Enemies.MORPHA:
         return (has_boss_soul(Items.MORPHAS_SOUL, bundle) and
                 (can_use(Items.HOOKSHOT, bundle) or
                 (can_do_trick(Tricks.WATER_MORPHA_WITHOUT_HOOKSHOT, bundle) and has_item(Items.BRONZE_SCALE, bundle))) and
                 (can_use_sword(bundle) or can_use(Items.MEGATON_HAMMER, bundle)))
+
     if enemy == Enemies.BONGO_BONGO:
         return has_boss_soul(Items.BONGO_BONGOS_SOUL, bundle) and \
             (can_use(Items.LENS_OF_TRUTH, bundle) or can_do_trick(Tricks.LENS_BONGO, bundle)) and can_use_sword(bundle) and \
-            (can_use(Items.HOOKSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or
+            (can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle) or
                 can_do_trick(Tricks.SHADOW_BONGO, bundle))
+
     if enemy == Enemies.TWINROVA:
         return has_boss_soul(Items.TWINROVAS_SOUL, bundle) and can_use(Items.MIRROR_SHIELD, bundle) and \
             (can_use_sword(bundle) or can_use(Items.MEGATON_HAMMER, bundle))
+
     if enemy == Enemies.GANONDORF:
         # RANDOTODO: Trick to use hammer (no jumpslash) or stick (only jumpslash) instead of a sword to reflect the
         # energy ball and either of them regardless of jumpslashing to damage and kill ganondorf
@@ -682,35 +705,45 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         # This will not be the case once ammo logic in taken into account as
         # sticks are limited and using a bottle might become a requirement in that case
         return has_boss_soul(Items.GANONS_SOUL, bundle) and can_use(Items.LIGHT_ARROW, bundle) and can_use_sword(bundle)
+
     if enemy == Enemies.GANON:
         return has_boss_soul(Items.GANONS_SOUL, bundle) and can_use(Items.MASTER_SWORD, bundle)
+
     if enemy == Enemies.DARK_LINK:
         # RANDOTODO Dark link is buggy right now, retest when he is not
         return can_jump_slash(bundle) or can_use(Items.FAIRY_BOW, bundle)
+
     if enemy == Enemies.ANUBIS:
         # there's a restoration that allows beating them with mirror shield + some way to trigger their attack
         return has_fire_source(bundle)
+
     if enemy == Enemies.BEAMOS:
         return has_explosives(bundle)
+
     if enemy == Enemies.PURPLE_LEEVER:
-        # dies on it's own, so this is the conditions to spawn it (killing 10 normal leevers)
+        # dies on its own, so this is the conditions to spawn it (killing 10 normal leevers)
         # Sticks and Ice arrows work but will need ammo capacity logic
         # other methods can damage them but not kill them, and they run when hit, making them impractical
-        return can_use(Items.MASTER_SWORD, bundle) or can_use(Items.BIGGORONS_SWORD, bundle)
+        return can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD], bundle)
+
     if enemy == Enemies.TENTACLE:
         return can_use(Items.BOOMERANG, bundle)
+
     if enemy == Enemies.BARI:
-        return hookshot_or_boomerang(bundle) or can_use(Items.FAIRY_BOW, bundle) or has_explosives(bundle) or can_use(Items.MEGATON_HAMMER, bundle) or \
-            can_use(Items.STICKS, bundle) or can_use(Items.DINS_FIRE, bundle) or (
-                take_damage(bundle) and can_use_sword(bundle))
+        return (hookshot_or_boomerang(bundle)
+                or can_use_any([Items.FAIRY_BOW, Items.STICKS, Items.MEGATON_HAMMER, Items.DINS_FIRE], bundle)
+                or has_explosives(bundle)
+                or (take_damage(bundle) and can_use_sword(bundle)))
+
     if enemy == Enemies.SHABOM:
         # RANDOTODO when you add better damage logic, you can kill this by taking hits
-        return can_use(Items.BOOMERANG, bundle) or can_use(Items.NUTS, bundle) or can_jump_slash(bundle) or can_use(Items.DINS_FIRE, bundle) or \
-            can_use(Items.ICE_ARROW, bundle)
+        return (can_use_any([Items.BOOMERANG, Items.NUTS, Items.DINS_FIRE, Items.ICE_ARROW], bundle)
+                or can_jump_slash(bundle))
+
     if enemy == Enemies.OCTOROK:
-        return can_reflect_nuts(bundle) or hookshot_or_boomerang(bundle) or can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or \
-            can_use(Items.BOMB_BAG, bundle) or (
-                wall_or_floor and can_use(Items.BOMBCHUS_5, bundle))
+        return (can_reflect_nuts(bundle) or hookshot_or_boomerang(bundle)
+                or can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMB_BAG], bundle)
+                or (wall_or_floor and can_use(Items.BOMBCHUS_5, bundle)))
 
     return False
 
@@ -758,16 +791,13 @@ def can_pass_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 def can_cut_shrubs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can cut shrubs (grass, bushes)."""
     return (can_use_sword(bundle) or
-            can_use(Items.BOOMERANG, bundle) or
             has_explosives(bundle) or
-            can_use(Items.GORONS_BRACELET, bundle) or
-            can_use(Items.MEGATON_HAMMER, bundle))
+            can_use_any([Items.BOOMERANG, Items.GORONS_BRACELET, Items.MEGATON_HAMMER], bundle))
 
 
 def hookshot_or_boomerang(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has hookshot or boomerang."""
-    return (can_use(Items.HOOKSHOT, bundle) or
-            can_use(Items.BOOMERANG, bundle))
+    return can_use_any([Items.HOOKSHOT, Items.BOOMERANG], bundle)
 
 
 def can_open_underwater_chest(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
