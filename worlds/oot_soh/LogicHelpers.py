@@ -169,16 +169,7 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
     if item == Items.BOTTLE_WITH_GREEN_POTION:
         return has_bottle(bundle) and state.has(Items.BUY_GREEN_POTION, player)
 
-    if item == Items.BOTTLE_WITH_MILK:
-        return has_bottle(bundle)
-
-    if item == Items.BOTTLE_WITH_POE:
-        return has_bottle(bundle)
-
-    if item == Items.BOTTLE_WITH_RED_POTION:
-        return has_bottle(bundle)
-
-    if item == Items.EMPTY_BOTTLE:
+    if item in (Items.BOTTLE_WITH_MILK, Items.BOTTLE_WITH_POE, Items.BOTTLE_WITH_RED_POTION, Items.EMPTY_BOTTLE):
         return has_bottle(bundle)
 
     return state.has(item, player, count)
@@ -213,20 +204,26 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
 
 
 def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # soup
-    return bottle_count(bundle) >= 1
+    return bottle_count(bundle, 1)
 
 
-def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
+def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"], target_count: int) -> bool:
     state = bundle[0]
     world = bundle[2]
     count = 0
     for bottle in no_rules_bottles:
         count += state.count(bottle.value, world.player)
+        if count >= target_count:
+            return True
     if state.has(Events.DELIVER_LETTER, world.player):
         count += state.count(Items.BOTTLE_WITH_RUTOS_LETTER, world.player)
+        if count >= target_count:
+            return True
     if state.has(Events.CAN_EMPTY_BIG_POES, world.player):
         count += state.count(Items.BOTTLE_WITH_BIG_POE, world.player)
-    return count
+        if count >= target_count:
+            return True
+    return False
 
 
 def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
