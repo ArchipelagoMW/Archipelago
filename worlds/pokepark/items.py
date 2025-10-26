@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, NamedTuple
+from typing import Optional, NamedTuple, TYPE_CHECKING
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
@@ -1749,14 +1749,14 @@ static_progressive_items = [
     "Ice Zone Lift Unlock",
     "Ice Zone Frozen Lake Unlock",
 
+]
+static_useful_items = {
+    "Double Dash",
+    "Meadow Zone Fast Travel",
     "Progressive Dash",
     "Progressive Thunderbolt",
     "Progressive Iron Tail",
     "Progressive Health"
-]
-static_useful_items = {
-    "Double Dash",
-    "Meadow Zone Fast Travel"
 }
 
 fast_travel_items = [
@@ -1822,8 +1822,10 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Claydol Unlock",
         "Glalie Unlock",
 
-        "Progressive Thunderbolt",
+        "Progressive Health",
         "Progressive Iron Tail",
+        "Progressive Thunderbolt",
+        "Progressive Dash"
     ]),
     ("remove_chase_power_comp_locations", 0): (100, [
         "Pachirisu Unlock",
@@ -1845,6 +1847,7 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Gastly Unlock",
         "Gastly 2 Unlock",
         "Jolteon Unlock",
+        "Progressive Dash"
     ]),
     ("remove_hide_and_seek_power_comp_locations", 0): (0, [
         "Bonsly Unlock",
@@ -1865,7 +1868,9 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Smoochum Friendship",
         "Delibird Friendship",
         "Smoochum Unlock",
-        "Glalie Unlock"
+        "Glalie Unlock",
+        "Progressive Thunderbolt",
+        "Progressive Dash"
     ]),
     ("remove_misc_power_comp_locations", 0): (80, [
         "Magnemite Unlock",
@@ -1879,7 +1884,13 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Rayquaza Unlock",
 
     ]),
-    ("goal", 1): (193, []),
+    ("goal", 1): (193, []),  # option postgame
+    ("goal", 0): (0, [  # option mew
+        "Progressive Health",
+        "Progressive Iron Tail",
+        "Progressive Thunderbolt",
+        "Progressive Dash"
+    ]),
     ("remove_attraction_locations", 0): (80, [
         "Turtwig Friendship",
         "Munchlax Friendship",

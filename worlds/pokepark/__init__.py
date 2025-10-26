@@ -136,16 +136,18 @@ class PokeparkWorld(World):
 
         if self.options.goal == self.options.goal.option_mew:
             removable_location_flags.add(PokeparkFlag.POSTGAME)
+        if self.options.goal == self.options.goal.option_postgame:
+            removable_location_flags.add(PokeparkFlag.MEW)
 
-        locations: set[str] = set()
+        local_locations: set[str] = set()
         for location, data in LOCATION_TABLE.items():
             if (data.each_zone == each_zone_filter or
                     data.flags in removable_location_flags):
                 pass
             else:
-                locations.add(location)
+                local_locations.add(location)
 
-        return locations
+        return local_locations
 
     def generate_early(self) -> None:
         # generate regions and entrances
@@ -177,7 +179,6 @@ class PokeparkWorld(World):
     def _update_pool_with_precollected_items(self):
         """Move items to precollected pool based on game options."""
         options = self.options
-
         if options.power_randomizer.value == options.power_randomizer.option_dash:
             self._precollect_item("Progressive Dash", 1)
 

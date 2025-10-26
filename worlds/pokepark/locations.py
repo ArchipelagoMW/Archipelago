@@ -20,6 +20,7 @@ class PokeparkFlag(Flag):
     LEGENDARY = auto()  # unsure
     POWER_UP = auto()
     POSTGAME = auto()  # for postgame goals
+    MEW = auto()  # for beating Mew goal
 
 
 class MultiZoneFlag(Flag):
@@ -3779,7 +3780,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
     # Skygarden
 
     "Skygarden - Mew Power Competition -- Stage 1": PokeparkLocationData(
-        542, PokeparkFlag.ALWAYS, "Skygarden",
+        542, PokeparkFlag.MEW, "Skygarden",
         PokeparkMewChallengeGengarPaintingClientData(
 
             _expected_value=0b00010000,
@@ -3787,7 +3788,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Skygarden - Mew Power Competition -- Stage 2": PokeparkLocationData(
-        543, PokeparkFlag.ALWAYS, "Skygarden",
+        543, PokeparkFlag.MEW, "Skygarden",
         PokeparkMewChallengeGengarPaintingClientData(
 
             _expected_value=0b00001000,
@@ -3795,7 +3796,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Skygarden - Mew Power Competition -- Stage 3": PokeparkLocationData(
-        544, PokeparkFlag.ALWAYS, "Skygarden",
+        544, PokeparkFlag.MEW, "Skygarden",
         PokeparkMewChallengeGengarPaintingClientData(
 
             _expected_value=0b00000100,
@@ -3803,7 +3804,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Skygarden - Mew Power Competition -- Stage 4": PokeparkLocationData(
-        545, PokeparkFlag.ALWAYS, "Skygarden",
+        545, PokeparkFlag.MEW, "Skygarden",
         PokeparkMewChallengeGengarPaintingClientData(
 
             _expected_value=0b00000010,
@@ -3811,7 +3812,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         )
     ),
     "Skygarden - Mew Power Competition -- Friendship": PokeparkLocationData(
-        546, PokeparkFlag.ALWAYS, "Skygarden",
+        546, PokeparkFlag.MEW, "Skygarden",
         PokeparkFriendshipClientLocationData(
             structure_position=169
         ),
