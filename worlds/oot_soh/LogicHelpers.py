@@ -941,7 +941,6 @@ def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
     world = bundle[2]
-    # return 3 + state.count(Items.HEART_CONTAINER, world.player) + (state.count(Items.PIECE_OF_HEART, world.player) // 4)
     return state.soh_heart_count[world.player]  # type: ignore
 
 
