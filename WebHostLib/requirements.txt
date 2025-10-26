@@ -4,8 +4,7 @@ pony>=0.7.19; python_version <= '3.12'
 pony @ git+https://github.com/black-sliver/pony@7feb1221953b7fa4a6735466bf21a8b4d35e33ba#0.7.19; python_version >= '3.13'
 waitress>=3.0.2
 Flask-Caching>=2.3.0
-Flask-Compress>=1.17; python_version >= '3.12'
-Flask-Compress==1.18; python_version <= '3.11'  # 3.11's pkg_resources can't resolve the new "backports.zstd" dependency
+Flask-Compress==1.18  # pkg_resources can't resolve the "backports.zstd" dependency of >1.18, breaking ModuleUpdate.py
 Flask-Limiter>=3.12
 bokeh>=3.6.3
 markupsafe>=3.0.2
