@@ -229,15 +229,15 @@ def has_bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"], target
 def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    return state.has_any([Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or bool(world.options.bombchu_drops)
+    return state.has_any([Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or world.options.bombchu_drops
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    if world.options.bombchu_bag.value:
-        return state.has(Items.PROGRESSIVE_BOMBCHU.value, world.player)
-    return state.has(Items.BOMB_BAG.value, world.player)
+    if world.options.bombchu_bag:
+        return state.has(Items.PROGRESSIVE_BOMBCHU, world.player)
+    return state.has(Items.BOMB_BAG, world.player)
 
 
 ocarina_buttons_required: dict[str, list[str]] = {
@@ -296,17 +296,13 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Age
     """Check if Link has access to projectiles."""
     if has_explosives(bundle):
         return True
-    child_projectiles = (can_use(Items.FAIRY_SLINGSHOT, bundle) or
-                         can_use(Items.BOOMERANG, bundle))
-    adult_projectiles = (can_use(Items.HOOKSHOT, bundle) or
-                         can_use(Items.FAIRY_BOW, bundle))
 
     if age == Ages.CHILD:
-        return child_projectiles
+        return can_use_any([Items.FAIRY_SLINGSHOT, Items.BOOMERANG], bundle)
     elif age == Ages.ADULT:
-        return adult_projectiles
+        return can_use_any([Items.HOOKSHOT, Items.FAIRY_BOW], bundle)
     else:  # "either"
-        return child_projectiles or adult_projectiles
+        return can_use_any([Items.FAIRY_SLINGSHOT, Items.BOOMERANG, Items.HOOKSHOT, Items.FAIRY_BOW], bundle)
 
 
 def can_use_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
