@@ -187,7 +187,7 @@ def create_regions(world: "NineSolsWorld") -> None:
             # we'll replace this with a generic "requires": { "option": ... } syntax when we get to trick logic
             if (region_name == "CC - Root Node" and to == "CC - Root Node After Boss"
                     and options.skip_soulscape_platforming):
-                requires = [  # no TCK, only the platforming required that
+                requires = [  # no WC or TCK, only the platforming required that
                     {"item": "Event - Lady Ethereal Soulscape Unlocked"},
                     {"item": "Air Dash"}
                 ]
