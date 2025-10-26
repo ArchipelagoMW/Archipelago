@@ -6,6 +6,8 @@
     ] } ] },
     { "from": "AFM - Vents", "to": "AFM - Exit", "requires": [] },
     // Exit -> Vents can theoretically be done with CL + ledge storage getup, but there's no ledge there
+    { "from": "AFM - Exit", "to": "AFM - Root Node", "requires": [] },
+    // since upper AFM is inaccessible otherwise, the mod will unlock AFM's root node when you walk into AFM
 
     { "from": "AFM - Exit", "to": "AFE - Upper Root Node", "requires": [] },
     { "from": "AFE - Upper Root Node", "to": "AFM - Exit", "requires": [] },

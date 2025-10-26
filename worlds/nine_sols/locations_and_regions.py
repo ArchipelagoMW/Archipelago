@@ -207,7 +207,7 @@ def create_regions(world: "NineSolsWorld") -> None:
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
         first_node_region = "AFM - Root Node"
     elif options.first_root_node == FirstRootNode.option_galactic_dock:
-        first_node_region = "GD - Root Node"
+        first_node_region = "GD - Root Node & Right Exit"
     elif options.first_root_node == FirstRootNode.option_power_reservoir_east:
         first_node_region = "PRE - Root Node"
     elif options.first_root_node == FirstRootNode.option_power_reservoir_central:
@@ -217,9 +217,9 @@ def create_regions(world: "NineSolsWorld") -> None:
     elif options.first_root_node == FirstRootNode.option_yinglong_canal:
         first_node_region = "YC - Root Node"
     elif options.first_root_node == FirstRootNode.option_factory_great_hall:
-        first_node_region = "FGH - Root Node"
+        first_node_region = "FGH - Lower Levels & Root Node"
     elif options.first_root_node == FirstRootNode.option_outer_warehouse:
-        first_node_region = "OW - Root Node"
+        first_node_region = "OW - Root Node & Middle Exits"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_entry:
         first_node_region = "GoSY - Root Node"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_east:
@@ -227,7 +227,7 @@ def create_regions(world: "NineSolsWorld") -> None:
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
         first_node_region = "GoSW - Root Node"
     elif options.first_root_node == FirstRootNode.option_sky_tower:
-        first_node_region = "ST - Root Node"
+        first_node_region = "ST - Upper Exit & Root Node"
     else:
         raise Exception("Unrecognized first_root_node")
 

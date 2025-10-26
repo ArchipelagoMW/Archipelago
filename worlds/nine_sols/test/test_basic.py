@@ -17,6 +17,7 @@ class TestDefaultWorld(NineSolsTestBase):
             'seals_for_ethereal',
             'seals_for_prison',
             'jade_costs',
+            'first_root_node',
         })
         # now for the "real" slot_data tests on our default world:
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
