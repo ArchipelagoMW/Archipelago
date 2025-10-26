@@ -77,6 +77,7 @@ class JadeCostMax(Range):
     default = 3
 
 
+# not yet exposed to players
 class LogicDifficulty(Choice):
     """
     `vanilla` is exactly what it sounds like: You will only be expected to do what the vanilla game required.
@@ -113,6 +114,34 @@ class LogicDifficulty(Choice):
     default = 0
 
 
+class FirstRootNode(Choice):
+    """
+    The first root node you can teleport to after starting a randomized game.
+    This is often referred to as "spawn", although you technically always spawn in Four Seasons Pavilion.
+
+    Many root nodes are intentionally excluded from this list.
+    Some are not viable starting points because there aren't enough locations you can reach with few or no items,
+    especially when Grapple, Ledge Grab and Wall Climb are all shuffled.
+    Some are redundant with another node (e.g. Radiant Pagoda is left out because Power Reservoir (Central) is kinda
+    the same thing).
+    Some are in boss rooms (e.g. Agrarian Hall) and we don't want to force a boss fight that quickly. And so on.
+    """
+    display_name = "First Root Node"
+    default = 0
+    option_apeman_facility_monitoring = 0
+    option_galactic_dock = 1
+    option_power_reservoir_east = 2
+    option_power_reservoir_central = 3
+    option_lake_yaochi_ruins = 4
+    option_yinglong_canal = 5
+    option_factory_great_hall = 6
+    option_outer_warehouse = 7
+    option_grotto_of_scriptures_entry = 8
+    option_grotto_of_scriptures_east = 9
+    option_grotto_of_scriptures_west = 10
+    option_sky_tower = 11
+
+
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -125,4 +154,5 @@ class NineSolsGameOptions(PerGameCommonOptions):
     jade_cost_min: JadeCostMin
     jade_cost_max: JadeCostMax
     # logic_difficulty: LogicDifficulty
+    first_root_node: FirstRootNode
 

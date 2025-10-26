@@ -6,7 +6,7 @@ from typing import Any, NamedTuple
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
-from .options import NineSolsGameOptions
+from .options import FirstRootNode, NineSolsGameOptions
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -204,8 +204,33 @@ def create_regions(world: "NineSolsWorld") -> None:
                      lambda state, r=ld["requires"]: eval_rule(state, p, options, r))  # noqa
 
     world.origin_region_name = "FSP - Root Node"
-    # add dynamic logic, i.e. connections based on player options
-    first_node_region = "AFM - Root Node"
+    if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
+        first_node_region = "AFM - Root Node"
+    elif options.first_root_node == FirstRootNode.option_galactic_dock:
+        first_node_region = "GD - Root Node"
+    elif options.first_root_node == FirstRootNode.option_power_reservoir_east:
+        first_node_region = "PRE - Root Node"
+    elif options.first_root_node == FirstRootNode.option_power_reservoir_central:
+        first_node_region = "PRC - Root Node"
+    elif options.first_root_node == FirstRootNode.option_lake_yaochi_ruins:
+        first_node_region = "LYR - Root Node"
+    elif options.first_root_node == FirstRootNode.option_yinglong_canal:
+        first_node_region = "YC - Root Node"
+    elif options.first_root_node == FirstRootNode.option_factory_great_hall:
+        first_node_region = "FGH - Root Node"
+    elif options.first_root_node == FirstRootNode.option_outer_warehouse:
+        first_node_region = "OW - Root Node"
+    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_entry:
+        first_node_region = "GoSY - Root Node"
+    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_east:
+        first_node_region = "GoSE - Root Node"
+    elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
+        first_node_region = "GoSW - Root Node"
+    elif options.first_root_node == FirstRootNode.option_sky_tower:
+        first_node_region = "ST - Root Node"
+    else:
+        raise Exception("Unrecognized first_root_node")
+
     mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
 
 

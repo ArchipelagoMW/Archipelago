@@ -62,7 +62,7 @@ class NineSolsWorld(World):
                     self.options.seals_for_prison.value = slot_data['seals_for_prison']
                     self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
-                    # TODO: alternate spawns, etc
+                    self.options.first_root_node.value = slot_data['first_root_node']
             return
 
         # generate game-specific randomizations separate from AP items/locations
@@ -114,6 +114,7 @@ class NineSolsWorld(World):
             'seals_for_eigong',
             'seals_for_prison',
             'seals_for_ethereal',
+            'first_root_node',
         )
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
         slot_data["jade_costs"] = self.jade_costs
