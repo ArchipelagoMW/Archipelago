@@ -38,7 +38,7 @@ def add_locations(parent_region: Regions, world: "SohWorld",
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region).add_locations(
-                {locationName: locationAddress}, SohLocation)
+                {str(locationName): locationAddress}, SohLocation)
             set_rule(world.get_location(locationName),
                      rule_wrapper.wrap(parent_region, locationRule, world))
 

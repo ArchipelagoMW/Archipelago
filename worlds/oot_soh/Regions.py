@@ -242,12 +242,6 @@ def create_regions_and_locations(world: "SohWorld") -> None:
     for region in all_regions:
         region.set_region_rules(world)
 
-    # Place any locations that still don't have a region in the ROOT region.
-    # TODO should be removed when logic is done
-    for location_name, location_address in world.included_locations.items():
-        world.get_region(Regions.ROOT).add_locations(
-            {location_name: location_address}, SohLocation)
-
 
 # Create a dictionary mapping blue warp rewards to their vanilla items
 dungeon_reward_item_mapping = {
