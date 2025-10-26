@@ -204,10 +204,10 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
 
 
 def has_bottle(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:  # soup
-    return bottle_count(bundle, 1)
+    return has_bottle_count(bundle, 1)
 
 
-def bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"], target_count: int) -> bool:
+def has_bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"], target_count: int) -> bool:
     state = bundle[0]
     world = bundle[2]
     count = 0
