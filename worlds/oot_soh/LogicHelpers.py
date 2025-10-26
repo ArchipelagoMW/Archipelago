@@ -851,7 +851,8 @@ def has_key_ring(key: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]
     return has_item(key_to_ring[key], bundle)
 
 
-def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE, aboveLink: bool = False) -> bool:
+def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies,
+                       distance: EnemyDistance = EnemyDistance.CLOSE, aboveLink: bool = False) -> bool:
     if not can_kill_enemy(bundle, enemy, distance):
         return False
 
@@ -885,10 +886,7 @@ def can_detonate_upright_bomb_flower(bundle: tuple[CollectionState, Regions, "So
             or (can_do_trick(Tricks.BLUE_FIRE_MUD_WALLS, bundle)
                 and blue_fire(bundle)
                 and (effective_health(bundle) != 1
-                     or can_use(Items.NAYRUS_LOVE, bundle)
-                     ))
-
-            )
+                     or can_use(Items.NAYRUS_LOVE, bundle))))
 
 
 def item_group_count(bundle: tuple[CollectionState, Regions, "SohWorld"], item_group: str) -> int:
@@ -898,9 +896,9 @@ def item_group_count(bundle: tuple[CollectionState, Regions, "SohWorld"], item_g
 
 
 def ocarina_button_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
-    if (bundle[2].options.shuffle_ocarina_buttons):
+    world = bundle[2]
+    if world.options.shuffle_ocarina_buttons:
         return item_group_count(bundle, "Ocarina Buttons")
-
     return 5
 
 
@@ -912,8 +910,9 @@ def medallion_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return item_group_count(bundle, "Medallions")
 
 
-dungeon_events: list[Events] = [Events.DEKU_TREE_COMPLETED, Events.DODONGOS_CAVERN_COMPLETED, Events.JABU_JABUS_BELLY_COMPLETED,
-                                Events.FOREST_TEMPLE_COMPLETED, Events.FIRE_TEMPLE_COMPLETED, Events.WATER_TEMPLE_COMPLETED,
+dungeon_events: list[Events] = [Events.DEKU_TREE_COMPLETED, Events.DODONGOS_CAVERN_COMPLETED,
+                                Events.JABU_JABUS_BELLY_COMPLETED, Events.FOREST_TEMPLE_COMPLETED,
+                                Events.FIRE_TEMPLE_COMPLETED, Events.WATER_TEMPLE_COMPLETED,
                                 Events.SPIRIT_TEMPLE_COMPLETED, Events.SHADOW_TEMPLE_COMPLETED]
 
 
@@ -937,6 +936,7 @@ def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     return 255 if can_use(Items.ZORA_TUNIC, bundle) else ((hearts(bundle) * 8) if can_do_trick(Tricks.FEWER_TUNIC_REQUIREMENTS, bundle) else 0)
 
 
+# todo: this should probably be cached
 def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
     world = bundle[2]
@@ -950,7 +950,7 @@ def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) ->
 def trade_quest_step(item: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
     # If adult trade shuffle is off, it'll automatically assume the whole trade quest is complete as soon as claim check is obtained.
-    if world.options.shuffle_adult_trade_items.value == 0:
+    if not world.options.shuffle_adult_trade_items:
         return has_item(Items.CLAIM_CHECK, bundle)
 
     # Items aren't comparable, so recursion is used to replace fallthrough here
@@ -988,19 +988,19 @@ def can_build_rainbow_bridge(bundle: tuple[CollectionState, Regions, "SohWorld"]
     world = bundle[2]
 
     greg_reward = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_modifier.value == 1:
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.rainbow_bridge_greg_modifier == "reward":
         greg_reward = 1
 
-    bridge_setting = world.options.rainbow_bridge.value
+    bridge_setting = world.options.rainbow_bridge
 
-    return (bridge_setting == 1 or
-            (bridge_setting == 0 and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
-            (bridge_setting == 2 and ((stone_count(bundle) + greg_reward) >= world.options.rainbow_bridge_stones_required.value)) or
-            (bridge_setting == 3 and ((medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_medallions_required.value)) or
-            (bridge_setting == 4 and ((stone_count(bundle) + medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeon_rewards_required.value)) or
-            (bridge_setting == 5 and ((dungeon_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeons_required.value)) or
-            (bridge_setting == 6 and (get_gs_count(bundle) >= world.options.rainbow_bridge_skull_tokens_required.value)) or
-            (bridge_setting == 7 and has_item(Items.GREG_THE_GREEN_RUPEE, bundle)))
+    return (bridge_setting == "always_open" or
+            (bridge_setting == "vanilla" and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle) and can_use(Items.LIGHT_ARROW, bundle)) or
+            (bridge_setting == "stones" and ((stone_count(bundle) + greg_reward) >= world.options.rainbow_bridge_stones_required)) or
+            (bridge_setting == "medallions" and ((medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_medallions_required)) or
+            (bridge_setting == "dungeon_rewards" and ((stone_count(bundle) + medallion_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeon_rewards_required)) or
+            (bridge_setting == "dungeons" and ((dungeon_count(bundle) + greg_reward) >= world.options.rainbow_bridge_dungeons_required)) or
+            (bridge_setting == "tokens" and (get_gs_count(bundle) >= world.options.rainbow_bridge_skull_tokens_required)) or
+            (bridge_setting == "greg" and has_item(Items.GREG_THE_GREEN_RUPEE, bundle)))
 
 
 def get_gs_count(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
@@ -1013,17 +1013,17 @@ def can_trigger_lacs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> boo
     world = bundle[2]
 
     greg_reward = 0
-    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_modifier.value == 1:
+    if has_item(Items.GREG_THE_GREEN_RUPEE, bundle) and world.options.ganons_castle_boss_key_greg_modifier == "reward":
         greg_reward = 1
 
-    gbk_setting = world.options.ganons_castle_boss_key.value
+    gbk_setting = world.options.ganons_castle_boss_key
 
-    return (((gbk_setting == 0 or gbk_setting == 1 or gbk_setting == 2) and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
-            (gbk_setting == 3 and (stone_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_stones_required.value)) or
-            (gbk_setting == 4 and (medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_medallions_required.value)) or
-            (gbk_setting == 5 and (stone_count(bundle) + medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeon_rewards_required.value)) or
-            (gbk_setting == 6 and (dungeon_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeons_required.value)) or
-            (gbk_setting == 7 and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required.value)))
+    return ((gbk_setting in ["vanilla", "anywhere", "lacs_vanilla"] and has_item(Items.SHADOW_MEDALLION, bundle) and has_item(Items.SPIRIT_MEDALLION, bundle)) or
+            (gbk_setting == "lacs_stones" and (stone_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_stones_required)) or
+            (gbk_setting == "lacs_medallions" and (medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_medallions_required)) or
+            (gbk_setting == "lacs_dungeon_rewards" and (stone_count(bundle) + medallion_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeon_rewards_required)) or
+            (gbk_setting == "lacs_dungeons" and (dungeon_count(bundle) + greg_reward >= world.options.ganons_castle_boss_key_dungeons_required)) or
+            (gbk_setting == "lacs_skull_tokens" and (get_gs_count(bundle) >= world.options.ganons_castle_boss_key_skull_tokens_required)))
 
 
 # TODO implement EffectiveHealth(); Returns 2 for now. Requires implementing a damage multiplier option
@@ -1037,4 +1037,6 @@ def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
-    return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
+    return (can_do_trick(Tricks.GROUND_JUMP, bundle)
+            and can_standing_shield(bundle)
+            and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle))))
