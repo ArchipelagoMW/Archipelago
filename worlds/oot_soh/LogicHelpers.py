@@ -749,13 +749,12 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
 
 def has_boss_soul(soul: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]):
-    state = bundle[0]
     world = bundle[2]
-    soulsanity = world.options.shuffle_boss_souls.value
-    if soulsanity == 0:
+    soulsanity = world.options.shuffle_boss_souls
+    if not soulsanity:
         return True
-    if soul == Items.GANONS_SOUL:
-        return True if soulsanity == 1 else state.has(Items.GANONS_SOUL, world.player)
+    if soul == Items.GANONS_SOUL and soulsanity == "on":
+        return True
     return has_item(soul, bundle)
 
 
