@@ -1373,10 +1373,6 @@ pots_dungeon_location_table: dict[str, int] = {
 crates_overworld_location_table: dict[str, int] = {
     Locations.GV_FREESTANDING_POH_CRATE.value: 1334,
     Locations.GV_NEAR_COW_CRATE.value: 1335,
-    # Locations.GV_NEAR_BRIDGE_CRATE1.value: 1336,
-    # Locations.GV_NEAR_BRIDGE_CRATE2.value: 1337,
-    # Locations.GV_NEAR_BRIDGE_CRATE3.value: 1338,
-    # Locations.GV_NEAR_BRIDGE_CRATE4.value: 1339,
     Locations.GF_ABOVE_JAIL_CRATE.value: 1340,
     Locations.GF_SOUTHMOST_CENTER_CRATE.value: 1341,
     Locations.GF_MIDDLE_SOUTH_CENTER_CRATE.value: 1342,
@@ -2421,8 +2417,6 @@ tree_location_table: dict[str, int] = {
     Locations.HC_NEAR_GUARDS_TREE_6.value: 2399,
     Locations.HC_SKULLTULA_TREE.value: 2400,
     Locations.HC_GROTTO_TREE.value: 2401,
-    # Locations.HC_NL_TREE_1.value: 2402,
-    # Locations.HC_NL_TREE_2.value: 2403,
     Locations.HF_NEAR_LLR_TREE.value: 2404,
     Locations.HF_NEAR_LH_TREE.value: 2405,
     Locations.HF_CHILD_NEAR_GV_TREE.value: 2406,
@@ -2548,6 +2542,19 @@ hundred_skulls_location_table: dict[str, int] = {
     Locations.KAK_100_GOLD_SKULLTULA_REWARD.value: 79
 }
 
+no_logic_crates_location_table: dict[str, int] = {
+    Locations.GV_NEAR_BRIDGE_CRATE1: 1336,
+    Locations.GV_NEAR_BRIDGE_CRATE2: 1337,
+    Locations.GV_NEAR_BRIDGE_CRATE3: 1338,
+    Locations.GV_NEAR_BRIDGE_CRATE4: 1339,
+    Locations.GF_NORTH_TARGET_CHILD_CRATE: 1358
+}
+
+no_logic_trees_location_table: dict[str, int] = {
+    Locations.HC_NL_TREE_1: 2402,
+    Locations.HC_NL_TREE_2: 2403
+}
+
 location_data_table: dict[str, int] = {
     **base_location_table,
     **gold_skulltula_overworld_location_table,
@@ -2577,6 +2584,8 @@ location_data_table: dict[str, int] = {
     **child_zelda_location_table,
     **carpenters_location_table,
     **hundred_skulls_location_table,
+    **no_logic_crates_location_table,
+    **no_logic_trees_location_table,
 }
 
 location_table = {name: address for name,

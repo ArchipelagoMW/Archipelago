@@ -321,5 +321,6 @@ class SohWorld(World):
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
+            "no_logic": self.options.true_no_logic.value,
             "apworld_version": self.apworld_version,
         }
