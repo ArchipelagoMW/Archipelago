@@ -501,7 +501,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
         in_water: Whether the fight is underwater
     """
     # Define what weapons work at each range
-    def can_hit_at_range(distance: EnemyDistance) -> bool:
+    def can_hit_at_range() -> bool:
         if distance == EnemyDistance.CLOSE and can_use(Items.MEGATON_HAMMER, bundle):
             return True
         if distance <= EnemyDistance.SHORT_JUMPSLASH and can_use(Items.KOKIRI_SWORD, bundle):
