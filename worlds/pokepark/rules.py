@@ -26,12 +26,13 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists("Treehouse - Power Up - Thunderbolt Upgrade 1", lambda state: can_farm_berries(state, player))
     set_rule_if_exists(
         "Treehouse - Power Up - Thunderbolt Upgrade 2",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 1", player) and
+        lambda state: can_farm_berries(state, player) and
                       can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Thunderbolt Upgrade 3",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Thunderbolt Upgrade 2", player) and
+        lambda state: can_farm_berries(state, player) and
+                      can_farm_berries_intermediate(state, player) and
                       can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
@@ -40,21 +41,23 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Dash Upgrade 2",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 1", player) and
+        lambda state: can_farm_berries(state, player) and state.has("Pelipper Prisma", player) and
                       can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Ponyta Unlocked",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player)
+        lambda state: can_farm_berries(state, player) and state.has("Pelipper Prisma", player) and
+                      can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Dash Upgrade 3",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player) and
+        lambda state: can_farm_berries(state, player) and state.has("Pelipper Prisma", player) and
+                      can_farm_berries_intermediate(state, player) and
                       can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Double Dash Upgrade",
-        lambda state: state.can_reach_location("Treehouse - Power Up - Dash Upgrade 2", player)
+        lambda state: state.has("Pelipper Prisma", player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 1",
@@ -62,17 +65,15 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 2",
-        lambda state: state.can_reach_location(
-            "Treehouse - Power Up - Health Upgrade 1",
-            player
+        lambda state: can_farm_berries(state, player) and state.has(
+            "Venusaur Prisma", player
         ) and can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Health Upgrade 3",
-        lambda state: state.can_reach_location(
-            "Treehouse - Power Up - Health Upgrade 2",
-            player
-        ) and can_farm_berries_advanced(state, player)
+        lambda state: can_farm_berries(state, player) and state.has(
+            "Venusaur Prisma", player
+        ) and can_farm_berries_intermediate(state, player) and can_farm_berries_advanced(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Iron Tail Upgrade 1",
@@ -80,17 +81,16 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Iron Tail Upgrade 2",
-        lambda state: state.can_reach_location(
-            "Treehouse - Power Up - Iron Tail Upgrade 1",
-            player
+        lambda state: can_farm_berries(state, player) and state.has(
+            "Empoleon Prisma", player
         ) and can_farm_berries_intermediate(state, player)
     )
     set_rule_if_exists(
         "Treehouse - Power Up - Iron Tail Upgrade 3",
-        lambda state: state.can_reach_location(
-            "Treehouse - Power Up - Iron Tail Upgrade 2",
-            player
-        ) and can_farm_berries_advanced(state, player)
+        lambda state: can_farm_berries(state, player) and
+                      state.has("Empoleon Prisma", player) and
+                      can_farm_berries_intermediate(state, player) and
+                      can_farm_berries_advanced(state, player)
     )
 
     # Meadow Zone
@@ -110,9 +110,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Bulbasaur -- Friendship",
-        lambda state: state.has("Bulbasaur Prisma", player) and state.can_reach_region(
-            "Bulbasaur's Daring Dash Attraction", player
-        )
+        lambda state: state.has("Bulbasaur Prisma", player)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Buneary Power Competition -- Friendship",
@@ -809,9 +807,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Delibird -- Friendship",
-        lambda state: state.can_reach_location(
-            "Ice Zone Main Area - Christmas Tree Present -- Stage 4", player
-        )
+        lambda state: can_clear_christmas_tree_stage4(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Smoochum Power Competition -- Friendship",
@@ -855,9 +851,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Kirlia -- Friendship",
-        lambda state: state.has("Delibird Friendship", player) and state.can_reach_location(
-            "Ice Zone Main Area - Christmas Tree Present -- Stage 4", player
-        )
+        lambda state: state.has("Delibird Friendship", player) and can_clear_christmas_tree_stage4(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Igloo Housing -- Stage 1",
@@ -882,29 +876,19 @@ def set_rules(world: "PokeparkWorld") -> None:
 
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 1",
-        lambda state: state.has("Delibird Unlock", player) and state.has("Spheal Friendship", player)
+        lambda state: can_clear_christmas_tree_stage1(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 2",
-        lambda state: state.can_reach_location(
-            "Ice Zone Main Area - Christmas Tree Present -- Stage 1", player
-        ) and state.has("Teddiursa Friendship", player)
+        lambda state: can_clear_christmas_tree_stage2(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 3",
-        lambda state: state.can_reach_location(
-            "Ice Zone Main Area - Christmas Tree Present -- Stage 2", player
-        ) and
-                      state.has("Squirtle Unlock", player) and
-                      state.has("Squirtle Friendship", player)
+        lambda state: can_clear_christmas_tree_stage3(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Christmas Tree Present -- Stage 4",
-        lambda state: state.can_reach_location(
-            "Ice Zone Main Area - Christmas Tree Present -- Stage 3", player
-        ) and
-                      state.has("Smoochum Friendship", player) and
-                      state.has("Smoochum Unlock", player)
+        lambda state: can_clear_christmas_tree_stage4(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Frozen Lake Area - Frozen Mamoswine -- Ice Rescue",
@@ -2311,37 +2295,23 @@ def set_rules(world: "PokeparkWorld") -> None:
     # Skygarden
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Stage 1",
-        lambda state: True
+        lambda state: can_clear_mew_power_competition_stage1(state, player)
     )
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Stage 2",
-        lambda state: state.can_reach_location(
-            "Skygarden - Mew Power Competition -- Stage 1",
-            player
-        ) and can_battle_advanced(state, player, options)
+        lambda state: can_clear_mew_power_competition_stage2(state, player, options)
     )
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Stage 3",
-        lambda state: state.can_reach_location(
-            "Skygarden - Mew Power Competition -- Stage 2",
-            player
-        ) and can_battle_thunderbolt_immune_advanced(
-            state, player, options
-        )
+        lambda state: can_clear_mew_power_competition_stage3(state, player, options)
     )
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Stage 4",
-        lambda state: state.can_reach_location(
-            "Skygarden - Mew Power Competition -- Stage 3",
-            player
-        )
+        lambda state: can_clear_mew_power_competition_stage4(state, player, options)
     )
     set_rule_if_exists(
         "Skygarden - Mew Power Competition -- Friendship",
-        lambda state: state.can_reach_location(
-            "Skygarden - Mew Power Competition -- Stage 4",
-            player
-        ) and maximized_dash(state, player)
+        lambda state: can_beat_mew(state, player, options)
     )
     set_rule_if_exists(
         "Skygarden - Prisma Completion -- Stage 1",
@@ -3076,3 +3046,55 @@ def can_farm_berries_intermediate(state: CollectionState, player: int):
 def can_farm_berries_advanced(state: CollectionState, player: int):
     return (state.can_reach_region("Magma Zone Main Area", player) and
             state.has("Golem Unlock", player))
+
+
+def can_clear_christmas_tree_stage1(state: CollectionState, player: int):
+    return state.has("Delibird Unlock", player) and state.has("Spheal Friendship", player)
+
+
+def can_clear_christmas_tree_stage2(state: CollectionState, player: int):
+    return can_clear_christmas_tree_stage1(state, player) and state.has("Teddiursa Friendship", player)
+
+
+def can_clear_christmas_tree_stage3(state: CollectionState, player: int):
+    return (can_clear_christmas_tree_stage1(state, player) and
+            can_clear_christmas_tree_stage2(state, player) and
+            state.has("Squirtle Unlock", player) and
+            state.has("Squirtle Friendship", player))
+
+
+def can_clear_christmas_tree_stage4(state: CollectionState, player: int):
+    return (can_clear_christmas_tree_stage1(state, player) and
+            can_clear_christmas_tree_stage2(state, player) and
+            can_clear_christmas_tree_stage3(state, player) and
+            state.has("Smoochum Friendship", player) and
+            state.has("Smoochum Unlock", player))
+
+
+def can_clear_mew_power_competition_stage1(state: CollectionState, player: int):
+    return True
+
+
+def can_clear_mew_power_competition_stage2(state: CollectionState, player: int, options: "PokeparkOptions"):
+    return (can_clear_mew_power_competition_stage1(state, player) and
+            can_battle_advanced(state, player, options))
+
+
+def can_clear_mew_power_competition_stage3(state: CollectionState, player: int, options: "PokeparkOptions"):
+    return (can_clear_mew_power_competition_stage1(state, player) and
+            can_clear_mew_power_competition_stage2(state, player, options) and
+            can_battle_thunderbolt_immune_advanced(state, player, options))
+
+
+def can_clear_mew_power_competition_stage4(state: CollectionState, player: int, options: "PokeparkOptions"):
+    return (can_clear_mew_power_competition_stage1(state, player) and
+            can_clear_mew_power_competition_stage2(state, player, options) and
+            can_clear_mew_power_competition_stage3(state, player, options))
+
+
+def can_beat_mew(state: CollectionState, player: int, options: "PokeparkOptions"):
+    return (can_clear_mew_power_competition_stage1(state, player) and
+            can_clear_mew_power_competition_stage2(state, player, options) and
+            can_clear_mew_power_competition_stage3(state, player, options) and
+            can_clear_mew_power_competition_stage4(state, player, options) and
+            maximized_dash(state, player))
