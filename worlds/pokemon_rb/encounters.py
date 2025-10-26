@@ -2,13 +2,31 @@ from copy import deepcopy
 from . import poke_data
 from .locations import location_data
 
+non_randomized_catch_em_all_candidate_slots = [
+    "Route 4 Pokemon Center - Pokemon For Sale",
+    "Underground Path Route 5 - Spot Trade",
+    "Route 11 Gate 2F - Terry Trade",
+    "Cinnabar Lab Fossil Room - Sailor Trade",
+    "Cinnabar Lab Trade Room - Crinkles Trade",
+    "Cinnabar Lab Trade Room - Doris Trade",
+    *[f"Celadon Prize Corner - Pokemon Prize - {i}" for i in range(1, 3)]
+]
 
-def get_encounter_slots(self):
-    encounter_slots = deepcopy([location for location in location_data if location.type == "Wild Encounter"])
 
+def get_encounter_slots(world, types):
+    encounter_slots = deepcopy([location for location in location_data if location.type in types])
+
+    i = [True, False][world.options.game_version.value]
     for location in encounter_slots:
         if isinstance(location.original_item, list):
-            location.original_item = location.original_item[not self.options.game_version.value]
+            if world.options.catch_em_all and not world.options.randomize_pokemon_locations and location.name in (
+                    "Celadon Prize Corner - Pokemon Prize - 4", "Celadon Prize Corner - Pokemon Prize - 5"):
+                location.original_item = location.original_item[world.options.game_version.value]
+            else:
+                location.original_item = location.original_item[i]
+                if world.options.catch_em_all and not world.options.randomize_pokemon_locations:
+                    i = not i
+
     return encounter_slots
 
 
@@ -75,7 +93,7 @@ def process_trainer_data(world):
                     for i, mon in enumerate(rival_party):
                         if mon in ("Bulbasaur", "Ivysaur", "Venusaur", "Charmander", "Charmeleon", "Charizard",
                                    "Squirtle", "Wartortle", "Blastoise"):
-                            if world.options.randomize_starter_pokemon:
+                            if world.options.randomize_pokemon_locations:
                                 rival_party[i] = rival_map[mon]
                         elif world.options.randomize_trainer_parties:
                             if mon in rival_map:
@@ -97,12 +115,12 @@ def process_trainer_data(world):
 
 
 def process_pokemon_locations(self):
-    starter_slots = deepcopy([location for location in location_data if location.type == "Starter Pokemon"])
-    legendary_slots = deepcopy([location for location in location_data if location.type == "Legendary Pokemon"])
-    static_slots = deepcopy([location for location in location_data if location.type in
-                    ["Static Pokemon", "Missable Pokemon"]])
+    starter_slots = get_encounter_slots(self, ["Starter Pokemon"])
+    legendary_slots = get_encounter_slots(self, ["Legendary Pokemon"])
+    static_slots = get_encounter_slots(self, ["Static Pokemon", "Static Repeatable Pokemon", "Missable Pokemon"])
     legendary_mons = deepcopy([slot.original_item for slot in legendary_slots])
 
+    static_placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
     placed_mons = {pokemon: 0 for pokemon in poke_data.pokemon_data.keys()}
 
     mons_list = [pokemon for pokemon in poke_data.first_stage_pokemon if pokemon not in poke_data.legendary_pokemon
@@ -117,64 +135,92 @@ def process_pokemon_locations(self):
             location = self.multiworld.get_location(slot.name, self.player)
             mon = legendary_mons.pop()
             location.place_locked_item(self.create_item("Static " + mon))
-            placed_mons[mon] += 1
+            static_placed_mons[mon] += 1
     elif self.options.randomize_legendary_pokemon == "static":
         static_slots = static_slots + legendary_slots
         self.random.shuffle(static_slots)
-        static_slots.sort(key=lambda s: s.name != "Pokemon Tower 6F - Restless Soul")
+        static_slots.sort(key=lambda s: s.name != "Pokemon Tower 6F - Restless Soul"
+                          and "Fake Pokeball" not in s.name)
         while legendary_slots:
             swap_slot = legendary_slots.pop()
             slot = static_slots.pop()
-            slot_type = slot.type.split()[0]
-            if slot_type == "Legendary":
-                slot_type = "Static"
+            prepend = ""
+            if slot.type in ("Legendary Pokemon", "Static Pokemon"):
+                prepend = "Static "
+                static_placed_mons[swap_slot.original_item] += 1
+            else:
+                placed_mons[swap_slot.original_item] += 1
             location = self.multiworld.get_location(slot.name, self.player)
-            location.place_locked_item(self.create_item(slot_type + " " + swap_slot.original_item))
+            location.place_locked_item(self.create_item(prepend + swap_slot.original_item))
             swap_slot.original_item = slot.original_item
+            
     elif self.options.randomize_legendary_pokemon == "any":
         static_slots = static_slots + legendary_slots
 
+    non_randomized_catch_em_all_mons = ["Bulbasaur", "Charmander", "Squirtle", "Eevee"]
+    non_randomized_catch_em_all_slots = []
+    if self.options.catch_em_all and not self.options.randomize_pokemon_locations:
+        non_randomized_catch_em_all_slots = self.random.sample(
+            [mon for mon in non_randomized_catch_em_all_candidate_slots
+             if mon in [slot.name for slot in static_slots]], 4)
+
     for slot in static_slots:
         location = self.multiworld.get_location(slot.name, self.player)
-        randomize_type = self.options.randomize_static_pokemon.value
-        slot_type = slot.type.split()[0]
-        if slot_type == "Legendary":
-            slot_type = "Static"
+        randomize_type = self.options.randomize_pokemon_locations.value
+        prepend = ""
+        if slot.type in ("Legendary Pokemon", "Static Pokemon"):
+            prepend = "Static "
+        elif slot.type == "Missable Pokemon":
+            prepend = "Missable "
         if not randomize_type:
-            location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
+            if slot.name in non_randomized_catch_em_all_slots:
+                location.place_locked_item(self.create_item(prepend + non_randomized_catch_em_all_mons.pop()))
+            else:
+                location.place_locked_item(self.create_item(prepend + slot.original_item))
         else:
-            mon = self.create_item(slot_type + " " +
+            mon = self.create_item(prepend +
                                    randomize_pokemon(self, slot.original_item, mons_list, randomize_type,
                                                      self.random))
             location.place_locked_item(mon)
-            if slot_type != "Missable":
-                placed_mons[mon.name.replace("Static ", "")] += 1
+            if slot.type in ("Legendary Pokemon", "Static Pokemon"):
+                static_placed_mons[mon.name.replace("Static ", "")] += 1
+            elif slot.type == "Repeatable Static Pokemon":
+                placed_mons[mon.name] += 1
+    assert not (non_randomized_catch_em_all_mons and non_randomized_catch_em_all_slots)
 
-    chosen_mons = set()
+    chosen_starter_mons = set()
     for slot in starter_slots:
         location = self.multiworld.get_location(slot.name, self.player)
-        randomize_type = self.options.randomize_starter_pokemon.value
+        randomize_type = self.options.randomize_pokemon_locations.value
         slot_type = "Missable"
         if not randomize_type:
             location.place_locked_item(self.create_item(slot_type + " " + slot.original_item))
         else:
             mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
                                                                        randomize_type, self.random))
-            while mon.name in chosen_mons:
+            while mon.name in chosen_starter_mons:
                 mon = self.create_item(slot_type + " " + randomize_pokemon(self, slot.original_item, mons_list,
                                                                            randomize_type, self.random))
-            chosen_mons.add(mon.name)
+            chosen_starter_mons.add(mon.name)
             location.place_locked_item(mon)
 
-    encounter_slots_master = get_encounter_slots(self)
+    encounter_slots_master = get_encounter_slots(self, ["Wild Encounter"])
     encounter_slots = encounter_slots_master.copy()
 
-    zone_mapping = {}
-    zone_placed_mons = {}
-    
-    if self.options.randomize_wild_pokemon:
+    if self.options.randomize_pokemon_locations:
+        evolutions_needed = []
+        for mon in static_placed_mons:
+            if static_placed_mons[mon]:
+                if mon in poke_data.evolves_to:
+                    evolutions_needed.append(poke_data.evolves_to[mon])
+                else:
+                    placed_mons[mon] += 1
+        static_exclusives = [mon for mon in static_placed_mons if static_placed_mons[mon]]
+        static_exclusives = self.random.sample(static_exclusives, int(len(static_exclusives) * 0.75))
+        zone_mapping = {}
+        zone_placed_mons = {}
         mons_list = [pokemon for pokemon in poke_data.pokemon_data.keys() if pokemon not in poke_data.legendary_pokemon
-                     or self.options.randomize_legendary_pokemon.value == 3]
+                     or self.options.randomize_legendary_pokemon.value == 3 and pokemon not in static_exclusives]
         self.random.shuffle(encounter_slots)
         locations = []
         for slot in encounter_slots:
@@ -189,7 +235,7 @@ def process_pokemon_locations(self):
                 mon = zone_mapping[zone][original_mon]
             else:
                 mon = randomize_pokemon(self, original_mon, [m for m in mons_list if m not in zone_placed_mons[zone]],
-                                        self.options.randomize_wild_pokemon.value, self.random)
+                                        self.options.randomize_pokemon_locations.value, self.random)
             #
             while ("Pokemon Tower 6F" in slot.name and
                    self.multiworld.get_location("Pokemon Tower 6F - Restless Soul", self.player).item.name
@@ -213,13 +259,15 @@ def process_pokemon_locations(self):
         if self.options.catch_em_all == "first_stage":
             mons_to_add = [pokemon for pokemon in poke_data.first_stage_pokemon if placed_mons[pokemon] == 0 and
                            (pokemon not in poke_data.legendary_pokemon or self.options.randomize_legendary_pokemon.value == 3)]
+            mons_to_add += [pokemon for pokemon in evolutions_needed if placed_mons[pokemon] == 0]
         elif self.options.catch_em_all == "all_pokemon":
             mons_to_add = remaining_pokemon.copy()
         logic_needed_mons = max(self.options.oaks_aide_rt_2.value,
                                 self.options.oaks_aide_rt_11.value,
-                                self.options.oaks_aide_rt_15.value)
+                                self.options.oaks_aide_rt_15.value,
+                                self.options.elite_four_pokedex_condition.total)
         if self.options.accessibility == "minimal":
-            logic_needed_mons = 0
+            logic_needed_mons = self.options.elite_four_pokedex_condition.total
 
         self.random.shuffle(remaining_pokemon)
         while (len([pokemon for pokemon in placed_mons if placed_mons[pokemon] > 0])
@@ -228,9 +276,9 @@ def process_pokemon_locations(self):
         for mon in mons_to_add:
             stat_base = get_base_stat_total(mon)
             candidate_locations = encounter_slots_master.copy()
-            if self.options.randomize_wild_pokemon.current_key in ["match_base_stats", "match_types_and_base_stats"]:
+            if self.options.randomize_pokemon_locations.current_key in ["match_base_stats", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: abs(get_base_stat_total(slot.original_item) - stat_base))
-            if self.options.randomize_wild_pokemon.current_key in ["match_types", "match_types_and_base_stats"]:
+            if self.options.randomize_pokemon_locations.current_key in ["match_types", "match_types_and_base_stats"]:
                 candidate_locations.sort(key=lambda slot: not any([poke_data.pokemon_data[slot.original_item]["type1"] in
                      [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]],
                      poke_data.pokemon_data[slot.original_item]["type2"] in
