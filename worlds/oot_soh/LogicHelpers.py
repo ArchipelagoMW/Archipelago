@@ -439,8 +439,7 @@ def has_fire_source_with_torch(bundle: tuple[CollectionState, Regions, "SohWorld
 
 def has_fire_source(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link has any fire source."""
-    return (can_use(Items.DINS_FIRE, bundle) or
-            can_use(Items.FIRE_ARROW, bundle))
+    return can_use_any([Items.DINS_FIRE, Items.FIRE_ARROW], bundle)
 
 
 def can_jump_slash_except_hammer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -470,7 +469,7 @@ def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]
     world = bundle[2]
     return (hookshot_or_boomerang(bundle) or
             (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or
-            (world.options.slingbow_break_beehives and (can_use(Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle))))
+            (world.options.slingbow_break_beehives and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))))
 
 
 def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -481,7 +480,6 @@ def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) 
 
 def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
     return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
 
