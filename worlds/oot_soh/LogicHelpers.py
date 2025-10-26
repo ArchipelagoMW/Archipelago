@@ -382,7 +382,7 @@ def can_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def take_damage(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (can_use(Items.BOTTLE_WITH_FAIRY, bundle) or can_use(Items.NAYRUS_LOVE, bundle)
+    return (can_use_any([Items.BOTTLE_WITH_FAIRY, Items.NAYRUS_LOVE], bundle)
             or effective_health(bundle) != 1)
 
 
@@ -394,7 +394,7 @@ def can_do_trick(trick: Tricks, bundle: tuple[CollectionState, Regions, "SohWorl
 
 def can_get_nighttime_gs(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     world = bundle[2]
-    return at_night(bundle) and (can_use(Items.SUNS_SONG, bundle) or not bool(world.options.skulls_sun_song))
+    return at_night(bundle) and (not world.options.skulls_sun_song or can_use(Items.SUNS_SONG, bundle))
 
 
 def can_break_pots(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
