@@ -4,6 +4,7 @@ from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 from Utils import restricted_loads, Version, version_tuple
+from .options import FirstRootNode
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -207,3 +208,17 @@ def create_items(world: "NineSolsWorld") -> None:
 
     pool = prog_and_useful_items + unique_filler + repeatable_filler_items
     multiworld.itempool += pool
+
+    # handle restrictive starts by setting early items
+    if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
+        if options.shuffle_wall_climb.value:
+            multiworld.local_early_items[player]["Wall Climb"] = 1
+    if options.first_root_node == FirstRootNode.option_yinglong_canal:
+        if options.shuffle_ledge_grab.value:
+            multiworld.local_early_items[player]["Ledge Grab"] = 1
+        if options.shuffle_grapple.value:
+            if options.shuffle_ledge_grab.value:  # since there's no "local_sphere_2_items", we name the location:
+                multiworld.get_location("Yinglong Canal: Near Root Node", player).place_locked_item(create_item(player, "Grapple"))
+            else:
+                multiworld.local_early_items[player]["Grapple"] = 1
+

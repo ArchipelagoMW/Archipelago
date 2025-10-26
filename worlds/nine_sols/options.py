@@ -122,7 +122,9 @@ class FirstRootNode(Choice):
     Many root nodes are intentionally excluded from this list.
     Most of the excluded nodes are not viable starting points because there aren't enough locations you can reach with
     few or no items, especially when Grapple, Ledge Grab and Wall Climb are all shuffled.
-    Some are in boss rooms (e.g. Agrarian Hall) and we don't want to force a boss fight that quickly. And so on.
+    Other reasons for exclusion include: Agrarian Hall because it'd force a boss fight, AF (Elevator) because it has the
+    same early locations as AF (Monitoring), Radiant Pagoda because if it doesn't force the boss fight then it forces
+    the light bridge to be pre-hacked which makes it just a less interesting version of PR (Central) spawn, etc.
     """
     display_name = "First Root Node"
     default = 0
