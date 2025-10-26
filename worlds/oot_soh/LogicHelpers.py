@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING, Callable
 from collections import Counter
 
-from BaseClasses import CollectionState, ItemClassification as IC, Item, MultiWorld
+from BaseClasses import CollectionState, ItemClassification as IC, MultiWorld
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
 from worlds.AutoWorld import LogicMixin
 from .Enums import *
-from .Items import SohItem, item_data_table, ItemType, no_rules_bottles, item_name_groups
+from .Items import SohItem, item_data_table, ItemType, no_rules_bottles
 
 if TYPE_CHECKING:
     from . import SohWorld
