@@ -306,8 +306,7 @@ def has_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"], age: Age
 
 
 def can_use_projectile(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return (can_use_any([Items.FAIRY_SLINGSHOT, Items.BOOMERANG, Items.HOOKSHOT, Items.FAIRY_BOW], bundle)
-            or has_explosives(bundle))
+    return has_projectile(bundle)
 
 
 def can_break_mud_walls(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
