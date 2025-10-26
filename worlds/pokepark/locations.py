@@ -901,7 +901,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             structure_position=5
         )
     ),
-    "Meadow Zone Main Area - Bidoof Housing Completed -- Beach Bidoof Unlocked": PokeparkLocationData(
+    "Meadow Zone Main Area - Bidoof Housing -- Beach Bidoof Unlocked": PokeparkLocationData(
         55, PokeparkFlag.ERRAND, "Meadow Zone Main Area", PokeparkF0301BippaFlagClientData(
 
             _expected_value=0b00000001,
