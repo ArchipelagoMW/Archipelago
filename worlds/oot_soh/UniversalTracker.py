@@ -84,6 +84,7 @@ def setup_options_from_slot_data(world: "SohWorld") -> None:
             world.options.skeleton_key.value = world.passthrough["skeleton_key"]
             world.options.slingbow_break_beehives.value = world.passthrough["slingbow_break_beehives"]
             world.options.starting_age.value = world.passthrough["starting_age"]
+            world.options.true_no_logic = world.passthrough["no_logic"]
             # world.options.tricks_in_logic.value = world.passthrough["tricks_in_logic"]
             # uncomment above and delete this line when tricks in logic is put in
             # the below do not need to be handled in UT at all, since they do not affect logic
