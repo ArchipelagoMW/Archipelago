@@ -294,30 +294,3 @@ class TestGoSWSpawnAllShuffle(NineSolsTestBase):
         self.assertReachableWith("GoS (Entry): Near Greenhouse Roof", [])
         self.assertNotReachableWith("GoS (Entry): Lower Left Caves", [])  # because shuffle_ledge_grab
 
-
-class TestSTSpawn(NineSolsTestBase):
-    options = {
-        "first_root_node": "sky_tower",
-    }
-
-    def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 3)
-
-        self.assertReachableWith("Sky Tower: By Root Node", [])
-        self.assertReachableWith("Sky Tower: Pink Water Near Root Node", [])
-
-
-class TestSTSpawnAllShuffle(NineSolsTestBase):
-    options = {
-        "first_root_node": "sky_tower",
-        "shuffle_grapple": True,
-        "shuffle_wall_climb": True,
-        "shuffle_ledge_grab": True,
-    }
-
-    def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 3)
-
-        self.assertReachableWith("Sky Tower: By Root Node", [])
-        self.assertReachableWith("Sky Tower: Pink Water Near Root Node", [])
-

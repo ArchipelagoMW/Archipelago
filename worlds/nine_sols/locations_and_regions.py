@@ -226,8 +226,6 @@ def create_regions(world: "NineSolsWorld") -> None:
         first_node_region = "GoSE - Root Node"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
         first_node_region = "GoSW - Root Node"
-    elif options.first_root_node == FirstRootNode.option_sky_tower:
-        first_node_region = "ST - Upper Exit & Root Node"
     else:
         raise Exception("Unrecognized first_root_node")
 

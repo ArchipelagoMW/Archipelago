@@ -120,10 +120,8 @@ class FirstRootNode(Choice):
     This is often referred to as "spawn", although you technically always spawn in Four Seasons Pavilion.
 
     Many root nodes are intentionally excluded from this list.
-    Some are not viable starting points because there aren't enough locations you can reach with few or no items,
-    especially when Grapple, Ledge Grab and Wall Climb are all shuffled.
-    Some are redundant with another node (e.g. Radiant Pagoda is left out because Power Reservoir (Central) is kinda
-    the same thing).
+    Most of the excluded nodes are not viable starting points because there aren't enough locations you can reach with
+    few or no items, especially when Grapple, Ledge Grab and Wall Climb are all shuffled.
     Some are in boss rooms (e.g. Agrarian Hall) and we don't want to force a boss fight that quickly. And so on.
     """
     display_name = "First Root Node"
@@ -139,7 +137,6 @@ class FirstRootNode(Choice):
     option_grotto_of_scriptures_entry = 8
     option_grotto_of_scriptures_east = 9
     option_grotto_of_scriptures_west = 10
-    option_sky_tower = 11
 
 
 class ShuffleGrapple(Toggle):
