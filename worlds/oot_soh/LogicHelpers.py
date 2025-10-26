@@ -484,27 +484,6 @@ def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
 
 
-def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
-                   in_water: bool = False) -> bool:
-    if distance <= EnemyDistance.SHORT_JUMPSLASH and (can_use(Items.KOKIRI_SWORD, bundle) or can_use(Items.MEGATON_HAMMER, bundle)):
-        return True
-    if distance <= EnemyDistance.MASTER_SWORD_JUMPSLASH and can_use(Items.MASTER_SWORD, bundle):
-        return True
-    if distance <= EnemyDistance.LONG_JUMPSLASH and (can_use(Items.BIGGORONS_SWORD, bundle) or can_use(Items.STICKS, bundle)):
-        return True
-    if distance <= EnemyDistance.BOMB_THROW and not in_water and can_use(Items.BOMB_BAG, bundle):
-        return True
-    if distance <= EnemyDistance.BOOMERANG and can_use(Items.BOOMERANG, bundle):
-        return True
-    if distance <= EnemyDistance.HOOKSHOT and (can_use(Items.HOOKSHOT, bundle) or can_use(Items.BOMBCHUS_5, bundle)):
-        return True
-    if distance <= EnemyDistance.LONGSHOT and can_use(Items.LONGSHOT, bundle):
-        return True
-    if distance <= EnemyDistance.FAR and (can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.FAIRY_BOW, bundle)):
-        return True
-    return False
-
-
 def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies, distance: EnemyDistance = EnemyDistance.CLOSE,
                    wall_or_floor: bool = True, quantity: int = 1, timer: bool = False, in_water: bool = False) -> bool:
     """
@@ -512,6 +491,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
     Based on the C++ Logic::CanKillEnemy implementation.
 
     Args:
+        bundle: The standard bundle of state, regions, and the world class
         enemy: Enemy type (e.g., "gold_skulltula", "keese", etc.)
         distance: Combat range - "close", "short_jumpslash", "master_sword_jumpslash",
                      "long_jumpslash", "bomb_throw", "boomerang", "hookshot", "longshot", "far"
