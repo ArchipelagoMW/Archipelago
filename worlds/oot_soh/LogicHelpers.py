@@ -350,8 +350,6 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    parent_region = bundle[1]
     world = bundle[2]
     return (world.options.starting_age == 'child' and is_child(bundle)) or (world.options.starting_age == 'adult' and is_adult(bundle))
 
@@ -374,13 +372,8 @@ def can_attack(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
 
 def can_standing_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     """Check if Link can use a shield for standing blocks."""
-    state = bundle[0]
-    parent_region = bundle[1]
-    world = bundle[2]
-    return (can_use(Items.MIRROR_SHIELD, bundle) or  # Only adult can use mirror shield
-            (is_adult(bundle) and can_use(Items.HYLIAN_SHIELD, bundle)) or
-            # Only child can use deku shield
-            can_use(Items.DEKU_SHIELD, bundle))
+    return (can_use_any([Items.MIRROR_SHIELD, Items.DEKU_SHIELD], bundle) or
+            (is_adult(bundle) and can_use(Items.HYLIAN_SHIELD, bundle)))
 
 
 def can_shield(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
