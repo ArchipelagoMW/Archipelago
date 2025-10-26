@@ -12,7 +12,10 @@ from BaseClasses import ItemClassification as IC, Region, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components, icon_paths, launch as launch_component
-from .items import ITEM_TABLE, PokeparkItem, PokeparkItemData, item_name_groups, option_to_progression
+from .items import ITEM_TABLE, PokeparkItem, PokeparkItemData, TOTAL_FRIENDSHIP_ITEMS, fast_travel_items, \
+    item_name_groups, \
+    option_to_progression, \
+    road_block_items, static_progressive_items, static_useful_items
 from .locations import LOCATION_TABLE, MultiZoneFlag, PokeparkFlag, PokeparkLocation
 from .options import PokeparkOptions, RemoveBattlePowerCompLocations, pokepark_option_groups
 from .regions import EntranceRandomizer
@@ -95,11 +98,14 @@ class PokeparkWorld(World):
         super().__init__(*args, **kwargs)
 
         self.locations: set[str] = set()
+
+        self.all_items: list[str] = list()
         self.progressive_pool: list[str] = list()
         self.useful_pool: list[str] = list()
         self.filler_pool: list[str] = list()
         self.precollected_pool: list[str] = list()
-        self.item_classification_overrides: dict[str, IC] = {}
+        self.item_classifications: dict[str, IC] = {}
+
         self.entrances: EntranceRandomizer = EntranceRandomizer(self)
 
     def _determine_locations(self) -> set[str]:
@@ -147,12 +153,12 @@ class PokeparkWorld(World):
 
         # setup locations
         self.locations = self._determine_locations()
-        for item_name, data in ITEM_TABLE.items():
-            if data.type == "Item":
-                self.progressive_pool.extend([item_name] * data.quantity)
+
+        # setup items
+        self._init_items_and_classification()
         self._update_pool_with_precollected_items()
 
-        self._determine_classification_dynamic()
+        self._determine_item_classification()
         self._distribute_item_pools()
 
         if len(self.locations) <= len(self.progressive_pool):
@@ -161,100 +167,125 @@ class PokeparkWorld(World):
                 "Consider adding more locations."
             )
 
-    def _distribute_item_pools(self):
-        filler_items = [name for name in self.progressive_pool
-                        if self.item_classification_overrides.get(name) == IC.filler]
-        useful_items = [name for name in self.progressive_pool
-                        if self.item_classification_overrides.get(name) == IC.useful]
-        progression_items = [name for name in self.progressive_pool
-                             if self.item_classification_overrides.get(name) == IC.progression]
+    def _init_items_and_classification(self):
+        """Initialize all items list and base classifications from ITEM_TABLE."""
+        for item_name, data in ITEM_TABLE.items():
+            if data.type == "Item":
+                self.all_items.extend([item_name] * data.quantity)
+                self.item_classifications[item_name] = data.classification
 
-        self.filler_pool.extend(filler_items)
-        self.useful_pool.extend(useful_items)
-        self.progressive_pool = progression_items
-
-    def _determine_classification_dynamic(self):
-        progressive_items = [
-            "Bulbasaur Prisma",
-            "Venusaur Prisma",
-            "Pelipper Prisma",
-            "Gyarados Prisma",
-            "Empoleon Prisma",
-            "Bastiodon Prisma",
-            "Rhyperior Prisma",
-            "Blaziken Prisma",
-            "Tangrowth Prisma",
-            "Dusknoir Prisma",
-            "Rotom Prisma",
-            "Absol Prisma",
-            "Salamence Prisma",
-            "Rayquaza Prisma",
-
-            "Beach Zone Fast Travel",
-            "Ice Zone Fast Travel",
-            "Cavern Zone Fast Travel",
-            "Magma Zone Fast Travel",
-            "Haunted Zone Fast Travel",
-            "Granite Zone Fast Travel",
-            "Flower Zone Fast Travel",
-
-            "Beach Bridge 1 Unlock",
-            "Beach Bridge 2 Unlock",
-            "Magma Zone Fire Wall Unlock",
-            "Haunted Zone Mansion Doors Unlock",
-            "Ice Zone Lift Unlock",
-            "Ice Zone Frozen Lake Unlock",
-
-            "Progressive Dash",
-            "Progressive Thunderbolt",
-            "Progressive Iron Tail",
-            "Progressive Health"
-        ]
-        useful_items = {
-            "Double Dash",
-            "Meadow Zone Fast Travel"
-        }
-
+    def _update_pool_with_precollected_items(self):
+        """Move items to precollected pool based on game options."""
         options = self.options
+
+        if options.power_randomizer.value == options.power_randomizer.option_dash:
+            self._precollect_item("Progressive Dash", 1)
+
+        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt:
+            self._precollect_item("Progressive Thunderbolt", 1)
+
+        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt_dash:
+            self._precollect_item("Progressive Thunderbolt", 1)
+            self._precollect_item("Progressive Dash", 1)
+
+        if options.power_randomizer.value == options.power_randomizer.option_full:
+            self._precollect_item("Progressive Thunderbolt", 4)
+            self._precollect_item("Progressive Dash", 4)
+            self._precollect_item("Progressive Iron Tail", 3)
+            self._precollect_item("Progressive Health", 3)
+            self._precollect_item("Double Dash", 1)
+
+        if options.starting_zone.value == options.starting_zone.option_one:
+            self.random.shuffle(fast_travel_items)
+            precollected_fast_travel = self.random.choice(fast_travel_items)
+            self._precollect_item(precollected_fast_travel, 1)
+
+        if options.starting_zone.value == options.starting_zone.option_all:
+            for item in fast_travel_items:
+                self._precollect_item(item, 1)
+
+        if not options.in_zone_road_blocks.value:
+            for item in road_block_items:
+                self._precollect_item(item, 1)
+
+    def _precollect_item(self, item_name: str, count: int = 1):
+        """Move item(s) from all_items to precollected_pool."""
+        for _ in range(count):
+            self.precollected_pool.append(item_name)
+            self.all_items.remove(item_name)
+
+    def _distribute_item_pools(self):
+        """Distribute all items into progression, useful, and filler pools based on their classifications."""
+        for item_name in self.all_items:
+            classification = self.item_classifications[item_name]
+
+            if classification == IC.progression:
+                self.progressive_pool.append(item_name)
+            elif classification == IC.useful:
+                self.useful_pool.append(item_name)
+            elif classification == IC.filler:
+                self.filler_pool.append(item_name)
+
+    def _determine_item_classification(self):
+        """Determine item classifications based on options"""
+        progression_items = self._get_progression_items_from_options()
+
+        removable_items = self._get_removable_items(progression_items)
+
+        overlap = progression_items & removable_items
+        assert not overlap, f"Items marked as both needed and removable: {overlap}"
+
+        for item_name in self.item_classifications:
+            if item_name in progression_items:
+                self.item_classifications[item_name] = IC.progression
+            elif item_name in removable_items:
+                self.item_classifications[item_name] = IC.useful if item_name in static_useful_items else IC.filler
+
+    def _get_progression_items_from_options(self) -> set[str]:
+        """Get all items that must be progression based on static list and options."""
+        progression_items = set(static_progressive_items)
+
         option_names = [option_name for option_name, _ in option_to_progression.keys()]
+        option_dict = self.options.as_dict(*option_names)
 
-        option_dict = options.as_dict(*option_names)
-        min_required_friendship_count = 0
-
-        for option, (min_friendship, progression_items) in option_to_progression.items():
+        for option, (min_friendship, items) in option_to_progression.items():
             option_name, expected_value = option
             if option_dict.get(option_name) == expected_value:
-                min_required_friendship_count = max(min_required_friendship_count, min_friendship)
-                progressive_items.extend(progression_items)
+                progression_items.update(items)
 
-        progressive_set = set(progressive_items)
+        return progression_items
+
+    def _get_removable_items(self, required_progression: set[str]) -> set[str]:
+        """Determine which items can be downgraded from progression to useful/filler."""
+        min_required_friendship = self._calculate_min_friendship_requirement()
+        max_removable_friendship = TOTAL_FRIENDSHIP_ITEMS - min_required_friendship
+
         friendship_removable = []
         other_removable = []
 
-        for name in self.progressive_pool:
-            if name not in progressive_set:
-                if "Friendship" in name:
-                    friendship_removable.append(name)
+        for item_name in self.item_classifications:
+            if item_name not in required_progression:
+                if "Friendship" in item_name:
+                    friendship_removable.append(item_name)
                 else:
-                    other_removable.append(name)
+                    other_removable.append(item_name)
 
-        max_removable_friendship = 193 - min_required_friendship_count
         friendship_to_remove = friendship_removable[:max_removable_friendship]
 
-        removable_items = set(friendship_to_remove + other_removable)
+        return set(friendship_to_remove + other_removable)
 
-        overlap = progressive_set & removable_items
-        assert not overlap, f"Items marked as both needed and removable: {overlap}"
+    def _calculate_min_friendship_requirement(self) -> int:
+        """Calculate minimum required friendship items based on options."""
+        option_names = [option_name for option_name, _ in option_to_progression.keys()]
+        option_dict = self.options.as_dict(*option_names)
 
-        for name, data in ITEM_TABLE.items():
-            if data.type != "Item":
-                continue
+        min_required_friendship = 0
+        for option, (min_friendship, progression_items) in option_to_progression.items():
+            option_name, expected_value = option
+            if option_dict.get(option_name) == expected_value:
+                min_required_friendship = max(min_required_friendship, min_friendship)
 
-            if name in progressive_set or name not in removable_items:
-                self.item_classification_overrides[name] = IC.progression
-            else:
-                classification = IC.useful if name in useful_items else IC.filler
-                self.item_classification_overrides[name] = classification
+        return min_required_friendship
 
     def generate_output(self, output_directory: str) -> None:
         """
@@ -281,7 +312,7 @@ class PokeparkWorld(World):
             output_entrances[zone_entrance] = zone_exit
 
         # Output the plando details to file.
-        aptww = PokeparkContainer(
+        appokepark = PokeparkContainer(
             path=os.path.join(
                 output_directory, f"{multiworld.get_out_file_name_base(player)}{PokeparkContainer.patch_file_ending}"
             ),
@@ -289,7 +320,7 @@ class PokeparkWorld(World):
             player_name=self.player_name,
             data=output_data,
         )
-        aptww.write()
+        appokepark.write()
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -325,86 +356,12 @@ class PokeparkWorld(World):
 
     def create_item(self, name: str) -> PokeparkItem:
         if name in ITEM_TABLE:
-            if self.item_classification_overrides.__contains__(name):
-                classification = self.item_classification_overrides.get(name)
+            if self.item_classifications.__contains__(name):
+                classification = self.item_classifications.get(name)
             else:
                 classification = ITEM_TABLE[name].classification
             return PokeparkItem(name, self.player, ITEM_TABLE[name], classification)
         raise KeyError(f"Invalid item name: {name}")
-
-    def _update_pool_with_precollected_items(self):
-        options = self.options
-
-        if options.power_randomizer.value == options.power_randomizer.option_dash:
-            self.precollected_pool.append("Progressive Dash")
-            self.progressive_pool.remove("Progressive Dash")
-        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt:
-            self.precollected_pool.append("Progressive Thunderbolt")
-            self.progressive_pool.remove("Progressive Thunderbolt")
-
-        if options.power_randomizer.value == options.power_randomizer.option_thunderbolt_dash:
-            self.precollected_pool.append("Progressive Thunderbolt")
-            self.progressive_pool.remove("Progressive Thunderbolt")
-            self.precollected_pool.append("Progressive Dash")
-            self.progressive_pool.remove("Progressive Dash")
-        if options.power_randomizer.value == options.power_randomizer.option_full:
-            for i in range(4):
-                self.precollected_pool.append("Progressive Thunderbolt")
-                self.progressive_pool.remove("Progressive Thunderbolt")
-                self.precollected_pool.append("Progressive Dash")
-                self.progressive_pool.remove("Progressive Dash")
-            for i in range(3):
-                self.precollected_pool.append("Progressive Iron Tail")
-                self.progressive_pool.remove("Progressive Iron Tail")
-                self.precollected_pool.append("Progressive Health")
-                self.progressive_pool.remove("Progressive Health")
-
-            self.precollected_pool.append("Double Dash")
-            self.progressive_pool.remove("Double Dash")
-
-        if options.starting_zone.value == options.starting_zone.option_one:
-            fast_travel_items = [
-                "Meadow Zone Fast Travel",
-                "Beach Zone Fast Travel",
-                "Ice Zone Fast Travel",
-                "Cavern Zone Fast Travel",
-                "Magma Zone Fast Travel",
-                "Haunted Zone Fast Travel",
-                "Granite Zone Fast Travel",
-                "Flower Zone Fast Travel",
-            ]
-            self.random.shuffle(fast_travel_items)
-            precollected_fast_travel = self.random.choice(fast_travel_items)
-            self.precollected_pool.append(precollected_fast_travel)
-            self.progressive_pool.remove(precollected_fast_travel)
-
-        if options.starting_zone.value == options.starting_zone.option_all:
-            fast_travel_items = [
-                "Meadow Zone Fast Travel",
-                "Beach Zone Fast Travel",
-                "Ice Zone Fast Travel",
-                "Cavern Zone Fast Travel",
-                "Magma Zone Fast Travel",
-                "Haunted Zone Fast Travel",
-                "Granite Zone Fast Travel",
-                "Flower Zone Fast Travel",
-            ]
-            for item in fast_travel_items:
-                self.precollected_pool.append(item)
-                self.progressive_pool.remove(item)
-
-        if not options.in_zone_road_blocks.value:
-            road_block_items = [
-                "Beach Bridge 1 Unlock",
-                "Beach Bridge 2 Unlock",
-                "Magma Zone Fire Wall Unlock",
-                "Haunted Zone Mansion Doors Unlock",
-                "Ice Zone Lift Unlock",
-                "Ice Zone Frozen Lake Unlock",
-            ]
-            for item in road_block_items:
-                self.precollected_pool.append(item)
-                self.progressive_pool.remove(item)
 
     def get_filler_item_name(self, strict: bool = True) -> str:
         if not strict and len(self.useful_pool) > 0:

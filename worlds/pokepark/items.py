@@ -1716,6 +1716,68 @@ for basename, substring in _simple_groups:
         if substring in itemname:
             item_name_groups[basename].add(itemname)
 
+TOTAL_FRIENDSHIP_ITEMS = 193
+
+static_progressive_items = [
+    "Bulbasaur Prisma",
+    "Venusaur Prisma",
+    "Pelipper Prisma",
+    "Gyarados Prisma",
+    "Empoleon Prisma",
+    "Bastiodon Prisma",
+    "Rhyperior Prisma",
+    "Blaziken Prisma",
+    "Tangrowth Prisma",
+    "Dusknoir Prisma",
+    "Rotom Prisma",
+    "Absol Prisma",
+    "Salamence Prisma",
+    "Rayquaza Prisma",
+
+    "Beach Zone Fast Travel",
+    "Ice Zone Fast Travel",
+    "Cavern Zone Fast Travel",
+    "Magma Zone Fast Travel",
+    "Haunted Zone Fast Travel",
+    "Granite Zone Fast Travel",
+    "Flower Zone Fast Travel",
+
+    "Beach Bridge 1 Unlock",
+    "Beach Bridge 2 Unlock",
+    "Magma Zone Fire Wall Unlock",
+    "Haunted Zone Mansion Doors Unlock",
+    "Ice Zone Lift Unlock",
+    "Ice Zone Frozen Lake Unlock",
+
+    "Progressive Dash",
+    "Progressive Thunderbolt",
+    "Progressive Iron Tail",
+    "Progressive Health"
+]
+static_useful_items = {
+    "Double Dash",
+    "Meadow Zone Fast Travel"
+}
+
+fast_travel_items = [
+    "Meadow Zone Fast Travel",
+    "Beach Zone Fast Travel",
+    "Ice Zone Fast Travel",
+    "Cavern Zone Fast Travel",
+    "Magma Zone Fast Travel",
+    "Haunted Zone Fast Travel",
+    "Granite Zone Fast Travel",
+    "Flower Zone Fast Travel",
+]
+road_block_items = [
+    "Beach Bridge 1 Unlock",
+    "Beach Bridge 2 Unlock",
+    "Magma Zone Fire Wall Unlock",
+    "Haunted Zone Mansion Doors Unlock",
+    "Ice Zone Lift Unlock",
+    "Ice Zone Frozen Lake Unlock",
+]
+
 option_to_progression: dict[tuple[str, int], (int, list[str])] = {
     ("remove_power_training_locations", 0): (0, [
         "Golem Unlock"
