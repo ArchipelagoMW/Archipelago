@@ -263,10 +263,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Leafeon Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
-            "Friendship Items",
-            player
-        ) >= 20
+        lambda state: can_play_catch_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 20)
     )
     set_rule_if_exists(
         "Meadow Zone Main Area - Torterra Power Competition -- Friendship",
@@ -551,7 +549,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Vaporeon Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player, options) and state.count_group("Friendship Items", player) >= 30
+        lambda state: can_play_catch(state, player, options) and has_friendship_count(state, player, 30)
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Golduck Power Competition -- Friendship",
@@ -819,7 +817,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Glaceon Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player, options) and state.count_group("Friendship Items", player) >= 50
+        lambda state: can_play_catch(state, player, options) and
+                      has_friendship_count(state, player, 50)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Prinplup Power Competition -- Friendship",
@@ -1142,10 +1141,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Cavern Zone Main Area - Bastiodon -- Friendship",
-        lambda state: state.has("Bastiodon Prisma", player) and state.count_group(
-            "Friendship Items",
-            player
-        ) >= 50
+        lambda state: state.has("Bastiodon Prisma", player) and
+                      has_friendship_count(state, player, 50)
     )
     # Bastiodon's Panel Crush
 
@@ -1261,9 +1258,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Flareon Power Competition -- Friendship",
-        lambda state: can_battle_intermediate(state, player, options) and state.count_group(
-            "Friendship Items", player
-        ) >= 60
+        lambda state: can_battle_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 60)
     )
     set_rule_if_exists(
         "Magma Zone Circle Area - Infernape Power Competition -- Friendship",
@@ -1667,15 +1663,13 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Umbreon Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
-            "Friendship Items", player
-            ) >= 75
+        lambda state: can_play_catch_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 75)
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Umbreon Power Competition -- Espeon Unlocked",
-        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
-            "Friendship Items", player
-            ) >= 75
+        lambda state: can_play_catch_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 75)
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Espeon Power Competition -- Friendship",
@@ -1753,7 +1747,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Gengar Painting -- Gengar Unlocked",
-        lambda state: state.count_group("Friendship Items", player) >= 85
+        lambda state: has_friendship_count(state, player, 85)
     )
     set_rule_if_exists(
         "Haunted Zone Mansion Area - Voltorb Vase -- Voltorb Unlocked",
@@ -1957,12 +1951,9 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Jolteon Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
-            "Friendship Items",
-            player
-        ) >= 90 and state.has(
-            "Jolteon Unlock", player
-        )
+        lambda state: can_play_catch_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 90) and
+                      state.has("Jolteon Unlock", player)
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Skorupi Power Competition -- Friendship",
@@ -2019,10 +2010,8 @@ def set_rules(world: "PokeparkWorld") -> None:
 
     set_rule_if_exists(
         "Granite Zone Salamence Area - Salamence -- Friendship",
-        lambda state: state.has("Salamence Prisma", player) and state.count_group(
-            "Friendship Items",
-            player
-        ) >= 80
+        lambda state: state.has("Salamence Prisma", player) and
+                      has_friendship_count(state, player, 80)
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Absol -- Friendship",
@@ -2195,10 +2184,8 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Flower Zone Main Area - Lucario Power Competition -- Friendship",
-        lambda state: can_play_catch_intermediate(state, player, options) and state.count_group(
-            "Friendship Items",
-            player
-        ) >= 100
+        lambda state: can_play_catch_intermediate(state, player, options) and
+                      has_friendship_count(state, player, 100)
     )
     set_rule_if_exists(
         "Flower Zone Main Area - Dragonite Power Competition -- Friendship",
@@ -2326,18 +2313,21 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Skygarden - Prisma Completion -- Stage 1",
-        lambda state: state.count_group("Friendship Items", player) >= 100
+        lambda state: has_friendship_count(state, player, 100)
     )
     set_rule_if_exists(
         "Skygarden - Prisma Completion -- Stage 2",
-        lambda state: state.count_group("Friendship Items", player) >= 150
+        lambda state: has_friendship_count(state, player, 150)
     )
     set_rule_if_exists(
         "Skygarden - Prisma Completion -- Completed",
-        lambda state: state.count_group("Friendship Items", player) >= 193
+        lambda state: has_friendship_count(state, player, 193)
     )
     world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
+
+def has_friendship_count(state: CollectionState, player: int, count: int):
+    return state.count_group("Friendship Items", player) >= count
 
 def can_beat_all_rayquaza_balloon_panic_records(state: CollectionState, player: int):
     return (
@@ -3114,3 +3104,282 @@ def can_beat_mew(state: CollectionState, player: int, options: "PokeparkOptions"
             can_clear_mew_power_competition_stage3(state, player, options) and
             can_clear_mew_power_competition_stage4(state, player, options) and
             maximized_dash(state, player))
+
+
+def get_entrance_rules_dict(player: int, options: "PokeparkOptions"):
+    entrance_rules: dict[str, Callable[[CollectionState], bool]] = {
+        "Treehouse Meadow Zone Gate": lambda state: True,
+        "Treehouse Drifblim Fast Travel Meadow Zone": lambda state: state.has(
+            "Meadow Zone Fast Travel",
+            player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": lambda state: True,
+        "Meadow Zone Main Area - Venusaur's Gate": lambda state: state.has("Bulbasaur Prisma", player),
+        "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": lambda state: True,
+
+        "Treehouse Beach Zone Gate": lambda state: state.has("Venusaur Prisma", player),
+        "Treehouse Drifblim Fast Travel Beach Zone": lambda state: state.has(
+            "Beach Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": lambda state: True,
+        "Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction": lambda state: True,
+        "Beach Zone Bridge 2": lambda state: state.has("Beach Bridge 2 Unlock", player),
+        "Beach Zone Middle Isle Bridge 2": lambda state: state.has("Beach Bridge 2 Unlock", player),
+        "Beach Zone Bridge 1": lambda state: state.has("Beach Bridge 1 Unlock", player) or state.has(
+            "Beach "
+            "Bridge 2 "
+            "Unlock", player
+        ),
+
+        "Beach Zone Main Area Lapras Travel": lambda state: state.has("Gyarados Prisma", player),
+        "Treehouse Drifblim Fast Travel Ice Zone": lambda state: state.has(
+            "Ice Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Ice Zone Main Area Lift": lambda state: state.has("Ice Zone Lift Unlock", player),
+        "Ice Zone Frozen Lake": lambda state: state.has("Ice Zone Frozen Lake Unlock", player),
+        "Ice Zone Main Area Empoleon Gate": lambda state: state.has("Gyarados Prisma", player),
+        "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": lambda state: True,
+
+        "Treehouse Cavern Zone Gate": lambda state: state.has("Empoleon Prisma", player),
+        "Treehouse Drifblim Fast Travel Cavern Zone": lambda state: state.has(
+            "Cavern Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": lambda state: has_friendship_count(
+            state,
+            player, 50
+        ),
+
+        "Cavern Zone Magma Zone Gate": lambda state: state.has("Bastiodon Prisma", player),
+        "Treehouse Drifblim Fast Travel Magma Zone": lambda state: state.has(
+            "Magma Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction": lambda state: True,
+        "Magma Zone Blaziken Gate": lambda state: state.has("Rhyperior Prisma", player),
+        "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction": lambda state: True,
+        "Magma Zone Fire Wall": lambda state: state.has("Magma Zone Fire Wall Unlock", player),
+
+        "Treehouse Haunted Zone Gate": lambda state: state.has("Blaziken Prisma", player),
+        "Treehouse Drifblim Fast Travel Haunted Zone": lambda state: state.has(
+            "Haunted Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Haunted Zone Main Area - Tangrowth's Swing-Along Attraction": lambda state: True,
+        "Haunted Zone Mansion Entrance": lambda state: state.has("Tangrowth Prisma", player),
+        "Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction": lambda state: state.has(
+            "Dusknoir Unlock", player
+        ),
+        "Haunted Zone Mansion White Gem Door": lambda state: state.has("Haunted Zone Mansion Doors Unlock", player),
+        "Haunted Zone Mansion Red Gem Door": lambda state: state.has("Haunted Zone Mansion Doors Unlock", player),
+        "Haunted Zone Mansion Blue Gem Door": lambda state: state.has("Haunted Zone Mansion Doors Unlock", player),
+        "Haunted Zone Mansion Green Gem Door": lambda state: state.has("Haunted Zone Mansion Doors Unlock", player),
+        "Haunted Zone Mansion Rotom's Hidden Entrance": lambda state: state.has("Dusknoir Prisma", player),
+        "Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction": lambda state: has_friendship_count(
+            state,
+            player, 65
+        ),
+
+        "Treehouse Granite Zone Gate": lambda state: state.has("Rotom Prisma", player),
+        "Treehouse Drifblim Fast Travel Granite Zone": lambda state: state.has(
+            "Granite Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": lambda state: True,
+        "Granite Zone Flygon Door": lambda state: state.has("Absol Prisma", player),
+        "Granite Zone Salamence Area - Salamence's Sky Race Attraction": lambda state: has_friendship_count(
+            state,
+            player, 80
+            ),
+
+        "Granite Zone Flower Zone Entrance": lambda state: True,
+        "Treehouse Drifblim Fast Travel Flower Zone": lambda state: state.has(
+            "Flower Zone Fast Travel", player
+        ) and can_farm_berries(
+            state,
+            player
+        ),
+        "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction": lambda state: state.has(
+            "Rayquaza Unlock", player
+        ),
+
+        "Treehouse Piplup Air Balloon": lambda state: state.count_group("Prisma Items", player) >=
+                                                      options.num_required_prisma_count_skygarden.value,
+        #
+        #
+        #
+        "Treehouse Abra": lambda state: True,
+        "Haunted Zone Abra": lambda state: True,
+
+        "Meadow Zone Spearow": lambda state: True,
+        "Beach Zone Spearow": lambda state: True,
+
+        "Meadow Zone Starly": lambda state: state.has("Starly Unlock", player) or state.has(
+            "Starly 2 Unlock", player
+        ),
+        "Beach Zone Starly": lambda state: True,
+        "Ice Zone Starly": lambda state: True,
+
+        "Meadow Zone Bonsly": lambda state: state.has("Bonsly Unlock", player),
+        "Meadow Zone Bonsly Unlocks": lambda state: state.has("Bonsly Unlock", player),
+        "Cavern Zone Bonsly": lambda state: True,
+        "Cavern Zone Bonsly Unlocks": lambda state: True,
+        "Magma Zone Bonsly": lambda state: True,
+
+        "Meadow Zone Chimchar": lambda state: state.has("Chimchar Unlock", player) and can_battle(
+            state, player,
+            options
+        ),
+        "Cavern Zone Chimchar": lambda state: can_battle_intermediate(
+            state, player,
+            options
+        ),
+        "Magma Zone Chimchar": lambda state: can_battle_intermediate(
+            state, player,
+            options
+        ),
+
+        "Meadow Zone Sudowoodo": lambda state: state.has("Sudowoodo Unlock", player),
+        "Cavern Zone Sudowoodo": lambda state: state.has("Sudowoodo Unlock", player),
+
+        "Meadow Zone Aipom": lambda state: can_play_catch(state, player, options),
+        "Meadow Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
+        "Haunted Zone Aipom": lambda state: can_play_catch(state, player, options),
+        "Haunted Zone Aipom Unlocks": lambda state: can_play_catch(state, player, options),
+
+        "Haunted Zone Main Area Riolu": lambda state: True,
+        "Haunted Zone Mansion Area Riolu": lambda state: True,
+
+        "Haunted Zone Main Area Drifloon": lambda state: True,
+        "Haunted Zone Ballroom Area Drifloon": lambda state: True,
+
+        "Meadow Zone Ambipom": lambda state: state.has("Ambipom Unlock", player) and can_battle(
+            state,
+            player,
+            options
+        ),
+        "Haunted Zone Ambipom": lambda state: state.has("Ambipom Unlock", player) and can_battle_intermediate(
+            state,
+            player,
+            options
+        ),
+
+        "Beach Zone Krabby": lambda state: state.has("Krabby Unlock", player) and can_play_catch(
+            state, player, options
+        ),
+        "Ice Zone Krabby": lambda state: state.has("Krabby Unlock", player) and can_play_catch(
+            state, player, options
+        ),
+
+        "Beach Zone Mudkip": lambda state: state.has("Mudkip Unlock", player),
+        "Ice Zone Mudkip": lambda state: state.has("Mudkip Unlock", player),
+
+        "Beach Zone Taillow": lambda state: can_play_catch(
+            state, player, options
+        ),
+        "Ice Zone Taillow": lambda state: can_play_catch(
+            state, player, options
+        ),
+        "Granite Zone Taillow": lambda state: can_play_catch(
+            state, player, options
+        ),
+
+        "Beach Zone Staravia": lambda state: can_battle(state, player, options),
+        "Ice Zone Staravia": lambda state: can_battle(state, player, options),
+
+        "Beach Zone Wingull": lambda state: can_play_catch(state, player, options),
+        "Ice Zone Wingull": lambda state: can_play_catch(state, player, options),
+
+        "Beach Zone Corphish": lambda state: state.has("Corphish Unlock", player) and can_battle(
+            state, player, options
+        ),
+        "Ice Zone Corphish": lambda state: state.has("Corphish Unlock", player) and can_battle(
+            state, player, options
+        ),
+
+        "Ice Zone Teddiursa": lambda state: can_play_catch(state, player, options),
+        "Cavern Zone Teddiursa": lambda state: True,
+        "Flower Zone Teddiursa": lambda state: True,
+
+        "Cavern Zone Aron": lambda state: can_destroy_objects_overworld(state, player),
+        "Magma Zone Aron": lambda state: can_dash_overworld(state, player),
+
+        "Cavern Zone Torchic": lambda state: can_battle_intermediate(state, player, options),
+        "Magma Zone Torchic": lambda state: can_battle_intermediate(state, player, options),
+
+        "Cavern Zone Geodude": lambda state: True,
+        "Magma Zone Geodude": lambda state: True,
+
+        "Cavern Zone Raichu": lambda state: state.has("Raichu Unlock", player) and can_play_catch_intermediate(
+            state,
+            player, options
+        ),
+        "Haunted Zone Raichu": lambda state: can_play_catch_intermediate(
+            state,
+            player, options
+        ),
+
+        "Cavern Zone Meowth": lambda state: True,
+        "Haunted Zone Meowth": lambda state: True,
+
+        "Cavern Zone Marowak": lambda state: can_battle_intermediate(state, player, options),
+        "Granite Zone Marowak": lambda state: can_battle_intermediate(state, player, options),
+
+        "Magma Zone Baltoy": lambda state: state.has(
+            "Baltoy Unlock", player
+        ) and can_battle_thunderbolt_immune_intermediate(
+            state, player, options
+        ),
+        "Magma Zone Baltoy Unlocks": lambda state: state.has(
+            "Baltoy Unlock", player
+        ) and can_battle_thunderbolt_immune_intermediate(
+            state, player, options
+        ),
+        "Granite Zone Baltoy": lambda state: state.has(
+            "Baltoy Unlock", player
+        ) and can_battle_thunderbolt_immune_advanced(
+            state, player, options
+        ),
+        "Granite Zone Baltoy Unlocks": lambda state: state.has(
+            "Baltoy Unlock", player
+        ) and can_battle_thunderbolt_immune_advanced(
+            state, player, options
+        ),
+
+        "Magma Zone Claydol": lambda state: state.has(
+            "Claydol Unlock", player
+        ) and can_battle_thunderbolt_immune_intermediate(
+            state, player, options
+        ),
+        "Granite Zone Claydol": lambda state: state.has(
+            "Claydol Unlock", player
+        ) and can_battle_thunderbolt_immune_advanced(
+            state, player, options
+        ),
+        "Magma Zone Meditite": lambda state: True,
+        "Flower Zone Meditite": lambda state: True,
+
+        "Haunted Zone Drifloon": lambda state: state.has("Rotom Prisma", player),
+        "Granite Zone Drifloon": lambda state: True,
+
+        "Granite Zone Furret": lambda state: True,
+        "Flower Zone Furret": lambda state: True,
+    }
+    return entrance_rules
