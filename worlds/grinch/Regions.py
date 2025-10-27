@@ -13,7 +13,7 @@ mainareas_list = [
     "Whoville",
     "Who Forest",
     "Who Dump",
-    "Who Lake"
+    "Who Lake",
 ]
 
 subareas_list = [
@@ -29,29 +29,35 @@ subareas_list = [
     "Scout's Hut",
     "North Shore",
     "Mayor's Villa",
-    "Sleigh Room"
+    "Sleigh Room",
 ]
 
 supadow_list = [
     "Spin N' Win Supadow",
     "Dankamania Supadow",
     "The Copter Race Contest Supadow",
-    "Bike Race"
+    "Bike Race",
 ]
+
 
 def create_regions(world: "GrinchWorld"):
     for mainarea in mainareas_list:
-        #Each area in mainarea, create a region for the given player
-        world.multiworld.regions.append(Region(mainarea, world.player, world.multiworld))
+        # Each area in mainarea, create a region for the given player
+        world.multiworld.regions.append(
+            Region(mainarea, world.player, world.multiworld)
+        )
     for subarea in subareas_list:
-        #Each area in subarea, create a region for the given player
+        # Each area in subarea, create a region for the given player
         world.multiworld.regions.append(Region(subarea, world.player, world.multiworld))
     for supadow in supadow_list:
-        #Each area in supadow, create a region for the given player
+        # Each area in supadow, create a region for the given player
         world.multiworld.regions.append(Region(supadow, world.player, world.multiworld))
 
+
 # TODO Optimize this function
-def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_region_name: str):
+def grinchconnect(
+    world: "GrinchWorld", current_region_name: str, connected_region_name: str
+):
     current_region = world.get_region(current_region_name)
     connected_region = world.get_region(connected_region_name)
     required_items: list[list[str]] = access_rules_dict[connected_region.name]
@@ -62,21 +68,26 @@ def grinchconnect(world: "GrinchWorld", current_region_name: str, connected_regi
     connected_region.connect(current_region)
     for access_rule in rule_list:
         for region_entrance in current_region.entrances:
-            if region_entrance.connected_region.name == current_region_name and \
-                region_entrance.parent_region.name == connected_region_name:
+            if (
+                region_entrance.connected_region.name == current_region_name
+                and region_entrance.parent_region.name == connected_region_name
+            ):
                 if rule_list.index(access_rule) == 0:
                     add_rule(region_entrance, access_rule)
                 else:
                     add_rule(region_entrance, access_rule, combine="or")
         for region_entrance in connected_region.entrances:
-            if region_entrance.connected_region.name == connected_region_name and \
-                    region_entrance.parent_region.name == current_region_name:
+            if (
+                region_entrance.connected_region.name == connected_region_name
+                and region_entrance.parent_region.name == current_region_name
+            ):
                 if rule_list.index(access_rule) == 0:
                     add_rule(region_entrance, access_rule)
                 else:
                     add_rule(region_entrance, access_rule, combine="or")
 
-#What regions are connected to each other
+
+# What regions are connected to each other
 def connect_regions(world: "GrinchWorld"):
     grinchconnect(world, "Mount Crumpit", "Whoville")
     grinchconnect(world, "Mount Crumpit", "Who Forest")

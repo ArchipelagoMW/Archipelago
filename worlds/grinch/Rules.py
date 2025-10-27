@@ -4,9 +4,10 @@ import Utils
 from BaseClasses import CollectionState
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
-from .Items import *
+from .Items import grinch_items
 
-#Adds all rules from access_rules_dict to locations
+
+# Adds all rules from access_rules_dict to locations
 def set_location_rules(world: World):
     all_locations = world.get_locations()
     for location in all_locations:
@@ -18,6 +19,7 @@ def set_location_rules(world: World):
             else:
                 add_rule(location, access_rule, "or")
 
+
 def interpret_rule(rule_set: list[list[str]], player: int):
     # If a region/location does not have any items required, make the section(s) return no logic.
     if len(rule_set) < 1:
@@ -27,344 +29,727 @@ def interpret_rule(rule_set: list[list[str]], player: int):
 
     access_list: list[Callable[[CollectionState], bool]] = []
     for item_set in rule_set:
-        access_list.append(lambda state, items=tuple(item_set): state.has_all(items, player))
+        access_list.append(
+            lambda state, items=tuple(item_set): state.has_all(items, player)
+        )
     return access_list
 
-    #Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
-rules_dict: dict[str,list[list[str]]] = {
-    "WV - First Visit": [
-        []
+    # Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
+
+
+access_rules_dict: dict[str, list[list[str]]] = {
+    "Whoville": [
+        [
+            grinch_items.keys.WHOVILLE,
+        ]
     ],
-    "WV - Post Office - First Visit": [
-        []
+    "Post Office": [
+        [
+            grinch_items.level_items.WV_WHO_CLOAK,
+        ]
     ],
-    "WV - City Hall - First Visit": [
-        []
+    "City Hall": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
     ],
-    "WV - Clock Tower - First Visit": [
-        []
+    "Clock Tower": [[]],
+    "Who Forest": [
+        [
+            grinch_items.keys.WHO_FOREST,
+        ],
     ],
-    "WF - First Visit": [
-        []
+    "Ski Resort": [
+        [
+            grinch_items.level_items.WF_CABLE_CAR_ACCESS_CARD,
+        ]
     ],
-    "WF - Ski Resort - First Visit": [
-        []
+    "Civic Center": [
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+        ],
     ],
-    "WF - Civic Center - First Visit": [
-        []
+    "Who Dump": [
+        [
+            grinch_items.keys.WHO_DUMP,
+        ],
     ],
-    "WD - First Visit": [
-        []
+    "Minefield": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
-    "WD - Minefield - First Visit": [
-        []
+    "Power Plant": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
-    "WD - Power Plant - First Visit": [
-        []
+    "Generator Building": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
-    "WD - Generator Building - First Visit": [
-        []
+    "Who Lake": [
+        [
+            grinch_items.keys.WHO_LAKE,
+        ],
     ],
-    "WL - South Shore - First Visit": [
-        []
+    "Scout's Hut": [
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
-    "WL - Submarine World - First Visit": [
-        []
+    "North Shore": [
+        [
+            grinch_items.level_items.WL_SCOUT_CLOTHESL,
+        ]
     ],
-    "WL - Scout's Hut - First Visit": [
-        []
+    "Mayor's Villa": [
+        [
+            grinch_items.level_items.WL_SCOUT_CLOTHESL,
+        ]
     ],
-    "WL - North Shore - First Visit": [
-        []
+    "Submarine World": [
+        [
+            grinch_items.gadgets.MARINE_MOBILE,
+        ]
     ],
-    "WL - Mayor's Villa - First Visit": [
-        []
+    "Sleigh Room": [
+        [
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
     ],
-    "WV - Post Office - Shuffling The Mail": [
-        []
-    ],
-    "WV - Smashing Snowmen": [
-        []
-        # "move_rando"
-        # [PC]
-    ],
+    "Spin N' Win": [[]],
+    "Dankamania": [],
+    "The Copter Race Contest": [[]],
+    "Bike Race": [[]],
+}
+
+
+rules_dict: dict[str, list[list[str]]] = {
+    # Rules applied to regions first via the access_list, so "First Visit" checks should ALWAYS be empty
+    # First Visit Checks (ALWAYS empty)
+    "WV - First Visit": [[]],
+    "WV - Post Office - First Visit": [[]],
+    "WV - City Hall - First Visit": [[]],
+    "WV - Clock Tower - First Visit": [[]],
+    "WF - First Visit": [[]],
+    "WF - Ski Resort - First Visit": [[]],
+    "WF - Civic Center - First Visit": [[]],
+    "WD - First Visit": [[]],
+    "WD - Minefield - First Visit": [[]],
+    "WD - Power Plant - First Visit": [[]],
+    "WD - Generator Building - First Visit": [[]],
+    "WL - South Shore - First Visit": [[]],
+    "WL - Submarine World - First Visit": [[]],
+    "WL - Scout's Hut - First Visit": [[]],
+    "WL - North Shore - First Visit": [[]],
+    "WL - Mayor's Villa - First Visit": [[]],
+    # Whoville Missions
+    "WV - Post Office - Shuffling The Mail": [[]],
+    "WV - Smashing Snowmen": [[]],
     "WV - Painting The Mayor's Posters": [
-        [PB]
+        [
+            grinch_items.level_items.WV_PAINT_BUCKET,
+        ]
     ],
     "WV - Launching Eggs Into Houses": [
-        [REL]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
     ],
     "WV - City Hall - Modifying The Mayor's Statue": [
-        [ST]
-        # "move_rando"
-        # [ST, SN],
-        # [ST, SS]
+        [
+            grinch_items.level_items.WV_SCULPTING_TOOLS,
+        ]
     ],
     "WV - Clock Tower - Advancing The Countdown-To-Xmas Clock": [
-        [HMR, RS]
+        [
+            grinch_items.level_items.WV_HAMMER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ]
     ],
     "WV - Squashing All Gifts": [
-        [GC, SS, REL, WC, RS]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.level_items.WV_WHO_CLOAK,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ]
     ],
+    # Who Forest Missions
     "WF - Making Xmas Trees Droop": [
-        [REL]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
         # "move_rando"
-        # [REL, BB]
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, BB]
     ],
     "WF - Sabotaging Snow Cannon With Glue": [
-        [GB, RS],
-        [GB, GC]
+        [
+            grinch_items.level_items.WF_GLUE_BUCKET,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.level_items.WF_GLUE_BUCKET,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - Putting Beehives In Cabins": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - Ski Resort - Sliming The Mayor's Skis": [
-        [SS, REL]
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
     ],
     "WF - Civic Center - Replacing The Candles On The Cake With Fireworks": [
-        [REL, GC],
-        [REL, OCD, RS]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
         # "move_rando"
-        # [REL, GC],
-        # [REL, OCD, RS, SN],
-        # [REL, OCD, RS, SS]
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.GRINCH_COPTER],
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE, grinch_items.gadgets.ROCKET_SPRING, SN],
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE, grinch_items.gadgets.ROCKET_SPRING, grinch_items.gadgets.SLIME_SHOOTER]
     ],
     "WF - Squashing All Gifts": [
-        [GC, CCAC, SS, REL],
-        [OCD, RS, CCAC, SS, REL]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+            grinch_items.level_items.WF_CABLE_CAR_ACCESS_CARD,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ],
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.level_items.WF_CABLE_CAR_ACCESS_CARD,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ],
     ],
+    # Who Dump Missions
     "WD - Stealing Food From Birds": [
-        [RS, REL]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
         # "move_rando"
-        # [RS, REL, PC]
+        # [grinch_items.gadgets.ROCKET_SPRING, grinch_items.gadgets.ROCKET_EGG_LAUNCHER, PC]
     ],
     "WD - Feeding The Computer With Robot Parts": [
-        [RS, REL]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
         # "move_rando"
-        # [RS, REL, PC]
+        # [grinch_items.gadgets.ROCKET_SPRING, grinch_items.gadgets.ROCKET_EGG_LAUNCHER, PC]
     ],
     "WD - Infesting The Mayor's House With Rats": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
         # "move_rando"
-        # [REL, RS, PC],
-        # [REL, GC, PC]
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.ROCKET_SPRING, PC],
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.GRINCH_COPTER, PC]
     ],
     "WD - Conducting The Stinky Gas To Who-Bris' Shack": [
-        [RS, REL]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ]
         # "move_rando"
-        # [RS, REL, PC]
+        # [grinch_items.gadgets.ROCKET_SPRING, grinch_items.gadgets.ROCKET_EGG_LAUNCHER, PC]
     ],
     "WD - Minefield - Shaving Who Dump Guardian": [
-        [SC, GC],
-        [SC, SS, RS]
+        [
+            grinch_items.level_items.WL_SCOUT_CLOTHES,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.level_items.WL_SCOUT_CLOTHES,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
         # "move_rando"
-        # [SC, GC, SN],
-        # [SC, SS, RS, SN]
+        # [grinch_items.level_items.WL_SCOUT_CLOTHES, grinch_items.gadgets.GRINCH_COPTER, SN],
+        # [grinch_items.level_items.WL_SCOUT_CLOTHES, grinch_items.gadgets.SLIME_SHOOTER, grinch_items.gadgets.ROCKET_SPRING, SN]
     ],
     "WD - Generator Building - Short-Circuiting Power-Plant": [
-        [REL, GC],
-        [REL, OCD, SS, RS]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
     "WD - Squashing All Gifts": [
-        [GC, RS, SS, REL],
-        [OCD, RS, SS, REL]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ],
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ],
     ],
+    # Who Lake Missions
     "WL - South Shore - Putting Thistles In Shorts": [
-        [REL, OCD],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WL - South Shore - Sabotaging The Tents": [
-        [OCD, RS],
-        [GC]
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [grinch_items.gadgets.GRINCH_COPTER],
     ],
     "WL - North Shore - Drilling Holes In Canoes": [
-        [DRL]
+        [
+            grinch_items.level_items.WL_DRILL,
+        ]
     ],
-    "WL - Submarine World - Modifying The Marine Mobile": [
-        []
-    ],
+    "WL - Submarine World - Modifying The Marine Mobile": [[]],
     "WL - Mayor's Villa - Hooking The Mayor's Bed To The Motorboat": [
-        [RP, HK, REL, SCL]
+        [
+            grinch_items.level_items.WL_ROPE,
+            grinch_items.level_items.WL_HOOK,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.level_items.WL_SCOUT_CLOTHES,
+        ]
     ],
     "WL - Squashing All Gifts": [
-        [GC, MM, SCL, REL, HK, RP],
-        [OCD, RS, MM, SCL, REL, HK, RP]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+            grinch_items.gadgets.MARINE_MOBILE,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.level_items.WL_SCOUT_CLOTHES,
+            grinch_items.level_items.WL_HOOK,
+            grinch_items.level_items.WL_ROPE,
+        ],
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.MARINE_MOBILE,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.level_items.WL_SCOUT_CLOTHES,
+            grinch_items.level_items.WL_HOOK,
+            grinch_items.level_items.WL_ROPE,
+        ],
     ],
-    "WV - Binoculars BP on Post Office Roof": [
+    # Whoville Blueprints
+    "WV - Binoculars BP on Post Office Roof": [[]],
+    "WV - City Hall - Binoculars BP left side of Library": [[]],
+    "WV - City Hall - Binoculars BP front side of Library": [[]],
+    "WV - City Hall - Binoculars BP right side of Library": [[]],
+    "WV - TEL BP left of City Hall": [[]],
+    "WV - REL BP left of Clock Tower": [[]],
+    "WV - Post Office - REL BP inside Silver Room": [[]],
+    "WV - Post Office - REL BP at Entrance Door after Migrinch_items.gadgets.SLIME_SHOOTERion Completion": [
         []
     ],
-    "WV - City Hall - Binoculars BP left side of Library": [
-        []
-    ],
-    "WV - City Hall - Binoculars BP front side of Library": [
-        []
-    ],
-    "WV - City Hall - Binoculars BP right side of Library": [
-        []
-    ],
-    "WV - REL BP left of City Hall": [
-        []
-    ],
-    "WV - REL BP left of Clock Tower": [
-        []
-    ],
-    "WV - Post Office - REL BP inside Silver Room": [
-        [WC]
+    "WV - City Hall - GC BP in Safe Room": [[]],
+    "WV - City Hall - GC BP in Statue Room": [[]],
+    "WV - Clock Tower - GC BP in Bedroom": [
+        [grinch_items.gadgets.ROCKET_SPRING]
         # "move_rando"
-        # [WC, MX]
+        #   [MX, grinch_items.gadgets.ROCKET_SPRING]
     ],
-    "WV - Post Office - REL BP at Entrance Door after Mission Completion": [
-        [WC]
-        # "move_rando"
-        # [WC, MX]
+    "WV - Clock Tower - GC BP in Bell Room": [
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+        ]
     ],
-    "WF - RS BP behind Vacuum Tube": [
-        []
-    ],
-    "WF - RS BP in front of 2nd House near Vacuum Tube": [
-        []
-    ],
-    "WF - RS BP near Tree House on Ground": [
-        []
-    ],
-    "WF - RS BP behind Cable Car House": [
-        []
-    ],
-    "WF - RS BP near Who Snowball in Cave": [
-        []
-    ],
-    "WF - RS BP on Branch Platform closest to Glue Cannon": [
-        []
-    ],
-    "WF - RS BP on Branch Platform Near Beast": [
-        []
-    ],
-    "WF - RS BP on Branch Platform Elevated next to House": [
-        []
-    ],
+    # Who Forest Blueprints
+    "WF - RS BP behind Vacuum Tube": [[]],
+    "WF - RS BP in front of 2nd House near Vacuum Tube": [[]],
+    "WF - RS BP near Tree House on Ground": [[]],
+    "WF - RS BP behind Cable Car House": [[]],
+    "WF - RS BP near Who Snowball in Cave": [[]],
+    "WF - RS BP on Branch Platform closest to Glue Cannon": [[]],
+    "WF - RS BP on Branch Platform Near Beast": [[]],
+    "WF - RS BP on Branch Platform Elevated next to House": [[]],
     "WF - RS BP on Tree House": [
-        [REL],
-        [GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in Branch Platform Elevated House": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in Branch Platform House next to Beast": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in House in front of Civic Center Cave": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in House next to Tree House": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
-    "WF - SS BP in House across from Tree House": [
-        [REL, RS],
-        [REL, GC]
+    "WF - SS BP in House acrogrinch_items.gadgets.SLIME_SHOOTER from Tree House": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in 2nd House near Vacuum Tube Right Side": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in 2nd House near Vacuum Tube Left Side": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in 2nd House near Vacuum Tube inbetween Blueprints": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WF - SS BP in House near Vacuum Tube": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
+    "WF - Ski Resort - GC BP inside Dog's Fence": [[]],
+    "WF - Ski Resort - GC BP in Max Cave": [
+        []
+        # "move_rando"
+        # [MX]
+    ],
+    "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+    ],
+    "WF - Civic Center - GC BP in Frozen Ice": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+    ],
+    # Who Dump Blueprints
     "WD - OCD BP inside Middle Pipe": [
-        [REL, RS],
-        [REL, GC],
-        [SS, RS],
-        [SS, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WD - OCD BP inside Right Pipe": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WD - OCD BP in Vent to Mayor's House": [
-        [REL, RS],
-        [REL, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WD - OCD BP inside Left Pipe": [
-        [REL, RS],
-        [REL, GC],
-        [SS, RS],
-        [SS, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WD - OCD BP near Right Side of Power Plant Wall": [
-        [REL, RS],
-        [REL, GC],
-        [SS, RS],
-        [SS, GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WD - OCD BP near Who-Bris' Shack": [
-        [REL, RS]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ]
     ],
     "WD - Minefield - OCD BP on Left Side of House": [
         []
         # "move_rando"
-        # [REL, GC],
-        # [REL, SS, RS]
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.GRINCH_COPTER],
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.SLIME_SHOOTER, grinch_items.gadgets.ROCKET_SPRING]
         # [MX]
     ],
     "WD - Minefield - OCD BP on Right Side of Shack": [
-        [GC],
-        [SS, RS]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
     "WD - Minefield - OCD BP inside Guardian's House": [
         []
         # "move_rando"
-        # [REL, GC],
-        # [REL, SS, RS]
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.GRINCH_COPTER],
+        # [grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.SLIME_SHOOTER, grinch_items.gadgets.ROCKET_SPRING]
         # [MX]
     ],
-    "WL - South Shore - MM BP on Bridge to Scout's Hut": [
+    "WD - Power Plant - GC BP in Max Cave": [
         []
+        # "move_rando"
+        # [MX]
     ],
-    "WL - South Shore - MM BP across from Tent near Porcupine": [
-        []
+    "WD - Power Plant - GC BP After First Gate": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        # "move_rando"
+        #   [MX, grinch_items.gadgets.ROCKET_EGG_LAUNCHER, grinch_items.gadgets.ROCKET_SPRING]
     ],
-    "WL - South Shore - MM BP near Outhouse": [
-        []
+    "WD - Generator Building - GC BP on the Highest Platform": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
-    "WL - South Shore - MM BP near Hill Bridge": [
-        []
+    "WD - Generator Building - GC BP at the Entrance after Migrinch_items.gadgets.SLIME_SHOOTERion Completion": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
+    # Who Lake Blueprints
+    "WL - South Shore - MM BP on Bridge to Scout's Hut": [[]],
+    "WL - South Shore - MM BP across from Tent near Porcupine": [[]],
+    "WL - South Shore - MM BP near Outhouse": [[]],
+    "WL - South Shore - MM BP near Hill Bridge": [[]],
     "WL - South Shore - MM BP on Scout's Hut Roof": [
-        [RS],
-        [GC]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WL - South Shore - MM BP on Grass Platform": [
-        [RS],
-        [GC]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WL - South Shore - MM BP across Zipline Platform": [
-        [RS, OCD],
-        [GC]
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
     "WL - South Shore - MM BP behind Summer Beast": [
-        [REL, OCD],
-        [GC]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.OCTOPUS_CLIMBING_DEVICE,
+        ],
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
     ],
-    "WL - North Shore - MM BP below Bridge": [
-        []
-    ],
-    "WL - North Shore - MM BP behind Skunk Hut": [
-        []
-    ],
+    "WL - North Shore - MM BP below Bridge": [[]],
+    "WL - North Shore - MM BP behind Skunk Hut": [[]],
     "WL - North Shore - MM BP inside Skunk Hut": [
         []
         # "move_rando"
@@ -375,182 +760,128 @@ rules_dict: dict[str,list[list[str]]] = {
         # "move_rando"
         # [MX]
     ],
-    "WL - North Shore - MM BP inside Boulder Box near Bridge": [
-        []
-    ],
-    "WL - North Shore - MM BP inside Boulder Box behind Skunk Hut": [
-        []
-    ],
-    "WL - North Shore - MM BP inside Drill House": [
-        []
-    ],
-    "WL - North Shore - MM BP on Crow Platform near Drill House": [
-        []
-    ],
-    "WV - City Hall - GC BP in Safe Room": [
-        []
-    ],
-    "WV - City Hall - GC BP in Statue Room": [
-        []
-    ],
-    "WV - Clock Tower - GC BP in Bedroom": [
-        [RS]
-        # "move_rando"
-    #   [MX, RS]
-    ],
-    "WV - Clock Tower - GC BP in Bell Room": [
-        [RS]
-    ],
-    "WF - Ski Resort - GC BP inside Dog's Fence": [
-        []
-    ],
-    "WF - Ski Resort - GC BP in Max Cave": [
-        []
-        # "move_rando"
-        # [MX]
-    ],
-    "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
-        [GC],
-        [OCD, RS]
-    ],
-    "WF - Civic Center - GC BP in Frozen Ice": [
-        [REL, GC],
-        [REL, OCD, RS],
-        [SS, GC],
-        [SS, OCD, RS]
-    ],
-    "WD - Power Plant - GC BP in Max Cave": [
-        []
-        # "move_rando"
-        # [MX]
-    ],
-    "WD - Power Plant - GC BP After First Gate": [
-        [REL, RS],
-        [GC]
-        # "move_rando"
-    #   [MX, REL, RS]
-    ],
-    "WD - Generator Building - GC BP on the Highest Platform": [
-        [REL, GC],
-        [REL, OCD, SS, RS]
-    ],
-    "WD - Generator Building - GC BP at the Entrance after Mission Completion": [
-        [REL, GC],
-        [REL, OCD, SS, RS]
-    ],
+    "WL - North Shore - MM BP inside Boulder Box near Bridge": [[]],
+    "WL - North Shore - MM BP inside Boulder Box behind Skunk Hut": [[]],
+    "WL - North Shore - MM BP inside Drill House": [[]],
+    "WL - North Shore - MM BP on Crow Platform near Drill House": [[]],
     "WL - Submarine World - GC BP Just Below Water Surface": [
-        [MM]
+        [grinch_items.gadgets.MARINE_MOBILE]
     ],
     "WL - Submarine World - GC BP Underwater": [
-        [MM]
+        [
+            grinch_items.gadgets.MARINE_MOBILE,
+        ]
     ],
     "WL - Mayor's Villa - GC BP on Tree Branch": [
-        [GC],
-        [REL, RS]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
     "WL - Mayor's Villa - GC BP in Pirate's Cave": [
-        [GC],
-        [REL, RS]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
+    ],
+    # Finale
+    "WV - Exhaust Pipes": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
+    ],
+    "WF - Skis": [
+        [
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
+    ],
+    "WD - Tires": [
+        [
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
+    ],
+    "WL - Submarine World - Twin-End Tuba": [
+        [
+            grinch_items.gadgets.MARINE_MOBILE,
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
+    ],
+    "WL - South Shore - GPS": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.keys.SLEIGH_ROOM_KEY,
+        ]
     ],
     "MC - Sleigh Ride - Stealing All Gifts": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        [REL, WV, WF, WD, WL, RS, MM]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.keys.WHOVILLE,
+            grinch_items.keys.WHO_FOREST,
+            grinch_items.keys.WHO_DUMP,
+            grinch_items.keys.WHO_LAKE,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.MARINE_MOBILE,
+        ]
     ],
     "MC - Sleigh Ride - Neutralizing Santa": [
         # ["Exhaust Pipes", "Tires", "Skis", "Twin-End Tuba"]
-        [REL, WV, WF, WD, WL, RS, MM]
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.keys.WHOVILLE,
+            grinch_items.keys.WHO_FOREST,
+            grinch_items.keys.WHO_DUMP,
+            grinch_items.keys.WHO_LAKE,
+            grinch_items.gadgets.ROCKET_SPRING,
+            grinch_items.gadgets.MARINE_MOBILE,
+        ]
     ],
-    "WV - Post Office - Heart of Stone": [
-        []
-    ],
-    "WF - Ski Resort - Heart of Stone": [
-        []
-    ],
+    # Hearts of Stone
+    "WV - Post Office - Heart of Stone": [[]],
+    "WF - Ski Resort - Heart of Stone": [[]],
     "WD - Minefield - Heart of Stone": [
-        [GC],
-        [REL, SS, RS]
+        [
+            grinch_items.gadgets.GRINCH_COPTER,
+        ],
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.SLIME_SHOOTER,
+            grinch_items.gadgets.ROCKET_SPRING,
+        ],
     ],
     "WL - North Shore - Heart of Stone": [
         []
         # "move_rando"
         # [MX]
     ],
-    "Spin N' Win - Easy": [
-        []
-    ],
-    "Spin N' Win - Hard": [
-        []
-    ],
-    "Spin N' Win - Real Tough": [
-        []
-    ],
-    "Dankamania - Easy - 15 Points": [
-        []
-    ],
-    "Dankamania - Hard - 15 Points": [
-        []
-    ],
-    "Dankamania - Real Tough - 15 Points": [
-        []
-    ],
-    "The Copter Race Contest - Easy": [
-        []
-    ],
-    "The Copter Race Contest - Hard": [
-        []
-    ],
-    "The Copter Race Contest - Real Tough": [
-        []
-    ],
-    "Bike Race - 1st Place": [
-        []
-    ],
-    "Bike Race - Top 2": [
-        []
-    ],
-    "Bike Race - Top 3": [
-        []
-    ],
-    "WV - Exhaust Pipes": [
-        [WV, REL, SR]
-    ],
-    "WF - Skis": [
-        [WF, SR]
-    ],
-    "WD - Tires": [
-        [WD, RS, REL, SR]
-    ],
-    "WL - Submarine World - Twin-End Tuba": [
-        [WL, MM, SR]
-    ],
-    "WL - South Shore - GPS": [
-        [WL, REL, SR]
-    ],
-    "MC - 1st Crate Squashed": [
-        []
-        # "move_rando"
-        # [PC]
-    ],
-    "MC - 2nd Crate Squashed": [
-        []
-        # "move_rando"
-        # [PC]
-    ],
-    "MC - 3rd Crate Squashed": [
-        []
-        # "move_rando"
-        # [PC]
-    ],
-    "MC - 4th Crate Squashed": [
-        []
-        # "move_rando"
-        # [PC]
-    ],
-    "MC - 5th Crate Squashed": [
-        []
-        # "move_rando"
-        # [PC]
-    ]
+    # Supadows
+    "Spin N' Win - Easy": [[]],
+    "Spin N' Win - Hard": [[]],
+    "Spin N' Win - Real Tough": [[]],
+    "Dankamania - Easy - 15 Points": [[]],
+    "Dankamania - Hard - 15 Points": [[]],
+    "Dankamania - Real Tough - 15 Points": [[]],
+    "The Copter Race Contest - Easy": [[]],
+    "The Copter Race Contest - Hard": [[]],
+    "The Copter Race Contest - Real Tough": [[]],
+    "Bike Race - 1st Place": [[]],
+    "Bike Race - Top 2": [[]],
+    "Bike Race - Top 3": [[]],
+    # Intro
+    "MC - 1st Crate Squashed": [[]],
+    "MC - 2nd Crate Squashed": [[]],
+    "MC - 3rd Crate Squashed": [[]],
+    "MC - 4th Crate Squashed": [[]],
+    "MC - 5th Crate Squashed": [[]],
     # "Green Present": [
     #     []
     # ],
@@ -558,7 +889,7 @@ rules_dict: dict[str,list[list[str]]] = {
     #     []
     # ],
     # "Pink Present": [
-    #     [REL],
+    #     [grinch_items.gadgets.ROCKET_EGG_LAUNCHER],
     #     [move_rando]
     #     [PC]
     # ],
@@ -567,98 +898,4 @@ rules_dict: dict[str,list[list[str]]] = {
     #     "move_rando"
     #     [PC]
     # ]
-}
-
-
-
-access_rules_dict: dict[str,list[list[str]]] = {
-    "Whoville": [
-        [WV]
-    ],
-    "Post Office": [
-        [WC]
-    ],
-    "City Hall": [
-        [REL]
-    ],
-    "Clock Tower": [
-        []
-        # "move_rando"
-        # [SN]
-    ],
-    "Who Forest": [
-        [WF],
-        # [VT: 1]
-    ],
-    "Ski Resort": [
-        [CCAC]
-    ],
-    "Civic Center": [
-        [GC],
-        [OCD]
-    ],
-    "Who Dump": [
-        [WD],
-        # [VT: 2]
-    ],
-    "Minefield": [
-        [REL, RS],
-        [REL, GC]
-        # "move_rando"
-        # [REL, RS, PC],
-        # [REL, GC, PC]
-    ],
-    "Power Plant": [
-        [REL, GC],
-        [SS, GC],
-        [REL, OCD, SS, RS]
-        # "move_rando"
-        # [REL, GC, PC],
-        # [SS, GC, PC],
-        # [REL, OCD, SS, RS, PC]
-    ],
-    "Generator Building": [
-        [REL, GC],
-        [REL, OCD, SS, RS]
-    ],
-    "Who Lake": [
-        [WL],
-        # [VT: 3]
-    ],
-    "Scout's Hut": [
-        [GC],
-        [RS]
-    ],
-    "North Shore": [
-        [SCL]
-    ],
-    "Mayor's Villa": [
-        [SCL]
-    ],
-    "Submarine World": [
-        [MM]
-    ],
-    "Sleigh Room": [
-        [SR]
-    ],
-    "Spin N' Win": [
-        []
-        # ["Spin N' Win Door Unlock"],
-        # ["Progressive Supadow Door Unlock"]
-    ],
-    "Dankamania": [
-        []
-        # ["Dankamania Door Unlock"],
-        # ["Progressive Supadow Door Unlock: 2"]
-    ],
-    "The Copter Race Contest": [
-        []
-        # ["The Copter Race Contest Door Unlock"],
-        # ["Progressive Supadow Door Unlock: 3"]
-    ],
-    "Bike Race": [
-        []
-        # ["Bike Race Access"],
-        # ["Progressive Supadow Door Unlock: 4"]
-    ]
 }
