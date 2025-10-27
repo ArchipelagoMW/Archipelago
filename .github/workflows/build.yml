@@ -9,17 +9,24 @@ on:
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   workflow_dispatch:
 
 env:
   ENEMIZER_VERSION: 7.1
-  APPIMAGETOOL_VERSION: 13
+  # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
+  #       we check the sha256 and require manual intervention if it was updated.
+  APPIMAGETOOL_VERSION: continuous
+  APPIMAGETOOL_X86_64_HASH: '9493a6b253a01f84acb9c624c38810ecfa11d99daa829b952b0bff43113080f9'
+  APPIMAGE_RUNTIME_VERSION: continuous
+  APPIMAGE_RUNTIME_X86_64_HASH: 'e70ffa9b69b211574d0917adc482dd66f25a0083427b5945783965d55b0b0a8b'
 
 permissions:  # permissions required for attestation
   id-token: 'write'
@@ -98,7 +105,7 @@ jobs:
         shell: bash
         run: |
           cd build/exe*
-          cp Players/Templates/Clique.yaml Players/
+          cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store 7z
         uses: actions/upload-artifact@v4
@@ -134,10 +141,13 @@ jobs:
       - name: Install build-time dependencies
         run: |
           echo "PYTHON=python3.12" >> $GITHUB_ENV
-          wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
+          wget -nv https://github.com/AppImage/appimagetool/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
+          echo "$APPIMAGETOOL_X86_64_HASH appimagetool-x86_64.AppImage" | sha256sum -c
+          wget -nv https://github.com/AppImage/type2-runtime/releases/download/$APPIMAGE_RUNTIME_VERSION/runtime-x86_64
+          echo "$APPIMAGE_RUNTIME_X86_64_HASH runtime-x86_64" | sha256sum -c
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract
-          echo -e '#/bin/sh\n./squashfs-root/AppRun "$@"' > appimagetool
+          echo -e '#/bin/sh\n./squashfs-root/AppRun --runtime-file runtime-x86_64 "$@"' > appimagetool
           chmod a+rx appimagetool
       - name: Download run-time dependencies
         run: |
@@ -189,7 +199,7 @@ jobs:
         shell: bash
         run: |
           cd build/exe*
-          cp Players/Templates/Clique.yaml Players/
+          cp Players/Templates/VVVVVV.yaml Players/
           timeout 30 ./ArchipelagoGenerate
       - name: Store AppImage
         uses: actions/upload-artifact@v4

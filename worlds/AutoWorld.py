@@ -12,14 +12,18 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, Iterable, List, Ma
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState
-from Utils import deprecate
+from Utils import Version
 
 if TYPE_CHECKING:
     from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
-    from . import GamesPackage
+    from NetUtils import GamesPackage, MultiData
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
+
+
+class InvalidItemError(KeyError):
+    pass
 
 
 class AutoWorldRegister(type):
@@ -71,15 +75,10 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
-
-        # create missing options_dataclass from legacy option_definitions
-        # TODO - remove this once all worlds use options dataclasses
-        if "options_dataclass" not in dct and "option_definitions" in dct:
-            # TODO - switch to deprecate after a version
-            deprecate(f"{name} Assigned options through option_definitions which is now deprecated. "
-                      "Please use options_dataclass instead.")
-            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
-                                                      bases=(PerGameCommonOptions,))
+        if "world_version" in dct:
+            if dct["world_version"] != Version(0, 0, 0):
+                raise RuntimeError(f"{name} is attempting to set 'world_version' from within the class. world_version "
+                                   f"can only be set from manifest.")
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
@@ -342,6 +341,8 @@ class World(metaclass=AutoWorldRegister):
     """If loaded from a .apworld, this is the Path to it."""
     __file__: ClassVar[str]
     """path it was loaded from"""
+    world_version: ClassVar[Version] = Version(0, 0, 0)
+    """Optional world version loaded from archipelago.json"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
@@ -450,7 +451,7 @@ class World(metaclass=AutoWorldRegister):
         """
         pass
 
-    def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
+    def modify_multidata(self, multidata: "MultiData") -> None:
         """For deeper modification of server multidata."""
         pass
 
@@ -493,9 +494,6 @@ class World(metaclass=AutoWorldRegister):
         Creates a group, which is an instance of World that is responsible for multiple others.
         An example case is ItemLinks creating these.
         """
-        # TODO remove loop when worlds use options dataclass
-        for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
         group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})

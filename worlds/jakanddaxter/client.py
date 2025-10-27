@@ -135,6 +135,10 @@ class JakAndDaxterContext(CommonContext):
         self.tags = set()
         await self.send_connect()
 
+    async def disconnect(self, allow_autoreconnect: bool = False):
+        self.locations_checked = set()  # Clear this set to gracefully handle server disconnects.
+        await super(JakAndDaxterContext, self).disconnect(allow_autoreconnect)
+
     def on_package(self, cmd: str, args: dict):
 
         if cmd == "RoomInfo":
@@ -176,6 +180,10 @@ class JakAndDaxterContext(CommonContext):
                     await self.send_msgs([{"cmd": "Get", "keys": [f"jakanddaxter_{self.auth}_orbs_paid"]}])
 
                 create_task_log_exception(get_orb_balance())
+
+            # If there were any locations checked while the client wasn't connected, we want to make sure the server
+            # knows about them. To do that, replay the whole location_outbox (no duplicates will be sent).
+            self.memr.outbox_index = 0
 
             # Tell the server if Deathlink is enabled or disabled in the in-game options.
             # This allows us to "remember" the user's choice.
@@ -254,6 +262,7 @@ class JakAndDaxterContext(CommonContext):
 
     # We don't need an ap_inform function because check_locations solves that need.
     def on_location_check(self, location_ids: list[int]):
+        self.locations_checked.update(location_ids)  # Populate this set to gracefully handle server disconnects.
         create_task_log_exception(self.check_locations(location_ids))
 
     # CommonClient has no finished_game function, so we will have to craft our own. TODO - Update if that changes.
@@ -367,7 +376,7 @@ def find_root_directory(ctx: JakAndDaxterContext):
                         f"   Close all launchers, games, clients, and console windows, then restart Archipelago.")
 
     if not os.path.exists(settings_path):
-        msg = (f"{err_title}: the OpenGOAL settings file does not exist.\n"
+        msg = (f"{err_title}: The OpenGOAL settings file does not exist.\n"
                f"{alt_instructions}")
         ctx.on_log_error(logger, msg)
         return
@@ -375,14 +384,44 @@ def find_root_directory(ctx: JakAndDaxterContext):
     with open(settings_path, "r") as f:
         load = json.load(f)
 
-        jak1_installed = load["games"]["Jak 1"]["isInstalled"]
+        # This settings file has changed format once before, and may do so again in the future.
+        # Guard against future incompatibilities by checking the file version first, and use that to determine
+        # what JSON keys to look for next.
+        try:
+            settings_version = load["version"]
+            logger.debug(f"OpenGOAL settings file version: {settings_version}")
+        except KeyError:
+            msg = (f"{err_title}: The OpenGOAL settings file has no version number!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
+        try:
+            if settings_version == "2.0":
+                jak1_installed = load["games"]["Jak 1"]["isInstalled"]
+                mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
+
+            elif settings_version == "3.0":
+                jak1_installed = load["games"]["jak1"]["isInstalled"]
+                mod_sources = load["games"]["jak1"]["mods"]
+
+            else:
+                msg = (f"{err_title}: The OpenGOAL settings file has an unknown version number ({settings_version}).\n"
+                       f"{alt_instructions}")
+                ctx.on_log_error(logger, msg)
+                return
+        except KeyError as e:
+            msg = (f"{err_title}: The OpenGOAL settings file does not contain key entry {e}!\n"
+                   f"{alt_instructions}")
+            ctx.on_log_error(logger, msg)
+            return
+
         if not jak1_installed:
             msg = (f"{err_title}: The OpenGOAL Launcher is missing a normal install of Jak 1!\n"
                    f"{alt_instructions}")
             ctx.on_log_error(logger, msg)
             return
 
-        mod_sources = load["games"]["Jak 1"]["modsInstalledVersion"]
         if mod_sources is None:
             msg = (f"{err_title}: No mod sources have been configured in the OpenGOAL Launcher!\n"
                    f"{alt_instructions}")
