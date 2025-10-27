@@ -2049,6 +2049,7 @@ snack_rules = [
             LocationNames.b001_EX__CLUE__SNACKBOX3: lambda player: lambda state: state.can_reach(RegionNames.b003, "Region", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
             LocationNames.b001_EX__CLUE__SNACKBOX30: lambda player: lambda state: state.can_reach(RegionNames.b003, "Region", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
             LocationNames.b001_EX__CLUE__SNACKBOX300: lambda player: lambda state: state.can_reach(RegionNames.b003, "Region", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
+            LocationNames.b001_EX__CLUE__SNACKBOX3000: lambda player: lambda state: state.can_reach(RegionNames.b003, "Region", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
 
             LocationNames.b002_EX__CLUE__SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
             LocationNames.b002_SS601: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1),
