@@ -1691,7 +1691,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Ice Zone Main Area - Delibird -- Friendship": PokeparkLocationData(
-        190, PokeparkFlag.ERRAND, "Ice Zone Main Area", PokeparkFriendshipClientLocationData(
+        190, PokeparkFlag.QUIZ, "Ice Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=72
         ),
     ),

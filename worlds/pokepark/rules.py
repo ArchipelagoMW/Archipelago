@@ -851,7 +851,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Kirlia -- Friendship",
-        lambda state: state.has("Delibird Friendship", player) and can_clear_christmas_tree_stage4(state, player)
+        lambda state: can_clear_christmas_tree_stage4(state, player)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Igloo Housing -- Stage 1",
