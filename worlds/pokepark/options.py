@@ -212,6 +212,7 @@ class PokeparkOptions(PerGameCommonOptions):
         # Note: these options' values must be able to be passed through
         # `yaml.safe_dump`.
         return self.as_dict(
+            "goal",
             "num_required_battle_count",
             "num_required_prisma_count_skygarden",
             "remove_errand_power_comp_locations",
