@@ -142,17 +142,23 @@ class FirstRootNode(Choice):
 
 
 class ShuffleGrapple(Toggle):
-    """Takes away Yi's grapple hook and zipline sliding abilities until you collect the 'Grapple' item."""
+    """Takes away Yi's grapple hook and zipline sliding abilities until you collect the 'Grapple' item.
+
+    If your first_root_node is yinglong_canal, then Grapple will have to be placed early."""
     display_name = "Shuffle Grapple"
 
 
 class ShuffleWallClimb(Toggle):
-    """Takes away Yi's ability to climb glowing green walls until you collect the 'Wall Climb' item."""
+    """Takes away Yi's ability to climb glowing green walls until you collect the 'Wall Climb' item.
+
+    If your first_root_node is apeman_facility_monitoring, then Wall Climb will have to be placed early."""
     display_name = "Shuffle Wall Climb"
 
 
 class ShuffleLedgeGrab(Toggle):
     """Takes away Yi's ability to grab onto ledges and pull himself up until you collect the 'Ledge Grab' item.
+
+    If your first_root_node is yinglong_canal, then Ledge Grab will have to be placed early.
 
     This is more impactful than it might sound because of 'ledge storage' glitches.
     See logic_level (whenever I implement that)."""
