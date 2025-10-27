@@ -3039,6 +3039,12 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
 
+    "Haunted Zone Mansion Area - Sableye Power Competition -- Friendship": PokeparkLocationData(
+        999, PokeparkFlag.QUIZ, "Haunted Zone Mansion Study Area", PokeparkFriendshipClientLocationData(
+            structure_position=133
+        ),
+    ),
+
     # Dusknoir's Speed Slam
 
     "Dusknoir's Speed Slam Attraction -- Prisma": PokeparkLocationData(
