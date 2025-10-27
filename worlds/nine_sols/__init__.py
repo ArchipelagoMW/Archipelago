@@ -52,6 +52,9 @@ class NineSolsWorld(World):
     def generate_early(self) -> None:
         if self.options.jade_cost_max < self.options.jade_cost_min:
             raise OptionError("jade_cost_max is less than jade_cost_min")
+        if self.options.seals_for_ethereal.value >= 8 and not self.options.shuffle_sol_seals.value:
+            raise OptionError("seals_for_ethereal is set to its maximum value of 8, "
+                              "which is incompatible with shuffle_sol_seals being false")
 
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
