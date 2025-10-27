@@ -179,7 +179,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
 
     for display_region in display_region_levels_dictionary:
-        if world.options.regionsanity.value == world.options.regionsanity.option_true and display_region != MODDED_ZONE_AP_REGION:
+        if world.options.regionsanity.value != world.options.regionsanity.option_disabled and display_region != MODDED_ZONE_AP_REGION:
             rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0])
                                                                                                       and state.has(display_region_name_to_pass_dict[lambda_region], player))
 
@@ -368,8 +368,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
     #A Jojo Sewers <-> Sewers to Boomer Society connector; untraversable w/o a region pass in Regionsanity
     fancy_add_exits(world, SEWERS_SECRET_PASSWORD_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION],
-                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false,
-                     SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_false})
+                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_disabled,
+                     SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_disabled})
     fancy_add_exits(world, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, BOOMER_SOCIETY_AP_REGION],
                     #Swimming connection to Jojo Sewers Main (lol) bypasses the Secret Password region
                     {JOJO_SEWERS_AP_REGION: lambda state: logic.has_swimming(state)})
@@ -621,7 +621,7 @@ def create_ap_region(world: "CrystalProjectWorld", player: int, locations_per_re
                     region_completion = location
 
         # This is for making sure players can earn money for required shop checks in shopsanity + regionsanity
-        if world.options.regionsanity.value == world.options.regionsanity.option_true and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
+        if world.options.regionsanity.value != world.options.regionsanity.option_disabled and world.options.shopsanity.value != world.options.shopsanity.option_disabled:
             for location in ap_region.locations:
                 if "Shop -" in location.name:
                     location.access_rule = combine_callables(location.access_rule, lambda state: logic.can_earn_money(state, ap_region.name))
@@ -649,7 +649,7 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
     #need to add the rule for every other location in the ap region, as well as every location in other ap regions, as well as a can_reach rule on other ap regions in this display region
     # This is for the region completion location
     if not excluded:
-        if world.options.regionsanity.value == world.options.regionsanity.option_true and region_completion_location is not None:
+        if world.options.regionsanity.value != world.options.regionsanity.option_disabled and region_completion_location is not None:
             for ap_region_name in display_region_subregions_dictionary[display_region_name]:
                 ap_region = Region(ap_region_name, player, world.multiworld)
                 region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
@@ -697,7 +697,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
 
     fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, SALMON_RIVER_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, TALL_TALL_HEIGHTS_AP_REGION, LANDS_END_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
                     # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
-                    {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_false,
+                    {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_disabled,
                      CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
                      MERCURY_SHRINE_AP_REGION: lambda state: state.has(MERCURY_STONE, world.player),
                      SALMON_RIVER_AP_REGION: lambda state: state.has(POSEIDON_STONE, world.player),

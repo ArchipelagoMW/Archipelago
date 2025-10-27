@@ -222,7 +222,7 @@ class CrystalProjectWorld(World):
             self.options.newWorldStoneJobQuantity.value = jobs_earnable
 
         # pick one display region to give a starting pass to and then save that later
-        if self.options.regionsanity.value == self.options.regionsanity.option_true:
+        if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
             starting_passes_list: List[str] = []
             #checking the start inventory for region passes and using the first one to set the starter region, if any
             for item_name in self.options.start_inventory.keys():
@@ -444,7 +444,7 @@ class CrystalProjectWorld(World):
             excluded_items.add(MIMIC_JOB)
 
         #regionsanity items
-        if self.options.regionsanity.value == self.options.regionsanity.option_false:
+        if self.options.regionsanity.value == self.options.regionsanity.option_disabled:
             for region_pass in self.item_name_groups[PASS]:
                 excluded_items.add(region_pass)
         else:
@@ -476,12 +476,12 @@ class CrystalProjectWorld(World):
                         amount = amount + int(data.endGameShops or 0)
 
                 # Make sure new world pass is included if regionsanity is on and its required for the goal
-                if (self.options.regionsanity.value == self.options.regionsanity.option_true and
+                if (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
                         name == THE_NEW_WORLD_PASS):
                     amount = 1
                 # Same goes for old world pass
-                elif (self.options.regionsanity.value == self.options.regionsanity.option_true and
+                elif (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         self.options.goal.value == self.options.goal.option_true_astley and
                         name == THE_OLD_WORLD_PASS):
                     amount = 1
@@ -615,7 +615,7 @@ class CrystalProjectWorld(World):
             "startingJobs": self.get_job_id_list(),
             "killBossesMode" : bool(self.options.killBossesMode.value),
             "shopsanity": self.options.shopsanity.value,
-            "regionsanity": bool(self.options.regionsanity.value),
+            "regionsanity": self.options.regionsanity.value,
             "includedRegions": self.included_regions,
             "includedRegionsOption": self.options.includedRegions.value,
             "progressiveMountMode": self.options.progressiveMountMode.value,

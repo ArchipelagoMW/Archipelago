@@ -8,7 +8,7 @@ explorer_mode_options = {
     "clamshellGoalQuantity":         50,
     "extraClamshellsInPool":         10,
     "shopsanity":                    Shopsanity.option_disabled,
-    "regionsanity":                  Regionsanity.option_true,
+    "regionsanity":                  Regionsanity.option_extreme,
     "progressiveMountMode":          ProgressiveMountMode.option_true,
     "levelGating":                   LevelGating.option_level_catch_up,
     "progressiveLevelSize":          10,

@@ -136,7 +136,7 @@ class Shopsanity(Choice):
     option_enabled_and_hint = 2
     default = 0
 
-class Regionsanity(Toggle):
+class Regionsanity(Choice):
     """
     Nothing I have tried has been able to drive the citizens of Sequoia to collect enough crystals!
     Adventurers have had TOO MUCH freedom!  From now on, you will adventure where I tell you to.
@@ -148,9 +148,16 @@ class Regionsanity(Toggle):
     However, the Overpass and Underpass are regions of lawlessness where the Grandmaster has no authority! ;)
     (You're also still allowed to use the save points, we won't tell.)
 
+    If regionsanity is set to extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
+    Spend more than 10 seconds in a region without a pass and the Grandmaster will teleport you!
+
     You will start the game with a pass for one reachable region.
     """
     display_name = "Regionsanity"
+    option_disabled = 0
+    option_enabled = 1
+    option_extreme = 2
+    default = 0
 
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
