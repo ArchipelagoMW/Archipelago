@@ -189,14 +189,13 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                            elif key == "triggers":
+                                if "triggers" not in yaml[category_name]:
+                                    yaml[category_name][key] = []
+                                for trigger in option:
+                                    yaml[category_name][key].append(trigger)
                             else:
-                                if key == "triggers":
-                                    if "triggers" not in yaml[category_name]:
-                                        yaml[category_name][key] = []
-                                    for trigger in option:
-                                        yaml[category_name][key].append(trigger)
-                                else:
-                                    yaml[category_name][key] = option
+                                yaml[category_name][key] = option
 
     player_path_cache = {}
     for player in range(1, args.multi + 1):
