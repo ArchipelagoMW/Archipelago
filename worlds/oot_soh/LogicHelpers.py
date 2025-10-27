@@ -147,8 +147,9 @@ def has_item(item: Items | Events | StrEnum, bundle: tuple[CollectionState, Regi
     if item == Items.EPONA:
         return state.has(Events.FREED_EPONA, player)
 
-    if item in (Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW, Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS):
-        return (not world.options.shuffle_adult_trade_items) or state.has(item, player)
+    if item in {Items.POCKET_EGG, Items.COJIRO, Items.ODD_MUSHROOM, Items.ODD_POTION, Items.POACHERS_SAW,
+                Items.BROKEN_GORONS_SWORD, Items.PRESCRIPTION, Items.EYEBALL_FROG, Items.WORLDS_FINEST_EYEDROPS}:
+        return not world.options.shuffle_adult_trade_items or state.has(item, player)
 
     if item == Items.BOTTLE_WITH_BIG_POE:
         return has_bottle(bundle) and state.has(Events.CAN_DEFEAT_BIG_POE, player)
@@ -818,15 +819,6 @@ def can_open_overworld_door(key: Items, bundle: tuple[CollectionState, Regions, 
     return has_item(Items.SKELETON_KEY, bundle) or has_item(key, bundle)
 
 
-def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    world = bundle[2]
-    if has_item(Items.SKELETON_KEY, bundle) or (world.options.key_rings.value and has_key_ring(key, bundle)):
-        return True
-
-    return state.has(key, world.player, requiredAmount)
-
-
 key_to_ring: dict[Items, Items] = {
     Items.FOREST_TEMPLE_SMALL_KEY: Items.FOREST_TEMPLE_KEY_RING,
     Items.FIRE_TEMPLE_SMALL_KEY: Items.FIRE_TEMPLE_KEY_RING,
@@ -840,8 +832,11 @@ key_to_ring: dict[Items, Items] = {
 }
 
 
-def has_key_ring(key: Items, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return has_item(key_to_ring[key], bundle)
+def small_keys(key: Items, requiredAmount: int, bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
+    state = bundle[0]
+    world = bundle[2]
+    return (state.has_any((Items.SKELETON_KEY, key_to_ring[key]), world.player)
+            or state.has(key, world.player, requiredAmount))
 
 
 def can_get_enemy_drop(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: Enemies,
