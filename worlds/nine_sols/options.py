@@ -36,10 +36,11 @@ class SealsForPrison(Range):
 class SealsForEthereal(Range):
     """The number of Sol Seals needed for the entrance to Lady Ethereal's soulscape to appear in Cortex Center.
     See also the skip_soulscape_platforming option.
-    Unlike the vanilla game, it does not matter which Sol Seals you've collected, only the total number."""
+    Unlike the vanilla game, it does not matter which Sol Seals you've collected, only the total number.
+    The maximum is 7 instead of 8 because 8 would be incompatible with shuffle_sol_seals: false."""
     display_name = "Seals For Ethereal"
     range_start = 0
-    range_end = 8
+    range_end = 7
     default = 4
 
 
