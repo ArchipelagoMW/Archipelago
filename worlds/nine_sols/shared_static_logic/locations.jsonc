@@ -615,7 +615,7 @@
             [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ],
             [
                 { "item": "Wall Climb" },
-                { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
+                { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
             ]
         ] } ]
     },

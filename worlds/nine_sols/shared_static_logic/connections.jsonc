@@ -489,8 +489,11 @@
         { "item": "Wall Climb" }, { "item": "Cloud Leap" }
     ] } ] },
     { "from": "YC - Farmland Markings", "to": "YC - Above Egg Cave", "requires": [ { "anyOf": [
-        [ { "item": "Wall Climb" }, { "item": "Ledge Grab" } ],
-        { "item": "Cloud Leap" }
+        { "item": "Cloud Leap" }, // jump into "Between Egg Cave and Farmland Markings" room and jump to upper platforms of it
+        [
+            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }, // get into the "Between ..." room somehow
+            { "item": "Wall Climb" } // then climb the green wall in the "Between ..." room
+        ]
     ] } ] },
     { "from": "YC - Above Egg Cave", "to": "YC - Farmland Markings", "requires": [] }, // fall
     { "from": "YC - Above Egg Cave", "to": "YC - Egg Cave & Left Exit", "requires": [] }, // fall
@@ -1001,7 +1004,8 @@
 
     // Grotto of Scriptures (East)
     { "from": "GoSE - Lower Exit", "to": "GoSE - Spike Ball Hall Floor", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Lower Exit", "requires": [] }, // fall
+    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    // on logic_level: ledge_storage, bow hover into parry vault might work, needs testing
     { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Spike Ball Hall Platforms", "requires": [
         { "item": "Cloud Leap" }, // the spike balls are slightly too large to single jump over
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Grapple" } ] }
