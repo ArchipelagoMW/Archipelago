@@ -1882,6 +1882,7 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Diglett Unlock",
         "Dusknoir Unlock",
         "Rayquaza Unlock",
+        "Progressive Dash"
 
     ]),
     ("goal", 1): (193, []),  # option postgame

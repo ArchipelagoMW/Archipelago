@@ -1306,6 +1306,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.has("Rayquaza Prisma", player)
     )
     set_rule_if_exists(
+        "Magma Zone Circle Area - Magcargo Power Competition -- Friendship",
+        lambda state: state.has("Rhyperior Prisma", player) and state.has("Bastiodon Prisma", player)
+    )
+    set_rule_if_exists(
         "Magma Zone Circle Area - Rhyperior Iron Disc -- Errand",
         lambda state: can_dash_overworld(state, player)
     )
@@ -1763,6 +1767,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Haunted Zone Mansion Area - Dusknoir -- Friendship",
         lambda state: state.has("Dusknoir Prisma", player) and state.has("Dusknoir Unlock", player)
     )
+    set_rule_if_exists(
+        "Haunted Zone Mansion Area - Sableye Power Competition -- Friendship",
+        lambda state: True
+    )
     # Dusknoir's Speed Slam
     set_rule_if_exists(
         "Dusknoir's Speed Slam Attraction -- Prisma",
@@ -2020,7 +2028,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Granite Zone Main Area - Absol -- Friendship",
         lambda state: state.has("Absol Prisma", player)
     )
-
+    set_rule_if_exists(
+        "Granite Zone Togekiss Area - Togekiss Power Competition -- Friendship",
+        lambda state: can_dash_overworld(state, player)
+    )
     # Absol Hurdle Dash
     set_rule_if_exists(
         "Absol's Hurdle Bounce Attraction -- Prisma",
