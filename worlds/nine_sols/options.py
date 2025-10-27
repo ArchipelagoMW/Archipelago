@@ -21,10 +21,12 @@ class SealsForEigong(Range):
 class SealsForPrison(Range):
     """The number of Sol Seals needed for Jiequan to appear in Factory (Great Hall), allowing you to "fight" him,
     do the whole Prison escape sequence, and check most of the locations in Factory (Machine Room).
-    Note that you also need Mystic Nymph: Scout Mode before Jiequan will appear,
-    since you can't do the Prison escape sequence without it.
-    Unlike the vanilla game, the real Jiequan fight may be done before or after Prison, and it does not matter
-    which Sol Seals you've collected, only the total number."""
+
+    Note that you also need Mystic Nymph: Scout Mode, Grapple, and either Cloud Leap or Ledge Grab
+    before Jiequan will appear, since you can't finish the Prison escape sequence without them.
+
+    Unlike the vanilla game, the real Jiequan fight may be done before or after Prison.
+    Also, it does not matter which Sol Seals you've collected, only the total number."""
     display_name = "Seals For Prison"
     range_start = 0
     range_end = 8
