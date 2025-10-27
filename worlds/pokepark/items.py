@@ -1866,7 +1866,6 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Squirtle Unlock",
         "Squirtle Friendship",
         "Smoochum Friendship",
-        "Delibird Friendship",
         "Smoochum Unlock",
         "Glalie Unlock",
         "Progressive Thunderbolt",

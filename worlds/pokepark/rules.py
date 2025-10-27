@@ -807,7 +807,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Delibird -- Friendship",
-        lambda state: can_clear_christmas_tree_stage4(state, player)
+        lambda state: can_befriend_delibird(state, player, options)
     )
     set_rule_if_exists(
         "Ice Zone Main Area - Smoochum Power Competition -- Friendship",
@@ -3081,6 +3081,11 @@ def can_clear_christmas_tree_stage4(state: CollectionState, player: int):
             state.has("Smoochum Friendship", player) and
             state.has("Smoochum Unlock", player))
 
+
+def can_befriend_delibird(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.remove_errand_power_comp_locations.value:
+        return True
+    return can_clear_christmas_tree_stage4(state, player)
 
 def can_clear_mew_power_competition_stage1(state: CollectionState, player: int):
     return True
