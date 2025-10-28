@@ -194,12 +194,6 @@ class SohWorld(World):
         if item.name == Items.HEART_CONTAINER:
             state.soh_heart_count[self.player] += 1  # type: ignore
 
-        if item.name in (Items.PIECE_OF_HEART, Items.PIECE_OF_HEART_WINNER):
-            state.soh_piece_of_heart_count[self.player] += 1  # type: ignore
-            if state.soh_piece_of_heart_count[self.player] == 4:  # type: ignore
-                state.soh_piece_of_heart_count[self.player] = 0  # type: ignore
-                state.soh_heart_count[self.player] += 1  # type: ignore
-
         return changed
 
     def remove(self, state: CollectionState, item: Item) -> bool:
@@ -215,12 +209,6 @@ class SohWorld(World):
 
         if item.name == Items.HEART_CONTAINER:
             state.soh_heart_count[self.player] -= 1  # type: ignore
-
-        if item.name in (Items.PIECE_OF_HEART, Items.PIECE_OF_HEART_WINNER):
-            state.soh_piece_of_heart_count[self.player] -= 1  # type: ignore
-            if state.soh_piece_of_heart_count[self.player] == -1:  # type: ignore
-                state.soh_piece_of_heart_count[self.player] = 3  # type: ignore
-                state.soh_heart_count[self.player] -= 1  # type: ignore
 
         return changed
 
