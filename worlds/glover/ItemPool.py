@@ -740,7 +740,7 @@ def create_trap_name_table(self) -> list[str]:
 			"Pht2 Erupt Volcano",
 			"Pht3 Dino Wedding",
 			"FoF1 Mr Bones",
-			"FoF2 Green Door",
+			"FoF2 Green Castle",
 			"FoF3 Drawbridge",
 			"Otw1 Ancienter Aliens",
 			"Otw2 Bomb",

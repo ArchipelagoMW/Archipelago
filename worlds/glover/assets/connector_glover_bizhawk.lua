@@ -6196,7 +6196,7 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_FORTRESS_L2"] = {
-		["GOAL"] = "1493",
+		["GOAL"] = "1494",
 		["GARIBS"] = {
 			["1419"] = {
 				['id'] = 0x58B,
@@ -6506,6 +6506,10 @@ local ADDRESS_MAP = {
 			["1492"] = {
 				['id'] = 0x5D4,
 				['offset'] = 2,
+			},
+			["1493"] = {
+				['id'] = 0x5D5,
+				['offset'] = 3,
 			},
 		},
 	},
