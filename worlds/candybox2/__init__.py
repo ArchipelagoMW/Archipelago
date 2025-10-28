@@ -127,9 +127,8 @@ class CandyBox2World(World):
     def create_items(self):
         for name, data in items.items():
             required_amount = data.required_amount(self)
-            if required_amount > 0:
-                for _i in range(required_amount):
-                    self.multiworld.itempool += [self.create_item(name.value)]
+            for _ in range(required_amount):
+                self.multiworld.itempool.append(self.create_item(name.value))
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)
@@ -177,13 +176,15 @@ class CandyBox2World(World):
         self.rules_package.apply_location_rules(self, self.player)
 
     def completion_rule(self, state: CollectionState):
-        return (
-            can_reach_room(state, CandyBox2Room.TOWER, self.player)
-            and state.has(CandyBox2ItemName.P_STONE, self.player)
-            and state.has(CandyBox2ItemName.L_STONE, self.player)
-            and state.has(CandyBox2ItemName.A_STONE, self.player)
-            and state.has(CandyBox2ItemName.Y_STONE, self.player)
-            and state.has(CandyBox2ItemName.LOCKED_CANDY_BOX, self.player)
+        return can_reach_room(state, CandyBox2Room.TOWER, self.player) and state.has_all(
+            [
+                CandyBox2ItemName.P_STONE,
+                CandyBox2ItemName.L_STONE,
+                CandyBox2ItemName.A_STONE,
+                CandyBox2ItemName.Y_STONE,
+                CandyBox2ItemName.LOCKED_CANDY_BOX,
+            ],
+            self.player,
         )
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
@@ -194,7 +195,7 @@ class CandyBox2World(World):
 
     def generate_basic(self) -> None:
         if not self.should_randomize_hp_bar:
-            self.multiworld.get_location(CandyBox2LocationName.HP_BAR_UNLOCK, self.player).place_locked_item(
+            self.get_location(CandyBox2LocationName.HP_BAR_UNLOCK).place_locked_item(
                 self.create_item(CandyBox2ItemName.HP_BAR)
             )
 
@@ -202,7 +203,7 @@ class CandyBox2World(World):
         er_hint_data = {}
 
         for entrance, destination in self.calculated_entrances:
-            region = self.multiworld.get_region(entrance_friendly_names[destination], self.player)
+            region = self.get_region(entrance_friendly_names[destination])
             for location in region.locations:
                 er_hint_data[location.address] = entrance_friendly_names[entrance]
 
