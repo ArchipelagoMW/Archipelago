@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, NamedTuple
 from BaseClasses import Location
 
 if TYPE_CHECKING:
-    from worlds.candybox2 import CandyBox2World
+    from . import CandyBox2World
 
 
 class CandyBox2LocationData(NamedTuple):

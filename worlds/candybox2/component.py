@@ -18,7 +18,6 @@ def open_page(url):
         webbrowser.open(
             f"https://candybox2-ap.vicr123.com/latest?hostport={host}:{port}&name={slot}&password={password}"
         )
-    pass
 
 
 def setup_candy_box_2_component():

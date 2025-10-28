@@ -76,41 +76,20 @@ def can_reach_room(state: CollectionState, room: CandyBox2Room, player: int):
     return state.can_reach_region(entrance_friendly_names[room], player)
 
 
-def can_brew(state: CollectionState, player: int, also_require_lollipops: bool):
-    return (
-        state.has(CandyBox2ItemName.SORCERESS_CAULDRON, player)
-        and can_farm_candies(state, player)
-        and (not also_require_lollipops or can_farm_lollipops(state, player))
-    )
-
-
 # Allows the player to plant enough lollipops at the farm for 1/minute
 def can_grow_lollipops(state: CollectionState, player: int):
-    return (
-        lollipop_count(state, player) >= 9
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
-    )
+    return lollipop_count(state, player) >= 9 and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
 
 
 def can_farm_lollipops(state: CollectionState, player: int):
-    return (
-        can_grow_lollipops(state, player)
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
-        and state.has(CandyBox2ItemName.PITCHFORK, player)
-        and state.has(CandyBox2ItemName.SHELL_POWDER, player)
-        and state.has(CandyBox2ItemName.GREEN_FIN, player)
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
+    return can_grow_lollipops(state, player) and state.has_all(
+        [CandyBox2ItemName.PITCHFORK, CandyBox2ItemName.SHELL_POWDER, CandyBox2ItemName.GREEN_FIN], player
     )
 
 
 # Ideally allows the player to stumble upon a quest they can use to farm candies
 def can_farm_candies(state: CollectionState, player: int):
-    return (
-        can_farm_lollipops(state, player)
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
-        and can_reach_room(state, CandyBox2Room.LOLLIPOP_FARM, player)
-    )
+    return can_farm_lollipops(state, player)
 
 
 def lollipop_count(state: CollectionState, player: int):
@@ -125,7 +104,7 @@ def create_regions(world: "CandyBox2World"):
         "MENU": CandyBox2Region("Menu", player, multiworld, "The Candy Box"),
     }
 
-    for room in [room for room in CandyBox2Room if room != CandyBox2Room.VILLAGE and room != CandyBox2Room.WORLD_MAP]:
+    for room in [room for room in CandyBox2Room if room not in (CandyBox2Room.VILLAGE, CandyBox2Room.WORLD_MAP)]:
         room_regions[room.value] = CandyBox2RoomRegion(room, player, multiworld)
 
     for region in room_regions.values():
@@ -163,7 +142,7 @@ def connect_entrances(world: "CandyBox2World"):
     if world.options.quest_randomisation == "off":
         return world.original_entrances
 
-    if hasattr(world.multiworld, "re_gen_passthrough"):
+    if world.is_ut_regen():
         placements = world.multiworld.re_gen_passthrough["Candy Box 2"]["entranceInformation"]
         placement_state = ERPlacementState(world, EntranceLookup(world.random, False, set(), []), False)
 
