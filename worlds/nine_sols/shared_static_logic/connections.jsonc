@@ -250,7 +250,9 @@
     // or skip activating crate by using TCK, then T-dash and AD, then CL to reach the crate, and CL to arena afterward
     //[ { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } ],
     { "from": "CTH - Yanren Arena", "to": "CTH - Middle Left Exit & Elevator", "requires": [] }, // one-way door
-    { "from": "CTH - Above Elevator", "to": "CTH - Middle Left Exit & Elevator", "requires": [] }, // not quite a one-way fall, but no locations on the way
+    { "from": "CTH - Above Elevator", "to": "CTH - Middle Left Exit & Elevator", "requires": [
+        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
+    ] }, // not quite a one-way fall, but no locations and small ledges on the way
     { "from": "CTH - Upper Right Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // one-way door
     { "from": "CTH - Bottom of Large Shaft", "to": "CTH - Stairs Near Large Shaft", "requires": [] }, // hacking
     { "from": "CTH - Stairs Near Large Shaft", "to": "CTH - Lower Left Vents", "requires": [

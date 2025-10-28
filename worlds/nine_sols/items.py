@@ -213,6 +213,9 @@ def create_items(world: "NineSolsWorld") -> None:
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
         if options.shuffle_wall_climb.value:
             multiworld.local_early_items[player]["Wall Climb"] = 1
+    if options.first_root_node == FirstRootNode.option_galactic_dock:
+        early_item = random.choice(["Mystic Nymph: Scout Mode", "Tai-Chi Kick"])
+        multiworld.local_early_items[player][early_item] = 1
     if options.first_root_node == FirstRootNode.option_yinglong_canal:
         if options.shuffle_ledge_grab.value:
             multiworld.local_early_items[player]["Ledge Grab"] = 1

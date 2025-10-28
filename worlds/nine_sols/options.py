@@ -128,6 +128,10 @@ class FirstRootNode(Choice):
     Other reasons for exclusion include: Agrarian Hall because it'd force a boss fight, AF (Elevator) because it has the
     same early locations as AF (Monitoring), Radiant Pagoda because if it doesn't force the boss fight then it forces
     the light bridge to be pre-hacked which makes it just a less interesting version of PR (Central) spawn, etc.
+
+    Some first_root_nodes may require certain items to be placed early.
+    galactic_dock requires either Nymph or Tai-Chi Kick to be placed early.
+    See shuffle_grapple, shuffle_wall_climb and shuffle_ledge_grab option descriptions for the remaining cases.
     """
     display_name = "First Root Node"
     default = 0
