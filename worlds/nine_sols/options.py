@@ -130,15 +130,14 @@ class FirstRootNode(Choice):
     the light bridge to be pre-hacked which makes it just a less interesting version of PR (Central) spawn, etc.
 
     Some first_root_nodes may require certain items to be placed early.
-    galactic_dock requires either Nymph or Tai-Chi Kick to be placed early.
-    See shuffle_grapple, shuffle_wall_climb and shuffle_ledge_grab option descriptions for the remaining cases.
+    For example, if galactic_dock is your first node, Nymph or Tai-Chi Kick will be placed early.
+    See the descriptions of shuffle_grapple, shuffle_wall_climb and shuffle_ledge_grab for similar cases.
     """
     display_name = "First Root Node"
     default = 0
     option_apeman_facility_monitoring = 0
     option_galactic_dock = 1
     option_power_reservoir_east = 2
-    option_power_reservoir_central = 3
     option_lake_yaochi_ruins = 4
     option_yinglong_canal = 5
     option_factory_great_hall = 6
@@ -151,21 +150,21 @@ class FirstRootNode(Choice):
 class ShuffleGrapple(Toggle):
     """Takes away Yi's grapple hook and zipline sliding abilities until you collect the 'Grapple' item.
 
-    If your first_root_node is yinglong_canal, then Grapple will have to be placed early."""
+    If your first_root_node is yinglong_canal, then Grapple will be placed early."""
     display_name = "Shuffle Grapple"
 
 
 class ShuffleWallClimb(Toggle):
     """Takes away Yi's ability to climb glowing green walls until you collect the 'Wall Climb' item.
 
-    If your first_root_node is apeman_facility_monitoring, then Wall Climb will have to be placed early."""
+    If your first_root_node is apeman_facility_monitoring, then Wall Climb will be placed early."""
     display_name = "Shuffle Wall Climb"
 
 
 class ShuffleLedgeGrab(Toggle):
     """Takes away Yi's ability to grab onto ledges and pull himself up until you collect the 'Ledge Grab' item.
 
-    If your first_root_node is yinglong_canal, then Ledge Grab will have to be placed early.
+    If your first_root_node is yinglong_canal, then Ledge Grab will be placed early.
 
     This is more impactful than it might sound because of 'ledge storage' glitches.
     See logic_level (whenever I implement that)."""

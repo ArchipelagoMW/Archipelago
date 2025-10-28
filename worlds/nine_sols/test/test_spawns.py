@@ -79,33 +79,6 @@ class TestPRESpawnAllShuffle(NineSolsTestBase):
         self.assertNotReachableWith("PR (East): Upper Left Room", [])  # because shuffle_grapple
 
 
-class TestPRCSpawn(NineSolsTestBase):
-    options = {
-        "first_root_node": "power_reservoir_central",
-    }
-
-    def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 8)
-
-        self.assertReachableWith("PR (Central): Retrieve Chip From Shanhai 9000", [])
-        self.assertReachableWith("Central Hall: Examine Launch Memorial", [])
-
-
-class TestPRCSpawnAllShuffle(NineSolsTestBase):
-    options = {
-        "first_root_node": "power_reservoir_central",
-        "shuffle_grapple": True,
-        "shuffle_wall_climb": True,
-        "shuffle_ledge_grab": True,
-    }
-
-    def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 8)
-
-        self.assertReachableWith("PR (Central): Retrieve Chip From Shanhai 9000", [])
-        self.assertReachableWith("Central Hall: Examine Launch Memorial", [])
-
-
 class TestLYRSpawn(NineSolsTestBase):
     options = {
         "first_root_node": "lake_yaochi_ruins",

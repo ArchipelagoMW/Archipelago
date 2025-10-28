@@ -332,13 +332,14 @@
         { "item": "Tai-Chi Kick" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
     ] } ] }, // on logic_level: easy, T-dash
     { "from": "PRC - Building Right of Light Bridge", "to": "PRC - Light Bridge", "requires": [] }, // one-way door
-    { "from": "PRC - Light Bridge", "to": "PRC - Root Node", "requires": [] }, // one-way fall
-    { "from": "PRC - Root Node", "to": "PRC - Light Bridge", "requires": [] }, // hacking to unlock door right of Backup Control Room
+    { "from": "PRC - Light Bridge", "to": "PRC - Backup Control Room", "requires": [] }, // one-way fall
+    { "from": "PRC - Backup Control Room", "to": "PRC - Light Bridge", "requires": [] }, // hacking to unlock door right of Backup Control Room
     { "from": "PRC - Left Transporter", "to": "PRC - Chest Near Left Transporter", "requires": [
         { "item": "Cloud Leap" }, { "item": "Ledge Grab" }
     ] },
     { "from": "PRC - Chest Near Left Transporter", "to": "PRC - Left Transporter", "requires": [] }, // fall
     { "from": "PRC - Left Transporter", "to": "PRC - Root Node", "requires": [] }, // one-way door
+    { "from": "PRC - Backup Control Room", "to": "PRC - Root Node", "requires": [] }, // one-way door
     { "from": "PRC - Left Transporter", "to": "PRC - Above Root Node", "requires": [ { "anyOf": [
         { "item": "Grapple" }, { "item": "Cloud Leap" } // one-way hacking door, then this jump
     ] } ] }, // on logic_level: ledge_storage, CL + LS getup, using ledges around the moving box
@@ -359,7 +360,7 @@
     { "from": "PRW - Right Transporter", "to": "PRC - Left Transporter", "requires": [] },
 
     { "from": "PRC - Light Bridge", "to": "RP - Root Node", "requires": [
-        { "region": "PRC - Root Node" } // AND hacking in Backup Control Room to restore power
+        { "region": "PRC - Backup Control Room" } // AND hacking to restore power
     ] },
     // TODO: what happens if we spawn in RP and then try to exit left?
 

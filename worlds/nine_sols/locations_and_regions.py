@@ -210,8 +210,6 @@ def create_regions(world: "NineSolsWorld") -> None:
         first_node_region = "GD - Root Node & Right Exit"
     elif options.first_root_node == FirstRootNode.option_power_reservoir_east:
         first_node_region = "PRE - Root Node"
-    elif options.first_root_node == FirstRootNode.option_power_reservoir_central:
-        first_node_region = "PRC - Root Node"
     elif options.first_root_node == FirstRootNode.option_lake_yaochi_ruins:
         first_node_region = "LYR - Root Node"
     elif options.first_root_node == FirstRootNode.option_yinglong_canal:
