@@ -475,7 +475,8 @@ def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) 
 def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
+    # pieces of heart are not progression, so we don't need to check those here
+    return state.has(Items.HEART_CONTAINER, world.player)
 
 
 def can_hit_at_range(bundle: tuple[CollectionState, Regions, "SohWorld"],
@@ -1031,15 +1032,12 @@ def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBomb
 
 class SohHeartState(LogicMixin):
     # tracking how many hearts the player has instead of checking the collection state every time
-    soh_piece_of_heart_count: Counter[int]
     soh_heart_count: Counter[int]
 
     def init_mixin(self, parent: MultiWorld):
         soh_players = list(parent.get_game_players("Ship of Harkinian") + parent.get_game_groups("Ship of Harkinian"))
-        self.soh_piece_of_heart_count = Counter()
         self.soh_heart_count = Counter({player: 3 for player in soh_players})
 
     def copy_mixin(self, ret: CollectionState) -> CollectionState:
-        ret.soh_piece_of_heart_count = Counter(self.soh_piece_of_heart_count)
         ret.soh_heart_count = Counter(self.soh_heart_count)
         return ret
