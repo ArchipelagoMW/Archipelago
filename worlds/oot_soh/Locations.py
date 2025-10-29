@@ -2604,6 +2604,7 @@ location_table = {str(name): address for name,
 # For making priority locations or excluded locations easier
 # contributions to add more location groups are welcome
 location_name_groups: dict[str, set[str]] = {
+    # Ganon isn't a real location, so it shouldn't be in this group
     "Bosses": {Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON,
-               Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA, Locations.GANON},
+               Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA},
 }
