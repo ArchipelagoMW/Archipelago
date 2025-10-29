@@ -29,7 +29,9 @@ from .Locations import SohLocation, base_location_table, \
     fish_overworld_location_table, \
     child_zelda_location_table, \
     carpenters_location_table, \
-    hundred_skulls_location_table
+    hundred_skulls_location_table, \
+    no_logic_crates_location_table, \
+    no_logic_trees_location_table
 from .location_access import root
 from .location_access.overworld import \
     castle_grounds, \
@@ -232,6 +234,12 @@ def create_regions_and_locations(world: "SohWorld") -> None:
         if world.options.shuffle_100_gs_reward:
             world.included_locations.update(hundred_skulls_location_table)
 
+        if world.options.true_no_logic:
+            if world.options.shuffle_crates == "overworld" or world.options.shuffle_crates == "all":
+                world.included_locations.update(no_logic_crates_location_table)
+            if world.options.shuffle_trees:
+                world.included_locations.update(no_logic_trees_location_table)
+
     # Set region rules and location rules after all locations are created
     all_regions = [root, castle_grounds, death_mountain_crater, death_mountain_trail, desert_colossus, gerudo_fortress,
                    gerudo_valley, goron_city, graveyard, haunted_wasteland, hyrule_field, kakariko, kokiri_forest,
@@ -241,12 +249,6 @@ def create_regions_and_locations(world: "SohWorld") -> None:
                    shadow_temple, spirit_temple, water_temple]
     for region in all_regions:
         region.set_region_rules(world)
-
-    # Place any locations that still don't have a region in the ROOT region.
-    # TODO should be removed when logic is done
-    for location_name, location_address in world.included_locations.items():
-        world.get_region(Regions.ROOT).add_locations(
-            {location_name: location_address}, SohLocation)
 
 
 # Create a dictionary mapping blue warp rewards to their vanilla items

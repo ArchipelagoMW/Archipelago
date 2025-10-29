@@ -1,12 +1,12 @@
 import orjson
 import pkgutil
 
-from typing import Any, List
+from typing import Any, List, ClassVar
 
 from BaseClasses import CollectionState, Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import SohItem, item_data_table, item_table, item_name_groups, progressive_items
-from .Locations import location_table
+from .Locations import location_table, location_name_groups
 from .Options import SohOptions, soh_option_groups
 from .Regions import create_regions_and_locations, place_locked_items, dungeon_reward_item_mapping
 from .Enums import *
@@ -16,6 +16,8 @@ from .ShopItems import fill_shop_items, generate_scrub_prices, set_price_rules, 
 from Fill import fill_restrictive
 from .Presets import oot_soh_options_presets
 from .UniversalTracker import setup_options_from_slot_data
+from settings import Group, Bool
+from Options import OptionError
 
 import logging
 logger = logging.getLogger("SOH_OOT")
@@ -39,6 +41,17 @@ class SohWebWorld(WebWorld):
     option_groups = soh_option_groups
 
 
+class SohSettings(Group):
+    class AllowTrueNoLogic(Bool):
+        """
+        Allows SoH players to enable the true_no_logic hidden option, which makes every region and logically accessible.
+        Do not enable this if you are not ready to use /send, !getitem, or similar commands.
+        Do not enable this if you don't trust the players using it to play responsibly.
+        """
+
+    allow_true_no_logic: AllowTrueNoLogic | bool = False
+
+
 class SohWorld(World):
     """A PC Port of Ocarina of Time"""
 
@@ -46,9 +59,11 @@ class SohWorld(World):
     web = SohWebWorld()
     options: SohOptions
     options_dataclass = SohOptions
+    settings: ClassVar[SohSettings]
     location_name_to_id = location_table
     item_name_to_id = item_table
     item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
 
     # Universal Tracker stuff, does not do anything in normal gen
     using_ut: bool  # so we can check if we're using UT only once
@@ -74,6 +89,11 @@ class SohWorld(World):
         # for use with Universal Tracker, doesn't do anything otherwise
         setup_options_from_slot_data(self)
 
+        if self.options.true_no_logic and not self.settings.allow_true_no_logic:
+            raise OptionError(f"Player {self.player_name} enabled True No Logic, but the corresponding host.yaml "
+                              "setting has not been enabled. Either have them disable that option, or enable it in "
+                              "your host.yaml settings.")
+
         # If door of time is set to closed and dungeon rewards aren't shuffled, force child spawn
         if self.options.door_of_time.value == 0 and self.options.shuffle_dungeon_rewards.value == 0:
             self.options.starting_age.value = 0
@@ -93,6 +113,12 @@ class SohWorld(World):
             location.name = str(location.name)
         for region in self.get_regions():
             region.name = str(region.name)
+
+        if self.options.true_no_logic:
+            for entrance in self.get_entrances():
+                entrance.access_rule = lambda state: True
+            for location in self.get_locations():
+                location.access_rule = lambda state: True
 
     def create_item(self, name: str, create_as_event: bool = False) -> SohItem:
         item_entry = Items(name)
@@ -125,6 +151,9 @@ class SohWorld(World):
         create_filler_item_pool(self)
 
     def set_rules(self) -> None:
+        if self.options.true_no_logic:
+            return
+
         # Completion condition.
         self.multiworld.completion_condition[self.player] = lambda state: state.has(
             Events.GAME_COMPLETED.value, self.player)
@@ -174,7 +203,7 @@ class SohWorld(World):
         fill_shop_items(self)
 
         # if UT ever does start running pre_fill, this will stop it from overwriting the shop price rules
-        if self.using_ut:
+        if self.using_ut or self.options.true_no_logic:
             return
 
         set_price_rules(self)
@@ -311,5 +340,6 @@ class SohWorld(World):
             "shuffle_100_gs_reward": self.options.shuffle_100_gs_reward.value,
             "ice_trap_count": self.options.ice_trap_count.value,
             "ice_trap_filler_replacement": self.options.ice_trap_filler_replacement.value,
+            "no_logic": self.options.true_no_logic.value,
             "apworld_version": self.apworld_version,
         }

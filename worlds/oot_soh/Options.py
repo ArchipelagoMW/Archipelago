@@ -827,6 +827,15 @@ class IceTrapFillerReplacement(Range):
     default = 0
 
 
+class TrueNoLogic(Toggle):
+    """
+    Turn off logic completely.
+    Generation will fail if this is enabled and allow_true_no_logic is not set to true in the host.yaml.
+    """
+    display_name = "True No Logic"
+    visibility = Visibility.spoiler
+
+
 @dataclass
 class SohOptions(PerGameCommonOptions):
     closed_forest: ClosedForest
@@ -909,6 +918,7 @@ class SohOptions(PerGameCommonOptions):
     shuffle_100_gs_reward: Shuffle100GSReward
     ice_trap_count: IceTrapCount
     ice_trap_filler_replacement: IceTrapFillerReplacement
+    true_no_logic: TrueNoLogic
 
 
 soh_option_groups = [
