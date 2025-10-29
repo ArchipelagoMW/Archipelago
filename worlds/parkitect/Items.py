@@ -5,63 +5,65 @@ from .data.item_info import item_info
 from .Options import *
 
 def get_dlc_items():
-    """Get all DLC items from item_info"""
-    dlc_items = []
-    
-    # Taste of Adventures DLC items
+    """Get all DLC items from item_info."""
+    dlc_items = {}
+
     if "taste_of_adventures_dlc" in item_info:
-        for category in item_info["taste_of_adventures_dlc"]:
-            dlc_items.extend(item_info["taste_of_adventures_dlc"][category])
+        dlc_items["taste_of_adventures"] = [
+            item for category in item_info["taste_of_adventures_dlc"]
+            for item in item_info["taste_of_adventures_dlc"][category]
+        ]
     
-    # Booms and Blooms DLC items
     if "booms_and_blooms_dlc" in item_info:
-        for category in item_info["booms_and_blooms_dlc"]:
-            dlc_items.extend(item_info["booms_and_blooms_dlc"][category])
+        dlc_items["booms_and_blooms"] = [
+            item for category in item_info["booms_and_blooms_dlc"]
+            for item in item_info["booms_and_blooms_dlc"][category]
+        ]
     
+    if "dinos_and_dynasties_dlc" in item_info:
+        dlc_items["dinos_and_dynasties"] = [
+            item for category in item_info["dinos_and_dynasties_dlc"]
+            for item in item_info["dinos_and_dynasties_dlc"][category]
+        ]
+
     return dlc_items
 
-def filter_items_by_dlc(items, dlc_value):
-    """Filter out DLC items based on DLC selection"""
+def filter_items_by_dlc(items, dlc1_value, dlc2_value, dlc3_value):
+    """Filter items based on which DLCs are active."""
     dlc_items = get_dlc_items()
-    
-    # If no DLCs are selected (value 0), remove all DLC items
-    if dlc_value == 0:
-        return [item for item in items if item not in dlc_items]
-    
-    # If all DLCs are selected (value 1), keep all items
-    if dlc_value == 1:
-        return items
-    
-    # Filter based on specific DLC selection
-    taste_of_adventures_items = []
-    booms_and_blooms_items = []
     filtered_items = items[:]
-    
-    # Get items for each DLC
-    if "taste_of_adventures_dlc" in item_info:
-        for category in item_info["taste_of_adventures_dlc"]:
-            taste_of_adventures_items.extend(item_info["taste_of_adventures_dlc"][category])
-    
-    if "booms_and_blooms_dlc" in item_info:
-        for category in item_info["booms_and_blooms_dlc"]:
-            booms_and_blooms_items.extend(item_info["booms_and_blooms_dlc"][category])
 
-    if dlc_value != DLC.taste_of_adventures.value:
-        filtered_items = [item for item in filtered_items if item not in taste_of_adventures_items]
+    # Remove DLC1 items if not selected
+    if not dlc1_value and "taste_of_adventures" in dlc_items:
+        filtered_items = [
+            item for item in filtered_items
+            if item not in dlc_items["taste_of_adventures"]
+        ]
 
-    if dlc_value != DLC.booms_and_blooms.value:
-        filtered_items = [item for item in filtered_items if item not in booms_and_blooms_items]
-    
+    # Remove DLC2 items if not selected
+    if not dlc2_value and "booms_and_blooms" in dlc_items:
+        filtered_items = [
+            item for item in filtered_items
+            if item not in dlc_items["booms_and_blooms"]
+        ]
+
+    # Remove DLC3 items if not selected
+    if not dlc3_value and "dinos_and_dynasties" in dlc_items:
+        filtered_items = [
+            item for item in filtered_items
+            if item not in dlc_items["dinos_and_dynasties"]
+        ]
+
     return filtered_items
 
 class ParkitectItem(Item):
     game: str = "Parkitect"
 
 def set_parkitect_items(world):
-    parkitect_items = copy.deepcopy(Scenario_Items[world.options.scenario.value]) # Attractions and Shops!
+    parkitect_items = copy.deepcopy(Scenario_Items[world.options.scenario.value])
     
     # Filter out DLC items based on DLC selection
-    parkitect_items = filter_items_by_dlc(parkitect_items, world.options.dlc.value)
+    parkitect_items = filter_items_by_dlc(parkitect_items, world.options.dlc1.value, world.options.dlc2.value, world.options.dlc3.value)
 
     for each in range(world.options.trap_player_money.value):
         parkitect_items.append("Player Money Trap")
@@ -136,7 +138,7 @@ def set_parkitect_items(world):
     items = item_info["Rides"] + item_info["Shops"]
     
     # Filter items based on DLC selection for starting ride selection
-    items = filter_items_by_dlc(items, world.options.dlc.value)
+    items = filter_items_by_dlc(items, world.options.dlc1.value, world.options.dlc2.value, world.options.dlc3.value)
 
     candidates = [item for item in parkitect_items if item in items]
     candidate = world.random.choice(candidates)

@@ -16,8 +16,9 @@ class Difficulty(IntEnum):
     extreme = 3
 
 class DLC(IntEnum):
-    taste_of_adventures = 2
-    booms_and_blooms = 3
+    taste_of_adventures = 1
+    booms_and_blooms = 2
+    dinos_and_dynasties = 3
 
 # Selectable options
 class SelectedScenario(Choice):
@@ -41,15 +42,32 @@ class SelectedDifficulty(Choice):
     option_extreme = Difficulty.extreme.value
     default = Difficulty.medium.value
 
-class SelectedDLC(Choice):
+# DLC's
+class SelectedDLC1(Choice):
     """
     DLC's have extra rides and shops.
     """
-    display_name = "DLCs"
-    option_none = 0
-    option_all = 1
-    option_taste_of_adventures = DLC.taste_of_adventures.value
-    option_booms_and_blooms = DLC.booms_and_blooms.value
+    display_name = "Taste of Adventures"
+    option_no = 0
+    option_yes = 1
+    default = 0
+
+class SelectedDLC2(Choice):
+    """
+    DLC's have extra rides and shops.
+    """
+    display_name = "Booms and Blooms"
+    option_no = 0
+    option_yes = 1
+    default = 0
+
+class SelectedDLC3(Choice):
+    """
+    DLC's have extra rides and shops.
+    """
+    display_name = "Dinos and Dynasties"
+    option_no = 0
+    option_yes = 1
     default = 0
 
 # Goals
@@ -429,8 +447,12 @@ class SelectedProgressiveSpeedups(Choice):
 parkitect_option_groups = [
     OptionGroup("Scenario Options", [
         SelectedScenario,
-        SelectedDifficulty,
-        SelectedDLC
+        SelectedDifficulty
+    ]),
+    OptionGroup("DLC Options", [
+        SelectedDLC1,
+        SelectedDLC2,
+        SelectedDLC3
     ]),
     OptionGroup("Goal Options", [
         GoalGuests,
@@ -485,7 +507,9 @@ parkitect_option_groups = [
 class ParkitectOptions(PerGameCommonOptions):
     difficulty: SelectedDifficulty
     scenario: SelectedScenario
-    dlc: SelectedDLC
+    dlc1: SelectedDLC1
+    dlc2: SelectedDLC2
+    dlc3: SelectedDLC3
 
     # traps
     trap_player_money: TrapPlayerMoney

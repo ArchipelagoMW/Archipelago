@@ -489,6 +489,8 @@ class ParkitectWorld(World):
         goal_shops = self.options.goal_shops.value
         goal_shop_profit = self.options.goal_shop_profit.value
 
+        print(self.item_table)
+
         goals = {
             "park_tickets": {
                 "enabled": goal_park_tickets > 0,
@@ -522,10 +524,10 @@ class ParkitectWorld(World):
                 "enabled": goal_shops > 0,
                 "value": goal_shops,
             },
-            #"shops2": {
-            #    "enabled": len(goal_shops) > 0,
-            #    "value": goal_shops,
-            #},
+            "shops2": {
+                "enabled": len(goal_shops) > 0,
+                "value": goal_shops,
+            },
         }
 
         seed = self.multiworld.player_name[self.player] + str(self.options.scenario) + str(self.multiworld.seed_name)
