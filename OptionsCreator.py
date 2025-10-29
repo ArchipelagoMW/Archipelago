@@ -80,7 +80,7 @@ class VisualRange(MDBoxLayout):
         self.name = name
         super().__init__(*args, **kwargs)
 
-        def update_points(*args):
+        def update_points(*update_args):
             pass
 
         self.slider._update_points = update_points
@@ -103,11 +103,11 @@ class VisualNamedRange(MDBoxLayout):
     range: VisualRange = ObjectProperty(None)
     choice: MDButton = ObjectProperty(None)
 
-    def __init__(self, *args, option: typing.Type[NamedRange], name: str, range: VisualRange, **kwargs):
+    def __init__(self, *args, option: typing.Type[NamedRange], name: str, range_widget: VisualRange, **kwargs):
         self.option = option
         self.name = name
         super().__init__(*args, **kwargs)
-        self.range = range
+        self.range = range_widget
         self.add_widget(self.range)
 
 
@@ -216,8 +216,8 @@ class VisualListSetCounter(MDDialog):
         if len(value) >= 3:
             self.dropdown.items.clear()
 
-            def on_press(text):
-                split_text = MarkupLabel(text=text, markup=True).markup
+            def on_press(txt):
+                split_text = MarkupLabel(text=txt, markup=True).markup
                 self.input.set_text(self.input, "".join(text_frag for text_frag in split_text
                                                         if not text_frag.startswith("[")))
                 self.input.focus = True
@@ -293,9 +293,9 @@ class OptionsCreator(ThemedApp):
                        pos_hint={"center_x": 0.5}, size_hint_x=0.5).open()
 
     def create_range(self, option: typing.Type[Range], name: str):
-        def update_text(box: VisualRange):
-            self.options[name] = int(box.slider.value)
-            box.tag.text = str(int(box.slider.value))
+        def update_text(range_box: VisualRange):
+            self.options[name] = int(range_box.slider.value)
+            range_box.tag.text = str(int(range_box.slider.value))
             return
 
         box = VisualRange(option=option, name=name)
@@ -304,32 +304,32 @@ class OptionsCreator(ThemedApp):
         return box
 
     def create_named_range(self, option: typing.Type[NamedRange], name: str):
-        def set_to_custom(box: VisualNamedRange):
-            if (not self.options[name] == box.range.slider.value) \
+        def set_to_custom(range_box: VisualNamedRange):
+            if (not self.options[name] == range_box.range.slider.value) \
                     and (not self.options[name] in option.special_range_names or
-                         box.range.slider.value != option.special_range_names[self.options[name]]):
+                         range_box.range.slider.value != option.special_range_names[self.options[name]]):
                 # we should validate the touch here,
                 # but this is much cheaper
-                self.options[name] = int(box.range.slider.value)
-                box.range.tag.text = str(int(box.range.slider.value))
-                set_button_text(box.choice, "Custom")
+                self.options[name] = int(range_box.range.slider.value)
+                range_box.range.tag.text = str(int(range_box.range.slider.value))
+                set_button_text(range_box.choice, "Custom")
 
         def set_button_text(button: MDButton, text: str):
             button.text.text = text
 
-        def set_value(text: str, box: VisualNamedRange):
-            box.range.slider.value = min(max(option.special_range_names[text.lower()], option.range_start),
-                                         option.range_end)
-            box.range.tag.text = str(int(box.range.slider.value))
-            set_button_text(box.choice, text)
+        def set_value(text: str, range_box: VisualNamedRange):
+            range_box.range.slider.value = min(max(option.special_range_names[text.lower()], option.range_start),
+                                               option.range_end)
+            range_box.range.tag.text = str(int(range_box.range.slider.value))
+            set_button_text(range_box.choice, text)
             self.options[name] = text.lower()
-            box.range.slider.dropdown.dismiss()
+            range_box.range.slider.dropdown.dismiss()
 
-        def open(button):
+        def open_dropdown(button):
             # for some reason this fixes an issue causing some to not open
             box.range.slider.dropdown.open()
 
-        box = VisualNamedRange(option=option, name=name, range=self.create_range(option, name))
+        box = VisualNamedRange(option=option, name=name, range_widget=self.create_range(option, name))
         box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
         items = [
             {
@@ -339,7 +339,7 @@ class OptionsCreator(ThemedApp):
             for choice in option.special_range_names
         ]
         box.range.slider.dropdown = MDDropdownMenu(caller=box.choice, items=items)
-        box.choice.bind(on_release=open)
+        box.choice.bind(on_release=open_dropdown)
         self.options[name] = option.default
         return box
 
@@ -361,13 +361,13 @@ class OptionsCreator(ThemedApp):
             self.options[name] = value
             dropdown.dismiss()
 
-        def open(button):
+        def open_dropdown(button):
             # for some reason this fixes an issue causing some to not open
             dropdown.open()
 
         default_random = option.default == "random"
         main_button = VisualChoice(option=option, name=name)
-        main_button.bind(on_release=open)
+        main_button.bind(on_release=open_dropdown)
 
         items = [
             {
@@ -458,7 +458,7 @@ class OptionsCreator(ThemedApp):
         dialog.open()
 
     def create_option_set_list_counter(self, option: typing.Type[OptionList] | typing.Type[OptionSet] |
-                                                     typing.Type[OptionCounter], name: str, world: typing.Type[World]):
+                                       typing.Type[OptionCounter], name: str, world: typing.Type[World]):
         main_button = MDButton(MDButtonText(text="Edit"), on_release=lambda x: self.create_popup(option, name, world))
         return main_button
 
@@ -466,8 +466,7 @@ class OptionsCreator(ThemedApp):
         option_base = MDBoxLayout(orientation="vertical", size_hint_y=None, padding=[0, 0, dp(5), dp(5)])
 
         tooltip = filter_tooltip(option.__doc__)
-        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]"
-                                         f"{getattr(option, 'display_name', name)}")
+        option_label = TooltipLabel(text=f"[ref=0|{tooltip}]{getattr(option, 'display_name', name)}")
         label_box = MDBoxLayout(orientation="horizontal")
         label_anchor = MDAnchorLayout(anchor_x="right", anchor_y="center")
         label_anchor.add_widget(option_label)
@@ -567,7 +566,7 @@ class OptionsCreator(ThemedApp):
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
                                                                                            on_release=lambda x,
-                                                                                                             item=group_item:
+                                                                                           item=group_item:
                                                                                            self.tap_expansion_chevron(
                                                                                                item, x)),
                                                                  md_bg_color=self.theme_cls.surfaceContainerLowestColor,
@@ -590,7 +589,8 @@ class OptionsCreator(ThemedApp):
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"
 
-    def tap_expansion_chevron(self, panel: MDExpansionPanel, chevron: TrailingPressedIconButton | MDListItem):
+    @staticmethod
+    def tap_expansion_chevron(panel: MDExpansionPanel, chevron: TrailingPressedIconButton | MDListItem):
         if isinstance(chevron, MDListItem):
             chevron = next((child for child in chevron.ids.trailing_container.children
                             if isinstance(child, TrailingPressedIconButton)), None)
@@ -608,15 +608,15 @@ class OptionsCreator(ThemedApp):
         self.main_layout = self.container.ids.main
         self.scrollbox = self.container.ids.scrollbox
 
-        def world_button_action(world_button: WorldButton):
-            if self.current_game != world_button.world_cls.game:
+        def world_button_action(world_btn: WorldButton):
+            if self.current_game != world_btn.world_cls.game:
                 old_button = next((button for button in self.scrollbox.layout.children
                                    if button.world_cls.game == self.current_game), None)
                 if old_button:
                     old_button.state = "normal"
             else:
-                world_button.state = "down"
-            self.create_options_panel(world_button)
+                world_btn.state = "down"
+            self.create_options_panel(world_btn)
 
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
@@ -643,9 +643,11 @@ class OptionsCreator(ThemedApp):
 
         self.game_label.bind(texture_size=set_height)
 
-        #from kivy.modules.console import create_console
-        #from kivy.core.window import Window
-        #create_console(Window, self.container)
+        # Uncomment to re-enable the Kivy console/live editor
+        # Ctrl-E to enable it, make sure numlock/capslock is disabled
+        # from kivy.modules.console import create_console
+        # from kivy.core.window import Window
+        # create_console(Window, self.container)
 
         return self.container
 
