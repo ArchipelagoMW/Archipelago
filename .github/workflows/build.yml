@@ -9,12 +9,14 @@ on:
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
       - '*.iss'
+      - 'worlds/*/archipelago.json'
   workflow_dispatch:
 
 env:
@@ -22,7 +24,7 @@ env:
   # NOTE: since appimage/appimagetool and appimage/type2-runtime does not have tags anymore,
   #       we check the sha256 and require manual intervention if it was updated.
   APPIMAGETOOL_VERSION: continuous
-  APPIMAGETOOL_X86_64_HASH: '29348a20b80827cd261c28e95172ff828b69d43d4e4e18e3fd069e2c8693c94e'
+  APPIMAGETOOL_X86_64_HASH: '9493a6b253a01f84acb9c624c38810ecfa11d99daa829b952b0bff43113080f9'
   APPIMAGE_RUNTIME_VERSION: continuous
   APPIMAGE_RUNTIME_X86_64_HASH: 'e70ffa9b69b211574d0917adc482dd66f25a0083427b5945783965d55b0b0a8b'
 

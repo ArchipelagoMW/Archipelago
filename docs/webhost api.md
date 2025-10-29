@@ -383,6 +383,8 @@ Will provide a dict of static tracker data with the following keys:
 - item_link groups and their players (`groups`)
 - The datapackage hash for each game (`datapackage`)
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
+- The number of checks found vs. total checks available per player (`player_locations_total`)
+  - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
 
 Example:
 ```json
@@ -412,7 +414,19 @@ Example:
     "The Messenger": {
       "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b",
     }
-  }
+  },
+  "player_locations_total": [
+    {
+      "player": 1,
+      "team" : 0,
+      "total_locations": 10
+    },
+    {
+      "player": 2,
+      "team" : 0,
+      "total_locations": 20
+    }
+  ],
 }
 ```
 
