@@ -2417,6 +2417,7 @@ grass_dungeon_location_table: dict[str, int] = {
 }
 
 tree_location_table: dict[str, int] = {
+    Locations.MARKET_TREE: 2393,
     Locations.HC_NEAR_GUARDS_TREE_1: 2394,
     Locations.HC_NEAR_GUARDS_TREE_2: 2395,
     Locations.HC_NEAR_GUARDS_TREE_3: 2396,
@@ -2603,6 +2604,6 @@ location_table = {str(name): address for name,
 # For making priority locations or excluded locations easier
 # contributions to add more location groups are welcome
 location_name_groups: dict[str, set[str]] = {
-    "Bosses": {Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON, 
+    "Bosses": {Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON,
                Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA, Locations.GANON},
 }
