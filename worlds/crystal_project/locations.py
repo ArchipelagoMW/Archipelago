@@ -113,14 +113,16 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Soiled Den
         #Treasure chests
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Lurking in the shadows by the Bangler", 218 + treasure_index_offset), #(311, 111, -96) Clamshell chest
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - By the Bangler", 271 + treasure_index_offset), #(322, 111, -101) Clamshell chest
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Long river jump", 448 + treasure_index_offset), #(326, 111, -116) Dodge Charm chest
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Riverside", 1155 + treasure_index_offset), #(249, 116, -156) Tonic Pouch chest
+        #Soiled Denlende
+        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Riverside", 1155 + treasure_index_offset),  # (249, 116, -156) Tonic Pouch chest
+        #The Bangler
+        LocationData(THE_BANGLER_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Lurking in the shadows by the Bangler", 218 + treasure_index_offset), #(311, 111, -96) Clamshell chest
+        LocationData(THE_BANGLER_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - By the Bangler", 271 + treasure_index_offset), #(322, 111, -101) Clamshell chest
+        LocationData(THE_BANGLER_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Chest - Long river jump", 448 + treasure_index_offset), #(326, 111, -116) Dodge Charm chest
 
         #NPCs
-        #296, 112, -155
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset),
+        #Soiled Denlende
+        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " NPC - Dog Bone among the bones and flowers", 176 + npc_index_offset), #(296, 112, -155)
 
         #Pale Grotto
         #Treasure chests
@@ -568,7 +570,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Stormy first floor of ruins", 2676 + treasure_index_offset), #Fenix Juice chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset), #West Lookout Token chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasnt that bad)", 1189 + treasure_index_offset), #Central Lookout Token chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasn't that bad)", 1189 + treasure_index_offset), #Central Lookout Token chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Balance beam", 97 + treasure_index_offset), #Scope Specs chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Past Lost Son", 1667 + treasure_index_offset), #Ether Pouch chest
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Salmon Bay map chest
@@ -1365,7 +1367,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 8
         LocationData(GRAN_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Gran...?", 183 + boss_index_offset), #Monster ID: 28 (min level 30)
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 12
+        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 12
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 23
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 18
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)), #Monster ID: 27
@@ -1854,7 +1856,7 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
         LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
         LocationData(MERCURY_SHRINE_AP_REGION, MERCURY_SHRINE_DISPLAY_NAME + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SOILED_DEN_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Region Completion", 6003 + regionsanity_index_offset, regionsanity=True),
+        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Region Completion", 6003 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Region Completion", 6004 + regionsanity_index_offset, regionsanity=True),
         LocationData(SEASIDE_CLIFFS_AP_REGION, SEASIDE_CLIFFS_DISPLAY_NAME + " Region Completion", 6005 + regionsanity_index_offset, regionsanity=True),
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Region Completion", 6006 + regionsanity_index_offset, regionsanity=True),
