@@ -36,6 +36,26 @@ DATA_LOCATIONS = {
     "CrashCheck4": (0x16DD, 1),
 }
 
+TRACKER_EVENT_FLAGS = [
+    0x77, # EVENT_BEAT_BROCK
+    0xbf, # EVENT_BEAT_MISTY
+    0x167, # EVENT_BEAT_LT_SURGE
+    0x1a9, # EVENT_BEAT_ERIKA
+    0x259, # EVENT_BEAT_KOGA
+    0x361, # EVENT_BEAT_SABRINA
+    0x299, # EVENT_BEAT_BLAINE
+    0x51, # EVENT_BEAT_VIRIDIAN_GYM_GIOVANNI
+
+    0x38, # EVENT_OAK_GOT_PARCEL
+    0x525, # EVENT_BEAT_ROUTE22_RIVAL_1ST_BATTLE
+    0x117, # EVENT_RESCUED_MR_FUJI
+    0x55c, # EVENT_GOT_SS_TICKET
+    0x78f, # EVENT_BEAT_SILPH_CO_GIOVANNI
+    0x901, # EVENT_BEAT_CHAMPION_RIVAL
+]
+
+assert len(TRACKER_EVENT_FLAGS) <= 32
+
 location_map = {"Rod": {}, "EventFlag": {}, "Missable": {}, "Hidden": {}, "list": {}, "DexSanityFlag": {}}
 location_bytes_bits = {}
 for location in location_data:
@@ -61,6 +81,7 @@ class PokemonRBClient(BizHawkClient):
         super().__init__()
         self.auto_hints = set()
         self.locations_array = None
+        self.tracker_bitfield = 0
         self.disconnect_pending = False
         self.set_deathlink = False
         self.banking_command = None
@@ -235,6 +256,22 @@ class PokemonRBClient(BizHawkClient):
         if data["CurrentMap"][0] != self.current_map:
             await ctx.send_msgs([{"cmd": "Bounce", "slots": [ctx.slot], "data": {"currentMap": data["CurrentMap"][0]}}])
             self.current_map = data["CurrentMap"][0]
+
+        # TRACKER
+        tracker_bitfield = 0
+        for i, flag in enumerate(TRACKER_EVENT_FLAGS):
+            if data["EventFlag"][flag // 8] & (1 << (flag % 8)):
+                tracker_bitfield |= 1 << i
+
+        if tracker_bitfield != self.tracker_bitfield:
+            await ctx.send_msgs([{
+                "cmd": "Set",
+                "key": f"pokemon_rb_events_{ctx.team}_{ctx.slot}",
+                "default": 0,
+                "want_reply": False,
+                "operations": [{"operation": "or", "value": tracker_bitfield}],
+            }])
+            self.tracker_bitfield = tracker_bitfield
 
         # VICTORY
 
