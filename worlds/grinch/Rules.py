@@ -284,13 +284,13 @@ rules_dict: dict[str,list[list[str]]] = {
         [REL, RS],
         [REL, GC]
     ],
-    "WD - OCD BP inside Middle Pipe": [
+    "WD - OCD BP inside Pipe near Vacuum Tube": [
         [REL, RS],
         [REL, GC],
         [SS, RS],
         [SS, GC]
     ],
-    "WD - OCD BP inside Right Pipe": [
+    "WD - OCD BP inside Pipe on right side": [
         [REL, RS],
         [REL, GC]
     ],
@@ -298,7 +298,7 @@ rules_dict: dict[str,list[list[str]]] = {
         [REL, RS],
         [REL, GC]
     ],
-    "WD - OCD BP inside Left Pipe": [
+    "WD - OCD BP inside Pipe on left side": [
         [REL, RS],
         [REL, GC],
         [SS, RS],
