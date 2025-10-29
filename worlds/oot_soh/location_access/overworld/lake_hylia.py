@@ -167,7 +167,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # LH from Shortcut
     # Connections
     connect_regions(Regions.LH_FROM_SHORTCUT, world, [
-        (Regions.LAKE_HYLIA, lambda bundle: can_live(bundle) or
+        (Regions.LAKE_HYLIA, lambda bundle: (hearts(bundle) > 1) or
          has_item(Items.BOTTLE_WITH_FAIRY, bundle) or
          has_item(Items.BRONZE_SCALE, bundle) or
          can_use(Items.IRON_BOOTS, bundle)),

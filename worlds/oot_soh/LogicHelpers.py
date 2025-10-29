@@ -37,7 +37,7 @@ def add_locations(parent_region: Regions, world: "SohWorld",
         locationName = location[0]
         def locationRule(bundle): return True
         if len(location) > 1:
-            locationRule = location[1]
+            locationRule = location[1]  # type: ignore # noqa
         if locationName in world.included_locations:
             locationAddress = world.included_locations.pop(location[0])
             world.get_region(parent_region).add_locations(
@@ -52,7 +52,7 @@ def connect_regions(parent_region: Regions, world: "SohWorld",
         regionName = region[0]
         def regionRule(bundle): return True
         if len(region) > 1:
-            regionRule = region[1]
+            regionRule = region[1]  # type: ignore # noqa
         world.get_region(parent_region).connect(world.get_region(regionName),
                                                 rule=rule_wrapper.wrap(parent_region, regionRule, world))
 
@@ -229,7 +229,7 @@ def has_bottle_count(bundle: tuple[CollectionState, Regions, "SohWorld"], target
 def bombchu_refill(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     world = bundle[2]
-    return state.has_any([Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or world.options.bombchu_drops
+    return state.has_any([Items.BUY_BOMBCHUS10, Items.BUY_BOMBCHUS20, Events.COULD_PLAY_BOWLING, Events.CARPET_MERCHANT], world.player) or bool(world.options.bombchu_drops)
 
 
 def bombchus_enabled(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -284,7 +284,7 @@ def blue_fire(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
              (has_item(Events.CAN_ACCESS_BLUE_FIRE, bundle) or
               has_item(Items.BUY_BLUE_FIRE, bundle))) or
             (can_use(Items.ICE_ARROW, bundle) and
-             world.options.blue_fire_arrows))
+             bool(world.options.blue_fire_arrows)))
 
 
 def can_use_sword(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -325,7 +325,7 @@ def is_adult(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)  # type: ignore
+    return state._soh_can_reach_as_age(parent_region, Ages.ADULT, world.player)  # type: ignore # noqa
 
 
 def at_day(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -344,7 +344,7 @@ def is_child(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     state = bundle[0]
     parent_region = bundle[1]
     world = bundle[2]
-    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)  # type: ignore
+    return state._soh_can_reach_as_age(parent_region, Ages.CHILD, world.player)  # type: ignore # noqa
 
 
 def starting_age(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -464,17 +464,13 @@ def can_break_upper_beehives(bundle: tuple[CollectionState, Regions, "SohWorld"]
     world = bundle[2]
     return (hookshot_or_boomerang(bundle) or
             (can_do_trick(Tricks.BOMBCHU_BEEHIVES, bundle) and can_use(Items.PROGRESSIVE_BOMBCHU, bundle)) or
-            (world.options.slingbow_break_beehives and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))))
+            (bool(world.options.slingbow_break_beehives) and (can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT], bundle))))
 
 
 def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
     return (can_use(Items.SONG_OF_STORMS, bundle) and
             (has_item(Items.STONE_OF_AGONY, bundle)
              or can_do_trick(Tricks.GROTTOS_WITHOUT_AGONY, bundle)))
-
-
-def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    return hearts(bundle) >= 4
 
 
 def can_hit_at_range(bundle: tuple[CollectionState, Regions, "SohWorld"],
@@ -659,7 +655,7 @@ def can_kill_enemy(bundle: tuple[CollectionState, Regions, "SohWorld"], enemy: E
 
     if enemy == Enemies.KING_DODONGO:
         return (has_boss_soul(Items.KING_DODONGOS_SOUL, bundle) and can_jump_slash(bundle) and
-                (can_use_any([Items.BOMB_BAG, bundle, Items.GORONS_BRACELET], bundle) or
+                (can_use_any([Items.BOMB_BAG, Items.GORONS_BRACELET], bundle) or
                  (can_do_trick(Tricks.DC_DODONGO_CHU, bundle) and is_adult(bundle) and can_use(Items.BOMBCHUS_5, bundle))))
 
     if enemy == Enemies.BARINADE:
@@ -1034,12 +1030,12 @@ class SohHeartState(LogicMixin):
     soh_heart_count: Counter[int]
 
     def init_mixin(self, parent: MultiWorld):
-        soh_players = list(parent.get_game_players("Ship of Harkinian") + parent.get_game_groups("Ship of Harkinian"))
+        soh_players = list(parent.get_game_players(
+            "Ship of Harkinian") + parent.get_game_groups("Ship of Harkinian"))
         self.soh_piece_of_heart_count = Counter()
         self.soh_heart_count = Counter({player: 3 for player in soh_players})
 
     def copy_mixin(self, ret: CollectionState) -> CollectionState:
-        ret.soh_piece_of_heart_count = Counter(self.soh_piece_of_heart_count)
-        ret.soh_heart_count = Counter(self.soh_heart_count)
+        ret.soh_piece_of_heart_count = Counter(self.soh_piece_of_heart_count)  # type: ignore # noqa
+        ret.soh_heart_count = Counter(self.soh_heart_count)  # type: ignore # noqa
         return ret
-
