@@ -1,10 +1,20 @@
-from .Enums import Locations
+from .Enums import Locations, Ages
 
-from BaseClasses import Location
+from BaseClasses import CollectionState, Location
 
 
 class SohLocation(Location):
     game = "Ship of Harkinian"
+
+    def can_reach(self, state: CollectionState) -> bool:
+        can_reach = False
+        # check if we can reach this as either age
+        stored_age = state._soh_age[self.player]
+        for age in [Ages.CHILD, Ages.ADULT]:
+            state._soh_age[self.player] = age
+            can_reach |= super().can_reach(state)
+        state._soh_age[self.player] = stored_age
+        return can_reach
 
 
 base_location_table: dict[str, int] = {
