@@ -192,7 +192,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.GRAVEYARD_WARP_PAD_REGION, world, [
-        (Locations.GRAVEYARD_GOSSIP_STONE_FAIRY, lambda bundle: True),
+        (Locations.GRAVEYARD_GOSSIP_STONE_FAIRY,
+         lambda bundle: call_gossip_fairy_except_suns(bundle)),
         (Locations.GRAVEYARD_GOSSIP_STONE_BIG_FAIRY,
          lambda bundle: can_use(Items.SONG_OF_STORMS, bundle))
     ])
