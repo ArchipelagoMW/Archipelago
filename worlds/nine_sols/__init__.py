@@ -114,8 +114,8 @@ class NineSolsWorld(World):
             'seals_for_eigong',
             'seals_for_prison',
             'seals_for_ethereal',
-            'first_root_node',
         )
+        slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
         slot_data["jade_costs"] = self.jade_costs
         # APWorld versions are not (yet?) exposed by AP servers, so the client/mod needs us to put it in slot_data
