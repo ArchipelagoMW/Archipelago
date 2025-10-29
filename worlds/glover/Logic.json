@@ -26540,6 +26540,19 @@
 			]
 		},
 		"l1": {
+			"Alien Block": [
+				{
+					"AP_IDS": [
+						"0x6AE"
+					],
+					"IDS": [
+						"0x20E"
+					],
+					"NEEDS_BALL": false,
+					"REGION": 3,
+					"TYPE": 0
+				}
+			],
 			"Aliens Life": [
 				{
 					"AP_IDS": [
@@ -26757,7 +26770,7 @@
 			"Cliff Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x6AE"
+						"0x6AF"
 					],
 					"IDS": [
 						"0x14E"
@@ -27044,7 +27057,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x6B3"
+						"0x6B4"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -27256,7 +27269,7 @@
 			"Hazard Stripe Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x6AF"
+						"0x6B0"
 					],
 					"IDS": [
 						"0x1DD"
@@ -27607,7 +27620,7 @@
 			"Sign Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x6B0"
+						"0x6B1"
 					],
 					"IDS": [
 						"0x154"
@@ -27725,7 +27738,7 @@
 			"Stone Pillar Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x6B1"
+						"0x6B2"
 					],
 					"IDS": [
 						"0x142"
@@ -27763,7 +27776,7 @@
 			"UFO Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x6B2"
+						"0x6B3"
 					],
 					"IDS": [
 						"0x169"
@@ -28002,11 +28015,11 @@
 			"Above Mashers Garibs": [
 				{
 					"AP_IDS": [
-						"0x6B4",
 						"0x6B5",
 						"0x6B6",
 						"0x6B7",
-						"0x6B8"
+						"0x6B8",
+						"0x6B9"
 					],
 					"IDS": [
 						"0x37",
@@ -28144,10 +28157,10 @@
 			"Before Mashers Garibs": [
 				{
 					"AP_IDS": [
-						"0x6B9",
 						"0x6BA",
 						"0x6BB",
-						"0x6BC"
+						"0x6BC",
+						"0x6BD"
 					],
 					"IDS": [
 						"0x84",
@@ -28168,9 +28181,9 @@
 			"Behind Spawn Garibs": [
 				{
 					"AP_IDS": [
-						"0x6BD",
 						"0x6BE",
-						"0x6BF"
+						"0x6BF",
+						"0x6C0"
 					],
 					"IDS": [
 						"0x86",
@@ -28190,7 +28203,7 @@
 			"Checkpoint 1": [
 				{
 					"AP_IDS": [
-						"0x6EE"
+						"0x6EF"
 					],
 					"IDS": [
 						"0x2E"
@@ -28210,7 +28223,7 @@
 			"Cliff Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x6EF"
+						"0x6F0"
 					],
 					"IDS": [
 						"0x142"
@@ -28228,10 +28241,10 @@
 			"Crusher Wind-Ups": [
 				{
 					"AP_IDS": [
-						"0x6E6",
 						"0x6E7",
-						"0x6E0",
-						"0x6E1"
+						"0x6E8",
+						"0x6E1",
+						"0x6E2"
 					],
 					"COUNT": 2,
 					"IDS": [
@@ -28289,7 +28302,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x6F2"
+						"0x6F3"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -28394,8 +28407,8 @@
 			"Metal Walkway Garibs": [
 				{
 					"AP_IDS": [
-						"0x6C0",
-						"0x6C1"
+						"0x6C1",
+						"0x6C2"
 					],
 					"IDS": [
 						"0x70",
@@ -28643,7 +28656,6 @@
 			"Pyramid Garibs": [
 				{
 					"AP_IDS": [
-						"0x6C2",
 						"0x6C3",
 						"0x6C4",
 						"0x6C5",
@@ -28654,7 +28666,8 @@
 						"0x6CA",
 						"0x6CB",
 						"0x6CC",
-						"0x6CD"
+						"0x6CD",
+						"0x6CE"
 					],
 					"IDS": [
 						"0x92",
@@ -28683,7 +28696,7 @@
 			"Pyramid Life": [
 				{
 					"AP_IDS": [
-						"0x6ED"
+						"0x6EE"
 					],
 					"IDS": [
 						"0x8A"
@@ -28701,12 +28714,12 @@
 			"Race Bridge Garibs": [
 				{
 					"AP_IDS": [
-						"0x6CE",
 						"0x6CF",
 						"0x6D0",
 						"0x6D1",
 						"0x6D2",
-						"0x6D3"
+						"0x6D3",
+						"0x6D4"
 					],
 					"IDS": [
 						"0xB0",
@@ -28729,11 +28742,11 @@
 			"Ramp Jump Arch Garibs": [
 				{
 					"AP_IDS": [
-						"0x6D4",
 						"0x6D5",
 						"0x6D6",
 						"0x6D7",
-						"0x6D8"
+						"0x6D8",
+						"0x6D9"
 					],
 					"IDS": [
 						"0x2F",
@@ -28790,7 +28803,7 @@
 			"Right Platform Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x6F0"
+						"0x6F1"
 					],
 					"IDS": [
 						"0x148"
@@ -28883,14 +28896,14 @@
 			"Slope Wind-Ups": [
 				{
 					"AP_IDS": [
-						"0x6E8",
 						"0x6E9",
 						"0x6EA",
 						"0x6EB",
-						"0x6E2",
+						"0x6EC",
 						"0x6E3",
 						"0x6E4",
-						"0x6E5"
+						"0x6E5",
+						"0x6E6"
 					],
 					"COUNT": 4,
 					"IDS": [
@@ -29008,7 +29021,7 @@
 			"Spawn Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x6F1"
+						"0x6F2"
 					],
 					"IDS": [
 						"0x118"
@@ -29021,7 +29034,7 @@
 			"Speed Potion": [
 				{
 					"AP_IDS": [
-						"0x6F3"
+						"0x6F4"
 					],
 					"IDS": [
 						"0x202"
@@ -29039,9 +29052,9 @@
 			"Spike Wall Garibs": [
 				{
 					"AP_IDS": [
-						"0x6D9",
 						"0x6DA",
-						"0x6DB"
+						"0x6DB",
+						"0x6DC"
 					],
 					"IDS": [
 						"0x5A",
@@ -29108,7 +29121,7 @@
 			"Throwbot": [
 				{
 					"AP_IDS": [
-						"0x6EC"
+						"0x6ED"
 					],
 					"COUNT": 1,
 					"IDS": [
@@ -29128,10 +29141,10 @@
 			"Under Spike Garibs": [
 				{
 					"AP_IDS": [
-						"0x6DC",
 						"0x6DD",
 						"0x6DE",
-						"0x6DF"
+						"0x6DF",
+						"0x6E0"
 					],
 					"IDS": [
 						"0x7C",
@@ -29154,7 +29167,6 @@
 			"Above Fan Garibs": [
 				{
 					"AP_IDS": [
-						"0x6F4",
 						"0x6F5",
 						"0x6F6",
 						"0x6F7",
@@ -29162,7 +29174,8 @@
 						"0x6F9",
 						"0x6FA",
 						"0x6FB",
-						"0x6FC"
+						"0x6FC",
+						"0x6FD"
 					],
 					"IDS": [
 						"0xA7",
@@ -29189,7 +29202,7 @@
 			"Above Fan Red Switch": [
 				{
 					"AP_IDS": [
-						"0x74D"
+						"0x74E"
 					],
 					"IDS": [
 						"0x128"
@@ -29208,7 +29221,7 @@
 			"Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x74E"
+						"0x74F"
 					],
 					"IDS": [
 						"0x182"
@@ -29226,7 +29239,7 @@
 			"Boomerang Ball": [
 				{
 					"AP_IDS": [
-						"0x754"
+						"0x755"
 					],
 					"IDS": [
 						"0x268"
@@ -29245,7 +29258,7 @@
 			"Checkpoint 1": [
 				{
 					"AP_IDS": [
-						"0x749"
+						"0x74A"
 					],
 					"IDS": [
 						"0x27"
@@ -29265,7 +29278,7 @@
 			"Checkpoint 2": [
 				{
 					"AP_IDS": [
-						"0x74A"
+						"0x74B"
 					],
 					"IDS": [
 						"0x1CC"
@@ -29285,7 +29298,7 @@
 			"Checkpoint 3": [
 				{
 					"AP_IDS": [
-						"0x74B"
+						"0x74C"
 					],
 					"IDS": [
 						"0x1D2"
@@ -29305,7 +29318,7 @@
 			"Checkpoint 4": [
 				{
 					"AP_IDS": [
-						"0x74C"
+						"0x74D"
 					],
 					"IDS": [
 						"0x1D5"
@@ -29357,7 +29370,7 @@
 			"Conveyor Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x74F"
+						"0x750"
 					],
 					"IDS": [
 						"0x188"
@@ -29376,9 +29389,9 @@
 			"Conveyor Island Garibs": [
 				{
 					"AP_IDS": [
-						"0x6FD",
 						"0x6FE",
-						"0x6FF"
+						"0x6FF",
+						"0x700"
 					],
 					"IDS": [
 						"0xB1",
@@ -29399,7 +29412,7 @@
 			"Duel Switch": [
 				{
 					"AP_IDS": [
-						"0x750"
+						"0x751"
 					],
 					"IDS": [
 						""
@@ -29579,10 +29592,10 @@
 			"First Conveyor Garibs": [
 				{
 					"AP_IDS": [
-						"0x700",
 						"0x701",
 						"0x702",
-						"0x703"
+						"0x703",
+						"0x704"
 					],
 					"IDS": [
 						"0x4A",
@@ -29653,7 +29666,7 @@
 			"Gate Throwbot": [
 				{
 					"AP_IDS": [
-						"0x744"
+						"0x745"
 					],
 					"COUNT": 1,
 					"IDS": [
@@ -29714,12 +29727,12 @@
 			"Glass Pyramids Garibs": [
 				{
 					"AP_IDS": [
-						"0x704",
 						"0x705",
 						"0x706",
 						"0x707",
 						"0x708",
-						"0x709"
+						"0x709",
+						"0x70A"
 					],
 					"IDS": [
 						"0x36",
@@ -29742,7 +29755,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x753"
+						"0x754"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -29799,7 +29812,7 @@
 			"L Turn Throwbot": [
 				{
 					"AP_IDS": [
-						"0x745"
+						"0x746"
 					],
 					"COUNT": 1,
 					"IDS": [
@@ -29819,10 +29832,10 @@
 			"Last Conveyor Garibs": [
 				{
 					"AP_IDS": [
-						"0x70A",
 						"0x70B",
 						"0x70C",
-						"0x70D"
+						"0x70D",
+						"0x70E"
 					],
 					"IDS": [
 						"0x4C",
@@ -29844,11 +29857,11 @@
 			"Left Guard Rail Garibs": [
 				{
 					"AP_IDS": [
-						"0x70E",
 						"0x70F",
 						"0x710",
 						"0x711",
-						"0x712"
+						"0x712",
+						"0x713"
 					],
 					"IDS": [
 						"0x82",
@@ -30090,7 +30103,7 @@
 			"Magnet Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x751"
+						"0x752"
 					],
 					"IDS": [
 						"0x18A"
@@ -30110,10 +30123,10 @@
 			"Middle Conveyor Garibs": [
 				{
 					"AP_IDS": [
-						"0x713",
 						"0x714",
 						"0x715",
-						"0x716"
+						"0x716",
+						"0x717"
 					],
 					"IDS": [
 						"0x47",
@@ -30135,7 +30148,7 @@
 			"Opec": [
 				{
 					"AP_IDS": [
-						"0x746"
+						"0x747"
 					],
 					"COUNT": 1,
 					"IDS": [
@@ -30236,7 +30249,6 @@
 			"Pinwheel Garibs": [
 				{
 					"AP_IDS": [
-						"0x717",
 						"0x718",
 						"0x719",
 						"0x71A",
@@ -30247,7 +30259,8 @@
 						"0x71F",
 						"0x720",
 						"0x721",
-						"0x722"
+						"0x722",
+						"0x723"
 					],
 					"IDS": [
 						"0xB9",
@@ -30276,7 +30289,7 @@
 			"Pinwheel Life": [
 				{
 					"AP_IDS": [
-						"0x748"
+						"0x749"
 					],
 					"IDS": [
 						"0x27"
@@ -30356,13 +30369,13 @@
 			"Ramp Garibs": [
 				{
 					"AP_IDS": [
-						"0x723",
 						"0x724",
 						"0x725",
 						"0x726",
 						"0x727",
 						"0x728",
-						"0x729"
+						"0x729",
+						"0x72A"
 					],
 					"IDS": [
 						"0xC2",
@@ -30386,7 +30399,7 @@
 			"Red Magnet Switch": [
 				{
 					"AP_IDS": [
-						"0x752"
+						"0x753"
 					],
 					"IDS": [
 						"0x123"
@@ -30449,11 +30462,11 @@
 			"Right Guard Rail Garibs": [
 				{
 					"AP_IDS": [
-						"0x72A",
 						"0x72B",
 						"0x72C",
 						"0x72D",
-						"0x72E"
+						"0x72E",
+						"0x72F"
 					],
 					"IDS": [
 						"0x88",
@@ -30518,13 +30531,13 @@
 			"Split Path Left Garibs": [
 				{
 					"AP_IDS": [
-						"0x72F",
 						"0x730",
 						"0x731",
 						"0x732",
 						"0x733",
 						"0x734",
-						"0x735"
+						"0x735",
+						"0x736"
 					],
 					"IDS": [
 						"0x9B",
@@ -30548,12 +30561,12 @@
 			"Split Path Right Garibs": [
 				{
 					"AP_IDS": [
-						"0x736",
 						"0x737",
 						"0x738",
 						"0x739",
 						"0x73A",
-						"0x73B"
+						"0x73B",
+						"0x73C"
 					],
 					"IDS": [
 						"0xA0",
@@ -30576,7 +30589,7 @@
 			"Sucker": [
 				{
 					"AP_IDS": [
-						"0x747"
+						"0x748"
 					],
 					"COUNT": 1,
 					"IDS": [
@@ -30804,14 +30817,14 @@
 			"Walkway Corner Garibs": [
 				{
 					"AP_IDS": [
-						"0x73C",
 						"0x73D",
 						"0x73E",
 						"0x73F",
 						"0x740",
 						"0x741",
 						"0x742",
-						"0x743"
+						"0x743",
+						"0x744"
 					],
 					"IDS": [
 						"0x40",
@@ -30838,7 +30851,7 @@
 			"Boss": [
 				{
 					"AP_IDS": [
-						"0x755"
+						"0x756"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -30882,7 +30895,7 @@
 			"Air Helicopter Potion A": [
 				{
 					"AP_IDS": [
-						"0x78F"
+						"0x790"
 					],
 					"IDS": [
 						"0xDC"
@@ -30901,7 +30914,7 @@
 			"Air Helicopter Potion B": [
 				{
 					"AP_IDS": [
-						"0x790"
+						"0x791"
 					],
 					"IDS": [
 						"0xD9"
@@ -30920,7 +30933,7 @@
 			"Air Helicopter Potion C": [
 				{
 					"AP_IDS": [
-						"0x791"
+						"0x792"
 					],
 					"IDS": [
 						"0xE2"
@@ -30939,7 +30952,7 @@
 			"Air Helicopter Potion D": [
 				{
 					"AP_IDS": [
-						"0x792"
+						"0x793"
 					],
 					"IDS": [
 						"0xDF"
@@ -30958,12 +30971,12 @@
 			"Bottom Ring Garibs": [
 				{
 					"AP_IDS": [
-						"0x756",
 						"0x757",
 						"0x758",
 						"0x759",
 						"0x75A",
-						"0x75B"
+						"0x75B",
+						"0x75C"
 					],
 					"IDS": [
 						"0x59",
@@ -30987,14 +31000,14 @@
 			"Column A Garibs": [
 				{
 					"AP_IDS": [
-						"0x75C",
 						"0x75D",
 						"0x75E",
 						"0x75F",
 						"0x760",
 						"0x761",
 						"0x762",
-						"0x763"
+						"0x763",
+						"0x764"
 					],
 					"IDS": [
 						"0x3D",
@@ -31020,14 +31033,14 @@
 			"Column B Garibs": [
 				{
 					"AP_IDS": [
-						"0x764",
 						"0x765",
 						"0x766",
 						"0x767",
 						"0x768",
 						"0x769",
 						"0x76A",
-						"0x76B"
+						"0x76B",
+						"0x76C"
 					],
 					"IDS": [
 						"0x34",
@@ -31053,14 +31066,14 @@
 			"Column C Garibs": [
 				{
 					"AP_IDS": [
-						"0x76C",
 						"0x76D",
 						"0x76E",
 						"0x76F",
 						"0x770",
 						"0x771",
 						"0x772",
-						"0x773"
+						"0x773",
+						"0x774"
 					],
 					"IDS": [
 						"0x46",
@@ -31086,14 +31099,14 @@
 			"Column D Garibs": [
 				{
 					"AP_IDS": [
-						"0x774",
 						"0x775",
 						"0x776",
 						"0x777",
 						"0x778",
 						"0x779",
 						"0x77A",
-						"0x77B"
+						"0x77B",
+						"0x77C"
 					],
 					"IDS": [
 						"0x4F",
@@ -31119,7 +31132,7 @@
 			"Floor Helicopter Potion A": [
 				{
 					"AP_IDS": [
-						"0x793"
+						"0x794"
 					],
 					"IDS": [
 						"0xD0"
@@ -31137,7 +31150,7 @@
 			"Floor Helicopter Potion B": [
 				{
 					"AP_IDS": [
-						"0x794"
+						"0x795"
 					],
 					"IDS": [
 						"0xD3"
@@ -31155,7 +31168,7 @@
 			"Floor Helicopter Potion C": [
 				{
 					"AP_IDS": [
-						"0x795"
+						"0x796"
 					],
 					"IDS": [
 						"0xD6"
@@ -31173,7 +31186,7 @@
 			"Floor Helicopter Potion D": [
 				{
 					"AP_IDS": [
-						"0x796"
+						"0x797"
 					],
 					"IDS": [
 						"0xCD"
@@ -31191,7 +31204,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x78E"
+						"0x78F"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -31208,7 +31221,7 @@
 			"Life 1": [
 				{
 					"AP_IDS": [
-						"0x788"
+						"0x789"
 					],
 					"IDS": [
 						"0x30"
@@ -31227,7 +31240,7 @@
 			"Life 2": [
 				{
 					"AP_IDS": [
-						"0x789"
+						"0x78A"
 					],
 					"IDS": [
 						"0x29"
@@ -31246,7 +31259,7 @@
 			"Life 3": [
 				{
 					"AP_IDS": [
-						"0x78A"
+						"0x78B"
 					],
 					"IDS": [
 						"0x2E"
@@ -31265,7 +31278,7 @@
 			"Life 4": [
 				{
 					"AP_IDS": [
-						"0x78B"
+						"0x78C"
 					],
 					"IDS": [
 						"0x27"
@@ -31284,7 +31297,7 @@
 			"Life 5": [
 				{
 					"AP_IDS": [
-						"0x78C"
+						"0x78D"
 					],
 					"IDS": [
 						"0x25"
@@ -31303,7 +31316,7 @@
 			"Life 6": [
 				{
 					"AP_IDS": [
-						"0x78D"
+						"0x78E"
 					],
 					"IDS": [
 						"0x32"
@@ -31353,12 +31366,12 @@
 			"Middle Ring Garibs": [
 				{
 					"AP_IDS": [
-						"0x77C",
 						"0x77D",
 						"0x77E",
 						"0x77F",
 						"0x780",
-						"0x781"
+						"0x781",
+						"0x782"
 					],
 					"IDS": [
 						"0x60",
@@ -31382,7 +31395,7 @@
 			"Spawn Helicopter Potion": [
 				{
 					"AP_IDS": [
-						"0x797"
+						"0x798"
 					],
 					"IDS": [
 						"0xCA"
@@ -31405,12 +31418,12 @@
 			"Top Ring Garibs": [
 				{
 					"AP_IDS": [
-						"0x782",
 						"0x783",
 						"0x784",
 						"0x785",
 						"0x786",
-						"0x787"
+						"0x787",
+						"0x788"
 					],
 					"IDS": [
 						"0x66",
@@ -31494,7 +31507,7 @@
 			"Cheat Chicken": [
 				{
 					"AP_IDS": [
-						"0x79B"
+						"0x79C"
 					],
 					"IDS": [],
 					"NEEDS_BALL": false,
@@ -31620,7 +31633,7 @@
 			"Spawning Tip": [
 				{
 					"AP_IDS": [
-						"0x798"
+						"0x799"
 					],
 					"IDS": [
 						""
@@ -31647,7 +31660,7 @@
 			"Well Tip 1": [
 				{
 					"AP_IDS": [
-						"0x799"
+						"0x79A"
 					],
 					"IDS": [
 						""
@@ -31660,7 +31673,7 @@
 			"Well Tip 2": [
 				{
 					"AP_IDS": [
-						"0x79A"
+						"0x79B"
 					],
 					"IDS": [
 						""
@@ -31675,13 +31688,13 @@
 			"Ball Turn-In": [
 				{
 					"AP_IDS": [
-						"0x79C",
 						"0x79D",
 						"0x79E",
 						"0x79F",
 						"0x7A0",
 						"0x7A1",
-						"0x7A2"
+						"0x7A2",
+						"0x7A3"
 					],
 					"IDS": [],
 					"NEEDS_BALL": false,
@@ -31739,7 +31752,7 @@
 			"Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x7B2"
+						"0x7B3"
 					],
 					"IDS": [
 						"0x8D"
@@ -31757,7 +31770,7 @@
 			"Ball Switch Tip": [
 				{
 					"AP_IDS": [
-						"0x7A3"
+						"0x7A4"
 					],
 					"IDS": [
 						"0x108"
@@ -31775,7 +31788,7 @@
 			"Bounce Throw Tip": [
 				{
 					"AP_IDS": [
-						"0x7A4"
+						"0x7A5"
 					],
 					"IDS": [
 						"0x10D"
@@ -31824,7 +31837,7 @@
 			"Camera Tip": [
 				{
 					"AP_IDS": [
-						"0x7A5"
+						"0x7A6"
 					],
 					"IDS": [
 						"0x103"
@@ -31842,7 +31855,7 @@
 			"Crate Tip": [
 				{
 					"AP_IDS": [
-						"0x7A6"
+						"0x7A7"
 					],
 					"IDS": [
 						"0x110"
@@ -31861,7 +31874,7 @@
 			"Deep Pool Tip": [
 				{
 					"AP_IDS": [
-						"0x7A7"
+						"0x7A8"
 					],
 					"IDS": [
 						"0x10A"
@@ -31879,7 +31892,7 @@
 			"Dribble Tip": [
 				{
 					"AP_IDS": [
-						"0x7A8"
+						"0x7A9"
 					],
 					"IDS": [
 						"0x104"
@@ -31897,7 +31910,7 @@
 			"Duck Tip": [
 				{
 					"AP_IDS": [
-						"0x7A9"
+						"0x7AA"
 					],
 					"IDS": [
 						"0x10F"
@@ -31948,7 +31961,7 @@
 			"Fist Slam Tip": [
 				{
 					"AP_IDS": [
-						"0x7AA"
+						"0x7AB"
 					],
 					"IDS": [
 						"0x10B"
@@ -31966,7 +31979,7 @@
 			"Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x7B3"
+						"0x7B4"
 					],
 					"IDS": [
 						"0x93"
@@ -31985,7 +31998,7 @@
 			"Glover Switch Tip": [
 				{
 					"AP_IDS": [
-						"0x7AB"
+						"0x7AC"
 					],
 					"IDS": [
 						"0x10C"
@@ -32003,7 +32016,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x7B5"
+						"0x7B6"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -32088,7 +32101,7 @@
 			"Intro Tip": [
 				{
 					"AP_IDS": [
-						"0x7AC"
+						"0x7AD"
 					],
 					"IDS": [
 						"0x111"
@@ -32106,7 +32119,7 @@
 			"No Ball Tip": [
 				{
 					"AP_IDS": [
-						"0x7AD"
+						"0x7AE"
 					],
 					"IDS": [
 						"0x10E"
@@ -32253,7 +32266,7 @@
 			"Shallow Pool Tip": [
 				{
 					"AP_IDS": [
-						"0x7AE"
+						"0x7AF"
 					],
 					"IDS": [
 						"0x109"
@@ -32271,7 +32284,7 @@
 			"Slap Tip": [
 				{
 					"AP_IDS": [
-						"0x7AF"
+						"0x7B0"
 					],
 					"IDS": [
 						"0x107"
@@ -32355,7 +32368,7 @@
 			"Target": [
 				{
 					"AP_IDS": [
-						"0x7B4"
+						"0x7B5"
 					],
 					"IDS": [
 						"0x9A"
@@ -32375,7 +32388,7 @@
 			"Toss Tip": [
 				{
 					"AP_IDS": [
-						"0x7B0"
+						"0x7B1"
 					],
 					"IDS": [
 						"0x105"
@@ -32393,7 +32406,7 @@
 			"Z-Cancel Tip": [
 				{
 					"AP_IDS": [
-						"0x7B1"
+						"0x7B2"
 					],
 					"IDS": [
 						"0x106"

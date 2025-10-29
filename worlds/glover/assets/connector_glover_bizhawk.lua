@@ -7150,7 +7150,7 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_SPACE_L1"] = {
-		["GOAL"] = "1715",
+		["GOAL"] = "1716",
 		["GARIBS"] = {
 			["1650"] = {
 				['id'] = 0x672,
@@ -7426,6 +7426,10 @@ local ADDRESS_MAP = {
 			["1714"] = {
 				['id'] = 0x6B2,
 				['offset'] = 4,
+			},
+			["1715"] = {
+				['id'] = 0x6B3,
+				['offset'] = 5,
 			},
 		},
 	},
@@ -8375,7 +8379,7 @@ local ADDRESS_MAP = {
 			},
 		},
 	},
-	["AP_TUTORIA_LTraining"] = {
+	["AP_TRAINING_WORLD"] = {
 		["GOAL"] = "1973",
 		["TIP"] = {
 			["1955"] = {
