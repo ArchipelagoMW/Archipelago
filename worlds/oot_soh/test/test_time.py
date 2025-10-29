@@ -11,5 +11,5 @@ class TestTime(SohTestBase):
                               Items.BOMB_BAG, Items.PROGRESSIVE_BOMB_BAG, Items.PROGRESSIVE_BOMBCHU])
         self.assertFalse(self.can_reach_location(Locations.MARKET_MARKET_GRASS1),
                          "Can access child-exclusive grass without an item that child can use to break it.")
-        self.collect_by_name([Items.GORONS_BRACELET])
+        self.collect_by_name([Items.STRENGTH_UPGRADE])
         self.assertTrue(self.can_reach_location(Locations.MARKET_MARKET_GRASS1))
