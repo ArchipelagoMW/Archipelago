@@ -41,8 +41,8 @@ def set_region_rules(world: "SohWorld") -> None:
             Items.LONGSHOT, bundle)) and can_break_crates(bundle)) or (can_do_trick(Tricks.GY_POH, bundle) and can_use(Items.BOOMERANG, bundle))),
         (Locations.GRAVEYARD_DAMPE_GRAVEDIGGING_TOUR, lambda bundle: has_item(
             Items.CHILD_WALLET, bundle) and is_child(bundle) and at_night(bundle)),
-        (Locations.GRAVEYARD_GS_WALL, lambda bundle: is_child(bundle) and can_use(
-            Items.BOOMERANG, bundle) and at_night(bundle) and can_get_nighttime_gs(bundle)),
+        (Locations.GRAVEYARD_GS_WALL, lambda bundle: is_child(bundle) and hookshot_or_boomerang(
+            bundle) and at_night(bundle) and can_get_nighttime_gs(bundle)),
         (Locations.GRAVEYARD_GS_BEAN_PATCH,
          lambda bundle: can_spawn_soil_skull(bundle) and can_attack(bundle)),
         (Locations.GRAVEYARD_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle) and can_use(

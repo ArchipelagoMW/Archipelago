@@ -46,7 +46,7 @@ def set_region_rules(world: "SohWorld") -> None:
          is_child(bundle) and
          can_use(Items.BOTTLE_WITH_BUGS, bundle)),
         (Locations.KF_GS_HOUSE_OF_TWINS, lambda bundle: is_adult(bundle) and
-         (can_use(Items.HOOKSHOT, bundle)
+         (hookshot_or_boomerang(bundle)
           or (can_do_trick(Tricks.KF_ADULT_GS, bundle)
               and can_use(Items.HOVER_BOOTS, bundle))) and can_get_nighttime_gs(bundle)),
         (Locations.KF_BEAN_SPROUT_FAIRY1, lambda bundle: is_child(bundle)

@@ -9,11 +9,11 @@ class SohLocation(Location):
     def can_reach(self, state: CollectionState) -> bool:
         can_reach = False
         # check if we can reach this as either age
-        stored_age = state._soh_age[self.player]
+        stored_age = state._soh_age[self.player]  # type: ignore
         for age in [Ages.CHILD, Ages.ADULT]:
-            state._soh_age[self.player] = age
+            state._soh_age[self.player] = age  # type: ignore
             can_reach |= super().can_reach(state)
-        state._soh_age[self.player] = stored_age
+        state._soh_age[self.player] = stored_age  # type: ignore
         return can_reach
 
 
