@@ -190,7 +190,7 @@ item_data_table: dict[Items, SohItemData] = {
     # Items.RED_POTION_REFILL: SohItemData( 158, IC.filler, 0 ),
     # Items.GREEN_POTION_REFILL: SohItemData( 159, IC.filler, 0 ),
     # Items.BLUE_POTION_REFILL: SohItemData( 160, IC.filler, 0 ),
-    Items.PIECE_OF_HEART_WINNER: SohItemData(161, IC.progression, 1),
+    Items.PIECE_OF_HEART_WINNER: SohItemData(161, IC.useful, 1),
     # Items.TREASURE_GAME_GREEN_RUPEE: SohItemData( 162, IC.filler, 0 ),
     Items.BUY_DEKU_NUTS5: SohItemData(None, IC.progression, 0),
     Items.BUY_ARROWS30: SohItemData(None, IC.progression, 0),
