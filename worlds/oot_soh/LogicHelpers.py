@@ -1,8 +1,10 @@
+from collections import Counter
 from typing import TYPE_CHECKING, Callable
 
-from BaseClasses import CollectionState, ItemClassification as IC, Item
+from BaseClasses import CollectionState, ItemClassification as IC, Item, MultiWorld
 from .Locations import SohLocation
 from worlds.generic.Rules import set_rule
+from worlds.AutoWorld import LogicMixin
 from .Enums import *
 from .Items import SohItem, item_data_table, ItemType, no_rules_bottles, item_name_groups
 
@@ -495,10 +497,7 @@ def can_open_storms_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) 
 
 
 def can_live(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
-    state = bundle[0]
-    parent_region = bundle[1]
-    world = bundle[2]
-    return state.has_any_count({"Heart Container": 1, "Heart Piece": 4}, world.player)
+    return hearts(bundle) >= 4
 
 
 def can_hit_switch(bundle: tuple[CollectionState, Regions, "SohWorld"], distance: EnemyDistance = EnemyDistance.CLOSE,
@@ -952,7 +951,7 @@ def water_timer(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
 def hearts(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> int:
     state = bundle[0]
     world = bundle[2]
-    return 3 + state.count(Items.HEART_CONTAINER, world.player) + (state.count(Items.PIECE_OF_HEART, world.player) // 4)
+    return state.soh_heart_count[world.player]  # type: ignore
 
 
 def can_open_bomb_grotto(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool:
@@ -1050,3 +1049,19 @@ def is_fire_loop_locked(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> 
 
 def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBombFlower: bool = False) -> bool:
     return can_do_trick(Tricks.GROUND_JUMP, bundle) and can_standing_shield(bundle) and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle)))
+
+
+class SohHeartState(LogicMixin):
+    # tracking how many hearts the player has instead of checking the collection state every time
+    soh_piece_of_heart_count: Counter[int]
+    soh_heart_count: Counter[int]
+
+    def init_mixin(self, parent: MultiWorld):
+        soh_players = list(parent.get_game_players("Ship of Harkinian") + parent.get_game_groups("Ship of Harkinian"))
+        self.soh_piece_of_heart_count = Counter()
+        self.soh_heart_count = Counter({player: 3 for player in soh_players})
+
+    def copy_mixin(self, ret: CollectionState) -> CollectionState:
+        ret.soh_piece_of_heart_count = Counter(self.soh_piece_of_heart_count)
+        ret.soh_heart_count = Counter(self.soh_heart_count)
+        return ret
