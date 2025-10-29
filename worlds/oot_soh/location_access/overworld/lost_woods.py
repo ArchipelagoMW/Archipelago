@@ -130,12 +130,11 @@ def set_region_rules(world: "SohWorld") -> None:
          lambda bundle: is_child(bundle) and can_stun_deku(bundle)),
         (Locations.LW_DEKU_SCRUB_NEAR_DEKU_THEATER_LEFT,
          lambda bundle: is_child(bundle) and can_stun_deku(bundle)),
-        (Locations.LW_GS_ABOVE_THEATER, lambda bundle: is_adult(bundle) and (
-            (has_item(LocalEvents.LW_THEATER_BEAN_PLANTED, bundle) and can_attack(bundle)) or (
-                can_do_trick(Tricks.LW_GS_BEAN, bundle) and can_use(Items.LONGSHOT, bundle) or can_use(
-                    Items.FAIRY_BOW, bundle) or can_use(Items.FAIRY_SLINGSHOT, bundle) or can_use(Items.BOMBCHUS_5,
-                                                                                                  bundle) or can_use(
-                    Items.DINS_FIRE, bundle))) and can_get_nighttime_gs(bundle)),
+        (Locations.LW_GS_ABOVE_THEATER, lambda bundle: is_adult(bundle) and can_get_nighttime_gs(bundle)
+         and (has_item(LocalEvents.LW_THEATER_BEAN_PLANTED, bundle) and (can_attack(bundle))
+              or (can_do_trick(Tricks.LW_GS_BEAN, bundle)
+                  and can_use(Items.LONGSHOT, bundle)
+                  and can_use_any([Items.FAIRY_BOW, Items.FAIRY_SLINGSHOT, Items.BOMBCHUS_5, Items.DINS_FIRE], bundle)))),
         (Locations.LW_GS_BEAN_PATCH_NEAR_THEATER,
          lambda bundle: can_spawn_soil_skull(bundle) and (can_attack(bundle) or
                                                           (world.options.shuffle_scrubs.value == 0 and can_reflect_nuts(bundle)))),
