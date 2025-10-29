@@ -55,6 +55,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.DEKU_TREE_LOBBY, world, [
+        (Regions.DEKU_TREE_ENTRYWAY, lambda bundle: True),
         (Regions.DEKU_TREE_2F_MIDDLE_ROOM, lambda bundle: True),
         (Regions.DEKU_TREE_COMPASS_ROOM, lambda bundle: True),
         (Regions.DEKU_TREE_BASEMENT_LOWER, lambda bundle: can_attack(
