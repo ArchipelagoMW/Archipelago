@@ -198,7 +198,8 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Connections
     connect_regions(Regions.DEKU_TREE_BASEMENT_TORCH_ROOM, world, [
-        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda bundle: True),
+        (Regions.DEKU_TREE_BASEMENT_WATER_ROOM_BACK, lambda bundle: has_fire_source_with_torch(
+            bundle) or can_use(Items.FAIRY_BOW, bundle),
         (Regions.DEKU_TREE_BASEMENT_BACK_LOBBY, lambda bundle: has_fire_source_with_torch(
             bundle) or can_use(Items.FAIRY_BOW, bundle))
     ])
