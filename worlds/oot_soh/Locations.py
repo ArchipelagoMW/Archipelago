@@ -1383,10 +1383,6 @@ pots_dungeon_location_table: dict[str, int] = {
 crates_overworld_location_table: dict[str, int] = {
     Locations.GV_FREESTANDING_POH_CRATE: 1334,
     Locations.GV_NEAR_COW_CRATE: 1335,
-    # Locations.GV_NEAR_BRIDGE_CRATE1: 1336,
-    # Locations.GV_NEAR_BRIDGE_CRATE2: 1337,
-    # Locations.GV_NEAR_BRIDGE_CRATE3: 1338,
-    # Locations.GV_NEAR_BRIDGE_CRATE4: 1339,
     Locations.GF_ABOVE_JAIL_CRATE: 1340,
     Locations.GF_SOUTHMOST_CENTER_CRATE: 1341,
     Locations.GF_MIDDLE_SOUTH_CENTER_CRATE: 1342,
@@ -1405,7 +1401,6 @@ crates_overworld_location_table: dict[str, int] = {
     Locations.GF_HBA_CANOPY_WEST_CRATE: 1355,
     Locations.GF_NORTH_TARGET_EAST_CRATE: 1356,
     Locations.GF_NORTH_TARGET_WEST_CRATE: 1357,
-    # Locations.GF_NORTH_TARGET_CHILD_CRATE: 1358,
     Locations.GF_SOUTH_TARGET_EAST_CRATE: 1359,
     Locations.GF_SOUTH_TARGET_WEST_CRATE: 1360,
     Locations.TH_NEAR_KITCHEN_LEFTMOST_CRATE: 1361,
@@ -2422,7 +2417,6 @@ grass_dungeon_location_table: dict[str, int] = {
 }
 
 tree_location_table: dict[str, int] = {
-    Locations.MARKET_TREE: 2393,
     Locations.HC_NEAR_GUARDS_TREE_1: 2394,
     Locations.HC_NEAR_GUARDS_TREE_2: 2395,
     Locations.HC_NEAR_GUARDS_TREE_3: 2396,
@@ -2431,8 +2425,6 @@ tree_location_table: dict[str, int] = {
     Locations.HC_NEAR_GUARDS_TREE_6: 2399,
     Locations.HC_SKULLTULA_TREE: 2400,
     Locations.HC_GROTTO_TREE: 2401,
-    # Locations.HC_NL_TREE_1: 2402,
-    # Locations.HC_NL_TREE_2: 2403,
     Locations.HF_NEAR_LLR_TREE: 2404,
     Locations.HF_NEAR_LH_TREE: 2405,
     Locations.HF_CHILD_NEAR_GV_TREE: 2406,
@@ -2558,6 +2550,19 @@ hundred_skulls_location_table: dict[str, int] = {
     Locations.KAK_100_GOLD_SKULLTULA_REWARD: 79
 }
 
+no_logic_crates_location_table: dict[str, int] = {
+    Locations.GV_NEAR_BRIDGE_CRATE1: 1336,
+    Locations.GV_NEAR_BRIDGE_CRATE2: 1337,
+    Locations.GV_NEAR_BRIDGE_CRATE3: 1338,
+    Locations.GV_NEAR_BRIDGE_CRATE4: 1339,
+    Locations.GF_NORTH_TARGET_CHILD_CRATE: 1358
+}
+
+no_logic_trees_location_table: dict[str, int] = {
+    Locations.HC_NL_TREE_1: 2402,
+    Locations.HC_NL_TREE_2: 2403
+}
+
 location_data_table: dict[str, int] = {
     **base_location_table,
     **gold_skulltula_overworld_location_table,
@@ -2587,6 +2592,8 @@ location_data_table: dict[str, int] = {
     **child_zelda_location_table,
     **carpenters_location_table,
     **hundred_skulls_location_table,
+    **no_logic_crates_location_table,
+    **no_logic_trees_location_table,
 }
 
 location_table = {str(name): address for name,
