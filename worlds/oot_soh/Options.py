@@ -830,7 +830,7 @@ class IceTrapFillerReplacement(Range):
 class TrueNoLogic(Toggle):
     """
     Turn off logic completely.
-    Generation will fail if this is enabled and the corresponding host.yaml setting is not enabled.
+    Generation will fail if this is enabled and allow_true_no_logic is not set to true in the host.yaml.
     """
     display_name = "True No Logic"
     visibility = Visibility.spoiler
