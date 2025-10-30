@@ -460,8 +460,9 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     savegame_name = os.path.abspath("Archipelago.zip")
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
+        config_file = user_path('factorio', 'config', 'apconfig.ini')
         subprocess.run((
-            executable, "--create", savegame_name
+            executable, "--create", savegame_name, "--config", config_file
         ))
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
