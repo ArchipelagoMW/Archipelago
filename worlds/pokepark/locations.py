@@ -3118,7 +3118,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
             structure_position=11
         )
     ),
-    "Dusknoir's Speed Slam Attraction -- Electrode": PokeparkLocationData(
+    "Dusknoir's Speed Slam Attraction -- Voltorb": PokeparkLocationData(
         431, PokeparkFlag.ATTRACTION, "Dusknoir's Speed Slam Attraction",
         PokeparkDusknoirAttractionClientData(
             structure_position=9

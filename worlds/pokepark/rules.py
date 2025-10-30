@@ -1878,8 +1878,8 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: state.has("Skuntank Friendship", player)
     )
     set_rule_if_exists(
-        "Dusknoir's Speed Slam Attraction -- Electrode",
-        lambda state: state.has("Electrode Friendship", player)
+        "Dusknoir's Speed Slam Attraction -- Voltorb",
+        lambda state: state.has("Voltorb Friendship", player)
     )
     set_rule_if_exists(
         "Dusknoir's Speed Slam Attraction -- Gastly",
@@ -3183,7 +3183,7 @@ def can_clear_christmas_tree_stage4(state: CollectionState, player: int):
 
 def can_befriend_delibird(state: CollectionState, player: int, options: "PokeparkOptions"):
     if options.remove_errand_power_comp_locations.value:
-        return True
+        return state.has("Delibird Unlock", player)
     return can_clear_christmas_tree_stage4(state, player)
 
 def can_clear_mew_power_competition_stage1(state: CollectionState, player: int):
