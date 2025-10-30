@@ -1,3 +1,5 @@
+from enum import StrEnum
+
 from .Enums import Locations, Ages
 
 from BaseClasses import CollectionState, Location
@@ -2601,10 +2603,15 @@ location_table = {str(name): address for name,
                   address in location_data_table.items()}
 
 
+# pickleing will fail unless the items in the group are actual strings
+def stringify_set(items: set[StrEnum]) -> set[str]:
+    return {str(item) for item in items}
+
+
 # For making priority locations or excluded locations easier
 # contributions to add more location groups are welcome
 location_name_groups: dict[str, set[str]] = {
     # Ganon isn't a real location, so it shouldn't be in this group
-    "Bosses": {Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON,
-               Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA},
+    "Bosses": stringify_set({Locations.QUEEN_GOHMA, Locations.KING_DODONGO, Locations.BARINADE, Locations.PHANTOM_GANON,
+                             Locations.VOLVAGIA, Locations.MORPHA, Locations.BONGO_BONGO, Locations.TWINROVA}),
 }
