@@ -356,9 +356,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SKUMPARADISE_AP_REGION: lambda state: logic.has_jobs(state, 3)})
     fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, CAPITAL_SEQUOIA_AP_REGION])
     fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [PROVING_MEADOWS_AP_REGION, JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, CASTLE_SEQUOIA_AP_REGION, SKUMPARADISE_AP_REGION],
-                    # why rental and horizontal both listed?
                     {BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
-                     COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state),
+                     COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5),
                      #note for eme: technically possible to get into the first dungeon with quintar instead of glide, but it's hard lol; come from Quintar Sanctum save point and go west up mountain and fall down through grate (that part's easy) then the quintar jump to the lamp is hard
                      CASTLE_SEQUOIA_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
@@ -436,7 +435,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SARA_SARA_BAZAAR_AP_REGION: lambda state: logic.has_horizontal_movement(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, ANCIENT_RESERVOIR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, IBEK_CAVE_AP_REGION, BELOW_GRAN_AP_REGION],
-                    {IBEK_CAVE_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                    {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
+                     IBEK_CAVE_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, IBEK_CAVE_AP_REGION, [SARA_SARA_BEACH_EAST_AP_REGION],
                     {SARA_SARA_BEACH_EAST_AP_REGION: lambda state: logic.has_vertical_movement(state)})
@@ -506,8 +506,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SLIP_GLIDE_RIDE_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, NORTHERN_CAVE_AP_REGION],
                     {NORTHERN_CAVE_AP_REGION: lambda state: logic.has_glide(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
-    fancy_add_exits(world, SEQUOIA_ATHENAEUM_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION],
-                    {TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    #Regionsanity: can't get out of Athenaeum because you can't reach the duck through the door
+    fancy_add_exits(world, SEQUOIA_ATHENAEUM_AP_REGION, [MENU_AP_REGION])
     fancy_add_exits(world, NORTHERN_STRETCH_AP_REGION, [TALL_TALL_HEIGHTS_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      TALL_TALL_HEIGHTS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
