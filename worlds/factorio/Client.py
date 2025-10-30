@@ -84,7 +84,7 @@ class FactorioContext(CommonContext):
 
     def __init__(self, server_address, password, filter_item_sends: bool, bridge_chat_out: bool,
                  rcon_port: int, rcon_password: str, server_settings_path: str | None,
-                 factorio_server_args: tuple[str, ...]):
+                 config_file: str, factorio_server_args: tuple[str, ...] | list[str]):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index: int = 0
         self.rcon_client = None
@@ -100,6 +100,7 @@ class FactorioContext(CommonContext):
         self.rcon_port: int = rcon_port
         self.rcon_password: str = rcon_password
         self.server_settings_path: str = server_settings_path
+        self.config_file: str = config_file
         self.additional_factorio_server_args = factorio_server_args
 
     @property
@@ -152,9 +153,11 @@ class FactorioContext(CommonContext):
                 "--rcon-port", str(self.rcon_port),
                 "--rcon-password", self.rcon_password,
                 "--server-settings", self.server_settings_path,
+                "--config", self.config_file,
                 *self.additional_factorio_server_args)
         else:
             return ("--rcon-port", str(self.rcon_port), "--rcon-password", self.rcon_password,
+                    "--config", self.config_file,
                     *self.additional_factorio_server_args)
 
     @property
@@ -347,10 +350,9 @@ def stream_factorio_output(pipe, queue, process):
 async def factorio_server_watcher(ctx: FactorioContext):
     savegame_name = os.path.abspath(os.path.join(ctx.write_data_path, "saves", "Archipelago", ctx.savegame_name))
     if not os.path.exists(savegame_name):
-        config_file = user_path('factorio', 'config', 'apconfig.ini')
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago", "--config", config_file
+            executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
         ))
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
@@ -460,9 +462,8 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     savegame_name = os.path.abspath("Archipelago.zip")
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
-        config_file = user_path('factorio', 'config', 'apconfig.ini')
         subprocess.run((
-            executable, "--create", savegame_name, "--config", config_file
+            executable, "--create", savegame_name, "--config", ctx.config_file
         ))
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
@@ -609,23 +610,9 @@ def launch(*new_args: str):
         with open(config_file, 'w') as f:
             f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
 
-    if server_settings and os.path.isfile(server_settings):
-        server_args = (
-            "--rcon-port", rcon_port,
-            "--rcon-password", rcon_password,
-            "--server-settings", server_settings,
-            "--config", config_file,
-            *rest)
-    else:
-        server_args = (
-            "--rcon-port", rcon_port,
-            "--rcon-password", rcon_password,
-            "--config", config_file,
-            *rest)
-
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
         initial_filter_item_sends, initial_bridge_chat_out,
-        rcon_port, rcon_password, server_settings, server_args
+        rcon_port, rcon_password, server_settings, config_file, rest
     )))
     colorama.deinit()
