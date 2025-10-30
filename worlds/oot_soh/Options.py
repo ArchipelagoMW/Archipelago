@@ -187,7 +187,7 @@ class RainbowBridgeSkullTokensRequired(Range):
     default = 50
 
 
-class SkipGanonsTrials(Toggle):
+class SkipGanonsTrials(DefaultOnToggle):
     """
     Choose wether or not Ganon's Trials are completed from the start.
     """
@@ -727,7 +727,7 @@ class FullWallets(DefaultOnToggle):
     display_name = "Full Wallets"
 
 
-class BombchuBag(Toggle):
+class BombchuBag(DefaultOnToggle):
     """
     Bombchus require their own bag to be found before use. Without this setting, any Bombchu requirement is filled by Bomb Bag + a renewable source of Bombchus.
     The first Bombchu you find be a Bag containing 20 chus, and subsequent packs will have 10.
@@ -779,7 +779,7 @@ class SkeletonKey(Toggle):
     display_name = "Skeleton Key"
 
 
-class SlingbowBreakBeehives(Toggle):
+class SlingbowBreakBeehives(DefaultOnToggle):
     """
     Allows Slingshot and Bow to break beehives when Beehive Shuffle is turned on.
     """
