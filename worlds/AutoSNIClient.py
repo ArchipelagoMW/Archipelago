@@ -14,7 +14,12 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 if TYPE_CHECKING:
     from SNIClient import SNIContext
 
-SNES_READ_CHUNK_SIZE = 4096
+SNES_READ_CHUNK_SIZE = 2048
+"""
+note: SNI v0.0.101 currently has a bug where reads from
+RetroArch >2048 bytes will only return the last ~2048 bytes read.
+https://github.com/alttpo/sni/issues/51
+"""
 
 component = Component('SNI Client', 'SNIClient', component_type=Type.CLIENT, file_identifier=SuffixIdentifier(".apsoe"),
                       description="A client for connecting to SNES consoles via Super Nintendo Interface.")
