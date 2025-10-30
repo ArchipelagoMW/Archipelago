@@ -9,11 +9,13 @@ class EventLocations(StrEnum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_ROOM_SWITCH = "Fire Temple Loop Hammer Switch Room Switch"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM = "Fire Temple Fire Maze Upper Platform"
     FIRE_TEMPLE_VOLVAGIA = "Fire Temple Volvagia"
+    FIRE_TEMPLE_SHORTCUT_SWITCH = "Fire Temple Shorcut Switch"
 
 
 class LocalEvents(StrEnum):
     FIRE_TEMPLE_LOOP_HAMMER_SWITCH_HIT = "Fire Temple Loop Hammer Switch Hit"
     FIRE_TEMPLE_FIRE_MAZE_UPPER_PLATFORM_HIT = "Fire Temple Fire Maze Upper Platform Hit"
+    FIRE_TEMPLE_SHORTCUT_SWITCH_HIT = "Fire Temple Shorcut Switch Hit"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -220,7 +222,8 @@ def set_region_rules(world: "SohWorld") -> None:
     connect_regions(Regions.FIRE_TEMPLE_SHORTCUT_ROOM, world, [
         (Regions.FIRE_TEMPLE_FIRE_PILLAR_ROOM, lambda bundle: small_keys(
             Items.FIRE_TEMPLE_SMALL_KEY, 4, bundle)),
-        (Regions.FIRE_TEMPLE_SHORTCUT_CLIMB, lambda bundle: True),
+        (Regions.FIRE_TEMPLE_SHORTCUT_CLIMB, lambda bundle: has_item(
+            LocalEvents.FIRE_TEMPLE_SHORTCUT_SWITCH_HIT, bundle)),
         (Regions.FIRE_TEMPLE_BOULDER_MAZE_LOWER, lambda bundle:
             is_adult(bundle) and (
                 has_item(Items.GORONS_BRACELET, bundle) or can_do_trick(Tricks.FIRE_STRENGTH, bundle) or can_ground_jump(bundle)) and (
@@ -228,6 +231,11 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
 
     # Fire Temple Shortcut Climb
+    # Events
+    add_events(Regions.FIRE_TEMPLE_SHORTCUT_CLIMB, world, [
+        (EventLocations.FIRE_TEMPLE_SHORTCUT_SWITCH,
+         LocalEvents.FIRE_TEMPLE_SHORTCUT_SWITCH_HIT, lambda bundle: True)
+    ])
     # Locations
     add_locations(Regions.FIRE_TEMPLE_SHORTCUT_CLIMB, world, [
         (Locations.FIRE_TEMPLE_BOULDER_MAZE_SHORTCUT_CHEST, lambda bundle: True)
