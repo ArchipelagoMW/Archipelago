@@ -323,12 +323,19 @@ class GloverWorld(World):
         
         #Bonus level garibs all go at the end if they're disabled
         if not self.options.bonus_levels:
-            self.garib_level_order.append(self.garib_level_order.pop(["Atl?", 25])),
-            self.garib_level_order.append(self.garib_level_order.pop(["Crn?", 20]))
-            self.garib_level_order.append(self.garib_level_order.pop(["Prt?", 50]))
-            self.garib_level_order.append(self.garib_level_order.pop(["Pht?", 60]))
-            self.garib_level_order.append(self.garib_level_order.pop(["FoF?", 56]))
-            self.garib_level_order.append(self.garib_level_order.pop(["Otw?", 50]))
+            self.garib_level_order.remove(["Atl?", 25])
+            self.garib_level_order.remove(["Crn?", 20])
+            self.garib_level_order.remove(["Prt?", 50])
+            self.garib_level_order.remove(["Pht?", 60])
+            self.garib_level_order.remove(["FoF?", 56])
+            self.garib_level_order.remove(["Otw?", 50])
+
+            self.garib_level_order.append(["Atl?", 25])
+            self.garib_level_order.append(["Crn?", 20])
+            self.garib_level_order.append(["Prt?", 50])
+            self.garib_level_order.append(["Pht?", 60])
+            self.garib_level_order.append(["FoF?", 56])
+            self.garib_level_order.append(["Otw?", 50])
 
         #Set the starting ball
         match self.options.starting_ball:

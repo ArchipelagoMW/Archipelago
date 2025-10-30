@@ -95,7 +95,7 @@ switches_to_event_items = {
     "FoF1: Coffin Glover Switch" : "FoF1 Drawbridge",
     "FoF2: Push Target" : "FoF2 Garibs Fall",
     "FoF2: Push Switch" : "FoF2 Progressive Gate",
-    "FoF2: Slope Switch" : "FoF2 Progressive Gate",
+    "FoF2: Slope Target" : "FoF2 Progressive Gate",
     "FoF2: Mummy" : "FoF2 Mummy Gate",
     "FoF3: Target" : "FoF3 Gate",
     "FoF3: Ball Switch" : "FoF3 Spikes",
