@@ -601,9 +601,15 @@ class CrystalProjectWorld(World):
                                             "biomeId": location.biomeId,
                                             "Rule": None})
 
+        # TODO: when 0.6.4 ships, get rid of this and just use the contents of the try directly in the return statement for apworld_version
+        try:
+            apworld_version = CrystalProjectWorld.apworld_version
+        except:
+            apworld_version = self.apworld_version
+
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
         return {
-            "apworld_version": self.apworld_version,
+            "apworld_version": apworld_version,
             "goal": self.options.goal.value,
             "clamshellGoalQuantity": self.get_goal_clamshells(),
             "extraClamshellsInPool": self.get_extra_clamshells(),

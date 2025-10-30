@@ -16,7 +16,7 @@ from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
 from .aesthetics import renon_item_dialogue, get_item_text_color
 from .locations import get_location_info
 from .options import CharacterStages, VincentFightCondition, RenonFightCondition, PostBehemothBoss, RoomOfClocksBoss, \
-    BadEndingCondition, DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
+    BadEndingCondition, CV64DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -356,7 +356,7 @@ class CV64PatchExtensions(APPatchExtension):
         rom_data.write_int32s(0xBFE190, patches.subweapon_surface_checker)
 
         # Make received DeathLinks blow you to smithereens instead of kill you normally.
-        if options["death_link"] == DeathLink.option_explosive:
+        if options["death_link"] == CV64DeathLink.option_explosive:
             rom_data.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
             rom_data.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
             rom_data.write_int32(0x27AA0, 0x0C0FFA78)  # JAL	0x803FE9E0
@@ -365,7 +365,7 @@ class CV64PatchExtensions(APPatchExtension):
             rom_data.write_int32(0x32DBC, 0x00000000)
 
         # Set the DeathLink ROM flag if it's on at all.
-        if options["death_link"] != DeathLink.option_off:
+        if options["death_link"] != CV64DeathLink.option_off:
             rom_data.write_byte(0xBFBFDE, 0x01)
 
         # DeathLink counter decrementer code
@@ -609,8 +609,8 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Shimmy speed increase hack
         if options["increase_shimmy_speed"]:
-            rom_data.write_int32(0x97EB4, 0x803FE9F0)
-            rom_data.write_int32s(0xBFE9F0, patches.shimmy_speed_modifier)
+            rom_data.write_int32(0x97EB4, 0x803FEA20)
+            rom_data.write_int32s(0xBFEA20, patches.shimmy_speed_modifier)
 
         # Disable landing fall damage
         if options["fall_guard"]:
