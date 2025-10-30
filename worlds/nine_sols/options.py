@@ -119,15 +119,12 @@ class LogicDifficulty(Choice):
 
 class FirstRootNode(Choice):
     """
-    The first root node you can teleport to after starting a randomized game.
-    This is often referred to as "spawn", although you technically always spawn in Four Seasons Pavilion.
+    The first root node you can teleport to from Four Seasons Pavilion after starting a randomized game.
+    This is often referred to as your "spawn", although you technically always spawn in FSP.
 
-    Many root nodes are intentionally excluded from this list.
-    Most of the excluded nodes are not viable starting points because there aren't enough locations you can reach with
-    few or no items, especially when Grapple, Ledge Grab and Wall Climb are all shuffled.
-    Other reasons for exclusion include: Agrarian Hall because it'd force a boss fight, AF (Elevator) because it has the
-    same early locations as AF (Monitoring), Radiant Pagoda because if it doesn't force the boss fight then it forces
-    the light bridge to be pre-hacked which makes it just a less interesting version of PR (Central) spawn, etc.
+    Many root nodes are intentionally excluded from this list, usually because they would be "overly restrictive starts"
+    (i.e. few if any locations would be checkable with no items, especially when Grapple, Ledge Grab and Wall Climb are
+    all shuffled).
 
     Some first_root_nodes may require certain items to be placed early.
     For example, if galactic_dock is your first node, Nymph or Tai-Chi Kick will be placed early.
@@ -138,13 +135,13 @@ class FirstRootNode(Choice):
     option_apeman_facility_monitoring = 0
     option_galactic_dock = 1
     option_power_reservoir_east = 2
-    option_lake_yaochi_ruins = 4
-    option_yinglong_canal = 5
-    option_factory_great_hall = 6
-    option_outer_warehouse = 7
-    option_grotto_of_scriptures_entry = 8
-    option_grotto_of_scriptures_east = 9
-    option_grotto_of_scriptures_west = 10
+    option_lake_yaochi_ruins = 3
+    option_yinglong_canal = 4
+    option_factory_great_hall = 5
+    option_outer_warehouse = 6
+    option_grotto_of_scriptures_entry = 7
+    option_grotto_of_scriptures_east = 8
+    option_grotto_of_scriptures_west = 9
 
 
 class ShuffleGrapple(Toggle):
