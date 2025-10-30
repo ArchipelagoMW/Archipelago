@@ -144,7 +144,11 @@
         { "item": "Tai-Chi Kick" }, { "item": "Cloud Leap" }
     ] } ] }, // on logic_level: ledge_storage, combining LS (setup with AD) and a T-dash barely works
     { "from": "AFD - Climb to Root Node", "to": "AFD - Root Node", "requires": [] }, // one-way door
-    { "from": "AFD - Climb to Root Node", "to": "AFD - Upper Right", "requires": [] }, // hacking 1 OR CL
+    { "from": "AFD - Climb to Root Node", "to": "AFD - Upper Right", "requires": [] }, // hack the lift OR CL broken platforms near node
+    { "from": "AFD - Upper Right", "to": "AFD - Upper Right Chest", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }, // to hold the right box in place
+        { "anyOf": [ { "item": "Wall Climb" }, { "item": "Cloud Leap" } ] } // to get on top of the left box
+    ] },
 
     { "from": "AFD - Upper Left Exit", "to": "FU - Lower Right Exit", "requires": [] },
     { "from": "FU - Lower Right Exit", "to": "AFD - Upper Left Exit", "requires": [] },

@@ -74,7 +74,7 @@
         "region": "AFD - Lower Left Exit", "requires": [ // hacking 1 AND
             { "item": "Tai-Chi Kick" }, // 1st statue is also in Lower Left Exit next to the chest; requires TCK
             { "region": "AFD - Climb to Root Node" }, // hidden on left side of the shaft; requires parry only
-            { "region": "AFD - Upper Right" } // left of the chests; requires parry only
+            { "region": "AFD - Upper Right" } // left of the box puzzle before the chest; requires parry only
         ]
     },
     {
@@ -91,11 +91,11 @@
     },
     {
         "address": 309, "name": "AF (Depths): Upper Right Chest (1st Reward)",
-        "region": "AFD - Upper Right", "requires": []
+        "region": "AFD - Upper Right Chest", "requires": []
     },
     {
         "address": 310, "name": "AF (Depths): Upper Right Chest (2nd Reward)",
-        "region": "AFD - Upper Right", "requires": []
+        "region": "AFD - Upper Right Chest", "requires": []
     },
 
     // Central Hall
