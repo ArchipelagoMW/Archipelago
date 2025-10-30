@@ -12,6 +12,8 @@ class EventLocations(StrEnum):
     CHILD_SCARECROW = "Child Scarecrow"
     ADULT_SCARECROW = "Adult Scarecrow"
     LH_BEAN_PATCH = "LH Bean Patch"
+    LH_DAY_NIGHT_CYCLE_CHILD = "LH Day Night Cycle Child"
+    LH_DAY_NIGHT_CYCLE_ADULT = "LH Day Night Cycle Adult"
 
 
 class LocalEvents(StrEnum):
@@ -39,6 +41,10 @@ def set_region_rules(world: "SohWorld") -> None:
          ocarina_button_count(bundle) >= 2),
         (EventLocations.LH_BEAN_PATCH, LocalEvents.LH_BEAN_PLANTED, lambda bundle: is_child(bundle) and
          can_use(Items.MAGIC_BEAN, bundle)),
+        (EventLocations.LH_DAY_NIGHT_CYCLE_CHILD,
+         Events.CHILD_CAN_PASS_TIME, lambda bundle: is_child(bundle)),
+        (EventLocations.LH_DAY_NIGHT_CYCLE_ADULT,
+         Events.ADULT_CAN_PASS_TIME, lambda bundle: is_adult(bundle)),
     ])
     # Locations
     add_locations(Regions.LAKE_HYLIA, world, [

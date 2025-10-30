@@ -12,6 +12,8 @@ class EventLocations(StrEnum):
     ZR_OPEN_GROTTO_BUG_GRASS = "ZR Upper Grotto Bug Grass"
     ZR_OPEN_GROTTO_POND_FISH = "ZR Upper Grotto Pond Fish"
     ZR_BEAN_PATCH = "ZR Bean Patch"
+    ZR_DAY_NIGHT_CYCLE_CHILD = "ZR Day Night Cycle Child"
+    ZR_DAY_NIGHT_CYCLE_ADULT = "ZR Day Night Cycle Adult"
 
 
 class LocalEvents(StrEnum):
@@ -20,6 +22,13 @@ class LocalEvents(StrEnum):
 
 def set_region_rules(world: "SohWorld") -> None:
     # ZR Front
+    # Events
+    add_events(Regions.HYRULE_FIELD, world, [
+        (EventLocations.ZR_DAY_NIGHT_CYCLE_CHILD,
+         Events.CHILD_CAN_PASS_TIME, lambda bundle: is_child(bundle)),
+        (EventLocations.ZR_DAY_NIGHT_CYCLE_ADULT,
+         Events.ADULT_CAN_PASS_TIME, lambda bundle: is_adult(bundle)),
+    ])
     # Locations
     add_locations(Regions.ZR_FRONT, world, [
         (Locations.ZR_GS_TREE, lambda bundle: is_child(bundle) and can_bonk_trees(bundle) and

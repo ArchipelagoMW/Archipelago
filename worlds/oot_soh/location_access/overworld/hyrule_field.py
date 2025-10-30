@@ -22,6 +22,8 @@ class EventLocations(StrEnum):
     HF_NEAR_MARKET_GROTTO_BUTTERFLY_FAIRY = "HF Near Market Grotto Butterfly Fairy"
     HF_NEAR_MARKET_GROTTO_BUG_GRASS = "HF Near Market Grotto Bugs"
     HF_NEAR_MARKET_GROTTO_PUDDLE_FISH = "HF Near Market Grotto Puddle Fish"
+    HF_DAY_NIGHT_CYCLE_CHILD = "HF Day Night Cycle Child"
+    HF_DAY_NIGHT_CYCLE_ADULT = "HF Day Night Cycle Adult"
 
 
 def set_region_rules(world: "SohWorld") -> None:
@@ -36,7 +38,11 @@ def set_region_rules(world: "SohWorld") -> None:
                                                                                 has_item(Items.KOKIRIS_EMERALD, bundle) and
                                                                                 has_item(Items.GORONS_RUBY, bundle) and
                                                                                 has_item(Items.ZORAS_SAPPHIRE, bundle) and
-                                                                                has_item(Items.CHILD_WALLET, bundle)))
+                                                                                has_item(Items.CHILD_WALLET, bundle))),
+        (EventLocations.HF_DAY_NIGHT_CYCLE_CHILD,
+         Events.CHILD_CAN_PASS_TIME, lambda bundle: is_child(bundle)),
+        (EventLocations.HF_DAY_NIGHT_CYCLE_ADULT,
+         Events.ADULT_CAN_PASS_TIME, lambda bundle: is_adult(bundle)),
     ])
     # Locations
     add_locations(Regions.HYRULE_FIELD, world, [

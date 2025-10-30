@@ -3533,6 +3533,8 @@ class Events(StrEnum):
     CAN_BORROW_SPOOKY_MASK = "Can Borrow Spooky Mask"
     CAN_BORROW_BUNNY_HOOD = "Can Borrow Bunny Hood"
     CAN_BORROW_MASK_OF_TRUTH = "Can Borrow Mask of Truth"
+    CHILD_CAN_PASS_TIME = "Child Can Pass Time"
+    ADULT_CAN_PASS_TIME = "Adult Can Pass Time"
     SOLD_KEATON_MASK = "Sold Keaton Mask"
     SOLD_SKULL_MASK = "Sold Skull Mask"
     SOLD_SPOOKY_MASK = "Sold Spooky Mask"

@@ -9,6 +9,8 @@ class EventLocations(StrEnum):
     GV_GOSSIP_STONE_SONG_FAIRY = "GV Gossip Stone Song Fairy"
     GV_BEAN_SOIL = "GV Bean Soil"
     GV_BEAN_PATCH = "GV Bean Patch"
+    GV_DAY_NIGHT_CYCLE_CHILD = "GV Day Night Cycle Child"
+    GV_DAY_NIGHT_CYCLE_ADULT = "GV Day Night Cycle Adult"
 
 
 class LocalEvents(StrEnum):
@@ -21,6 +23,10 @@ def set_region_rules(world: "SohWorld") -> None:
     add_events(Regions.GERUDO_VALLEY, world, [
         (EventLocations.GV_BUG_ROCK, Events.CAN_ACCESS_BUGS,
          lambda bundle: is_child(bundle)),
+        (EventLocations.GV_DAY_NIGHT_CYCLE_CHILD,
+         Events.CHILD_CAN_PASS_TIME, lambda bundle: is_child(bundle)),
+        (EventLocations.GV_DAY_NIGHT_CYCLE_ADULT,
+         Events.ADULT_CAN_PASS_TIME, lambda bundle: is_adult(bundle)),
     ])
     # Locations
     add_locations(Regions.GERUDO_VALLEY, world, [

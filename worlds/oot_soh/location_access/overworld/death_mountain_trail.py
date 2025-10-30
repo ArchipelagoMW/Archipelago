@@ -13,6 +13,8 @@ class EventLocations(StrEnum):
     DMT_STORMS_GROTTO_BUG_GRASS = "DMT Storms Grotto Bug Grass"
     DMT_STORMS_GROTTO_PUDDLE_FISH = "DMT Storms Grotto Puddle Fish"
     DMT_BEAN_PATCH = "DMT Bean Patch"
+    DMT_DAY_NIGHT_CYCLE_CHILD = "DMT Day Night Cycle Child"
+    DMT_DAY_NIGHT_CYCLE_ADULT = "DMT Day Night Cycle Adult"
 
 
 class LocalEvents(StrEnum):
@@ -29,6 +31,10 @@ def set_region_rules(world: "SohWorld") -> None:
          bundle) and can_use(Items.SONG_OF_STORMS, bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle))),
         (EventLocations.DMT_BEAN_PATCH, LocalEvents.DMT_BEAN_PLANTED, lambda bundle: is_child(bundle) and can_use(
             Items.MAGIC_BEAN, bundle) and (has_explosives(bundle) or has_item(Items.GORONS_BRACELET, bundle))),
+        (EventLocations.DMT_DAY_NIGHT_CYCLE_CHILD,
+         Events.CHILD_CAN_PASS_TIME, lambda bundle: is_child(bundle)),
+        (EventLocations.DMT_DAY_NIGHT_CYCLE_ADULT,
+         Events.ADULT_CAN_PASS_TIME, lambda bundle: is_adult(bundle)),
     ])
     # Locations
     add_locations(Regions.DEATH_MOUNTAIN_TRAIL, world, [
