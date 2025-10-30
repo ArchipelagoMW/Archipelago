@@ -2390,6 +2390,29 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Skygarden - Prisma Completion -- Completed",
         lambda state: has_friendship_count(state, player, 193)
     )
+
+    set_rule_if_exists(
+        "Pokepark Entrance - Celebi Power Competition -- Friendship",
+        lambda state: state.has("Celebi Unlock", player) and can_play_catch_advanced(state, player, options)
+    )
+    set_rule_if_exists(
+        "Magma Zone Main Area - Groudon Power Competition -- Friendship",
+        lambda state: state.has("Groudon Unlock", player) and can_battle_thunderbolt_immune_advanced(
+            state, player, options
+        )
+    )
+    set_rule_if_exists(
+        "Haunted Zone Mansion Area - Darkrai Power Competition -- Friendship",
+        lambda state: state.has("Darkrai Unlock", player) and can_battle_advanced(
+            state, player, options
+        )
+    )
+    set_rule_if_exists(
+        "Granite Zone Main Area - Jirachi Power Competition -- Friendship",
+        lambda state: state.has("Jirachi Unlock", player) and can_play_catch_advanced(
+            state, player, options
+        )
+    )
     world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
 
@@ -3101,6 +3124,12 @@ def can_play_catch_intermediate(state: CollectionState, player: int, options: "P
     return state.has("Progressive Dash", player, 2)
 
 
+def can_play_catch_advanced(state: CollectionState, player: int, options: "PokeparkOptions"):
+    if options.harder_enemy_ai.value:
+        return state.has("Progressive Dash", player, 4)
+    return state.has("Progressive Dash", player, 3)
+
+
 def maximized_dash(state: CollectionState, player: int):
     return state.has("Progressive Dash", player, 4)
 
@@ -3199,6 +3228,7 @@ def get_entrance_rules_dict(player: int, options: "PokeparkOptions"):
         "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": lambda state: True,
         "Meadow Zone Main Area - Venusaur's Gate": lambda state: state.has("Bulbasaur Prisma", player),
         "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": lambda state: True,
+        "Meadow Zone Pokepark Entrance": lambda state: True,
 
         "Treehouse Beach Zone Gate": lambda state: state.has("Venusaur Prisma", player),
         "Treehouse Drifblim Fast Travel Beach Zone": lambda state: state.has(

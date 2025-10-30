@@ -127,7 +127,8 @@ class PokeparkWorld(World):
             (PokeparkFlag.POWER_UP, self.options.remove_power_training_locations),
             (PokeparkFlag.ATTRACTION, self.options.remove_attraction_locations),
             (PokeparkFlag.ATTRACTION_PRISMA, self.options.remove_attraction_prisma_locations),
-            (PokeparkFlag.POKEMON_UNLOCK, self.options.remove_pokemon_unlock_locations)
+            (PokeparkFlag.POKEMON_UNLOCK, self.options.remove_pokemon_unlock_locations),
+            (PokeparkFlag.LEGENDARY, self.options.remove_legendary_pokemon_power_comp_locations)
         ]
 
         for flag, option in flag_options:

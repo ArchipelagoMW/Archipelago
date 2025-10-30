@@ -1779,6 +1779,17 @@ road_block_items = [
 ]
 
 option_to_progression: dict[tuple[str, int], (int, list[str])] = {
+    ("remove_legendary_pokemon_power_comp_locations", 0): (0, [
+        "Celebi Unlock",
+        "Groudon Unlock",
+        "Darkrai Unlock",
+        "Jirachi Unlock",
+
+        "Progressive Health",
+        "Progressive Iron Tail",
+        "Progressive Thunderbolt",
+        "Progressive Dash"
+    ]),
     ("remove_power_training_locations", 0): (0, [
         "Golem Unlock"
     ]),

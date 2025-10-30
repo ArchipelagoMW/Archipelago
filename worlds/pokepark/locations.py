@@ -17,7 +17,7 @@ class PokeparkFlag(Flag):
     POKEMON_UNLOCK = auto()  # Unlocks like Caterpie Tree
     ATTRACTION = auto()
     ATTRACTION_PRISMA = auto()
-    LEGENDARY = auto()  # unsure
+    LEGENDARY = auto()
     POWER_UP = auto()
     POSTGAME = auto()  # for postgame goals
     MEW = auto()  # for beating Mew goal
@@ -4033,5 +4033,25 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
         each_zone=MultiZoneFlag.SINGLE
     ),
-
+    "Pokepark Entrance - Celebi Power Competition -- Friendship": PokeparkLocationData(
+        582, PokeparkFlag.LEGENDARY, "Pokepark Entrance", PokeparkWeedleTreeClientData(
+            _expected_value=0b00000100,
+            _bit_mask=0b00000100
+        ),
+    ),
+    "Magma Zone Main Area - Groudon Power Competition -- Friendship": PokeparkLocationData(
+        583, PokeparkFlag.LEGENDARY, "Pokepark Entrance", Pokepark13AttractionClientData(
+            structure_position=5
+        ),
+    ),
+    "Haunted Zone Mansion Area - Darkrai Power Competition -- Friendship": PokeparkLocationData(
+        584, PokeparkFlag.LEGENDARY, "Haunted Zone Mansion Ballroom Area", Pokepark13AttractionClientData(
+            structure_position=6
+        ),
+    ),
+    "Granite Zone Main Area - Jirachi Power Competition -- Friendship": PokeparkLocationData(
+        585, PokeparkFlag.LEGENDARY, "Granite Zone Main Area", Pokepark13AttractionClientData(
+            structure_position=7
+        ),
+    ),
 }

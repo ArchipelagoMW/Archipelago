@@ -4,12 +4,7 @@ from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
     from worlds.pokepark import PokeparkWorld
-from worlds.pokepark.rules import can_battle, can_battle_intermediate, can_battle_thunderbolt_immune_advanced, \
-    can_battle_thunderbolt_immune_intermediate, \
-    can_dash_overworld, \
-    can_destroy_objects_overworld, can_farm_berries, \
-    can_play_catch, \
-    can_play_catch_intermediate, get_entrance_rules_dict
+from worlds.pokepark.rules import get_entrance_rules_dict
 
 REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Treehouse": [
@@ -29,6 +24,7 @@ REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Meadow Zone Main Area": [
         "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction",
         "Meadow Zone Main Area - Venusaur's Gate",
+        "Meadow Zone Pokepark Entrance"
     ],
     "Meadow Zone Venusaur Area": ["Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction"],
     "Beach Zone Main Area": ["Beach Zone Main Area - Pelipper's Circle Circuit Attraction",
@@ -205,6 +201,8 @@ VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Haunted Zone Mansion Area Riolu": "Riolu",
     "Haunted Zone Main Area Drifloon": "Drifloon",
     "Haunted Zone Ballroom Area Drifloon": "Drifloon",
+
+    "Meadow Zone Pokepark Entrance": "Pokepark Entrance"
 }
 ATTRACTION_ENTRANCES_TO_EXITS: dict[str, str] = {
     "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",

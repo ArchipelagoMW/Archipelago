@@ -112,6 +112,15 @@ class RemoveErrandPowerCompLocations(Toggle):
     default = False
 
 
+class RemoveLegendaryPokemonPowerCompLocations(Toggle):
+    """
+    Remove Legendary Pokemon Power Competition Locations e.g. Celebi. They will no longer send items but can still be
+    used for gaining berries.
+    WARNING: Removing too many location types may cause an OptionError if there aren't enough locations for progressive items.
+    """
+    default = False
+
+
 class RemoveMiscPowerCompLocations(Toggle):
     """
     Remove Miscellaneous Power Competition Locations. They will no longer send items but can still be
@@ -192,6 +201,7 @@ class PokeparkOptions(PerGameCommonOptions):
     remove_hide_and_seek_power_comp_locations: RemoveHideAndSeekPowerCompLocations
     remove_errand_power_comp_locations: RemoveErrandPowerCompLocations
     remove_misc_power_comp_locations: RemoveMiscPowerCompLocations
+    remove_legendary_pokemon_power_comp_locations: RemoveLegendaryPokemonPowerCompLocations
     remove_power_training_locations: RemovePowerUpLocations
     remove_attraction_locations: RemoveAttractionLocations
     remove_attraction_prisma_locations: RemoveAttractionPrismaLocations
