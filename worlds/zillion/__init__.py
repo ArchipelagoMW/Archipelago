@@ -59,7 +59,7 @@ class ZillionWebWorld(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["beauxq"]
+        ["beauxq"],
     )]
 
     option_groups = z_option_groups
@@ -168,8 +168,8 @@ class ZillionWorld(World):
     def create_regions(self) -> None:
         assert self.zz_system.randomizer, "generate_early hasn't been called"
         assert self.id_to_zz_item, "generate_early hasn't been called"
-        p = self.player
-        logic_cache = ZillionLogicCache(p, self.zz_system.randomizer, self.id_to_zz_item)
+        player = self.player
+        logic_cache = ZillionLogicCache(player, self.zz_system.randomizer, self.id_to_zz_item)
         self.logic_cache = logic_cache
         w = self.multiworld
         self.my_locations = []
@@ -192,7 +192,7 @@ class ZillionWorld(World):
         all_regions: dict[str, ZillionRegion] = {}
         for here_zz_name, zz_r in self.zz_system.randomizer.regions.items():
             here_name = "Menu" if here_zz_name == "start" else zz_reg_name_to_reg_name(here_zz_name)
-            all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, p, w)
+            all_regions[here_name] = ZillionRegion(zz_r, here_name, here_name, player, w)
             self.multiworld.regions.append(all_regions[here_name])
 
         limited_skill = Req(gun=3, jump=3, skill=self.zz_system.randomizer.options.skill, hp=940, red=1, floppy=126)
@@ -239,7 +239,7 @@ class ZillionWorld(World):
             for zz_dest in zz_here.connections.keys():
                 dest_name = "Menu" if zz_dest.name == "start" else zz_reg_name_to_reg_name(zz_dest.name)
                 dest = all_regions[dest_name]
-                exit_ = Entrance(p, f"{here_name} to {dest_name}", here)
+                exit_ = Entrance(player, f"{here_name} to {dest_name}", here)
                 here.exits.append(exit_)
                 exit_.connect(dest)
 
@@ -247,6 +247,11 @@ class ZillionWorld(World):
             done.add(here.name)
         if self.options.priority_dead_ends.value:
             self.options.priority_locations.value |= {loc.name for loc in dead_end_locations}
+
+        # main location name is an alias
+        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
+        self.multiworld.get_location(main_loc_name, player).place_locked_item(self.create_item("Win"))
+        self.multiworld.completion_condition[player] = lambda state: state.has("Win", player)
 
     @override
     def create_items(self) -> None:
@@ -271,17 +276,6 @@ class ZillionWorld(World):
                 # One of the 3 rescues will not be in the pool and its zz_item will be 'empty'.
                 self.logger.debug(f"Zillion Items: {item_name}  1")
                 self.multiworld.itempool.append(self.create_item(item_name))
-
-    @override
-    def generate_basic(self) -> None:
-        assert self.zz_system.randomizer, "generate_early hasn't been called"
-        # main location name is an alias
-        main_loc_name = self.zz_system.randomizer.loc_name_2_pretty[self.zz_system.randomizer.locations["main"].name]
-
-        self.multiworld.get_location(main_loc_name, self.player)\
-            .place_locked_item(self.create_item("Win"))
-        self.multiworld.completion_condition[self.player] = \
-            lambda state: state.has("Win", self.player)
 
     @staticmethod
     def stage_generate_basic(multiworld: MultiWorld, *args: Any) -> None:  # noqa: ANN401
@@ -365,7 +359,7 @@ class ZillionWorld(World):
                 z_loc.zz_loc.item = multi_item
                 multi_items[z_loc.zz_loc.name] = (
                     z_loc.item.name,
-                    self.multiworld.get_player_name(z_loc.item.player)
+                    self.multiworld.get_player_name(z_loc.item.player),
                 )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():

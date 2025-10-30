@@ -3,7 +3,6 @@ import settings
 import base64
 import threading
 import requests
-import yaml
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial
 from .Regions import create_regions, location_table, set_rules, stage_set_rules, rooms, non_dead_end_crest_rooms,\
@@ -44,6 +43,7 @@ class FFMQWebWorld(WebWorld):
         )
     
     tutorials = [setup_en, setup_fr]
+    game_info_languages = ["en", "fr"]
 
 
 class FFMQWorld(World):
@@ -134,7 +134,7 @@ class FFMQWorld(World):
                         errors.append([api_url, err])
                     else:
                         if response.ok:
-                            world.rooms = rooms_data[query] = yaml.load(response.text, yaml.Loader)
+                            world.rooms = rooms_data[query] = Utils.parse_yaml(response.text)
                             break
                         else:
                             api_urls.remove(api_url)

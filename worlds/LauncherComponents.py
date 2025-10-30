@@ -5,7 +5,7 @@ import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename
+from Utils import local_path, open_filename, is_frozen, is_kivy_running
 
 
 class Type(Enum):
@@ -27,6 +27,8 @@ class Component:
     """
     display_name: str
     """Used as the GUI button label and the component name in the CLI args"""
+    description: str
+    """Optional description displayed on the GUI underneath the display name"""
     type: Type
     """
     Enum "Type" classification of component intent, for filtering in the Launcher GUI
@@ -58,8 +60,9 @@ class Component:
     def __init__(self, display_name: str, script_name: Optional[str] = None, frozen_name: Optional[str] = None,
                  cli: bool = False, icon: str = 'icon', component_type: Optional[Type] = None,
                  func: Optional[Callable] = None, file_identifier: Optional[Callable[[str], bool]] = None,
-                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False):
+                 game_name: Optional[str] = None, supports_uri: Optional[bool] = False, description: str = "") -> None:
         self.display_name = display_name
+        self.description = description
         self.script_name = script_name
         self.frozen_name = frozen_name or f'Archipelago{script_name}' if script_name else None
         self.icon = icon
@@ -88,7 +91,6 @@ processes = weakref.WeakSet()
 
 
 def launch_subprocess(func: Callable, name: str | None = None, args: Tuple[str, ...] = ()) -> None:
-    global processes
     import multiprocessing
     process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
@@ -175,11 +177,10 @@ def _install_apworld(apworld_src: str = "") -> Optional[Tuple[pathlib.Path, path
         if module_name == loaded_name:
             found_already_loaded = True
             break
-    if found_already_loaded:
-        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded,\n"
-                        "so a Launcher restart is required to use the new installation.\n"
-                        "If the Launcher is not open, no action needs to be taken.")
-    world_source = worlds.WorldSource(str(target), is_zip=True)
+    if found_already_loaded and is_kivy_running():
+        raise Exception(f"Installed APWorld successfully, but '{module_name}' is already loaded, "
+                        "so a Launcher restart is required to use the new installation.")
+    world_source = worlds.WorldSource(str(target), is_zip=True, relative=False)
     bisect.insort(worlds.world_sources, world_source)
     world_source.load()
 
@@ -195,7 +196,7 @@ def install_apworld(apworld_path: str = "") -> None:
         source, target = res
     except Exception as e:
         import Utils
-        Utils.messagebox(e.__class__.__name__, str(e), error=True)
+        Utils.messagebox("Notice", str(e), error=True)
         logging.exception(e)
     else:
         import Utils
@@ -208,30 +209,23 @@ components: List[Component] = [
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
     # Core
     Component('Host', 'MultiServer', 'ArchipelagoServer', cli=True,
-              file_identifier=SuffixIdentifier('.archipelago', '.zip')),
-    Component('Generate', 'Generate', cli=True),
-    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld")),
-    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
-    Component('Links Awakening DX Client', 'LinksAwakeningClient',
-              file_identifier=SuffixIdentifier('.apladx')),
+              file_identifier=SuffixIdentifier('.archipelago', '.zip'),
+              description="Host a generated multiworld on your computer."),
+    Component('Generate', 'Generate', cli=True,
+              description="Generate a multiworld with the YAMLs in the players folder."),
+    Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
+              description="Install an APWorld to play games not included with Archipelago by default."),
+    Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
+              description="Connect to a multiworld using the text client."),
     Component('LttP Adjuster', 'LttPAdjuster'),
-    # Minecraft
-    Component('Minecraft Client', 'MinecraftClient', icon='mcicon', cli=True,
-              file_identifier=SuffixIdentifier('.apmc')),
     # Ocarina of Time
     Component('OoT Client', 'OoTClient',
               file_identifier=SuffixIdentifier('.apz5')),
     Component('OoT Adjuster', 'OoTAdjuster'),
-    # FF1
-    Component('FF1 Client', 'FF1Client'),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
     Component('ChecksFinder Client', 'ChecksFinderClient'),
-    # Starcraft 2
-    Component('Starcraft 2 Client', 'Starcraft2Client'),
-    # Wargroove
-    Component('Wargroove Client', 'WargrooveClient'),
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
@@ -244,6 +238,69 @@ components: List[Component] = [
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
 icon_paths = {
     'icon': local_path('data', 'icon.png'),
-    'mcicon': local_path('data', 'mcicon.png'),
     'discord': local_path('data', 'discord-mark-blue.png'),
 }
+
+if not is_frozen():
+    def _build_apworlds(*launch_args: str):
+        import json
+        import os
+        import zipfile
+
+        from worlds import AutoWorldRegister
+        from worlds.Files import APWorldContainer
+        from Launcher import open_folder
+
+        import argparse
+        parser = argparse.ArgumentParser("Build script for APWorlds")
+        parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
+        args = parser.parse_args(launch_args)
+
+        if args.worlds:
+            games = [(game, AutoWorldRegister.world_types.get(game, None)) for game in args.worlds]
+        else:
+            games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
+                     if not worldtype.zip_path]
+
+        apworlds_folder = os.path.join("build", "apworlds")
+        os.makedirs(apworlds_folder, exist_ok=True)
+        for worldname, worldtype in games:
+            if not worldtype:
+                logging.error(f"Requested APWorld \"{worldname}\" does not exist.")
+                continue
+            file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
+            world_directory = os.path.join("worlds", file_name)
+            if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                    manifest = json.load(manifest_file)
+
+                assert "game" in manifest, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                    "does not define a \"game\"."
+                )
+                assert manifest["game"] == worldtype.game, (
+                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                    f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                )
+            else:
+                manifest = {}
+
+            zip_path = os.path.join(apworlds_folder, file_name + ".apworld")
+            apworld = APWorldContainer(str(zip_path))
+            apworld.game = worldtype.game
+            manifest.update(apworld.get_manifest())
+            apworld.manifest_path = f"{file_name}/archipelago.json"
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
+                                 compresslevel=9) as zf:
+                for path in pathlib.Path(world_directory).rglob("*"):
+                    relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
+                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
+                        continue
+                    if not relative_path.endswith("archipelago.json"):
+                        zf.write(path, relative_path)
+                zf.writestr(apworld.manifest_path, json.dumps(manifest))
+        open_folder(apworlds_folder)
+
+
+    components.append(Component('Build APWorlds', func=_build_apworlds, cli=True,
+                                description="Build APWorlds from loose-file world folders."))
