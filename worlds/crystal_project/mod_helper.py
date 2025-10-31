@@ -703,7 +703,7 @@ def build_region_specific_rules(region, player:int, logic: CrystalProjectLogic) 
     elif region == CASTLE_RAMPARTS_DISPLAY_NAME:
         return lambda state: logic.has_key(state, RAMPART_KEY)
     else:
-        return None
+        return lambda state: True
 
 def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
     if mod.System is not None and mod.System["Randomizer"] is not None:
