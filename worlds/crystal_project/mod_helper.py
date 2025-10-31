@@ -7,7 +7,7 @@ from BaseClasses import Item, ItemClassification, CollectionState
 from typing import List, NamedTuple
 from .options import CrystalProjectOptions
 from .items import item_table, equipment_index_offset, item_index_offset, job_index_offset
-from .locations import get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
+from .locations import LocationData, get_locations, get_shops, get_bosses, npc_index_offset, treasure_index_offset, crystal_index_offset, boss_index_offset, shop_index_offset
 from .unused_locations import get_unused_locations
 from .constants.biomes import get_display_region_by_id
 from .constants.display_regions import *
@@ -320,8 +320,8 @@ def get_modded_bosses(mod_info: List[ModInfoModel]) -> List[ModLocationData]:
 
     return locations
 
-def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]:
-    removed_locations: List[ModLocationData] = []
+def get_removed_locations(mod_info: List[ModInfoModel]) -> List[LocationData]:
+    removed_locations: List[LocationData] = []
     vanilla_locations = get_locations(-1, None)
     vanilla_bosses = get_bosses(-1, None)
     vanilla_shops = get_shops(-1, None)
@@ -329,7 +329,6 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
     for mod in mod_info:
         for location in mod.data_model.Entities:
             location_id = location['ID']
-            biome_id = location['BiomeID']
             has_no_npc_info = location['NpcData'] is None or not location['NpcData']['Pages']
 
             if has_no_npc_info and location['SignData'] is None and location['SparkData'] is None and location['DoorData'] is None and location['HomePointData'] is None and location['TreasureData'] is None and location['CrystalData'] is None and location['MarkerData'] is None:
@@ -341,19 +340,19 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[ModLocationData]
 
                 for vanilla_location in vanilla_locations:
                     if vanilla_location.code == treasure_id:
-                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
                     if vanilla_location.code == npc_id:
-                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
                     if vanilla_location.code == crystal_id:
-                        removed_locations.append(ModLocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
 
                 for boss in vanilla_bosses:
                     if boss.code == boss_id:
-                        removed_locations.append(ModLocationData(boss.ap_region, boss.name, boss.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(LocationData(boss.ap_region, boss.name, boss.code))
 
                 for shop in vanilla_shops:
                     if shop.code == shop_id:
-                        removed_locations.append(ModLocationData(shop.ap_region, shop.name, shop.code, location_id, '0,0,0', biome_id, None))
+                        removed_locations.append(LocationData(shop.ap_region, shop.name, shop.code))
 
     return removed_locations
 

@@ -181,7 +181,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods:
             for modded_location in self.modded_locations:
-                location = LocationData(modded_location.display_region,
+                location = LocationData(display_region_subregions_dictionary[modded_location.display_region][0],
                                         modded_location.name,
                                         modded_location.code,
                                         build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
@@ -189,7 +189,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
-                location = LocationData(shop.display_region,
+                location = LocationData(display_region_subregions_dictionary[shop.display_region][0],
                                         shop.name,
                                         shop.code,
                                         build_condition_rule(shop.display_region, shop.rule_condition, self))
@@ -197,7 +197,7 @@ class CrystalProjectWorld(World):
 
         if self.options.useMods and self.options.killBossesMode.value == self.options.killBossesMode.option_true:
             for modded_location in self.modded_bosses:
-                location = LocationData(modded_location.display_region,
+                location = LocationData(display_region_subregions_dictionary[modded_location.display_region][0],
                                         modded_location.name,
                                         modded_location.code,
                                         build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
@@ -570,7 +570,7 @@ class CrystalProjectWorld(World):
 
             for modded_location in self.modded_locations:
                 slot_data_locations.append({"Id": modded_location.offsetless_code,
-                                            "DisplayRegion": modded_location.display_region,
+                                            "APRegion": display_region_subregions_dictionary[modded_location.display_region][0],
                                             "Name": modded_location.name,
                                             "Coordinates": modded_location.coordinates,
                                             "biomeId": modded_location.biomeId,
@@ -578,7 +578,7 @@ class CrystalProjectWorld(World):
             if self.options.shopsanity != self.options.shopsanity.option_disabled:
                 for shop in self.modded_shops:
                     slot_data_locations.append({ "Id": shop.offsetless_code,
-                                                 "DisplayRegion": shop.display_region,
+                                                 "APRegion": display_region_subregions_dictionary[shop.display_region][0],
                                                  "Name": shop.name,
                                                  "Coordinates": shop.coordinates,
                                                  "BiomeId": shop.biomeId,
@@ -587,19 +587,15 @@ class CrystalProjectWorld(World):
             if self.options.killBossesMode == self.options.killBossesMode.option_true:
                 for boss in self.modded_bosses:
                     slot_data_locations.append({ "Id": boss.offsetless_code,
-                                                 "DisplayRegion": boss.display_region,
+                                                 "APRegion": display_region_subregions_dictionary[boss.display_region][0],
                                                  "Name": boss.name,
                                                  "Coordinates": boss.coordinates,
                                                  "BiomeId": boss.biomeId,
                                                  "Rule": None })
 
             for location in self.removed_locations:
-                slot_data_removed_locations.append({"Id": location.offsetless_code,
-                                            "DisplayRegion": location.display_region,
-                                            "Name": location.name,
-                                            "Coordinates": location.coordinates,
-                                            "biomeId": location.biomeId,
-                                            "Rule": None})
+                slot_data_removed_locations.append({"Id": location.code,
+                                            "APRegion": location.ap_region})
 
         # TODO: when 0.6.4 ships, get rid of this and just use the contents of the try directly in the return statement for apworld_version
         try:
