@@ -6944,17 +6944,16 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 32,
-						"mv1": 8,
+						"mv0": 11,
+						"mv1": 2,
+						"mv2": 13,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 11,
-						"mv1": 2,
-						"mv2": 27,
-						"mv3": 26,
+						"mv0": 32,
+						"mv1": 8,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -11631,9 +11630,14 @@
 					},
 					{
 						"ballRequirement": true,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
 						"ck0": "Ramp",
 						"mv0": 27,
-						"regionIndex": 6,
+						"regionIndex": 9,
 						"trickDifficulty": 0
 					}
 				],
@@ -19402,24 +19406,66 @@
 						"ballRequirement": true,
 						"ck0": "Floating Platforms",
 						"mv0": 8,
-						"mv1": 32,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"ck0": "Floating Platforms",
-						"mv0": 8,
 						"mv1": 13,
 						"mv2": 11,
 						"mv3": 2,
-						"regionIndex": 0,
+						"regionIndex": 6,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
 						"mv0": 26,
 						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 2,
+						"mv1": 12,
+						"mv2": 13,
+						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 2,
+						"mv1": 8,
+						"mv2": 13,
+						"mv3": 11,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 13,
+						"mv1": 2,
+						"mv2": 12,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 12,
+						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 32,
+						"mv1": 8,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 32,
+						"mv1": 8,
+						"regionIndex": 6,
 						"trickDifficulty": 0
 					}
 				],
@@ -19690,6 +19736,13 @@
 					{
 						"ballRequirement": true,
 						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Floating Platforms",
+						"mv0": 26,
+						"regionIndex": 7,
 						"trickDifficulty": 0
 					}
 				],
@@ -29373,7 +29426,7 @@
 						"0x750"
 					],
 					"IDS": [
-						"0x188"
+						"0x18A"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 6,
@@ -30106,7 +30159,7 @@
 						"0x752"
 					],
 					"IDS": [
-						"0x18A"
+						"0x188"
 					],
 					"NEEDS_BALL": true,
 					"REGION": 12,
@@ -31507,7 +31560,7 @@
 			"Cheat Chicken": [
 				{
 					"AP_IDS": [
-						"0x79C"
+						"0x799"
 					],
 					"IDS": [],
 					"NEEDS_BALL": false,
@@ -31630,19 +31683,6 @@
 					"trickDifficulty": 0
 				}
 			],
-			"Spawning Tip": [
-				{
-					"AP_IDS": [
-						"0x799"
-					],
-					"IDS": [
-						""
-					],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 6
-				}
-			],
 			"Well Entry": [
 				{
 					"AP_IDS": [],
@@ -31656,45 +31696,19 @@
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
-			],
-			"Well Tip 1": [
-				{
-					"AP_IDS": [
-						"0x79A"
-					],
-					"IDS": [
-						""
-					],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 6
-				}
-			],
-			"Well Tip 2": [
-				{
-					"AP_IDS": [
-						"0x79B"
-					],
-					"IDS": [
-						""
-					],
-					"NEEDS_BALL": false,
-					"REGION": 0,
-					"TYPE": 6
-				}
 			]
 		},
 		"l1": {
 			"Ball Turn-In": [
 				{
 					"AP_IDS": [
+						"0x79A",
+						"0x79B",
+						"0x79C",
 						"0x79D",
 						"0x79E",
 						"0x79F",
-						"0x7A0",
-						"0x7A1",
-						"0x7A2",
-						"0x7A3"
+						"0x7A0"
 					],
 					"IDS": [],
 					"NEEDS_BALL": false,
@@ -31752,7 +31766,7 @@
 			"Ball Switch": [
 				{
 					"AP_IDS": [
-						"0x7B3"
+						"0x7B0"
 					],
 					"IDS": [
 						"0x8D"
@@ -31770,7 +31784,7 @@
 			"Ball Switch Tip": [
 				{
 					"AP_IDS": [
-						"0x7A4"
+						"0x7A1"
 					],
 					"IDS": [
 						"0x108"
@@ -31788,7 +31802,7 @@
 			"Bounce Throw Tip": [
 				{
 					"AP_IDS": [
-						"0x7A5"
+						"0x7A2"
 					],
 					"IDS": [
 						"0x10D"
@@ -31837,7 +31851,7 @@
 			"Camera Tip": [
 				{
 					"AP_IDS": [
-						"0x7A6"
+						"0x7A3"
 					],
 					"IDS": [
 						"0x103"
@@ -31855,7 +31869,7 @@
 			"Crate Tip": [
 				{
 					"AP_IDS": [
-						"0x7A7"
+						"0x7A4"
 					],
 					"IDS": [
 						"0x110"
@@ -31874,7 +31888,7 @@
 			"Deep Pool Tip": [
 				{
 					"AP_IDS": [
-						"0x7A8"
+						"0x7A5"
 					],
 					"IDS": [
 						"0x10A"
@@ -31892,7 +31906,7 @@
 			"Dribble Tip": [
 				{
 					"AP_IDS": [
-						"0x7A9"
+						"0x7A6"
 					],
 					"IDS": [
 						"0x104"
@@ -31910,7 +31924,7 @@
 			"Duck Tip": [
 				{
 					"AP_IDS": [
-						"0x7AA"
+						"0x7A7"
 					],
 					"IDS": [
 						"0x10F"
@@ -31961,7 +31975,7 @@
 			"Fist Slam Tip": [
 				{
 					"AP_IDS": [
-						"0x7AB"
+						"0x7A8"
 					],
 					"IDS": [
 						"0x10B"
@@ -31979,7 +31993,7 @@
 			"Glover Switch": [
 				{
 					"AP_IDS": [
-						"0x7B4"
+						"0x7B1"
 					],
 					"IDS": [
 						"0x93"
@@ -31998,7 +32012,7 @@
 			"Glover Switch Tip": [
 				{
 					"AP_IDS": [
-						"0x7AC"
+						"0x7A9"
 					],
 					"IDS": [
 						"0x10C"
@@ -32016,7 +32030,7 @@
 			"Goal": [
 				{
 					"AP_IDS": [
-						"0x7B6"
+						"0x7B3"
 					],
 					"IDS": [],
 					"NEEDS_BALL": true,
@@ -32101,7 +32115,7 @@
 			"Intro Tip": [
 				{
 					"AP_IDS": [
-						"0x7AD"
+						"0x7AA"
 					],
 					"IDS": [
 						"0x111"
@@ -32119,7 +32133,7 @@
 			"No Ball Tip": [
 				{
 					"AP_IDS": [
-						"0x7AE"
+						"0x7AB"
 					],
 					"IDS": [
 						"0x10E"
@@ -32145,6 +32159,7 @@
 					},
 					{
 						"ballRequirement": true,
+						"ck0": "Sandpit",
 						"regionIndex": 3,
 						"trickDifficulty": 0
 					},
@@ -32183,9 +32198,15 @@
 						"trickDifficulty": 0
 					},
 					{
-						"ballRequirement": true,
+						"ballRequirement": false,
 						"mv0": 25,
 						"mv1": 32,
+						"regionIndex": 3,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Sandpit",
 						"regionIndex": 3,
 						"trickDifficulty": 0
 					}
@@ -32203,7 +32224,6 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Sandpit",
 						"mv0": 10,
 						"mv1": 26,
 						"mv2": 27,
@@ -32266,7 +32286,7 @@
 			"Shallow Pool Tip": [
 				{
 					"AP_IDS": [
-						"0x7AF"
+						"0x7AC"
 					],
 					"IDS": [
 						"0x109"
@@ -32284,7 +32304,7 @@
 			"Slap Tip": [
 				{
 					"AP_IDS": [
-						"0x7B0"
+						"0x7AD"
 					],
 					"IDS": [
 						"0x107"
@@ -32368,7 +32388,7 @@
 			"Target": [
 				{
 					"AP_IDS": [
-						"0x7B5"
+						"0x7B2"
 					],
 					"IDS": [
 						"0x9A"
@@ -32388,7 +32408,7 @@
 			"Toss Tip": [
 				{
 					"AP_IDS": [
-						"0x7B1"
+						"0x7AE"
 					],
 					"IDS": [
 						"0x105"
@@ -32406,7 +32426,7 @@
 			"Z-Cancel Tip": [
 				{
 					"AP_IDS": [
-						"0x7B2"
+						"0x7AF"
 					],
 					"IDS": [
 						"0x106"

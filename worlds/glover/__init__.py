@@ -831,7 +831,12 @@ class GloverWorld(World):
         garibs_location.place_locked_item(all_garibs_item)
 
     def connect_entrances(self):
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml", regions_to_highlight=self.multiworld.get_all_state().reachable_regions[self.player])
+        reachable_regions = self.multiworld.get_all_state().reachable_regions[self.player]
+        unreachable_regions = []
+        for each_region in self.multiworld.regions:
+            if not each_region in reachable_regions:
+                unreachable_regions.append(each_region)
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "Glover.puml", regions_to_highlight=unreachable_regions)
         return super().connect_entrances()
 
     def build_options(self):
