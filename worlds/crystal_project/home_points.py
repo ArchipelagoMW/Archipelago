@@ -95,19 +95,19 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(PIPELINE_NORTH_AP_REGION, "Capital Pipeline", 1127),
         LocationData(PIPELINE_SOUTH_AP_REGION, "East Capital Pipeline", 1420),
 
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Sequoia Athenaeum", 2361, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Ice Pass", 2413),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Tall, Tall Souvenir Shop", 1260, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Land's End Cottage", 2564),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Slip Glide Ride Exit", 2743, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Ice Fisher's Hut", 3014),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Triton Shrine", 3018, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Tall, Tall Heights", 3047),
+        LocationData(SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, "Sequoia Athenaeum", 2361),
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Ice Pass", 2413),
+        LocationData(SOUVENIR_SHOP_AP_REGION, "Tall, Tall Souvenir Shop", 1260),
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Land's End Cottage", 2564),
+        LocationData(SLIP_GLIDE_RIDE_EXIT_AP_REGION, "Slip Glide Ride Exit", 2743),
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Ice Fisher's Hut", 3014),
+        LocationData(UPPER_ICE_LAKES_AP_REGION, "Triton Shrine", 3018),
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, "Tall, Tall Heights", 3047),
 
-        LocationData(CASTLE_RAMPARTS_AP_REGION, "East Ramparts", 1375, lambda state: logic.has_glide(state)),
-        LocationData(CASTLE_RAMPARTS_AP_REGION, "West Ramparts", 1376, lambda state: logic.has_glide(state)),
+        LocationData(PEAK_RAMPARTS_AP_REGION, "East Ramparts", 1375, lambda state: logic.has_glide(state)),
+        LocationData(PEAK_RAMPARTS_AP_REGION, "West Ramparts", 1376, lambda state: logic.has_glide(state)),
 
-        LocationData(SLIP_GLIDE_RIDE_AP_REGION, "Slip Glide Ride Entrance", 1550),
+        LocationData(SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, "Slip Glide Ride Entrance", 1550),
 
         LocationData(LANDS_END_AP_REGION, "Summit Shrine", 1559),
 
