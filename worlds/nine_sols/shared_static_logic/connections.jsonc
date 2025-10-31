@@ -462,11 +462,8 @@
     // on logic_level: easy, Cloud Piercer S/X
     { "from": "W&OS - Center", "to": "W&OS - Root Node", "requires": [ { "anyOf": [
         { "item": "Grapple" },
-        [
-            { "item": "Charged Strike" },
-            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
-        ]
-    ] } ] }, // on logic_level: easy, bow hover // on logic_level: ledge_storage, parry hover
+        [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
+    ] } ] }, // on logic_level: easy, bow hover OR (CS AND (AD OR CL)) // on logic_level: ledge_storage, parry hover
     // 2 T-dashes is enough, but that's out of logic
     { "from": "W&OS - Root Node", "to": "W&OS - Right Exit", "requires": [ { "item": "Charged Strike" } ] }, // one-way dragon boat ride
     // Thunder Buster and Cloud Piercer S arrows do *not* work on the CS bell, it really has to be CS here
