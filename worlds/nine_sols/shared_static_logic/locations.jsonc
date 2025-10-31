@@ -316,7 +316,9 @@
     },
     {
         "address": 703, "name": "CTH: Side Room Near Right Exit",
-        "region": "CTH - Upper Right Exit", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+        "region": "CTH - Upper Right Exit", "requires": [
+            { "anyOf": [ { "item": "Mystic Nymph: Scout Mode" }, { "item": "Cloud Leap" } ] }
+        ]
     },
     {
         "address": 704, "name": "CTH: Lower Left Vents",
