@@ -71,6 +71,10 @@ class CrystalProjectLogic:
     def has_vertical_movement(self, state: CollectionState) -> bool:
         return state.has(IBEK_BELL, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 3)
 
+    def push_ice_block_and_goat(self, state: CollectionState) -> bool:
+        #TODO: without region pass this is not traversable bc you can't push the ice blocks
+        return state.has(IBEK_BELL, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 3)
+
     def has_glide(self, state: CollectionState) -> bool: 
         return state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 4)
 

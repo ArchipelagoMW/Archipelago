@@ -539,8 +539,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset), #Ether Pouch chest
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Hop east from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
+        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Hop west from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
         LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Chilling by Nomad's Outpost", 3676 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)),  # (45, 215, -465) Overpass (Outpost) Scrap
         LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
@@ -985,58 +986,82 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Tall Tall Heights
         #Treasure chests
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Tear Seed chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Lonely chest", 2428 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ether
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Tear Seed chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Potion chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Above the Boomer Society", 2844 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Z-Potion Pouch chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Above the Triton Shrine", 2795 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)), #Ether chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Frost Reaper chest
-        #requires (Ibek or Triton Stone) and Quintar
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)) and logic.has_horizontal_movement(state)), #Potion Pouch chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Break the ice", 2744 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Radiance Northern Cave
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset, lambda state: logic.has_glide(state)), #Judo Gi chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - East of the souvenir store", 2993 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Money chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Athenaeum Chips Challenge (or be a bird)", 2785 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Insignia Helm chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - East of the Athenaeum", 2565 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Potion Pouch chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - A funny chest happened on the way to the Athenaeum", 2994 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Z-Potion chest
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset), #1st Overpass (Cloudy Wind) Scrap
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Overpass Chest - Chilling by Nomads Outpost", 3676 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(45, 215, -465) Overpass (Outpost) Scrap
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset), #Underpass (Ice Pass) Scrap
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset), #Underpass (Ice Pass) Potion
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(191, 172, -437) (Underwater) Underpass Scrap chest
+        #Boomer Overlook
+        LocationData(BOOMER_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Above the Boomer Society", 2844 + treasure_index_offset),  # Z-Potion Pouch chest
+        #Note: this chest is not technically connected to this region but it has the exact same requirements to get to it from Boomer Society/Tall, Tall Heights Save Point
+        LocationData(BOOMER_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Lonely chest over the ridge from Boomer Society", 2428 + treasure_index_offset),  # Ether
+        #Greenshire Overlook
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)), #Tear Seed chest
+        #Tall, Tall Heights Save Point
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Tear Seed chest
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Potion chest
+        #Lower Ice Lakes
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Frost Reaper chest
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Potion Pouch chest
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, lambda state: logic.has_swimming(state)),  # (191, 172, -437) (Underwater) Underpass Scrap chest
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset),  # 1st Overpass (Cloudy Wind) Scrap
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 1", 3672 + treasure_index_offset),  # Underpass (Ice Pass) Scrap
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Underpass Chest - Tall Tall Heights spiky tunnel to Salmon River 2", 1601 + treasure_index_offset),  # Underpass (Ice Pass) Potion
+        #Upper Ice Lakes
+        LocationData(UPPER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Above the Triton Shrine", 2795 + treasure_index_offset),  # Ether chest
+        #Tall, Tall Diamondsmith
+        LocationData(TALL_TALL_DIAMONDSMITH_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Parkour off the diamondsmith beneath the dead tree", 2810 + treasure_index_offset),  # Judo Gi chest
+        #Slip Glide Ride Exit
+        LocationData(SLIP_GLIDE_RIDE_EXIT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Break the ice", 2744 + treasure_index_offset),  # Radiance Northern Cave
+        #Sequoia Athenaeum Entrance
+        LocationData(SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - East of the souvenir store", 2993 + treasure_index_offset),  # Money chest
+        #Sequoia Athenaeum Balcony
+        LocationData(SEQUOIA_ATHENAEUM_BALCONY_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - A funny chest happened on the way to the Athenaeum", 2994 + treasure_index_offset),  # Z-Potion chest
+        LocationData(SEQUOIA_ATHENAEUM_BALCONY_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - East of the Athenaeum", 2565 + treasure_index_offset),  # Potion Pouch chest
+        #Tall, Tall Tall Chest
+        LocationData(TALL_TALL_TALL_CHEST_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Athenaeum outdoors Chip's Challenge (or be a bird)", 2785 + treasure_index_offset), #Insignia Helm chest
 
         #NPCs
         #Todo NPCs Job Masters: Tall Tall Heights (Outpost) map has Master Chemist ID 3707 (491, 221, -389); gives you Chemist Seal in exchange for job mastery
         #Todo NPCs Player Options: (197, 192, -441) do we want a filter option to add the guys who fish things up for you
-        #LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Z8_FisherInHut", 1549 + npc_index_offset),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold above the Boomer Society", 1600 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)), #Dust
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)) and logic.has_horizontal_movement(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Chip Challenge himself", 2388 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or state.has(TRITON_STONE, player)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold by the breakable ice wall", 2814 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.has_vertical_movement(state)), #Ingot
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold tucked in melted snow past the Chips Challenge east of shrine", 2846 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset), #1st Gold Dust Overpass (Cloudy Wind)
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)), #Z8_FisherInHut (197, 192, -441)
+        #Boomer Overlook
+        LocationData(BOOMER_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold above the Boomer Society", 1600 + npc_index_offset), #Ingot
+        #Tall, Tall Ramparts Crag Chest
+        LocationData(TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold tucked in melted snow past the Chip's Challenge east of shrine", 2846 + npc_index_offset),  # Ore
+        #Greenshire Overlook
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state)),  # Ingot
+        #Lower Ice Lakes
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Ingot
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)),  # Z8_FisherInHut (197, 192, -441)
+        LocationData(LOWER_ICE_LAKES_AP_REGION, "Overpass NPC - Gold past Tall Tall Heights spiky tunnel to Salmon River", 2710 + npc_index_offset),  # 1st Gold Dust Overpass (Cloudy Wind)
+        #Upper Ice Lakes
+        LocationData(UPPER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Chip Challenge himself", 2388 + npc_index_offset),
+        #Land's End Cottage Ridge
+        LocationData(LANDS_END_COTTAGE_RIDGE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Hop along spike mountain to Gold", 2853 + npc_index_offset), #Dust
+        #Slip Glide Ride Exit
+        LocationData(SLIP_GLIDE_RIDE_EXIT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold by the breakable ice wall", 2814 + npc_index_offset), #Ingot
+        #Sequoia Athenaeum Balcony
+        LocationData(SEQUOIA_ATHENAEUM_BALCONY_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold past the Athenaeum Chips Challenge", 1602 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),  # Dust
+        #Icy Spikes Madness
+        LocationData(ICY_SPIKES_MADNESS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Treacherous landing Gold above the spikes", 1584 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
 
         #Northern Cave
         #Treasure chests
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Island in the ice", 2787 + treasure_index_offset), #Tear Seed chest
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Ominous Chips Challenge cave", 1579 + treasure_index_offset), #Ice Cell Key chest
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Chip mimic", 1552 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Apprentice chest
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Past the wiggly block spike pit", 3001 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Money chest
+        #Lower Northern Cave
+        LocationData(LOWER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Island in the ice", 2787 + treasure_index_offset), #Tear Seed chest
+        #Ice Cell
+        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Ominous Chips Challenge cave", 1579 + treasure_index_offset), #Ice Cell Key chest
+        #Note: ibek here requires ice block; check can be made with quintar and not owl but the owl is required from Slip Glide Ride save point or Ice Cell start
+        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Chip mimic", 1552 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state)), #Apprentice chest
+        #Upper Northern Cave
+        LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Past the wiggly block spike pit", 3001 + treasure_index_offset), #Money chest
 
         #NPCs
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " NPC - Gold past the wiggly block spike pit", 2815 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ore
+        #Upper Northern Cave
+        LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " NPC - Gold past the wiggly block spike pit", 2815 + npc_index_offset), #Ore
 
         #Lands End
         #Treasure chests
+        #Land's End Northern Peak
+        LocationData(LANDS_END_NORTHERN_PEAK_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset),  # Money chest
+        #Land's End
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Definitely requires Quintar *wink* among the first spikes 1", 2849 + treasure_index_offset), #Ether chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Definitely requires Quintar *wink* among the first spikes 2", 3003 + treasure_index_offset), #Potion chest
-        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Brave the spikes to climb the northern peak", 3002 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Money chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - To defeat the Huns", 2740 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.has_vertical_movement(state)), #Blue Cape chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Defender chest
@@ -1046,7 +1071,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(LANDS_END_AP_REGION, "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, lambda state: logic.has_glide(state)), #(191, 177, -214) 9th Scrap on main Overpass map
 
         #NPCs
-        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
+        #Land's End Northern Peak
+        LocationData(LANDS_END_NORTHERN_PEAK_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Lets get down to business in the mountains for Gold", 2848 + npc_index_offset), #Ingot
+        #Land's End
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Pillar Gold by River Cats Ego", 2850 + npc_index_offset), #Ore
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
@@ -1079,24 +1106,28 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Northern Stretch
         #Treasure chests
-        LocationData(NORTHERN_STRETCH_AP_REGION, "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map in Overpass (Outpost)
+        LocationData(SUMMONERS_TOWER_AP_REGION, "Overpass Chest - At the base of Summoners Lookout", 3655 + treasure_index_offset), #Northern Stretch map in Overpass (Outpost)
 
         #Castle Ramparts
         #Treasure chests
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Tucked beside eastern turret", 1547 + treasure_index_offset), #(443, 206, -378) Money chest
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Below the crystal", 2908 + treasure_index_offset, lambda state: logic.has_glide(state)), #(407, 228, -383) Castle Ramparts map chest
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Jump down from eastern save point", 2742 + treasure_index_offset, lambda state: logic.has_glide(state)), #(440, 227, -386) Conquest chest
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Jump down from western save point", 2741 + treasure_index_offset, lambda state: logic.has_glide(state)), #(369, 227, -386) Rune Sword chest
-        #Technically Castle Sequoia but they're in a locked room only accessible from Ramparts
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY) and logic.has_glide(state)), #(375, 232, -452) (Skums) Decapitator chest
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY) and logic.has_glide(state)), #(371, 231, -457) (Skums) Castle Sequoia map chest
+        #Lone Chest Rampart
+        LocationData(LONE_CHEST_RAMPART_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Tucked beside eastern turret", 1547 + treasure_index_offset), #(443, 206, -378) Money chest
+        #Peak Ramparts
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Below the crystal", 2908 + treasure_index_offset), #(407, 228, -383) Castle Ramparts map chest
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Jump down from eastern save point", 2742 + treasure_index_offset), #(440, 227, -386) Conquest chest
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Chest - Jump down from western save point", 2741 + treasure_index_offset), #(369, 227, -386) Rune Sword chest
+        #Technically Castle Sequoia but they're in a locked room only accessible from Peak Ramparts
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Locked Ramparts storage room 1", 2758 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY)), #(375, 232, -452) (Skums) Decapitator chest
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Chest - Locked Ramparts storage room 2", 3657 + treasure_index_offset, lambda state: logic.has_key(state, RAMPART_KEY)), #(371, 231, -457) (Skums) Castle Sequoia map chest
 
         #NPCs
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Western Gold above spikes", 2843 + npc_index_offset, lambda state: logic.has_glide(state)), #(354, 231, -429) Ingot
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Eastern Gold above spikes", 2842 + npc_index_offset, lambda state: logic.has_glide(state)), #(458, 231, -436) Ore
+        #Peak Ramparts
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Western Gold above spikes", 2843 + npc_index_offset, lambda state: logic.has_glide(state)), #(354, 231, -429) Ingot
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Eastern Gold above spikes", 2842 + npc_index_offset, lambda state: logic.has_glide(state)), #(458, 231, -436) Ore
 
         #Crystals
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Crystal - Beastmaster (say high to the Ramparts Demon!)", 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
+        #Peak Ramparts
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Crystal - Beastmaster (say high to the Ramparts Demon!)", 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
 
         #The Chalice of Tar
         #Treasure chests
@@ -1109,7 +1140,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Gold sparkling above the Overpass on the way up", 2841 + npc_index_offset), #Ore
 
         #Crystals
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Crystal - Biiiiiig glide to the Mimic", 3701 + crystal_index_offset),
+        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Crystal - Biiiiiig glide to the Mimic", 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
 
         #Flyers Crag
         #Treasure chests
@@ -1358,7 +1389,7 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(THE_UNDERCITY_AP_REGION, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
+        LocationData(PAMOA_TREE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
         LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
@@ -1388,10 +1419,10 @@ def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[Locat
         LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)), #Monster ID: 59
         LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)), #Monster ID: 78 and 100
         LocationData(EASTERN_CHASM_AP_REGION, EASTERN_CHASM_DISPLAY_NAME + " Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 293
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state) and logic.is_area_in_level_range(state, 55)), #Monster ID: 309
+        LocationData(SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 55)), #Monster ID: 309
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Boss - The Owlbear", 2104 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 47)), #Monster ID: 143
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)), #Monster ID: 224
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)), #Monster ID: 222
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)), #Monster ID: 222
         LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 242
         LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)), #Monster ID: 117
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)), #Monster ID: 192
@@ -1680,7 +1711,7 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Shop - Old Nans Stew", 10423 + shop_index_offset),
 
         #Salmon River
-        LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 1", 10631 + shop_index_offset),
+        LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 1", 10631 + shop_index_offset), #TODO: does this have no rules bc you can get there with the rental salmon?
         LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 2", 20631 + shop_index_offset),
         LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 3", 30631 + shop_index_offset),
 
@@ -1804,35 +1835,35 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Shop - Quintar Raising Supplies 9", 92227 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
 
         #Tall Tall Heights
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Triton Shrine Shop - Attendant 1", 11165 + shop_index_offset),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, "Triton Shrine Shop - Attendant 2", 21165 + shop_index_offset),
+        LocationData(UPPER_ICE_LAKES_AP_REGION, "Triton Shrine Shop - Attendant 1", 11165 + shop_index_offset),
+        LocationData(UPPER_ICE_LAKES_AP_REGION, "Triton Shrine Shop - Attendant 2", 21165 + shop_index_offset),
 
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 1", 12746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 2", 22746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 3", 32746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 4", 42746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 5", 52746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 6", 62746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 7", 72746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 8", 82746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 9", 92746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 10", 102746 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 1", 12746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 2", 22746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 3", 32746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 4", 42746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 5", 52746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 6", 62746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 7", 72746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 8", 82746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 9", 92746 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Armor Merchant 10", 102746 + shop_index_offset),
 
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 1", 10540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 2", 20540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 3", 30540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 4", 40540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 5", 50540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 6", 60540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 7", 70540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 8", 80540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 9", 90540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 10", 100540 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 1", 10540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 2", 20540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 3", 30540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 4", 40540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 5", 50540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 6", 60540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 7", 70540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 8", 80540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 9", 90540 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Weapon Merchant 10", 100540 + shop_index_offset),
 
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 1", 12918 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 2", 22918 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 3", 32918 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 4", 42918 + shop_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 1", 12918 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 2", 22918 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 3", 32918 + shop_index_offset),
+        LocationData(SOUVENIR_SHOP_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Shop - Souvenir Merchant 4", 42918 + shop_index_offset),
 
         #Jidamba Tangle
         LocationData(EUROPA_SHRINE_AP_REGION, EUROPA_SHRINE_AP_REGION + " Shop - Attendant 1", 11163 + shop_index_offset),
@@ -1894,13 +1925,13 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Region Completion", 6040 + regionsanity_index_offset, regionsanity=True),
         LocationData(QUINTAR_MAUSOLEUM_AP_REGION, QUINTAR_MAUSOLEUM_DISPLAY_NAME + " Region Completion", 6041 + regionsanity_index_offset, regionsanity=True),
         LocationData(EASTERN_CHASM_AP_REGION, EASTERN_CHASM_DISPLAY_NAME + " Region Completion", 6042 + regionsanity_index_offset, regionsanity=True),
-        LocationData(TALL_TALL_HEIGHTS_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Region Completion", 6043 + regionsanity_index_offset, regionsanity=True),
-        LocationData(NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Region Completion", 6044 + regionsanity_index_offset, regionsanity=True),
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Region Completion", 6043 + regionsanity_index_offset, regionsanity=True),
+        LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Region Completion", 6044 + regionsanity_index_offset, regionsanity=True),
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Region Completion", 6045 + regionsanity_index_offset, regionsanity=True),
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Region Completion", 6046 + regionsanity_index_offset, regionsanity=True),
         LocationData(SEQUOIA_ATHENAEUM_AP_REGION, SEQUOIA_ATHENAEUM_DISPLAY_NAME + " Region Completion", 6047 + regionsanity_index_offset, regionsanity=True),
-        LocationData(NORTHERN_STRETCH_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " Region Completion", 6048 + regionsanity_index_offset, regionsanity=True),
-        LocationData(CASTLE_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Region Completion", 6049 + regionsanity_index_offset, regionsanity=True),
+        LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " Region Completion", 6048 + regionsanity_index_offset, regionsanity=True),
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Region Completion", 6049 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Region Completion", 6050 + regionsanity_index_offset, regionsanity=True),
         LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Region Completion", 6051 + regionsanity_index_offset, regionsanity=True),
         LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
