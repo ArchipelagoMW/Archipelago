@@ -282,6 +282,7 @@ local ROM_WORLDS_TABLE = {
     "AP_SPACE_BOSS",
     "AP_SPACE_BONUS",
     "AP_TRAINING_WORLD",
+	"AP_OUTRO",
     "AP_MAX_WORLDS"
 };
 
@@ -8380,84 +8381,85 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_TRAINING_WORLD"] = {
-		["GOAL"] = "1974",
+		["GOAL"] = "1971",
 		["TIP"] = {
+			["1953"] = {
+				['id'] = 0x7A1,
+				['offset'] = 0,
+			},
+			["1954"] = {
+				['id'] = 0x7A2,
+				['offset'] = 1,
+			},
+			["1955"] = {
+				['id'] = 0x7A3,
+				['offset'] = 2,
+			},
 			["1956"] = {
 				['id'] = 0x7A4,
-				['offset'] = 0,
+				['offset'] = 3,
 			},
 			["1957"] = {
 				['id'] = 0x7A5,
-				['offset'] = 1,
+				['offset'] = 4,
 			},
 			["1958"] = {
 				['id'] = 0x7A6,
-				['offset'] = 2,
+				['offset'] = 5,
 			},
 			["1959"] = {
 				['id'] = 0x7A7,
-				['offset'] = 3,
+				['offset'] = 6,
 			},
 			["1960"] = {
 				['id'] = 0x7A8,
-				['offset'] = 4,
+				['offset'] = 7,
 			},
 			["1961"] = {
 				['id'] = 0x7A9,
-				['offset'] = 5,
+				['offset'] = 8,
 			},
 			["1962"] = {
 				['id'] = 0x7AA,
-				['offset'] = 6,
+				['offset'] = 9,
 			},
 			["1963"] = {
 				['id'] = 0x7AB,
-				['offset'] = 7,
+				['offset'] = 10,
 			},
 			["1964"] = {
 				['id'] = 0x7AC,
-				['offset'] = 8,
+				['offset'] = 11,
 			},
 			["1965"] = {
 				['id'] = 0x7AD,
-				['offset'] = 9,
+				['offset'] = 12,
 			},
 			["1966"] = {
 				['id'] = 0x7AE,
-				['offset'] = 10,
+				['offset'] = 13,
 			},
 			["1967"] = {
 				['id'] = 0x7AF,
-				['offset'] = 11,
-			},
-			["1968"] = {
-				['id'] = 0x7B0,
-				['offset'] = 12,
-			},
-			["1969"] = {
-				['id'] = 0x7B1,
-				['offset'] = 13,
-			},
-			["1970"] = {
-				['id'] = 0x7B2,
 				['offset'] = 14,
 			},
 		},
 		["SWITCH"] = {
-			["1971"] = {
-				['id'] = 0x7B3,
+			["1968"] = {
+				['id'] = 0x7B0,
 				['offset'] = 0,
 			},
-			["1972"] = {
-				['id'] = 0x7B4,
+			["1969"] = {
+				['id'] = 0x7B1,
 				['offset'] = 1,
 			},
-			["1973"] = {
-				['id'] = 0x7B5,
+			["1970"] = {
+				['id'] = 0x7B2,
 				['offset'] = 2,
 			},
 		},
-	}
+	},
+	["AP_OUTRO"] = {}
 }
 
 local GARIB_GROUPS_MAP = {
@@ -12256,6 +12258,16 @@ function goal_check()
 	return check
 end
 
+function ball_returned_check()
+    local check = {}
+	local highest_returned = mainmemory.readbyte(0x1EAA57)
+	for i=1,7
+	do
+		check[tostring(0x79A + (i - 1))] = i <= highest_returned
+	end
+	return check
+end
+
 function received_garibs(itemId)
     --Decoupled Garib Groups and Garibsanity
 	if 6510000 <= itemId and itemId <= 6519999 then
@@ -12632,7 +12644,9 @@ function map_handler()
         set_map("AP_SPACE_BOSS")
     elseif CURRENT_MAP == 0x29 then
         set_map("AP_SPACE_BONUS")
-    end
+	elseif CURRENT_MAP == 0x2F then
+		set_map("AP_OUTRO")
+	end
 end
 
 function setRandomizedWorlds(WORLD_LOOKUP)
@@ -12797,7 +12811,8 @@ function SendToClient()
     retTable["enemy"] = enemy_check()
     retTable["potions"] = potion_check()
 	retTable["goal"] = goal_check()
-
+	retTable["ball_returns"] = ball_returned_check()
+	retTable["outro"] = WORLD_NAME == "AP_OUTRO"
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
 

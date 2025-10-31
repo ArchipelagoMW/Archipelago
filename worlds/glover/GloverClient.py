@@ -312,6 +312,7 @@ class GloverContext(CommonContext):
         self.checkpoint_table = {}
         self.switch_table = {}
         self.goal_table = {}
+        self.ball_return_list = {}
 
         self.current_world = 0
         self.current_hub = 0
@@ -608,6 +609,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     tipslist = payload["tip"]
     checkpointslist = payload["checkpoint"]
     switchslist = payload["switch"]
+    ball_return_list = payload["ball_returns"]
 
     glover_world = payload["glover_world"]
     glover_hub = payload["glover_hub"]
@@ -644,6 +646,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         glover_hub = 0
     if isinstance(goallist, list):
         goallist = {}
+    if isinstance(ball_return_list, list):
+        ball_return_list = {}
     
     if demo == False and ctx.sync_ready == True:
         locs1 = []
@@ -720,6 +724,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             for locationId, value in goallist.items():
                 if value == True:
                     locs1.append(int(locationId))
+        if ctx.ball_return_list != ball_return_list:
+            ctx.ball_return_list = ball_return_list
+            for locationId, value in ball_return_list.items():
+                if value == True:
+                    locs1.append((int(locationId)))
 
         if len(locs1) > 0:
             await ctx.send_msgs([{
@@ -744,14 +753,13 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             ctx.handled_scouts.extend(scoutsVague)
         
         #GAME VICTORY
-        # if hag == True and (ctx.slot_data["victory_condition"] == 0 or ctx.slot_data["victory_condition"] == 4 or\
-        #     ctx.slot_data["victory_condition"] == 6) and not ctx.finished_game:
-        #     await ctx.send_msgs([{
-        #         "cmd": "StatusUpdate",
-        #         "status": 30
-        #     }])
-        #     ctx.finished_game = True
-        #     ctx._set_message("You have completed your goal", None)
+        if payload["outro"] == True and not ctx.finished_game:
+            await ctx.send_msgs([{
+                "cmd": "StatusUpdate",
+                "status": 30
+            }])
+            ctx.finished_game = True
+            ctx._set_message("You have completed your goal", None)
 
         # Tracker
         if ctx.current_world != glover_world:
