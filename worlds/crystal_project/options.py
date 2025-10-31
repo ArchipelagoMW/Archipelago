@@ -129,8 +129,8 @@ class Shopsanity(Choice):
     """
     When enabled, all shop inventories will be replaced with checks. Be prepared, adventurer.
 
-    Choosing "enabled and hint" will automatically create a hint for any item available in a store after you have visited it for the first time,
-    letting other players in the multiworld know you've seen their item.
+    Choosing "enabled and hint" will, when you CLOSE the store, automatically create a hint for every item you did not purchase
+    so other players will realize you have betrayed them by refusing to purchase their key progression item!
     """
     display_name = "Shopsanity"
     option_disabled = 0
@@ -149,6 +149,8 @@ class Regionsanity(Choice):
     without receiving his "official permission" (i.e. "Item - Spawning Meadows Pass").
     However, the Overpass and Underpass are regions of lawlessness where the Grandmaster has no authority! ;)
     (You're also still allowed to use the save points, we won't tell.)
+
+    If you put any region pass items in your starting inventory, the first one will be chosen as your starting region.
 
     If regionsanity is set to extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
     Spend more than 10 seconds in a region without a pass and the Grandmaster will teleport you!
