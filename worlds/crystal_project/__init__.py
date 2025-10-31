@@ -448,7 +448,7 @@ class CrystalProjectWorld(World):
             for region_pass in self.item_name_groups[PASS]:
                 excluded_items.add(region_pass)
         else:
-            excluded_items.add(display_region_name_to_pass_dict[self.starter_ap_region])
+            excluded_items.add(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]])
 
         return excluded_items
 
