@@ -537,16 +537,17 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - Hop on chest once you have become frogger", 1264 + treasure_index_offset), #Money chest
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - Atop river island crown", 1297 + treasure_index_offset), #Bloodbind chest
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - It also wishes to be frogger", 325 + treasure_index_offset), #Money chest
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset), #Ether Pouch chest
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - In the stands of Salmon race finish line", 2976 + treasure_index_offset, lambda state: logic.has_rental_salmon(state)), #Ether Pouch chest
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Hop west from shrine to shroom-studded mountainside", 3539 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Chilling by Nomad's Outpost", 3676 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)),  # (45, 215, -465) Overpass (Outpost) Scrap
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
+        #Mushroom Mountain
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Hop west from shrine to shroom-studded mountainside", 3539 + treasure_index_offset), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Chilling by Nomad's Outpost", 3676 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or logic.has_swimming(state)),  # (45, 215, -465) Overpass (Outpost) Scrap
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_glide(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Reid chilling by the Fish Hatchery", 2410 + npc_index_offset), #(113, 172, -372) Courtyard Key; Fixed Missable
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race Participation Prize", 50639 + npc_index_offset),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race Participation Prize", 50639 + npc_index_offset, lambda state: logic.has_rental_salmon(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 14th place price", 50640 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 12th place price", 50641 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 10th place price", 50642 + npc_index_offset, lambda state: logic.has_swimming(state)),
@@ -556,10 +557,12 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
+        #Mushroom Mountain
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
         #Crystals
-        LocationData(SALMON_RIVER_AP_REGION, "River Cat's Ego Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
+        #River Cat's Ego
+        LocationData(RIVER_CATS_EGO_AP_REGION, RIVER_CATS_EGO_AP_REGION + " Crystal - Appease the QuizFish Nomad", 630 + crystal_index_offset), #River Cats Ego
 
         #Poko Poko Desert
         #Treasure chests
@@ -991,12 +994,12 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Note: this chest is not technically connected to this region but it has the exact same requirements to get to it from Boomer Society/Tall, Tall Heights Save Point
         LocationData(BOOMER_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Lonely chest over the ridge from Boomer Society", 2428 + treasure_index_offset),  # Ether
         #Greenshire Overlook
-        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)), #Tear Seed chest
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)), #Tear Seed chest
         #Tall, Tall Heights Save Point
-        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Tear Seed chest
-        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Potion chest
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Tear Seed chest
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Potion chest
         #Lower Ice Lakes
-        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state) or logic.has_glide(state)),  # Frost Reaper chest
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Frost Reaper chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Potion Pouch chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, lambda state: logic.has_swimming(state)),  # (191, 172, -437) (Underwater) Underpass Scrap chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset),  # 1st Overpass (Cloudy Wind) Scrap
@@ -1024,7 +1027,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Tall, Tall Ramparts Crag Chest
         LocationData(TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold tucked in melted snow past the Chip's Challenge east of shrine", 2846 + npc_index_offset),  # Ore
         #Greenshire Overlook
-        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state)),  # Ingot
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME)),  # Ingot
         #Lower Ice Lakes
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Ingot
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)),  # Z8_FisherInHut (197, 192, -441)
@@ -1047,7 +1050,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Ice Cell
         LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Ominous Chips Challenge cave", 1579 + treasure_index_offset), #Ice Cell Key chest
         #Note: ibek here requires ice block; check can be made with quintar and not owl but the owl is required from Slip Glide Ride save point or Ice Cell start
-        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Chip mimic", 1552 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state)), #Apprentice chest
+        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Hop along the igloos or Quintar skip the Chip", 1552 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state, NORTHERN_CAVE_DISPLAY_NAME)), #Apprentice chest
         #Upper Northern Cave
         LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Past the wiggly block spike pit", 3001 + treasure_index_offset), #Money chest
 
@@ -1711,9 +1714,10 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Shop - Old Nans Stew", 10423 + shop_index_offset),
 
         #Salmon River
-        LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 1", 10631 + shop_index_offset), #TODO: does this have no rules bc you can get there with the rental salmon?
-        LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 2", 20631 + shop_index_offset),
-        LocationData(SALMON_RIVER_AP_REGION, "Poseidon Shrine Shop - Attendant 3", 30631 + shop_index_offset),
+        #Poseidon Shrine Proper
+        LocationData(POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION + " Shop - Attendant 1", 10631 + shop_index_offset),
+        LocationData(POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION + " Shop - Attendant 2", 20631 + shop_index_offset),
+        LocationData(POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION + " Shop - Attendant 3", 30631 + shop_index_offset),
 
         #Sara Sara Bazaar
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Old Nans Stew Subsidiary", 10957 + shop_index_offset),
