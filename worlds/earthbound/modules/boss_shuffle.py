@@ -126,9 +126,6 @@ class BossData(NamedTuple):
 
 def initialize_bosses(world: "EarthBoundWorld") -> None:
     from ..Options import BossShuffle
-
-    world.spoil_dog_shuffle = world.options.decouple_diamond_dog.value
-    world.spoil_giygas_shuffle = world.options.boss_shuffle_add_giygas.value
      
     world.boss_list = [
         "Frank",
@@ -259,7 +256,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         boss_plando = []
         shuffle_result = world.options.boss_shuffle.value
 
-    if shuffle_result:
+    if shuffle_result == "true":
         world.random.shuffle(world.boss_list)
 
         if not world.options.decouple_diamond_dog:
@@ -286,7 +283,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
                 continue
             world.boss_list[25], world.boss_list[i] = world.boss_list[i], world.boss_list[25]
 
-    print(f"Old: {world.boss_list}")
+    #print(f"Old: {world.boss_list}")
     for item in boss_plando:
         boss_block = item.split("-")
         boss = boss_block[0].title()
@@ -296,12 +293,6 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
 
         if slot in boss_typo_key:
             slot = boss_typo_key[boss]
-
-        if slot == "Diamond Dog":
-            world.spoil_dog_shuffle = True
-
-        if slot == "Giygas":
-            world.spoil_dog_shuffle = True
 
         world.boss_list.remove(boss)
         world.boss_list.insert(world.boss_slot_order.index(slot), boss)

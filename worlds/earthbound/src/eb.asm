@@ -9127,6 +9127,10 @@ ORG $EEC777
 db $73, $98, $99, $95, $96, $50, $0A
 dl TwosonCopBossText
 
+ORG $EEBDA4
+db $0A
+dl SetupNessForMagicantBoost
+
 
 ;New data table go here
 
@@ -18383,6 +18387,12 @@ dd $EEEEBC
 db $0A
 dl $EEC785
 
+SetupNessForMagicantBoost:
+db $18, $01, $01
+db $19, $10, $01
+db $70
+db $0A
+dl $EEBDA8
 
 ;ORG $C7617D
 ;dd DisplayAndGetMoney
