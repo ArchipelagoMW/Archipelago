@@ -6903,17 +6903,7 @@ local ADDRESS_MAP = {
 		},
 	},
 	["AP_FORTRESS_BOSS"] = {
-		["GOAL"] = "1590",
-		["SWITCH"] = {
-			["1588"] = {
-				['id'] = 0x634,
-				['offset'] = 0,
-			},
-			["1589"] = {
-				['id'] = 0x635,
-				['offset'] = 1,
-			},
-		},
+		["GOAL"] = "1590"
 	},
 	["AP_FORTRESS_BONUS"] = {
 		["GOAL"] = "1648",
@@ -12126,19 +12116,22 @@ function garib_group_contruction()
                     then
                         all_pass = false
                     end
-                elseif ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id] ~= nil
-                then
-                    local offset_list = {}
-                    for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"])
-                    do
-                        offset_list[loc_id] = locationTable["offset"]
-                    end
-                    local object_id = ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id]['object_id']
-                    if GVR:checkEnemyGaribLocationFlag(WORLD_ID, offset_list, object_id) == false
-                    then
-                        all_pass = false
-                    end
-                end
+                elseif ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"] ~= nil
+				then
+					if ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id] ~= nil
+                	then
+                	    local offset_list = {}
+                	    for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"])
+                	    do
+                	        offset_list[loc_id] = locationTable["offset"]
+                	    end
+                	    local object_id = ADDRESS_MAP[WORLD_NAME]["ENEMY_GARIBS"][garib_id]['object_id']
+                	    if GVR:checkEnemyGaribLocationFlag(WORLD_ID, offset_list, object_id) == false
+                	    then
+                	        all_pass = false
+                	    end
+                	end
+				end
             end
             checks[group_info["id"]] = all_pass
         end
