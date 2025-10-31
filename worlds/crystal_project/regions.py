@@ -511,13 +511,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     #Tall, Tall Heights start
     fancy_add_exits(world, BOOMER_OVERLOOK_AP_REGION, [BOOMER_SOCIETY_AP_REGION, LONE_CHEST_RAMPART_AP_REGION, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION, UPPER_ICE_LAKES_AP_REGION],
-                    {RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION: lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME),
+                    {RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION: lambda state: logic.has_glide(state) or logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME),
                      TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, [BOOMER_OVERLOOK_AP_REGION, UPPER_ICE_LAKES_AP_REGION])
     fancy_add_exits(world, GREENSHIRE_OVERLOOK_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION],
                     {TALL_TALL_SAVE_POINT_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
     fancy_add_exits(world, TALL_TALL_SAVE_POINT_AP_REGION, [BOOMER_OVERLOOK_AP_REGION, GREENSHIRE_OVERLOOK_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
-                    {BOOMER_OVERLOOK_AP_REGION: lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)})
+                    {BOOMER_OVERLOOK_AP_REGION: lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)})
     fancy_add_exits(world, LOWER_ICE_LAKES_AP_REGION, [THE_PALE_GROTTO_AP_REGION, SALMON_RIVER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION, UPPER_ICE_LAKES_AP_REGION, LANDS_END_COTTAGE_RIDGE_AP_REGION, LANDS_END_AP_REGION, LOWER_NORTHERN_CAVE_AP_REGION],
                     {THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
                      TALL_TALL_SAVE_POINT_AP_REGION: lambda state: logic.has_vertical_movement(state),
@@ -528,7 +528,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {BOOMER_OVERLOOK_AP_REGION: lambda state: logic.has_glide(state),
                      TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      TALL_TALL_DIAMONDSMITH_AP_REGION: lambda state: logic.has_glide(state),
-                     SOUVENIR_SHOP_AP_REGION: lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state),
+                     SOUVENIR_SHOP_AP_REGION: lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state),
                      SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION: lambda state: logic.has_glide(state)})
     fancy_add_exits(world, LANDS_END_COTTAGE_RIDGE_AP_REGION, [LOWER_ICE_LAKES_AP_REGION, LANDS_END_AP_REGION],
                     {LANDS_END_AP_REGION: lambda state: logic.has_glide(state) and logic.obscure_routes_on(state)})
@@ -545,7 +545,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      ICY_SPIKES_MADNESS_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      SEQUOIA_ATHENAEUM_AP_REGION: lambda state: state.has(VERMILLION_BOOK, player) and state.has(VIRIDIAN_BOOK, player) and state.has(CERULEAN_BOOK, player)})
     fancy_add_exits(world, SEQUOIA_ATHENAEUM_BALCONY_AP_REGION, [SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION, ICY_SPIKES_MADNESS_AP_REGION],
-                    {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME),
+                    {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME),
                      ICY_SPIKES_MADNESS_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
     fancy_add_exits(world, TALL_TALL_TALL_CHEST_AP_REGION, [SEQUOIA_ATHENAEUM_BALCONY_AP_REGION])
     fancy_add_exits(world, ICY_SPIKES_MADNESS_AP_REGION, [SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, SEQUOIA_ATHENAEUM_BALCONY_AP_REGION, PAMOA_TREE_AP_REGION],
@@ -563,7 +563,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, MIDDLE_NORTHERN_CAVE_AP_REGION, [ICE_CELL_AP_REGION, LOWER_NORTHERN_CAVE_AP_REGION])
     fancy_add_exits(world, ICE_CELL_AP_REGION, [LOWER_NORTHERN_CAVE_AP_REGION, SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION],
                     {LOWER_NORTHERN_CAVE_AP_REGION: lambda state: logic.has_key(state, ICE_CELL_KEY),
-                     SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION: lambda state: logic.push_ice_block_and_goat(state, NORTHERN_CAVE_DISPLAY_NAME) or logic.has_glide(state)})
+                     SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION: lambda state: logic.can_push_ice_block_and_goat(state, NORTHERN_CAVE_DISPLAY_NAME) or logic.has_glide(state)})
     fancy_add_exits(world, LOWER_NORTHERN_CAVE_AP_REGION, [ICE_CELL_AP_REGION, LOWER_ICE_LAKES_AP_REGION])
     #Northern Cave end
     #Land's End start

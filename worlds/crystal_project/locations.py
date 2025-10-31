@@ -994,12 +994,12 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Note: this chest is not technically connected to this region but it has the exact same requirements to get to it from Boomer Society/Tall, Tall Heights Save Point
         LocationData(BOOMER_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Lonely chest over the ridge from Boomer Society", 2428 + treasure_index_offset),  # Ether
         #Greenshire Overlook
-        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)), #Tear Seed chest
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the icy Chips Challenge", 2786 + treasure_index_offset, lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)), #Tear Seed chest
         #Tall, Tall Heights Save Point
-        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Tear Seed chest
-        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Potion chest
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 2nd icy Chips Challenge", 2788 + treasure_index_offset, lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Tear Seed chest
+        LocationData(TALL_TALL_SAVE_POINT_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the 3rd icy Chips Challenge", 1254 + treasure_index_offset, lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Potion chest
         #Lower Ice Lakes
-        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Frost Reaper chest
+        LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Past the Chips Challenge fishing hut", 1578 + treasure_index_offset, lambda state: logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME) or logic.has_glide(state)),  # Frost Reaper chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Chest - Tall stones and blue flowers", 2992 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Potion Pouch chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, "Underpass Chest - Ice swimming instead of ice fishing", 3623 + treasure_index_offset, lambda state: logic.has_swimming(state)),  # (191, 172, -437) (Underwater) Underpass Scrap chest
         LocationData(LOWER_ICE_LAKES_AP_REGION, "Overpass Chest - Past Tall Tall Heights spiky tunnel to Salmon River", 3538 + treasure_index_offset),  # 1st Overpass (Cloudy Wind) Scrap
@@ -1027,7 +1027,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Tall, Tall Ramparts Crag Chest
         LocationData(TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Gold tucked in melted snow past the Chip's Challenge east of shrine", 2846 + npc_index_offset),  # Ore
         #Greenshire Overlook
-        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME)),  # Ingot
+        LocationData(GREENSHIRE_OVERLOOK_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - I bek you can get this one (or come back with the bird) for Gold", 2845 + npc_index_offset, lambda state: logic.has_glide(state) or logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME)),  # Ingot
         #Lower Ice Lakes
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Melted snow Gold past the chest east of the Athenaeum", 2847 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Ingot
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " NPC - Fish in the hut", 1549 + npc_index_offset, lambda state: state.has("Item - Tough Rod", player) and state.has("Item - Fly Lure", player)),  # Z8_FisherInHut (197, 192, -441)
@@ -1050,7 +1050,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Ice Cell
         LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Ominous Chips Challenge cave", 1579 + treasure_index_offset), #Ice Cell Key chest
         #Note: ibek here requires ice block; check can be made with quintar and not owl but the owl is required from Slip Glide Ride save point or Ice Cell start
-        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Hop along the igloos or Quintar skip the Chip", 1552 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.push_ice_block_and_goat(state, NORTHERN_CAVE_DISPLAY_NAME)), #Apprentice chest
+        LocationData(ICE_CELL_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Hop along the igloos or Quintar skip the Chip", 1552 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.can_push_ice_block_and_goat(state, NORTHERN_CAVE_DISPLAY_NAME)), #Apprentice chest
         #Upper Northern Cave
         LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Chest - Past the wiggly block spike pit", 3001 + treasure_index_offset), #Money chest
 
