@@ -3,6 +3,8 @@ from typing import Type, Any, List
 from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Visibility, Option, OptionGroup
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
+from worlds.ladx.Options import DefaultOffToggle
+
 
 def create_option_groups() -> List[OptionGroup]:
     option_group_list: List[OptionGroup] = []
@@ -317,6 +319,12 @@ class StartWithMaps(DefaultOnToggle):
     """
     display_name = "Begin with Area Maps"
 
+class FillFullMap(DefaultOffToggle):
+    """
+    When enabled, the world map will start filled in for areas that the player has a map for
+    """
+    display_name = "Fill Full Map"
+
 class IncludeSummonAbilities(DefaultOnToggle):
     """
     When enabled, Summons are added to the item pool.
@@ -411,6 +419,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     progressiveEquipmentMode: ProgressiveEquipmentMode
     startWithTreasureFinder: StartWithTreasureFinder
     startWithMaps: StartWithMaps
+    fill_full_map: FillFullMap
     includeSummonAbilities: IncludeSummonAbilities
     includeScholarAbilities: IncludeScholarAbilities
     trapLikelihood: TrapLikelihood
@@ -422,6 +431,6 @@ crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
-    "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, IncludeSummonAbilities, IncludeScholarAbilities],
+    "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }

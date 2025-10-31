@@ -31,9 +31,9 @@ class TestProgressiveMountModeOn(CrystalProjectTestBase):
         self.collect_by_name(GAEA_STONE)
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
-        self.assertFalse(self.can_reach_region(TALL_TALL_HEIGHTS_AP_REGION))
+        self.assertFalse(self.can_reach_region(SOUVENIR_SHOP_AP_REGION))
         self.collect(self.get_item_by_name(PROGRESSIVE_MOUNT))
-        self.assertTrue(self.can_reach_region(TALL_TALL_HEIGHTS_AP_REGION))
+        self.assertTrue(self.can_reach_region(SOUVENIR_SHOP_AP_REGION))
 
     def test_owl_drum(self):
         self.set_collected_job_count(18)
@@ -96,9 +96,9 @@ class TestProgressiveMountModeOff(CrystalProjectTestBase):
     def test_ibek_bell(self):
         self.set_collected_job_count(18)
         self.collect_by_name(GAEA_STONE)
-        self.assertFalse(self.can_reach_region(TALL_TALL_HEIGHTS_AP_REGION))
+        self.assertFalse(self.can_reach_region(GREENSHIRE_OVERLOOK_AP_REGION))
         self.collect(self.get_item_by_name(IBEK_BELL))
-        self.assertTrue(self.can_reach_region(TALL_TALL_HEIGHTS_AP_REGION))
+        self.assertTrue(self.can_reach_region(GREENSHIRE_OVERLOOK_AP_REGION))
 
     def test_owl_drum(self):
         self.set_collected_job_count(18)

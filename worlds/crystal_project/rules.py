@@ -71,14 +71,23 @@ class CrystalProjectLogic:
     def has_vertical_movement(self, state: CollectionState) -> bool:
         return state.has(IBEK_BELL, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 3)
 
+    def can_push_ice_block_and_goat(self, state: CollectionState, region_pass: str) -> bool:
+        return self.has_vertical_movement(state) and (state.has(region_pass, self.player, 1) or self.options.regionsanity.value == self.options.regionsanity.option_disabled)
+
     def has_glide(self, state: CollectionState) -> bool: 
         return state.has(OWL_DRUM, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 4)
+
+    def has_rental_salmon(self, state: CollectionState) -> bool:
+        return self.has_swimming(state) or state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled
 
     def has_swimming(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3)  or state.has(PROGRESSIVE_MOUNT, self.player, 5)
 
     def has_golden_quintar(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 7)
+
+    def obscure_routes_on(self, state: CollectionState) -> bool:
+        return self.options.obscureRoutes.value == self.options.obscureRoutes.option_true
 
     def new_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
