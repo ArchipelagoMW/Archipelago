@@ -168,6 +168,7 @@ class CrystalProjectLogic:
 
         has_combat = False
         region_checked = 0
+        #This is getting the order of the Display Region that the shop is in; higher order means more difficult zones
         shop_region_index = list(display_region_levels_dictionary.keys()).index(ap_region_to_display_region_dictionary[shop_ap_region])
 
         for ap_region in state.multiworld.worlds[self.player].get_regions():
