@@ -600,8 +600,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Sara Sara Bazaar
         #Treasure chests
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Someone took the St James and left a...", 408 + treasure_index_offset, lambda state: logic.has_key(state, ROOM_ONE_KEY)), #Knockout Stick chest
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 1", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Potion chest
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom 2", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Storm Rod chest
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Darkened upper storeroom", 414 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Potion chest
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Wedge yourself through the crates in the darkened upper storeroom", 513 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Storm Rod chest
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Potion Mixer", 1194 + treasure_index_offset), #Beaurior Volcano map chest
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Chest - Spilled booty", 2936 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Captains Hat chest
 
