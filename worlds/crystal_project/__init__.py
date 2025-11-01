@@ -250,10 +250,12 @@ class CrystalProjectWorld(World):
                 for ap_region in self.get_regions():
                     #This checks what AP Regions are accessible to the player
                     if ap_region.can_reach(all_passes_state) and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION:
-                        if len(ap_region.locations) > 3:
+                        if len(ap_region.locations) > 2:
                             initially_reachable_regions.append(ap_region)
                 self.starter_ap_region = self.random.choice(initially_reachable_regions).name
-            # logging.getLogger().info("Starting region is " + self.starter_region)
+                #Until we have a teleport location in every single apregion, for now we take specifically the first apregion in the display regions subregion list
+                self.starter_ap_region = display_region_subregions_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
+            #logging.getLogger().info("Starting region is " + self.starter_ap_region)
             self.origin_region_name = self.starter_ap_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
@@ -448,7 +450,7 @@ class CrystalProjectWorld(World):
             for region_pass in self.item_name_groups[PASS]:
                 excluded_items.add(region_pass)
         else:
-            excluded_items.add(display_region_name_to_pass_dict[self.starter_ap_region])
+            excluded_items.add(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]])
 
         return excluded_items
 

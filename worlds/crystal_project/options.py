@@ -3,7 +3,6 @@ from typing import Type, Any, List
 from typing import Dict
 from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Visibility, Option, OptionGroup
 from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
-from worlds.ladx.Options import DefaultOffToggle
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -319,7 +318,7 @@ class StartWithMaps(DefaultOnToggle):
     """
     display_name = "Begin with Area Maps"
 
-class FillFullMap(DefaultOffToggle):
+class FillFullMap(Toggle):
     """
     When enabled, the world map will start filled in for areas that the player has a map for
     """

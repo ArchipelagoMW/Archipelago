@@ -339,20 +339,16 @@ def get_removed_locations(mod_info: List[ModInfoModel]) -> List[LocationData]:
                 shop_id = location_id + shop_index_offset
 
                 for vanilla_location in vanilla_locations:
-                    if vanilla_location.code == treasure_id:
-                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
-                    if vanilla_location.code == npc_id:
-                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
-                    if vanilla_location.code == crystal_id:
-                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, vanilla_location.code))
+                    if vanilla_location.code == treasure_id or vanilla_location.code == npc_id or vanilla_location.code == crystal_id:
+                        removed_locations.append(LocationData(vanilla_location.ap_region, vanilla_location.name, location_id))
 
                 for boss in vanilla_bosses:
                     if boss.code == boss_id:
-                        removed_locations.append(LocationData(boss.ap_region, boss.name, boss.code))
+                        removed_locations.append(LocationData(boss.ap_region, boss.name, location_id))
 
                 for shop in vanilla_shops:
                     if shop.code == shop_id:
-                        removed_locations.append(LocationData(shop.ap_region, shop.name, shop.code))
+                        removed_locations.append(LocationData(shop.ap_region, shop.name, location_id))
 
     return removed_locations
 
@@ -703,7 +699,7 @@ def build_region_specific_rules(region, player:int, logic: CrystalProjectLogic) 
     elif region == CASTLE_RAMPARTS_DISPLAY_NAME:
         return lambda state: logic.has_key(state, RAMPART_KEY)
     else:
-        return None
+        return lambda state: True
 
 def get_excluded_ids(mod: ModDataModel) -> IdsExcludedFromRandomization:
     if mod.System is not None and mod.System["Randomizer"] is not None:

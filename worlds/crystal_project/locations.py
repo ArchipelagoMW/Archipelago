@@ -375,7 +375,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Northwest Donut Lake sprinkle", 432 + treasure_index_offset), #Potion chest
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Welcome", 3078 + treasure_index_offset), #Potion chest
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Mighty jump along east side wall", 746 + treasure_index_offset), #Scope Bit chest
-        LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Detour through the sewers", 638 + treasure_index_offset), #Static Rod chest
+        #You can't detour through the sewers if you can't reach the sewers (relevant for regionsanity)
+        LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Detour through the sewers", 638 + treasure_index_offset, lambda state: state.can_reach(JOJO_SEWERS_AP_REGION, player=player) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)), #Static Rod chest
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - North Donut Lake sprinkle", 852 + treasure_index_offset), #Tincture chest
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Hop along west side wall", 2982 + treasure_index_offset), #Tincture Pouch chest
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " Chest - Donut Lake crown sprinkle", 851 + treasure_index_offset), #Tonic chest
