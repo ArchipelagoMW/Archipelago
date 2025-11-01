@@ -199,7 +199,7 @@ def scarecrows_song(bundle: tuple[CollectionState, Regions, "SohWorld"]) -> bool
     state = bundle[0]
     world = bundle[2]
     return ((bool(world.options.skip_scarecrows_song) and has_item(Items.FAIRY_OCARINA, bundle)
-            and state.has_group_unique("Ocarina Buttons", world.player, 2))
+            and (ocarina_button_count(bundle) >= 2))
             or (has_item(Events.CHILD_SCARECROW_UNLOCKED, bundle) and has_item(Events.ADULT_SCARECROW_UNLOCKED, bundle)))
 
 
