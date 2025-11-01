@@ -317,7 +317,10 @@
     {
         "address": 703, "name": "CTH: Side Room Near Right Exit",
         "region": "CTH - Upper Right Exit", "requires": [
-            { "anyOf": [ { "item": "Mystic Nymph: Scout Mode" }, { "item": "Cloud Leap" } ] }
+            { "anyOf": [
+                [ { "item": "Mystic Nymph: Scout Mode" }, { "item": "Ledge Grab" } ], // the intended path all around the room
+                { "item": "Cloud Leap" } // bring boxes to the left, then simply jump on top of them and up to the chest
+            ] }
         ]
     },
     {
