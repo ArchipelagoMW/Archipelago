@@ -243,8 +243,8 @@
     { "from": "CC - Caves Lower Left", "to": "CC - Left Exit", "requires": [] },
     { "from": "CC - Left Exit", "to": "CC - Caves Lower Left", "requires": [] }, // grapple
 
-    { "from": "CC - Left Exit", "to": "FGH - Lower Levels & Root Node", "requires": [] },
-    { "from": "FGH - Lower Levels & Root Node", "to": "CC - Left Exit", "requires": [] },
+    { "from": "CC - Left Exit", "to": "FGH - Right Exit", "requires": [] },
+    { "from": "FGH - Right Exit", "to": "CC - Left Exit", "requires": [] },
 
     // Central Transport Hub
     { "from": "CTH - Upper Left Exit", "to": "CTH - Bottom of Large Shaft", "requires": [] }, // elevator combat gauntlet
