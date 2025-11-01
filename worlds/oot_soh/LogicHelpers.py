@@ -1024,6 +1024,10 @@ def can_ground_jump(bundle: tuple[CollectionState, Regions, "SohWorld"], hasBomb
             and (can_use(Items.BOMB_BAG, bundle) or (hasBombFlower and has_item(Items.GORONS_BRACELET, bundle))))
 
 
+def can_clear_stalagmite(bundle: tuple[CollectionState, Regions, "SohWorld"]):
+    return can_jump_slash(bundle) or has_explosives(bundle)
+
+
 class SohHeartState(LogicMixin):
     # tracking how many hearts the player has instead of checking the collection state every time
     soh_piece_of_heart_count: Counter[int]
