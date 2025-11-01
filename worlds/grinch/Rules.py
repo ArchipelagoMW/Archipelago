@@ -533,7 +533,6 @@ rules_dict: dict[str, list[list[str]]] = {
     "WF - Ski Resort - GC BP inside Dog's Fence": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
-            grinch_items.gadgets.SLIME_SHOOTER,
         ]
     ],
     "WF - Ski Resort - GC BP in Max Cave": [
