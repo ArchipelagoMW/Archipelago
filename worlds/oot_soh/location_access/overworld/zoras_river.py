@@ -60,7 +60,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Events
     add_events(Regions.ZORA_RIVER, world, [
         (EventLocations.ZR_BUG_GRASS, Events.CAN_ACCESS_BUGS,
-         lambda bundle: can_cut_shrubs(bundle)),
+         lambda bundle: can_cut_shrubs(bundle) and (is_child(bundle) or can_use(Items.HOVER_BOOTS, bundle) or can_do_trick(Tricks.ZR_LOWER, bundle))),
         (EventLocations.ZR_BEAN_PATCH, LocalEvents.ZR_BEAN_PLANTED,
          lambda bundle: is_child(bundle) and can_use(Items.MAGIC_BEAN, bundle)),
     ])
@@ -145,7 +145,11 @@ def set_region_rules(world: "SohWorld") -> None:
           can_use(Items.IRON_BOOTS, bundle) or
           can_use(Items.BOOMERANG, bundle))),
         (Locations.ZR_NEAR_FREESTANDING_POH_GRASS,
-         lambda bundle: can_cut_shrubs(bundle))
+         lambda bundle: can_cut_shrubs(bundle)
+            and (is_child(bundle)
+                 or can_use(Items.HOVER_BOOTS, bundle)
+                 or can_do_trick(Tricks.ZR_LOWER, bundle)
+                 or can_use(Items.BOOMERANG, bundle))),
     ])
     # Connections
     connect_regions(Regions.ZORA_RIVER, world, [
