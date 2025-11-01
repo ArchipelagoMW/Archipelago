@@ -1,6 +1,6 @@
 <img width="777" height="181" alt="SoH_AP_Logo" src="https://github.com/user-attachments/assets/3e40eaaa-02ce-432e-b830-7e5ef48cfe9f" />
 
-# SoH Archipelago
+# Ship of Harkinian + Archipelago
 
 ## What is this?
 

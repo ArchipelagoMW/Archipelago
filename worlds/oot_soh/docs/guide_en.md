@@ -12,8 +12,8 @@
 
 ### Installing Ship of Harkinian
 
-Please follow the instructions that come with your Ship of Harkinian download. The SoH discord also has a guide to help you extracting your ROM
-from whichever physical copy you own.
+Please follow the instructions in the README that comes with your Ship of Harkinian download to get SoH set-up. The SoH discord also has a guide to help you 
+extracting your ROM from whichever physical copy you own.
 
 
 ### How to play Archipelago on Ship of Harkinian
