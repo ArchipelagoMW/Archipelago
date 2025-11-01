@@ -187,11 +187,11 @@
     },
     {
         "address": 511, "name": "FSP: Fully Grown Tree 1st Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer", "count": 2 } ] // and Shennong
+        "region": "FSP - Roof", "requires": [] // and Shennong
     },
     {
         "address": 512, "name": "FSP: Fully Grown Tree 2nd Chest",
-        "region": "FSP - Root Node", "requires": [ { "item": "(Artifact) Unknown Seed" }, { "item": "(Artifact) GM Fertilizer", "count": 2 } ] // and Shennong
+        "region": "FSP - Roof", "requires": []
     },
     {
         "address": 513, "name": "FSP: Isolate the Mutant Gene Sequence",
