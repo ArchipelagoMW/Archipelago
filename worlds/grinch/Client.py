@@ -66,34 +66,24 @@ class GrinchClient(BizHawkClient):
 
         try:
             bytes_actual: bytes = (
-                await bizhawk.read(
-                    ctx.bizhawk_ctx, [(grinch_identifier_ram_address, 11, "MainRAM")]
-                )
+                await bizhawk.read(ctx.bizhawk_ctx, [(grinch_identifier_ram_address, 11, "MainRAM")])
             )[0]
 
             psx_rom_name = bytes_actual.decode("ascii")
             if psx_rom_name != "SLUS_011.97":
                 bios_bytes_check: bytes = (
-                    await bizhawk.read(
-                        ctx.bizhawk_ctx, [(bios_identifier_ram_address, 24, "MainRAM")]
-                    )
+                    await bizhawk.read(ctx.bizhawk_ctx, [(bios_identifier_ram_address, 24, "MainRAM")])
                 )[0]
 
                 if "System ROM Version" in bios_bytes_check.decode("ascii"):
                     if not self.loading_bios_msg:
                         self.loading_bios_msg = True
-                        logger.error(
-                            "BIOS is currently loading. Will wait up to 5 seconds before retrying."
-                        )
+                        logger.error("BIOS is currently loading. Will wait up to 5 seconds before retrying.")
 
                     return False
 
-                logger.error(
-                    "Invalid rom detected. You are not playing Grinch USA Version."
-                )
-                raise Exception(
-                    "Invalid rom detected. You are not playing Grinch USA Version."
-                )
+                logger.error("Invalid rom detected. You are not playing Grinch USA Version.")
+                raise Exception("Invalid rom detected. You are not playing Grinch USA Version.")
 
             ctx.command_processor.commands["ringlink"] = _cmd_ringlink
 
@@ -147,9 +137,7 @@ class GrinchClient(BizHawkClient):
                     and "RingLink" in args["tags"]
                     and args["data"]["source"] != self.unique_client_id
                 ):
-                    Utils.async_start(
-                        self.ring_link_input(args["data"]["amount"], ctx), "SyncEggs"
-                    )
+                    Utils.async_start(self.ring_link_input(args["data"]["amount"], ctx), "SyncEggs")
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         await ctx.get_username()
@@ -165,9 +153,7 @@ class GrinchClient(BizHawkClient):
             if not await self.ingame_checker(ctx):
                 return
 
-            if not any(
-                task.get_name() == "Grinch EggLink" for task in asyncio.all_tasks()
-            ):
+            if not any(task.get_name() == "Grinch EggLink" for task in asyncio.all_tasks()):
                 print("EggLink")
                 self.send_ring_link = True
                 Utils.async_start(self.ring_link_output(ctx), name="Grinch EggLink")
@@ -180,18 +166,12 @@ class GrinchClient(BizHawkClient):
 
         except bizhawk.RequestFailedError as ex:
             # The connector didn't respond. Exit handler and return to main loop to reconnect
-            logger.error(
-                "Failure to connect / authenticate the grinch. Error details: "
-                + str(ex)
-            )
+            logger.error("Failure to connect / authenticate the grinch. Error details: " + str(ex))
             pass
 
         except Exception as genericEx:
             # For all other errors, catch this and let the client gracefully disconnect
-            logger.error(
-                "Unknown error occurred while playing the grinch. Error details: "
-                + str(genericEx)
-            )
+            logger.error("Unknown error occurred while playing the grinch. Error details: " + str(genericEx))
             await ctx.disconnect(False)
             pass
 
@@ -208,14 +188,12 @@ class GrinchClient(BizHawkClient):
             grinch_loc_name = ctx.location_names.lookup_in_game(missing_location)
             grinch_loc_ram_data = grinch_locations[grinch_loc_name]
             missing_addr_list: list[tuple[int, int, str]] = [
-                (read_addr.ram_address, read_addr.byte_size, "MainRAM")
+                (read_addr.ram_address, read_addr.byte_size, read_addr.ram_area)
                 for read_addr in grinch_loc_ram_data.update_ram_addr
             ]
             addr_list_to_read = [*addr_list_to_read, *missing_addr_list]
 
-        returned_bytes: list[bytes] = await bizhawk.read(
-            ctx.bizhawk_ctx, addr_list_to_read
-        )
+        returned_bytes: list[bytes] = await bizhawk.read(ctx.bizhawk_ctx, addr_list_to_read)
 
         # Now loop through everything again and this time get the byte value from the above read, convert to int,
         # and check to see if that ram address has our expected value.
@@ -234,31 +212,20 @@ class GrinchClient(BizHawkClient):
                 orig_index: int = addr_list_to_read.index(
                     (addr_to_update.ram_address, addr_to_update.byte_size, "MainRAM")
                 )
-                value_read_from_bizhawk: int = int.from_bytes(
-                    returned_bytes[orig_index], "little"
-                )
+                value_read_from_bizhawk: int = int.from_bytes(returned_bytes[orig_index], "little")
 
                 if is_binary:
-                    ram_checked_list.append(
-                        (value_read_from_bizhawk & (1 << addr_to_update.binary_bit_pos))
-                        > 0
-                    )
+                    ram_checked_list.append((value_read_from_bizhawk & (1 << addr_to_update.binary_bit_pos)) > 0)
 
                 else:
                     expected_int_value = addr_to_update.value
-                    ram_checked_list.append(
-                        expected_int_value == value_read_from_bizhawk
-                    )
+                    ram_checked_list.append(expected_int_value == value_read_from_bizhawk)
 
             if all(ram_checked_list):
-                local_locations_checked.append(
-                    GrinchLocation.get_apid(grinch_loc_ram_data.id)
-                )
+                local_locations_checked.append(GrinchLocation.get_apid(grinch_loc_ram_data.id))
 
         # Update the AP server with the locally checked list of locations (In other words, locations I found in Grinch)
-        locations_sent_to_ap: set[int] = await ctx.check_locations(
-            local_locations_checked
-        )
+        locations_sent_to_ap: set[int] = await ctx.check_locations(local_locations_checked)
 
         if len(locations_sent_to_ap) > 0:
             await self.remove_physical_items(ctx)
@@ -271,11 +238,7 @@ class GrinchClient(BizHawkClient):
         # Otherwise, we will get the new items and give them to the player.
 
         self.last_received_index = int.from_bytes(
-            (
-                await bizhawk.read(
-                    ctx.bizhawk_ctx, [(RECV_ITEM_ADDR, RECV_ITEM_BITSIZE, "MainRAM")]
-                )
-            )[0],
+            (await bizhawk.read(ctx.bizhawk_ctx, [(RECV_ITEM_ADDR, RECV_ITEM_BITSIZE, "MainRAM")]))[0],
             "little",
         )
 
@@ -294,9 +257,7 @@ class GrinchClient(BizHawkClient):
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
 
                 if addr_to_update.ram_address in ram_addr_dict.keys():
-                    current_ram_address_value = ram_addr_dict[
-                        addr_to_update.ram_address
-                    ][0]
+                    current_ram_address_value = ram_addr_dict[addr_to_update.ram_address][0]
                 else:
                     current_ram_address_value = int.from_bytes(
                         (
@@ -306,25 +267,21 @@ class GrinchClient(BizHawkClient):
                                     (
                                         addr_to_update.ram_address,
                                         addr_to_update.byte_size,
-                                        "MainRAM",
+                                        addr_to_update.ram_area,
                                     )
                                 ],
                             )
                         )[0],
-                        "little",
+                        addr_to_update.endian,
                     )
 
                 if is_binary:
-                    current_ram_address_value = current_ram_address_value | (
-                        1 << addr_to_update.binary_bit_pos
-                    )
+                    current_ram_address_value = current_ram_address_value | (1 << addr_to_update.binary_bit_pos)
 
                 elif addr_to_update.update_existing_value:
                     # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
                     current_ram_address_value += addr_to_update.value
-                    current_ram_address_value = min(
-                        current_ram_address_value, addr_to_update.max_count
-                    )
+                    current_ram_address_value = min(current_ram_address_value, addr_to_update.max_count)
 
                 else:
                     current_ram_address_value = addr_to_update.value
@@ -340,9 +297,7 @@ class GrinchClient(BizHawkClient):
         # Update the latest received item index to ram as well.
         ram_addr_dict[RECV_ITEM_ADDR] = [self.last_received_index, RECV_ITEM_BITSIZE]
 
-        await bizhawk.write(
-            ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict)
-        )
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
 
     async def goal_checker(self, ctx: "BizHawkClientContext"):
         if not ctx.finished_game:
@@ -356,12 +311,12 @@ class GrinchClient(BizHawkClient):
                             (
                                 goal_ram_address.ram_address,
                                 goal_ram_address.byte_size,
-                                "MainRAM",
+                                goal_ram_address.ram_area,
                             )
                         ],
                     )
                 )[0],
-                "little",
+                goal_ram_address.endian,
             )
 
             if (current_ram_address_value & (1 << goal_ram_address.binary_bit_pos)) > 0:
@@ -381,12 +336,8 @@ class GrinchClient(BizHawkClient):
         ram_addr_dict: dict[int, list[int]] = {}
 
         list_recv_itemids: list[int] = [netItem.item for netItem in ctx.items_received]
-        items_to_check: dict[str, GrinchItemData] = {
-            **GADGETS_TABLE
-        }  # , **SLEIGH_PARTS_TABLE
-        heart_count = len(
-            list(item_id for item_id in list_recv_itemids if item_id == 42570)
-        )
+        items_to_check: dict[str, GrinchItemData] = {**GADGETS_TABLE}  # , **SLEIGH_PARTS_TABLE
+        heart_count = len(list(item_id for item_id in list_recv_itemids if item_id == 42570))
         heart_item_data = ALL_ITEMS_TABLE["Heart of Stone"]
         ram_addr_dict[heart_item_data.update_ram_addr[0].ram_address] = [
             min(heart_count, 4),
@@ -398,10 +349,7 @@ class GrinchClient(BizHawkClient):
 
         for item_name, item_data in items_to_check.items():
             # If item is an event or already been received, ignore.
-            if (
-                item_data.id is None
-                or GrinchLocation.get_apid(item_data.id) in list_recv_itemids
-            ):
+            if item_data.id is None or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
                 continue
 
             # This assumes we don't have the item so we must set all the data to 0
@@ -421,12 +369,12 @@ class GrinchClient(BizHawkClient):
                                         (
                                             addr_to_update.ram_address,
                                             addr_to_update.byte_size,
-                                            "MainRAM",
+                                            addr_to_update.ram_area,
                                         )
                                     ],
                                 )
                             )[0],
-                            "little",
+                            addr_to_update.endian,
                         )
                     current_bin_value &= ~(1 << addr_to_update.binary_bit_pos)
                     ram_addr_dict[addr_to_update.ram_address] = [current_bin_value, 1]
@@ -437,19 +385,13 @@ class GrinchClient(BizHawkClient):
                         addr_to_update.byte_size,
                     ]
 
-        await bizhawk.write(
-            ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict)
-        )
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
 
-    def convert_dict_to_ram_list(
-        self, addr_dict: dict[int, list[int]]
-    ) -> list[tuple[int, Sequence[int], str]]:
+    def convert_dict_to_ram_list(self, addr_dict: dict[int, list[int]]) -> list[tuple[int, Sequence[int], str]]:
         addr_list_to_update: list[tuple[int, Sequence[int], str]] = []
 
         for key, val in addr_dict.items():
-            addr_list_to_update.append(
-                (key, val[0].to_bytes(val[1], "little"), "MainRAM")
-            )
+            addr_list_to_update.append((key, val[0].to_bytes(val[1], "little"), "MainRAM"))
 
         return addr_list_to_update
 
@@ -465,9 +407,7 @@ class GrinchClient(BizHawkClient):
 
         for item_name, item_data in items_to_check.items():
             # If item is an event or already been received, ignore.
-            if (
-                item_data.id is None
-            ):  # or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
+            if item_data.id is None:  # or GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
                 continue
 
             # This will either constantly update the item to ensure you still have it or take it away if you don't deserve it
@@ -487,12 +427,12 @@ class GrinchClient(BizHawkClient):
                                         (
                                             addr_to_update.ram_address,
                                             addr_to_update.byte_size,
-                                            "MainRAM",
+                                            addr_to_update.ram_area,
                                         )
                                     ],
                                 )
                             )[0],
-                            "little",
+                            addr_to_update.endian,
                         )
 
                     if GrinchLocation.get_apid(item_data.id) in list_recv_itemids:
@@ -516,9 +456,7 @@ class GrinchClient(BizHawkClient):
                             addr_to_update.byte_size,
                         ]
 
-        await bizhawk.write(
-            ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict)
-        )
+        await bizhawk.write(ctx.bizhawk_ctx, self.convert_dict_to_ram_list(ram_addr_dict))
 
     async def ingame_checker(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
@@ -575,14 +513,13 @@ class GrinchClient(BizHawkClient):
         if self.loc_unlimited_eggs:
             await bizhawk.write(
                 ctx.bizhawk_ctx,
-                [(EGG_COUNT_ADDR, MAX_EGGS.to_bytes(2, "little"), "MainRAM")],
+                [(EGG_COUNT_ADDR, MAX_EGGS.to_bytes(EGG_ADDR_BYTESIZE, "little"), "MainRAM")],
             )
 
     async def ring_link_output(self, ctx: "BizHawkClientContext"):
         from CommonClient import logger
 
         while self.send_ring_link and ctx.slot:
-
             try:
                 current_egg_count = int.from_bytes(
                     (
@@ -604,6 +541,7 @@ class GrinchClient(BizHawkClient):
                         },
                         "tags": ["RingLink"],
                     }
+
                     await ctx.send_msgs([msg])
                     self.previous_egg_count = current_egg_count
                     # logger.info(f"RingLink: You sent {str(current_egg_count - self.previous_egg_count)} rotten eggs.")
@@ -611,31 +549,20 @@ class GrinchClient(BizHawkClient):
                 await asyncio.sleep(0.1)
 
             except Exception as ex:
-                logger.error(
-                    "While monitoring grinch's egg count ingame, an error occurred. Details:"
-                    + str(ex)
-                )
+                logger.error("While monitoring grinch's egg count ingame, an error occurred. Details:" + str(ex))
                 self.send_ring_link = False
 
         if not ctx.slot:
-            logger.info(
-                "You must be connected to the multi-world in order for RingLink to work properly."
-            )
+            logger.info("You must be connected to the multi-world in order for RingLink to work properly.")
 
     async def ring_link_input(self, egg_amount: int, ctx: "BizHawkClientContext"):
         from CommonClient import logger
 
         game_egg_count = int.from_bytes(
-            (
-                await bizhawk.read(
-                    ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]
-                )
-            )[0],
+            (await bizhawk.read(ctx.bizhawk_ctx, [(EGG_COUNT_ADDR, EGG_ADDR_BYTESIZE, "MainRAM")]))[0],
             "little",
         )
-        non_neg_eggs = (
-            game_egg_count + egg_amount if game_egg_count + egg_amount > 0 else 0
-        )
+        non_neg_eggs = game_egg_count + egg_amount if game_egg_count + egg_amount > 0 else 0
         current_egg_count = min(non_neg_eggs, MAX_EGGS)
 
         await bizhawk.write(
@@ -657,6 +584,7 @@ class GrinchClient(BizHawkClient):
         uid: int = 0
         for char in string_id:
             uid += ord(char)
+
         return uid
 
 
@@ -677,7 +605,6 @@ async def _update_ring_link(ctx: "BizHawkClientContext", ring_link: bool):
 
     if ring_link:
         ctx.tags.add("RingLink")
-
     else:
         ctx.tags -= {"RingLink"}
 

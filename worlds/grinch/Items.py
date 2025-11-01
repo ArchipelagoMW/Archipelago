@@ -8,9 +8,7 @@ from BaseClasses import (
 
 
 class GrinchItemData(NamedTuple):
-    item_group: list[
-        str
-    ]  # arbituary that can be whatever it can be, basically the field/property for item groups
+    item_group: list[str]  # arbituary that can be whatever it can be, basically the field/property for item groups
     id: Optional[int]
     classification: IC
     update_ram_addr: list[GrinchRamData]
@@ -27,9 +25,7 @@ class GrinchItem(Item):
         return base_id + id if id is not None else None
 
     def __init__(self, name: str, player: int, data: GrinchItemData):
-        super(GrinchItem, self).__init__(
-            name, data.classification, GrinchItem.get_apid(data.id), player
-        )
+        super(GrinchItem, self).__init__(name, data.classification, GrinchItem.get_apid(data.id), player)
 
         self.type = data.item_group
         self.item_id = data.id
@@ -75,13 +71,13 @@ class grinch_items:
         WV_WHO_CLOAK: str = "Who Cloak"
         WV_PAINT_BUCKET: str = "Painting Bucket"
         WV_HAMMER: str = "Hammer"
-        WV_SCULPTIN_TOOLS: str = "Sculpting Tools"
+        WV_SCULPTING_TOOLS: str = "Sculpting Tools"
         WF_GLUE_BUCKET: str = "Glue Bucket"
         WF_CABLE_CAR_ACCESS_CARD: str = "Cable Car Access Card"
         WD_SCISSORS: str = "Scissors"
         WL_ROPE: str = "Rope"
         WL_HOOK: str = "Hook"
-        WL_DRILLL: str = "Drill"
+        WL_DRILL: str = "Drill"
         WL_SCOUT_CLOTHES: str = "Scout Clothes"
 
     class useful_items:
@@ -288,7 +284,7 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
         IC.progression,
         [GrinchRamData(0x0101F9, binary_bit_pos=5)],
     ),
-    grinch_items.level_items.WL_DRILLL: GrinchItemData(
+    grinch_items.level_items.WL_DRILL: GrinchItemData(
         [
             grinch_categories.MISSION_SPECIFIC_ITEMS,
             grinch_categories.USEFUL_ITEMS,
@@ -315,7 +311,7 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
         IC.progression_deprioritized,
         [GrinchRamData(0x0101FA, binary_bit_pos=0)],
     ),
-    grinch_items.level_items.WV_SCULPTIN_TOOLS: GrinchItemData(
+    grinch_items.level_items.WV_SCULPTING_TOOLS: GrinchItemData(
         [
             grinch_categories.MISSION_SPECIFIC_ITEMS,
             grinch_categories.USEFUL_ITEMS,

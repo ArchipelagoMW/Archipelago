@@ -41,22 +41,16 @@ supadow_list = [
 
 
 def create_regions(world: "GrinchWorld"):
-    for mainarea in mainareas_list:
-        # Each area in mainarea, create a region for the given player
-        world.multiworld.regions.append(
-            Region(mainarea, world.player, world.multiworld)
-        )
-    for subarea in subareas_list:
-        # Each area in subarea, create a region for the given player
-        world.multiworld.regions.append(Region(subarea, world.player, world.multiworld))
-    for supadow in supadow_list:
-        # Each area in supadow, create a region for the given player
-        world.multiworld.regions.append(Region(supadow, world.player, world.multiworld))
+    for area in [*mainareas_list, *subareas_list, *supadow_list]:
+        # Each area in mainarea, subarea, and supadow create a region for the given player
+        world.multiworld.regions.append(Region(area, world.player, world.multiworld))
 
 
 # TODO Optimize this function
 def grinchconnect(
-    world: "GrinchWorld", current_region_name: str, connected_region_name: str
+    world: "GrinchWorld",
+    current_region_name: str,
+    connected_region_name: str,
 ):
     current_region = world.get_region(current_region_name)
     connected_region = world.get_region(connected_region_name)
@@ -66,6 +60,7 @@ def grinchconnect(
     current_region.connect(connected_region)
     # Goes from connected to current
     connected_region.connect(current_region)
+
     for access_rule in rule_list:
         for region_entrance in current_region.entrances:
             if (
@@ -74,8 +69,10 @@ def grinchconnect(
             ):
                 if rule_list.index(access_rule) == 0:
                     add_rule(region_entrance, access_rule)
+
                 else:
                     add_rule(region_entrance, access_rule, combine="or")
+
         for region_entrance in connected_region.entrances:
             if (
                 region_entrance.connected_region.name == connected_region_name
@@ -83,6 +80,7 @@ def grinchconnect(
             ):
                 if rule_list.index(access_rule) == 0:
                     add_rule(region_entrance, access_rule)
+
                 else:
                     add_rule(region_entrance, access_rule, combine="or")
 

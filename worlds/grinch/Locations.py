@@ -1,17 +1,41 @@
-from typing import NamedTuple, Optional
+from typing import Optional
 
 from .RamHandler import GrinchRamData
 from BaseClasses import Location, Region
 
 
-class GrinchLocationData(NamedTuple):
+class GrinchLocationData:
     region: str
     location_group: Optional[list[str]]
     id: Optional[int]
     update_ram_addr: list[GrinchRamData]
-    reset_addr: Optional[list[GrinchRamData]] = (
-        None  # Addresses to update once we find the item
-    )
+    reset_addr: Optional[list[GrinchRamData]] = None  # Addresses to update once we find the item
+
+    def __init__(
+        self,
+        region: str,
+        location_group: Optional[list[str]] = None,
+        id: Optional[int] = None,
+        update_ram_addr: list[GrinchRamData] = [],
+        reset_addr: Optional[list[GrinchRamData]] = None,
+    ):
+        self.region = region
+
+        if location_group:
+            self.location_group = location_group
+
+        if id:
+            self.id = id
+        else:
+            raise ValueError(f"id is required on GrinchLocationData")
+
+        if update_ram_addr:
+            self.update_ram_addr = update_ram_addr
+        else:
+            raise ValueError(f"udpate_ram_addr is required on GrinchLocationData")
+
+        if reset_addr:
+            self.reset_addr = reset_addr
 
 
 class GrinchLocation(Location):
@@ -23,17 +47,18 @@ class GrinchLocation(Location):
         return base_id + id if id is not None else None
 
     def __init__(
-        self, player: int, name: str, parent: Region, data: GrinchLocationData
+        self,
+        player: int,
+        name: str,
+        parent: Region,
+        data: GrinchLocationData,
     ):
         address = None if data.id is None else GrinchLocation.get_apid(data.id)
-        super(GrinchLocation, self).__init__(
-            player, name, address=address, parent=parent
-        )
+        super(GrinchLocation, self).__init__(player, name, address=address, parent=parent)
 
         self.code = data.id
         self.region = data.region
         self.type = data.location_group
-        self.address = self.address
 
 
 def get_location_names_per_category() -> dict[str, set[str]]:
@@ -1151,7 +1176,10 @@ grinch_locations = {
         [GrinchRamData(0x0100BF, binary_bit_pos=6)],
     ),
     "MC - Sleigh Ride - Neutralizing Santa": GrinchLocationData(
-        "Sleigh Room", None, None, [GrinchRamData(0x0100BF, binary_bit_pos=7)]
+        "Sleigh Room",
+        ["Sleigh Ride"],
+        1301,
+        [GrinchRamData(0x0100BF, binary_bit_pos=7)],
     ),  # [GrinchRamData(0x010000, value=0x3E)]),
     # Heart of Stones
     "WV - Post Office - Heart of Stone": GrinchLocationData(
@@ -1224,19 +1252,44 @@ grinch_locations = {
     ),
     # Mount Crumpit Locations
     "MC - 1st Crate Squashed": GrinchLocationData(
-        "Mount Crumpit", ["Mount Crumpit"], 1700, [GrinchRamData(0x095343, value=1)]
+        "Mount Crumpit",
+        ["Mount Crumpit"],
+        1700,
+        [
+            GrinchRamData(0x095343, value=1),
+        ],
     ),
     "MC - 2nd Crate Squashed": GrinchLocationData(
-        "Mount Crumpit", ["Mount Crumpit"], 1701, [GrinchRamData(0x095343, value=2)]
+        "Mount Crumpit",
+        ["Mount Crumpit"],
+        1701,
+        [
+            GrinchRamData(0x095343, value=2),
+        ],
     ),
     "MC - 3rd Crate Squashed": GrinchLocationData(
-        "Mount Crumpit", ["Mount Crumpit"], 1702, [GrinchRamData(0x095343, value=3)]
+        "Mount Crumpit",
+        ["Mount Crumpit"],
+        1702,
+        [
+            GrinchRamData(0x095343, value=3),
+        ],
     ),
     "MC - 4th Crate Squashed": GrinchLocationData(
-        "Mount Crumpit", ["Mount Crumpit"], 1703, [GrinchRamData(0x095343, value=4)]
+        "Mount Crumpit",
+        ["Mount Crumpit"],
+        1703,
+        [
+            GrinchRamData(0x095343, value=4),
+        ],
     ),
     "MC - 5th Crate Squashed": GrinchLocationData(
-        "Mount Crumpit", ["Mount Crumpit"], 1704, [GrinchRamData(0x095343, value=5)]
+        "Mount Crumpit",
+        ["Mount Crumpit"],
+        1704,
+        [
+            GrinchRamData(0x095343, value=5),
+        ],
     ),
 }
 
@@ -1244,7 +1297,5 @@ grinch_locations = {
 def grinch_locations_to_id() -> dict[str, int]:
     location_mappings: dict[str, int] = {}
     for LocationName, LocationData in grinch_locations.items():
-        location_mappings.update(
-            {LocationName: GrinchLocation.get_apid(LocationData.id)}
-        )
+        location_mappings.update({LocationName: GrinchLocation.get_apid(LocationData.id)})
     return location_mappings
