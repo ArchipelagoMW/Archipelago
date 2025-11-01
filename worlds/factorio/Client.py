@@ -19,7 +19,7 @@ import factorio_rcon
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between
+from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between, user_path
 from .settings import FactorioSettings
 from settings import get_settings
 
@@ -59,7 +59,7 @@ class FactorioCommandProcessor(ClientCommandProcessor):
     def _cmd_toggle_chat(self):
         """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
         self.ctx.toggle_bridge_chat_out()
-        
+
     def _cmd_rcon_reconnect(self) -> bool:
         """Reconnect the RCON client if its disconnected."""
         try:
@@ -84,7 +84,7 @@ class FactorioContext(CommonContext):
 
     def __init__(self, server_address, password, filter_item_sends: bool, bridge_chat_out: bool,
                  rcon_port: int, rcon_password: str, server_settings_path: str | None,
-                 factorio_server_args: tuple[str, ...]):
+                 config_file: str, factorio_server_args: tuple[str, ...] | list[str]):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index: int = 0
         self.rcon_client = None
@@ -100,6 +100,7 @@ class FactorioContext(CommonContext):
         self.rcon_port: int = rcon_port
         self.rcon_password: str = rcon_password
         self.server_settings_path: str = server_settings_path
+        self.config_file: str = config_file
         self.additional_factorio_server_args = factorio_server_args
 
     @property
@@ -152,9 +153,11 @@ class FactorioContext(CommonContext):
                 "--rcon-port", str(self.rcon_port),
                 "--rcon-password", self.rcon_password,
                 "--server-settings", self.server_settings_path,
+                "--config", self.config_file,
                 *self.additional_factorio_server_args)
         else:
             return ("--rcon-port", str(self.rcon_port), "--rcon-password", self.rcon_password,
+                    "--config", self.config_file,
                     *self.additional_factorio_server_args)
 
     @property
@@ -349,7 +352,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago"
+            executable, "--create", savegame_name, "--preset", "archipelago", "--config", ctx.config_file
         ))
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
@@ -460,7 +463,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name
+            executable, "--create", savegame_name, "--config", ctx.config_file
         ))
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
@@ -590,6 +593,9 @@ def launch(*new_args: str):
 
     if not os.path.exists(os.path.dirname(executable)):
         raise FileNotFoundError(f"Path {os.path.dirname(executable)} does not exist or could not be accessed.")
+    if os.path.isdir(executable) and os.path.exists(os.path.join(executable, "Contents", "MacOS", "factorio")):
+        # user entered the .App bundle, let's find the executable
+        executable = os.path.join(executable, "Contents", "MacOS", "factorio")
     if os.path.isdir(executable):  # user entered a path to a directory, let's find the executable therein
         executable = os.path.join(executable, "factorio")
     if not os.path.isfile(executable):
@@ -598,9 +604,15 @@ def launch(*new_args: str):
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
+    config_file = user_path('factorio', 'config', 'apconfig.ini')
+    if not os.path.exists(config_file):
+        os.makedirs(os.path.dirname(config_file), exist_ok=True)
+        with open(config_file, 'w') as f:
+            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={user_path('factorio')}")
+
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
         initial_filter_item_sends, initial_bridge_chat_out,
-        rcon_port, rcon_password, server_settings, rest
+        rcon_port, rcon_password, server_settings, config_file, rest
     )))
     colorama.deinit()
