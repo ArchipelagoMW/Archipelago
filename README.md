@@ -17,12 +17,24 @@ Looking for more info about Archipelago in general? Check out their [website](ht
 
 ## Credits
 
-Project leads:
+**Project leads:**
+- aMannus
+- Jerm
 
-**aMannus and Jerm**
+**In no particular order, massive thanks to everyone else that helped with code for either the client, apworld, or both, or helped with assets like custom models or images:**
+- ScipioWright
+- Fanta-Tanked
+- Sam
+- DaComputerNerd717
+- A-Green-Spoon
+- StuBob
+- Tzuf23
+- mattman107
+- Varuuna
+- Lorithan
+- BootsinSoots
+- briaguya
+- Sirius902
+- ThatHypedPerson**
 
-In no particular order, massive thanks to everyone else that helped with code for either the client, apworld, or both, or helped with assets like custom models or images:
-
-**ScipioWright, Fanta-Tanked, Sam, DaComputerNerd717, A-Green-Spoon, StuBob, Tzuf23, mattman107, Varuuna, Lorithan, BootsinSoots, briaguya, Sirius902 and ThatHypedPerson**
-
-And of course, thanks to everyone that has helped test this along the way, gave out suggestions, etc!
+**And of course, thanks to everyone that has helped test this along the way, gave out suggestions, etc!**
