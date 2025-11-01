@@ -4,7 +4,7 @@
 
 - [Ship of Harkinian](https://www.shipofharkinian.com/). Windows, Linux (including Steam Deck) and Mac are supported!
 - An Ocarina of Time ROM. Every version of OoT is supported!
-- Until AP is integrated into the main SoH builds, a separate version of SoH including it (see releases [here](https://github.com/aMannus/Archipelago/releases))
+- Until AP is integrated into the main SoH builds, a separate version of SoH including it (see releases [here](https://github.com/HarbourMasters/Archipelago-SoH/releases))
 - If hosting or wanting to generate the default yaml yourself, the .apworld also found on our releases page.
 
 

@@ -6,11 +6,11 @@
 
 This is for the Archipelago integration in Ship of Harkinian. For now, a separate version of SoH will have to be downloaded to play this, but eventually this page will only contain the .apworld needed to play AP in Ship. 
 
-If you need more info about AP in SoH in general, please take a look at our [overview doc](https://github.com/aMannus/Archipelago/blob/soh/worlds/oot_soh/docs/en_Ship%20of%20Harkinian.md).
+If you need more info about AP in SoH in general, please take a look at our [overview doc](https://github.com/HarbourMasters/Archipelago-SoH/blob/oot-soh/worlds/oot_soh/docs/en_Ship%20of%20Harkinian.md).
 
-If you need more info about how to play AP in SoH, follow our [setup guide](https://github.com/aMannus/Archipelago/blob/soh/worlds/oot_soh/docs/guide_en.md).
+If you need more info about how to play AP in SoH, follow our [setup guide](https://github.com/HarbourMasters/Archipelago-SoH/blob/oot-soh/worlds/oot_soh/docs/guide_en.md).
 
-You can [find our releases here](https://github.com/aMannus/Archipelago/releases).
+You can [find our releases here](https://github.com/HarbourMasters/Archipelago-SoH/releases).
 
 Looking for more info about Archipelago in general? Check out their [website](https://archipelago.gg/) or [GitHub page](https://github.com/ArchipelagoMW/Archipelago).
 
