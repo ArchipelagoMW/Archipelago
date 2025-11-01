@@ -442,7 +442,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(ANCIENT_TABLET_A, player) or logic.obscure_routes_on(state)) and logic.has_vertical_movement(state) and logic.has_glide(state)})
     fancy_add_exits(world, SARA_SARA_BAZAAR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
                     {SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME),
-                     SHOUDU_PROVINCE_AP_REGION: lambda state: state.has(FERRY_PASS, player),
+                     SHOUDU_PROVINCE_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and state.has(FERRY_PASS, player),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      CONTINENTAL_TRAM_AP_REGION: lambda state: logic.has_swimming(state) or logic.has_key(state, TRAM_KEY)})
     fancy_add_exits(world, SARA_SARA_BEACH_EAST_AP_REGION, [SARA_SARA_BAZAAR_AP_REGION, THE_OPEN_SEA_AP_REGION, IBEK_CAVE_AP_REGION, BEAURIOR_VOLCANO_AP_REGION],
@@ -484,7 +484,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SHOUDU_PROVINCE_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_horizontal_movement(state)})
     fancy_add_exits(world, SHOUDU_PROVINCE_AP_REGION, [SARA_SARA_BAZAAR_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, THE_UNDERCITY_AP_REGION, QUINTAR_RESERVE_AP_REGION],
-                    {SARA_SARA_BAZAAR_AP_REGION: lambda state: state.has(FERRY_PASS, player),
+                    {SARA_SARA_BAZAAR_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and state.has(FERRY_PASS, player),
                      GANYMEDE_SHRINE_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state) and state.has(ELEVATOR_PART, player, 10)})
     fancy_add_exits(world, THE_UNDERCITY_AP_REGION, [SHOUDU_PROVINCE_AP_REGION, THE_OPEN_SEA_AP_REGION],

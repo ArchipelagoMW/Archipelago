@@ -54,7 +54,7 @@ class CrystalProjectLogic:
         #If not we check for Quintar Pass and access to the rental location
         else:
             has_rental_quintar = state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player) or state.has(PROGRESSIVE_MOUNT, self.player)
-            if self.options.regionsanity:
+            if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
                 if rental_display_region_name == ROLLING_QUINTAR_FIELDS_DISPLAY_NAME and not state.has(ROLLING_QUINTAR_FIELDS_PASS, self.player):
                     has_rental_quintar = False
                 if rental_display_region_name == SARA_SARA_BAZAAR_DISPLAY_NAME and not state.has(SARA_SARA_BAZAAR_PASS, self.player):
