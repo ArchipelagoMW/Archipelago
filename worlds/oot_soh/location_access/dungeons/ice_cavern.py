@@ -65,8 +65,7 @@ def set_region_rules(world: "SohWorld") -> None:
     ])
     # Locations
     add_locations(Regions.ICE_CAVERN_MAP_ROOM, world, [
-        (Locations.ICE_CAVERN_MAP_CHEST, lambda bundle: blue_fire(bundle) and (is_adult(
-            bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle)))),
+        (Locations.ICE_CAVERN_MAP_CHEST, lambda bundle: blue_fire(bundle)),
         (Locations.ICE_CAVERN_FROZEN_POT1, lambda bundle: (can_break_pots(bundle) and blue_fire(bundle)) or has_explosives(bundle) or (can_do_trick(Tricks.RUSTED_SWITCHES, bundle) and ((can_standing_shield(bundle) and can_use(Items.KOKIRI_SHIELD, bundle)) or can_use_any([Items.MASTER_SWORD, Items.BIGGORONS_SWORD, Items.MEGATON_HAMMER], bundle))) or (can_do_trick(Tricks.HOOKSHOT_EXTENSION, bundle) and can_use(Items.HOOKSHOT, bundle))),
         (Locations.ICE_CAVERN_MAP_ROOM_LEFT_HEART, lambda bundle: True),
         (Locations.ICE_CAVERN_MAP_ROOM_MIDDLE_HEART, lambda bundle: True),
@@ -96,8 +95,7 @@ def set_region_rules(world: "SohWorld") -> None:
     # Ice Cavern Main
     # Events
     add_events(Regions.ICE_CAVERN_BLOCK_ROOM, world, [
-        (EventLocations.ICE_CAVERN_BLOCK_ROOM_BLUE_FIRE_ACCESS, Events.CAN_ACCESS_BLUE_FIRE, lambda bundle: is_adult(
-            bundle) or (can_do_trick(Tricks.GROUND_JUMP_HARD, bundle) and can_ground_jump(bundle)))
+        (EventLocations.ICE_CAVERN_BLOCK_ROOM_BLUE_FIRE_ACCESS, Events.CAN_ACCESS_BLUE_FIRE, lambda bundle: True)
     ])
     # Locations
     add_locations(Regions.ICE_CAVERN_BLOCK_ROOM, world, [
