@@ -13,3 +13,14 @@ If you need more info about how to play AP in SoH, follow our [setup guide](http
 You can [find our releases here](https://github.com/aMannus/Archipelago/releases).
 
 Looking for more info about Archipelago in general? Check out their [website](https://archipelago.gg/) or [GitHub page](https://github.com/ArchipelagoMW/Archipelago).
+
+
+## Credits
+
+Project leads:
+**aMannus and Jerm**
+
+In no particular order, massive thanks to everyone else that helped with code for either the client, apworld, or both, or helped with assets like custom models or images:
+**ScipioWright, Fanta-Tanked, Sam, DaComputerNerd717, A-Green-Spoon, StuBob, Tzuf23, mattman107, Varuuna, Lorithan, BootsinSoots, briaguya, Sirius902 and ThatHypedPerson**
+
+And of course, thanks to everyone that has helped test this along the way, gave out suggestions, etc!
