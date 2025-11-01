@@ -6,7 +6,7 @@ class UpdateMethod(IntEnum, boundary=STRICT):
     SET = 1
     ADD = 2
     SUBTRACT = 3
-    FREEZE = 4
+    FREEZE = 4  # Currently Non-functional
 
 
 class GrinchRamData:
@@ -51,7 +51,7 @@ class GrinchRamData:
             self.value = 1
 
         if binary_bit_pos > -1:
-            self.binary_bit_pos = bin
+            self.binary_bit_pos = binary_bit_pos
 
         if byte_size > 0:
             self.byte_size = byte_size

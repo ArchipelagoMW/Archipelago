@@ -210,6 +210,7 @@ class GrinchClient(BizHawkClient):
 
             for addr_to_update in grinch_loc_ram_data.update_ram_addr:
                 is_binary = True if not addr_to_update.binary_bit_pos is None else False
+
                 orig_index: int = addr_list_to_read.index(
                     (addr_to_update.ram_address, addr_to_update.byte_size, "MainRAM")
                 )
@@ -308,24 +309,24 @@ class GrinchClient(BizHawkClient):
     async def goal_checker(self, ctx: "BizHawkClientContext"):
         if not ctx.finished_game:
             goal_loc = grinch_locations["MC - Sleigh Ride - Neutralizing Santa"]
-            goal_ram_address = goal_loc.update_ram_addr[0]
+            goal_ram_data = goal_loc.update_ram_addr[0]
             current_ram_address_value = int.from_bytes(
                 (
                     await bizhawk.read(
                         ctx.bizhawk_ctx,
                         [
                             (
-                                goal_ram_address.ram_address,
-                                goal_ram_address.byte_size,
-                                goal_ram_address.ram_area,
+                                goal_ram_data.ram_address,
+                                goal_ram_data.byte_size,
+                                goal_ram_data.ram_area,
                             )
                         ],
                     )
                 )[0],
-                goal_ram_address.endian,
+                goal_ram_data.endian,
             )
 
-            if (current_ram_address_value & (1 << goal_ram_address.binary_bit_pos)) > 0:
+            if (current_ram_address_value & (1 << goal_ram_data.binary_bit_pos)) > 0:
                 # if current_ram_address_value == goal_ram_address.value:
                 ctx.finished_game = True
                 await ctx.send_msgs(
