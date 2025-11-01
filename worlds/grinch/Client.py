@@ -5,6 +5,7 @@ import NetUtils
 import copy
 import uuid
 import Utils
+from worlds.grinch.RamHandler import UpdateMethod
 from .Locations import grinch_locations, GrinchLocation
 from .Items import (
     ALL_ITEMS_TABLE,
@@ -278,13 +279,18 @@ class GrinchClient(BizHawkClient):
                 if is_binary:
                     current_ram_address_value = current_ram_address_value | (1 << addr_to_update.binary_bit_pos)
 
-                elif addr_to_update.update_existing_value:
-                    # Grabs minimum value of a list of numbers and makes sure it does not go above max count possible
+                elif addr_to_update.update_method == UpdateMethod.SET:
+                    current_ram_address_value = addr_to_update.value
+
+                elif addr_to_update.update_method == UpdateMethod.ADD:
+                    # min() gets the lowest of a set, so we can't go over the max_count
                     current_ram_address_value += addr_to_update.value
                     current_ram_address_value = min(current_ram_address_value, addr_to_update.max_count)
 
-                else:
-                    current_ram_address_value = addr_to_update.value
+                elif addr_to_update.update_method == UpdateMethod.SUBTRACT:
+                    # max() gets the highest of a set, so we can't go under the min_count
+                    current_ram_address_value += addr_to_update.value
+                    current_ram_address_value = max(current_ram_address_value, addr_to_update.min_count)
 
                 # Write the updated value back into RAM
                 ram_addr_dict[addr_to_update.ram_address] = [

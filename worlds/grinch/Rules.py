@@ -26,13 +26,14 @@ def interpret_rule(
 ):
     # If a region/location does not have any items required, make the section(s) return no logic.
     if len(rule_set) < 1:
-        return True
+        return []
 
     # Otherwise, if a region/location DOES have items required, make the section(s) return list of logic.
 
     access_list: list[Callable[[CollectionState], bool]] = []
     for item_set in rule_set:
         access_list.append(lambda state, items=tuple(item_set): state.has_all(items, player))
+
     return access_list
 
     # Each item in the list is a separate list of rules. Each separate list is just an "OR" condition.
@@ -406,10 +407,10 @@ rules_dict: dict[str, list[list[str]]] = {
     "WV - City Hall - Binoculars BP left side of Library": [[]],
     "WV - City Hall - Binoculars BP front side of Library": [[]],
     "WV - City Hall - Binoculars BP right side of Library": [[]],
-    "WV - TEL BP left of City Hall": [[]],
+    "WV - REL BP left of City Hall": [[]],
     "WV - REL BP left of Clock Tower": [[]],
     "WV - Post Office - REL BP inside Silver Room": [[]],
-    "WV - Post Office - REL BP at Entrance Door after Migrinch_items.gadgets.SLIME_SHOOTERion Completion": [[]],
+    "WV - Post Office - REL BP at Entrance Door after Mission Completion": [[]],
     "WV - City Hall - GC BP in Safe Room": [[]],
     "WV - City Hall - GC BP in Statue Room": [[]],
     "WV - Clock Tower - GC BP in Bedroom": [
@@ -479,7 +480,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WF - SS BP in House acrogrinch_items.gadgets.SLIME_SHOOTER from Tree House": [
+    "WF - SS BP in House across from Tree House": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
@@ -696,7 +697,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.ROCKET_SPRING,
         ],
     ],
-    "WD - Generator Building - GC BP at the Entrance after Migrinch_items.gadgets.SLIME_SHOOTERion Completion": [
+    "WD - Generator Building - GC BP at the Entrance after Mission Completion": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.GRINCH_COPTER,
