@@ -274,8 +274,8 @@ class ObscureRoutes(Toggle):
 
 class AutoSpendLP(Toggle):
     """
-    When enabled, every time a character earns LP it will automatically spend LP on abilities or passives.
-    Extra LP earned on a job that is maxxed will then be sent to your subjob or if that is also maxxed a random unmaxxed job.
+    When enabled, every time a character earns LP, it will automatically spend LP on abilities or passives.
+    Extra LP earned on a job that is maxed will be sent to your sub job or, if that is also maxed, a random un-maxed job.
     """
     display_name = "Automatically Spend LP"
 
@@ -320,7 +320,7 @@ class StartWithMaps(DefaultOnToggle):
 
 class FillFullMap(Toggle):
     """
-    When enabled, the world map will start filled in for areas that the player has a map for
+    When enabled, the world map will start filled in for areas that the player has a map item for.
     """
     display_name = "Fill Full Map"
 
@@ -341,7 +341,7 @@ class IncludeScholarAbilities(DefaultOnToggle):
 #"""Bonus Fun"""
 class TrapLikelihood(Range):
     """
-    This is the likelihood that a trap will replace a filler check, a value of 0 means no traps
+    This is the likelihood that a trap will replace a filler check. A value of 0 means no traps.
     """
     display_name = "Trap Likelihood"
     range_start = 0
@@ -352,7 +352,7 @@ class ItemInfoMode(Choice):
     """
     For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
 
-    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back v0.9.
+    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back later.
 
     For Obscured, all treasure and store icons on the map will display as mimics permanently.
     If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
