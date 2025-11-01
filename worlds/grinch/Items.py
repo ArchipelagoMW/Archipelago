@@ -581,7 +581,7 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **TRAPS_TABLE,
     **USEFUL_ITEMS_TABLE,
     # **SLEIGH_PARTS_TABLE,
-    **MOVES_TABLE,
+    # **MOVES_TABLE,
 }
 
 # Psuedocoding traplink table

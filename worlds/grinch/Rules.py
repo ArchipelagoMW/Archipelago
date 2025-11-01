@@ -530,11 +530,16 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WF - Ski Resort - GC BP inside Dog's Fence": [[]],
+    "WF - Ski Resort - GC BP inside Dog's Fence": [
+        [
+            grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
+            grinch_items.gadgets.SLIME_SHOOTER,
+        ]
+    ],
     "WF - Ski Resort - GC BP in Max Cave": [
-        []
-        # "move_rando"
-        # [MX]
+        [
+            grinch_items.gadgets.SLIME_SHOOTER,
+        ]
     ],
     "WF - Civic Center - GC BP on Left Side in Bat Cave Wall": [
         [
