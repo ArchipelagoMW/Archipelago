@@ -326,7 +326,8 @@ filler_items = [
     Items.ARROWS_10,
     Items.DEKU_NUTS_5,
     Items.DEKU_NUTS_10,
-    Items.DEKU_STICK_1
+    Items.DEKU_STICK_1,
+    Items.DEKU_SEEDS_30
 ]
 
 no_rules_bottles = [
