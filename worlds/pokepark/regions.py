@@ -53,11 +53,9 @@ REGION_TO_ENTRANCES: dict[str, List[str]] = {
     "Haunted Zone Rotom Area": ["Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction"],
     "Granite Zone Main Area": [
         "Granite Zone Main Area - Absol's Hurdle Bounce Attraction",
-        "Granite Zone Flygon Door"
+        "Granite Zone Flower Zone Entrance",
+        "Granite Zone Salamence Area - Salamence's Sky Race Attraction",
     ],
-    "Granite Zone Salamence Area": ["Granite Zone Flower Zone Entrance",
-                                    "Granite Zone Salamence Area - Salamence's Sky Race Attraction",
-                                    ],
     "Flower Zone Main Area": [
         "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction"
     ]
@@ -143,10 +141,9 @@ ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
         "Granite Zone Baltoy Unlocks",
         "Granite Zone Drifloon",
         "Granite Zone Furret",
-        "Granite Zone Claydol"
-    ],
-    "Granite Zone Salamence Area": [
+        "Granite Zone Claydol",
         "Granite Zone Taillow"
+
     ],
     "Flower Zone Main Area": [
         "Flower Zone Teddiursa",
@@ -190,7 +187,6 @@ VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
 
     "Treehouse Granite Zone Gate": "Granite Zone Main Area",
     "Treehouse Drifblim Fast Travel Granite Zone": "Granite Zone Main Area",
-    "Granite Zone Flygon Door": "Granite Zone Salamence Area",
 
     "Granite Zone Flower Zone Entrance": "Flower Zone Main Area",
     "Treehouse Drifblim Fast Travel Flower Zone": "Flower Zone Main Area",

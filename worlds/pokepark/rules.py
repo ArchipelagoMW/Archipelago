@@ -1998,8 +1998,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Flygon Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player, options) and
-                      state.has("Absol Prisma", player)
+        lambda state: can_play_catch(state, player, options)
     )
     set_rule_if_exists(
         "Granite Zone Main Area - Staraptor Power Competition -- Friendship",
@@ -3167,16 +3166,13 @@ def can_clear_christmas_tree_stage2(state: CollectionState, player: int):
 
 
 def can_clear_christmas_tree_stage3(state: CollectionState, player: int):
-    return (can_clear_christmas_tree_stage1(state, player) and
-            can_clear_christmas_tree_stage2(state, player) and
+    return (can_clear_christmas_tree_stage2(state, player) and
             state.has("Squirtle Unlock", player) and
             state.has("Squirtle Friendship", player))
 
 
 def can_clear_christmas_tree_stage4(state: CollectionState, player: int):
-    return (can_clear_christmas_tree_stage1(state, player) and
-            can_clear_christmas_tree_stage2(state, player) and
-            can_clear_christmas_tree_stage3(state, player) and
+    return (can_clear_christmas_tree_stage3(state, player) and
             state.has("Smoochum Friendship", player) and
             state.has("Smoochum Unlock", player))
 
@@ -3196,22 +3192,16 @@ def can_clear_mew_power_competition_stage2(state: CollectionState, player: int, 
 
 
 def can_clear_mew_power_competition_stage3(state: CollectionState, player: int, options: "PokeparkOptions"):
-    return (can_clear_mew_power_competition_stage1(state, player) and
-            can_clear_mew_power_competition_stage2(state, player, options) and
+    return (can_clear_mew_power_competition_stage2(state, player, options) and
             can_battle_thunderbolt_immune_advanced(state, player, options))
 
 
 def can_clear_mew_power_competition_stage4(state: CollectionState, player: int, options: "PokeparkOptions"):
-    return (can_clear_mew_power_competition_stage1(state, player) and
-            can_clear_mew_power_competition_stage2(state, player, options) and
-            can_clear_mew_power_competition_stage3(state, player, options))
+    return can_clear_mew_power_competition_stage3(state, player, options)
 
 
 def can_beat_mew(state: CollectionState, player: int, options: "PokeparkOptions"):
-    return (can_clear_mew_power_competition_stage1(state, player) and
-            can_clear_mew_power_competition_stage2(state, player, options) and
-            can_clear_mew_power_competition_stage3(state, player, options) and
-            can_clear_mew_power_competition_stage4(state, player, options) and
+    return (can_clear_mew_power_competition_stage4(state, player, options) and
             maximized_dash(state, player))
 
 
@@ -3313,7 +3303,6 @@ def get_entrance_rules_dict(player: int, options: "PokeparkOptions"):
             player
         ),
         "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": lambda state: True,
-        "Granite Zone Flygon Door": lambda state: state.has("Absol Prisma", player),
         "Granite Zone Salamence Area - Salamence's Sky Race Attraction": lambda state: has_friendship_count(
             state,
             player, 80

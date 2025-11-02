@@ -3300,27 +3300,27 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Granite Zone Main Area - Staraptor Power Competition -- Friendship": PokeparkLocationData(
-        461, PokeparkFlag.BATTLE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        461, PokeparkFlag.BATTLE, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=22
         ),
     ),
     "Granite Zone Main Area - Staraptor Power Competition -- Aerodactyl Unlocked": PokeparkLocationData(
-        462, PokeparkFlag.BATTLE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        462, PokeparkFlag.BATTLE, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=22
         ),
     ),
     "Granite Zone Main Area - Aerodactyl Power Competition -- Friendship": PokeparkLocationData(
-        463, PokeparkFlag.BATTLE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        463, PokeparkFlag.BATTLE, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=141
         ),
     ),
     "Granite Zone Main Area - Arcanine Power Competition -- Friendship": PokeparkLocationData(
-        464, PokeparkFlag.CHASE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        464, PokeparkFlag.CHASE, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=144
         ),
     ),
     "Granite Zone Main Area - Jolteon Power Competition -- Friendship": PokeparkLocationData(
-        465, PokeparkFlag.CHASE, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        465, PokeparkFlag.CHASE, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=44
         ),
     ),
@@ -3345,7 +3345,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Granite Zone Main Area - Taillow Power Competition -- Friendship": PokeparkLocationData(
-        470, PokeparkFlag.CHASE, "Granite Zone Salamence Area", Pokepark07AttractionClientData(
+        470, PokeparkFlag.CHASE, "Granite Zone Main Area", Pokepark07AttractionClientData(
             structure_position=24
         ),
         each_zone=MultiZoneFlag.MULTI
@@ -3392,7 +3392,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ),
     ),
     "Granite Zone Salamence Area - Salamence -- Friendship": PokeparkLocationData(
-        478, PokeparkFlag.FRIENDSHIP, "Granite Zone Salamence Area", PokeparkFriendshipClientLocationData(
+        478, PokeparkFlag.FRIENDSHIP, "Granite Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=155
         ),
     ),

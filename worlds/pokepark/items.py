@@ -1791,7 +1791,8 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Progressive Dash"
     ]),
     ("remove_power_training_locations", 0): (0, [
-        "Golem Unlock"
+        "Golem Unlock",
+        "Progressive Dash"
     ]),
     ("remove_battle_power_comp_locations", 0): (60, [
         "Lotad Unlock",
@@ -2066,7 +2067,7 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Umbreon Friendship",
         "Cranidos Friendship",
         "Skuntank Friendship",
-        "Electrode Friendship",
+        "Voltorb Friendship",
         "Gastly Friendship",
         "Duskull Friendship",
         "Misdreavus Friendship",
@@ -2157,5 +2158,8 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
     ("remove_pokemon_unlock_locations", 0): (85, [
         "Progressive Dash",
         "Progressive Thunderbolt"
+    ]),
+    ("remove_quiz_power_comp_locations", 0): (85, [
+        "Delibird Unlock"
     ])
 }
