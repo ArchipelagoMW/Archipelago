@@ -148,11 +148,11 @@ item_table: Dict[str, ItemData] = {
     RAMPART_KEY: ItemData(KEY, 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     FORGOTTEN_KEY: ItemData(KEY, 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
     SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
-    PRISON_KEY_RING: ItemData(KEY, 501 + item_index_offset, ItemClassification.progression, 0, 1),
-    BEAURIOR_KEY_RING: ItemData(KEY, 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    ICE_PUZZLE_KEY_RING: ItemData(KEY, 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    JIDAMBA_KEY_RING: ItemData(KEY, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    PRISON_KEY_RING: ItemData(KEY, 650 + item_index_offset, ItemClassification.progression, 0, 1),
+    BEAURIOR_KEY_RING: ItemData(KEY, 651 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    ICE_PUZZLE_KEY_RING: ItemData(KEY, 652 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 653 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_KEY_RING: ItemData(KEY, 654 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     "Item - Quintar Pass": ItemData(ITEM, 7 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified (now part of Progressive Quintar Flute)
