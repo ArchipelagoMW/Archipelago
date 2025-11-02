@@ -47,7 +47,7 @@ class PokeparkWebWorld(WebWorld):
 
 class PokeparkContainer(APPlayerContainer):
     """
-    This class defines the container file for The Wind Waker.
+    This class defines the container file for Pokepark.
     """
 
     game: str = "PokePark"
@@ -197,12 +197,12 @@ class PokeparkWorld(World):
             self._precollect_item("Progressive Health", 3)
             self._precollect_item("Double Dash", 1)
 
-        if options.starting_zone.value == options.starting_zone.option_one:
+        if options.start_fast_travel.value == options.start_fast_travel.option_one:
             self.random.shuffle(fast_travel_items)
             precollected_fast_travel = self.random.choice(fast_travel_items)
             self._precollect_item(precollected_fast_travel, 1)
 
-        if options.starting_zone.value == options.starting_zone.option_all:
+        if options.start_fast_travel.value == options.start_fast_travel.option_all:
             for item in fast_travel_items:
                 self._precollect_item(item, 1)
 

@@ -80,17 +80,12 @@ The story has been removed, and some changes were made to the game’s logic to 
 | Mismagius              | None                              |
 | Spinarak               | Rotom Prisma                      |
 
-### Granite Zone
-
-| Location / Entrance | Condition    |
-|---------------------|--------------|
-| Flygon Door         | Absol Prisma |
-
 ### Misc
 
 - Postgame Pokemon unlocked in Attractions
 - Drifblim always spawns
 - Removed Intro and Ending files
+- Increased Berry Reward from Bottle Recycling
 
 ## Feature Roadmap
 

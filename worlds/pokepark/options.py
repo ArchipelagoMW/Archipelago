@@ -22,14 +22,14 @@ class Powers(Choice):
     default = 3
 
 
-class RandomStartingZones(Choice):
+class StartFastTravel(Choice):
     """
-    Determines Starting Zone
-    None: Start with only Meadow Zone (Default)
-    One: Start with one random Fast Travel
-    All: Start with Fast Travel to all Zones
+    Determines how Fast Travel Items are shuffled into the pool
+    None: Start with no Fast Travel Items (Default)
+    One: Start with one random Fast Travel Item
+    All: Start with all Fast Travel Items
     """
-    display = "Starting Zone"
+    display = "Precollect Fast Travel"
     option_none = 0
     option_one = 1
     option_all = 2
@@ -49,7 +49,7 @@ class Goal(Choice):
 
 class NumRequiredBattleCount(Range):
     """
-    Select the number of required consecutive Wins to challenge Battle count Pokemon
+    Select the number of required consecutive Wins to challenge Battle count Pokemon e.g. Scyther
     """
     display = "Number of Battle Count"
     range_start = 0
@@ -191,7 +191,7 @@ class InZoneRoadBlocks(Toggle):
 @dataclass
 class PokeparkOptions(PerGameCommonOptions):
     power_randomizer: Powers
-    starting_zone: RandomStartingZones
+    start_fast_travel: StartFastTravel
     goal: Goal
     num_required_battle_count: NumRequiredBattleCount
     each_zone: EachZone
@@ -242,7 +242,7 @@ pokepark_option_groups = [
     ),
     OptionGroup("Misc", [
         Powers,
-        RandomStartingZones,
+        StartFastTravel,
         NumRequiredBattleCount,
         NumRequiredPrismaCountSkygarden,
         InZoneRoadBlocks,
@@ -261,6 +261,7 @@ pokepark_option_groups = [
             RemoveAttractionLocations,
             RemoveAttractionPrismaLocations,
             RemovePokemonUnlockLocations,
+            RemoveLegendaryPokemonPowerCompLocations,
             EachZone
         ]
     )
