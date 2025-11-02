@@ -24,7 +24,7 @@ The locations in the randomizer are:
     * Beating Mithalan God boss
     * Fish Cave puzzle
     * Beating Drunian God boss
-    * Beating Sun God boss
+    * Beating Lumerean God boss
     * Breaking Li cage in the body
 
 Note that, unlike the vanilla game, when opening sing bulbs, Mithalas urns and Sunken City crates,

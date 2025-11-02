@@ -1,17 +1,6 @@
-from typing import Union
-
 from ..mod_data import ModNames
 from ...data.craftable_data import all_crafting_recipes_by_name
-from ...logic.action_logic import ActionLogicMixin
-from ...logic.artisan_logic import ArtisanLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
-from ...logic.crafting_logic import CraftingLogicMixin
-from ...logic.has_logic import HasLogicMixin
-from ...logic.received_logic import ReceivedLogicMixin
-from ...logic.region_logic import RegionLogicMixin
-from ...logic.relationship_logic import RelationshipLogicMixin
-from ...logic.season_logic import SeasonLogicMixin
-from ...logic.wallet_logic import WalletLogicMixin
 from ...strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import Consumable, Edible, Bomb
@@ -33,8 +22,7 @@ class ModSpecialOrderLogicMixin(BaseLogicMixin):
         self.special_order = ModSpecialOrderLogic(*args, **kwargs)
 
 
-class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, HasLogicMixin, RegionLogicMixin,
-ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
+class ModSpecialOrderLogic(BaseLogic):
     def get_modded_special_orders_rules(self):
         special_orders = {}
         if ModNames.juna in self.options.mods:

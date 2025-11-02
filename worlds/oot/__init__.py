@@ -30,9 +30,8 @@ from .Patches import OoTContainer, patch_rom
 from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
-from settings import get_settings
 from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
-from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections
+from Options import Range, Toggle, VerifyKeys, Accessibility, PlandoConnections, PlandoItems
 from Fill import fill_restrictive, fast_fill, FillError
 from worlds.generic.Rules import exclusion_rules, add_item_rule
 from worlds.AutoWorld import World, AutoLogicRegister, WebWorld
@@ -100,14 +99,15 @@ class OOTWeb(WebWorld):
         ["Edos"]
     )
 
-    setup_es = Tutorial(
-        setup.tutorial_name,
-        setup.description,
-        "Español",
-        "setup_es.md",
-        "setup/es",
-        setup.authors
-    )
+    # Very out of date, requires updating to match current
+    # setup_es = Tutorial(
+    #     setup.tutorial_name,
+    #     setup.description,
+    #     "Español",
+    #     "setup_es.md",
+    #     "setup/es",
+    #     setup.authors
+    # )
 
     setup_fr = Tutorial(
         setup.tutorial_name,
@@ -127,8 +127,9 @@ class OOTWeb(WebWorld):
         ["Held_der_Zeit"]
     )
 
-    tutorials = [setup, setup_es, setup_fr, setup_de]
+    tutorials = [setup, setup_fr, setup_de]
     option_groups = oot_option_groups
+    game_info_languages = ["en", "de"]
 
 
 class OOTWorld(World):
@@ -184,6 +185,10 @@ class OOTWorld(World):
                  "Small Key Ring (Spirit Temple)", "Small Key Ring (Thieves Hideout)", "Small Key Ring (Water Temple)",
                  "Boss Key (Fire Temple)", "Boss Key (Forest Temple)", "Boss Key (Ganons Castle)",
                  "Boss Key (Shadow Temple)", "Boss Key (Spirit Temple)", "Boss Key (Water Temple)"},
+
+        # aliases
+        "Longshot": {"Progressive Hookshot"},  # fuzzy hinting thought Longshot was Slingshot
+        "Hookshot": {"Progressive Hookshot"},  # for consistency, mostly
     }
 
     location_name_groups = build_location_name_groups()
@@ -197,7 +202,8 @@ class OOTWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld):
-        rom = Rom(file=get_settings()['oot_options']['rom_file'])
+        oot_settings = OOTWorld.settings
+        rom = Rom(file=oot_settings.rom_file)
 
 
     # Option parsing, handling incompatible options, building useful-item table
@@ -213,6 +219,8 @@ class OOTWorld(World):
             elif isinstance(result, VerifyKeys):
                 option_value = result.value
             elif isinstance(result, PlandoConnections):
+                option_value = result.value
+            elif isinstance(result, PlandoItems):
                 option_value = result.value
             else:
                 option_value = result.current_key
@@ -578,8 +586,7 @@ class OOTWorld(World):
                     new_exit = OOTEntrance(self.player, self.multiworld, '%s -> %s' % (new_region.name, exit), new_region)
                     new_exit.vanilla_connected_region = exit
                     new_exit.rule_string = rule
-                    if self.options.logic_rules != 'no_logic':
-                        self.parser.parse_spot_rule(new_exit)
+                    self.parser.parse_spot_rule(new_exit)
                     if new_exit.never:
                         logger.debug('Dropping unreachable exit: %s', new_exit.name)
                     else:
@@ -1082,7 +1089,8 @@ class OOTWorld(World):
             self.hint_rng = self.random
 
             outfile_name = self.multiworld.get_out_file_name_base(self.player)
-            rom = Rom(file=get_settings()['oot_options']['rom_file'])
+            oot_settings = OOTWorld.settings
+            rom = Rom(file=oot_settings.rom_file)
             try:
                 if self.hints != 'none':
                     buildWorldGossipHints(self)
@@ -1316,10 +1324,20 @@ class OOTWorld(World):
             state.prog_items[self.player][alt_item_name] -= count
             if state.prog_items[self.player][alt_item_name] < 1:
                 del (state.prog_items[self.player][alt_item_name])
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
             return True
         changed = super().remove(state, item)
         if changed:
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
         return changed
 
@@ -1344,22 +1362,8 @@ class OOTWorld(World):
     def get_locations(self):
         return self.multiworld.get_locations(self.player)
 
-    def get_location(self, location):
-        return self.multiworld.get_location(location, self.player)
-
-    def get_region(self, region_name):
-        try:
-            return self._regions_cache[region_name]
-        except KeyError:
-            ret = self.multiworld.get_region(region_name, self.player)
-            self._regions_cache[region_name] = ret
-            return ret
-
     def get_entrances(self):
         return self.multiworld.get_entrances(self.player)
-
-    def get_entrance(self, entrance):
-        return self.multiworld.get_entrance(entrance, self.player)
 
     def is_major_item(self, item: OOTItem):
         if item.type == 'Token':

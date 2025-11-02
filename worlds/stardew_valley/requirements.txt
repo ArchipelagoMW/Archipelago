@@ -1,2 +1,0 @@
-importlib_resources; python_version <= '3.8'
-graphlib_backport; python_version <= '3.8'

@@ -10,12 +10,20 @@ from worlds._bizhawk.client import BizHawkClient
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
+DEATHLINK_AREA_NUMBERS = [0, 1, 1, 2, 2, 2, 2, 3, 4, 5, 5, 5, 5, 5, 5, 5,
+                          7, 9, 8, 6, 12, 12, 13, 11, 12, 5, 2, 10, 13, 13]
+
+DEATHLINK_AREA_NAMES = ["Forest of Silence", "Castle Wall", "Villa", "Tunnel", "Underground Waterway", "Castle Center",
+                        "Duel Tower", "Tower of Execution", "Tower of Science", "Tower of Sorcery", "Room of Clocks",
+                        "Clock Tower", "Castle Keep", "Level: You Cheated"]
+
 
 class Castlevania64Client(BizHawkClient):
     game = "Castlevania 64"
     system = "N64"
     patch_suffix = ".apcv64"
     self_induced_death = False
+    time_of_sent_death = None
     received_deathlinks = 0
     death_causes = []
     currently_shopping = False
@@ -62,14 +70,19 @@ class Castlevania64Client(BizHawkClient):
             return
         if "tags" not in args:
             return
-        if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+        if "DeathLink" in args["tags"] and args["data"]["time"] != self.time_of_sent_death:
             self.received_deathlinks += 1
             if "cause" in args["data"]:
                 cause = args["data"]["cause"]
-                if len(cause) > 88:
-                    cause = cause[0x00:0x89]
+                # If the other game sent a death with a blank string for the cause, use the default death message.
+                if cause == "":
+                    cause = f"{args['data']['source']} killed you without a word!"
+                # Truncate the death cause message at 120 characters.
+                if len(cause) > 120:
+                    cause = cause[0:120]
             else:
-                cause = f"{args['data']['source']} killed you!"
+                # If the other game sent a death with no cause at all, use the default death message.
+                cause = f"{args['data']['source']} killed you without a word!"
             self.death_causes.append(cause)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
@@ -114,11 +127,30 @@ class Castlevania64Client(BizHawkClient):
             if "DeathLink" in ctx.tags and save_struct[0xA4] & 0x80 and not self.self_induced_death and not \
                     deathlink_induced_death:
                 self.self_induced_death = True
-                if save_struct[0xA4] & 0x08:
-                    # Special death message for dying while having the Vamp status.
-                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} became a vampire and drank your blood!")
+
+                # If the player died at the Castle Keep exterior map on one of the Room of Clocks boss towers
+                # (determinable by checking the entrance value as well as the map value), consider Room of Clocks the
+                # actual area of death.
+                if save_struct[0xAD] == 0x14 and save_struct[0xAF] in [0, 1]:
+                    area_of_death = DEATHLINK_AREA_NAMES[10]
+                # Otherwise, determine what area the player perished in from the current map ID.
                 else:
-                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished. Dracula has won!")
+                    area_of_death = DEATHLINK_AREA_NAMES[DEATHLINK_AREA_NUMBERS[save_struct[0xAD]]]
+
+                # If we had the Vamp status while dying, use a special message.
+                if save_struct[0xA4] & 0x08:
+                    death_message = (f"{ctx.player_names[ctx.slot]} became a vampire at {area_of_death} and drank your "
+                                     f"blood!")
+                # Otherwise, use the generic one.
+                else:
+                    death_message = f"{ctx.player_names[ctx.slot]} perished in {area_of_death}. Dracula has won!"
+
+                # Send the death.
+                await ctx.send_death(death_message)
+
+                # Record the time in which the death was sent so when we receive the packet we can tell it wasn't our
+                # own death. ctx.on_deathlink overwrites it later, so it MUST be grabbed now.
+                self.time_of_sent_death = ctx.last_death_link
 
             # Write any DeathLinks received along with the corresponding death cause starting with the oldest.
             # To minimize Bizhawk Write jank, the DeathLink write will be prioritized over the item received one.
@@ -146,8 +178,18 @@ class Castlevania64Client(BizHawkClient):
                         text_color = bytearray([0xA2, 0x0B])
                     else:
                         text_color = bytearray([0xA2, 0x02])
+
+                    # Get the item's player's name. If it's longer than 40 characters, truncate it at 40.
+                    # 35 should be the max number of characters in a server player name right now (16 for the original
+                    # name + 16 for the alias + 3 for the added parenthesis and space), but if it ever goes higher it
+                    # should be future-proofed now. No need to truncate CV64 items names because its longest item name
+                    # gets nowhere near the limit.
+                    player_name = ctx.player_names[next_item.player]
+                    if len(player_name) > 40:
+                        player_name = player_name[0:40]
+
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names.lookup_in_game(next_item.item)}\n"
-                                                              f"from {ctx.player_names[next_item.player]}", 96)
+                                                              f"from {player_name}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                                 [(0x389BE1, [next_item.item & 0xFF], "RDRAM"),
                                                  (0x18C0A8, text_color + cv64_string_to_bytearray(received_text, False),
@@ -197,6 +239,7 @@ class Castlevania64Client(BizHawkClient):
 
             # Send game clear if we're in either any ending cutscene or the credits state.
             if not ctx.finished_game and (0x26 <= int(cutscene_value) <= 0x2E or game_state == 0x0000000B):
+                ctx.finished_game = True
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL

@@ -52,49 +52,49 @@
   "ITEM_HM_CUT": {
     "label": "HM01 Cut",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM01", "Unique"],
     "modern_id": 420
   },
   "ITEM_HM_FLY": {
     "label": "HM02 Fly",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM02", "Unique"],
     "modern_id": 421
   },
   "ITEM_HM_SURF": {
     "label": "HM03 Surf",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM03", "Unique"],
     "modern_id": 422
   },
   "ITEM_HM_STRENGTH": {
     "label": "HM04 Strength",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM04", "Unique"],
     "modern_id": 423
   },
   "ITEM_HM_FLASH": {
     "label": "HM05 Flash",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM05", "Unique"],
     "modern_id": 424
   },
   "ITEM_HM_ROCK_SMASH": {
     "label": "HM06 Rock Smash",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM06", "Unique"],
     "modern_id": 425
   },
   "ITEM_HM_WATERFALL": {
     "label": "HM07 Waterfall",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM07", "Unique"],
     "modern_id": 737
   },
   "ITEM_HM_DIVE": {
     "label": "HM08 Dive",
     "classification": "PROGRESSION",
-    "tags": ["HM", "Unique"],
+    "tags": ["HM", "HM08", "Unique"],
     "modern_id": null
   },
 
@@ -375,169 +375,169 @@
   "ITEM_POTION": {
     "label": "Potion",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 17
   },
   "ITEM_ANTIDOTE": {
     "label": "Antidote",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 18
   },
   "ITEM_BURN_HEAL": {
     "label": "Burn Heal",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 19
   },
   "ITEM_ICE_HEAL": {
     "label": "Ice Heal",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 20
   },
   "ITEM_AWAKENING": {
     "label": "Awakening",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 21
   },
   "ITEM_PARALYZE_HEAL": {
     "label": "Paralyze Heal",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 22
   },
   "ITEM_FULL_RESTORE": {
     "label": "Full Restore",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 23
   },
   "ITEM_MAX_POTION": {
     "label": "Max Potion",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 24
   },
   "ITEM_HYPER_POTION": {
     "label": "Hyper Potion",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 25
   },
   "ITEM_SUPER_POTION": {
     "label": "Super Potion",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 26
   },
   "ITEM_FULL_HEAL": {
     "label": "Full Heal",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 27
   },
   "ITEM_REVIVE": {
     "label": "Revive",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 28
   },
   "ITEM_MAX_REVIVE": {
     "label": "Max Revive",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 29
   },
   "ITEM_FRESH_WATER": {
     "label": "Fresh Water",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 30
   },
   "ITEM_SODA_POP": {
     "label": "Soda Pop",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 31
   },
   "ITEM_LEMONADE": {
     "label": "Lemonade",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 32
   },
   "ITEM_MOOMOO_MILK": {
     "label": "Moomoo Milk",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 33
   },
   "ITEM_ENERGY_POWDER": {
     "label": "Energy Powder",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 34
   },
   "ITEM_ENERGY_ROOT": {
     "label": "Energy Root",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 35
   },
   "ITEM_HEAL_POWDER": {
     "label": "Heal Powder",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 36
   },
   "ITEM_REVIVAL_HERB": {
     "label": "Revival Herb",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 37
   },
   "ITEM_ETHER": {
     "label": "Ether",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 38
   },
   "ITEM_MAX_ETHER": {
     "label": "Max Ether",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 39
   },
   "ITEM_ELIXIR": {
     "label": "Elixir",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 40
   },
   "ITEM_MAX_ELIXIR": {
     "label": "Max Elixir",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 41
   },
   "ITEM_LAVA_COOKIE": {
     "label": "Lava Cookie",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 42
   },
   "ITEM_BERRY_JUICE": {
     "label": "Berry Juice",
     "classification": "FILLER",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 43
   },
   "ITEM_SACRED_ASH": {
     "label": "Sacred Ash",
     "classification": "USEFUL",
-    "tags": ["Heal"],
+    "tags": ["Healing"],
     "modern_id": 44
   },
 
@@ -736,19 +736,19 @@
   },
   "ITEM_BLACK_FLUTE": {
     "label": "Black Flute",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": ["Misc"],
     "modern_id": 68
   },
   "ITEM_WHITE_FLUTE": {
     "label": "White Flute",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": ["Misc"],
     "modern_id": 69
   },
   "ITEM_HEART_SCALE": {
     "label": "Heart Scale",
-    "classification": "FILLER",
+    "classification": "USEFUL",
     "tags": ["Misc"],
     "modern_id": 93
   },
@@ -757,37 +757,37 @@
   "ITEM_SUN_STONE": {
     "label": "Sun Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 80
   },
   "ITEM_MOON_STONE": {
     "label": "Moon Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 81
   },
   "ITEM_FIRE_STONE": {
     "label": "Fire Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 82
   },
   "ITEM_THUNDER_STONE": {
     "label": "Thunder Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 83
   },
   "ITEM_WATER_STONE": {
     "label": "Water Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 84
   },
   "ITEM_LEAF_STONE": {
     "label": "Leaf Stone",
     "classification": "USEFUL",
-    "tags": ["EvoStone"],
+    "tags": ["Evolution Stone"],
     "modern_id": 85
   },
 
@@ -1215,7 +1215,7 @@
   "ITEM_KINGS_ROCK": {
     "label": "King's Rock",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 221
   },
   "ITEM_SILVER_POWDER": {
@@ -1245,13 +1245,13 @@
   "ITEM_DEEP_SEA_TOOTH": {
     "label": "Deep Sea Tooth",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 226
   },
   "ITEM_DEEP_SEA_SCALE": {
     "label": "Deep Sea Scale",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 227
   },
   "ITEM_SMOKE_BALL": {
@@ -1287,7 +1287,7 @@
   "ITEM_METAL_COAT": {
     "label": "Metal Coat",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 233
   },
   "ITEM_LEFTOVERS": {
@@ -1299,7 +1299,7 @@
   "ITEM_DRAGON_SCALE": {
     "label": "Dragon Scale",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 235
   },
   "ITEM_LIGHT_BALL": {
@@ -1401,7 +1401,7 @@
   "ITEM_UP_GRADE": {
     "label": "Up-Grade",
     "classification": "USEFUL",
-    "tags": ["Held"],
+    "tags": ["Held", "Evolution Stone"],
     "modern_id": 252
   },
   "ITEM_SHELL_BELL": {

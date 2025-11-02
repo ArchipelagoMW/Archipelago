@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import json
 import typing
 import builtins
@@ -18,8 +19,8 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from typing_extensions import TypeGuard
+from time import sleep
+from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -31,10 +32,11 @@ if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
     from BaseClasses import Region
+    import multiprocessing
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -46,7 +48,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.5.1"
+__version__ = "0.6.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -113,6 +115,8 @@ def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[
             cache[arg] = res
             return res
 
+    wrap.__defaults__ = function.__defaults__
+
     return wrap
 
 
@@ -136,8 +140,11 @@ def local_path(*path: str) -> str:
             local_path.cached_path = os.path.dirname(os.path.abspath(sys.argv[0]))
     else:
         import __main__
-        if hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+        if globals().get("__file__") and os.path.isfile(__file__):
             # we are running in a normal Python environment
+            local_path.cached_path = os.path.dirname(os.path.abspath(__file__))
+        elif hasattr(__main__, "__file__") and os.path.isfile(__main__.__file__):
+            # we are running in a normal Python environment, but AP was imported weirdly
             local_path.cached_path = os.path.dirname(os.path.abspath(__main__.__file__))
         else:
             # pray
@@ -151,7 +158,18 @@ def home_path(*path: str) -> str:
     if hasattr(home_path, 'cached_path'):
         pass
     elif sys.platform.startswith('linux'):
-        home_path.cached_path = os.path.expanduser('~/Archipelago')
+        xdg_data_home = os.getenv('XDG_DATA_HOME', os.path.expanduser('~/.local/share'))
+        home_path.cached_path = xdg_data_home + '/Archipelago'
+        if not os.path.isdir(home_path.cached_path):
+            legacy_home_path = os.path.expanduser('~/Archipelago')
+            if os.path.isdir(legacy_home_path):
+                os.renames(legacy_home_path, home_path.cached_path)
+                os.symlink(home_path.cached_path, legacy_home_path)
+            else:
+                os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
+    elif sys.platform == 'darwin':
+        import platformdirs
+        home_path.cached_path = platformdirs.user_data_dir("Archipelago", False)
         os.makedirs(home_path.cached_path, 0o700, exist_ok=True)
     else:
         # not implemented
@@ -164,7 +182,7 @@ def user_path(*path: str) -> str:
     """Returns either local_path or home_path based on write permissions."""
     if hasattr(user_path, "cached_path"):
         pass
-    elif os.access(local_path(), os.W_OK):
+    elif os.access(local_path(), os.W_OK) and not (is_macos and is_frozen()):
         user_path.cached_path = local_path()
     else:
         user_path.cached_path = home_path()
@@ -213,7 +231,12 @@ def open_file(filename: typing.Union[str, "pathlib.Path"]) -> None:
         from shutil import which
         open_command = which("open") if is_macos else (which("xdg-open") or which("gnome-open") or which("kde-open"))
         assert open_command, "Didn't find program for open_file! Please report this together with system details."
-        subprocess.call([open_command, filename])
+
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.call([open_command, filename], env=env)
 
 
 # from https://gist.github.com/pypt/94d747fe5180851196eb#gistcomment-4015118 with some changes
@@ -300,11 +323,13 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
-    path = user_path("_persistent_storage.yaml")
+def persistent_store(category: str, key: str, value: typing.Any, force_store: bool = False):
     storage = persistent_load()
+    if not force_store and category in storage and key in storage[category] and storage[category][key] == value:
+        return  # no changes necessary
     category_dict = storage.setdefault(category, {})
     category_dict[key] = value
+    path = user_path("_persistent_storage.yaml")
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
@@ -391,13 +416,26 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    uuid = persistent_load().get("client", {}).get("uuid", None)
+    common_path = cache_path("common.json")
+    try:
+        with open(common_path) as f:
+            common_file = json.load(f)
+            uuid = common_file.get("uuid", None)
+    except FileNotFoundError:
+        common_file = {}
+        uuid = None
+
     if uuid:
         return uuid
 
-    import uuid
-    uuid = uuid.getnode()
-    persistent_store("client", "uuid", uuid)
+    from uuid import uuid4
+    uuid = str(uuid4())
+    common_file["uuid"] = uuid
+
+    cache_folder = os.path.dirname(common_path)
+    os.makedirs(cache_folder, exist_ok=True)
+    with open(common_path, "w") as f:
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
@@ -419,11 +457,16 @@ class RestrictedUnpickler(pickle.Unpickler):
     def find_class(self, module: str, name: str) -> type:
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
+        # used by OptionCounter
+        # necessary because the actual Options class instances are pickled when transfered to WebHost generation pool
+        if module == "collections" and name == "Counter":
+            return collections.Counter
         # used by MultiServer -> savegame/multidata
-        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint", "SlotType", "NetworkSlot"}:
+        if module == "NetUtils" and name in {"NetworkItem", "ClientStatus", "Hint",
+                                             "SlotType", "NetworkSlot", "HintStatus"}:
             return getattr(self.net_utils_module, name)
         # Options and Plando are unpickled by WebHost -> Generate
-        if module == "worlds.generic" and name in {"PlandoItem", "PlandoConnection"}:
+        if module == "worlds.generic" and name == "PlandoItem":
             if not self.generic_properties_module:
                 self.generic_properties_module = importlib.import_module("worlds.generic")
             return getattr(self.generic_properties_module, name)
@@ -434,7 +477,8 @@ class RestrictedUnpickler(pickle.Unpickler):
             else:
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
-            if issubclass(obj, self.options_module.Option):
+            if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
+                                self.options_module.PlandoItem, self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -443,6 +487,18 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+def restricted_dumps(obj: Any) -> bytes:
+    """Helper function analogous to pickle.dumps()."""
+    s = pickle.dumps(obj)
+    # Assert that the string can be successfully loaded by restricted_loads
+    try:
+        restricted_loads(s)
+    except pickle.UnpicklingError as e:
+        raise pickle.PicklingError(e) from e
+
+    return s
 
 
 class ByValue:
@@ -483,9 +539,9 @@ def get_text_after(text: str, start: str) -> str:
 loglevel_mapping = {'error': logging.ERROR, 'info': logging.INFO, 'warning': logging.WARNING, 'debug': logging.DEBUG}
 
 
-def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, write_mode: str = "w",
-                 log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
-                 exception_logger: typing.Optional[str] = None):
+def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO,
+                 write_mode: str = "w", log_format: str = "[%(name)s at %(asctime)s]: %(message)s",
+                 add_timestamp: bool = False, exception_logger: typing.Optional[str] = None):
     import datetime
     loglevel: int = loglevel_mapping.get(loglevel, loglevel)
     log_folder = user_path("logs")
@@ -512,12 +568,18 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         def filter(self, record: logging.LogRecord) -> bool:
             return self.condition(record)
 
-    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
+    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record, "NoFile", False)))
+    file_handler.addFilter(Filter("NoCarriageReturn", lambda record: '\r' not in record.getMessage()))
     root_logger.addHandler(file_handler)
     if sys.stdout:
+        formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        if add_timestamp:
+            stream_handler.setFormatter(formatter)
         root_logger.addHandler(stream_handler)
+        if hasattr(sys.stdout, "reconfigure"):
+            sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
@@ -528,7 +590,8 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
                 sys.__excepthook__(exc_type, exc_value, exc_traceback)
                 return
             logging.getLogger(exception_logger).exception("Uncaught exception",
-                                                          exc_info=(exc_type, exc_value, exc_traceback))
+                                                          exc_info=(exc_type, exc_value, exc_traceback),
+                                                          extra={"NoStream": exception_logger is None})
             return orig_hook(exc_type, exc_value, exc_traceback)
 
         handle_exception._wrapped = True
@@ -551,7 +614,7 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
     import platform
     logging.info(
         f"Archipelago ({__version__}) logging initialized"
-        f" on {platform.platform()}"
+        f" on {platform.platform()} process {os.getpid()}"
         f" running Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
         f"{' (frozen)' if is_frozen() else ''}"
     )
@@ -567,6 +630,8 @@ def stream_input(stream: typing.TextIO, queue: "asyncio.Queue[str]"):
             else:
                 if text:
                     queue.put_nowait(text)
+                else:
+                    sleep(0.01)  # non-blocking stream
 
     from threading import Thread
     thread = Thread(target=queuer, name=f"Stream handler for {stream.name}", daemon=True)
@@ -613,6 +678,8 @@ def get_fuzzy_results(input_word: str, word_list: typing.Collection[str], limit:
     import jellyfish
 
     def get_fuzzy_ratio(word1: str, word2: str) -> float:
+        if word1 == word2:
+            return 1.01
         return (1 - jellyfish.damerau_levenshtein_distance(word1.lower(), word2.lower())
                 / max(len(word1), len(word2)))
 
@@ -633,8 +700,10 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
     picks = get_fuzzy_results(input_text, possible_answers, limit=2)
     if len(picks) > 1:
         dif = picks[0][1] - picks[1][1]
-        if picks[0][1] == 100:
+        if picks[0][1] == 101:
             return picks[0][0], True, "Perfect Match"
+        elif picks[0][1] == 100:
+            return picks[0][0], True, "Case Insensitive Perfect Match"
         elif picks[0][1] < 75:
             return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
@@ -652,24 +721,51 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in
+    arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command
+                    (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
 
 
+def is_kivy_running() -> bool:
+    if "kivy" in sys.modules:
+        from kivy.app import App
+        return App.get_running_app() is not None
+    return False
+
+
+def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_filename(*args))
+
+
+def _run_for_stdout(*args: str):
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    return subprocess.run(args, capture_output=True, text=True, env=env).stdout.split("\n", 1)[0] or None
+
+
 def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
         -> typing.Optional[str]:
     logging.info(f"Opening file input dialog for {title}.")
-
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
 
     if is_linux:
         # prefer native dialog
@@ -677,12 +773,12 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getopenfilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -693,6 +789,13 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
                       f'This attempt was made because open_filename was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -702,22 +805,25 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
                                                   initialfile=suggest or None)
 
 
-def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(open_directory(*args))
 
+
+def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
     if is_linux:
         # prefer native dialog
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--getexistingdirectory",
+            return _run_for_stdout(kdialog, f"--title={title}", "--getexistingdirectory",
                        os.path.abspath(suggest) if suggest else ".")
         zenity = which("zenity")
         if zenity:
             z_filters = ("--directory",)
             selection = (f"--filename={os.path.abspath(suggest)}/",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", *z_filters, *selection)
 
     # fall back to tk
     try:
@@ -725,9 +831,16 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
         import tkinter.filedialog
     except Exception as e:
         logging.error('Could not load tkinter, which is likely not installed. '
-                      f'This attempt was made because open_filename was used for "{title}".')
+                      f'This attempt was made because open_directory was used for "{title}".')
         raise e
     else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_open_directory, args=(res, title, suggest)).start()
+            return res.get()
         try:
             root = tkinter.Tk()
         except tkinter.TclError:
@@ -737,15 +850,6 @@ def open_directory(title: str, suggest: str = "") -> typing.Optional[str]:
 
 
 def messagebox(title: str, text: str, error: bool = False) -> None:
-    def run(*args: str):
-        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
-
-    def is_kivy_running():
-        if "kivy" in sys.modules:
-            from kivy.app import App
-            return App.get_running_app() is not None
-        return False
-
     if is_kivy_running():
         from kvui import MessageBox
         MessageBox(title, text, error).open()
@@ -756,10 +860,10 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         from shutil import which
         kdialog = which("kdialog")
         if kdialog:
-            return run(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
+            return _run_for_stdout(kdialog, f"--title={title}", "--error" if error else "--msgbox", text)
         zenity = which("zenity")
         if zenity:
-            return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
+            return _run_for_stdout(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
     elif is_windows:
         import ctypes
@@ -811,7 +915,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
     """
-    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # https://docs.python.org/3.11/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
     # Important: Save a reference to the result of [asyncio.create_task],
@@ -824,11 +928,10 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     task.add_done_callback(_faf_tasks.discard)
 
 
-def deprecate(message: str):
+def deprecate(message: str, add_stacklevels: int = 0):
     if __debug__:
         raise Exception(message)
-    import warnings
-    warnings.warn(message)
+    warnings.warn(message, stacklevel=2 + add_stacklevels)
 
 
 class DeprecateDict(dict):
@@ -842,23 +945,22 @@ class DeprecateDict(dict):
 
     def __getitem__(self, item: Any) -> Any:
         if self.should_error:
-            deprecate(self.log_message)
+            deprecate(self.log_message, add_stacklevels=1)
         elif __debug__:
-            import warnings
-            warnings.warn(self.log_message)
+            warnings.warn(self.log_message, stacklevel=2)
         return super().__getitem__(item)
 
 
 def _extend_freeze_support() -> None:
-    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
-    # upstream issue: https://github.com/python/cpython/issues/76327
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
+    # original upstream issue: https://github.com/python/cpython/issues/76327
     # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
     import multiprocessing
     import multiprocessing.spawn
 
     def _freeze_support() -> None:
         """Minimal freeze_support. Only apply this if frozen."""
-        from subprocess import _args_from_interpreter_flags
+        from subprocess import _args_from_interpreter_flags  # noqa
 
         # Prevent `spawn` from trying to read `__main__` in from the main script
         multiprocessing.process.ORIGINAL_DIR = None
@@ -866,8 +968,7 @@ def _extend_freeze_support() -> None:
         # Handle the first process that MP will create
         if (
             len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
-                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
-                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.resource_tracker import main',
                 'from multiprocessing.forkserver import main'
             )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
         ):
@@ -886,20 +987,26 @@ def _extend_freeze_support() -> None:
             multiprocessing.spawn.spawn_main(**kwargs)
             sys.exit()
 
-    if not is_windows and is_frozen():
-        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+    def _noop() -> None:
+        pass
+
+    multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
 def freeze_support() -> None:
-    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
-    _extend_freeze_support()
+
+    deprecate("Use multiprocessing.freeze_support() instead")
     multiprocessing.freeze_support()
+
+
+_extend_freeze_support()
 
 
 def visualize_regions(root_region: Region, file_name: str, *,
                       show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
-                      linetype_ortho: bool = True) -> None:
+                      linetype_ortho: bool = True, regions_to_highlight: set[Region] | None = None) -> None:
     """Visualize the layout of a world as a PlantUML diagram.
 
     :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
@@ -915,16 +1022,22 @@ def visualize_regions(root_region: Region, file_name: str, *,
             Items without ID will be shown in italics.
     :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
     :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
+    :param regions_to_highlight: Regions that will be highlighted in green if they are reachable.
 
     Example usage in World code:
     from Utils import visualize_regions
-    visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+    state = self.multiworld.get_all_state(False)
+    state.update_reachable_regions(self.player)
+    visualize_regions(self.get_region("Menu"), "my_world.puml", show_entrance_names=True,
+                      regions_to_highlight=state.reachable_regions[self.player])
 
     Example usage in Main code:
     from Utils import visualize_regions
     for player in multiworld.player_ids:
         visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
+    if regions_to_highlight is None:
+        regions_to_highlight = set()
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
     from collections import deque
@@ -977,7 +1090,7 @@ def visualize_regions(root_region: Region, file_name: str, *,
                 uml.append(f"\"{fmt(region)}\" : {{field}} {lock}{fmt(location)}")
 
     def visualize_region(region: Region) -> None:
-        uml.append(f"class \"{fmt(region)}\"")
+        uml.append(f"class \"{fmt(region)}\" {'#00FF00' if region in regions_to_highlight else ''}")
         if show_locations:
             visualize_locations(region)
         visualize_exits(region)
@@ -1026,3 +1139,40 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
+    """
+    ThreadPoolExecutor that uses daemonic threads that do not keep the program alive.
+    NOTE: use this with caution because killed threads will not properly clean up.
+    """
+
+    def _adjust_thread_count(self):
+        # see upstream ThreadPoolExecutor for details
+        import threading
+        import weakref
+        from concurrent.futures.thread import _worker
+
+        if self._idle_semaphore.acquire(timeout=0):
+            return
+
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+
+        num_threads = len(self._threads)
+        if num_threads < self._max_workers:
+            thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
+            t = threading.Thread(
+                name=thread_name,
+                target=_worker,
+                args=(
+                    weakref.ref(self, weakref_cb),
+                    self._work_queue,
+                    self._initializer,
+                    self._initargs,
+                ),
+                daemon=True,
+            )
+            t.start()
+            self._threads.add(t)
+            # NOTE: don't add to _threads_queues so we don't block on shutdown

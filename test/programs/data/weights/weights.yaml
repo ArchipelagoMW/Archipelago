@@ -1,0 +1,10 @@
+name: Player{number}
+game: Archipelago # we only need to test options work and this "supports" all the base options
+Archipelago:
+  progression_balancing:
+    0: 50
+    50: 50
+    99: 50
+  accessibility:
+    0: 50
+    2: 50

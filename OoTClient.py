@@ -12,6 +12,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from Utils import async_start
 from worlds import network_data_package
+from worlds.oot import OOTWorld
 from worlds.oot.Rom import Rom, compress_rom_file
 from worlds.oot.N64Patch import apply_patch_file
 from worlds.oot.Utils import data_path
@@ -276,11 +277,12 @@ async def n64_sync_task(ctx: OoTContext):
             except ConnectionRefusedError:
                 logger.debug("Connection Refused, Trying Again")
                 ctx.n64_status = CONNECTION_REFUSED_STATUS
+                await asyncio.sleep(1)
                 continue
 
 
 async def run_game(romfile):
-    auto_start = Utils.get_options()["oot_options"].get("rom_start", True)
+    auto_start = OOTWorld.settings.rom_start
     if auto_start is True:
         import webbrowser
         webbrowser.open(romfile)
@@ -295,7 +297,7 @@ async def patch_and_run_game(apz5_file):
     decomp_path = base_name + '-decomp.z64'
     comp_path = base_name + '.z64'
     # Load vanilla ROM, patch file, compress ROM
-    rom_file_name = Utils.get_options()["oot_options"]["rom_file"]
+    rom_file_name = OOTWorld.settings.rom_file
     rom = Rom(rom_file_name)
 
     sub_file = None
@@ -346,7 +348,7 @@ if __name__ == '__main__':
 
     import colorama
 
-    colorama.init()
+    colorama.just_fix_windows_console()
 
     asyncio.run(main())
     colorama.deinit()
