@@ -1,5 +1,3 @@
-import typing
-
 from .base_logic import BaseLogic, BaseLogicMixin
 from ..data.craftable_data import all_crafting_recipes_by_name
 from ..data.recipe_data import all_cooking_recipes_by_name
@@ -12,11 +10,6 @@ from ..strings.quest_names import Quest
 from ..strings.season_names import Season
 from ..strings.wallet_item_names import Wallet
 
-if typing.TYPE_CHECKING:
-    from .logic import StardewLogic
-else:
-    StardewLogic = object
-
 
 class GoalLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
@@ -24,7 +17,7 @@ class GoalLogicMixin(BaseLogicMixin):
         self.goal = GoalLogic(*args, **kwargs)
 
 
-class GoalLogic(BaseLogic[StardewLogic]):
+class GoalLogic(BaseLogic):
 
     def can_complete_community_center(self) -> StardewRule:
         return self.logic.bundle.can_complete_community_center
@@ -44,7 +37,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
             self.logic.museum.can_complete_museum(),
             # Catching every fish not expected
             # Shipping every item not expected
-            self.logic.relationship.can_get_married() & self.logic.building.has_house(2),
+            self.logic.relationship.can_get_married() & self.logic.building.has_building(Building.kids_room),
             self.logic.relationship.has_hearts_with_n(5, 8),  # 5 Friends
             self.logic.relationship.has_hearts_with_n(10, 8),  # 10 friends
             self.logic.pet.has_pet_hearts(5),  # Max Pet
@@ -67,7 +60,7 @@ class GoalLogic(BaseLogic[StardewLogic]):
         if not self.content.features.fishsanity.is_enabled:
             return self.logic.fishing.can_catch_every_fish()
 
-        rules = [self.logic.fishing.has_max_fishing()]
+        rules = [self.logic.fishing.has_max_fishing]
 
         rules.extend(
             self.logic.fishing.can_catch_fish_for_fishsanity(fish)
