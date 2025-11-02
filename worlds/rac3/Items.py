@@ -2,9 +2,8 @@ import logging
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from Rac3Addresses import (FILLER_LIST, GADGET_LIST, PLANET_LIST, PROGRESSIVE_DICT, RAC3_ITEM_DATA_TABLE, RAC3ITEMDATA,
-                           RAC3OPTION, WEAPON_LIST)
-from worlds.rac3 import RAC3ITEM
+from Rac3Addresses import (FILLER_LIST, GADGET_LIST, INFOBOT_LIST, PROGRESSIVE_DICT, RAC3_ITEM_DATA_TABLE, RAC3ITEM,
+                           RAC3ITEMDATA, RAC3OPTION, WEAPON_LIST)
 
 from .Types import GameItem
 
@@ -94,7 +93,7 @@ def get_dict(item_list) -> dict[str, RAC3ITEMDATA]:
 weapon_dict: dict[str, RAC3ITEMDATA] = get_dict(WEAPON_LIST)
 prog_dict: dict[str, RAC3ITEMDATA] = get_dict(PROGRESSIVE_DICT.keys())
 gadget_dict: dict[str, RAC3ITEMDATA] = get_dict(GADGET_LIST)
-planet_dict: dict[str, RAC3ITEMDATA] = get_dict(PLANET_LIST)
+planet_dict: dict[str, RAC3ITEMDATA] = get_dict(INFOBOT_LIST)
 filler_dict: dict[str, RAC3ITEMDATA] = get_dict(FILLER_LIST)
 
 item_counts: dict[str, int] = {
@@ -104,8 +103,6 @@ item_counts: dict[str, int] = {
     **dict.fromkeys(planet_dict.keys(), 1),
     RAC3ITEM.VICTORY: 0
 }
-
-
 
 item_table: dict[str, RAC3ITEMDATA] = {
     **weapon_dict,

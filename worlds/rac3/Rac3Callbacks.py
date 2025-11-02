@@ -26,18 +26,32 @@ async def update(ctx: 'Context', ap_connected: bool) -> None:
     if ap_connected and ctx.slot_data is not None:
         # Check if exit to main menu
         menu = ctx.main_menu
-        await handle_main_menu(ctx)
+        ctx.main_menu = ctx.game_interface.check_main_menu()
 
         if menu is True and ctx.main_menu is False:
-            logger.info("Updating game...")
-            ctx.game_interface.file_load()
-            logger.info("Game State Updated!")
+            logger.info("Starting game...")
+            ctx.game_interface.reset_file()
+            logger.info("Old state removed!")
+            logger.info("Checking for items...")
+            for item in ctx.items_received:
+                ctx.game_interface.item_received(item.item)
+            ctx.processed_item_count = len(ctx.items_received)
+            logger.info("Items received!")
+            logger.info("Checking locations...")
+            for loc in ctx.locations_checked:
+                ctx.game_interface.collect_location(loc)
+            logger.info("Locations collected!")
+            logger.info("Checking cosmetics...")
+            ctx.game_interface.add_cosmetics()
+            logger.info("Game READY!")
 
         if not ctx.main_menu:
             # Check received items
             await handle_received_items(ctx)
             # Check collected locations
             await handle_checked_locations(ctx)
+            # Check player dead or not
+            await handle_deathlink(ctx)
             # Check goal is checked or not
             await handle_check_goal(ctx)
             # Check planet id
@@ -57,6 +71,7 @@ async def init(ctx: 'Context', ap_connected: bool) -> None:
 
 
 async def handle_planet_changed(ctx: 'Context') -> None:
+    """Checks if the player is going to a different planet"""
     if ctx.slot_data is None:
         return
     planet = ctx.current_planet
@@ -84,15 +99,8 @@ async def handle_received_items(ctx: 'Context') -> None:
         return
 
     # 初回だけ記録用に items_received の長さを記憶しておく
-    if not hasattr(ctx, "processed_item_count"):
-        ctx.processed_item_count = -1
-        new_items = ctx.items_received[0:]
-    else:
-        new_items = ctx.items_received[ctx.processed_item_count:]
-
-    for index, item in enumerate(new_items):
-        item_id = item.item
-        ctx.game_interface.item_received(item_id, ctx.processed_item_count)
+    for item in ctx.items_received[ctx.processed_item_count:]:
+        ctx.game_interface.item_received(item.item)
         # logger.info(f"Received item: ({item_id})")
 
     ctx.processed_item_count = len(ctx.items_received)
@@ -126,14 +134,15 @@ async def handle_deathlink(ctx: 'Context') -> None:
         return
 
     if time() - ctx.deathlink_timestamp > 10:
-        if ctx.game_interface.alive():
+        alive, message = ctx.game_interface.alive()
+        if alive:
             if ctx.queued_deaths > 0:
-                ctx.game_interface.kill_player()
-                ctx.queued_deaths -= 1
-                ctx.deathlink_timestamp = time()
+                if ctx.game_interface.kill_player():
+                    ctx.queued_deaths -= 1
+                    ctx.deathlink_timestamp = time()
         else:
             # Maybe add something that writes a cause?
-            await ctx.send_death()
+            await ctx.send_death(message)
             ctx.deathlink_timestamp = time()
 
 
@@ -145,11 +154,3 @@ async def handle_check_goal(ctx: 'Context') -> None:
     victory_code = ctx.game_interface.get_victory_code()
     if victory_code in ctx.checked_locations:
         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-
-
-async def handle_main_menu(ctx: 'Context') -> None:
-    """Checks if the player has exited to the main menu"""
-    if ctx.slot_data is None:
-        return
-
-    ctx.main_menu = ctx.game_interface.check_main_menu()

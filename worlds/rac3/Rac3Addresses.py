@@ -112,6 +112,10 @@ class RAC3OPTION:
     NANOTECH_MILESTONES = "nanotech_milestones"
     EXCLUDE = "RaC3 Exclude Locations"
     TOTAL_LOCATIONS = "TotalLocations"
+    SHIP_NOSE = "Ship Nose"
+    SHIP_WINGS = "Ship Wings"
+    SHIP_SKIN = "Ship Skin"
+    SKIN = "Skin"
 
 
 class RAC3ITEM:
@@ -517,8 +521,17 @@ class RAC3SKILLPOINT:
     THE_SHAMING_OF_THE_Q = "The Shaming of the Q - set a new record for qwark"  # 0x001D54CD,
 
 
+class RAC3DEATH:
+    EATEN = "was Eaten"
+    DROWNED = "Drowned"
+    FELL = "Fell"
+    LAVA = "Drowned"
+    FROZEN = "became an Ice cube"
+
+
 class RAC3STATUS:
     GAME_ID = "SCUS-97353"
+    ACTION = 0x001A71A4
     LEVEL_TABLE = 0x001425C0
     BOLTS = 0x00142660
     MAX_HEALTH = 0x00142668
@@ -529,6 +542,7 @@ class RAC3STATUS:
     CHALLENGE_MODE = 0x00142692
     NANOTECH_EXP = 0x00142694
     ARMOR = 0x001426A0
+    HELMET = 0x001426D8
     CRYSTALS = 0x001426A2
     MULTIPLIER = 0x001426BA
     ROBONOIDS = 0x0014275C
@@ -545,9 +559,14 @@ class RAC3STATUS:
     HEALTH = 0x001A7430
     JACKPOT = 0x001A74A8
     WEAPON_LOCK = 0x001A74A9
+    PAUSE = 0x001CD021
     EQUIPPED = 0x001D4C40
     QUICK_SELECT = 0x001D4C60
     PLANET = 0x001D545C
+    SHIP_CONFIG = 0x001D54D0
+    SHIP_SKIN = 0x001D54D2
+    PLAYER_SKIN = 0x001427AB
+    PLAYER_SKIN_2 = 0x001C5D67
     ALLOW_SHIP = 0x001D5533
 
 
@@ -573,7 +592,6 @@ WEAPON_LIST: list[str] = [
     RAC3ITEM.BOUNCER,
     RAC3ITEM.PLASMA_COIL,
 ]
-
 UPGRADE_DICT: dict[str, list[int]] = {
     RAC3ITEM.SHOCK_BLASTER: [0x27, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2D, 0x2E],
     RAC3ITEM.NITRO_LAUNCHER: [0x77, 0x78, 0x79, 0x7A, 0x7B, 0x7C, 0x7D, 0x7E],
@@ -597,7 +615,6 @@ UPGRADE_DICT: dict[str, list[int]] = {
     RAC3ITEM.PLASMA_COIL: [0x10, 0xA0, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF],
     RAC3ITEM.WRENCH: [0x09, 0xA4, 0xA5, 0xC6, 0xC7, 0xC8, 0xC9, 0xCA]
 }
-
 GADGET_LIST: list[str] = [
     RAC3ITEM.HELI_PACK,
     RAC3ITEM.THRUSTER_PACK,
@@ -616,7 +633,6 @@ GADGET_LIST: list[str] = [
     RAC3ITEM.STAR_MAP,
     RAC3ITEM.MASTER_PLAN
 ]
-
 VIDCOMIC_LIST: list[str] = [
     RAC3ITEM.VIDCOMIC1,
     RAC3ITEM.VIDCOMIC2,
@@ -624,14 +640,12 @@ VIDCOMIC_LIST: list[str] = [
     RAC3ITEM.VIDCOMIC4,
     RAC3ITEM.VIDCOMIC5
 ]
-
 ARMOR_LIST: list[str] = [
     RAC3ITEM.MAGNAPLATE,
     RAC3ITEM.ADAMANTINE,
     RAC3ITEM.AEGIS,
     RAC3ITEM.INFERNOX,
 ]
-
 PROGRESSIVE_DICT: dict[str, str] = {
     RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEM.SHOCK_BLASTER,
     RAC3ITEM.PROGRESSIVE_NITRO_LAUNCHER: RAC3ITEM.NITRO_LAUNCHER,
@@ -656,7 +670,6 @@ PROGRESSIVE_DICT: dict[str, str] = {
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: RAC3ITEM.PROGRESSIVE_VIDCOMIC,
     RAC3ITEM.PROGRESSIVE_ARMOR: RAC3ITEM.PROGRESSIVE_ARMOR,
 }
-
 EQUIP_LIST: list[str] = [
     *WEAPON_LIST,
     *PROGRESSIVE_DICT.keys(),
@@ -666,8 +679,7 @@ EQUIP_LIST: list[str] = [
     RAC3ITEM.WARP_PAD,
     RAC3ITEM.PDA,
 ]
-
-PLANET_LIST: list[str] = [
+INFOBOT_LIST: list[str] = [
     RAC3ITEM.VELDIN,
     RAC3ITEM.FLORANA,
     RAC3ITEM.STARSHIP_PHOENIX,
@@ -689,7 +701,28 @@ PLANET_LIST: list[str] = [
     RAC3ITEM.COMMAND_CENTER,
     # RAC3ITEM.MUSEUM,
 ]
-
+PLANET_FROM_INFOBOT: dict[str, str] = {
+    RAC3ITEM.VELDIN: RAC3REGION.VELDIN,
+    RAC3ITEM.FLORANA: RAC3REGION.FLORANA,
+    RAC3ITEM.STARSHIP_PHOENIX: RAC3REGION.STARSHIP_PHOENIX,
+    RAC3ITEM.MARCADIA: RAC3REGION.MARCADIA,
+    RAC3ITEM.ANNIHILATION_NATION: RAC3REGION.ANNIHILATION_NATION,
+    RAC3ITEM.AQUATOS: RAC3REGION.AQUATOS,
+    RAC3ITEM.TYHRRANOSIS: RAC3REGION.TYHRRANOSIS,
+    RAC3ITEM.DAXX: RAC3REGION.DAXX,
+    RAC3ITEM.OBANI_GEMINI: RAC3REGION.OBANI_GEMINI,
+    RAC3ITEM.BLACKWATER_CITY: RAC3REGION.BLACKWATER_CITY,
+    RAC3ITEM.HOLOSTAR_STUDIOS: RAC3REGION.HOLOSTAR_STUDIOS,
+    RAC3ITEM.OBANI_DRACO: RAC3REGION.OBANI_DRACO,
+    RAC3ITEM.ZELDRIN_STARPORT: RAC3REGION.ZELDRIN_STARPORT,
+    RAC3ITEM.METROPOLIS: RAC3REGION.METROPOLIS,
+    RAC3ITEM.CRASH_SITE: RAC3REGION.CRASH_SITE,
+    RAC3ITEM.ARIDIA: RAC3REGION.ARIDIA,
+    RAC3ITEM.QWARKS_HIDEOUT: RAC3REGION.QWARKS_HIDEOUT,
+    RAC3ITEM.KOROS: RAC3REGION.KOROS,
+    RAC3ITEM.COMMAND_CENTER: RAC3REGION.COMMAND_CENTER,
+    # RAC3ITEM.MUSEUM = # RAC3REGION.MUSEUM,
+}
 QUICK_SELECT_LIST: list[str] = [
     RAC3ITEM.QUICK_SELECT_0,
     RAC3ITEM.QUICK_SELECT_1,
@@ -708,7 +741,6 @@ QUICK_SELECT_LIST: list[str] = [
     RAC3ITEM.QUICK_SELECT_E,
     RAC3ITEM.QUICK_SELECT_F,
 ]
-
 SHIP_SLOTS: list[str] = [
     RAC3REGION.SLOT_0,
     RAC3REGION.SLOT_1,
@@ -731,7 +763,6 @@ SHIP_SLOTS: list[str] = [
     RAC3REGION.SLOT_12,
     RAC3REGION.SLOT_13
 ]
-
 PLANET_NAME_FROM_ID: dict[int, str] = {
     0x01: RAC3REGION.VELDIN,
     0x02: RAC3REGION.FLORANA,
@@ -771,7 +802,6 @@ PLANET_NAME_FROM_ID: dict[int, str] = {
     0x23: RAC3REGION.QWARK_VID_COMIC_5,
     0x24: RAC3REGION.QWARK_VID_COMIC_UNUSED_2,
 }
-
 FILLER_LIST: list[str] = [
     RAC3ITEM.TITANIUM_BOLT,
     RAC3ITEM.WEAPON_XP,
@@ -812,6 +842,13 @@ SIMPLE_SKILL_POINTS = [
     # RAC3SKILLPOINT.THE_SHAMING_OF_THE_Q,
     # RAC3SKILLPOINT.ARCADE_PERFECTION,
 ]
+DEATH_FROM_ACTION: dict[int, str] = {
+    0x31: RAC3DEATH.EATEN,
+    0x6C: RAC3DEATH.DROWNED,
+    0x79: RAC3DEATH.FELL,
+    0x7E: RAC3DEATH.LAVA,
+    0x81: RAC3DEATH.FROZEN
+}
 
 
 @dataclass
@@ -826,6 +863,7 @@ class RAC3STATUSDATA:
 class RAC3ITEMDATA:
     ID = None
     LEVEL = None
+    LEVEL_ADDRESS = None
     UNLOCK_ADDRESS = None
     UNLOCK_ADDRESS_2 = None
     XP_ADDRESS = None
@@ -845,12 +883,14 @@ class RAC3ITEMDATA:
                  ammo: Optional[int] = None,
                  xp: Optional[int] = None,
                  level: Optional[int] = None,
+                 level_address: Optional[int] = None,
                  armor: Optional[float] = None,
                  ap_classification: Optional[ItemClassification] = ItemClassification.filler):
         self.ID: int = idx
         self.AP_CODE: int = idx + 50000000
         self.AP_CLASSIFICATION: ItemClassification = ap_classification
         self.LEVEL: Optional[int] = level
+        self.LEVEL_ADDRESS: Optional[int] = level_address
         self.UNLOCK_ADDRESS: Optional[int] = address
         self.UNLOCK_ADDRESS_2: Optional[int] = address_2
         self.XP_ADDRESS: int = 4 * idx + RAC3STATUS.ITEM_XP_ADDRESS
@@ -879,16 +919,18 @@ class RAC3ITEMDATA:
                          ap_classification: Optional[ItemClassification] = None):
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
-        return RAC3ITEMDATA(idx, address, address_2, power, ammo, level=idx, ap_classification=ap_classification)
+        return RAC3ITEMDATA(idx, address, address_2, power, ammo, level=1, level_address=idx + RAC3STATUS.LEVEL_TABLE,
+                            ap_classification=ap_classification)
 
     @staticmethod
     def construct_weapon_level(idx: int,
                                power: int,
                                ammo: Optional[int] = None,
                                xp: Optional[int] = 0):
-        base: int = [weapon[0] for weapon in UPGRADE_DICT.values() if idx in weapon][0] + RAC3STATUS.LEVEL_TABLE
+        base: int = [weapon[0] for weapon in UPGRADE_DICT.values() if idx in weapon][-1]
         amount: int = 32 * xp
-        return RAC3ITEMDATA(base, power=power, ammo=ammo, xp=amount, level=base)
+        return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=idx - base,
+                            level_address=base + RAC3STATUS.LEVEL_TABLE)
 
     @staticmethod
     def construct_weapon_prog(idx: int,
@@ -929,20 +971,25 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_goal(idx: int):
-        return RAC3ITEMDATA(idx, ItemClassification.progression)
+        return RAC3ITEMDATA(idx, ap_classification=ItemClassification.progression)
 
 
 @dataclass
 class RAC3REGIONDATA:
-    ID: Optional[int] = None
+    ID: int = None
     SLOT_ADDRESS: Optional[int] = None
 
     def __init__(self,
                  idx: Optional[int] = None,
                  slot: Optional[int] = None):
         self.ID: Optional[int] = idx
-        if slot:
-            self.SLOT_ADDRESS: Optional[int] = 4 * slot + RAC3STATUS.PLANET_SLOT_ADDRESS
+        self.SLOT_ADDRESS: Optional[int] = slot
+
+    @staticmethod
+    def construct_slot(slot: int):
+        idx: int = slot + 1
+        addr: int = 4 * slot + RAC3STATUS.PLANET_SLOT_ADDRESS
+        return RAC3REGIONDATA(idx, addr)
 
 
 RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
@@ -1156,7 +1203,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_N60_STORM:
         RAC3ITEMDATA.construct_weapon_prog(0xCC, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_INFECTOR:
-        RAC3ITEMDATA.construct_weapon_prog(0xCD, ItemClassification.useful),
+        RAC3ITEMDATA.construct_weapon_prog(0xCD, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_ANNIHILATOR:
         RAC3ITEMDATA.construct_weapon_prog(0xCE, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA:
@@ -1164,11 +1211,11 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_DISC_BLADE:
         RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_AGENTS_OF_DOOM:
-        RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.progression_skip_balancing),
+        RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_RIFT_INDUCER:
-        RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.useful),
+        RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_HOLO_SHIELD:
-        RAC3ITEMDATA.construct_weapon_prog(0xD3, ItemClassification.progression_skip_balancing),
+        RAC3ITEMDATA.construct_weapon_prog(0xD3, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_FLUX_RIFLE:
         RAC3ITEMDATA.construct_weapon_prog(0xD4, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_NITRO_LAUNCHER:
@@ -1180,7 +1227,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PROGRESSIVE_QWACK_O_RAY:
         RAC3ITEMDATA.construct_weapon_prog(0xD8, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_RY3N0:
-        RAC3ITEMDATA.construct_rac2_prog(0xD9, ItemClassification.progression_skip_balancing),
+        RAC3ITEMDATA.construct_weapon_prog(0xD9, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_PLASMA_COIL:
         RAC3ITEMDATA.construct_rac2_prog(0xDA, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_LAVA_GUN:
@@ -1295,26 +1342,26 @@ RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {
     RAC3REGION.QWARK_VID_COMIC_3: RAC3REGIONDATA(0x22),
     RAC3REGION.QWARK_VID_COMIC_5: RAC3REGIONDATA(0x23),
     RAC3REGION.QWARK_VID_COMIC_UNUSED_2: RAC3REGIONDATA(0x24),
-    RAC3REGION.SLOT_0: RAC3REGIONDATA(slot=0x00),
-    RAC3REGION.SLOT_1: RAC3REGIONDATA(slot=0x01),
-    RAC3REGION.SLOT_2: RAC3REGIONDATA(slot=0x02),
-    RAC3REGION.SLOT_3: RAC3REGIONDATA(slot=0x03),
-    RAC3REGION.SLOT_4: RAC3REGIONDATA(slot=0x04),
-    RAC3REGION.SLOT_5: RAC3REGIONDATA(slot=0x05),
-    RAC3REGION.SLOT_6: RAC3REGIONDATA(slot=0x06),
-    RAC3REGION.SLOT_7: RAC3REGIONDATA(slot=0x07),
-    RAC3REGION.SLOT_8: RAC3REGIONDATA(slot=0x08),
-    RAC3REGION.SLOT_9: RAC3REGIONDATA(slot=0x09),
-    RAC3REGION.SLOT_A: RAC3REGIONDATA(slot=0x0A),
-    RAC3REGION.SLOT_B: RAC3REGIONDATA(slot=0x0B),
-    RAC3REGION.SLOT_C: RAC3REGIONDATA(slot=0x0C),
-    RAC3REGION.SLOT_D: RAC3REGIONDATA(slot=0x0D),
-    RAC3REGION.SLOT_E: RAC3REGIONDATA(slot=0x0E),
-    RAC3REGION.SLOT_F: RAC3REGIONDATA(slot=0x0F),
-    RAC3REGION.SLOT_10: RAC3REGIONDATA(slot=0x10),
-    RAC3REGION.SLOT_11: RAC3REGIONDATA(slot=0x11),
-    RAC3REGION.SLOT_12: RAC3REGIONDATA(slot=0x12),
-    RAC3REGION.SLOT_13: RAC3REGIONDATA(slot=0x13),
+    RAC3REGION.SLOT_0: RAC3REGIONDATA.construct_slot(slot=0x00),
+    RAC3REGION.SLOT_1: RAC3REGIONDATA.construct_slot(slot=0x01),
+    RAC3REGION.SLOT_2: RAC3REGIONDATA.construct_slot(slot=0x02),
+    RAC3REGION.SLOT_3: RAC3REGIONDATA.construct_slot(slot=0x03),
+    RAC3REGION.SLOT_4: RAC3REGIONDATA.construct_slot(slot=0x04),
+    RAC3REGION.SLOT_5: RAC3REGIONDATA.construct_slot(slot=0x05),
+    RAC3REGION.SLOT_6: RAC3REGIONDATA.construct_slot(slot=0x06),
+    RAC3REGION.SLOT_7: RAC3REGIONDATA.construct_slot(slot=0x07),
+    RAC3REGION.SLOT_8: RAC3REGIONDATA.construct_slot(slot=0x08),
+    RAC3REGION.SLOT_9: RAC3REGIONDATA.construct_slot(slot=0x09),
+    RAC3REGION.SLOT_A: RAC3REGIONDATA.construct_slot(slot=0x0A),
+    RAC3REGION.SLOT_B: RAC3REGIONDATA.construct_slot(slot=0x0B),
+    RAC3REGION.SLOT_C: RAC3REGIONDATA.construct_slot(slot=0x0C),
+    RAC3REGION.SLOT_D: RAC3REGIONDATA.construct_slot(slot=0x0D),
+    RAC3REGION.SLOT_E: RAC3REGIONDATA.construct_slot(slot=0x0E),
+    RAC3REGION.SLOT_F: RAC3REGIONDATA.construct_slot(slot=0x0F),
+    RAC3REGION.SLOT_10: RAC3REGIONDATA.construct_slot(slot=0x10),
+    RAC3REGION.SLOT_11: RAC3REGIONDATA.construct_slot(slot=0x11),
+    RAC3REGION.SLOT_12: RAC3REGIONDATA.construct_slot(slot=0x12),
+    RAC3REGION.SLOT_13: RAC3REGIONDATA.construct_slot(slot=0x13),
 }
 
 
@@ -1353,7 +1400,12 @@ ITEM_FROM_AP_CODE: dict[int, str] = dict(
 ITEM_NAME_FROM_ID: dict[int, str] = dict(
     (kv[1].ID, kv[0]) for kv in filter(lambda data_kv: data_kv[1].ID is not None, RAC3_ITEM_DATA_TABLE.items()))
 
+ITEM_NAME_FROM_ADDRESS: dict[int, str] = dict(
+    (kv[1].UNLOCK_ADDRESS, kv[0]) for kv in
+    filter(lambda data_kv: data_kv[1].UNLOCK_ADDRESS is not None, RAC3_ITEM_DATA_TABLE.items()))
+
 ALL_ITEMS_LIST: list[str] = list(ITEM_FROM_AP_CODE.values())
+ITEMS_WITH_ADDRESSES: list[str] = list(ITEM_NAME_FROM_ADDRESS.values())
 
 LOCATIONS = [
     {

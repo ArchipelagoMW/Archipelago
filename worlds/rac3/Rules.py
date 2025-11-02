@@ -1,9 +1,8 @@
 import logging
 from typing import Callable, TYPE_CHECKING
 
-from Rac3Addresses import PLANET_LIST, RAC3REGION
+from Rac3Addresses import INFOBOT_LIST, RAC3REGION, RAC3ITEM, RAC3OPTION
 from worlds.generic.Rules import add_rule
-from worlds.rac3 import RAC3ITEM, RAC3OPTION
 
 if TYPE_CHECKING:
     from . import RaC3World
@@ -422,29 +421,29 @@ def set_rules(world: "RaC3World"):
                           and state.has_all(
                 [RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT,
                  RAC3ITEM.TYHRRA_GUISE, RAC3ITEM.WARP_PAD], world.player)
-                          and state.can_reach("Florana", player=world.player)
-                          and state.can_reach("Starship Phoenix", player=world.player)
-                          and state.can_reach("Marcadia", player=world.player)
-                          and state.can_reach("Annihilation Nation 2", player=world.player)
-                          and state.can_reach("Aquatos", player=world.player)
-                          and state.can_reach("Tyhrranosis", player=world.player)
-                          and state.can_reach("Daxx", player=world.player)
-                          and state.can_reach("Obani Gemini", player=world.player)
-                          and state.can_reach("Holostar Studios", player=world.player)
-                          and state.can_reach("Zeldrin Starport", player=world.player)
-                          and state.can_reach("Metropolis Region 2", player=world.player)
-                          and state.can_reach("Crash Site", player=world.player)
-                          and state.can_reach("Aridia", player=world.player)
-                          and state.can_reach("Qwarks Hideout", player=world.player)
-                          and state.can_reach("Koros", player=world.player)
-                          and state.can_reach("Command Center", player=world.player),
+                          and state.can_reach(RAC3REGION.FLORANA, player=world.player)
+                          and state.can_reach(RAC3REGION.STARSHIP_PHOENIX, player=world.player)
+                          and state.can_reach(RAC3REGION.MARCADIA, player=world.player)
+                          and state.can_reach(RAC3REGION.ANNIHILATION_NATION_2, player=world.player)
+                          and state.can_reach(RAC3REGION.AQUATOS_SEWERS, player=world.player)
+                          and state.can_reach(RAC3REGION.TYHRRANOSIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.DAXX, player=world.player)
+                          and state.can_reach(RAC3REGION.OBANI_GEMINI, player=world.player)
+                          and state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player)
+                          and state.can_reach(RAC3REGION.ZELDRIN_STARPORT, player=world.player)
+                          and state.can_reach(RAC3REGION.METROPOLIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.CRASH_SITE, player=world.player)
+                          and state.can_reach(RAC3REGION.ARIDIA, player=world.player)
+                          and state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player)
+                          and state.can_reach(RAC3REGION.KOROS, player=world.player)
+                          and state.can_reach(RAC3REGION.COMMAND_CENTER, player=world.player),
 
         "Phoenix: Long Term Trophy: Friend of the Rangers":
-            lambda state: state.can_reach("Marcadia", player=world.player)
-                          and state.can_reach("Tyhrranosis Region 2", player=world.player)
-                          and state.can_reach("Metropolis Region 2", player=world.player)
-                          and state.can_reach("Aridia", player=world.player)
-                          and state.can_reach("Blackwater City", player=world.player),
+            lambda state: state.can_reach(RAC3REGION.MARCADIA, player=world.player)
+                          and state.can_reach(RAC3REGION.TYHRRANOSIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.METROPOLIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.ARIDIA, player=world.player)
+                          and state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player),
 
         # Same rule as Qwarktastic Battle as you usually get it after that
         "Phoenix: Long Term Trophy: Annihilation Nation Champion":
@@ -460,22 +459,22 @@ def set_rules(world: "RaC3World"):
                 [RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT, RAC3ITEM.REFRACTOR,
                  RAC3ITEM.TYHRRA_GUISE, RAC3ITEM.WARP_PAD], world.player)
                           # Planets
-                          and state.can_reach("Florana", player=world.player)
-                          and state.can_reach("Starship Phoenix", player=world.player)
-                          and state.can_reach("Marcadia", player=world.player)
-                          and state.can_reach("Annihilation Nation 2", player=world.player)
-                          and state.can_reach("Aquatos", player=world.player)
-                          and state.can_reach("Tyhrranosis", player=world.player)
-                          and state.can_reach("Daxx", player=world.player)
-                          and state.can_reach("Obani Gemini", player=world.player)
-                          and state.can_reach("Blackwater City", player=world.player)
-                          and state.can_reach("Holostar Studios", player=world.player)
-                          and state.can_reach("Metropolis Region 1", player=world.player)
-                          and state.can_reach("Crash Site", player=world.player)
-                          and state.can_reach("Aridia", player=world.player)
-                          and state.can_reach("Qwarks Hideout", player=world.player)
-                          and state.can_reach("Koros", player=world.player)
-                          and state.can_reach("Command Center", player=world.player)
+                          and state.can_reach(RAC3REGION.FLORANA, player=world.player)
+                          and state.can_reach(RAC3REGION.STARSHIP_PHOENIX, player=world.player)
+                          and state.can_reach(RAC3REGION.MARCADIA, player=world.player)
+                          and state.can_reach(RAC3REGION.ANNIHILATION_NATION_2, player=world.player)
+                          and state.can_reach(RAC3REGION.AQUATOS_SEWERS, player=world.player)
+                          and state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)
+                          and state.can_reach(RAC3REGION.DAXX, player=world.player)
+                          and state.can_reach(RAC3REGION.OBANI_GEMINI, player=world.player)
+                          and state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player)
+                          and state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player)
+                          and state.can_reach(RAC3REGION.METROPOLIS, player=world.player)
+                          and state.can_reach(RAC3REGION.CRASH_SITE, player=world.player)
+                          and state.can_reach(RAC3REGION.ARIDIA, player=world.player)
+                          and state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player)
+                          and state.can_reach(RAC3REGION.KOROS, player=world.player)
+                          and state.can_reach(RAC3REGION.COMMAND_CENTER, player=world.player)
                           # Weapons
                           and state.has_all(
                 [RAC3ITEM.PLASMA_WHIP, RAC3ITEM.SPITTING_HYDRA, RAC3ITEM.SUCK_CANNON, RAC3ITEM.DISC_BLADE,
@@ -489,23 +488,23 @@ def set_rules(world: "RaC3World"):
             for level in range(15, 101, 5):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(PLANET_LIST, world.player, check))
+                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
         case 2:  # 10 nanotech level is a check
             for level in range(20, 101, 10):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(PLANET_LIST, world.player, check))
+                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
         case 3:  # 20 nanotech level is a check
             for level in range(20, 101, 20):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(PLANET_LIST, world.player, check))
+                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
 
         case 4:  # Every nanotech level is a check
             for level in range(11, 101):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(PLANET_LIST, world.player, check))
+                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])

@@ -1,6 +1,6 @@
 from typing import Any, TYPE_CHECKING
 
-from .Rac3Addresses import LOCATIONS, RAC3_REGION_DATA_TABLE, RAC3OPTION
+from .Rac3Addresses import LOCATIONS, RAC3_REGION_DATA_TABLE, RAC3OPTION, RAC3REGION
 
 if TYPE_CHECKING:
     from . import RaC3World
@@ -20,6 +20,10 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.trophies.value = world.passthrough[RAC3OPTION.TROPHIES]
             world.options.titanium_bolts.value = world.passthrough[RAC3OPTION.TITANIUM_BOLTS]
             world.options.nanotech_milestones.value = world.passthrough[RAC3OPTION.NANOTECH_MILESTONES]
+            world.options.ship_nose = world.passthrough[RAC3OPTION.SHIP_NOSE]
+            world.options.ship_wings = world.passthrough[RAC3OPTION.SHIP_WINGS]
+            world.options.ship_skin = world.passthrough[RAC3OPTION.SHIP_SKIN]
+            world.options.skin = world.passthrough[RAC3OPTION.SKIN]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
         else:
             world.using_ut = False
@@ -28,7 +32,10 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
 
 
 def map_page_index(data: Any) -> int:
-    return RAC3_REGION_DATA_TABLE[data].ID
+    if data:
+        return RAC3_REGION_DATA_TABLE[data].ID
+    else:
+        return RAC3_REGION_DATA_TABLE[RAC3REGION.GALAXY].ID
 
 
 def tracker_data() -> dict[str, int]:

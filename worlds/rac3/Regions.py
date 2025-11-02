@@ -73,6 +73,9 @@ def create_regions(world: "RaC3World"):
     annihilation_nation.connect(annihilation_nation_second_half,
                                 rule=lambda state: state.can_reach_location("Daxx: Gunship", player=world.player)),
 
+    aquatos_sewers = create_region(world, RAC3REGION.AQUATOS_SEWERS)
+    aquatos.connect(aquatos_sewers, rule=lambda state: state.can_reach(RAC3REGION.AQUATOS, player=world.player)),
+
     tyhrranosis_second_half = create_region(world, RAC3REGION.TYHRRANOSIS_MISSION)
     tyhrranosis.connect(tyhrranosis_second_half,
                         rule=lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)),

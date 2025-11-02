@@ -52,6 +52,11 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.update()
 
+    def _cmd_death_link_toggle(self):
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.death_link_enabled = not self.ctx.death_link_enabled
+            logger.info(f'Death Link set to {self.ctx.death_link_enabled}')
+
 
 class Rac3Context(CommonContext):
     # Client variables
@@ -71,6 +76,7 @@ class Rac3Context(CommonContext):
     queued_deaths: int = 0
     current_planet: str = RAC3REGION.GALAXY
     main_menu: bool = True
+    processed_item_count = 0
 
     items_handling = 0b111  # This is mandatory
 
@@ -81,6 +87,7 @@ class Rac3Context(CommonContext):
     def notification(self, text: str):
         self.notification_queue.append(text)
 
+    # TODO: make this work
     def on_deathlink(self, data: Utils.Dict[str, Utils.Any]) -> None:
         super().on_deathlink(data)
         if self.death_link_enabled:

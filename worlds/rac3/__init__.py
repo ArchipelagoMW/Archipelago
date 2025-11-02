@@ -99,7 +99,7 @@ class RaC3World(World):
         itempool = create_itempool(self)
         self.multiworld.itempool.extend(itempool)
         filler = [self.create_filler() for _ in
-                  range(get_total_locations(self) - len(self.preplaced_items) - len(itempool) - 1)]
+                  range(get_total_locations(self) - len(self.preplaced_items) - len(itempool) + 2)]
         self.multiworld.itempool.extend(filler)
 
     def get_filler_item_name(self) -> str:
@@ -125,6 +125,10 @@ class RaC3World(World):
             RAC3OPTION.TITANIUM_BOLTS: self.options.titanium_bolts.value,
             RAC3OPTION.NANOTECH_MILESTONES: self.options.nanotech_milestones.value,
             RAC3OPTION.EXCLUDE: self.options.exclude_locations.value,
+            RAC3OPTION.SHIP_NOSE: self.options.ship_nose.value,
+            RAC3OPTION.SHIP_WINGS: self.options.ship_wings.value,
+            RAC3OPTION.SHIP_SKIN: self.options.ship_skin.value,
+            RAC3OPTION.SKIN: self.options.skin.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self)
         }
 

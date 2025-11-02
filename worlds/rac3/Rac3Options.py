@@ -1,7 +1,7 @@
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, List
 
-from Options import Choice, ExcludeLocations, ItemDict, OptionGroup, Removed, StartInventoryPool
+from Options import Choice, ExcludeLocations, ItemDict, OptionGroup, StartInventoryPool
 from Rac3Addresses import RAC3TAG
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3 import RAC3OPTION
@@ -142,6 +142,86 @@ class NanotechMilestones(Choice):
     default = 0
 
 
+class ShipWings(Choice):
+    """
+    Cosmetic:
+    What Wings should you have on the ship?
+    """
+    display_name = RAC3OPTION.SHIP_WINGS
+    option_standard = 0
+    option_hi_lift = 4
+    option_heavy_ordinance = 8
+
+
+class ShipNose(Choice):
+    """
+    Cosmetic:
+    What Nose should you have on the ship?
+    """
+    display_name = RAC3OPTION.SHIP_NOSE
+    option_standard = 0
+    option_split = 1
+    option_scoop = 2
+
+
+class ShipSkin(Choice):
+    """
+    Cosmetic:
+    What Skin should you have on the ship?
+    """
+    display_name = RAC3OPTION.SHIP_SKIN
+    option_Blargian_Red = 0
+    option_Orxon_Green = 1
+    option_Bogon_Blue = 2
+    option_Insomniac_Special = 3
+    option_Dark_Nebula = 4
+    option_Dreks_Black_Heart = 5
+    option_Space_Storm = 6
+    option_Lunar_Eclipse = 7
+    option_Plaidtastic = 8
+    option_Supernova = 9
+    option_Solar_Wind = 10
+    option_Clowner = 11
+    option_Silent_Strike = 12
+    option_Lombax_Orange = 13
+    option_Neutron_Star = 14
+    option_Star_Traveller = 15
+    option_Hooked_On_Onyx = 16
+    option_Tyhrranoid_Void = 17
+    option_Zeldren_Sunset = 18
+    option_Ghost_Pirate_Purple = 19
+    option_Qwark_Green = 20
+    option_Agent_Orange = 21
+    option_Helgas_Hues = 22
+    option_Ameboid_Green = 23
+    option_Pulsing_Purple = 24
+    option_Obani_Orange = 25
+    option_Low_Rider = 26
+    option_Black_Hole = 27
+    option_Sun_Storm = 28
+    option_Sasha_Scarlet = 29
+    option_Florana_Breeze = 30
+    option_Ozzy_Kamikaze = 31
+
+
+class RatchetSkin(Choice):
+    """
+    Cosmetic:
+    What Skin should Ratchet have?
+    """
+    display_name = RAC3OPTION.SKIN
+    option_default = 0
+    option_old_school = 5
+    option_snowman = 6
+    option_tuxedo = 7
+    option_buginoid = 8
+    option_brainius = 9
+    option_unused_robot = 10
+    option_robo_rooster = 11
+    option_trooper = 12
+    option_robo = 13
+
+
 class RAC3ExcludeLocations(ExcludeLocations):
     """Prevent these locations from having an important item."""
     default = frozenset({RAC3TAG.UNSTABLE, RAC3TAG.LONG_TROPHY})
@@ -159,11 +239,16 @@ class RaC3Options(PerGameCommonOptions):
     titanium_bolts: TitaniumBolts
     nanotech_milestones: NanotechMilestones
     exclude_locations: RAC3ExcludeLocations
+    ship_nose: ShipNose
+    ship_wings: ShipWings
+    ship_skin: ShipSkin
+    skin: RatchetSkin
 
 
 rac3_option_groups: dict[str, List[Any]] = {
     "General Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones]
+                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones],
+    "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
 }
 
 slot_data_options: list[str] = [
