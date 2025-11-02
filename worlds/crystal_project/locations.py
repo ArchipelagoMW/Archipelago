@@ -144,7 +144,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " NPC - Reid gives you gently worn armor", 1166 + npc_index_offset), #Pale Grotto Temple map (Z2_ReidCamp (273, 122, -327)) gives you Ring Mail
 
         #Crystals
-        LocationData(THE_PALE_GROTTO_AP_REGION, FENCER_JOB_CRYSTAL_LOCATION, 130 + crystal_index_offset),
+        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + FENCER_JOB_CRYSTAL_LOCATION, 130 + crystal_index_offset),
 
         #Seaside Cliffs
         #Treasure chests
@@ -192,7 +192,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Chest - Ring around the rosy", 81 + treasure_index_offset), #Tonic Pouch chest
 
         #Crystals
-        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, SHAMAN_JOB_CRYSTAL_LOCATION, 35 + crystal_index_offset),
+        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + SHAMAN_JOB_CRYSTAL_LOCATION, 35 + crystal_index_offset),
 
         #Mercury Shrine
         #Treasure chests
@@ -213,7 +213,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Todo NPCs Job Masters: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
 
         #Crystals
-        LocationData(YAMAGAWA_MA_AP_REGION, SCHOLAR_JOB_CRYSTAL_LOCATION, 166 + crystal_index_offset),
+        LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + SCHOLAR_JOB_CRYSTAL_LOCATION, 166 + crystal_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -242,7 +242,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Chest - Behind boss", 332 + treasure_index_offset), #Money chest
 
         #Crystals
-        LocationData(SKUMPARADISE_AP_REGION, AEGIS_JOB_CRYSTAL_LOCATION, 68 + crystal_index_offset),
+        LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + AEGIS_JOB_CRYSTAL_LOCATION, 68 + crystal_index_offset),
 
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
@@ -319,7 +319,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Library Morii of the East!", 1948 + npc_index_offset), #(440, 171, -296) Z14_Library Scholar
 
         #Crystals
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
 
         #Jojo Sewers
         #Treasure chests
@@ -390,7 +390,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " NPC - Silver on the way out", 755 + npc_index_offset), #Ore
 
         #Crystals
-        LocationData(QUINTAR_NEST_AP_REGION, HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
+        LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
 
         #Quintar Sanctum
         #Treasure chests
@@ -413,7 +413,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " NPC - Two Toads crown Bowsette", 964 + npc_index_offset),
 
         #Crystals
-        LocationData(QUINTAR_SANCTUM_AP_REGION, CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
+        LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
 
         #Capital Jail
         #Treasure chests
@@ -456,7 +456,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Dust
 
         #Crystals
-        LocationData(CAPITAL_JAIL_AP_REGION, REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
 
         #Capital Pipeline
         #Treasure chests
@@ -510,7 +510,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(OKIMOTO_NS_AP_REGION, "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, lambda state: logic.has_swimming(state)), #Springs Oath (632, 243, -261) Overpass main map
 
         #Crystals
-        LocationData(OKIMOTO_NS_AP_REGION, NINJA_JOB_CRYSTAL_LOCATION, 699 + crystal_index_offset),
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + NINJA_JOB_CRYSTAL_LOCATION, 699 + crystal_index_offset),
 
         #Greenshire Reprise
         #Treasure chests
@@ -564,7 +564,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Crystals
         #River Cat's Ego
-        LocationData(RIVER_CATS_EGO_AP_REGION, NOMAD_JOB_CRYSTAL_LOCATION, 630 + crystal_index_offset), #River Cats Ego
+        LocationData(RIVER_CATS_EGO_AP_REGION, RIVER_CATS_EGO_AP_REGION + NOMAD_JOB_CRYSTAL_LOCATION, 630 + crystal_index_offset), #River Cats Ego
 
         #Poko Poko Desert
         #Treasure chests
@@ -678,7 +678,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in odd flooded room 2", 1675 + npc_index_offset), #Ore
 
         #Crystals
-        LocationData(ANCIENT_RESERVOIR_AP_REGION, DERVISH_JOB_CRYSTAL_LOCATION, 1121 + crystal_index_offset),
+        LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + DERVISH_JOB_CRYSTAL_LOCATION, 1121 + crystal_index_offset),
 
         #Ibek Cave
         #Treasure chests
@@ -854,7 +854,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Ore
 
         #Crystals
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Crystal - Samurai for 3 Sky Arena wins", 1206 + crystal_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 35)),
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + SAMURAI_JOB_CRYSTAL_LOCATION, 1206 + crystal_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 35)),
 
         #The Undercity
         #Treasures
@@ -891,7 +891,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Crystals
         #Can just swim or defeat the Undercity Masters; Blade Master: Ibek or Owl, Shadow Master: Horizontal or Fish, Duel Master: Ibek or Owl; to defeat all masters, you either need both ibek + quintar, owl, or fish
-        LocationData(THE_UNDERCITY_AP_REGION, ASSASSIN_JOB_CRYSTAL_LOCATION, 1204 + crystal_index_offset, lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state) or logic.has_swimming(state)),
+        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + ASSASSIN_JOB_CRYSTAL_LOCATION, 1204 + crystal_index_offset, lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state) or logic.has_swimming(state)),
 
         #Ganymede Shrine
         #Treasure chests
@@ -930,7 +930,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_VOLCANO_DISPLAY_NAME + " NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)), #Ore Beaurior Volcano but it's at the top so Rock it is
 
         #Crystals
-	    LocationData(BEAURIOR_ROCK_AP_REGION, VALKYRIE_JOB_CRYSTAL_LOCATION, 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
+	    LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_VOLCANO_DISPLAY_NAME + VALKYRIE_JOB_CRYSTAL_LOCATION, 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
 
         #Lake Delende
         #Treasure chests
@@ -1095,7 +1095,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Chest - Nickelodeon slime time :)", 1269 + treasure_index_offset), #Seekers Garb chest
 
         #Crystals
-        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SUMMONER_JOB_CRYSTAL_LOCATION, 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
+        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + SUMMONER_JOB_CRYSTAL_LOCATION, 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
 
         #Sequoia Athenaeum
         #Treasure chests
@@ -1132,7 +1132,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Crystals
         #Peak Ramparts
-        LocationData(PEAK_RAMPARTS_AP_REGION, BEASTMASTER_JOB_CRYSTAL_LOCATION, 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + BEASTMASTER_JOB_CRYSTAL_LOCATION, 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
 
         #The Chalice of Tar
         #Treasure chests
@@ -1145,7 +1145,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Gold sparkling above the Overpass on the way up", 2841 + npc_index_offset), #Ore
 
         #Crystals
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
 
         #Flyers Crag
         #Treasure chests
@@ -1224,7 +1224,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #1 Diamond Dust on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
 
         #Crystals
-        LocationData(JIDAMBA_EACLANEYA_AP_REGION, WEAVER_JOB_CRYSTAL_LOCATION, 2403 + crystal_index_offset),
+        LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + WEAVER_JOB_CRYSTAL_LOCATION, 2403 + crystal_index_offset),
 
         #The Deep Sea
         #Treasure chests
