@@ -259,7 +259,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     else:
                         # use the filename
                         args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                args.name[player] = handle_name(erargs.name[player], player, name_counter)
+                args.name[player] = handle_name(args.name[player], player, name_counter)
 
             except Exception as e:
                 logging.exception(f"Exception reading settings in file {path} document #{doc_index + 1} "
