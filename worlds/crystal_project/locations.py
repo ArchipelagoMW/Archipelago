@@ -1934,13 +1934,13 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(LOWER_ICE_LAKES_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Region Completion", 6043 + regionsanity_index_offset, regionsanity=True),
         LocationData(UPPER_NORTHERN_CAVE_AP_REGION, NORTHERN_CAVE_DISPLAY_NAME + " Region Completion", 6044 + regionsanity_index_offset, regionsanity=True),
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Region Completion", 6045 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Region Completion", 6046 + regionsanity_index_offset, regionsanity=True),
+        LocationData(SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Region Completion", 6046 + regionsanity_index_offset, regionsanity=True),
         LocationData(SEQUOIA_ATHENAEUM_AP_REGION, SEQUOIA_ATHENAEUM_DISPLAY_NAME + " Region Completion", 6047 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " Region Completion", 6048 + regionsanity_index_offset, regionsanity=True),
+        LocationData(NORTHERN_STRETCH_RACE_START_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " Region Completion", 6048 + regionsanity_index_offset, regionsanity=True),
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Region Completion", 6049 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Region Completion", 6050 + regionsanity_index_offset, regionsanity=True),
         LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Region Completion", 6051 + regionsanity_index_offset, regionsanity=True),
-        LocationData(JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
+        LocationData(EUROPA_SHRINE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " Region Completion", 6053 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Region Completion", 6054 + regionsanity_index_offset, regionsanity=True),
         LocationData(NEPTUNE_SHRINE_AP_REGION, NEPTUNE_SHRINE_DISPLAY_NAME + " Region Completion", 6055 + regionsanity_index_offset, regionsanity=True),
@@ -1951,5 +1951,6 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Region Completion", 6060 + regionsanity_index_offset, regionsanity=True),
         LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Region Completion", 6061 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_NEW_WORLD_AP_REGION, THE_NEW_WORLD_DISPLAY_NAME + " Region Completion", 6063 + regionsanity_index_offset, regionsanity=True),
-        ]
+        LocationData(THE_OLD_WORLD_AP_REGION, THE_OLD_WORLD_DISPLAY_NAME + " Region Completion", 6064 + regionsanity_index_offset, regionsanity=True),
+    ]
     return location_table

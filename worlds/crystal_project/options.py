@@ -396,35 +396,35 @@ class UseMods(Toggle):
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
-    newWorldStoneJobQuantity: NewWorldStoneJobQuantity
-    clamshellGoalQuantity: ClamshellGoalQuantity
-    extraClamshellsInPool: ExtraClamshellsInPool
-    jobRando: JobRando
-    startingJobQuantity: StartingJobQuantity
-    killBossesMode: KillBossesMode
+    new_world_stone_job_quantity: NewWorldStoneJobQuantity
+    clamshell_goal_quantity: ClamshellGoalQuantity
+    extra_clamshells_in_pool: ExtraClamshellsInPool
+    job_rando: JobRando
+    starting_job_quantity: StartingJobQuantity
+    kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
-    includedRegions: IncludedRegions
-    progressiveMountMode: ProgressiveMountMode
-    levelGating: LevelGating
-    levelComparedToEnemies: LevelComparedToEnemies
-    progressiveLevelSize: ProgressiveLevelSize
-    maxLevel: MaxLevel
-    keyMode: KeyMode
-    obscureRoutes: ObscureRoutes
+    included_regions: IncludedRegions
+    progressive_mount_mode: ProgressiveMountMode
+    level_gating: LevelGating
+    level_compared_to_enemies: LevelComparedToEnemies
+    progressive_level_size: ProgressiveLevelSize
+    max_level: MaxLevel
+    key_mode: KeyMode
+    obscure_routes: ObscureRoutes
     auto_spend_lp: AutoSpendLP
     auto_equip_passives: AutoEquipPassives
-    easyLeveling: EasyLeveling
-    progressiveEquipmentMode: ProgressiveEquipmentMode
-    startWithTreasureFinder: StartWithTreasureFinder
-    startWithMaps: StartWithMaps
+    easy_leveling: EasyLeveling
+    progressive_equipment_mode: ProgressiveEquipmentMode
+    start_with_treasure_finder: StartWithTreasureFinder
+    start_with_maps: StartWithMaps
     fill_full_map: FillFullMap
-    includeSummonAbilities: IncludeSummonAbilities
-    includeScholarAbilities: IncludeScholarAbilities
-    trapLikelihood: TrapLikelihood
+    include_summon_abilities: IncludeSummonAbilities
+    include_scholar_abilities: IncludeScholarAbilities
+    trap_likelihood: TrapLikelihood
     item_info_mode: ItemInfoMode
-    randomizeMusic: RandomizeMusic
-    useMods: UseMods
+    randomize_music: RandomizeMusic
+    use_mods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],

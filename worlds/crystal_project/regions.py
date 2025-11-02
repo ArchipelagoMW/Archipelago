@@ -167,14 +167,15 @@ class CrystalProjectLocation(Location):
     def __init__(self, player: int, name: str = " ", address = None, parent=None):
         super().__init__(player, name, address, parent)
 
+def init_ap_region_to_display_region_dictionary() -> None:
+    for display_region in display_region_subregions_dictionary:
+        for ap_region in display_region_subregions_dictionary[display_region]:
+            ap_region_to_display_region_dictionary[ap_region] = display_region
+
 def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
-
-    for display_region in display_region_subregions_dictionary:
-        for ap_region in display_region_subregions_dictionary[display_region]:
-            ap_region_to_display_region_dictionary[ap_region] = display_region
 
     rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
 
@@ -206,9 +207,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, SKUMPARADISE_DISPLAY_NAME, excluded),
     ]
 
-    if (options.includedRegions == options.includedRegions.option_advanced or
-        options.includedRegions == options.includedRegions.option_expert or
-        options.includedRegions == options.includedRegions.option_all):
+    if (options.included_regions == options.included_regions.option_advanced or
+        options.included_regions == options.included_regions.option_expert or
+        options.included_regions == options.included_regions.option_all):
         excluded = False
     else:
         excluded = True
@@ -237,8 +238,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, SALMON_BAY_DISPLAY_NAME, excluded),
     ]
 
-    if (options.includedRegions == options.includedRegions.option_expert or
-        options.includedRegions == options.includedRegions.option_all):
+    if (options.included_regions == options.included_regions.option_expert or
+        options.included_regions == options.included_regions.option_all):
         excluded = False
     else:
         excluded = True
@@ -272,7 +273,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, CONTINENTAL_TRAM_DISPLAY_NAME, excluded),
     ]
 
-    if options.includedRegions == options.includedRegions.option_all:
+    if options.included_regions == options.included_regions.option_all:
         excluded = False
     else:
         excluded = True
@@ -286,7 +287,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, THE_NEW_WORLD_DISPLAY_NAME, excluded),
     ]
 
-    if options.useMods.value == options.useMods.option_true:
+    if options.use_mods.value == options.use_mods.option_true:
         excluded = False
     else:
         excluded = True

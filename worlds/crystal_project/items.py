@@ -149,11 +149,11 @@ item_table: Dict[str, ItemData] = {
     RAMPART_KEY: ItemData(KEY, 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     FORGOTTEN_KEY: ItemData(KEY, 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
     SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
-    PRISON_KEY_RING: ItemData(KEY, 501 + item_index_offset, ItemClassification.progression, 0, 1),
-    BEAURIOR_KEY_RING: ItemData(KEY, 502 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    ICE_PUZZLE_KEY_RING: ItemData(KEY, 503 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 504 + item_index_offset, ItemClassification.progression, 0, 0, 1),
-    JIDAMBA_KEY_RING: ItemData(KEY, 505 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    PRISON_KEY_RING: ItemData(KEY, 650 + item_index_offset, ItemClassification.progression, 0, 1),
+    BEAURIOR_KEY_RING: ItemData(KEY, 651 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    ICE_PUZZLE_KEY_RING: ItemData(KEY, 652 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    SLIP_GLIDE_RIDE_KEY_RING: ItemData(KEY, 653 + item_index_offset, ItemClassification.progression, 0, 0, 1),
+    JIDAMBA_KEY_RING: ItemData(KEY, 654 + item_index_offset, ItemClassification.progression, 0, 0, 1),
 
     #Passes
     "Item - Quintar Pass": ItemData(ITEM, 7 + item_index_offset, ItemClassification.filler, 0), #We don't use this so it's filler to prevent it from being jsonified (now part of Progressive Quintar Flute)
@@ -1875,13 +1875,13 @@ def get_item_names_per_category() -> Dict[str, Set[str]]:
     return categories
 
 def get_starting_jobs(world: "CrystalProjectWorld") -> List[str]:
-    if world.options.jobRando.value == world.options.jobRando.option_full:
-        return get_random_starting_jobs(world, world.options.startingJobQuantity.value)
+    if world.options.job_rando.value == world.options.job_rando.option_full:
+        return get_random_starting_jobs(world, world.options.starting_job_quantity.value)
     else:
         return default_starting_job_list
 
 def get_random_starting_jobs(self, count:int) -> List[str]:
-    if self.options.useMods.value == self.options.useMods.option_true:
+    if self.options.use_mods.value == self.options.use_mods.option_true:
         return self.random.sample(list(self.item_name_groups[JOB]), count)
     else:
         return self.random.sample(list(self.base_game_jobs), count)
@@ -1889,11 +1889,11 @@ def get_random_starting_jobs(self, count:int) -> List[str]:
 def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
     job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too
 
-    if world.options.includedRegions.value == world.options.includedRegions.option_advanced:
+    if world.options.included_regions.value == world.options.included_regions.option_advanced:
         job_crystal_dictionary.update(job_crystal_advanced_dictionary)
 
-    if (world.options.includedRegions.value == world.options.includedRegions.option_expert
-        or world.options.includedRegions.value == world.options.includedRegions.option_all):
+    if (world.options.included_regions.value == world.options.included_regions.option_expert
+        or world.options.included_regions.value == world.options.included_regions.option_all):
         job_crystal_dictionary.update(job_crystal_advanced_dictionary)
         job_crystal_dictionary.update(job_crystal_expert_dictionary)
 

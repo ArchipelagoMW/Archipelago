@@ -11,9 +11,9 @@ class TestSpawningMeadows(CrystalProjectTestBase):
 
 class TestSpawningMeadowsObscureRoutes(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
-        "obscureRoutes": 1
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
+        "obscure_routes": 1
     }
 
     def test_obscure_routes(self):
@@ -28,9 +28,9 @@ class TestSpawningMeadowsObscureRoutes(CrystalProjectTestBase):
 
 class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
-        "obscureRoutes": 0
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
+        "obscure_routes": 0
     }
 
     def test_obscure_routes(self):
@@ -55,9 +55,9 @@ class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
 
 class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
-        "obscureRoutes": 0
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
+        "obscure_routes": 0
     }
 
     def test_mercury_shrine_connection(self):
@@ -90,9 +90,9 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
 
 class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
-        "progressiveMountMode": 0,
-        "obscureRoutes": 0
+        "level_gating": 1,
+        "progressive_mount_mode": 0,
+        "obscure_routes": 0
     }
     # Default Progressive Level Size: 6, 1 Progressive Level in player's starting inventory
     # Poko Poko Desert: 30

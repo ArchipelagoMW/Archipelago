@@ -8,10 +8,10 @@ from BaseClasses import CollectionState
 
 class TestLevelGatingOff(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
     def test_region_accessibility(self):
@@ -36,9 +36,9 @@ class TestLevelGatingOff(CrystalProjectTestBase):
 
 class TestLevelGatingLevelPasses(CrystalProjectTestBase):
     options = {
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
     # Level gating defaults: Progressive Level Passes, Progressive Level Size = 6
     def test_region_accessibility(self):
@@ -118,27 +118,27 @@ class TestLevelGatingLevelPasses(CrystalProjectTestBase):
 
 class TestLevelGatingLevelCapped(TestLevelGatingLevelPasses):
     options = {
-        "levelGating": 2,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 2,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
 class TestLevelGatingLevelCatchUp(TestLevelGatingLevelPasses):
     options = {
-        "levelGating": 3,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 3,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
 class TestMaxLevelIncrease(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
-        "maxLevel": 62,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 1,
+        "max_level": 62,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
     def test_boss_above_level_60(self):
@@ -170,11 +170,11 @@ class TestMaxLevelIncrease(CrystalProjectTestBase):
 
 class TestMaxLevelDecrease(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
-        "maxLevel": 3,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 1,
+        "max_level": 3,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
     # you can do everything at level 3 B)
@@ -194,9 +194,9 @@ class TestMaxLevelDecrease(CrystalProjectTestBase):
 
 class TestProgressiveLevelSize(CrystalProjectTestBase):
     options = {
-        "progressiveLevelSize": 10,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
+        "progressive_level_size": 10,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
     }
 
     def test_region_accessibility(self):
@@ -210,12 +210,12 @@ class TestProgressiveLevelSize(CrystalProjectTestBase):
 
 class TestLevelComparedToEnemiesIncrease(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
-        "levelComparedToEnemies": 5,
-        "maxLevel": 62,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 1,
+        "level_compared_to_enemies": 5,
+        "max_level": 62,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
     def test_region_accessibility(self):
@@ -240,12 +240,12 @@ class TestLevelComparedToEnemiesIncrease(CrystalProjectTestBase):
 
 class TestLevelComparedToEnemiesDecrease(CrystalProjectTestBase):
     options = {
-        "levelGating": 1,
-        "levelComparedToEnemies": -5,
-        "maxLevel": 62,
-        "progressiveMountMode": 0,
-        "keyMode": 0,
-        "killBossesMode": 1
+        "level_gating": 1,
+        "level_compared_to_enemies": -5,
+        "max_level": 62,
+        "progressive_mount_mode": 0,
+        "key_mode": 0,
+        "kill_bosses_mode": 1
     }
 
     def test_region_accessibility(self):
