@@ -41,7 +41,7 @@ class MultiuseKeyMethods(CrystalProjectTestBase):
 
 class TestSkeletonKeyMode(MultiuseKeyMethods):
     options = {
-        "keyMode": 0
+        "key_mode": 0
     }
 
     def test_has_skeleton_key(self):
@@ -51,7 +51,7 @@ class TestKeyRings(MultiuseKeyMethods):
     run_default_tests = False
 
     options = {
-        "keyMode": 1
+        "key_mode": 1
     }
 
     def test_has_no_dungeon_keys(self):
@@ -101,7 +101,7 @@ class TestVanillaKeys(MultiuseKeyMethods):
     run_default_tests = False
 
     options = {
-        "keyMode": 2
+        "key_mode": 2
     }
 
     def test_has_no_keyring(self):
@@ -176,7 +176,7 @@ class TestKeyRingsSkeleFree(TestKeyRings):
     run_default_tests = False
 
     options = {
-        "keyMode": 3
+        "key_mode": 3
     }
 
     def test_has_no_dungeon_keys(self):
@@ -207,7 +207,7 @@ class TestVanillaKeysSkeleFree(TestVanillaKeys):
     run_default_tests = False
 
     options = {
-        "keyMode": 4
+        "key_mode": 4
     }
 
     def test_has_no_skeleton_key(self):

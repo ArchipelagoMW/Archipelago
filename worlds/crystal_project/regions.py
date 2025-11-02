@@ -206,9 +206,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, SKUMPARADISE_DISPLAY_NAME, excluded),
     ]
 
-    if (options.includedRegions == options.includedRegions.option_advanced or
-        options.includedRegions == options.includedRegions.option_expert or
-        options.includedRegions == options.includedRegions.option_all):
+    if (options.included_regions == options.included_regions.option_advanced or
+        options.included_regions == options.included_regions.option_expert or
+        options.included_regions == options.included_regions.option_all):
         excluded = False
     else:
         excluded = True
@@ -237,8 +237,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, SALMON_BAY_DISPLAY_NAME, excluded),
     ]
 
-    if (options.includedRegions == options.includedRegions.option_expert or
-        options.includedRegions == options.includedRegions.option_all):
+    if (options.included_regions == options.included_regions.option_expert or
+        options.included_regions == options.included_regions.option_all):
         excluded = False
     else:
         excluded = True
@@ -272,7 +272,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, CONTINENTAL_TRAM_DISPLAY_NAME, excluded),
     ]
 
-    if options.includedRegions == options.includedRegions.option_all:
+    if options.included_regions == options.included_regions.option_all:
         excluded = False
     else:
         excluded = True
@@ -286,7 +286,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
         create_display_region(world, player, locations_per_region, THE_NEW_WORLD_DISPLAY_NAME, excluded),
     ]
 
-    if options.useMods.value == options.useMods.option_true:
+    if options.use_mods.value == options.use_mods.option_true:
         excluded = False
     else:
         excluded = True

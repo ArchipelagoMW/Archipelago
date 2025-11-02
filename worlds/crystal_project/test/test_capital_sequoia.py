@@ -7,8 +7,8 @@ from .bases import CrystalProjectTestBase
 
 class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
     }
 
     def test_region_connections_no_items(self):
@@ -44,8 +44,8 @@ class TestCapitalSequoiaNoLevelGating(CrystalProjectTestBase):
 
 class TestCapitalSequoiaWithRegionsanity(CrystalProjectTestBase):
     options = {
-        "levelGating": 0,
-        "progressiveMountMode": 0,
+        "level_gating": 0,
+        "progressive_mount_mode": 0,
         "regionsanity": 1,
         "start_inventory_from_pool": {SPAWNING_MEADOWS_PASS: 1}
     }

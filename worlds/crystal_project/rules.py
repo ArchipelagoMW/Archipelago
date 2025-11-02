@@ -33,15 +33,15 @@ class CrystalProjectLogic:
         return count - self.get_starting_job_count()
 
     def get_starting_job_count(self):
-        if self.options.jobRando.value == self.options.jobRando.option_full:
-            return self.options.startingJobQuantity.value
+        if self.options.job_rando.value == self.options.job_rando.option_full:
+            return self.options.starting_job_quantity.value
         else:
             return 6
 
     def has_enough_clamshells(self, state: CollectionState):
         clamshell_quantity = 2
         if self.options.goal.value == self.options.goal.option_clamshells:
-            clamshell_quantity = self.options.clamshellGoalQuantity.value
+            clamshell_quantity = self.options.clamshell_goal_quantity.value
         return state.has(CLAMSHELL, self.player, clamshell_quantity)
 
     def has_rental_quintar(self, state: CollectionState, rental_display_region_name: str) -> bool:
@@ -87,11 +87,11 @@ class CrystalProjectLogic:
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 7)
 
     def obscure_routes_on(self, state: CollectionState) -> bool:
-        return self.options.obscureRoutes.value == self.options.obscureRoutes.option_true
+        return self.options.obscure_routes.value == self.options.obscure_routes.option_true
 
     def new_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
-            return self.has_jobs(state, self.options.newWorldStoneJobQuantity.value)    
+            return self.has_jobs(state, self.options.new_world_stone_job_quantity.value)
         else:
             return state.has(NEW_WORLD_STONE, self.player)
 
@@ -102,15 +102,15 @@ class CrystalProjectLogic:
             return state.has(OLD_WORLD_STONE, self.player)
 
     def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
-        min_level = min_level + self.options.levelComparedToEnemies.value
+        min_level = min_level + self.options.level_compared_to_enemies.value
 
-        if min_level > self.options.maxLevel.value:
-            min_level = self.options.maxLevel.value
+        if min_level > self.options.max_level.value:
+            min_level = self.options.max_level.value
 
         # Players start with 1 Progressive Level
-        count = ((min_level - 1) // self.options.progressiveLevelSize.value) + 1
+        count = ((min_level - 1) // self.options.progressive_level_size.value) + 1
 
-        if not self.options.levelGating.value == self.options.levelGating.option_none:
+        if not self.options.level_gating.value == self.options.level_gating.option_none:
             return state.has(PROGRESSIVE_LEVEL, self.player, count)
 
         return True
@@ -120,8 +120,8 @@ class CrystalProjectLogic:
     def has_key(self, state: CollectionState, key_name: str, count: int = 1) -> bool:
         if state.has(SKELETON_KEY, self.player):
             return True
-        if (self.options.keyMode.value == self.options.keyMode.option_key_ring or
-            self.options.keyMode.value == self.options.keyMode.option_key_ring_skelefree):
+        if (self.options.key_mode.value == self.options.key_mode.option_key_ring or
+            self.options.key_mode.value == self.options.key_mode.option_key_ring_skelefree):
             return self.has_key_ring(state, key_name)
         return state.has(key_name, self.player, count)
 

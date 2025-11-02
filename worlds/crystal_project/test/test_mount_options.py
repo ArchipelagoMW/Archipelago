@@ -7,8 +7,8 @@ from ..constants.ap_regions import *
 
 class TestProgressiveMountModeOn(CrystalProjectTestBase):
     options = {
-        "progressiveMountMode": 1,
-        "levelGating": 0,
+        "progressive_mount_mode": 1,
+        "level_gating": 0,
     }
 
     def test_quintar_pass(self):
@@ -74,8 +74,8 @@ class TestProgressiveMountModeOn(CrystalProjectTestBase):
 
 class TestProgressiveMountModeOff(CrystalProjectTestBase):
     options = {
-        "progressiveMountMode": 0,
-        "levelGating": 0,
+        "progressive_mount_mode": 0,
+        "level_gating": 0,
     }
 
     def test_quintar_pass(self):
