@@ -167,14 +167,15 @@ class CrystalProjectLocation(Location):
     def __init__(self, player: int, name: str = " ", address = None, parent=None):
         super().__init__(player, name, address, parent)
 
+def init_ap_region_to_display_region_dictionary() -> None:
+    for display_region in display_region_subregions_dictionary:
+        for ap_region in display_region_subregions_dictionary[display_region]:
+            ap_region_to_display_region_dictionary[ap_region] = display_region
+
 def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], options: CrystalProjectOptions) -> None:
     multiworld = world.multiworld
     player = world.player
     logic = CrystalProjectLogic(player, options)
-
-    for display_region in display_region_subregions_dictionary:
-        for ap_region in display_region_subregions_dictionary[display_region]:
-            ap_region_to_display_region_dictionary[ap_region] = display_region
 
     rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
 

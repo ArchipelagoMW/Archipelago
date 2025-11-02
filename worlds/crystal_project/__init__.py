@@ -15,7 +15,7 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     display_region_name_to_pass_dict
 from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData
 from .presets import crystal_project_options_presets
-from .regions import init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
+from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
@@ -165,6 +165,8 @@ class CrystalProjectWorld(World):
                 self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_regions(self) -> None:
+        init_ap_region_to_display_region_dictionary()
+
         locations = get_locations(self.player, self.options)
 
         if self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true:
@@ -175,11 +177,7 @@ class CrystalProjectWorld(World):
             shops = get_shops(self.player, self.options)
             locations.extend(shops)
 
-        if self.options.regionsanity.value != self.options.shopsanity.option_disabled:
-            region_completions = get_region_completions(self.player, self.options)
-            locations.extend(region_completions)
-
-        if self.options.use_mods:
+        if self.options.use_mods.value == self.options.use_mods.option_true:
             for modded_location in self.modded_locations:
                 location = LocationData(display_region_subregions_dictionary[modded_location.display_region][0],
                                         modded_location.name,
@@ -187,7 +185,7 @@ class CrystalProjectWorld(World):
                                         build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
                 locations.append(location)
 
-        if self.options.use_mods and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
+        if self.options.use_mods.value == self.options.use_mods.option_true and self.options.shopsanity.value != self.options.shopsanity.option_disabled:
             for shop in self.modded_shops:
                 location = LocationData(display_region_subregions_dictionary[shop.display_region][0],
                                         shop.name,
@@ -195,7 +193,7 @@ class CrystalProjectWorld(World):
                                         build_condition_rule(shop.display_region, shop.rule_condition, self))
                 locations.append(location)
 
-        if self.options.use_mods and self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true:
+        if self.options.use_mods.value == self.options.use_mods.option_true and self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true:
             for modded_location in self.modded_bosses:
                 location = LocationData(display_region_subregions_dictionary[modded_location.display_region][0],
                                         modded_location.name,
@@ -203,11 +201,24 @@ class CrystalProjectWorld(World):
                                         build_condition_rule(modded_location.display_region, modded_location.rule_condition, self))
                 locations.append(location)
 
-        if self.options.use_mods:
+        if self.options.use_mods.value == self.options.use_mods.option_true:
             for removed_location in self.removed_locations:
                 for location in locations:
                     if location.name == removed_location.name:
                         locations.remove(location)
+
+        #Regionsanity completion locations need to be added after all other locations so they can be removed if the region is empty (e.g. Neptune Shrine w/o Shopsanity)
+        if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
+            region_completions = get_region_completions(self.player, self.options)
+            for completion in region_completions:
+                display_region_empty = True
+                for location in locations:
+                    if ap_region_to_display_region_dictionary[completion.ap_region] == ap_region_to_display_region_dictionary[location.ap_region]:
+                        display_region_empty = False
+                        break
+                if display_region_empty:
+                    region_completions.remove(completion)
+            locations.extend(region_completions)
 
         init_areas(self, locations, self.options)
 
