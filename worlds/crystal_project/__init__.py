@@ -138,6 +138,7 @@ class CrystalProjectWorld(World):
                     self.starter_ap_region = slot_data["starterRegion"]
 
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
+        self.multiworld.push_precollected(self.create_item(ARCHIPELAGO_STONE))
 
         # Checks if starting jobs is empty and if so fills it.  If this is UT re-gen it won't be empty
         if not self.starting_jobs:
@@ -366,6 +367,7 @@ class CrystalProjectWorld(World):
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
         excluded_items.add(HOME_POINT_STONE)
+        excluded_items.add(ARCHIPELAGO_STONE)
 
         for job in self.starting_jobs:
             excluded_items.add(job)

@@ -271,6 +271,7 @@ item_table: Dict[str, ItemData] = {
 
     #Teleport items (shards not included since they are stones but worse)
     HOME_POINT_STONE: ItemData(TELEPORT_STONE, 19 + item_index_offset, ItemClassification.useful), #Starter pack
+    ARCHIPELAGO_STONE: ItemData(TELEPORT_STONE, 233 + item_index_offset, ItemClassification.useful), #Teleports you to your starting location
     GAEA_STONE: ItemData(TELEPORT_STONE, 23 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Capital Sequoia, Advanced Regions
     MERCURY_STONE: ItemData(TELEPORT_STONE, 13 + item_index_offset, ItemClassification.progression), #Teleport to Beginner Regions
     POSEIDON_STONE: ItemData(TELEPORT_STONE, 57 + item_index_offset, ItemClassification.progression, 0, 1), #Teleport to Salmon River, Advanced Regions
