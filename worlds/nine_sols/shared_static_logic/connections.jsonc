@@ -988,7 +988,7 @@
     { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Lower Right Exit", "requires": [ { "anyOf": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // climb the ledge to the left
         [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] // or take the portal and cross the yellow water
-    ] } ] },
+    ] } ] }, // on logic_level: easy, T-dash
     { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Upper Caves", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] }
     ] },
@@ -1115,7 +1115,14 @@
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] },
         { "item": "Wall Climb" }
     ] },
-    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Platform Rotation Button", "requires": [] }, // rope to portal, fall
+    { "from": "GoSW - Upper Right Exit", "to": "GoSW - Lower Platform Rotation Button", "requires": [
+        // climb up rope, take portal on the right, fall down
+    ] },
+    { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Upper Right Exit", "requires": [
+        // rotate platforms to vertical
+        { "item": "Wall Climb" } // climb up the platform / green wall on the right
+        // go through portal, fall and walk right
+    ] },
     { "from": "GoSW - Root Node", "to": "GoSW - Lower Platform Rotation Button", "requires": [] }, // fall
     { "from": "GoSW - Lower Platform Rotation Button", "to": "GoSW - Lower Right Exits", "requires": [] }, // press button, fall, go right and open one-way door
     // This single region connection into SBR represents solving the rotating platforms puzzle
