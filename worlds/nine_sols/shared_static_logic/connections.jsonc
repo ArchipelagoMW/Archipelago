@@ -986,11 +986,11 @@
     ] } ] }, // on logic_level: easy, bow hover OR (T-dash AND (CL OR AD)) into portal
     // on logic_level: ledge_storage, T-dash setup for LS hover into portal
     { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Lower Right Exit", "requires": [ { "anyOf": [
-         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // climb the ledge to the left
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // climb the ledge to the left
         [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] // or take the portal and cross the yellow water
     ] } ] },
     { "from": "GoSY - Middle Caves & Lower Portals", "to": "GoSY - Upper Caves", "requires": [
-         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] }
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] }
     ] },
     { "from": "GoSY - Upper Caves", "to": "GoSY - Middle Caves & Lower Portals", "requires": [] }, // fall
     { "from": "GoSY - Upper Caves", "to": "GoSY - Below Elevator & Upper Cave Portals", "requires": [ { "anyOf": [
