@@ -372,8 +372,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
     #A Jojo Sewers <-> Sewers to Boomer Society connector; untraversable w/o a region pass in Regionsanity
     fancy_add_exits(world, SEWERS_SECRET_PASSWORD_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION],
-                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_disabled,
-                     SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or logic.options.regionsanity.value == logic.options.regionsanity.option_disabled})
+                    {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled,
+                     SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled})
     fancy_add_exits(world, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, BOOMER_SOCIETY_AP_REGION],
                     #Swimming connection to Jojo Sewers Main (lol) bypasses the Secret Password region
                     {JOJO_SEWERS_AP_REGION: lambda state: logic.has_swimming(state)})
