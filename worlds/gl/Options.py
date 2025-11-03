@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin, DefaultOnToggle
 
 
 class PlayerCount(Range):
@@ -31,7 +31,7 @@ class ChestBarrels(Choice):
     default = 3
 
 
-class Obelisks(Choice):
+class Obelisks(DefaultOnToggle):
     """
     Choose how you want Obelisks to be randomized.
     None: Obelisks will be placed in their own locations.
@@ -39,12 +39,9 @@ class Obelisks(Choice):
     """
 
     display_name = "Obelisks"
-    option_none = 0
-    option_all_obelisks = 1
-    default = 1
 
 
-class MirrorShards(Choice):
+class MirrorShards(DefaultOnToggle):
     """
     Choose how you want Mirror Shards to be randomized.
     None: Mirror Shards will be placed in their own locations.
@@ -52,9 +49,6 @@ class MirrorShards(Choice):
     """
 
     display_name = "Mirror Shards"
-    option_none = 0
-    option_all_shards = 1
-    default = 1
 
 
 class MaxDifficultyToggle(Toggle):

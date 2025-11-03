@@ -1,5 +1,3 @@
-from typing import Dict, List, Tuple
-
 from .Locations import (
     LocationData,
     arctic_docks,
@@ -31,7 +29,7 @@ from .Locations import (
 )
 
 # Item name to ram value conversion
-inv_dict: Dict[Tuple, str] = {
+inv_dict: dict[tuple, str] = {
     (0x0, 0x6, 0x0): "Gold",
     (0x0, 0x7, 0x0): "Key",
     (0x0, 0xA, 0x0): "Level",
@@ -66,8 +64,6 @@ inv_dict: Dict[Tuple, str] = {
     (0x28, 0x40, 0x9): "Thunder Hammer",
     (0x11, 0xA0, 0x0): "Anti-Death Halo",
     (0x11, 0xC0, 0x0): "Invulnerability",
-    (0x0, 0x1, 0x0): "Fruit",
-    (0x0, 0x1, 0x0): "Meat",
     (0x0, 0x1, 0x0): "Health",
     (0x0, 0x10, 0x82): "Runestone",
     (0x0, 0x60, 0x82): "Mirror Shard",
@@ -97,7 +93,7 @@ inv_dict: Dict[Tuple, str] = {
 characters = ["Minotaur", "Falconess", "Tigress", "Jackal", "Sumner"]
 
 # Item ID to rom ID conversion
-item_dict: Dict[int, bytes] = {
+item_dict: dict[int, bytes] = {
     77780000: [0x0, 0x0],
     77780001: [0x1, 0x1],
     77780002: [0x1, 0x2],
@@ -183,7 +179,7 @@ timers = [
 
 # Base item charge count per pickup
 # Some items are bitwise
-base_count: Dict[str, int] = {
+base_count: dict[str, int] = {
     "Key": 1,
     "Lightning Potion": 1,
     "Light Potion": 1,
@@ -258,7 +254,7 @@ base_count: Dict[str, int] = {
 castle_id = [1, 6, 3, 4, 5]
 
 # Area ID << 4 + Level ID to raw location list conversion
-level_locations: Dict[int, List[LocationData]] = {
+level_locations: dict[int, list[LocationData]] = {
     0x11: castle_courtyard,
     0x12: dungeon_of_torment,
     0x13: tower_armory,
@@ -328,7 +324,7 @@ skipped_local_locations = [
     "Yeti's Cavern - Yeti Mirror Shard"
 ]
 
-level_names: Dict[int, str] = {
+level_names: dict[int, str] = {
     0x11: "Castle Courtyard",
     0x12: "Dungeon of Torment",
     0x13: "Tower Armory",
@@ -361,7 +357,7 @@ level_names: Dict[int, str] = {
 # Count of all spawners in a level
 # Used for obj_read address offset calculation
 # Values are spawner difficulty
-spawners: Dict[int, List[int]] = {
+spawners: dict[int, list[int]] = {
     0x11: [0, 0, 0, 4, 3, 2, 0, 0, 2, 4, 2, 0, 2, 4, 0, 3, 4, 4, 3, 0, 2, 0, 0, 3, 4, 0, 2, 2, 0, 3, 0, 4, 3, 0, 0, 2, 0, 2, 2, 4, 3, 0, 3, 2, 4, 2, 2, 2, 4, 0, 4, 3, 2, 0, 4, 0, 3, 3, 4, 2, 3, 0, 0, 0, 2, 3, 4, 2, 2, 2, 2, 0, 3, 2, 0, 2, 0, 0, 3, 0, 4, 2, 2, 0, 0, 0, 3, 0, 3, 0, 3, 3, 0, 0, 4, 4, 3, 0, 2, 0, 2, 3, 0, 4, 0, 2, 2, 0, 2, 4, 0, 2, 0, 3, 4, 0, 4, 3, 2, 0, 3, 0],
     0x12: [0, 0, 0, 2, 3, 2, 0, 2, 0, 2, 3, 0, 2, 0, 2, 0, 3, 2, 0, 3, 2, 0, 3, 0, 0, 2, 0, 3, 0, 0, 4, 3, 0, 0, 0, 2, 4, 3, 2, 2, 0, 0, 0, 0, 2, 2, 0, 2, 0, 3, 4, 3, 0, 0, 2, 2, 3, 3, 3, 2, 2, 4, 4, 4],
     0x13: [0, 0, 0, 2, 0, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 4, 4, 2, 3, 0, 0, 3, 0, 2, 0, 2, 3, 3, 2, 0, 0, 2, 3, 0, 2, 0, 4, 2, 4, 2, 2, 3, 0, 2, 0, 3, 4, 3, 0, 0, 3, 3, 3, 4, 2, 3, 4, 3, 0, 0, 3, 2, 2, 2, 0, 2, 0, 3, 2, 0, 2, 0, 4, 4, 3, 0, 4, 3, 0, 0, 2, 3, 4],
@@ -482,11 +478,11 @@ level_header = [
 
 # Convert area to base level
 # Used for difficulty scaling
-difficulty_convert: Dict[int, int] = {0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35, 0x11: 40, 0x8: 45}
+difficulty_convert: dict[int, int] = {0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35, 0x11: 40, 0x8: 45}
 
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
-difficulty_lambda: Dict[int, List[int]] = {
+difficulty_lambda: dict[int, list[int]] = {
     0x2: [0, 0, 1, 2],
     0x1: [0, 1, 2, 3],
     0x7: [0, 3, 4, 5],
@@ -527,7 +523,7 @@ colors = {
 }
 
 # Level for vanilla scaling
-vanilla: Dict[int, int] = {
+vanilla: dict[int, int] = {
     0x2: 10,
     0x1: 25,
     0x7: 40,

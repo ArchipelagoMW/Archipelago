@@ -1,10 +1,9 @@
 import typing
 
-from BaseClasses import ItemClassification
 from worlds.generic.Rules import add_rule, forbid_item
 
 from .Arrays import difficulty_lambda, level_locations, no_obelisks
-from .Items import item_list, obelisks
+from .Items import obelisks
 from .Locations import all_locations, chimeras_keep, dragons_lair, gates_of_the_underworld
 
 if typing.TYPE_CHECKING:

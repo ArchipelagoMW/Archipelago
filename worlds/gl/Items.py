@@ -1,9 +1,8 @@
-import typing
-
 from BaseClasses import Item, ItemClassification
+from typing import NamedTuple
 
 
-class ItemData(typing.NamedTuple):
+class ItemData(NamedTuple):
     code: int
     item_name: str
     progression: ItemClassification
@@ -13,7 +12,7 @@ class GLItem(Item):
     game: str = "Gauntlet Legends"
 
 
-item_list: typing.List[ItemData] = [
+item_list: list[ItemData] = [
     ItemData(77780000, "Key", ItemClassification.filler),
     ItemData(77780001, "Lightning Potion", ItemClassification.filler),
     ItemData(77780002, "Light Potion", ItemClassification.filler),
@@ -83,7 +82,7 @@ traps = [
     ItemData(77780063, "Poison Fruit", ItemClassification.trap),
 ]
 
-item_frequencies: typing.Dict[str, int] = {
+item_frequencies: dict[str, int] = {
     "Key": 1000,
     "Lightning Potion": 60,
     "Light Potion": 60,
@@ -138,5 +137,5 @@ mirror_shards = [
     "Plague Fiend Mirror Shard"
 ]
 
-item_table: typing.Dict[str, ItemData] = {item.item_name: item for item in item_list + traps}
-items_by_id: typing.Dict[int, ItemData] = {item.code: item for item in item_list + traps}
+item_table: dict[str, ItemData] = {item.item_name: item for item in item_list + traps}
+items_by_id: dict[int, ItemData] = {item.code: item for item in item_list + traps}

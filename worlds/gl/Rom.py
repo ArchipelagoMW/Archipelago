@@ -5,11 +5,9 @@ import os
 import traceback
 import typing
 import zlib
-from typing import Dict, List, Tuple
 
 import Utils
 from BaseClasses import Location, ItemClassification
-from settings import get_settings
 
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
@@ -55,10 +53,10 @@ class LevelData:
     end_addr2: int
     end_addr3: int
     portal_addr: int
-    items: List[bytearray]
-    spawners: List[bytearray]
-    objects: List[bytearray]
-    chests: List[bytearray]
+    items: list[bytearray]
+    spawners: list[bytearray]
+    objects: list[bytearray]
+    chests: list[bytearray]
     end: bytes
     items_replaced_by_obelisks: int = 0
     chests_replaced_by_obelisks: int = 0
@@ -119,7 +117,7 @@ class GLPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
         for i in range(len(level_locations)):
-            level: Dict[str, Tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
+            level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
             stream, data = get_level_data(stream, level_size[i], i)
             for j, (location_name, item) in enumerate(level.items()):
@@ -227,7 +225,7 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     for i, level in enumerate(level_locations.values()):
-        locations: List[Location] = []
+        locations: list[Location] = []
         for location in level:
             if location.name in world.disabled_locations:
                 locations += [GLLocation(world.player, location.name, location.id)]
@@ -236,7 +234,7 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
 
 
-def locations_to_dict(locations: List[Location]) -> Dict[str, Tuple]:
+def locations_to_dict(locations: list[Location]) -> dict[str, tuple]:
     return {location.name: (location.item.code, location.item.player) if location.item is not None else (0, 0) for location in locations}
 
 

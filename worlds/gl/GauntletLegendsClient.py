@@ -3,7 +3,7 @@ import datetime
 import os
 import socket
 import traceback
-from typing import List, Optional
+from typing import Optional
 
 import Patch
 from BaseClasses import ItemClassification
@@ -163,7 +163,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         """Toggle Deathlink on or off"""
         self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
         self.ctx.update_death_link(self.ctx.deathlink_enabled)
-        logger.info(f"Deathlink {'Enabled.' if self.ctx.deathlink_enabled else 'Disabled.'}")
+        logger.info(f"Deathlink {('Enabled.' if self.ctx.deathlink_enabled else 'Disabled.')}")
 
     def _cmd_instantmax_toggle(self):
         """Toggle InstantMax on or off"""
@@ -171,7 +171,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
             logger.info("Cannot toggle InstantMax: slot data not initialized.")
             return
         self.ctx.glslotdata["instant_max"] = not self.ctx.glslotdata["instant_max"]
-        logger.info(f"InstantMax {'Enabled.' if self.ctx.glslotdata["instant_max"] else 'Disabled.'}")
+        logger.info(f"InstantMax {('Enabled.' if self.ctx.glslotdata["instant_max"] else 'Disabled.')}")
 
     def _cmd_players(self, value: int):
         """Set number of local players"""
@@ -187,7 +187,7 @@ class GauntletLegendsContext(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.useful: List[NetworkItem] = []
+        self.useful: list[NetworkItem] = []
         self.deathlink_pending: bool = False
         self.deathlink_enabled: bool = False
         self.deathlink_triggered: bool = False
@@ -198,21 +198,21 @@ class GauntletLegendsContext(CommonContext):
         self.glslotdata = None
         self.socket = RetroSocket()
         self.rom_loaded: bool = False
-        self.locations_checked: List[int] = []
-        self.inventory: List[List[InventoryEntry]] = []
-        self.inventory_raw: List[RamChunk] = []
-        self.item_objects: List[ObjectEntry] = []
-        self.chest_objects: List[ObjectEntry] = []
-        self.item_objects_init: List[ObjectEntry] = []
-        self.chest_objects_init: List[ObjectEntry] = []
+        self.locations_checked: list[int] = []
+        self.inventory: list[list[InventoryEntry]] = []
+        self.inventory_raw: list[RamChunk] = []
+        self.item_objects: list[ObjectEntry] = []
+        self.chest_objects: list[ObjectEntry] = []
+        self.item_objects_init: list[ObjectEntry] = []
+        self.chest_objects_init: list[ObjectEntry] = []
         self.retro_connected: bool = False
         self.level_loading: bool = False
         self.in_game: bool = False
         self.objects_loaded: bool = False
-        self.obelisks: List[NetworkItem] = []
-        self.item_locations: List[LocationData] = []
-        self.obelisk_locations: List[LocationData] = []
-        self.chest_locations: List[LocationData] = []
+        self.obelisks: list[NetworkItem] = []
+        self.item_locations: list[LocationData] = []
+        self.obelisk_locations: list[LocationData] = []
+        self.chest_locations: list[LocationData] = []
         self.extra_items: int = 0
         self.extra_spawners: int = 0
         self.extra_chests: int = 0
@@ -241,7 +241,7 @@ class GauntletLegendsContext(CommonContext):
         self.inventory = []
         self.inventory_raw = []
         for player in range(self.players):
-            _inv: List[InventoryEntry] = []
+            _inv: list[InventoryEntry] = []
             b = RamChunk(await self.socket.read(message_format(READ, f"0x{format(INV_ADDR + (0x400 * player), 'x')} 1008")))
             if b is None:
                 return
@@ -253,7 +253,7 @@ class GauntletLegendsContext(CommonContext):
                 if _inv[i].p_addr == 0:
                     _inv = _inv[i:]
                     break
-            new_inv: List[InventoryEntry] = []
+            new_inv: list[InventoryEntry] = []
             new_inv += [_inv[0]]
             addr = new_inv[0].n_addr
             while True:
@@ -288,7 +288,7 @@ class GauntletLegendsContext(CommonContext):
     # Objects are 0x3C bytes long
     # Modes: 0 = items, 1 = chests/barrels
     async def obj_read(self, mode=0):
-        _obj: List[ObjectEntry] = []
+        _obj: list[ObjectEntry] = []
         b: RamChunk
         if self.offset == -1:
             log_arr = []
@@ -716,7 +716,7 @@ class GauntletLegendsContext(CommonContext):
     # Compare values of loaded objects to see if they have been collected
     # Sends locations out to server based on object lists read in obj_read()
     # Local obelisks and mirror shards have special cases
-    async def location_loop(self) -> List[int]:
+    async def location_loop(self) -> list[int]:
         if not self.logged:
             await asyncio.sleep(0.5)
         await self.obj_read()
@@ -915,7 +915,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     await ctx.die()
                 if not ctx.level_loading and not ctx.in_game:
                     if not ctx.in_portal:
-                        ctx.in_portal = await ctx.portaling()
+                        ctx.in_portal = bool(await ctx.portaling())
                     if ctx.in_portal and not ctx.init_refactor:
                         await asyncio.sleep(0.1)
                         ctx.movement = await ctx.limbo_check()

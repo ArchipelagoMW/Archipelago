@@ -1,10 +1,9 @@
 import os
-import typing
-
 import settings
+
 from BaseClasses import ItemClassification, Tutorial, Item, CollectionState
 from Fill import fast_fill
-from typing import List
+from typing import ClassVar
 
 from worlds.AutoWorld import WebWorld, World
 
@@ -68,13 +67,13 @@ class GauntletLegendsWorld(World):
     web = GauntletLegendsWebWorld()
     options_dataclass = GLOptions
     options: GLOptions
-    settings: typing.ClassVar[GLSettings]
+    settings: ClassVar[GLSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
-    death: List[Item]
-    items: List[Item]
+    death: list[Item]
+    items: list[Item]
 
-    disabled_locations: typing.Set[str]
+    disabled_locations: set[str]
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
@@ -279,7 +278,7 @@ class GauntletLegendsWorld(World):
         return self.random.choice(list(filter(lambda item: item.progression == ItemClassification.filler, item_list))).item_name
 
     def generate_output(self, output_directory: str) -> None:
-        patch = GLProcedurePatch(player=self.player, player_name=self.multiworld.player_name[self.player])
+        patch = GLProcedurePatch(player=self.player, player_name=self.player_name)
         write_files(self, patch)
         rom_path = os.path.join(
             output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}",

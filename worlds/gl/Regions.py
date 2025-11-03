@@ -1,7 +1,7 @@
 import typing
+from typing import Optional, Callable
 
-from BaseClasses import Entrance, Region
-from .Items import item_list
+from BaseClasses import Region
 
 from .Locations import (
     GLLocation,
@@ -95,7 +95,7 @@ def create_regions(world: "GauntletLegendsWorld"):
 
 
 def connect_regions(world: "GauntletLegendsWorld"):
-    names: typing.Dict[str, int] = {}
+    names: dict[str, int] = {}
 
     connect(world, names, "Menu", "Valley of Fire")
     connect(world, names, "Menu", "Dagger Peak")
@@ -149,10 +149,10 @@ def create_region(world: "GauntletLegendsWorld", name: str, locations: list[Loca
 
 
 def connect(world: "GauntletLegendsWorld",
-            used_names: typing.Dict[str, int],
+            used_names: dict[str, int],
             source: str,
             target: str,
-            rule: typing.Optional[typing.Callable] = None,
+            rule: Optional[Callable] = None,
 ):
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
