@@ -1715,12 +1715,19 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
     from Utils import local_path, __version__
 
     full_path: str
+    preset_folder = os.path.join(target_folder, "Presets")
 
     os.makedirs(target_folder, exist_ok=True)
+    os.makedirs(preset_folder, exist_ok=True)
 
     # clean out old
     for file in os.listdir(target_folder):
         full_path = os.path.join(target_folder, file)
+        if os.path.isfile(full_path) and full_path.endswith(".yaml"):
+            os.unlink(full_path)
+
+    for file in os.listdir(preset_folder):
+        full_path = os.path.join(preset_folder, file)
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
@@ -1755,7 +1762,6 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if not world.hidden or generate_hidden:
             presets = world.web.options_presets.copy()
             presets.update({"": {}})
-            
 
             option_groups = get_option_groups(world)
             for name, preset in presets.items():
@@ -1771,8 +1777,8 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
                     preset=preset,
                 )
                 preset_name = f" - {name}" if name else ""
-                with open(os.path.join(target_folder, get_file_safe_name(game_name) +
-                                                      get_file_safe_name(preset_name) + ".yaml"),
+                with open(os.path.join(preset_folder if name else target_folder,
+                                       get_file_safe_name(game_name + preset_name) + ".yaml"),
                           "w", encoding="utf-8-sig") as f:
                     f.write(res)
 
