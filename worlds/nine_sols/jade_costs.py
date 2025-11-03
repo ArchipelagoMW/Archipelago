@@ -40,8 +40,12 @@ jade_titles = [
 def generate_random_jade_costs(random: Random, options: NineSolsGameOptions) -> dict[str, int]:
     min_cost = options.jade_cost_min.value
     max_cost = options.jade_cost_max.value
+    plando = options.jade_cost_plando.value
 
     costs = {}
     for jade in jade_titles:
-        costs[jade] = random.randint(min_cost, max_cost)
+        if jade in plando:
+            costs[jade] = plando[jade]
+        else:
+            costs[jade] = random.randint(min_cost, max_cost)
     return costs

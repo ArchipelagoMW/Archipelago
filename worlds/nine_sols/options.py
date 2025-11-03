@@ -1,6 +1,9 @@
 from dataclasses import dataclass
+from schema import And, Optional, Schema
 
-from Options import Choice, DefaultOnToggle, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+from Options import Choice, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, StartInventoryPool, Toggle
+
+from .item_data import jade_items
 
 
 class ShuffleSolSeals(DefaultOnToggle):
@@ -78,6 +81,18 @@ class JadeCostMax(Range):
     range_start = 0
     range_end = 10
     default = 3
+
+
+class JadeCostPlando(OptionDict):
+    """Manually specify the cost of certain jades. For example: { "Stasis Jade": 0, "Steely Jade": 10 }
+
+    The costs may be any integer from 0 to 10, even if jade_cost_min and jade_cost_max are set to a narrower range."""
+    schema = Schema({
+        Optional(jade_item_name): And(int, lambda n: n >= 0, lambda n: n <= 10)
+        for jade_item_name in jade_items
+    })
+    display_name = "Jade Cost Plando"
+    default = {}
 
 
 # not yet exposed to players
@@ -179,6 +194,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     randomize_jade_costs: RandomizeJadeCosts
     jade_cost_min: JadeCostMin
     jade_cost_max: JadeCostMax
+    jade_cost_plando: JadeCostPlando
     # logic_difficulty: LogicDifficulty
     first_root_node: FirstRootNode
     shuffle_grapple: ShuffleGrapple

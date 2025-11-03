@@ -1,9 +1,9 @@
-import pkgutil
 import typing
 from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
-from Utils import restricted_loads, Version, version_tuple
+from Utils import Version, version_tuple
+from .item_data import items_data, jade_items
 from .options import FirstRootNode
 from .should_generate import should_generate
 
@@ -21,9 +21,6 @@ class NineSolsItemData(NamedTuple):
     type: ItemClassification = ItemClassification.filler
     category: str | None = None
 
-
-pickled_data = pkgutil.get_data(__name__, "shared_static_logic/static_logic.pickle")
-items_data = restricted_loads(pickled_data)["ITEMS"]
 
 item_types_map = {
     "progression": ItemClassification.progression,
@@ -63,7 +60,7 @@ item_name_groups = {
     # "trap": set(entry["name"] for entry in items_data if entry["type"] == "trap"),
 
     "Sol Seals": set(entry["name"] for entry in items_data if entry["name"].startswith("Seal of ")),
-    "Jades": set(entry["name"] for entry in items_data if (" Jade" in entry["name"])),
+    "Jades": jade_items,
     "Map Chips": set(entry["name"] for entry in items_data if entry["name"].endswith(" Chip")),
     "Artifacts": set(entry["name"] for entry in items_data if entry["name"].startswith("(Artifact) ")),
     "Recyclables": set(entry["name"] for entry in items_data if entry["name"].startswith("(Recyclable) ")),
