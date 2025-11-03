@@ -1,6 +1,6 @@
 import orjson
 import pkgutil
-from typing import Any, ClassVar
+from typing import Any, ClassVar, TextIO
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -125,3 +125,9 @@ class NineSolsWorld(World):
         # slot_data["apworld_version"] = self.world_version
         return slot_data
 
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        if self.jade_costs != 'vanilla':
+            spoiler_handle.write(
+                '\nRandomized Jade Costs for %s:\n\n%s' %
+                (self.multiworld.player_name[self.player], self.jade_costs)
+            )
