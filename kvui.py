@@ -1090,7 +1090,7 @@ class GameManager(ThemedApp):
         self.log_panels["All"].on_message_markup(text)
         concerns_self = any(("player" in part and self.ctx.slot_concerns_self(part["player"])) for part in data) or \
                         all("player" not in part for part in data)
-        #only print if there's a player that is us, or there is not a player at all
+        # only print if there's a player that is us, or there is not a player at all
         if concerns_self:
             self.log_panels["Self"].on_message_markup(text)
 
