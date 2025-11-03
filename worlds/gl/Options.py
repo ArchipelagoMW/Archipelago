@@ -121,15 +121,25 @@ class TrapsChoice(Choice):
 class TrapsFrequency(Range):
     """
     Choose the frequency of traps added into the item pool
-    Normal: 75 of each selected trap are added into the item pool.
-    Large: 150 of each selected trap are added into the item pool.
-    Extreme: 375 of each selected trap are added into the item pool.
+    This range is a percentage of all items in the pool that will be traps.
     """
 
     display_name = "Trap Frequency"
     range_start = 1
-    range_end = 90
+    range_end = 75
     default = 10
+
+
+class LocalFillerFrequency(Range):
+    """
+    Choose the frequency of filler items that will be placed locally in your world.
+    This range is a percentage of how many filler items will be locally placed before generation occurs.
+    """
+
+    display_name = "Local Filler Frequency"
+    range_start = 0
+    range_end = 75
+    default = 50
 
 
 class UnlockCharacterOne(Choice):
@@ -210,6 +220,7 @@ class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     permanent_speed: PermaSpeed
     traps_choice: TrapsChoice
     traps_frequency: TrapsFrequency
+    local_filler_frequency: LocalFillerFrequency
     unlock_character_one: UnlockCharacterOne
     unlock_character_two: UnlockCharacterTwo
     unlock_character_three: UnlockCharacterThree

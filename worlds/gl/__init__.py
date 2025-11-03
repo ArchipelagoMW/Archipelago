@@ -212,7 +212,7 @@ class GauntletLegendsWorld(World):
             item_required_count -= traps_frequency
 
         for i in range(item_required_count):
-            if i < item_required_count // 2:
+            if i < int(item_required_count * (self.options.local_filler_frequency / 100)):
                 self.items.append(self.create_item(filler_items.pop()))
             else:
                 self.multiworld.itempool.append(self.create_item(filler_items.pop()))
