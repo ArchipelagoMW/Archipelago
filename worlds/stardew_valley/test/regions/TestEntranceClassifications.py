@@ -11,7 +11,7 @@ class EntranceRandomizationAssertMixin:
         non_progression_connections = [connection for connection in all_connections.values() if RandomizationFlag.BIT_NON_PROGRESSION in connection.flag]
 
         for non_progression_connections in non_progression_connections:
-            with self.subTest(connection=non_progression_connections):
+            with self.subTest(connection=non_progression_connections.name):
                 self.assert_can_reach_entrance(non_progression_connections.name)
 
 

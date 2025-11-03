@@ -386,7 +386,7 @@ coppper_slot_machine = skill_recipe(ModMachine.copper_slot_machine, ModSkill.luc
                                                                                        Forageable.salmonberry: 1, Material.clay: 1, Trash.joja_cola: 1}, ModNames.luck_skill)
 
 gold_slot_machine = skill_recipe(ModMachine.gold_slot_machine, ModSkill.luck, 4, {MetalBar.gold: 15, ModMachine.copper_slot_machine: 1}, ModNames.luck_skill)
-iridium_slot_machine = skill_recipe(ModMachine.iridium_slot_machine, ModSkill.luck, 4, {MetalBar.iridium: 15, ModMachine.gold_slot_machine: 1}, ModNames.luck_skill)
-radioactive_slot_machine = skill_recipe(ModMachine.radioactive_slot_machine, ModSkill.luck, 4, {MetalBar.radioactive: 15, ModMachine.iridium_slot_machine: 1}, ModNames.luck_skill)
+iridium_slot_machine = skill_recipe(ModMachine.iridium_slot_machine, ModSkill.luck, 6, {MetalBar.iridium: 15, ModMachine.gold_slot_machine: 1}, ModNames.luck_skill)
+radioactive_slot_machine = skill_recipe(ModMachine.radioactive_slot_machine, ModSkill.luck, 8, {MetalBar.radioactive: 15, ModMachine.iridium_slot_machine: 1}, ModNames.luck_skill)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
