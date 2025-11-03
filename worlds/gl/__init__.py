@@ -60,7 +60,9 @@ class GLSettings(settings.Group):
 
 class GauntletLegendsWorld(World):
     """
-    Gauntlet Legends
+    Adventure through the 5 realms to collect 13 runestones
+    and defeat the evil skorne. Treasure, enemies, and death
+    awaits.
     """
 
     game = "Gauntlet Legends"
