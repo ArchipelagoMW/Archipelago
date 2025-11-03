@@ -10,6 +10,12 @@ It is probably caused by one of these:
 5. You connected to AP without verifying that it the client successfully connected to the emulator. 
    It will say "Connected to RaC3" if it sucessfully connected
 
+## My RaC3 client never loads! It is always a black window no matter how long I wait, what can I do?
+
+Try installing [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases) and see if it works, 
+sometimes it just refuses to load the client without it installed even though it should work without it. 
+Installing Universal Tracker appears to solve this problem for those reporting this issue.
+
 ## In the vendors I can purchase a weapon multiple times, but I get nothing, why?
 
 Until you don't have a weapon it's vendor slot will be active, because the game tries to put it back to the shop 
@@ -36,6 +42,7 @@ Please refer to these:
 - [Unstable](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L581-L596)
 - [Weapons](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L509-L527)
 - [Gadgets](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L529-L538)
+
 
 
 
