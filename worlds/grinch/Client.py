@@ -253,6 +253,13 @@ class GrinchClient(BizHawkClient):
 
         for item_received in new_items_only:
             local_item = ctx.item_names.lookup_in_game(item_received.item)
+
+            if "unknown item" in local_item.lower():
+                logger.warning(
+                    f"Unknown item triggered in pool. Item: {local_item}\nIf you see this message, please report it in the Grinch thread in the AP Discord."
+                )
+                continue
+
             grinch_item_ram_data = ALL_ITEMS_TABLE[local_item]
 
             for addr_to_update in grinch_item_ram_data.update_ram_addr:
