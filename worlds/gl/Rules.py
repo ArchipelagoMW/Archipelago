@@ -18,7 +18,7 @@ def set_rules(world: "GauntletLegendsWorld"):
             or location in chimeras_keep
             or location in gates_of_the_underworld
             or location.id in no_obelisks
-    ] + [location for location in all_locations if "Obelisk" in location.name and world.options.obelisks == 1]:
+    ] + [location for location in all_locations if "Obelisk" in location.name and world.options.obelisks]:
         for item in obelisks:
             if location.name not in world.disabled_locations:
                 forbid_item(world.get_location(location.name), item, world.player)

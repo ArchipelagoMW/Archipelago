@@ -109,7 +109,7 @@ class GauntletLegendsWorld(World):
             self.lock_item("Valley of Fire - Key 1", "Key")
             self.lock_item("Valley of Fire - Key 5", "Key")
 
-        if self.options.obelisks == 0:
+        if not self.options.obelisks:
             self.lock_item("Valley of Fire - Obelisk", "Mountain Obelisk 1")
             self.lock_item("Dagger Peak - Obelisk", "Mountain Obelisk 2")
             self.lock_item("Cliffs of Desolation - Obelisk", "Mountain Obelisk 3")
@@ -118,7 +118,7 @@ class GauntletLegendsWorld(World):
             self.lock_item("Poisoned Fields - Obelisk", "Town Obelisk 1")
             self.lock_item("Haunted Cemetery - Obelisk", "Town Obelisk 2")
 
-        if self.options.mirror_shards == 0:
+        if not self.options.mirror_shards:
             self.lock_item("Dragon's Lair - Dragon Mirror Shard", "Dragon Mirror Shard")
             self.lock_item("Chimera's Keep - Chimera Mirror Shard", "Chimera Mirror Shard")
             self.lock_item("Vat of the Plague Fiend - Plague Fiend Mirror Shard", "Plague Fiend Mirror Shard")
@@ -170,9 +170,9 @@ class GauntletLegendsWorld(World):
             skipped_items.add("Poison Fruit")
         if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active":
             skipped_items.add("Death")
-        if self.options.obelisks == 0:
+        if not self.options.obelisks:
             skipped_items.update(obelisks)
-        if self.options.mirror_shards == 0:
+        if not self.options.mirror_shards:
             skipped_items.update(mirror_shards)
         for item in [item_ for item_ in item_list
                      if (ItemClassification.progression in item_.progression
