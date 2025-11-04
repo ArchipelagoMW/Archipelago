@@ -123,7 +123,7 @@ class RAC3ITEM:
     AGENTS_OF_DOOM_V2 = "Agents of Doom V2"
     AGENTS_OF_DOOM_V3 = "Agents of Doom V3"
     AGENTS_OF_DOOM_V4 = "Agents of Doom V4"
-    AGENTS_OF_DREAD_V5 = "Agents of Dread V5"
+    AGENTS_OF_DREAD = "Agents of Dread"
     AGENTS_OF_DREAD_V6 = "Agents of Dread V6"
     AGENTS_OF_DREAD_V7 = "Agents of Dread V7"
     AGENTS_OF_DREAD_V8 = "Agents of Dread V8"
@@ -131,54 +131,62 @@ class RAC3ITEM:
     ANNIHILATOR_V2 = "Annihilator V2"
     ANNIHILATOR_V3 = "Annihilator V3"
     ANNIHILATOR_V4 = "Annihilator V4"
-    DECIMATOR_V5 = "Decimator V5"
+    DECIMATOR = "Decimator"
     DECIMATOR_V6 = "Decimator V6"
     DECIMATOR_V7 = "Decimator V7"
     DECIMATOR_V8 = "Decimator V8"
     BOLT_GRABBER = "Bolt Grabber V2"
+    BOMB_GLOVE = "Bomb Glove"
     BOUNCER = "Bouncer"
     BOUNCER_V2 = "Bouncer V2"
     BOUNCER_V3 = "Bouncer V3"
     BOUNCER_V4 = "Bouncer V4"
-    HEAVY_BOUNCER_V5 = "Heavy Bouncer V5"
+    HEAVY_BOUNCER = "Heavy Bouncer"
     HEAVY_BOUNCER_V6 = "Heavy Bouncer V6"
     HEAVY_BOUNCER_V7 = "Heavy Bouncer V7"
     HEAVY_BOUNCER_V8 = "Heavy Bouncer V8"
     BOX_BREAKER = "Box Breaker"
     CHARGE_BOOTS = "Charge Boots"
+    COMMANDO_SUIT = "Commando Suit"
     DISC_BLADE = "Disc Blade Gun"
     DISC_BLADE_V2 = "Disc Blade Gun V2"
     DISC_BLADE_V3 = "Disc Blade Gun V3"
     DISC_BLADE_V4 = "Disc Blade Gun V4"
-    MULTI_DISC_V5 = "Multi-Disc Gun V5"
+    MULTI_DISC = "Multi-Disc Gun"
     MULTI_DISC_V6 = "Multi-Disc Gun V6"
     MULTI_DISC_V7 = "Multi-Disc Gun V7"
     MULTI_DISC_V8 = "Multi-Disc Gun V8"
+    FIRST_PERSON = "First Person"
     FLUX_RIFLE = "Flux Rifle"
     FLUX_RIFLE_V2 = "Flux Rifle V2"
     FLUX_RIFLE_V3 = "Flux Rifle V3"
     FLUX_RIFLE_V4 = "Flux Rifle V4"
-    SPLITTER_RIFLE_V5 = "Splitter Rifle V5"
+    SPLITTER_RIFLE = "Splitter Rifle"
     SPLITTER_RIFLE_V6 = "Splitter Rifle V6"
     SPLITTER_RIFLE_V7 = "Splitter Rifle V7"
     SPLITTER_RIFLE_V8 = "Splitter Rifle V8"
+    GLIDER = "Glider"
     GRAV_BOOTS = "Gravity Boots"
+    GRIND_BOOTS = "Grind Boots"
     HACKER = "The Hacker"
+    HASH = "Hash"
     HELI_PACK = "Heli-Pack"
+    HELMET = "Helmet"
     HOLO_SHIELD = "Holo Shield Glove"
     HOLO_SHIELD_V2 = "Holo Shield Glove V2"
     HOLO_SHIELD_V3 = "Holo Shield Glove V3"
     HOLO_SHIELD_V4 = "Holo Shield Glove V4"
-    ULTRA_SHIELD_V5 = "Ultrashield Launcher V5"
+    ULTRA_SHIELD = "Ultrashield Launcher"
     ULTRA_SHIELD_V6 = "Ultrashield Launcher V6"
     ULTRA_SHIELD_V7 = "Ultrashield Launcher V7"
     ULTRA_SHIELD_V8 = "Ultrashield Launcher V8"
+    HYDRO_PACK = "Hydro Pack"
     HYPERSHOT = "Hypershot"
     INFECTOR = "Infector"
     INFECTOR_V2 = "Infector V2"
     INFECTOR_V3 = "Infector V3"
     INFECTOR_V4 = "Infector V4"
-    INFECTO_BOMB_V5 = "Infecto-Bomb V5"
+    INFECTO_BOMB = "Infecto-Bomb"
     INFECTO_BOMB_V6 = "Infecto-Bomb V6"
     INFECTO_BOMB_V7 = "Infecto-Bomb V7"
     INFECTO_BOMB_V8 = "Infecto-Bomb V8"
@@ -186,35 +194,37 @@ class RAC3ITEM:
     LAVA_GUN_V2 = "Lava Gun V2"
     LAVA_GUN_V3 = "Lava Gun V3"
     LAVA_GUN_V4 = "Lava Gun V4"
-    LIQUID_NITROGEN_V5 = "Liquid Nitrogen Gun V5"
+    LIQUID_NITROGEN = "Liquid Nitrogen Gun"
     LIQUID_NITROGEN_V6 = "Liquid Nitrogen Gun V6"
     LIQUID_NITROGEN_V7 = "Liquid Nitrogen Gun V7"
     LIQUID_NITROGEN_V8 = "Liquid Nitrogen Gun V8"
+    LEVITATOR = "Levitator"
+    LOCK_STRAFE = "Lock Strafe"
     MAP_O_MATIC = "Map-O-Matic"
-    STAR_MAP = "Star Map"
     MASTER_PLAN = "Master Plan"
     MINI_TURRET = "Miniturret Glove"
     MINI_TURRET_V2 = "Miniturret Glove V2"
     MINI_TURRET_V3 = "Miniturret Glove V3"
     MINI_TURRET_V4 = "Miniturret Glove V4"
-    MEGA_TURRET_V5 = "Megaturret Glove V5"
+    MEGA_TURRET = "Megaturret Glove"
     MEGA_TURRET_V6 = "Megaturret Glove V6"
     MEGA_TURRET_V7 = "Megaturret Glove V7"
     MEGA_TURRET_V8 = "Megaturret Glove V8"
+    MORPH_O_RAY = "Morph-O-Ray"
     N60_STORM = "N60 Storm"
     N60_STORM_V2 = "N60 Storm V2"
     N60_STORM_V3 = "N60 Storm V3"
     N60_STORM_V4 = "N60 Storm V4"
-    N60_HURRICANE_V5 = "N90 Hurricane V5"
-    N60_HURRICANE_V6 = "N90 Hurricane V6"
-    N60_HURRICANE_V7 = "N90 Hurricane V7"
-    N60_HURRICANE_V8 = "N90 Hurricane V8"
+    N90_HURRICANE = "N90 Hurricane"
+    N90_HURRICANE_V6 = "N90 Hurricane V6"
+    N90_HURRICANE_V7 = "N90 Hurricane V7"
+    N90_HURRICANE_V8 = "N90 Hurricane V8"
     NANO_PAK = "Nano-pak"
     NITRO_LAUNCHER = "Nitro Launcher"
     NITRO_LAUNCHER_V2 = "Nitro Launcher V2"
     NITRO_LAUNCHER_V3 = "Nitro Launcher V3"
     NITRO_LAUNCHER_V4 = "Nitro Launcher V4"
-    NITRO_ERUPTOR_V5 = "Nitro Eruptor V5"
+    NITRO_ERUPTOR = "Nitro Eruptor"
     NITRO_ERUPTOR_V6 = "Nitro Eruptor V6"
     NITRO_ERUPTOR_V7 = "Nitro Eruptor V7"
     NITRO_ERUPTOR_V8 = "Nitro Eruptor V8"
@@ -223,7 +233,7 @@ class RAC3ITEM:
     PLASMA_COIL_V2 = "Plasma Coil V2"
     PLASMA_COIL_V3 = "Plasma Coil V3"
     PLASMA_COIL_V4 = "Plasma Coil V4"
-    PLASMA_STORM_V5 = "Plasma Storm V5"
+    PLASMA_STORM = "Plasma Storm"
     PLASMA_STORM_V6 = "Plasma Storm V6"
     PLASMA_STORM_V7 = "Plasma Storm V7"
     PLASMA_STORM_V8 = "Plasma Storm V8"
@@ -231,7 +241,7 @@ class RAC3ITEM:
     PLASMA_WHIP_V2 = "Plasma Whip V2"
     PLASMA_WHIP_V3 = "Plasma Whip V3"
     PLASMA_WHIP_V4 = "Plasma Whip V4"
-    QUANTUM_WHIP_V5 = "Quantum Whip V5"
+    QUANTUM_WHIP = "Quantum Whip"
     QUANTUM_WHIP_V6 = "Quantum Whip V6"
     QUANTUM_WHIP_V7 = "Quantum Whip V7"
     QUANTUM_WHIP_V8 = "Quantum Whip V8"
@@ -239,7 +249,7 @@ class RAC3ITEM:
     QWACK_O_RAY_V2 = "Qwack-O-Ray V2"
     QWACK_O_RAY_V3 = "Qwack-O-Ray V3"
     QWACK_O_RAY_V4 = "Qwack-O-Ray V4"
-    QWACK_O_BLITZER_V5 = "Qwack-O-Blitzer V5"
+    QWACK_O_BLITZER = "Qwack-O-Blitzer"
     QWACK_O_BLITZER_V6 = "Qwack-O-Blitzer V6"
     QWACK_O_BLITZER_V7 = "Qwack-O-Blitzer V7"
     QWACK_O_BLITZER_V8 = "Qwack-O-Blitzer V8"
@@ -248,7 +258,7 @@ class RAC3ITEM:
     RIFT_INDUCER_V2 = "Rift Inducer V2"
     RIFT_INDUCER_V3 = "Rift Inducer v3"
     RIFT_INDUCER_V4 = "Rift Inducer v4"
-    RIFT_RIPPER_V5 = "Rift Ripper V5"
+    RIFT_RIPPER = "Rift Ripper"
     RIFT_RIPPER_V6 = "Rift Ripper V6"
     RIFT_RIPPER_V7 = "Rift Ripper V7"
     RIFT_RIPPER_V8 = "Rift Ripper V8"
@@ -261,7 +271,7 @@ class RAC3ITEM:
     SHIELD_CHARGER_V2 = "Shield Charger V2"
     SHIELD_CHARGER_V3 = "Shield Charger V3"
     SHIELD_CHARGER_V4 = "Shield Charger V4"
-    TESLA_BARRIER_V5 = "Tesla Barrier V5"
+    TESLA_BARRIER = "Tesla Barrier"
     TESLA_BARRIER_V6 = "Tesla Barrier V6"
     TESLA_BARRIER_V7 = "Tesla Barrier V7"
     TESLA_BARRIER_V8 = "Tesla Barrier V8"
@@ -269,7 +279,7 @@ class RAC3ITEM:
     SHOCK_BLASTER_V2 = "Shock Blaster V2"
     SHOCK_BLASTER_V3 = "Shock Blaster V3"
     SHOCK_BLASTER_V4 = "Shock Blaster V4"
-    SHOCK_CANNON_V5 = "Shock Cannon V5"
+    SHOCK_CANNON = "Shock Cannon"
     SHOCK_CANNON_V6 = "Shock Cannon V6"
     SHOCK_CANNON_V7 = "Shock Cannon V7"
     SHOCK_CANNON_V8 = "Shock Cannon V8"
@@ -277,20 +287,27 @@ class RAC3ITEM:
     SPITTING_HYDRA_V2 = "Spitting Hydra V2"
     SPITTING_HYDRA_V3 = "Spitting Hydra V3"
     SPITTING_HYDRA_V4 = "Spitting Hydra V4"
-    TEMPEST_V5 = "Tempest V5"
+    TEMPEST = "Tempest"
     TEMPEST_V6 = "Tempest V6"
     TEMPEST_V7 = "Tempest V7"
     TEMPEST_V8 = "Tempest V8"
+    STAR_MAP = "Star Map"
     SUCK_CANNON = "Suck Cannon"
     SUCK_CANNON_V2 = "Suck Cannon V2"
     SUCK_CANNON_V3 = "Suck Cannon V3"
     SUCK_CANNON_V4 = "Suck Cannon V4"
-    VORTEX_CANNON_V5 = "Vortex Cannon V5"
+    VORTEX_CANNON = "Vortex Cannon"
     VORTEX_CANNON_V6 = "Vortex Cannon V6"
     VORTEX_CANNON_V7 = "Vortex Cannon V7"
     VORTEX_CANNON_V8 = "Vortex Cannon V8"
+    THIRD_PERSON = "Third Person"
     THRUSTER_PACK = "Thruster-Pack"
     TYHRRA_GUISE = "Tyhrra-Guise"
+    VIDCOMIC1 = "Qwark VidComic 1"
+    VIDCOMIC2 = "Qwark VidComic 2"
+    VIDCOMIC3 = "Qwark VidComic 3"
+    VIDCOMIC4 = "Qwark VidComic 4"
+    VIDCOMIC5 = "Qwark VidComic 5"
     WARP_PAD = "Warp Pad"
     WRENCH = "OmniWrench"
     WRENCH_V2 = "OmniWrench V2"
@@ -300,23 +317,6 @@ class RAC3ITEM:
     WRENCH_V6 = "OmniWrench V6"
     WRENCH_V7 = "OmniWrench V7"
     WRENCH_V8 = "OmniWrench V8"
-    VIDCOMIC1 = "Qwark VidComic 1"
-    VIDCOMIC2 = "Qwark VidComic 2"
-    VIDCOMIC3 = "Qwark VidComic 3"
-    VIDCOMIC4 = "Qwark VidComic 4"
-    VIDCOMIC5 = "Qwark VidComic 5"
-    THIRD_PERSON = "Third Person"
-    FIRST_PERSON = "First Person"
-    LOCK_STRAFE = "Lock Strafe"
-    HYDRO_PACK = "Hydro Pack"
-    COMMANDO_SUIT = "Commando Suit"
-    LEVITATOR = "Levitator"
-    BOMB_GLOVE = "Bomb Glove"
-    MORPH_O_RAY = "Morph-O-Ray"
-    GRIND_BOOTS = "Grind Boots"
-    GLIDER = "Glider"
-    HELMET = "Helmet"
-    HASH = "Hash"
     GRIND_BOOTS_2 = "Grind Boots 2"
     MAGNAPLATE = "Magnaplate armor"
     ADAMANTINE = "Adamantine armor"
@@ -1039,7 +1039,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SHOCK_BLASTER_V2: RAC3ITEMDATA.construct_weapon_level(0x28, 50, 35, 150),
     RAC3ITEM.SHOCK_BLASTER_V3: RAC3ITEMDATA.construct_weapon_level(0x29, 60, 40, 400),
     RAC3ITEM.SHOCK_BLASTER_V4: RAC3ITEMDATA.construct_weapon_level(0x2A, 80, 40, 700),
-    RAC3ITEM.SHOCK_CANNON_V5: RAC3ITEMDATA.construct_weapon_level(0x2B, 100, 50, 1000),
+    RAC3ITEM.SHOCK_CANNON: RAC3ITEMDATA.construct_weapon_level(0x2B, 100, 50, 1000),
     RAC3ITEM.SHOCK_CANNON_V6: RAC3ITEMDATA.construct_weapon_level(0x2C, 1100, 50),
     RAC3ITEM.SHOCK_CANNON_V7: RAC3ITEMDATA.construct_weapon_level(0x2D, 1400, 55, 10000),
     RAC3ITEM.SHOCK_CANNON_V8: RAC3ITEMDATA.construct_weapon_level(0x2E, 2100, 60, 25000),
@@ -1047,15 +1047,15 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.N60_STORM_V2: RAC3ITEMDATA.construct_weapon_level(0x30, 175, 175, 200),
     RAC3ITEM.N60_STORM_V3: RAC3ITEMDATA.construct_weapon_level(0x31, 200, 200, 500),
     RAC3ITEM.N60_STORM_V4: RAC3ITEMDATA.construct_weapon_level(0x32, 250, 225, 1500),
-    RAC3ITEM.N60_HURRICANE_V5: RAC3ITEMDATA.construct_weapon_level(0x33, 350, 300, 3300),
-    RAC3ITEM.N60_HURRICANE_V6: RAC3ITEMDATA.construct_weapon_level(0x34, 3500, 300),
-    RAC3ITEM.N60_HURRICANE_V7: RAC3ITEMDATA.construct_weapon_level(0x35, 5000, 350, 15000),
-    RAC3ITEM.N60_HURRICANE_V8: RAC3ITEMDATA.construct_weapon_level(0x36, 6000, 400, 37500),
+    RAC3ITEM.N90_HURRICANE: RAC3ITEMDATA.construct_weapon_level(0x33, 350, 300, 3300),
+    RAC3ITEM.N90_HURRICANE_V6: RAC3ITEMDATA.construct_weapon_level(0x34, 3500, 300),
+    RAC3ITEM.N90_HURRICANE_V7: RAC3ITEMDATA.construct_weapon_level(0x35, 5000, 350, 15000),
+    RAC3ITEM.N90_HURRICANE_V8: RAC3ITEMDATA.construct_weapon_level(0x36, 6000, 400, 37500),
     RAC3ITEM.INFECTOR: RAC3ITEMDATA.construct_weapon(0x37, 180, 15, ap_classification=ItemClassification.progression),
     RAC3ITEM.INFECTOR_V2: RAC3ITEMDATA.construct_weapon_level(0x38, 240, 15, 400),
     RAC3ITEM.INFECTOR_V3: RAC3ITEMDATA.construct_weapon_level(0x39, 320, 18, 800),
     RAC3ITEM.INFECTOR_V4: RAC3ITEMDATA.construct_weapon_level(0x3A, 400, 18, 2000),
-    RAC3ITEM.INFECTO_BOMB_V5: RAC3ITEMDATA.construct_weapon_level(0x3B, 600, 20, 3800),
+    RAC3ITEM.INFECTO_BOMB: RAC3ITEMDATA.construct_weapon_level(0x3B, 600, 20, 3800),
     RAC3ITEM.INFECTO_BOMB_V6: RAC3ITEMDATA.construct_weapon_level(0x3C, 4000, 20),
     RAC3ITEM.INFECTO_BOMB_V7: RAC3ITEMDATA.construct_weapon_level(0x3D, 5000, 25, 10000),
     RAC3ITEM.INFECTO_BOMB_V8: RAC3ITEMDATA.construct_weapon_level(0x3E, 6000, 30, 15000),
@@ -1064,7 +1064,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.ANNIHILATOR_V2: RAC3ITEMDATA.construct_weapon_level(0x40, 600, 20, 800),
     RAC3ITEM.ANNIHILATOR_V3: RAC3ITEMDATA.construct_weapon_level(0x41, 800, 20, 2400),
     RAC3ITEM.ANNIHILATOR_V4: RAC3ITEMDATA.construct_weapon_level(0x42, 1100, 22, 6400),
-    RAC3ITEM.DECIMATOR_V5: RAC3ITEMDATA.construct_weapon_level(0x43, 1400, 25, 12400),
+    RAC3ITEM.DECIMATOR: RAC3ITEMDATA.construct_weapon_level(0x43, 1400, 25, 12400),
     RAC3ITEM.DECIMATOR_V6: RAC3ITEMDATA.construct_weapon_level(0x44, 3000, 25),
     RAC3ITEM.DECIMATOR_V7: RAC3ITEMDATA.construct_weapon_level(0x45, 4000, 28, 10000),
     RAC3ITEM.DECIMATOR_V8: RAC3ITEMDATA.construct_weapon_level(0x46, 5000, 30, 25000),
@@ -1073,7 +1073,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SPITTING_HYDRA_V2: RAC3ITEMDATA.construct_weapon_level(0x48, 240, 15, 300),
     RAC3ITEM.SPITTING_HYDRA_V3: RAC3ITEMDATA.construct_weapon_level(0x49, 280, 15, 900),
     RAC3ITEM.SPITTING_HYDRA_V4: RAC3ITEMDATA.construct_weapon_level(0x4A, 320, 15, 1800),
-    RAC3ITEM.TEMPEST_V5: RAC3ITEMDATA.construct_weapon_level(0x4B, 400, 15, 3000),
+    RAC3ITEM.TEMPEST: RAC3ITEMDATA.construct_weapon_level(0x4B, 400, 15, 3000),
     RAC3ITEM.TEMPEST_V6: RAC3ITEMDATA.construct_weapon_level(0x4C, 3200, 15),
     RAC3ITEM.TEMPEST_V7: RAC3ITEMDATA.construct_weapon_level(0x4D, 5400, 18, 15000),
     RAC3ITEM.TEMPEST_V8: RAC3ITEMDATA.construct_weapon_level(0x4E, 6000, 20, 37500),
@@ -1081,7 +1081,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.DISC_BLADE_V2: RAC3ITEMDATA.construct_weapon_level(0x50, 600, 25, 700),
     RAC3ITEM.DISC_BLADE_V3: RAC3ITEMDATA.construct_weapon_level(0x51, 1400, 25, 2100),
     RAC3ITEM.DISC_BLADE_V4: RAC3ITEMDATA.construct_weapon_level(0x52, 2400, 25, 6100),
-    RAC3ITEM.MULTI_DISC_V5: RAC3ITEMDATA.construct_weapon_level(0x53, 3600, 25, 12100),
+    RAC3ITEM.MULTI_DISC: RAC3ITEMDATA.construct_weapon_level(0x53, 3600, 25, 12100),
     RAC3ITEM.MULTI_DISC_V6: RAC3ITEMDATA.construct_weapon_level(0x54, 4400, 25),
     RAC3ITEM.MULTI_DISC_V7: RAC3ITEMDATA.construct_weapon_level(0x55, 5600, 28, 10000),
     RAC3ITEM.MULTI_DISC_V8: RAC3ITEMDATA.construct_weapon_level(0x56, 8400, 30, 25000),
@@ -1089,7 +1089,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.AGENTS_OF_DOOM_V2: RAC3ITEMDATA.construct_weapon_level(0x58, 400, 6, 400),
     RAC3ITEM.AGENTS_OF_DOOM_V3: RAC3ITEMDATA.construct_weapon_level(0x59, 660, 6, 1000),
     RAC3ITEM.AGENTS_OF_DOOM_V4: RAC3ITEMDATA.construct_weapon_level(0x5A, 2000, 8, 3000),
-    RAC3ITEM.AGENTS_OF_DREAD_V5: RAC3ITEMDATA.construct_weapon_level(0x5B, 6000, 8, 6000),
+    RAC3ITEM.AGENTS_OF_DREAD: RAC3ITEMDATA.construct_weapon_level(0x5B, 6000, 8, 6000),
     RAC3ITEM.AGENTS_OF_DREAD_V6: RAC3ITEMDATA.construct_weapon_level(0x5C, 8000, 8),
     RAC3ITEM.AGENTS_OF_DREAD_V7: RAC3ITEMDATA.construct_weapon_level(0x5D, 10000, 10, 7500),
     RAC3ITEM.AGENTS_OF_DREAD_V8: RAC3ITEMDATA.construct_weapon_level(0x5E, 12000, 12, 20000),
@@ -1098,7 +1098,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.RIFT_INDUCER_V2: RAC3ITEMDATA.construct_weapon_level(0x60, 1300, 8, 800),
     RAC3ITEM.RIFT_INDUCER_V3: RAC3ITEMDATA.construct_weapon_level(0x61, 1500, 10, 2400),
     RAC3ITEM.RIFT_INDUCER_V4: RAC3ITEMDATA.construct_weapon_level(0x62, 1700, 10, 6400),
-    RAC3ITEM.RIFT_RIPPER_V5: RAC3ITEMDATA.construct_weapon_level(0x63, 2000, 12, 12400),
+    RAC3ITEM.RIFT_RIPPER: RAC3ITEMDATA.construct_weapon_level(0x63, 2000, 12, 12400),
     RAC3ITEM.RIFT_RIPPER_V6: RAC3ITEMDATA.construct_weapon_level(0x64, 4000, 12),
     RAC3ITEM.RIFT_RIPPER_V7: RAC3ITEMDATA.construct_weapon_level(0x65, 5000, 14, 15000),
     RAC3ITEM.RIFT_RIPPER_V8: RAC3ITEMDATA.construct_weapon_level(0x66, 6000, 16, 37500),
@@ -1106,7 +1106,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.HOLO_SHIELD_V2: RAC3ITEMDATA.construct_weapon_level(0x68, 300, 8, 150),
     RAC3ITEM.HOLO_SHIELD_V3: RAC3ITEMDATA.construct_weapon_level(0x69, 400, 10, 450),
     RAC3ITEM.HOLO_SHIELD_V4: RAC3ITEMDATA.construct_weapon_level(0x6A, 500, 10, 1350),
-    RAC3ITEM.ULTRA_SHIELD_V5: RAC3ITEMDATA.construct_weapon_level(0x6B, 600, 12, 2700),
+    RAC3ITEM.ULTRA_SHIELD: RAC3ITEMDATA.construct_weapon_level(0x6B, 600, 12, 2700),
     RAC3ITEM.ULTRA_SHIELD_V6: RAC3ITEMDATA.construct_weapon_level(0x6C, 1000, 12),
     RAC3ITEM.ULTRA_SHIELD_V7: RAC3ITEMDATA.construct_weapon_level(0x6D, 1500, 12, 5000),
     RAC3ITEM.ULTRA_SHIELD_V8: RAC3ITEMDATA.construct_weapon_level(0x6E, 2000, 14, 12500),
@@ -1114,7 +1114,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.FLUX_RIFLE_V2: RAC3ITEMDATA.construct_weapon_level(0x70, 400, 12, 200),
     RAC3ITEM.FLUX_RIFLE_V3: RAC3ITEMDATA.construct_weapon_level(0x71, 500, 12, 600),
     RAC3ITEM.FLUX_RIFLE_V4: RAC3ITEMDATA.construct_weapon_level(0x72, 1600, 12, 1500),
-    RAC3ITEM.SPLITTER_RIFLE_V5: RAC3ITEMDATA.construct_weapon_level(0x73, 2800, 15, 2900),
+    RAC3ITEM.SPLITTER_RIFLE: RAC3ITEMDATA.construct_weapon_level(0x73, 2800, 15, 2900),
     RAC3ITEM.SPLITTER_RIFLE_V6: RAC3ITEMDATA.construct_weapon_level(0x74, 5200, 15),
     RAC3ITEM.SPLITTER_RIFLE_V7: RAC3ITEMDATA.construct_weapon_level(0x75, 7000, 18, 7500),
     RAC3ITEM.SPLITTER_RIFLE_V8: RAC3ITEMDATA.construct_weapon_level(0x76, 8400, 20, 20000),
@@ -1122,7 +1122,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.NITRO_LAUNCHER_V2: RAC3ITEMDATA.construct_weapon_level(0x78, 240, 8, 200),
     RAC3ITEM.NITRO_LAUNCHER_V3: RAC3ITEMDATA.construct_weapon_level(0x79, 300, 10, 500),
     RAC3ITEM.NITRO_LAUNCHER_V4: RAC3ITEMDATA.construct_weapon_level(0x7A, 400, 10, 1100),
-    RAC3ITEM.NITRO_ERUPTOR_V5: RAC3ITEMDATA.construct_weapon_level(0x7B, 800, 12, 2600),
+    RAC3ITEM.NITRO_ERUPTOR: RAC3ITEMDATA.construct_weapon_level(0x7B, 800, 12, 2600),
     RAC3ITEM.NITRO_ERUPTOR_V6: RAC3ITEMDATA.construct_weapon_level(0x7C, 4200, 12),
     RAC3ITEM.NITRO_ERUPTOR_V7: RAC3ITEMDATA.construct_weapon_level(0x7D, 5000, 14, 7500),
     RAC3ITEM.NITRO_ERUPTOR_V8: RAC3ITEMDATA.construct_weapon_level(0x7E, 6000, 16, 20000),
@@ -1130,7 +1130,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.PLASMA_WHIP_V2: RAC3ITEMDATA.construct_weapon_level(0x80, 50, 30, 200),
     RAC3ITEM.PLASMA_WHIP_V3: RAC3ITEMDATA.construct_weapon_level(0x81, 70, 35, 800),
     RAC3ITEM.PLASMA_WHIP_V4: RAC3ITEMDATA.construct_weapon_level(0x82, 100, 40, 1800),
-    RAC3ITEM.QUANTUM_WHIP_V5: RAC3ITEMDATA.construct_weapon_level(0x83, 140, 40, 3300),
+    RAC3ITEM.QUANTUM_WHIP: RAC3ITEMDATA.construct_weapon_level(0x83, 140, 40, 3300),
     RAC3ITEM.QUANTUM_WHIP_V6: RAC3ITEMDATA.construct_weapon_level(0x84, 1400, 50),
     RAC3ITEM.QUANTUM_WHIP_V7: RAC3ITEMDATA.construct_weapon_level(0x85, 1800, 55, 10000),
     RAC3ITEM.QUANTUM_WHIP_V8: RAC3ITEMDATA.construct_weapon_level(0x86, 2400, 60, 25000),
@@ -1138,7 +1138,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SUCK_CANNON_V2: RAC3ITEMDATA.construct_weapon_level(0x88, 260, xp=200),
     RAC3ITEM.SUCK_CANNON_V3: RAC3ITEMDATA.construct_weapon_level(0x89, 320, xp=600),
     RAC3ITEM.SUCK_CANNON_V4: RAC3ITEMDATA.construct_weapon_level(0x8A, 400, xp=1200),
-    RAC3ITEM.VORTEX_CANNON_V5: RAC3ITEMDATA.construct_weapon_level(0x8B, 600, xp=2000),
+    RAC3ITEM.VORTEX_CANNON: RAC3ITEMDATA.construct_weapon_level(0x8B, 600, xp=2000),
     RAC3ITEM.VORTEX_CANNON_V6: RAC3ITEMDATA.construct_weapon_level(0x8C, 4200),
     RAC3ITEM.VORTEX_CANNON_V7: RAC3ITEMDATA.construct_weapon_level(0x8D, 5000, xp=5000),
     RAC3ITEM.VORTEX_CANNON_V8: RAC3ITEMDATA.construct_weapon_level(0x8E, 6000, xp=12500),
@@ -1146,7 +1146,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.QWACK_O_RAY_V2: RAC3ITEMDATA.construct_weapon_level(0x90, 1500, xp=1000),
     RAC3ITEM.QWACK_O_RAY_V3: RAC3ITEMDATA.construct_weapon_level(0x91, 2000, xp=3000),
     RAC3ITEM.QWACK_O_RAY_V4: RAC3ITEMDATA.construct_weapon_level(0x92, 2500, xp=8000),
-    RAC3ITEM.QWACK_O_BLITZER_V5: RAC3ITEMDATA.construct_weapon_level(0x93, 3000, xp=16000),
+    RAC3ITEM.QWACK_O_BLITZER: RAC3ITEMDATA.construct_weapon_level(0x93, 3000, xp=16000),
     RAC3ITEM.QWACK_O_BLITZER_V6: RAC3ITEMDATA.construct_weapon_level(0x94, 4000),
     RAC3ITEM.QWACK_O_BLITZER_V7: RAC3ITEMDATA.construct_weapon_level(0x95, 5000, xp=10000),
     RAC3ITEM.QWACK_O_BLITZER_V8: RAC3ITEMDATA.construct_weapon_level(0x96, 6000, xp=25000),
@@ -1164,31 +1164,31 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.SHIELD_CHARGER_V2: RAC3ITEMDATA.construct_weapon_level(0xA7, 100, 3, 2200),
     RAC3ITEM.MINI_TURRET_V3: RAC3ITEMDATA.construct_weapon_level(0xA8, 1000, 12, 1000),
     RAC3ITEM.MINI_TURRET_V4: RAC3ITEMDATA.construct_weapon_level(0xA9, 1200, 12, 2000),
-    RAC3ITEM.MEGA_TURRET_V5: RAC3ITEMDATA.construct_weapon_level(0xAA, 2080, 12, 3500),
+    RAC3ITEM.MEGA_TURRET: RAC3ITEMDATA.construct_weapon_level(0xAA, 2080, 12, 3500),
     RAC3ITEM.MEGA_TURRET_V6: RAC3ITEMDATA.construct_weapon_level(0xAB, 10400, 12),
     RAC3ITEM.MEGA_TURRET_V7: RAC3ITEMDATA.construct_weapon_level(0xAC, 13000, 14, 10000),
     RAC3ITEM.MEGA_TURRET_V8: RAC3ITEMDATA.construct_weapon_level(0xAD, 15600, 16, 25000),
     RAC3ITEM.LAVA_GUN_V3: RAC3ITEMDATA.construct_weapon_level(0xAE, 360, 175, 1500),
     RAC3ITEM.LAVA_GUN_V4: RAC3ITEMDATA.construct_weapon_level(0xAF, 500, 175, 2700),
-    RAC3ITEM.LIQUID_NITROGEN_V5: RAC3ITEMDATA.construct_weapon_level(0xB0, 700, 200, 4200),
+    RAC3ITEM.LIQUID_NITROGEN: RAC3ITEMDATA.construct_weapon_level(0xB0, 700, 200, 4200),
     RAC3ITEM.LIQUID_NITROGEN_V6: RAC3ITEMDATA.construct_weapon_level(0xB1, 2600, 200),
     RAC3ITEM.LIQUID_NITROGEN_V7: RAC3ITEMDATA.construct_weapon_level(0xB2, 3000, 250, 10000),
     RAC3ITEM.LIQUID_NITROGEN_V8: RAC3ITEMDATA.construct_weapon_level(0xB3, 3600, 300, 25000),
     RAC3ITEM.BOUNCER_V3: RAC3ITEMDATA.construct_weapon_level(0xB4, 1400, 12, 8500),
     RAC3ITEM.BOUNCER_V4: RAC3ITEMDATA.construct_weapon_level(0xB5, 1800, 12, 18500),
-    RAC3ITEM.HEAVY_BOUNCER_V5: RAC3ITEMDATA.construct_weapon_level(0xB6, 2000, 12, 30500),
+    RAC3ITEM.HEAVY_BOUNCER: RAC3ITEMDATA.construct_weapon_level(0xB6, 2000, 12, 30500),
     RAC3ITEM.HEAVY_BOUNCER_V6: RAC3ITEMDATA.construct_weapon_level(0xB7, 3000, 12),
     RAC3ITEM.HEAVY_BOUNCER_V7: RAC3ITEMDATA.construct_weapon_level(0xB8, 3600, 14, 10000),
     RAC3ITEM.HEAVY_BOUNCER_V8: RAC3ITEMDATA.construct_weapon_level(0xB9, 4400, 16, 25000),
     RAC3ITEM.PLASMA_COIL_V3: RAC3ITEMDATA.construct_weapon_level(0xBA, 3600, 18, 18000),
     RAC3ITEM.PLASMA_COIL_V4: RAC3ITEMDATA.construct_weapon_level(0xBB, 4200, 18, 30000),
-    RAC3ITEM.PLASMA_STORM_V5: RAC3ITEMDATA.construct_weapon_level(0xBC, 6000, 20, 44000),
+    RAC3ITEM.PLASMA_STORM: RAC3ITEMDATA.construct_weapon_level(0xBC, 6000, 20, 44000),
     RAC3ITEM.PLASMA_STORM_V6: RAC3ITEMDATA.construct_weapon_level(0xBD, 6800, 20),
     RAC3ITEM.PLASMA_STORM_V7: RAC3ITEMDATA.construct_weapon_level(0xBE, 7600, 22, 15000),
     RAC3ITEM.PLASMA_STORM_V8: RAC3ITEMDATA.construct_weapon_level(0xBF, 8400, 25, 37500),
     RAC3ITEM.SHIELD_CHARGER_V3: RAC3ITEMDATA.construct_weapon_level(0xC0, 140, 3, 5000),
     RAC3ITEM.SHIELD_CHARGER_V4: RAC3ITEMDATA.construct_weapon_level(0xC1, 180, 4, 9600),
-    RAC3ITEM.TESLA_BARRIER_V5: RAC3ITEMDATA.construct_weapon_level(0xC2, 240, 4, 16800),
+    RAC3ITEM.TESLA_BARRIER: RAC3ITEMDATA.construct_weapon_level(0xC2, 240, 4, 16800),
     RAC3ITEM.TESLA_BARRIER_V6: RAC3ITEMDATA.construct_weapon_level(0xC3, 300, 4),
     RAC3ITEM.TESLA_BARRIER_V7: RAC3ITEMDATA.construct_weapon_level(0xC4, 400, 5, 12000),
     RAC3ITEM.TESLA_BARRIER_V8: RAC3ITEMDATA.construct_weapon_level(0xC5, 500, 5, 30000),
