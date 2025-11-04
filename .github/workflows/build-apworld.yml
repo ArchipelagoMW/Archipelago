@@ -35,7 +35,7 @@ jobs:
           ref: ${{ steps.branch.outputs.branch }}
           fetch-depth: 0
 
-      - name: Check if build should run (skip workflow/README-only changes)
+      - name: Check if build should run (skip yml/md-only changes)
         id: changes
         shell: bash
         run: |
@@ -60,11 +60,11 @@ jobs:
             exit 0
           fi
 
-          # Skip if only workflows or README changed
-          if echo "$changed_files" | grep -Eq '^(\.github/workflows/|README\.md)'; then
-            non_workflow_changes=$(echo "$changed_files" | grep -Ev '^(\.github/workflows/|README\.md)' || true)
+          # Skip if only yml or md files changed
+          if echo "$changed_files" | grep -Eq '\.(md|ya?ml)$'; then
+            non_workflow_changes=$(echo "$changed_files" | grep -Ev '\.(md|ya?ml)$' || true)
             if [[ -z "$non_workflow_changes" ]]; then
-              echo "🟡 Only workflow/README changes detected — skipping build."
+              echo "🟡 Only yml/md file changes detected — skipping build."
               echo "should_build=false" >> $GITHUB_OUTPUT
               exit 0
             fi
