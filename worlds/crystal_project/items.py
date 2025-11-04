@@ -20,6 +20,11 @@ class ItemData(NamedTuple):
     category: str
     code: int
     classification: ItemClassification
+        #For maguffins, we use Progression + Deprioritize + SkipBalancing
+        #For progression items that you need a lot to unlock not much, and are therefore unsatisfying, we use Progression + Deprioritize
+        #For really neat progression items that are a BIG DEAL, we use Progression + Useful, just because that comes out a gold color instead of purple when colored text is used.
+        # deprioritize means it won't be picked for a priority location, because it would feel unsatisfying to get i.e. clam from a priority location
+        # skip balancing means that if you used progression balancing to try to force one player's items earlier than another, it will fill those with i.e. non-clams
     #Amount found in each region type; added together for each set you're including
     beginnerAmount: Optional[int] = 1
     advancedAmount: Optional[int] = 0
@@ -148,7 +153,7 @@ item_table: Dict[str, ItemData] = {
     CANOPY_KEY: ItemData(KEY, 116 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Jidamba Tangle (unlocks Jidamba Eaclaneya), Expert Regions
     RAMPART_KEY: ItemData(KEY, 175 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: Castle Ramparts, Expert Regions
     FORGOTTEN_KEY: ItemData(KEY, 192 + item_index_offset, ItemClassification.progression, 0, 0, 1), #Turn-in: The Deep Sea, Expert Regions
-    SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression, 0, 1), #Everyone's best friend
+    SKELETON_KEY: ItemData(KEY, 147 + item_index_offset, ItemClassification.progression | ItemClassification.useful, 0, 1), #Everyone's best friend
     PRISON_KEY_RING: ItemData(KEY, 650 + item_index_offset, ItemClassification.progression, 0, 1),
     BEAURIOR_KEY_RING: ItemData(KEY, 651 + item_index_offset, ItemClassification.progression, 0, 0, 1),
     ICE_PUZZLE_KEY_RING: ItemData(KEY, 652 + item_index_offset, ItemClassification.progression, 0, 0, 1),
@@ -165,11 +170,11 @@ item_table: Dict[str, ItemData] = {
     BLACK_SQUIRREL: ItemData(ITEM, 21 + item_index_offset, ItemClassification.progression, 4), #Turn-in: Spawning Meadows, Beginner Regions
     DOG_BONE: ItemData(ITEM, 6 + item_index_offset, ItemClassification.progression, 3), #Turn-in: Delende, Beginner Regions
     # Number of clamshells is set dynamically based on your Clamshells in pool variable
-    CLAMSHELL: ItemData(ITEM, 16 + item_index_offset, ItemClassification.progression, 0), #Turn-in: Seaside Cliffs, Beginner Regions
+    CLAMSHELL: ItemData(ITEM, 16 + item_index_offset, ItemClassification.progression | ItemClassification.deprioritized | ItemClassification.skip_balancing, 0), #Turn-in: Seaside Cliffs, Beginner Regions
     DIGESTED_HEAD: ItemData(ITEM, 17 + item_index_offset, ItemClassification.progression, 0, 3), #Turn-in: Capital Sequoia, Advanced Regions
     LOST_PENGUIN: ItemData(ITEM, 24 + item_index_offset, ItemClassification.progression, 0, 12), #Turn-in: Capital Sequoia, Advanced Regions
-    ELEVATOR_PART: ItemData(ITEM, 224 + item_index_offset, ItemClassification.progression, 0, 0, 10), #Turn-in: Shoudu Province, Expert Regions
-    UNDERSEA_CRAB: ItemData(ITEM, 212 + item_index_offset, ItemClassification.progression, 0, 0, 15), #Turn-in: The Deep Sea, Expert Regions
+    ELEVATOR_PART: ItemData(ITEM, 224 + item_index_offset, ItemClassification.progression | ItemClassification.deprioritized, 0, 0, 10), #Turn-in: Shoudu Province, Expert Regions
+    UNDERSEA_CRAB: ItemData(ITEM, 212 + item_index_offset, ItemClassification.progression | ItemClassification.deprioritized, 0, 0, 15), #Turn-in: The Deep Sea, Expert Regions
     WEST_LOOKOUT_TOKEN: ItemData(ITEM, 81 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     CENTRAL_LOOKOUT_TOKEN: ItemData(ITEM, 88 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
     NORTH_LOOKOUT_TOKEN: ItemData(ITEM, 131 + item_index_offset, ItemClassification.progression, 0, 1), #Turn-in: Sara Sara Bazaar, Advanced Regions
@@ -263,11 +268,11 @@ item_table: Dict[str, ItemData] = {
     THE_NEW_WORLD_PASS: ItemData(PASS, 863 + item_index_offset, ItemClassification.progression, 0, 0, 0, 1),
 
     #Animal mount summons
-    PROGRESSIVE_QUINTAR_WOODWIND: ItemData(MOUNT, 39 + item_index_offset, ItemClassification.progression, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
-    IBEK_BELL: ItemData(MOUNT, 50 + item_index_offset, ItemClassification.progression),
-    OWL_DRUM: ItemData(MOUNT, 49 + item_index_offset, ItemClassification.progression),
-    PROGRESSIVE_SALMON_VIOLA: ItemData(MOUNT, 48 + item_index_offset, ItemClassification.progression, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
-    PROGRESSIVE_MOUNT: ItemData(MOUNT, 700 + item_index_offset, ItemClassification.progression, 7),
+    PROGRESSIVE_QUINTAR_WOODWIND: ItemData(MOUNT, 39 + item_index_offset, ItemClassification.progression | ItemClassification.useful, 3), #Quintar Pass ID 7 & Quintar Flute ID 39 & Quintar Ocarina 115
+    IBEK_BELL: ItemData(MOUNT, 50 + item_index_offset, ItemClassification.progression | ItemClassification.useful),
+    OWL_DRUM: ItemData(MOUNT, 49 + item_index_offset, ItemClassification.progression | ItemClassification.useful),
+    PROGRESSIVE_SALMON_VIOLA: ItemData(MOUNT, 48 + item_index_offset, ItemClassification.progression | ItemClassification.useful, 2), #Salmon Violin ID 48 & Salmon Cello ID 114
+    PROGRESSIVE_MOUNT: ItemData(MOUNT, 700 + item_index_offset, ItemClassification.progression | ItemClassification.useful, 7),
 
     #Teleport items (shards not included since they are stones but worse)
     HOME_POINT_STONE: ItemData(TELEPORT_STONE, 19 + item_index_offset, ItemClassification.useful), #Starter pack
