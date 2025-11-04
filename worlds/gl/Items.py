@@ -1,5 +1,8 @@
+from collections.abc import Mapping
+from types import MappingProxyType
+from typing import Final, NamedTuple
+
 from BaseClasses import Item, ItemClassification
-from typing import NamedTuple
 
 
 class ItemData(NamedTuple):
@@ -12,7 +15,7 @@ class GLItem(Item):
     game: str = "Gauntlet Legends"
 
 
-item_list: list[ItemData] = [
+item_list: Final[tuple[ItemData, ...]] = (
     ItemData(77780000, "Key", ItemClassification.filler),
     ItemData(77780001, "Lightning Potion", ItemClassification.filler),
     ItemData(77780002, "Light Potion", ItemClassification.filler),
@@ -75,14 +78,14 @@ item_list: list[ItemData] = [
     ItemData(77780059, "Town Obelisk 2", ItemClassification.progression),
     ItemData(77780060, "Castle Obelisk 1", ItemClassification.progression),
     ItemData(77780061, "Castle Obelisk 2", ItemClassification.progression),
-]
+)
 
-traps = [
+traps: Final[tuple[ItemData, ...]] = (
     ItemData(77780062, "Death", ItemClassification.trap),
     ItemData(77780063, "Poison Fruit", ItemClassification.trap),
-]
+)
 
-item_frequencies: dict[str, int] = {
+item_frequencies: Final[Mapping[str, int]] = MappingProxyType({
     "Key": 1000,
     "Lightning Potion": 60,
     "Light Potion": 60,
@@ -118,9 +121,9 @@ item_frequencies: dict[str, int] = {
     "Anti-Death Halo": 30,
     "Death": 50,
     "Poison Fruit": 50,
-}
+})
 
-obelisks = [
+obelisks: Final[tuple[str, ...]] = (
     "Mountain Obelisk 1",
     "Mountain Obelisk 2",
     "Mountain Obelisk 3",
@@ -128,14 +131,14 @@ obelisks = [
     "Town Obelisk 2",
     "Castle Obelisk 1",
     "Castle Obelisk 2"
-]
+)
 
-mirror_shards = [
+mirror_shards: Final[tuple[str, ...]] = (
     "Dragon Mirror Shard",
     "Chimera Mirror Shard",
     "Yeti Mirror Shard",
     "Plague Fiend Mirror Shard"
-]
+)
 
-item_table: dict[str, ItemData] = {item.item_name: item for item in item_list + traps}
-items_by_id: dict[int, ItemData] = {item.code: item for item in item_list + traps}
+item_table: Final[Mapping[str, ItemData]] = MappingProxyType({item.item_name: item for item in item_list + traps})
+items_by_id: Final[Mapping[int, ItemData]] = MappingProxyType({item.code: item for item in item_list + traps})

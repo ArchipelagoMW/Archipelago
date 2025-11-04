@@ -1,3 +1,5 @@
+from typing import Final
+
 from BaseClasses import Location
 
 
@@ -16,7 +18,7 @@ class GLLocation(Location):
     game: str = "Gauntlet Legends"
 
 
-valley_of_fire: list[LocationData] = [
+valley_of_fire: Final[tuple[LocationData, ...]] = (
     LocationData("Valley of Fire - Scroll", 88870001, 1),
     LocationData("Valley of Fire - Key 1", 88870002, 1),
     LocationData("Valley of Fire - Key 2", 88870003, 1),
@@ -61,9 +63,9 @@ valley_of_fire: list[LocationData] = [
     LocationData("Valley of Fire Barrel - Fire Breath 1", 88873518, 1),
     LocationData("Valley of Fire Barrel - Key 2", 88873519, 1),
     LocationData("Valley of Fire Barrel - Potion 1", 88873520, 1),
-]
+)
 
-dagger_peak: list[LocationData] = [
+dagger_peak: Final[tuple[LocationData, ...]] = (
     LocationData("Dagger Peak - Growth", 88870023, 1),
     LocationData("Dagger Peak - Runestone", 88870024, 1),
     LocationData("Dagger Peak - Key 1", 88870025, 1),
@@ -127,9 +129,9 @@ dagger_peak: list[LocationData] = [
     LocationData("Dagger Peak Chest - Death 1 (Dif. 3)", 88873624, 3),
     LocationData("Dagger Peak Chest - Meat 2 (Dif. 4)", 88873625, 4),
     LocationData("Dagger Peak Chest - Timestop 1 (Dif. 3)", 88873626, 3),
-]
+)
 
-cliffs_of_desolation: list[LocationData] = [
+cliffs_of_desolation: Final[tuple[LocationData, ...]] = (
     LocationData("Cliffs of Desolation - Scroll 1", 88870058, 1),
     LocationData("Cliffs of Desolation - Reflective Shot (Dif. 4)", 88870059, 4),
     LocationData("Cliffs of Desolation - Key 1 (Dif. 2)", 88870060, 2),
@@ -221,9 +223,9 @@ cliffs_of_desolation: list[LocationData] = [
     LocationData("Cliffs of Desolation Chest - Fruit 2", 88873746, 1),
     LocationData("Cliffs of Desolation Barrel - Invulnerability 1", 88873747, 1),
     LocationData("Cliffs of Desolation Chest - Fruit 3", 88873748, 1),
-]
+)
 
-lost_cave: list[LocationData] = [
+lost_cave: Final[tuple[LocationData, ...]] = (
     LocationData("Lost Cave - Scroll 1", 88870099, 1),
     LocationData("Lost Cave - Runestone", 88870100, 1),
     LocationData("Lost Cave - Very Small Pile of Gold 1 (Dif. 2)", 88870101, 2),
@@ -305,9 +307,9 @@ lost_cave: list[LocationData] = [
     LocationData("Lost Cave Barrel - Reflective Shield 1 (Dif. 3)", 88873834, 3),
     LocationData("Lost Cave Barrel - Super Shot 1 (Dif. 4)", 88873835, 4),
     LocationData("Lost Cave Chest - Gold 6", 88873836, 1),
-]
+)
 
-volcanic_cavern: list[LocationData] = [
+volcanic_cavern: Final[tuple[LocationData, ...]] = (
     LocationData("Volcanic Cavern - Key 1", 88870143, 1),
     LocationData("Volcanic Cavern - Scimitar of Decapitation", 88870144, 1),
     LocationData("Volcanic Cavern - Runestone", 88870145, 1),
@@ -398,9 +400,9 @@ volcanic_cavern: list[LocationData] = [
     LocationData("Volcanic Cavern Barrel - Scroll 2", 88873954, 1),
     LocationData("Volcanic Cavern Barrel - Nothing 12 (Dif. 3)", 88873955, 3),
     LocationData("Volcanic Cavern Barrel - Nothing 13 (Dif. 2)", 88873956, 2),
-]
+)
 
-dragons_lair: list[LocationData] = [
+dragons_lair: Final[tuple[LocationData, ...]] = (
     LocationData("Dragon's Lair - Slab of Meat (Dif. 2)", 88870176, 2),
     LocationData("Dragon's Lair - Rapid Fire (Dif. 2)", 88870177, 2),
     LocationData("Dragon's Lair - Growth (Dif. 4)", 88870178, 4),
@@ -408,9 +410,9 @@ dragons_lair: list[LocationData] = [
     LocationData("Dragon's Lair - 3-Way Shot", 88870180, 1),
     LocationData("Dragon's Lair - Drumstick", 88870181, 1),
     LocationData("Dragon's Lair - Dragon Mirror Shard", 88870607, 1),
-]
+)
 
-castle_courtyard: list[LocationData] = [
+castle_courtyard: Final[tuple[LocationData, ...]] = (
     LocationData("Castle Courtyard - Runestone", 88870182, 1),
     LocationData("Castle Courtyard - Key 1", 88870183, 1),
     LocationData("Castle Courtyard - Key 2", 88870184, 1),
@@ -507,9 +509,9 @@ castle_courtyard: list[LocationData] = [
     LocationData("Castle Courtyard Barrel - Nothing 11 (Dif. 3)", 88873055, 3),
     LocationData("Castle Courtyard Barrel - Nothing 12", 88873056, 1),
     LocationData("Castle Courtyard Barrel - Key 12 (Dif. 4)", 88873057, 4),
-]
+)
 
-dungeon_of_torment: list[LocationData] = [
+dungeon_of_torment: Final[tuple[LocationData, ...]] = (
     LocationData("Dungeon of Torment - Lightning Potion 1 (Dif. 4)", 88870219, 4),
     LocationData("Dungeon of Torment - Key 1", 88870220, 1),
     LocationData("Dungeon of Torment - Runestone", 88870221, 1),
@@ -563,9 +565,9 @@ dungeon_of_torment: list[LocationData] = [
     LocationData("Dungeon of Torment Barrel - Nothing 7 (Dif. 3)", 88873129, 3),
     LocationData("Dungeon of Torment Barrel - Nothing 8 (Dif. 3)", 88873130, 3),
     LocationData("Dungeon of Torment Barrel - Scroll 2", 88873131, 1),
-]
+)
 
-tower_armory: list[LocationData] = [
+tower_armory: Final[tuple[LocationData, ...]] = (
     LocationData("Tower Armory - Key 1 (Dif. 4)", 88870239, 4),
     LocationData("Tower Armory - Key 2", 88870240, 1),
     LocationData("Tower Armory - Key 3", 88870241, 1),
@@ -648,9 +650,9 @@ tower_armory: list[LocationData] = [
     LocationData("Tower Armory Barrel - Levitate 1 (Dif. 3)", 88873234, 3),
     LocationData("Tower Armory Barrel - Nothing 2 (Dif. 4)", 88873235, 4),
     LocationData("Tower Armory Chest - Reflective Shield 1 (Dif. 2)", 88873236, 2),
-]
+)
 
-castle_treasury: list[LocationData] = [
+castle_treasury: Final[tuple[LocationData, ...]] = (
     LocationData("Castle Treasury - Lightning Potion 1", 88870284, 1),
     LocationData("Castle Treasury - Key 1", 88870285, 1),
     LocationData("Castle Treasury - Key 2", 88870286, 1),
@@ -729,9 +731,9 @@ castle_treasury: list[LocationData] = [
     LocationData("Castle Treasury Chest - Fire Shield 1", 88873330, 1),
     LocationData("Castle Treasury Barrel - Levitate 2 (Dif. 2)", 88873331, 2),
     LocationData("Castle Treasury Chest - Random 1", 88873332, 1),
-]
+)
 
-chimeras_keep: list[LocationData] = [
+chimeras_keep: Final[tuple[LocationData, ...]] = (
     LocationData("Chimera's Keep - Speed Boots", 88870329, 1),
     LocationData("Chimera's Keep - Growth (Dif. 4)", 88870330, 4),
     LocationData("Chimera's Keep - 3-Way Shot (Dif. 2)", 88870331, 2),
@@ -739,9 +741,9 @@ chimeras_keep: list[LocationData] = [
     LocationData("Chimera's Keep - Ham (Dif. 2)", 88870333, 2),
     LocationData("Chimera's Keep - Drumstick", 88870334, 1),
     LocationData("Chimera's Keep - Chimera Mirror Shard", 88870608, 1),
-]
+)
 
-poisoned_fields: list[LocationData] = [
+poisoned_fields: Final[tuple[LocationData, ...]] = (
     LocationData("Poisoned Fields - Fruit Pile 1", 88870335, 1),
     LocationData("Poisoned Fields - Fruit Pile 2 (Dif. 4)", 88870336, 4),
     LocationData("Poisoned Fields - Fruit Pile 3 (Dif. 3)", 88870337, 3),
@@ -874,9 +876,9 @@ poisoned_fields: list[LocationData] = [
     LocationData("Poisoned Fields Barrel - Death 3 (Dif. 2)", 88871181, 2),
     LocationData("Poisoned Fields Chest - Gold 13 (Dif. 4)", 88871182, 4),
     LocationData("Poisoned Fields Chest - Gold 14", 88871183, 1),
-]
+)
 
-haunted_cemetery: list[LocationData] = [
+haunted_cemetery: Final[tuple[LocationData, ...]] = (
     LocationData("Haunted Cemetery - Acid Potion 1", 88870382, 1),
     LocationData("Haunted Cemetery - Runestone", 88870383, 1),
     LocationData("Haunted Cemetery - Small Pile of Gold", 88870384, 1),
@@ -940,9 +942,9 @@ haunted_cemetery: list[LocationData] = [
     LocationData("Haunted Cemetery Chest - 3-Way Shot 1 (Dif. 2)", 88871240, 2),
     LocationData("Haunted Cemetery Chest - Gold 3", 88871241, 1),
     LocationData("Haunted Cemetery Chest - Meat 2 (Dif. 4)", 88871242, 4),
-]
+)
 
-venomous_spire: list[LocationData] = [
+venomous_spire: Final[tuple[LocationData, ...]] = (
     LocationData("Venemous Spire - Acid Potion 1", 88870401, 1),
     LocationData("Venemous Spire - Invisibility", 88870402, 1),
     LocationData("Venemous Spire - Flame of Tarkana", 88870403, 1),
@@ -1023,9 +1025,9 @@ venomous_spire: list[LocationData] = [
     LocationData("Venemous Spire Barrel - Key 18", 88871361, 1),
     LocationData("Venemous Spire Chest - Gold 5 (Dif. 2)", 88871362, 2),
     LocationData("Venemous Spire Barrel - Key 19", 88871363, 1),
-]
+)
 
-toxic_air_ship: list[LocationData] = [
+toxic_air_ship: Final[tuple[LocationData, ...]] = (
     LocationData("Toxic Air Ship - Acid Breath", 88870417, 1),
     LocationData("Toxic Air Ship - Scroll", 88870418, 1),
     LocationData("Toxic Air Ship - Key 1", 88870419, 1),
@@ -1089,13 +1091,13 @@ toxic_air_ship: list[LocationData] = [
     LocationData("Toxic Air Ship Barrel - Scroll 2", 88871441, 1),
     LocationData("Toxic Air Ship Barrel - Meat 1 (Dif. 3)", 88871442, 3),
     LocationData("Toxic Air Ship Barrel - Potion 3 (Dif. 4)", 88871443, 4),
-]
+)
 
-plague_fiend: list[LocationData] = [
+plague_fiend: Final[tuple[LocationData, ...]] = (
     LocationData("Vat of the Plague Fiend - Plague Fiend Mirror Shard", 88870609, 1),
-]
+)
 
-arctic_docks: list[LocationData] = [
+arctic_docks: Final[tuple[LocationData, ...]] = (
     LocationData("Arctic Docks - Light Potion 1", 88870436, 1),
     LocationData("Arctic Docks - Scroll", 88870437, 1),
     LocationData("Arctic Docks - Light Potion 2 (Dif. 2)", 88870438, 2),
@@ -1189,9 +1191,9 @@ arctic_docks: list[LocationData] = [
     LocationData("Arctic Docks Chest - Death 2", 88871664, 1),
     LocationData("Arctic Docks Chest - Meat 2 (Dif. 2)", 88871665, 2),
     LocationData("Arctic Docks Chest - Meat 3 (Dif. 4)", 88871666, 4),
-]
+)
 
-frozen_camp: list[LocationData] = [
+frozen_camp: Final[tuple[LocationData, ...]] = (
     LocationData("Frozen Camp - Light Potion 1", 88870462, 1),
     LocationData("Frozen Camp - Full Barrel of Gold 1 (Dif. 4)", 88870463, 4),
     LocationData("Frozen Camp - Half Barrel of Gold 1", 88870464, 1),
@@ -1306,9 +1308,9 @@ frozen_camp: list[LocationData] = [
     LocationData("Frozen Camp Chest - Speed Boots 1 (Dif. 3)", 88871775, 3),
     LocationData("Frozen Camp Chest - Invulnerability 1", 88871776, 1),
     LocationData("Frozen Camp Barrel - Death 1 (Dif. 2)", 88871777, 2),
-]
+)
 
-crystal_mine: list[LocationData] = [
+crystal_mine: Final[tuple[LocationData, ...]] = (
     LocationData("Crystal Mine - Rapid Fire", 88870498, 1),
     LocationData("Crystal Mine - Speed Boots", 88870499, 1),
     LocationData("Crystal Mine - Key 1 (Dif. 2)", 88870500, 2),
@@ -1392,9 +1394,9 @@ crystal_mine: list[LocationData] = [
     LocationData("Crystal Mine Barrel - Potion 5", 88871866, 1),
     LocationData("Crystal Mine Barrel - Fruit 3 (Dif. 4)", 88871867, 4),
     LocationData("Crystal Mine Barrel - Gold 7 (Dif. 2)", 88871868, 2),
-]
+)
 
-erupting_fissure: list[LocationData] = [
+erupting_fissure: Final[tuple[LocationData, ...]] = (
     LocationData("Erupting Fissure - Light Potion", 88870512, 1),
     LocationData("Erupting Fissure - Growth", 88870513, 1),
     LocationData("Erupting Fissure - Reflective Shield", 88870514, 1),
@@ -1491,11 +1493,11 @@ erupting_fissure: list[LocationData] = [
     LocationData("Erupting Fissure Barrel - Death 3 (Dif. 2)", 88871975, 2),
     LocationData("Erupting Fissure Chest - Levitate 1", 88871976, 1),
     LocationData("Erupting Fissure Chest - Gold 8 (Dif. 2)", 88871977, 2),
-]
+)
 
-yeti: list[LocationData] = [LocationData("Yeti's Cavern - Yeti Mirror Shard", 88870610, 1)]
+yeti: Final[tuple[LocationData, ...]] = (LocationData("Yeti's Cavern - Yeti Mirror Shard", 88870610, 1),)
 
-desecrated_temple: list[LocationData] = [
+desecrated_temple: Final[tuple[LocationData, ...]] = (
     LocationData("Desecrated Temple - Death 1", 88870530, 1),
     LocationData("Desecrated Temple - Death 2 (Dif. 2)", 88870531, 2),
     LocationData("Desecrated Temple - Speed Boots", 88870532, 1),
@@ -1535,9 +1537,9 @@ desecrated_temple: list[LocationData] = [
     LocationData("Desecrated Temple Chest - Gold 29", 88872030, 1),
     LocationData("Desecrated Temple Chest - Levitate 1 (Dif. 2)", 88872031, 2),
     LocationData("Desecrated Temple Chest - Phoenix Familiar 1 (Dif. 3)", 88872032, 3),
-]
+)
 
-battle_trenches: list[LocationData] = [
+battle_trenches: Final[tuple[LocationData, ...]] = (
     LocationData("Battle Trenches - Fire Potion 1", 88870536, 1),
     LocationData("Battle Trenches - Light Potion", 88870537, 1),
     LocationData("Battle Trenches - Scroll 1", 88870538, 1),
@@ -1618,9 +1620,9 @@ battle_trenches: list[LocationData] = [
     LocationData("Battle Trenches Barrel - Key 21", 88872153, 1),
     LocationData("Battle Trenches Chest - Fire Amulet 1 (Dif. 3)", 88872154, 3),
     LocationData("Battle Trenches Chest - Meat 4 (Dif. 3)", 88872155, 3),
-]
+)
 
-battle_towers: list[LocationData] = [
+battle_towers: Final[tuple[LocationData, ...]] = (
     LocationData("Battle Towers - Meat (Dif. 3)", 88870560, 3),
     LocationData("Battle Towers - Key 1", 88870561, 1),
     LocationData("Battle Towers - Large Pile of Gold (Dif. 3)", 88870562, 3),
@@ -1671,9 +1673,9 @@ battle_towers: list[LocationData] = [
     LocationData("Battle Towers Chest - Meat 1 (Dif. 2)", 88872240, 2),
     LocationData("Battle Towers Chest - Meat 2", 88872241, 1),
     LocationData("Battle Towers Chest - Fire Breath 1", 88872242, 1),
-]
+)
 
-infernal_fortress: list[LocationData] = [
+infernal_fortress: Final[tuple[LocationData, ...]] = (
     LocationData("Infernal Fortress - Thunder Hammer", 88870567, 1),
     LocationData("Infernal Fortress - Key 1 (Dif. 2)", 88870568, 2),
     LocationData("Infernal Fortress - Runestone", 88870569, 1),
@@ -1746,9 +1748,9 @@ infernal_fortress: list[LocationData] = [
     LocationData("Infernal Fortress Chest - 3-Way Shot 1", 88872352, 1),
     LocationData("Infernal Fortress Chest - Potion 2", 88872353, 1),
     LocationData("Infernal Fortress Chest - Meat 1 (Dif. 3)", 88872354, 3),
-]
+)
 
-gates_of_the_underworld: list[LocationData] = [
+gates_of_the_underworld: Final[tuple[LocationData, ...]] = (
     LocationData("Gates of the Underworld - Potion Pile", 88870584, 1),
     LocationData("Gates of the Underworld - Rapid Fire (Dif. 3)", 88870585, 3),
     LocationData("Gates of the Underworld - Reflective Shield (Dif. 2)", 88870586, 2),
@@ -1772,7 +1774,7 @@ gates_of_the_underworld: list[LocationData] = [
     LocationData("Gates of the Underworld - Super Shot", 88870604, 1),
     LocationData("Gates of the Underworld - Speed Boots (Dif. 3)", 88870605, 3),
     LocationData("Gates of the Underworld - Shrink (Dif. 4)", 88870606, 4),
-]
+)
 
 all_locations: list[LocationData] = (
         valley_of_fire
