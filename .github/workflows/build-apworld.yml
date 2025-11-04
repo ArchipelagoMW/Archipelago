@@ -169,74 +169,83 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
 
-      - name: Create release notes
-        id: notes
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            rac3.apworld
+            RaC3.yaml
+          tag_name: v${{ steps.semver.outputs.version }}
+          name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
+          body: "Generating release notes..."
+          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate release notes
         shell: bash
         run: |
           set -e
           repo_url="https://github.com/${{ github.repository }}"
           branch="${{ steps.semver.outputs.branch }}"
           new_tag="v${{ steps.semver.outputs.version }}"
-          short_sha=$(git rev-parse --short HEAD)
 
           git fetch --tags
 
-          echo "🔍 Determining previous tag for changelog..."
+          echo "🔍 All recent tags (descending):"
+          git tag --sort=-v:refname | head -n 10 || true
 
-          # Find the most recent relevant tag depending on branch type
+          # Get previous tag (latest before new_tag)
           if [[ "$branch" == "main" ]]; then
-            # For main: compare to latest *non-pre* tag
-            prev_tag=$(git tag --sort=-v:refname | grep -v -- '-pre' | head -n 1 || true)
+            # previous stable release (ignore -pre)
+            prev_tag=$(git tag --sort=-v:refname | grep -v -- '-pre' | grep -v "^$new_tag\$" | head -n 1)
           else
-            # For staging: compare to latest tag of ANY kind (pre or stable)
-            prev_tag=$(git tag --sort=-v:refname | head -n 1 || true)
+            # previous tag of any type for pre-release
+            prev_tag=$(git tag --sort=-v:refname | grep -v "^$new_tag\$" | head -n 1)
           fi
-          
-          # Fallback: if none found, show full commit history
+
+          # Full compare link
           if [[ -z "$prev_tag" ]]; then
-            echo "⚠️ No previous ${branch} release tag found — showing full history."
+            echo "⚠️ No previous relevant tag found — showing full history"
             changelog="${repo_url}/commits/${branch}"
           else
             changelog="${repo_url}/compare/${prev_tag}...${new_tag}"
           fi
 
           echo "Previous tag: ${prev_tag:-<none>}"
-          echo "Current tag:  ${new_tag}"
+          echo "New tag: $new_tag"
+          echo "Changelog link: $changelog"
 
-          echo "🔍 Using changelog link: $changelog"
-
-          # Gather commit list (limit 200, count total)
+          # Only show commits between the two tags
           if [[ -n "$prev_tag" ]]; then
-            total_commits=$(git rev-list --count "${prev_tag}..HEAD")
-            commit_list=$(git log "${prev_tag}..HEAD" --pretty=format:"- %s (%h)" -n 200)
+            commit_list=$(git log "${prev_tag}..${new_tag}" --pretty=format:"- %s (%h)")
+            total_commits=$(git rev-list "${prev_tag}..${new_tag}" --count)
           else
-            total_commits=$(git rev-list --count HEAD)
-            commit_list=$(git log -n 200 --pretty=format:"- %s (%h)")
+            commit_list=$(git log "${new_tag}" --pretty=format:"- %s (%h)")
+            total_commits=$(git rev-list "${new_tag}" --count)
           fi
 
-          if [[ -z "$commit_list" ]]; then
-            commit_list="- (no new commits since last release)"
-          fi
-
-          if [[ $total_commits -gt 200 ]]; then
-            extra_commits=$((total_commits - 200))
-            commit_list="${commit_list}\n- ...and ${extra_commits} more commits."
+          if [[ $total_commits -eq 0 ]]; then
+              commit_list="- (no new commits since last relevant release)"
+              echo "🟡 No new commits since last release"
+          elif [[ $total_commits -gt 200 ]]; then
+              extra_commits=$((total_commits - 200))
+              commit_list="${commit_list}\n- ...and ${extra_commits} more commits."
           fi
 
           cat <<EOF > release_notes.md
           ## RaC3 APWorld ${new_tag}
-
+      
           **Branch:** ${branch}  
-          **Commit:** ${short_sha}  
           **Date:** $(date -u +"%Y-%m-%d %H:%M UTC")
-
+      
           <details>
-          <summary><strong>📜 Summary (Last ${total_commits} Commits)</strong></summary>
-
+          <summary><strong>📜 Summary (${total_commits} changes since ${prev_tag:-initial commit})</strong></summary>
+      
           ${commit_list}
-
+      
           </details>
-
+      
           **Full changelog and compare**: ${changelog}
 
           ### Notes
@@ -248,13 +257,10 @@ jobs:
           \`/send_location <player_name> <location>\` Example: \`/send_location TaoshiRaC3 "Crash Site: Infobot: Aridia"\`
           EOF
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: rac3.apworld
-          tag_name: v${{ steps.semver.outputs.version }}
-          name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
-          body_path: release_notes.md
-          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+      - name: Update GitHub Release with generated notes
+        shell: bash
+        run: |
+          new_tag="v${{ steps.semver.outputs.version }}"
+          gh release edit "$new_tag" --notes-file release_notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
