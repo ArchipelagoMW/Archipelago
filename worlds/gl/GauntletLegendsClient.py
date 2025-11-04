@@ -171,7 +171,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
             logger.info("Cannot toggle InstantMax: slot data not initialized.")
             return
         self.ctx.glslotdata["instant_max"] = not self.ctx.glslotdata["instant_max"]
-        logger.info(f"InstantMax {('Enabled.' if self.ctx.glslotdata["instant_max"] else 'Disabled.')}")
+        logger.info(f"InstantMax {('Enabled.' if self.ctx.glslotdata['instant_max'] else 'Disabled.')}")
 
     def _cmd_players(self, value: int):
         """Set number of local players"""
