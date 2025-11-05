@@ -7,10 +7,11 @@ import warnings
 import zipimport
 import time
 import dataclasses
+import json
 from typing import List
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -38,6 +39,7 @@ class WorldSource:
     is_zip: bool = False
     relative: bool = True  # relative to regular world import folder
     time_taken: float = -1.0
+    version: Version = Version(0, 0, 0)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.path}, is_zip={self.is_zip}, relative={self.relative})"
@@ -102,12 +104,94 @@ for folder in (folder for folder in (user_folder, local_folder) if folder):
 
 # import all submodules to trigger AutoWorldRegister
 world_sources.sort()
+apworlds: list[WorldSource] = []
 for world_source in world_sources:
-    world_source.load()
+    # load all loose files first:
+    if world_source.is_zip:
+        apworlds.append(world_source)
+    else:
+        world_source.load()
 
-# Build the data package for each game.
+
 from .AutoWorld import AutoWorldRegister
 
+for world_source in world_sources:
+    if not world_source.is_zip:
+        # look for manifest
+        manifest = {}
+        for dirpath, dirnames, filenames in os.walk(world_source.resolved_path):
+            for file in filenames:
+                if file.endswith("archipelago.json"):
+                    with open(os.path.join(dirpath, file), mode="r", encoding="utf-8") as manifest_file:
+                        manifest = json.load(manifest_file)
+                    break
+            if manifest:
+                break
+        game = manifest.get("game")
+        if game in AutoWorldRegister.world_types:
+            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
+
+if apworlds:
+    # encapsulation for namespace / gc purposes
+    def load_apworlds() -> None:
+        global apworlds
+        from .Files import APWorldContainer, InvalidDataError
+        core_compatible: list[tuple[WorldSource, APWorldContainer]] = []
+
+        def fail_world(game_name: str, reason: str, add_as_failed_to_load: bool = True) -> None:
+            if add_as_failed_to_load:
+                failed_world_loads.append(game_name)
+            logging.warning(reason)
+
+        for apworld_source in apworlds:
+            apworld: APWorldContainer = APWorldContainer(apworld_source.resolved_path)
+            # populate metadata
+            try:
+                apworld.read()
+            except InvalidDataError as e:
+                if version_tuple < (0, 7, 0):
+                    logging.error(
+                        f"Invalid or missing manifest file for {apworld_source.resolved_path}. "
+                        "This apworld will stop working with Archipelago 0.7.0."
+                    )
+                    logging.error(e)
+                else:
+                    raise e
+
+            if apworld.minimum_ap_version and apworld.minimum_ap_version > version_tuple:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its minimum core version {apworld.minimum_ap_version} "
+                           f"is higher than current core version {version_tuple}.")
+            elif apworld.maximum_ap_version and apworld.maximum_ap_version < version_tuple:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its maximum core version {apworld.maximum_ap_version} "
+                           f"is lower than current core version {version_tuple}.")
+            else:
+                core_compatible.append((apworld_source, apworld))
+        # load highest version first
+        core_compatible.sort(
+            key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
+            reverse=True)
+        for apworld_source, apworld in core_compatible:
+            if apworld.game and apworld.game in AutoWorldRegister.world_types:
+                fail_world(apworld.game,
+                           f"Did not load {apworld_source.path} "
+                           f"as its game {apworld.game} is already loaded.",
+                           add_as_failed_to_load=False)
+            else:
+                apworld_source.load()
+                if apworld.game in AutoWorldRegister.world_types:
+                    # world could fail to load at this point
+                    if apworld.world_version:
+                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
+    load_apworlds()
+    del load_apworlds
+
+del apworlds
+
+# Build the data package for each game.
 network_data_package: DataPackage = {
     "games": {world_name: world.get_data_package_data() for world_name, world in AutoWorldRegister.world_types.items()},
 }
