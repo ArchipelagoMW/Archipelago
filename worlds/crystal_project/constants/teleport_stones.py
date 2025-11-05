@@ -1,4 +1,5 @@
 HOME_POINT_STONE = "Item - Home Point Stone"
+ARCHIPELAGO_STONE = "Item - Archipelago Stone"
 GAEA_STONE = "Item - Gaea Stone"
 MERCURY_STONE = "Item - Mercury Stone"
 POSEIDON_STONE = "Item - Poseidon Stone"

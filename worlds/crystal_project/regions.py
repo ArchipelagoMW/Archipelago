@@ -456,7 +456,6 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, ANCIENT_RESERVOIR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, IBEK_CAVE_AP_REGION, BELOW_GRAN_AP_REGION],
                     {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
-                     IBEK_CAVE_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, IBEK_CAVE_AP_REGION, [SARA_SARA_BEACH_EAST_AP_REGION],
                     {SARA_SARA_BEACH_EAST_AP_REGION: lambda state: logic.has_vertical_movement(state)})
