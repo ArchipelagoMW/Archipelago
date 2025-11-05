@@ -11692,9 +11692,7 @@ GLOVERHACK = {
     n64_taglink = 0x726,
     ROM_MAJOR_VERSION = 0x79C,
     ROM_MINOR_VERSION = 0x79D,
-    ROM_PATCH_VERSION = 0x79E,
-
-
+    ROM_PATCH_VERSION = 0x79E
 }
 
 function GLOVERHACK:new(t)
