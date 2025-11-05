@@ -550,14 +550,14 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #NPCs
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Reid chilling by the Fish Hatchery", 2410 + npc_index_offset), #(113, 172, -372) Courtyard Key; Fixed Missable
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race Participation Prize", 50639 + npc_index_offset, lambda state: logic.has_rental_salmon(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 14th place price", 50640 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 12th place price", 50641 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 10th place price", 50642 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 8th place price", 50643 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 6th place price", 50644 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 4th place price", 50645 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 3rd place price", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 2nd place price", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 14th place prize", 50640 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 12th place prize", 50641 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 10th place prize", 50642 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 8th place prize", 50643 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 6th place prize", 50644 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 4th place prize", 50645 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 3rd place prize", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 2nd place prize", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.has_swimming(state)),
         #Mushroom Mountain
         LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
