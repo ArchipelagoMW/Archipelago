@@ -159,7 +159,7 @@ class GauntletLegendsWorld(World):
     def create_items(self) -> None:
         # First add in all progression and useful items
         required_items = []
-        precollected = [item for item in item_list if item in self.multiworld.precollected_items[self.player]]
+        precollected = [item for item in item_list if item.item_name in [item.name for item in self.multiworld.precollected_items[self.player]]]
         skipped_items = set()
         item_required_count = len(self.multiworld.get_unfilled_locations(self.player))
         if self.options.infinite_keys:
