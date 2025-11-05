@@ -106,26 +106,38 @@ def tree_zone_4_midway_bell(state, player):
 
 def tree_zone_4_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Tree Zone 4")
-    reachable_coins = 0
+    entryway = 14
+    hall = 4
+    first_trip_downstairs = 31
+    second_trip_downstairs = 15
+    downstairs_with_auto_scroll = 12
+    final_room = 10
+
+    reachable_coins_from_start = 0
+    reachable_coins_from_bell = 0
+
     if has_pipe_up(state, player):
-        reachable_coins += 14
+        reachable_coins_from_start += entryway
         if has_pipe_right(state, player):
-            reachable_coins += 4
+            reachable_coins_from_start += hall
             if has_pipe_down(state, player):
-                reachable_coins += 10
-                if not auto_scroll:
-                    reachable_coins += 46
-    elif state.has("Tree Zone 4 Midway Bell", player):
-        if not auto_scroll:
-            if has_pipe_left(state, player):
-                reachable_coins += 18
-                if has_pipe_down(state, player):
-                    reachable_coins += 10
+                if auto_scroll:
+                    reachable_coins_from_start += downstairs_with_auto_scroll
+                else:
+                    reachable_coins_from_start += final_room + first_trip_downstairs + second_trip_downstairs
+    if state.has("Tree Zone 4 Midway Bell", player):
+        if has_pipe_down(state, player) and (auto_scroll or not has_pipe_left(state, player)):
+            reachable_coins_from_bell += final_room
+        elif has_pipe_left(state, player) and not auto_scroll:
+            if has_pipe_down(state, player):
+                reachable_coins_from_bell += first_trip_downstairs
+                if has_pipe_right(state, player):
+                    reachable_coins_from_bell += entryway + hall
                     if has_pipe_up(state, player):
-                        reachable_coins += 46
-        elif has_pipe_down(state, player):
-            reachable_coins += 10
-    return coins <= reachable_coins
+                        reachable_coins_from_bell += second_trip_downstairs + final_room
+            else:
+                reachable_coins_from_bell += entryway + hall
+    return coins <= max(reachable_coins_from_start, reachable_coins_from_bell)
 
 
 def tree_zone_5_boss(state, player):
@@ -135,10 +147,6 @@ def tree_zone_5_boss(state, player):
 def tree_zone_5_coins(state, player, coins):
     auto_scroll = is_auto_scroll(state, player, "Tree Zone 5")
     reachable_coins = 0
-    # Not actually sure if these platforms can be randomized / can make the coin blocks unreachable from below
-    if ((not state.multiworld.worlds[player].options.randomize_platforms)
-            or state.has_any(["Mushroom", "Fire Flower"], player)):
-        reachable_coins += 2
     if state.has_any(["Mushroom", "Fire Flower"], player):
         reachable_coins += 2
     if state.has("Carrot", player):
@@ -243,12 +251,9 @@ def pumpkin_zone_4_coins(state, player, coins):
 
 
 def mario_zone_1_normal_exit(state, player):
-    if has_pipe_right(state, player):
-        if state.has_any(["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 Midway Bell"], player):
-            return True
-        if is_auto_scroll(state, player, "Mario Zone 1"):
-            return True
-    return False
+    return has_pipe_right(state, player) and (not is_auto_scroll(state, player, "Mario Zone 1")
+                                              or state.has_any(["Mushroom", "Fire Flower", "Carrot",
+                                                                "Mario Zone 1 Midway Bell"], player))
 
 
 def mario_zone_1_midway_bell(state, player):

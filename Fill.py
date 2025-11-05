@@ -129,6 +129,10 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
                                      for i, location in enumerate(placements))
                     for (i, location, unsafe) in swap_attempts:
                         placed_item = location.item
+                        if item_to_place == placed_item:
+                            # The number of allowed swaps is limited, so do not allow a swap of an item with a copy of
+                            # itself.
+                            continue
                         # Unplaceable items can sometimes be swapped infinitely. Limit the
                         # number of times we will swap an individual item to prevent this
                         swap_count = swapped_items[placed_item.player, placed_item.name, unsafe]
@@ -549,10 +553,12 @@ def distribute_items_restrictive(multiworld: MultiWorld,
         if prioritylocations and regular_progression:
             # retry with one_item_per_player off because some priority fills can fail to fill with that optimization
             # deprioritized items are still not in the mix, so they need to be collected into state first.
+            # allow_partial should only be set if there is deprioritized progression to fall back on.
             priority_retry_state = sweep_from_pool(multiworld.state, deprioritized_progression)
             fill_restrictive(multiworld, priority_retry_state, prioritylocations, regular_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry", one_item_per_player=False, allow_partial=True)
+                             name="Priority Retry", one_item_per_player=False,
+                             allow_partial=bool(deprioritized_progression))
 
         if prioritylocations and deprioritized_progression:
             # There are no more regular progression items that can be placed on any priority locations.
