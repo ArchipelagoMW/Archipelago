@@ -280,7 +280,7 @@ def zenc(data):
 
 
 # Create a LevelData object from raw decompressed bytes of a level
-def get_level_data(stream: io.BytesIO, size: int, level=0) -> (io.BytesIO, LevelData):
+def get_level_data(stream: io.BytesIO, size: int, level: int = 0) -> tuple[io.BytesIO, LevelData]:
     data = LevelData()
     data.stream = io.BytesIO(zdec(stream.read(size)))
     if level == 17:
