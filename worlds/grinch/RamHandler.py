@@ -16,7 +16,7 @@ class GrinchRamData:
     value (int; Optional): The value we are using to set, add, or subtract from the RAM Address Value. Defaults to 1 if binary_bit_pos is passed in
     binary_bit_pos: (int; Optional): If passed in, we are looking for a specific bit within the byte of the ram_address. This is represented as a small-endian bit position, meaning the right-most bit is 0, and the left-most bit is 7
     byte_size: (int: Default: 1): The size of the RAM Address address we are looking for.
-    update_method (UpdateMethod; Default: SET): Determines what we are doing to the RAM Address. We can either SET the address, simply assigning a value. We can ADD or SUBTRACT, modifying hte existing value by a set amount. And we can FREEZE the address, preventing it from updating in the future
+    update_method (UpdateMethod; Default: SET): Determines what we are doing to the RAM Address. We can either SET the address, simply assigning a value. We can ADD or SUBTRACT, modifying the existing value by a set amount. And we can FREEZE the address, preventing it from updating in the future
     min_count: The minimum amount that a value can go down to using SUBTRACT
     max_count: The maximum amount that a value can go down to using ADD
     """
