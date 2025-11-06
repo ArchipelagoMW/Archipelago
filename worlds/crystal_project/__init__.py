@@ -494,18 +494,18 @@ class CrystalProjectWorld(World):
                 if (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
                         name == THE_NEW_WORLD_PASS):
-                    amount = 1
+                    amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                 # Same goes for old world pass
                 elif (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         self.options.goal.value == self.options.goal.option_true_astley and
                         name == THE_OLD_WORLD_PASS):
-                    amount = 1
+                    amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                 # adds Astley goal required item if it doesn't already exist (aka the map!)
                 if self.options.goal.value == self.options.goal.option_astley and name == THE_NEW_WORLD_MAP:
-                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
+                    amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                 # adds true Astley goal required items if they don't already exist (including maps!)
                 if self.options.goal.value == self.options.goal.option_true_astley and (name == STEM_WARD or name == DEITY_EYE or name == THE_OLD_WORLD_MAP or name == THE_NEW_WORLD_MAP):
-                    amount = amount + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
+                    amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
 
                 for _ in range(amount):
                     item = self.set_classifications(name)
