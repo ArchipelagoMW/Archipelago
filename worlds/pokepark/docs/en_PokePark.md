@@ -5,66 +5,108 @@
 Pokémon friendship and unlocking Pokémon in the overworld are randomized. Befriending Pokémon, completing
 events, quests and playing minigames are treated as locations.
 
-The story has been removed, and a few small changes were made to the game’s logic to support randomization.
+The story has been removed, and some changes were made to the game’s logic to support randomization.
 
-## Special Locations
+## Other Pages
 
-Some locations are only accessible once certain other locations have been checked. For example, Caterpie will only
-appear if its unlock location has been checked. This means the location for befriending Caterpie becomes available only
-after its unlock location is checked.
+- [Setup](https://github.com/Mekurushi/Archipelago_Pokepark/blob/main/worlds/pokepark/docs/setup_en.md)
 
-The following locations are affected:
+## Rom Changes
 
-| Zone         | Friendship Location | Unlock Location                          |
-|--------------|---------------------|------------------------------------------|
-| Cavern Zone  | Magnemite 1         | Magnemite Crate Dash Entrance Area       |
-| Cavern Zone  | Magnemite 2         | Magnemite Crate Dash Magma Zone Entrance |
-| Cavern Zone  | Magnemite 3         | Magnemite Crate Dash Magma Zone Entrance |
-| Cavern Zone  | Diglett             | Diglett Crate Dash                       |
-| Magma Zone   | Baltoy              | Baltoy Crate Dash                        |
-| Haunted Zone | Metapod             | Metapod Tree Dash left Entrance Side     |
-| Haunted Zone | Kakuna              | Kakuna Tree Dash right Entrance Side     |
-| Haunted Zone | Voltorb             | Voltorb vase dash blue gem room          |
+### Treehouse
 
-## Zone Unlocks
+| Location / Entrance | Condition                             |
+|---------------------|---------------------------------------|
+| Meadow Zone Gate    | None                                  |
+| Beach Zone Gate     | Venusaur Prisma                       |
+| Cavern Zone Gate    | Empoleon Prisma                       |
+| Haunted Zone Gate   | Blaziken Prisma                       |
+| Granite Zone Gate   | Rotom Prisma                          |
+| Skygarden Piplup    | Prisma count (depends on used option) |
+| Bibarel Instructor  | Venusaur Prisma                       |
+| Ponyta Instructor   | Pelipper Prisma                       |
+| Primeape Instructor | Empoleon Prisma                       |
 
-The spawn region is the Treehouse. Other zones are unlocked through the corresponding item, but the visual state of the
-gates leading to these zones depends on the world state. As a result, the gates may appear open, but access is only
-possible once the corresponding zone unlock item has been obtained.
+### Meadow Zone
 
-## Instruction
+| Location / Entrance | Condition         |
+|---------------------|-------------------|
+| Venusaur Gate       | Bulbasaur Prisma  |
+| Big Berry Crate     | Bulbasaur Prisma  |
+| Bidoof Quest        | Mankey Friendship |
 
-The client modifies assembly instructions through memory manipulation. However, since Dolphin caches instructions, it is
-necessary to connect the client at the main menu to ensure that all necessary modified instructions are properly
-overwritten.
+### Beach Zone
 
-## Modified Game Logic
+| Location / Entrance          | Condition                 |
+|------------------------------|---------------------------|
+| Ice Zone Boulder             | Gyarados Prisma           |
+| Bridges                      | Beach Zone Bridge Unlocks |
+| Pelipper Attraction Entrance | None                      |
+| Gyarados Attraction Entrance | None                      |      
 
-When interacting with Pokémon in the overworld, if their corresponding friendship location is unchecked, the friendship
-is deactivated, and the diary logo indicating friendship status will be missing. However, if the friendship location has
-already been checked, the Pokémon's friendship is set during the interaction, and the diary logo will appear, indicating
-that the friendship location has been checked.
+### Ice Zone
 
-![diary.png](diary.png)
+| Location / Entrance          | Condition            |
+|------------------------------|----------------------|
+| Lift                         | Ice Zone Lift Unlock |
+| Prinplup                     | None                 |
+| Lake                         | Ice Zone Lake Unlock |
+| Empoleon Gate                | Gyarados Prisma      |  
+| Empoleon Attraction Entrance | None                 |
 
-## Known Issues / Limitations
+### Cavern Zone
 
-- The first time completing the Prisma Shard goal in a minigame will cause the player to be ejected, which is required
-  to check the Prisma location.
-- Tracker is currently missing.
-- Item classifications are heavily focused on progression items.
-- Minigames and friendships still reward Berries (currency). This is intentional for now, as removing it leads
-  potentially to
-  excessive grinding.
+| Location / Entrance | Condition        |
+|---------------------|------------------|
+| Magma Zone Gate     | Bastiodon Prisma |
+| Diglett             | Bastiodon Prisma |
+| Dugtrio             | Bastiodon Prisma |
 
-## Future
+### Magma Zone
 
-- Adding configuration options for battle count Pokemon (e.g Scyther) and friendship count Pokemon (e.g Leafeon)
-- Adding more event Pokemon as Locations
-- Visualizing closed Zone Gates
-- Creating own Zone Unlock for Magma Zone
-- Model Randomization
+| Location / Entrance           | Condition                   |
+|-------------------------------|-----------------------------|
+| Blaziken Gate                 | Rhyperior Prisma            |
+| Fire Wall                     | Magma Zone Fire Wall Unlock |
+| Rhyperior Attraction Entrance | None                        |
 
+### Haunted Zone
 
+| Location / Entrance    | Condition                         |
+|------------------------|-----------------------------------|
+| Mansion Entrance       | Tangrowth Prisma                  |
+| Mansion Doors          | Haunted Zone Mansion Doors Unlock |
+| Rotom Hidden Bookshelf | Dusknoir Prisma                   |
+| Mismagius              | None                              |
+| Spinarak               | Rotom Prisma                      |
 
+### Misc
 
+- Postgame Pokemon unlocked in Attractions
+- Drifblim always spawns
+- Removed Intro and Ending files
+- Increased Berry Reward from Bottle Recycling
+
+## Feature Roadmap
+
+- In-game client messages
+- In-game hints
+- Entrance randomizer
+- Model randomizer
+- Locations of missing Pokemon
+
+## Credits
+
+### Core Development / APWorld Integration
+
+- Joe Mama (Mekurushi)
+- Seph — Reverse Engineering & Tools Support
+
+### Testing & Feedback
+
+- River — Testing, Q&A, and Feedback
+- Various users in the #future-game-design thread
+
+### Resources & References
+
+- Various other APWorlds as references

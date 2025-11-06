@@ -1,672 +1,362 @@
-from typing import Dict, Callable, TYPE_CHECKING
+from typing import Callable, List, TYPE_CHECKING
 
-from BaseClasses import CollectionState, Region
-from worlds.pokepark.locations import PokeparkLocation
-from worlds.pokepark.logic import Requirements, PokeparkRegion, PowerRequirement, WorldStateRequirement, \
-    MinigameRequirement, generate_regions
+from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    from . import PokeparkWorld
+    from worlds.pokepark import PokeparkWorld
+from worlds.pokepark.rules import get_entrance_rules_dict
 
-POWER_REQUIREMENT_CHECKS: Dict[PowerRequirement, Callable] = {
-    PowerRequirement.none: lambda state, world: True,
-    PowerRequirement.can_battle: lambda state, world: (
-            state.has("Progressive Thunderbolt", world.player) or
-            state.has("Progressive Dash", world.player) or
-            state.has("Progressive Iron Tail", world.player)
-    ),
-    PowerRequirement.can_dash_overworld: lambda state, world: state.has("Progressive Dash", world.player),
-    PowerRequirement.can_play_catch: lambda state, world: state.has("Progressive Dash", world.player),
-    PowerRequirement.can_destroy_objects_overworld: lambda state, world: (
-            state.has("Progressive Dash", world.player) or
-            state.has("Progressive Thunderbolt", world.player)
-    ),
-    PowerRequirement.can_thunderbolt_overworld: lambda state, world: state.has("Progressive Thunderbolt", world.player),
-    PowerRequirement.can_battle_thunderbolt_immune: lambda state, world: (
-            state.has("Progressive Dash", world.player) or
-            state.has("Progressive Iron Tail", world.player)
-    ),
-    PowerRequirement.can_farm_berries: lambda state, world: state.has("Progressive Dash", world.player),
-    PowerRequirement.can_play_catch_intermediate: lambda state, world: state.has("Progressive Dash", world.player,
-                                                                                 count=2),
+REGION_TO_ENTRANCES: dict[str, List[str]] = {
+    "Treehouse": [
+        "Treehouse Meadow Zone Gate",
+        "Treehouse Drifblim Fast Travel Meadow Zone",
+        "Treehouse Beach Zone Gate",
+        "Treehouse Drifblim Fast Travel Beach Zone", "Treehouse Drifblim Fast Travel Ice Zone",
+        "Treehouse Cavern Zone Gate", "Treehouse Drifblim Fast Travel Cavern Zone",
+        "Treehouse Drifblim Fast Travel Magma Zone",
+        "Treehouse Haunted Zone Gate",
+        "Treehouse Drifblim Fast Travel Haunted Zone",
+        "Treehouse Granite Zone Gate",
+        "Treehouse Drifblim Fast Travel Granite Zone",
+        "Treehouse Drifblim Fast Travel Flower Zone",
+        "Treehouse Piplup Air Balloon",
+    ],
+    "Meadow Zone Main Area": [
+        "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction",
+        "Meadow Zone Main Area - Venusaur's Gate",
+        "Meadow Zone Pokepark Entrance"
+    ],
+    "Meadow Zone Venusaur Area": ["Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction"],
+    "Beach Zone Main Area": ["Beach Zone Main Area - Pelipper's Circle Circuit Attraction",
+                             "Beach Zone Main Area Lapras Travel", "Beach Zone Bridge 2", "Beach Zone Bridge 1"],
+    "Beach Zone Recycle Area": ["Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction"],
+    "Ice Zone Main Area": ["Ice Zone Main Area Lift", "Ice Zone Main Area Empoleon Gate", "Ice Zone Frozen Lake"],
+    "Ice Zone Empoleon Area": ["Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction"],
+    "Cavern Zone Main Area": ["Cavern Zone Main Area - Bastiodon's Panel Crush Attraction",
+                              "Cavern Zone Magma Zone Gate"],
+    "Magma Zone Main Area": ["Magma Zone Fire Wall"],
+    "Magma Zone Circle Area": ["Magma Zone Blaziken Gate",
+                               "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction"],
+    "Magma Zone Blaziken Area": ["Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction"],
+    "Haunted Zone Main Area": ["Haunted Zone Main Area - Tangrowth's Swing-Along Attraction",
+                               "Haunted Zone Mansion Entrance", "Haunted Zone Main Area Riolu",
+                               "Haunted Zone Main Area Drifloon"],
+    "Haunted Zone Mansion Area": ["Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction",
+                                  "Haunted Zone Mansion White Gem Door",
+                                  "Haunted Zone Mansion Red Gem Door",
+                                  "Haunted Zone Mansion Blue Gem Door",
+                                  "Haunted Zone Mansion Green Gem Door",
+                                  "Haunted Zone Mansion Area Riolu"
+                                  ],
+    "Haunted Zone Mansion Ballroom Area": ["Haunted Zone Ballroom Area Drifloon"],
+    "Haunted Zone Mansion Study Area": ["Haunted Zone Mansion Rotom's Hidden Entrance"],
+    "Haunted Zone Rotom Area": ["Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction"],
+    "Granite Zone Main Area": [
+        "Granite Zone Main Area - Absol's Hurdle Bounce Attraction",
+        "Granite Zone Flower Zone Entrance",
+        "Granite Zone Salamence Area - Salamence's Sky Race Attraction",
+    ],
+    "Flower Zone Main Area": [
+        "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction"
+    ]
 }
-WORLD_STATE_REQUIREMENT_CHECKS: Dict[WorldStateRequirement, Callable] = {
-    WorldStateRequirement.none: lambda state, world: True,
-    WorldStateRequirement.meadow_zone_or_higher: lambda state, world: (
-            state.has("Meadow Zone Unlock", world.player) or
-            state.has("Beach Zone Unlock", world.player) or
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
 
-    ),
-    WorldStateRequirement.beach_zone_or_higher: lambda state, world: (
-            state.has("Beach Zone Unlock", world.player) or
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock",
-                      world.player) or
-            state.has("Skygarden Unlock", world.player)
+ADDITIONAL_REGION_TO_ENTRANCES: dict[str, List[str]] = {
+    "Treehouse": [
+        "Treehouse Abra"
+    ],
+    "Meadow Zone Main Area": [
+        "Meadow Zone Spearow",
+        "Meadow Zone Starly",
+        "Meadow Zone Bonsly",
+        "Meadow Zone Bonsly Unlocks",
+        "Meadow Zone Chimchar",
+        "Meadow Zone Sudowoodo",
+        "Meadow Zone Aipom",
+        "Meadow Zone Aipom Unlocks",
+        "Meadow Zone Ambipom",
+    ],
+    "Beach Zone Main Area": [
+        "Beach Zone Spearow",
+        "Beach Zone Starly",
+        "Beach Zone Krabby",
+        "Beach Zone Mudkip",
+        "Beach Zone Taillow",
+        "Beach Zone Staravia",
+        "Beach Zone Wingull",
+        "Beach Zone Corphish",
+    ],
+    "Ice Zone Main Area": [
+        "Ice Zone Starly",
+        "Ice Zone Krabby",
+        "Ice Zone Mudkip",
+        "Ice Zone Taillow",
+        "Ice Zone Staravia",
+        "Ice Zone Teddiursa"
+    ],
+    "Ice Zone Lower Lift Area": [
+        "Ice Zone Wingull",
+        "Ice Zone Corphish"
+    ],
+    "Cavern Zone Main Area": [
+        "Cavern Zone Bonsly",
+        "Cavern Zone Bonsly Unlocks",
+        "Cavern Zone Chimchar",
+        "Cavern Zone Sudowoodo",
+        "Cavern Zone Teddiursa",
+        "Cavern Zone Aron",
+        "Cavern Zone Torchic",
+        "Cavern Zone Geodude",
+        "Cavern Zone Raichu",
+        "Cavern Zone Meowth",
+        "Cavern Zone Marowak",
 
-    ),
-    WorldStateRequirement.ice_zone_or_higher: lambda state, world: (
-            state.has("Ice Zone Unlock", world.player) or
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
+    ],
+    "Magma Zone Main Area": [
+        "Magma Zone Bonsly",
+        "Magma Zone Chimchar",
+        "Magma Zone Aron",
+        "Magma Zone Torchic",
+        "Magma Zone Geodude",
+        "Magma Zone Baltoy",
+        "Magma Zone Baltoy Unlocks",
+        "Magma Zone Meditite",
+        "Magma Zone Claydol"
 
-    ),
-    WorldStateRequirement.cavern_and_magma_zone_or_higher: lambda state, world: (
-            state.has("Cavern Zone & Magma Zone Unlock", world.player) or
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.haunted_zone_or_higher: lambda state, world: (
-            state.has("Haunted Zone Unlock", world.player) or
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.granite_and_flower_zone_or_higher: lambda state, world: (
-            state.has("Granite Zone & Flower Zone Unlock", world.player) or
-            state.has("Skygarden Unlock", world.player)
-    ),
-    WorldStateRequirement.skygarden: lambda state, world: (
-        state.has("Skygarden Unlock", world.player)
-    )
+    ],
+    "Haunted Zone Main Area": [
+        "Haunted Zone Aipom",
+        "Haunted Zone Aipom Unlocks",
+        "Haunted Zone Ambipom",
+        "Haunted Zone Raichu",
+        "Haunted Zone Meowth",
+        "Haunted Zone Drifloon",
+    ],
+    "Haunted Zone Mansion Antic Area": [
+        "Haunted Zone Abra"
+    ],
+    "Granite Zone Main Area": [
+        "Granite Zone Marowak",
+        "Granite Zone Baltoy",
+        "Granite Zone Baltoy Unlocks",
+        "Granite Zone Drifloon",
+        "Granite Zone Furret",
+        "Granite Zone Claydol",
+        "Granite Zone Taillow"
+
+    ],
+    "Flower Zone Main Area": [
+        "Flower Zone Teddiursa",
+        "Flower Zone Meditite",
+        "Flower Zone Furret"
+    ],
 }
-MINIGAME_REQUIREMENT_CHECKS: Dict[MinigameRequirement, Callable] = {
-    MinigameRequirement.none: lambda state, world: True,
-    MinigameRequirement.bulbasaur_dash_any: lambda state, world: (
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Pikachu", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Turtwig", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Munchlax", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Chimchar", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Treecko", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Bibarel", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Bulbasaur", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Bidoof", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Oddish", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Shroomish", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Bonsly", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Lotad", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Weedle", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Caterpie", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Magikarp", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Jolteon", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Arcanine", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Leafeon", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Scyther", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Ponyta", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Shinx", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Eevee", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Pachirisu", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Buneary", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Croagunk", world.player) or
-            state.can_reach_location("Meadow Zone - Bulbasaur's Daring Dash Minigame - Mew", world.player)
-    ),
 
-    MinigameRequirement.venusaur_vine_swing_any: lambda state, world: (
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pikachu", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Munchlax", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Magikarp", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Blaziken", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Infernape", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Lucario", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Primeape", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Tangrowth", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Ambipom", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Croagunk", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Mankey", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Aipom", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Chimchar", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Treecko", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pachirisu", world.player) or
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Jirachi", world.player)
-    ),
-    MinigameRequirement.venusaur_vine_swing_all: lambda state, world: (
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pikachu", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Munchlax", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Magikarp", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Blaziken", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Infernape", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Lucario", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Primeape", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Tangrowth", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Ambipom", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Croagunk", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Mankey", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Aipom", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Chimchar", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Treecko", world.player) and
-            state.can_reach_location("Meadow Zone - Venusaur's Vine Swing - Pachirisu", world.player)
-    ),
-    MinigameRequirement.pelipper_circuit_any: lambda state, world: (
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pikachu", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Staraptor", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Togekiss", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Honchkrow", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Gliscor", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pelipper", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Staravia", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pidgeotto", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Butterfree", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Tropius", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Murkrow", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Taillow", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Spearow", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Starly", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Wingull", world.player) or
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Latias", world.player)
-    ),
-    MinigameRequirement.pelipper_circuit_all: lambda state, world: (
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pikachu", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Staraptor", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Togekiss", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Honchkrow", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Gliscor", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pelipper", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Staravia", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Pidgeotto", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Butterfree", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Tropius", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Murkrow", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Taillow", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Spearow", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Starly", world.player) and
-            state.can_reach_location("Beach Zone - Pelipper's Circle Circuit - Wingull", world.player)
-    ),
-    MinigameRequirement.gyarados_aqua_any: lambda state, world: (
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Pikachu", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Psyduck", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Azurill", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Slowpoke", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Empoleon", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Floatzel", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Feraligatr", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Golduck", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Vaporeon", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Prinplup", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Bibarel", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Buizel", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Corsola", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Piplup", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Lotad", world.player) or
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Manaphy", world.player)
+VANILLA_ENTRANCES_TO_EXITS: dict[str, str] = {
+    "Treehouse Meadow Zone Gate": "Meadow Zone Main Area",
+    "Treehouse Drifblim Fast Travel Meadow Zone": "Meadow Zone Main Area",
+    "Meadow Zone Main Area - Venusaur's Gate": "Meadow Zone Venusaur Area",
 
-    ),
-    MinigameRequirement.gyarados_aqua_all: lambda state, world: (
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Pikachu", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Psyduck", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Azurill", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Slowpoke", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Empoleon", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Floatzel", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Feraligatr", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Golduck", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Vaporeon", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Prinplup", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Bibarel", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Buizel", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Corsola", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Piplup", world.player) and
-            state.can_reach_location("Beach Zone - Gyarados' Aqua Dash - Lotad", world.player)
+    "Treehouse Beach Zone Gate": "Beach Zone Main Area",
+    "Treehouse Drifblim Fast Travel Beach Zone": "Beach Zone Main Area",
+    "Beach Zone Bridge 2": "Beach Zone Recycle Area",
+    "Beach Zone Bridge 1": "Beach Zone Middle Isle",
 
-    ),
-    MinigameRequirement.empoleon_slide_any: lambda state, world: (
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Pikachu", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Teddiursa", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Magikarp", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Empoleon", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Glaceon", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Blastoise", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Glalie", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Delibird", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Piloswine", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Prinplup", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Squirtle", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Piplup", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Quagsire", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Spheal", world.player) or
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Suicune", world.player)
+    "Beach Zone Main Area Lapras Travel": "Ice Zone Main Area",
+    "Treehouse Drifblim Fast Travel Ice Zone": "Ice Zone Main Area",
+    "Ice Zone Main Area Lift": "Ice Zone Lower Lift Area",
+    "Ice Zone Frozen Lake": "Ice Zone Frozen Lake Area",
+    "Ice Zone Main Area Empoleon Gate": "Ice Zone Empoleon Area",
 
-    ),
-    MinigameRequirement.empoleon_slide_all: lambda state, world: (
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Pikachu", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Teddiursa", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Magikarp", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Empoleon", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Glaceon", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Blastoise", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Glalie", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Delibird", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Piloswine", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Prinplup", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Squirtle", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Piplup", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Quagsire", world.player) and
-            state.can_reach_location("Ice Zone - Empoleon's Snow Slide - Spheal", world.player)
-    ),
-    MinigameRequirement.bastiodon_panel_any: lambda state, world: (
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Pikachu", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Sableye", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Meowth", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Torchic", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Electivire", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Magmortar", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Hitmonlee", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Ursaring", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Mr. Mime", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Raichu", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Sudowoodo", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Charmander", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Gible", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Chimchar", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Magby", world.player) or
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Metagross", world.player)
-    ),
-    MinigameRequirement.bastiodon_panel_all: lambda state, world: (
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Pikachu", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Sableye", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Meowth", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Torchic", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Electivire", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Magmortar", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Hitmonlee", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Ursaring", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Mr. Mime", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Raichu", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Sudowoodo", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Charmander", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Gible", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Chimchar", world.player) and
-            state.can_reach_location("Cavern Zone - Bastiodon's Panel Crush - Magby", world.player)
-    ),
-    MinigameRequirement.rhyperior_bumper_any: lambda state, world: (
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Pikachu", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Magnemite", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Rhyperior", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Tyranitar", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Hitmontop", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Flareon", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Venusaur", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Snorlax", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Torterra", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Magnezone", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Claydol", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Quilava", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Torkoal", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Baltoy", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Bonsly", world.player) or
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Heatran", world.player)
-    ),
-    MinigameRequirement.rhyperior_bumper_all: lambda state, world: (
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Pikachu", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Magnemite", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Rhyperior", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Tyranitar", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Hitmontop", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Flareon", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Venusaur", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Snorlax", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Torterra", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Magnezone", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Claydol", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Quilava", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Torkoal", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Baltoy", world.player) and
-            state.can_reach_location("Magma Zone - Rhyperior's Bumper Burn - Bonsly", world.player)
-    ),
-    MinigameRequirement.blaziken_boulder_any: lambda state, world: (
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Pikachu", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Geodude", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Phanpy", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Blaziken", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Garchomp", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Scizor", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Magmortar", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Hitmonchan", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Machamp", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Marowak", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Farfetch'd", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Cranidos", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Camerupt", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Bastiodon", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Mawile", world.player) or
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Groudon", world.player)
+    "Treehouse Cavern Zone Gate": "Cavern Zone Main Area",
+    "Treehouse Drifblim Fast Travel Cavern Zone": "Cavern Zone Main Area",
 
-    ),
-    MinigameRequirement.blaziken_boulder_all: lambda state, world: (
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Pikachu", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Geodude", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Phanpy", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Blaziken", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Garchomp", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Scizor", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Magmortar", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Hitmonchan", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Machamp", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Marowak", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Farfetch'd", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Cranidos", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Camerupt", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Bastiodon", world.player) and
-            state.can_reach_location("Magma Zone - Blaziken's Boulder Bash - Mawile", world.player)
-    ),
-    MinigameRequirement.tangrowth_swing_any: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Pikachu", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Meowth", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Pichu", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Lucario", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Infernape", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Blaziken", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Riolu", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Sneasel", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Raichu", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Ambipom", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Primeape", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Aipom", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Electabuzz", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Chimchar", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Croagunk", world.player) or
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Celebi", world.player)
+    "Cavern Zone Magma Zone Gate": "Magma Zone Main Area",
+    "Treehouse Drifblim Fast Travel Magma Zone": "Magma Zone Main Area",
+    "Magma Zone Blaziken Gate": "Magma Zone Blaziken Area",
+    "Magma Zone Fire Wall": "Magma Zone Circle Area",
 
-    ),
-    MinigameRequirement.tangrowth_swing_all: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Pikachu", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Meowth", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Pichu", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Lucario", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Infernape", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Blaziken", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Riolu", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Sneasel", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Raichu", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Ambipom", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Primeape", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Aipom", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Electabuzz", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Chimchar", world.player) and
-            state.can_reach_location("Haunted Zone - Tangrowth's Swing-Along - Croagunk", world.player)
+    "Treehouse Haunted Zone Gate": "Haunted Zone Main Area",
+    "Treehouse Drifblim Fast Travel Haunted Zone": "Haunted Zone Main Area",
+    "Haunted Zone Mansion Entrance": "Haunted Zone Mansion Area",
+    "Haunted Zone Mansion White Gem Door": "Haunted Zone Mansion Ballroom Area",
+    "Haunted Zone Mansion Red Gem Door": "Haunted Zone Mansion Study Area",
+    "Haunted Zone Mansion Blue Gem Door": "Haunted Zone Mansion Gengar Area",
+    "Haunted Zone Mansion Green Gem Door": "Haunted Zone Mansion Antic Area",
+    "Haunted Zone Mansion Rotom's Hidden Entrance": "Haunted Zone Rotom Area",
 
-    ),
-    MinigameRequirement.dusknoir_slam_any: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Pikachu", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Stunky", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Gengar", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Mismagius", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Scizor", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Espeon", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Dusknoir", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Umbreon", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Cranidos", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Skuntank", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Electrode", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Gastly", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Duskull", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Misdreavus", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Krabby", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Darkrai", world.player)
+    "Treehouse Granite Zone Gate": "Granite Zone Main Area",
+    "Treehouse Drifblim Fast Travel Granite Zone": "Granite Zone Main Area",
 
-    ),
-    MinigameRequirement.dusknoir_slam_all: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Pikachu", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Stunky", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Gengar", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Mismagius", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Scizor", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Espeon", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Dusknoir", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Umbreon", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Cranidos", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Skuntank", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Electrode", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Gastly", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Duskull", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Misdreavus", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Dusknoir's Speed Slam - Krabby", world.player)
-    ),
-    MinigameRequirement.rotom_shoot_any: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Pikachu", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnemite",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Porygon-Z",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnezone",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Gengar", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magmortar",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Electivire",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mismagius",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Claydol", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Electabuzz",
-                                     world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Abra", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Elekid", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mr. Mime", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Baltoy", world.player) or
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Rotom", world.player)
-    ),
-    MinigameRequirement.rotom_shoot_all: lambda state, world: (
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Pikachu", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnemite",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Porygon-Z",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magnezone",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Gengar", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Magmortar",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Electivire",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mismagius",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Claydol", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Electabuzz",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Abra", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Elekid", world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Mr. Mime",
-                                     world.player) and
-            state.can_reach_location("Haunted Zone - Mansion - Rotom's Spooky Shoot-'em-Up - Baltoy", world.player)
-    ),
-    MinigameRequirement.absol_hurdle_any: lambda state, world: (
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Pikachu", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Chikorita", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Absol", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Lucario", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Ponyta", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Ninetales", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Lopunny", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Espeon", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Infernape", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Breloom", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Riolu", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Furret", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Mareep", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Eevee", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Vulpix", world.player) or
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Shaymin", world.player)
-    ),
-    MinigameRequirement.absol_hurdle_all: lambda state, world: (
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Pikachu", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Chikorita", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Absol", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Lucario", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Ponyta", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Ninetales", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Lopunny", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Espeon", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Infernape", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Breloom", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Riolu", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Furret", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Mareep", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Eevee", world.player) and
-            state.can_reach_location("Granite Zone - Absol's Hurdle Bounce - Vulpix", world.player)
-    ),
-    MinigameRequirement.salamence_air_any: lambda state, world: (
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Pikachu", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Salamence", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Charizard", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Dragonite", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Flygon", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Aerodactyl", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Staraptor", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Honchkrow", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Gliscor", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Pidgeotto", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Togekiss", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Golbat", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Taillow", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Murkrow", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Zubat", world.player) or
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Latios", world.player)
-    ),
-    MinigameRequirement.salamence_air_all: lambda state, world: (
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Pikachu", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Salamence", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Charizard", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Dragonite", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Flygon", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Aerodactyl", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Staraptor", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Honchkrow", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Gliscor", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Pidgeotto", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Togekiss", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Golbat", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Taillow", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Murkrow", world.player) and
-            state.can_reach_location("Granite Zone - Salamence's Sky Race - Zubat", world.player)
-    ),
-    MinigameRequirement.rayquaza_balloon_any: lambda state, world: (
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Pikachu", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Lucario", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Glaceon", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Luxray", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mamoswine", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Infernape", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Floatzel", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Rhyperior", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Absol", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Breloom", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mareep", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Cyndaquil", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Totodile", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Chikorita", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mime Jr.", world.player) or
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Deoxys", world.player)
+    "Granite Zone Flower Zone Entrance": "Flower Zone Main Area",
+    "Treehouse Drifblim Fast Travel Flower Zone": "Flower Zone Main Area",
 
-    ),
-    MinigameRequirement.rayquaza_balloon_all: lambda state, world: (
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Pikachu", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Lucario", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Glaceon", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Luxray", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mamoswine", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Infernape", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Floatzel", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Rhyperior", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Absol", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Breloom", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mareep", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Cyndaquil", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Totodile", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Chikorita", world.player) and
-            state.can_reach_location("Flower Zone - Rayquaza's Balloon Panic - Mime Jr.", world.player)
-    ),
+    "Treehouse Piplup Air Balloon": "Skygarden",
+
+    "Haunted Zone Main Area Riolu": "Riolu",
+    "Haunted Zone Mansion Area Riolu": "Riolu",
+    "Haunted Zone Main Area Drifloon": "Drifloon",
+    "Haunted Zone Ballroom Area Drifloon": "Drifloon",
+
+    "Meadow Zone Pokepark Entrance": "Pokepark Entrance"
+}
+ATTRACTION_ENTRANCES_TO_EXITS: dict[str, str] = {
+    "Meadow Zone Main Area - Bulbasaur's Daring Dash Attraction": "Bulbasaur's Daring Dash Attraction",
+    "Meadow Zone Venusaur Area - Venusaur's Vine Swing Attraction": "Venusaur's Vine Swing Attraction",
+    "Beach Zone Main Area - Pelipper's Circle Circuit Attraction": "Pelipper's Circle Circuit Attraction",
+    "Beach Zone Recycle Area - Gyarados' Aqua Dash Attraction": "Gyarados' Aqua Dash Attraction",
+    "Ice Zone Empoleon Area - Empoleon's Snow Slide Attraction": "Empoleon's Snow Slide Attraction",
+    "Cavern Zone Main Area - Bastiodon's Panel Crush Attraction": "Bastiodon's Panel Crush Attraction",
+    "Magma Zone Circle Area - Rhyperior's Bumper Burn Attraction": "Rhyperior's Bumper Burn Attraction",
+    "Magma Zone Blaziken Area - Blaziken's Boulder Bash Attraction": "Blaziken's Boulder Bash Attraction",
+    "Haunted Zone Main Area - Tangrowth's Swing-Along Attraction": "Tangrowth's Swing-Along Attraction",
+    "Haunted Zone Mansion Area - Dusknoir's Speed Slam Attraction": "Dusknoir's Speed Slam Attraction",
+    "Haunted Zone Rotom Area - Rotom's Spooky Shoot-'em-Up Attraction": "Rotom's Spooky Shoot-'em-Up Attraction",
+    "Granite Zone Main Area - Absol's Hurdle Bounce Attraction": "Absol's Hurdle Bounce Attraction",
+    "Granite Zone Salamence Area - Salamence's Sky Race Attraction": "Salamence's Sky Race Attraction",
+    "Flower Zone Main Area - Rayquaza's Balloon Panic Attraction": "Rayquaza's Balloon Panic Attraction",
+
+}
+
+ADDITIONAL_ENTRANCES_TO_EXITS: dict[str, str] = {
+    "Treehouse Abra": "Abra",
+    "Haunted Zone Abra": "Abra",
+
+    "Meadow Zone Spearow": "Spearow",
+    "Beach Zone Spearow": "Spearow",
+
+    "Meadow Zone Starly": "Starly",
+    "Beach Zone Starly": "Starly",
+    "Ice Zone Starly": "Starly",
+
+    "Meadow Zone Bonsly": "Bonsly",
+    "Meadow Zone Bonsly Unlocks": "Bonsly Unlocks",
+    "Cavern Zone Bonsly": "Bonsly",
+    "Cavern Zone Bonsly Unlocks": "Bonsly Unlocks",
+    "Magma Zone Bonsly": "Bonsly",
+
+    "Meadow Zone Chimchar": "Chimchar",
+    "Cavern Zone Chimchar": "Chimchar",
+    "Magma Zone Chimchar": "Chimchar",
+
+    "Meadow Zone Sudowoodo": "Sudowoodo",
+    "Cavern Zone Sudowoodo": "Sudowoodo",
+
+    "Meadow Zone Aipom": "Aipom",
+    "Meadow Zone Aipom Unlocks": "Aipom Unlocks",
+    "Haunted Zone Aipom": "Aipom",
+    "Haunted Zone Aipom Unlocks": "Aipom Unlocks",
+
+    "Meadow Zone Ambipom": "Ambipom",
+    "Haunted Zone Ambipom": "Ambipom",
+
+    "Beach Zone Krabby": "Krabby",
+    "Ice Zone Krabby": "Krabby",
+
+    "Beach Zone Mudkip": "Mudkip",
+    "Ice Zone Mudkip": "Mudkip",
+
+    "Beach Zone Taillow": "Taillow",
+    "Ice Zone Taillow": "Taillow",
+    "Granite Zone Taillow": "Taillow",
+
+    "Beach Zone Staravia": "Staravia",
+    "Ice Zone Staravia": "Staravia",
+
+    "Beach Zone Wingull": "Wingull",
+    "Ice Zone Wingull": "Wingull",
+
+    "Beach Zone Corphish": "Corphish",
+    "Ice Zone Corphish": "Corphish",
+
+    "Ice Zone Teddiursa": "Teddiursa",
+    "Cavern Zone Teddiursa": "Teddiursa",
+    "Flower Zone Teddiursa": "Teddiursa",
+
+    "Cavern Zone Aron": "Aron",
+    "Magma Zone Aron": "Aron",
+
+    "Cavern Zone Torchic": "Torchic",
+    "Magma Zone Torchic": "Torchic",
+
+    "Cavern Zone Geodude": "Geodude",
+    "Magma Zone Geodude": "Geodude",
+
+    "Cavern Zone Raichu": "Raichu",
+    "Haunted Zone Raichu": "Raichu",
+
+    "Cavern Zone Meowth": "Meowth",
+    "Haunted Zone Meowth": "Meowth",
+
+    "Cavern Zone Marowak": "Marowak",
+    "Granite Zone Marowak": "Marowak",
+
+    "Magma Zone Baltoy": "Baltoy",
+    "Magma Zone Baltoy Unlocks": "Baltoy Unlocks",
+    "Magma Zone Claydol": "Claydol",
+
+    "Granite Zone Baltoy": "Baltoy",
+    "Granite Zone Baltoy Unlocks": "Baltoy Unlocks",
+    "Granite Zone Claydol": "Claydol",
+
+    "Magma Zone Meditite": "Meditite",
+    "Flower Zone Meditite": "Meditite",
+
+    "Haunted Zone Drifloon": "Drifloon",
+    "Granite Zone Drifloon": "Drifloon",
+
+    "Granite Zone Furret": "Furret",
+    "Flower Zone Furret": "Furret",
+
 }
 
 
-def pokepark_requirements_satisfied(state: CollectionState, requirements: Requirements, world: "PokeparkWorld"):
-    has_required_unlocks = all(state.has(unlock, world.player) for unlock in requirements.unlock_names)
-    has_required_friends = all(state.has(friend, world.player) for friend in requirements.friendship_names)
-    has_required_prismas = all(state.has(prisma, world.player) for prisma in requirements.prisma_names)
-    has_enough_friends = requirements.friendcount <= state.count_group("Friendship Items", world.player)
-    can_reach_required_locations = all(
-        state.can_reach_location(location, world.player) for location in requirements.can_reach_locations)
-    if requirements.oneof_item_names:
-        has_any = any(
-            all(state.has(item, world.player) for item in item_list)
-            for item_list in requirements.oneof_item_names
-        )
-    else:
-        has_any = True
-    has_required_power = POWER_REQUIREMENT_CHECKS[requirements.powers](state, world)
-    has_required_world_state = WORLD_STATE_REQUIREMENT_CHECKS[requirements.world_state](state, world)
-    has_required_minigames = MINIGAME_REQUIREMENT_CHECKS[requirements.minigame](state, world)
+class EntranceRandomizer:
+    def __init__(self, world: "PokeparkWorld"):
+        self.world = world
+        self.multiworld = world.multiworld
+        self.player = world.player
+        self.entrances_to_exits: dict[str, str] = {}
+        self.region_to_entrances: dict[str, str] = {}
+        self.entrances_rules: dict[str, Callable[[CollectionState], bool]] = {}
 
-    return (has_required_unlocks and
-            has_enough_friends and
-            has_required_friends and
-            has_required_prismas and
-            has_any and
-            can_reach_required_locations and
-            has_required_power and
-            has_required_world_state and
-            has_required_minigames)
+    def set_entrance_rules(self):
+        player = self.player
+        options = self.world.options
 
+        self.entrances_rules = get_entrance_rules_dict(player, options)
 
-def create_region(region: PokeparkRegion, world: "PokeparkWorld"):
-    new_region = Region(region.name, world.player, world.multiworld)
+    def randomize_attraction_entrances(self):
+        entrances = list(ATTRACTION_ENTRANCES_TO_EXITS.keys())
+        exits = list(ATTRACTION_ENTRANCES_TO_EXITS.values())
+        self.world.random.shuffle(exits)
 
-    def create_location(location):
-        new_location = PokeparkLocation(
-            world.player,
-            f"{region.display} - {location.name}",
-            location.id,
-            new_region
-        )
+        return dict(zip(entrances, exits))
 
-        new_location.access_rule = lambda state: pokepark_requirements_satisfied(state, location.requirements, world)
-        if world.options.goal == world.options.goal.option_mew:
-            if new_location.name == "Skygarden - Overworld - Mew Challenge completed":
-                event_item = world.create_item("Victory")
-                new_location.place_locked_item(event_item)
-        if world.options.goal == world.options.goal.option_aftergame:
-            if new_location.name == "Skygarden - Overworld - Completed Prisma Full":
-                event_item = world.create_item("Victory")
-                new_location.place_locked_item(event_item)
+    def set_entrances_to_exits(self):
+        options = self.world.options
+        entrances_to_exits = VANILLA_ENTRANCES_TO_EXITS.copy()
 
-        new_region.locations.append(new_location)
+        if options.randomize_attraction_entrances == options.randomize_attraction_entrances.option_true:
+            entrances_to_exits |= self.randomize_attraction_entrances()
+        else:
+            entrances_to_exits |= ATTRACTION_ENTRANCES_TO_EXITS
 
-    for location in region.quest_locations:
-        create_location(location)
-    for location in region.unlock_location:
-        create_location(location)
-    for location in region.friendship_locations:
-        create_location(location)
-    for location in region.minigame_location:
-        create_location(location)
+        if options.each_zone == options.each_zone.option_false:
+            entrances_to_exits |= ADDITIONAL_ENTRANCES_TO_EXITS
 
-    return new_region
+        self.entrances_to_exits = entrances_to_exits
 
+    def set_region_to_entrances(self):
+        options = self.world.options
+        region_to_entrances = {region: list(entrances) for region, entrances in REGION_TO_ENTRANCES.items()}
+        if options.each_zone == options.each_zone.option_false:
+            for region, entrances in ADDITIONAL_REGION_TO_ENTRANCES.items():
+                region_to_entrances.setdefault(region, []).extend(entrances)
 
-def create_regions(world: "PokeparkWorld"):
-    regions = {
-        "Menu": Region("Menu", world.player, world.multiworld)
-    }
+        self.region_to_entrances = region_to_entrances
 
-    CREATEDREGIONS = generate_regions()
-
-    for region in CREATEDREGIONS:
-        regions[region.name] = create_region(region, world)
-
-        for parent_name in region.parent_regions:
-            if parent_name in regions:
-                regions[parent_name].connect(regions[region.name], None,
-                                             lambda state, r=region: pokepark_requirements_satisfied(state,
-                                                                                                     r.requirements,
-                                                                                                     world))
-
-    world.multiworld.regions += regions.values()
-    world.set_rules()
+    def generate_entrance_data(self):
+        self.set_entrances_to_exits()
+        self.set_region_to_entrances()
+        self.set_entrance_rules()
