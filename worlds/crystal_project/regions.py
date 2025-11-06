@@ -497,17 +497,24 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, LAKE_DELENDE_AP_REGION, [POKO_POKO_DESERT_AP_REGION, DELENDE_AP_REGION],
                     {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    #Quintar Reserve start
     fancy_add_exits(world, QUINTAR_RESERVE_AP_REGION, [SHOUDU_PROVINCE_AP_REGION, DIONE_SHRINE_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
                     {QUINTAR_MAUSOLEUM_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
-                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
-                     THE_CHALICE_OF_TAR_AP_REGION: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)})
+    fancy_add_exits(world, RESERVE_TREETOPS_AP_REGION, [QUINTAR_RESERVE_AP_REGION])
+    #Quintar Reserve end
+    #Dione Shrine start
+    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, DIONE_ROOF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {DIONE_ROOF_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state) and logic.obscure_routes_on(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state)})
+    fancy_add_exits(world, DIONE_ROOF_AP_REGION, [DIONE_SHRINE_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
+                    {THE_CHALICE_OF_TAR_AP_REGION: lambda state: logic.has_glide(state)})
+    #Dione Shrine end
     fancy_add_exits(world, QUINTAR_MAUSOLEUM_AP_REGION, [QUINTAR_RESERVE_AP_REGION, QUINTAR_SANCTUM_AP_REGION],
                     {QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_SANCTUM_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, EASTERN_CHASM_AP_REGION, [QUINTAR_RESERVE_AP_REGION, THE_OPEN_SEA_AP_REGION],
-                    {QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
-                     THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, EASTERN_CHASM_AP_REGION, [QUINTAR_RESERVE_AP_REGION, DIONE_ROOF_AP_REGION, THE_OPEN_SEA_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+                    {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.obscure_routes_on(state)})
     #Tall, Tall Heights start
     fancy_add_exits(world, BOOMER_OVERLOOK_AP_REGION, [BOOMER_SOCIETY_AP_REGION, LONE_CHEST_RAMPART_AP_REGION, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, TALL_TALL_RAMPARTS_CRAG_CHEST_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION, UPPER_ICE_LAKES_AP_REGION],
                     {RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION: lambda state: logic.has_glide(state) or logic.can_push_ice_block_and_goat(state, TALL_TALL_HEIGHTS_DISPLAY_NAME),
@@ -568,7 +575,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #Land's End start
     fancy_add_exits(world, LANDS_END_AP_REGION, [LOWER_ICE_LAKES_AP_REGION, LANDS_END_COTTAGE_RIDGE_AP_REGION, LANDS_END_NORTHERN_PEAK_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {LANDS_END_NORTHERN_PEAK_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
-                     JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, LANDS_END_NORTHERN_PEAK_AP_REGION, [LANDS_END_AP_REGION, TALL_TALL_DIAMONDSMITH_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {TALL_TALL_DIAMONDSMITH_AP_REGION: lambda state: logic.has_glide(state),
@@ -602,14 +609,16 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, PEAK_RAMPARTS_AP_REGION, [RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION],
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state)})
     #Castle Ramparts end
-    fancy_add_exits(world, THE_CHALICE_OF_TAR_AP_REGION, [TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, QUINTAR_RESERVE_AP_REGION, EASTERN_CHASM_AP_REGION],
+    fancy_add_exits(world, THE_CHALICE_OF_TAR_AP_REGION, [TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, QUINTAR_RESERVE_AP_REGION, DIONE_ROOF_AP_REGION, EASTERN_CHASM_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state),
                      PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state),
                      NORTHERN_STRETCH_RACE_FINISH_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
-                     EASTERN_CHASM_AP_REGION: lambda state: (state.has(DIONE_SHRINE_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.has_vertical_movement(state)})
+                     DIONE_ROOF_AP_REGION: lambda state: logic.has_glide(state),
+                     EASTERN_CHASM_AP_REGION: lambda state: (state.has(DIONE_SHRINE_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.has_vertical_movement(state),
+                     JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.obscure_routes_on(state)})
     fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
-                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
+                    {JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state)})
     #Jidamba Tangle section start
     fancy_add_exits(world, JIDAMBA_FOREST_FLOOR_AP_REGION, [JIDAMBA_DIAMONDSMITH_AP_REGION, JIDAMBA_SOUTHWEST_BEACH_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_CANOPY_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
                     #if we change the elevators to Pipeline to always be powered, then add an exit to Pipeline Jidamba Connector
@@ -792,7 +801,7 @@ def fancy_add_exits(self, region: str, exits: List[str],
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
-    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_SHRINE_AP_REGION, UPPER_ICE_LAKES_AP_REGION, LANDS_END_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
+    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, UPPER_ICE_LAKES_AP_REGION, LANDS_END_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
                     # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
                     {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_disabled,
                      CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
@@ -800,7 +809,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      POSEIDON_SHRINE_ROOF_AP_REGION: lambda state: state.has(POSEIDON_STONE, world.player),
                      POKO_POKO_DESERT_AP_REGION: lambda state: state.has(MARS_STONE, world.player),
                      GANYMEDE_SHRINE_AP_REGION: lambda state: state.has(GANYMEDE_STONE, world.player),
-                     DIONE_SHRINE_AP_REGION: lambda state: state.has(DIONE_STONE, world.player),
+                     DIONE_ROOF_AP_REGION: lambda state: state.has(DIONE_STONE, world.player),
                      UPPER_ICE_LAKES_AP_REGION: lambda state: state.has(TRITON_STONE, world.player),
                      LANDS_END_AP_REGION: lambda state: state.has(CALLISTO_STONE, world.player),
                      EUROPA_SHRINE_AP_REGION: lambda state: state.has(EUROPA_STONE, world.player),

@@ -948,6 +948,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Chest - Hollowed-out wall of Mausoleum", 1320 + treasure_index_offset, lambda state: logic.has_glide(state)), #Undead Ring chest
 
         #NPCs
+        #Reserve main
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 54)), #Shedding 1
@@ -956,7 +957,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: state.has(DIONE_STONE, player) and logic.has_glide(state)), #Shedding 7
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Treetop shedding north of Mausoleum", 2263 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 8
         #shedding 9 is in the Dione Shrine because why not I guess
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the race start point", 2265 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 10
@@ -964,20 +964,25 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding just north of Quintar cosplayer", 2267 + npc_index_offset), #Shedding 12
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Gold on east side of map", 2837 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Climb the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and state.has(DIONE_STONE, player)), #Dust
+        #Reserve Treetops
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: logic.has_glide(state)), #Shedding 7
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
 
         #Dione Shrine
         #Treasure chests
-        LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - Roof", 2154 + treasure_index_offset, lambda state: state.has(DIONE_STONE, player)), #Dione Shard chest
+        #Shrine proper
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - Lobby", 2791 + treasure_index_offset), #Dione Shard chest
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - 2nd floor", 2792 + treasure_index_offset), #Dione Shard chest
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - 2nd floor balcony", 1146 + treasure_index_offset), #Dione Shard chest
-        LocationData(DIONE_SHRINE_AP_REGION, "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #4th Scrap on main Overpass map
-        LocationData(DIONE_SHRINE_AP_REGION, "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #Life Jewel Overpass main map
+        #Shrine Roof
+        LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - Roof", 2154 + treasure_index_offset),  # Dione Shard chest
+        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide(state)), #4th Scrap on main Overpass map
+        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide(state)), #Life Jewel Overpass main map
 
         #NPCs
-        LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Shedding on roof", 2264 + npc_index_offset, lambda state: state.has(DIONE_STONE, player)), #Shedding 9
-        LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)), #Ingot on Overpass main map
+        #Shrine Roof
+        LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Shedding on roof", 2264 + npc_index_offset), #Shedding 9
+        LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
         #Treasure chests
