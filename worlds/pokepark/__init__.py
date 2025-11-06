@@ -38,7 +38,7 @@ class PokeparkWebWorld(WebWorld):
     options_presets = {
         "Default": {
             "power_randomizer": 3,
-            "starting_zone": 0,
+            "start_fast_travel": 0,
             "goal": 0
         }
     }
