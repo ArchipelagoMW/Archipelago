@@ -607,7 +607,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state),
                      NORTHERN_STRETCH_RACE_FINISH_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
-                     EASTERN_CHASM_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
+                     EASTERN_CHASM_AP_REGION: lambda state: (state.has(DIONE_SHRINE_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.has_vertical_movement(state)})
     fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
                     {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
     #Jidamba Tangle section start
