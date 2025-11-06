@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import FreeText, NumericOption, Toggle, DefaultOnToggle, Choice, TextChoice, Range, NamedRange, OptionList, \
-    PerGameCommonOptions, OptionSet
+    PerGameCommonOptions, OptionSet, OptionCounter
 
 class StartingArea(Choice):
     """
@@ -93,6 +93,18 @@ class TrapLinkOption(Toggle):
     """If a trap is sent from Grinch, traps that are compatible with other games are triggered as well. [NOT IMPLEMENTED]"""
     display_name = "Trap Link"
 
+class FillerWeight(OptionCounter):
+    """
+    Determines how often each filler item appears in the itempool
+    """
+    default = {
+        "5 Rotten Eggs": 50,
+        "10 Rotten Eggs": 25,
+        "20 Rotten Eggs": 15,
+        # "Fully Healed Grinch": 10,
+    }
+    display_name = "Filler Weights"
+
 @dataclass
 class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     starting_area: StartingArea
@@ -106,3 +118,4 @@ class GrinchOptions(PerGameCommonOptions):#DeathLinkMixin
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
+    filler_weight: FillerWeight
