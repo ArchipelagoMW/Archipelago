@@ -19,8 +19,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     set_rule_if_exists("Treehouse - Burmy - Friendship", lambda state: True)
     set_rule_if_exists("Treehouse - Mime Jr. - Friendship", lambda state: True)
     set_rule_if_exists(
-        "Treehouse - Drifblim - Friendship", lambda state: can_farm_berries(state, player) and
-                                                           state.count_group("Fast Travel Items", player) >= 1
+        "Treehouse - Drifblim - Friendship", lambda state: state.count_group("Fast Travel Items", player) >= 1
     )
     set_rule_if_exists("Treehouse - Power Up - Thunderbolt Upgrade 1", lambda state: can_farm_berries(state, player))
     set_rule_if_exists(
@@ -648,8 +647,7 @@ def set_rules(world: "PokeparkWorld") -> None:
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Mudkip Power Competition -- Friendship",
-        lambda state: can_play_catch(state, player, options) and
-                      state.has("Mudkip Unlock", player)
+        lambda state: state.has("Mudkip Unlock", player)
     )
     set_rule_if_exists(
         "Beach Zone Main Area - Taillow Power Competition -- Friendship",
@@ -2606,7 +2604,7 @@ def can_beat_all_dusknoir_speed_slam_records(state: CollectionState, player: int
             state.has("Umbreon Friendship", player) and
             state.has("Cranidos Friendship", player) and
             state.has("Skuntank Friendship", player) and
-            state.has("Electrode Friendship", player) and
+            state.has("Voltorb Friendship", player) and
             state.has("Gastly Friendship", player) and
             state.has("Duskull Friendship", player) and
             state.has("Misdreavus Friendship", player) and
@@ -2628,7 +2626,7 @@ def can_beat_any_dusknoir_speed_slam_record(state: CollectionState, player: int,
             state.has("Umbreon Friendship", player) or
             state.has("Cranidos Friendship", player) or
             state.has("Skuntank Friendship", player) or
-            state.has("Electrode Friendship", player) or
+            state.has("Voltorb Friendship", player) or
             state.has("Gastly Friendship", player) or
             state.has("Duskull Friendship", player) or
             state.has("Misdreavus Friendship", player) or

@@ -1421,7 +1421,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Beach Zone Main Area - Staravia Power Competition -- Friendship": PokeparkLocationData(
-        144, PokeparkFlag.CHASE, "Beach Zone Main Area", PokeparkFriendshipClientLocationData(
+        144, PokeparkFlag.BATTLE, "Beach Zone Main Area", PokeparkFriendshipClientLocationData(
             structure_position=21
         ), each_zone=MultiZoneFlag.MULTI
     ),
@@ -1855,7 +1855,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         ), each_zone=MultiZoneFlag.MULTI
     ),
     "Ice Zone Main Area - Staravia Power Competition -- Friendship": PokeparkLocationData(
-        218, PokeparkFlag.CHASE, "Ice Zone Main Area", Pokepark07AttractionClientData(
+        218, PokeparkFlag.BATTLE, "Ice Zone Main Area", Pokepark07AttractionClientData(
             structure_position=6
         ), each_zone=MultiZoneFlag.MULTI
     ),
@@ -3938,7 +3938,7 @@ LOCATION_TABLE: dict[str, PokeparkLocationData] = {
         each_zone=MultiZoneFlag.SINGLE
     ),
     "Staravia Power Competition -- Friendship": PokeparkLocationData(
-        566, PokeparkFlag.CHASE, "Staravia", PokeparkFriendshipClientLocationData(
+        566, PokeparkFlag.BATTLE, "Staravia", PokeparkFriendshipClientLocationData(
             structure_position=21
         ),
         each_zone=MultiZoneFlag.SINGLE
