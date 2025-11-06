@@ -154,3 +154,4 @@ class GrinchOptions(PerGameCommonOptions):  # DeathLinkMixin
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
+    filler_weight: FillerWeight
