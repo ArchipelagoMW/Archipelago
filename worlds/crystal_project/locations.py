@@ -966,7 +966,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Climb the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
         #Reserve Treetops
         LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: logic.has_glide(state)), #Shedding 7
-        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Dust
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
 
         #Dione Shrine
         #Treasure chests
