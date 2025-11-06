@@ -11,7 +11,8 @@ import yaml
 from BaseClasses import ItemClassification as IC, Region, Tutorial
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, Type, components, icon_paths, launch as launch_component
+from worlds.LauncherComponents import Component, Type, components, icon_paths, \
+    launch_subprocess
 from .items import ITEM_TABLE, PokeparkItem, PokeparkItemData, TOTAL_FRIENDSHIP_ITEMS, fast_travel_items, \
     item_name_groups, \
     option_to_progression, \
@@ -431,11 +432,14 @@ class PokeparkWorld(World):
         return slot_data
 
 def launch_client():
+    print("Running Pokepark Client")
     from .PokeparkClient import main
-    launch_component(main, name="Pokepark client")
+    launch_subprocess(main, name="PokeparkClient")
 
 
-components.append(Component("Pokepark Client", "PokeparkClient",
+components.append(
+    Component(
+        "Pokepark Client",
                             func=launch_client, component_type=Type.CLIENT, icon="Pokepark"
                             )
                   )
