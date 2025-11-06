@@ -124,10 +124,10 @@ grinch_locations = {
         "WF - SS BP in 2nd House near Vacuum Tube inbetween Blueprints": GrinchLocationData("Who Forest", ["Slime Shooter Blueprints", "Blueprints", "Who Forest", "Who Forest Blueprints"], 907, [GrinchRamData(0x010244, binary_bit_pos=6)]),
         "WF - SS BP in House near Vacuum Tube": GrinchLocationData("Who Forest", ["Slime Shooter Blueprints", "Blueprints", "Who Forest", "Who Forest Blueprints"], 908, [GrinchRamData(0x010244, binary_bit_pos=0)]),
 #Octopus Climbing Device
-        "WD - OCD BP inside Middle Pipe": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1001, [GrinchRamData(0x010252, binary_bit_pos=3)]),
-        "WD - OCD BP inside Right Pipe": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1002, [GrinchRamData(0x010252, binary_bit_pos=5)]),
+        "WD - OCD BP inside Pipe near Vacuum Tube": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1001, [GrinchRamData(0x010252, binary_bit_pos=3)]),
+        "WD - OCD BP inside Pipe on right side": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1002, [GrinchRamData(0x010252, binary_bit_pos=5)]),
         "WD - OCD BP in Vent to Mayor's House": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1003, [GrinchRamData(0x010252, binary_bit_pos=1)]),
-        "WD - OCD BP inside Left Pipe": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1004, [GrinchRamData(0x010252, binary_bit_pos=4)]),
+        "WD - OCD BP inside Pipe on left side": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1004, [GrinchRamData(0x010252, binary_bit_pos=4)]),
         "WD - OCD BP near Right Side of Power Plant Wall": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1005, [GrinchRamData(0x010252, binary_bit_pos=0)]),
         "WD - OCD BP near Who-Bris' Shack": GrinchLocationData("Who Dump", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints"], 1006, [GrinchRamData(0x010252, binary_bit_pos=2)]),
         "WD - Minefield - OCD BP on Left Side of House": GrinchLocationData("Minefield", ["Octopus Climbing Device Blueprints", "Blueprints", "Who Dump", "Who Dump Blueprints", "Minefield", "Minefield Blueprints"], 1007, [GrinchRamData(0x01026E, binary_bit_pos=2)]),
