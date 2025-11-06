@@ -499,10 +499,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, QUINTAR_RESERVE_AP_REGION, [SHOUDU_PROVINCE_AP_REGION, DIONE_SHRINE_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
                     {QUINTAR_MAUSOLEUM_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, EASTERN_CHASM_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
+    fancy_add_exits(world, DIONE_SHRINE_AP_REGION, [QUINTAR_RESERVE_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION],
                     {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
-                     THE_CHALICE_OF_TAR_AP_REGION: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player),
-                     EASTERN_CHASM_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
+                     THE_CHALICE_OF_TAR_AP_REGION: lambda state: logic.has_glide(state) and state.has(DIONE_STONE, player)})
     fancy_add_exits(world, QUINTAR_MAUSOLEUM_AP_REGION, [QUINTAR_RESERVE_AP_REGION, QUINTAR_SANCTUM_AP_REGION],
                     {QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_SANCTUM_AP_REGION: lambda state: logic.has_swimming(state)})
@@ -567,7 +566,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, LOWER_NORTHERN_CAVE_AP_REGION, [ICE_CELL_AP_REGION, LOWER_ICE_LAKES_AP_REGION])
     #Northern Cave end
     #Land's End start
-    fancy_add_exits(world, LANDS_END_AP_REGION, [LOWER_ICE_LAKES_AP_REGION, LANDS_END_NORTHERN_PEAK_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_OPEN_SEA_AP_REGION],
+    fancy_add_exits(world, LANDS_END_AP_REGION, [LOWER_ICE_LAKES_AP_REGION, LANDS_END_COTTAGE_RIDGE_AP_REGION, LANDS_END_NORTHERN_PEAK_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {LANDS_END_NORTHERN_PEAK_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
@@ -603,11 +602,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, PEAK_RAMPARTS_AP_REGION, [RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION],
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state)})
     #Castle Ramparts end
-    fancy_add_exits(world, THE_CHALICE_OF_TAR_AP_REGION, [TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, QUINTAR_RESERVE_AP_REGION],
+    fancy_add_exits(world, THE_CHALICE_OF_TAR_AP_REGION, [TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, QUINTAR_RESERVE_AP_REGION, EASTERN_CHASM_AP_REGION],
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state),
                      PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state),
                      NORTHERN_STRETCH_RACE_FINISH_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
-                     QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state)})
+                     QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
+                     EASTERN_CHASM_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state)})
     fancy_add_exits(world, FLYERS_CRAG_AP_REGION, [OKIMOTO_NS_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
                     {JIDAMBA_SUMMIT_AP_REGION: lambda state: logic.has_glide(state)})
     #Jidamba Tangle section start
