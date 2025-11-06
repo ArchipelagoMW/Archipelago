@@ -429,8 +429,7 @@
         { "item": "Air Dash" }, { "item": "Cloud Leap" }, // to jump over the two-ninja pit after the roof breaks
         { "item": "Mystic Nymph: Scout Mode" } // or hack the rope to climb out
     ] } ] }, // on logic_level: easy, just T-dash // LS is redundant
-    // then a one-way dragon boat ride; even bow/parry hover can't bypass the boat because of flying enemies
-    // it is *possible* to hover under the flying enemies without getting hit, but this is too unreliable for logic
+    // then a one-way dragon boat ride; bow/parry hover can be used here as long as you start it above the flying enemies
     { "from": "LYR - Root Node", "to": "TRC - Upper Exit", "requires": [ { "item": "Elevator Access Token" } ] },
 
     { "from": "LYR - Root Node", "to": "YC - Upper Exit", "requires": [] },
