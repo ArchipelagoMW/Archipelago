@@ -1296,7 +1296,7 @@
 
     // Empyrean Dist. (Living Area)
     { "from": "EDLA - Root Node & Lower Elevator", "to": "EDLA - East Building Interior Part 1", "requires": [
-        { "item": "Cloud Leap" } // AND hacking 2 to activate the lift
+        { "item": "Cloud Leap" }, { "item": "Ledge Grab" } // AND hacking 2 to activate the lift
     ] }, // on logic_level: ledge_storage, T-dash setup left of node into wall slide all the way up the right side of EDLA
     // single jump from high up this wall is plenty to reach EBI, or with more waiting EBR
     //{ "from": "EDLA - Root Node & Lower Elevator", "to": "EDLA - East Building Rooftops", "requires": [] },
