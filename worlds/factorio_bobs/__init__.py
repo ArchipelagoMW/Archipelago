@@ -152,7 +152,7 @@ class FactorioBobs(World):
     def create_regions(self):
         player = self.player
         random = self.random
-        nauvis = Region("Nauvis", player, self.multiworld)
+        nauvis = Region(self.origin_region_name, player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo
 
