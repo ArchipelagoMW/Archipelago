@@ -748,10 +748,9 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
     if not excluded:
         if world.options.regionsanity.value != world.options.regionsanity.option_disabled and region_completion_location is not None:
             for ap_region_name in display_region_subregions_dictionary[display_region_name]:
-                ap_region = Region(ap_region_name, player, world.multiworld)
                 region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
-                for location in ap_region.locations:
-                    if location != region_completion_location:
+                for location in world.get_locations():
+                    if location.parent_region.name == ap_region_name and location != region_completion_location:
                         region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, location.access_rule)
 
     return ap_regions
