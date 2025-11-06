@@ -448,7 +448,10 @@ class Recipe(FactorioElement):
         return {technology_table[tech_name] for tech_name in recipe_sources.get(self.name, ())}
 
     def all_unlocking_technologies(self) -> set[Technology]:
-        return self.eval()[1]
+        _, technologies, all_categories = self.eval()
+        for category in all_categories:
+            technologies |= machine_per_category[category].all_unlocking_technologies()
+        return technologies
 
 
     @property
