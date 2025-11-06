@@ -63,25 +63,9 @@ class GrinchWorld(World):
         #Get number of current unfilled locations
         unfilled_locations: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(ALL_ITEMS_TABLE.keys()) - 3
 
-        # Total available weight sum
-        total_fillerweights = sum(self.options.filler_weight[filler] for filler in MISC_ITEMS_TABLE)
-
-        # Fill remaining locations according to weight ratio
-        for filler in MISC_ITEMS_TABLE:
-            weight_ratio = self.options.filler_weight[filler] / total_fillerweights
-            filler_count = round(unfilled_locations * weight_ratio)
-            for _ in range(filler_count):
-                self_itempool.append(self.create_item(filler))
-
-        # Make sure we don't underfill (in case of rounding losses)
-        while len(self_itempool) < unfilled_locations:
-            self_itempool.append(self.create_item(self.get_other_filler_item(list(MISC_ITEMS_TABLE.keys()))))
-
+        for _ in range(unfilled_locations):
+            self_itempool.append(self.create_item((self.get_other_filler_item(list(MISC_ITEMS_TABLE.keys())))))
         self.multiworld.itempool += self_itempool
-
-        # for _ in range(unfilled_locations):
-        #     self_itempool.append(self.create_item((self.get_other_filler_item(list(MISC_ITEMS_TABLE.keys())))))
-        # self.multiworld.itempool += self_itempool
 
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Goal", self.player)
