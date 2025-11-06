@@ -199,11 +199,13 @@
     { "from": "CC - Right Exit", "to": "CC - Root Node", "requires": [ { "item": "Charged Strike" } ] },
     { "from": "CC - Root Node", "to": "CC - Root Node After Boss", "requires": [
         { "item": "Event - Lady Ethereal Soulscape Unlocked" },
-        // pre-boss soulscape requires WC AND TCK AND (CL OR AD), the boss herself requires just AD
-        // to evade the phase 3 orb, so that simplifies down to just WC AND TCK AND AD
-        { "item": "Wall Climb" },
-        { "item": "Tai-Chi Kick" },
-        { "item": "Air Dash" }
+        { "item": "Tai-Chi Kick" }, // hard-required after the 4th hot spring to reveal an otherwise invincible and mandatory enemy
+        { "item": "Wall Climb" }, // hard-required multiple times after the 6th hot spring where you follow the nymph,
+            // either clinging to a wall waiting for the nymph, or climbing a wall before the nymph adds spikes to it.
+        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }, // the very last nymph-following section
+            // has 2 innocuous jumps that require the extra verticality of LG OR CL
+        // If we were writing logic for just the soulscape, it would be WC AND TCK AND (AD OR CL), but:
+        { "item": "Air Dash" } // Lady Ethereal herself requires Air Dash to evade the phase 3 orb, making CL fully redundant
     ] },
     { "from": "CC - Root Node", "to": "CC - After Large Door", "requires": [
         { "item": "Mystic Nymph: Scout Mode" }
