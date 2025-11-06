@@ -5,10 +5,12 @@ import logging
 import os
 import subprocess
 import sys
+import shlex
 
 from asyncio import Task
 from datetime import datetime
 from logging import Logger
+from shutil import which
 from typing import Awaitable
 
 # Misc imports
@@ -21,7 +23,6 @@ import ModuleUpdate
 import Utils
 
 from CommonClient import ClientCommandProcessor, CommonContext, server_loop, gui_enabled
-from Launcher import launch as program_launch
 from NetUtils import ClientStatus
 
 # Jak imports
@@ -606,15 +607,25 @@ async def run_game(ctx: JakAndDaxterContext):
                 goalc_args = [goalc_path, "--game", "jak1"]
 
             # This needs to be a new console. The REPL console cannot share a window with any other process.
-            
+            # We make similar decisions as Launcher.launch for terminals on Linux and Mac (despite not supporting Mac).
             if Utils.is_windows:
                 goalc_process = subprocess.Popen(goalc_args, creationflags=subprocess.CREATE_NEW_CONSOLE)
             elif Utils.is_linux:
-                # Here, program_launch is imported from archipelago to run executatbles, including terminal ones. 
-                goalc_process = program_launch(goalc_args, in_terminal=True)
+                terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+                if terminal:
+                    goalc_process = subprocess.Popen([terminal, '-e', shlex.join(goalc_args)])
+                else:
+                    msg = (f"Your Linux installation does not have a supported terminal application.\n"
+                           f"We support the following options:\n"
+                           f"   x-terminal-emulator\n"
+                           f"   gnome-terminal\n"
+                           f"   xterm\n"
+                           f"Please install one of these and try again.")
+                    ctx.on_log_error(logger, msg)
+                    return
             elif Utils.is_macos:
-                # Here, program_launch is imported from archipelago to run executatbles, including terminal ones. 
-                goalc_process = program_launch(goalc_args, in_terminal=True)
+                terminal = [which('open'), '-W', '-a', 'Terminal.app']
+                goalc_process = subprocess.Popen([*terminal, *goalc_args])
 
     except AttributeError as e:
         if " " in e.args[0]:
