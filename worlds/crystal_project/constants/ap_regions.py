@@ -79,6 +79,7 @@ SALMON_RIVER_AP_REGION_TELEPORT_LOCATION = "121,174,-363"
 POSEIDON_SHRINE_PROPER_AP_REGION = "Poseidon Shrine"
 POSEIDON_SHRINE_ROOF_AP_REGION = "Poseidon Shrine Roof"
 RIVER_CATS_EGO_AP_REGION = "River Cat's Ego"
+#if you add a Mushroom Mountain Teleport location the rules around locations and regions need to be updated; e.g. the checks that require only fish no longer make sense
 MUSHROOM_MOUNTAIN_AP_REGION = "Mushroom Mountain"
 #Salmon River end
 SHOUDU_WATERFRONT_AP_REGION = "Shoudu Waterfront"
