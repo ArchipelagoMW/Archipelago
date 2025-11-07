@@ -27,8 +27,8 @@ item_types_map = {
     "useful": ItemClassification.useful,
     "filler": ItemClassification.filler,
     "trap": ItemClassification.trap,
-    # Nine Sols currently has no use case for skip_balancing xor deprioritized flags,
-    # just "low value" progression where both flags make sense.
+    "progression_skip_balancing": ItemClassification.progression_skip_balancing,
+    # most of our skip_balancing/deprioritized use cases are just "low value" progression where both flags make sense
     "weak_progression": ItemClassification.progression_skip_balancing
     if version_tuple < Version(0, 6, 3)
     else ItemClassification.progression_deprioritized_skip_balancing,

@@ -13,7 +13,7 @@
     { "code": 12, "name": "Charged Strike", "type": "progression" },
     { "code": 13, "name": "Air Dash", "type": "progression" },
     { "code": 14, "name": "Unbounded Counter", "type": "progression" },
-    { "code": 15, "name": "Cloud Leap", "type": "progression" },
+    { "code": 15, "name": "Cloud Leap", "type": "progression_skip_balancing" }, // CL tends to show up too early and blow the game wide open
     { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
 
     { "code": 21, "name": "Arrow: Cloud Piercer", "type": "useful" },
