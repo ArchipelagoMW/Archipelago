@@ -544,9 +544,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Chest - Inside Salmon Shack", 2913 + treasure_index_offset), #Salmon River map chest
         #Mushroom Mountain
         LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Hop west from shrine to shroom-studded mountainside", 3539 + treasure_index_offset), #(32, 181, -373) 2nd Overpass scrap on (Cloudy Wind)
-        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
-        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Chilling by Nomad's Outpost", 3676 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state) or logic.has_swimming(state)),  # (45, 215, -465) Overpass (Outpost) Scrap
-        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_glide(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Frigid dip high behind River Cat", 3654 + treasure_index_offset, lambda state: logic.has_glide(state) or logic.has_swimming(state)), #(60, 225, -435) Overpass (Snow) River Cats Ego map
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Chilling by Nomad's Outpost", 3676 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state)),  # (45, 215, -465) Overpass (Outpost) Scrap
+        LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass Chest - Ultimate Mulan challenge past mushroom mountain", 1401 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #(-35, 166, -387) Overpass (Cloudy Wind) Zether Pouch chest
 
         #NPCs
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Reid chilling by the Fish Hatchery", 2410 + npc_index_offset), #(113, 172, -372) Courtyard Key; Fixed Missable

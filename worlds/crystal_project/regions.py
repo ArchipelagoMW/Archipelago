@@ -433,8 +433,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state),
                      MUSHROOM_MOUNTAIN_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, MUSHROOM_MOUNTAIN_AP_REGION, [SALMON_RIVER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SALMON_BAY_AP_REGION],
-                    #Note: depending on where the Mushroom Mountain teleport is put, rules may need to be added to Salmon River exit
-                    {RIVER_CATS_EGO_AP_REGION: lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.has_swimming(state)})
+                    {SALMON_RIVER_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or logic.has_swimming(state),
+                     RIVER_CATS_EGO_AP_REGION: lambda state: logic.has_glide(state) and logic.has_swimming(state)})
     #Salmon River end
     fancy_add_exits(world, POKO_POKO_DESERT_AP_REGION, [SARA_SARA_BAZAAR_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, LAKE_DELENDE_AP_REGION, SALMON_BAY_AP_REGION, ANCIENT_LABYRINTH_AP_REGION],
                     {ANCIENT_RESERVOIR_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
