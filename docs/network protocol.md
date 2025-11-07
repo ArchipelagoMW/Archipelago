@@ -647,7 +647,7 @@ class Version(NamedTuple):
     build: int
 ```
 
-If constructing version information as a Dict for a custom client rather than as a NamedTuple built into the CommonClient, you must use add the `class` key to allow Archipelago to compare version support.
+If constructing version information as a dict for a custom client rather than as a NamedTuple built into the CommonClient, you must add the `class` key to allow Archipelago to compare version support.
 ```
 "version": {
       "class": "Version",
