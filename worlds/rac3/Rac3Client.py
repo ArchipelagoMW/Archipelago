@@ -37,18 +37,22 @@ class CommandProcessor(ClientCommandProcessor):
     #     if isinstance(self.ctx, Rac3Context):
     #         self.ctx.game_interface.kill_player()
     def _cmd_weapon_exp_test(self):
+        """Give weapon exp for testing purposes."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.received_others(50000092)
 
     def _cmd_bolt_test(self):
+        """Give bolts for testing purposes."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.received_others(50000091)
 
     def _cmd_rac3_info(self):
+        """Dump Rac3 info for debugging purposes."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.dump_info(self.ctx.current_planet, self.ctx.slot_data)
 
     def _cmd_force_update(self):
+        """Force an update to the game state by running all update cycle methods."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.update()
 
