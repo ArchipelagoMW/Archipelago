@@ -66,7 +66,7 @@ is to ensure items necessary to complete the game will be accessible to the play
 rules allowing certain items to be placed in normally unreachable locations, provided the player has indicated they are
 comfortable exploiting certain glitches in the game.
 
-## I want to add a game to the Archipelago randomizer. How do I do that?
+## I want to develop a game implementation for Archipelago. How do I do that?
 
 The best way to get started is to take a look at our code on GitHub:  
 [Archipelago GitHub Page](https://github.com/ArchipelagoMW/Archipelago).
@@ -77,4 +77,5 @@ There, you will find examples of games in the `worlds` folder:
 You may also find developer documentation in the `docs` folder:  
 [/docs Folder in Archipelago Code](https://github.com/ArchipelagoMW/Archipelago/tree/main/docs).
 
-If you have more questions, feel free to ask in the **#ap-world-dev** channel on our Discord.
+If you have more questions regarding development of a game implementation, feel free to ask in the **#ap-world-dev** 
+channel on our Discord.

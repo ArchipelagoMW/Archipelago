@@ -261,6 +261,7 @@ class MultiWorld():
                         "local_items": set(item_link.get("local_items", [])),
                         "non_local_items": set(item_link.get("non_local_items", [])),
                         "link_replacement": replacement_prio.index(item_link["link_replacement"]),
+                        "skip_if_solo": item_link.get("skip_if_solo", False),
                     }
 
         for _name, item_link in item_links.items():
@@ -284,6 +285,8 @@ class MultiWorld():
 
         for group_name, item_link in item_links.items():
             game = item_link["game"]
+            if item_link["skip_if_solo"] and len(item_link["players"]) == 1:
+                continue
             group_id, group = self.add_group(group_name, game, set(item_link["players"]))
 
             group["item_pool"] = item_link["item_pool"]
@@ -1343,8 +1346,7 @@ class Region:
         for entrance in self.entrances:  # BFS might be better here, trying DFS for now.
             return entrance.parent_region.get_connecting_entrance(is_main_entrance)
 
-    def add_locations(self, locations: Dict[str, Optional[int]],
-                      location_type: Optional[type[Location]] = None) -> None:
+    def add_locations(self, locations: Mapping[str, int | None], location_type: type[Location] | None = None) -> None:
         """
         Adds locations to the Region object, where location_type is your Location class and locations is a dict of
         location names to address.
@@ -1432,8 +1434,8 @@ class Region:
         entrance.connect(self)
         return entrance
 
-    def add_exits(self, exits: Union[Iterable[str], Dict[str, Optional[str]]],
-                  rules: Dict[str, Callable[[CollectionState], bool]] = None) -> List[Entrance]:
+    def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
+                  rules: Mapping[str, Callable[[CollectionState], bool]] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1441,7 +1443,7 @@ class Region:
                       created entrances will be named "self.name -> connecting_region"
         :param rules: rules for the exits from this region. format is {"connecting_region": rule}
         """
-        if not isinstance(exits, Dict):
+        if not isinstance(exits, Mapping):
             exits = dict.fromkeys(exits)
         return [
             self.connect(
@@ -1855,6 +1857,9 @@ class Spoiler:
                     Utils.__version__, self.multiworld.seed))
             outfile.write('Filling Algorithm:               %s\n' % self.multiworld.algorithm)
             outfile.write('Players:                         %d\n' % self.multiworld.players)
+            if self.multiworld.players > 1:
+                loc_count = len([loc for loc in self.multiworld.get_locations() if not loc.is_event])
+                outfile.write('Total Location Count:            %d\n' % loc_count)
             outfile.write(f'Plando Options:                  {self.multiworld.plando_options}\n')
             AutoWorld.call_stage(self.multiworld, "write_spoiler_header", outfile)
 
@@ -1862,6 +1867,9 @@ class Spoiler:
                 if self.multiworld.players > 1:
                     outfile.write('\nPlayer %d: %s\n' % (player, self.multiworld.get_player_name(player)))
                 outfile.write('Game:                            %s\n' % self.multiworld.game[player])
+
+                loc_count = len([loc for loc in self.multiworld.get_locations(player) if not loc.is_event])
+                outfile.write('Location Count:                  %d\n' % loc_count)
 
                 for f_option, option in self.multiworld.worlds[player].options_dataclass.type_hints.items():
                     write_option(f_option, option)

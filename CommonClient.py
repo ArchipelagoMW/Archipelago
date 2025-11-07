@@ -99,17 +99,6 @@ class ClientCommandProcessor(CommandProcessor):
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
-    def get_current_datapackage(self) -> dict[str, typing.Any]:
-        """
-        Return datapackage for current game if known.
-
-        :return: The datapackage for the currently registered game. If not found, an empty dictionary will be returned.
-        """
-        if not self.ctx.game:
-            return {}
-        checksum = self.ctx.checksums[self.ctx.game]
-        return Utils.load_data_package_for_checksum(self.ctx.game, checksum)
-
     def _cmd_missing(self, filter_text = "") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
@@ -119,8 +108,8 @@ class ClientCommandProcessor(CommandProcessor):
         count = 0
         checked_count = 0
 
-        lookup = self.get_current_datapackage().get("location_name_to_id", {})
-        for location, location_id in lookup.items():
+        lookup = self.ctx.location_names[self.ctx.game]
+        for location_id, location in lookup.items():
             if filter_text and filter_text not in location:
                 continue
             if location_id < 0:
@@ -141,11 +130,10 @@ class ClientCommandProcessor(CommandProcessor):
             self.output("No missing location checks found.")
         return True
 
-    def output_datapackage_part(self, key: str, name: str) -> bool:
+    def output_datapackage_part(self, name: typing.Literal["Item Names", "Location Names"]) -> bool:
         """
         Helper to digest a specific section of this game's datapackage.
 
-        :param key: The dictionary key in the datapackage.
         :param name: Printed to the user as context for the part.
 
         :return: Whether the process was successful.
@@ -154,23 +142,20 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(f"No game set, cannot determine {name}.")
             return False
 
-        lookup = self.get_current_datapackage().get(key)
-        if lookup is None:
-            self.output("datapackage not yet loaded, try again")
-            return False
-
+        lookup = self.ctx.item_names if name == "Item Names" else self.ctx.location_names
+        lookup = lookup[self.ctx.game]
         self.output(f"{name} for {self.ctx.game}")
-        for key in lookup:
-            self.output(key)
+        for name in lookup.values():
+            self.output(name)
         return True
 
     def _cmd_items(self) -> bool:
         """List all item names for the currently running game."""
-        return self.output_datapackage_part("item_name_to_id", "Item Names")
+        return self.output_datapackage_part("Item Names")
 
     def _cmd_locations(self) -> bool:
         """List all location names for the currently running game."""
-        return self.output_datapackage_part("location_name_to_id", "Location Names")
+        return self.output_datapackage_part("Location Names")
 
     def output_group_part(self, group_key: typing.Literal["item_name_groups", "location_name_groups"],
                           filter_key: str,
@@ -871,9 +856,9 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     server_url = urllib.parse.urlparse(address)
     if server_url.username:
-        ctx.username = server_url.username
+        ctx.username = urllib.parse.unquote(server_url.username)
     if server_url.password:
-        ctx.password = server_url.password
+        ctx.password = urllib.parse.unquote(server_url.password)
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""

@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 
 from worlds.AutoWorld import AutoWorldRegister, World
 from . import app, cache
+from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
 from Utils import title_sorted
 
@@ -25,49 +26,6 @@ def get_visible_worlds() -> dict[str, type(World)]:
         if not world.hidden:
             worlds[game] = world
     return worlds
-
-
-def render_markdown(path: str) -> str:
-    import mistune
-    from collections import Counter
-
-    markdown = mistune.create_markdown(
-        escape=False,
-        plugins=[
-            "strikethrough",
-            "footnotes",
-            "table",
-            "speedup",
-        ],
-    )
-
-    heading_id_count: Counter[str] = Counter()
-
-    def heading_id(text: str) -> str:
-        nonlocal heading_id_count
-        import re  # there is no good way to do this without regex
-
-        s = re.sub(r"[^\w\- ]", "", text.lower()).replace(" ", "-").strip("-")
-        n = heading_id_count[s]
-        heading_id_count[s] += 1
-        if n > 0:
-            s += f"-{n}"
-        return s
-
-    def id_hook(_: mistune.Markdown, state: mistune.BlockState) -> None:
-        for tok in state.tokens:
-            if tok["type"] == "heading" and tok["attrs"]["level"] < 4:
-                text = tok["text"]
-                assert isinstance(text, str)
-                unique_id = heading_id(text)
-                tok["attrs"]["id"] = unique_id
-                tok["text"] = f"<a href=\"#{unique_id}\">{text}</a>"  # make header link to itself
-
-    markdown.before_render_hooks.append(id_hook)
-
-    with open(path, encoding="utf-8-sig") as f:
-        document = f.read()
-    return markdown(document)
 
 
 @app.errorhandler(404)
@@ -91,10 +49,9 @@ def game_info(game, lang):
         theme = get_world_theme(game)
         secure_game_name = secure_filename(game)
         lang = secure_filename(lang)
-        document = render_markdown(os.path.join(
-            app.static_folder, "generated", "docs",
-            secure_game_name, f"{lang}_{secure_game_name}.md"
-        ))
+        file_dir = os.path.join(app.static_folder, "generated", "docs", secure_game_name)
+        file_dir_url = url_for("static", filename=f"generated/docs/{secure_game_name}")
+        document = render_markdown(os.path.join(file_dir, f"{lang}_{secure_game_name}.md"), file_dir_url)
         return render_template(
             "markdown_document.html",
             title=f"{game} Guide",
@@ -119,10 +76,9 @@ def tutorial(game: str, file: str):
         theme = get_world_theme(game)
         secure_game_name = secure_filename(game)
         file = secure_filename(file)
-        document = render_markdown(os.path.join(
-            app.static_folder, "generated", "docs",
-            secure_game_name, file+".md"
-        ))
+        file_dir = os.path.join(app.static_folder, "generated", "docs", secure_game_name)
+        file_dir_url = url_for("static", filename=f"generated/docs/{secure_game_name}")
+        document = render_markdown(os.path.join(file_dir, f"{file}.md"), file_dir_url)
         return render_template(
             "markdown_document.html",
             title=f"{game} Guide",
@@ -260,7 +216,10 @@ def host_room(room: UUID):
     # indicate that the page should reload to get the assigned port
     should_refresh = ((not room.last_port and now - room.creation_time < datetime.timedelta(seconds=3))
                       or room.last_activity < now - datetime.timedelta(seconds=room.timeout))
-    with db_session:
+
+    if now - room.last_activity > datetime.timedelta(minutes=1):
+        # we only set last_activity if needed, otherwise parallel access on /room will cause an internal server error
+        # due to "pony.orm.core.OptimisticCheckError: Object Room was updated outside of current transaction"
         room.last_activity = now  # will trigger a spinup, if it's not already running
 
     browser_tokens = "Mozilla", "Chrome", "Safari"
@@ -268,9 +227,9 @@ def host_room(room: UUID):
                  or "Discordbot" in request.user_agent.string
                  or not any(browser_token in request.user_agent.string for browser_token in browser_tokens))
 
-    def get_log(max_size: int = 0 if automated else 1024000) -> str:
+    def get_log(max_size: int = 0 if automated else 1024000) -> Tuple[str, int]:
         if max_size == 0:
-            return "…"
+            return "…", 0
         try:
             with open(os.path.join("logs", str(room.id) + ".txt"), "rb") as log:
                 raw_size = 0
@@ -281,9 +240,9 @@ def host_room(room: UUID):
                         break
                     raw_size += len(block)
                     fragments.append(block.decode("utf-8"))
-                return "".join(fragments)
+                return "".join(fragments), raw_size
         except FileNotFoundError:
-            return ""
+            return "", 0
 
     return render_template("hostRoom.html", room=room, should_refresh=should_refresh, get_log=get_log)
 

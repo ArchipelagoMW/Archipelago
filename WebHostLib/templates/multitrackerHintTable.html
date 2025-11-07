@@ -22,14 +22,14 @@
                 -%}
                     <tr>
                         <td>
-                            {% if get_slot_info(team, hint.finding_player).type == 2 %}
+                            {% if get_slot_info(hint.finding_player).type == 2 %}
                                 <i>{{ player_names_with_alias[(team, hint.finding_player)] }}</i>
                             {% else %}
                                 {{ player_names_with_alias[(team, hint.finding_player)] }}
                             {% endif %}
                         </td>
                         <td>
-                            {% if get_slot_info(team, hint.receiving_player).type == 2 %}
+                            {% if get_slot_info(hint.receiving_player).type == 2 %}
                                 <i>{{ player_names_with_alias[(team, hint.receiving_player)] }}</i>
                             {% else %}
                                 {{ player_names_with_alias[(team, hint.receiving_player)] }}

@@ -11,7 +11,7 @@ _new_worlds: dict[str, str] = {}
 
 def copy(src: str, dst: str) -> None:
     from Utils import get_file_safe_name
-    from worlds import AutoWorldRegister
+    from worlds.AutoWorld import AutoWorldRegister
 
     assert dst not in _new_worlds, "World already created"
     if '"' in dst or "\\" in dst:  # easier to reject than to escape

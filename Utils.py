@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import json
 import typing
 import builtins
@@ -35,7 +36,7 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -322,11 +323,13 @@ def get_options() -> Settings:
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
-    path = user_path("_persistent_storage.yaml")
+def persistent_store(category: str, key: str, value: typing.Any, force_store: bool = False):
     storage = persistent_load()
+    if not force_store and category in storage and key in storage[category] and storage[category][key] == value:
+        return  # no changes necessary
     category_dict = storage.setdefault(category, {})
     category_dict[key] = value
+    path = user_path("_persistent_storage.yaml")
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
@@ -475,7 +478,7 @@ class RestrictedUnpickler(pickle.Unpickler):
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
-                                self.options_module.PlandoText)):
+                                self.options_module.PlandoItem, self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -718,13 +721,22 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in
+    arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command
+                    (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
@@ -1127,3 +1139,40 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
+    """
+    ThreadPoolExecutor that uses daemonic threads that do not keep the program alive.
+    NOTE: use this with caution because killed threads will not properly clean up.
+    """
+
+    def _adjust_thread_count(self):
+        # see upstream ThreadPoolExecutor for details
+        import threading
+        import weakref
+        from concurrent.futures.thread import _worker
+
+        if self._idle_semaphore.acquire(timeout=0):
+            return
+
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+
+        num_threads = len(self._threads)
+        if num_threads < self._max_workers:
+            thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
+            t = threading.Thread(
+                name=thread_name,
+                target=_worker,
+                args=(
+                    weakref.ref(self, weakref_cb),
+                    self._work_queue,
+                    self._initializer,
+                    self._initargs,
+                ),
+                daemon=True,
+            )
+            t.start()
+            self._threads.add(t)
+            # NOTE: don't add to _threads_queues so we don't block on shutdown

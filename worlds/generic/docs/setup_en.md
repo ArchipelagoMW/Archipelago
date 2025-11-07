@@ -136,6 +136,27 @@ are rolling locally, ensure this file is edited to your liking **before** rollin
 when running the Archipelago Installation software. If you have changed settings in this file, and would like to retain 
 them, you may rename the file to `options.yaml`. 
 
+### Playing with custom worlds
+
+If you are generating locally, you can play with worlds that are not included in the Archipelago installation.
+These worlds are packaged as `.apworld` files. To add a world to your installation, click the "Install APWorld" button
+in the launcher and select the `.apworld` file you wish to install. Alternatively, you can drag the `.apworld` file
+onto the launcher or double-click the file itself (if on Windows). Once the world is installed, it will function like
+the worlds that are already packaged with Archipelago. Also note that while generation with custom worlds must be done
+locally, these games can then be uploaded to the website for hosting and played as normal.
+
+We strongly recommend that you ensure the source of the `.apworld` is safe and trustworthy before playing with a
+custom world. Installed APWorlds are able to run custom code on your computer whenever you open Archipelago.
+
+#### Alternate versions of included worlds
+
+If you want to play with an alternate version of a game that is already included in Archipelago, you should also
+remove the original APWorld after completing the above installation. To do so, go to your Archipelago installation
+folder and navigate to the `lib/worlds` directory. Then move the `.apworld` or the folder corresponding to the game you
+want to play an alternate version of to somewhere else as a backup. If you want to play this original again, then
+restore the original version to `lib/worlds` and remove the alternate version, which is in the `custom_worlds` folder.
+
+Note: Currently, this cannot be done on the Linux AppImage release.
 
 ## Hosting an Archipelago Server
 

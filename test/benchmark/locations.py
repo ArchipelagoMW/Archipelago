@@ -1,4 +1,12 @@
-def run_locations_benchmark():
+def run_locations_benchmark(freeze_gc: bool = True) -> None:
+    """
+    Run a benchmark of location access rule performance against an empty_state and an all_state.
+
+    :param freeze_gc: Whether to freeze gc before benchmarking and unfreeze gc afterward. Freezing gc moves all objects
+        tracked by the garbage collector to a permanent generation, ignoring them in all future collections. Freezing
+        greatly reduces the duration of running gc.collect() within benchmarks, which otherwise often takes much longer
+        than running all iterations for the location rule being benchmarked.
+    """
     import argparse
     import logging
     import gc
@@ -34,6 +42,8 @@ def run_locations_benchmark():
             return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
 
         def location_test(self, test_location: Location, state: CollectionState, state_name: str) -> float:
+            if freeze_gc:
+                gc.freeze()
             with TimeIt(f"{test_location.game} {self.rule_iterations} "
                         f"runs of {test_location}.access_rule({state_name})", logger) as t:
                 for _ in range(self.rule_iterations):
@@ -41,6 +51,8 @@ def run_locations_benchmark():
                 # if time is taken to disentangle complex ref chains,
                 # this time should be attributed to the rule.
                 gc.collect()
+            if freeze_gc:
+                gc.unfreeze()
             return t.dif
 
         def main(self):
@@ -64,9 +76,13 @@ def run_locations_benchmark():
 
                     gc.collect()
                     for step in self.gen_steps:
+                        if freeze_gc:
+                            gc.freeze()
                         with TimeIt(f"{game} step {step}", logger):
                             call_all(multiworld, step)
                             gc.collect()
+                        if freeze_gc:
+                            gc.unfreeze()
 
                     locations = sorted(multiworld.get_unfilled_locations())
                     if not locations:

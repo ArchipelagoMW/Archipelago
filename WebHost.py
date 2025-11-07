@@ -99,16 +99,23 @@ if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
 
-    from WebHostLib.lttpsprites import update_sprites_lttp
     from WebHostLib.autolauncher import autohost, autogen, stop
     from WebHostLib.options import create as create_options_files
 
     try:
+        from WebHostLib.lttpsprites import update_sprites_lttp
         update_sprites_lttp()
     except Exception as e:
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
+    from worlds import AutoWorldRegister
+    # Update to only valid WebHost worlds
+    invalid_worlds = {name for name, world in AutoWorldRegister.world_types.items()
+                      if not hasattr(world.web, "tutorials")}
+    if invalid_worlds:
+        logging.error(f"Following worlds not loaded as they are invalid for WebHost: {invalid_worlds}")
+    AutoWorldRegister.world_types = {k: v for k, v in AutoWorldRegister.world_types.items() if k not in invalid_worlds}
     create_options_files()
     copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:

@@ -59,6 +59,19 @@ class FactorioCommandProcessor(ClientCommandProcessor):
     def _cmd_toggle_chat(self):
         """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
         self.ctx.toggle_bridge_chat_out()
+        
+    def _cmd_rcon_reconnect(self) -> bool:
+        """Reconnect the RCON client if its disconnected."""
+        try:
+            result = self.ctx.rcon_client.send_command("/help")
+            if result:
+                self.output("RCON Client already connected.")
+            return True
+        except factorio_rcon.RCONNetworkError:
+            self.ctx.rcon_client = factorio_rcon.RCONClient("localhost", self.ctx.rcon_port, self.ctx.rcon_password, timeout=5)
+            self.output("RCON Client successfully reconnected.")
+            return True
+        return False
 
 
 class FactorioContext(CommonContext):
@@ -242,7 +255,13 @@ async def game_watcher(ctx: FactorioContext):
             if ctx.rcon_client and time.perf_counter() > next_bridge:
                 next_bridge = time.perf_counter() + 1
                 ctx.awaiting_bridge = False
-                data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
+                try:
+                    data = json.loads(ctx.rcon_client.send_command("/ap-sync"))
+                except factorio_rcon.RCONNotConnected:
+                    continue
+                except factorio_rcon.RCONNetworkError:
+                    bridge_logger.warning("RCON Client has unexpectedly lost connection. Please issue /rcon_reconnect.")
+                    continue
                 if not ctx.auth:
                     pass  # auth failed, wait for new attempt
                 elif data["slot_name"] != ctx.auth:
@@ -294,9 +313,13 @@ async def game_watcher(ctx: FactorioContext):
                                     "cmd": "Set", "key": ctx.energylink_key, "operations":
                                         [{"operation": "add", "value": value}]
                                 }]))
-                                ctx.rcon_client.send_command(
-                                    f"/ap-energylink -{value}")
-                                logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
+                                try:
+                                    ctx.rcon_client.send_command(
+                                        f"/ap-energylink -{value}")
+                                except factorio_rcon.RCONNetworkError:
+                                    bridge_logger.warning("RCON Client has unexpectedly lost connection. Please issue /rcon_reconnect.")
+                                else:
+                                    logger.debug(f"EnergyLink: Sent {format_SI_prefix(value)}J")
 
             await asyncio.sleep(0.1)
 

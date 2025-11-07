@@ -609,8 +609,8 @@ class CV64PatchExtensions(APPatchExtension):
 
         # Shimmy speed increase hack
         if options["increase_shimmy_speed"]:
-            rom_data.write_int32(0x97EB4, 0x803FE9F0)
-            rom_data.write_int32s(0xBFE9F0, patches.shimmy_speed_modifier)
+            rom_data.write_int32(0x97EB4, 0x803FEA20)
+            rom_data.write_int32s(0xBFEA20, patches.shimmy_speed_modifier)
 
         # Disable landing fall damage
         if options["fall_guard"]:

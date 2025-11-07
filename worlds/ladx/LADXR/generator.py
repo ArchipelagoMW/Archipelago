@@ -57,6 +57,7 @@ from .patches import bingo as _
 from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
+from . import utils
 
 from .patches import bank34
 from .roomEditor import RoomEditor, Object
@@ -231,10 +232,10 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    #if ladxr_settings["steal"] == 'never':
-    #    rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
-    #elif ladxr_settings["steal"] == 'always':
-    #    rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
+    if options["stealing"] == Options.Stealing.option_disabled:
+        rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
+        rom.texts[0x2E] = utils.formatText("Hey!  Welcome!  Did you know that I have eyes on the back of my head?")
+        rom.texts[0x2F] = utils.formatText("Nothing escapes my gaze! Your thieving ways shall never prosper!")
 
     #if ladxr_settings["hpmode"] == 'inverted':
     #    patches.health.setStartHealth(rom, 9)
@@ -242,9 +243,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
     #    patches.health.setStartHealth(rom, 1)
 
     patches.inventory.songSelectAfterOcarinaSelect(rom)
-    if options["quickswap"] == 'a':
+    if options["quickswap"] == Options.Quickswap.option_a:
         patches.core.quickswap(rom, 1)
-    elif options["quickswap"] == 'b':
+    elif options["quickswap"] == Options.Quickswap.option_b:
         patches.core.quickswap(rom, 0)
 
     patches.core.addBootsControls(rom, options["boots_controls"])
@@ -271,9 +272,9 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 100:
+            if mw > 101:
                 # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
-                mw = 100
+                mw = 101
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, patch_data["world_setup"]["boss_mapping"])
     patches.enemies.changeMiniBosses(rom, patch_data["world_setup"]["miniboss_mapping"])
@@ -325,7 +326,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
             0x1A9, 0x1AA, 0x1AB, 0x1AC, 0x1AD,
 
             # Prices
-            0x02C, 0x02D, 0x030, 0x031, 0x032, 0x033, # Shop items
+            0x02C, 0x02D, 0x02E, 0x02F, 0x030, 0x031, 0x032, 0x033, # Shop items
             0x03B, # Trendy Game
             0x045, # Fisherman
             0x018, 0x019, # Crazy Tracy

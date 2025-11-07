@@ -1,160 +1,279 @@
-#player-tracker-wrapper{
-    margin: 0;
+*{
+  margin: 0;
+  font-family: "JuraBook", monospace;
+}
+body{
+  --icon-size: 36px;
+  --item-class-padding: 4px;
+}
+a{
+  color: #1ae;
 }
 
-#tracker-table td {
-    vertical-align: top;
+/* Section colours */
+#player-info{
+  background-color: #37a;
+}
+.player-tracker{
+  max-width: 100%;
+}
+.tracker-section{
+  background-color: grey;
+}
+#terran-items{
+  background-color: #3a7;
+}
+#zerg-items{
+  background-color: #d94;
+}
+#protoss-items{
+  background-color: #37a;
+}
+#nova-items{
+  background-color: #777;
+}
+#kerrigan-items{
+  background-color: #a37;
+}
+#keys{
+  background-color: #aa2;
 }
 
-.inventory-table-area{
-    border: 2px solid #000000;
-    border-radius: 4px;
-    padding: 3px 10px 3px 10px;
+/* Sections */
+.section-body{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-bottom: 3px;
+}
+.section-body-2{
+  display: flex;
+  flex-direction: column;
+}
+.tracker-section:has(input.collapse-section[type=checkbox]:checked) .section-body,
+.tracker-section:has(input.collapse-section[type=checkbox]:checked) .section-body-2{
+  display: none;
+}
+.section-title{
+  position: relative;
+  border-bottom: 3px solid black;
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+input[type="checkbox"]{
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+.section-title:hover h2{
+  text-shadow: 0 0 4px #ddd;
+}
+.f {
+  display: flex;
+  overflow: hidden;
 }
 
-.inventory-table-area:has(.inventory-table-terran) {
-    width: 690px;
-    background-color: #525494;
+/* Acquire item filters */
+.tracker-section img{
+  height: 100%;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  background-color: black;
+}
+.unacquired, .lvl-0 .f{
+  filter: grayscale(100%) contrast(80%) brightness(42%) blur(0.5px);
+}
+.spacer{
+  width: var(--icon-size);
+  height: var(--icon-size);
 }
 
-.inventory-table-area:has(.inventory-table-zerg) {
-    width: 360px;
-    background-color: #9d60d2;
+/* Item groups */
+.item-class{
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  padding: var(--item-class-padding);
+}
+.item-class-header{
+  display: flex;
+  flex-flow: row;
+}
+.item-class-upgrades{
+  /* Note: {display: flex; flex-flow: column wrap} */
+  /* just breaks on Firefox (width does not scale to content) */
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
 }
 
-.inventory-table-area:has(.inventory-table-protoss) {
-    width: 400px;
-    background-color: #d2b260;
+/* Subsections */
+.section-toc{
+  display: flex;
+  flex-direction: row;
+}
+.toc-box{
+  position: relative;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.toc-box:hover{
+  text-shadow: 0 0 7px white;
+}
+.ss-header{
+  position: relative;
+  text-align: center;
+  writing-mode: sideways-lr;
+  user-select: none;
+  padding-top: 5px;
+  font-size: 115%;
+}
+.tracker-section:has(input.ss-1-toggle:checked) .ss-1{
+  display: none;
+}
+.tracker-section:has(input.ss-2-toggle:checked) .ss-2{
+  display: none;
+}
+.tracker-section:has(input.ss-3-toggle:checked) .ss-3{
+  display: none;
+}
+.tracker-section:has(input.ss-4-toggle:checked) .ss-4{
+  display: none;
+}
+.tracker-section:has(input.ss-5-toggle:checked) .ss-5{
+  display: none;
+}
+.tracker-section:has(input.ss-6-toggle:checked) .ss-6{
+  display: none;
+}
+.tracker-section:has(input.ss-7-toggle:checked) .ss-7{
+  display: none;
+}
+.tracker-section:has(input.ss-1-toggle:hover) .ss-1{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-2-toggle:hover) .ss-2{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-3-toggle:hover) .ss-3{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-4-toggle:hover) .ss-4{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-5-toggle:hover) .ss-5{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-6-toggle:hover) .ss-6{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
+}
+.tracker-section:has(input.ss-7-toggle:hover) .ss-7{
+  background-color: #fff5;
+  box-shadow: 0 0 1px 1px white;
 }
 
-#tracker-table .inventory-table td{
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    vertical-align: middle;
+/* Progressive items */
+.progressive{
+  max-height: var(--icon-size);
+  display: contents;
 }
 
-.inventory-table td.title{
-    padding-top: 10px;
-    height: 20px;
-    font-family: "JuraBook", monospace;
-    font-size: 16px;
-    font-weight: bold;
+.lvl-0 > :nth-child(2),
+.lvl-0 > :nth-child(3),
+.lvl-0 > :nth-child(4),
+.lvl-0 > :nth-child(5){
+  display: none;
+}
+.lvl-1 > :nth-child(2),
+.lvl-1 > :nth-child(3),
+.lvl-1 > :nth-child(4),
+.lvl-1 > :nth-child(5){
+  display: none;
+}
+.lvl-2 > :nth-child(1),
+.lvl-2 > :nth-child(3),
+.lvl-2 > :nth-child(4),
+.lvl-2 > :nth-child(5){
+  display: none;
+}
+.lvl-3 > :nth-child(1),
+.lvl-3 > :nth-child(2),
+.lvl-3 > :nth-child(4),
+.lvl-3 > :nth-child(5){
+  display: none;
+}
+.lvl-4 > :nth-child(1),
+.lvl-4 > :nth-child(2),
+.lvl-4 > :nth-child(3),
+.lvl-4 > :nth-child(5){
+  display: none;
+}
+.lvl-5 > :nth-child(1),
+.lvl-5 > :nth-child(2),
+.lvl-5 > :nth-child(3),
+.lvl-5 > :nth-child(4){
+  display: none;
 }
 
-.inventory-table img{
-    height: 100%;
-    max-width: 40px;
-    max-height: 40px;
-    border: 1px solid #000000;
-    filter: grayscale(100%) contrast(75%) brightness(20%);
-    background-color: black;
+/* Filler item counters */
+.item-counter{
+  display: table;
+  text-align: center;
+  padding: var(--item-class-padding);
+}
+.item-count{
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 3px;
+  padding-right: 15px;
 }
 
-.inventory-table img.acquired{
-    filter: none;
-    background-color: black;
+/* Hidden items */
+.hidden-class:not(:has(img.acquired)){
+  display: none;
+}
+.hidden-item:not(.acquired){
+  display:none;
 }
 
-.inventory-table .tint-terran img.acquired {
-    filter: sepia(100%) saturate(300%) brightness(130%) hue-rotate(120deg)
+/* Keys */
+#keys ol, #keys ul{
+  columns: 3;
+  -webkit-columns: 3;
+  -moz-columns: 3;
+}
+#keys li{
+  padding-right: 15pt;
 }
 
-.inventory-table .tint-protoss img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(180deg)
+/* Locations */
+#section-locations{
+    padding-left: 5px;
+}
+@media only screen and (min-width: 120ch){
+  #section-locations ul{
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+  }
+}
+#locations li.checked{
+  list-style-type: "✔ ";
 }
 
-.inventory-table .tint-level-1 img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg)
-}
-
-.inventory-table .tint-level-2 img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(120deg)
-}
-
-.inventory-table .tint-level-3 img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(240deg)
-}
-
-.inventory-table div.counted-item {
-    position: relative;
-}
-
-.inventory-table div.item-count {
-    width: 160px;
-    text-align: left;
-    color: black;
-    font-family: "JuraBook", monospace;
-    font-weight: bold;
-}
-
-#location-table{
-    border: 2px solid #000000;
-    border-radius: 4px;
-    background-color: #87b678;
-    padding: 10px 3px 3px;
-    font-family: "JuraBook", monospace;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: default;
-}
-
-#location-table table{
-    width: 100%;
-}
-
-#location-table th{
-    vertical-align: middle;
-    text-align: left;
-    padding-right: 10px;
-}
-
-#location-table td{
-    padding-top: 2px;
-    padding-bottom: 2px;
-    line-height: 20px;
-}
-
-#location-table td.counter {
-    text-align: right;
-    font-size: 14px;
-}
-
-#location-table td.toggle-arrow {
-    text-align: right;
-}
-
-#location-table tr#Total-header {
-    font-weight: bold;
-}
-
-#location-table img{
-    height: 100%;
-    max-width: 30px;
-    max-height: 30px;
-}
-
-#location-table tbody.locations {
-    font-size: 16px;
-}
-
-#location-table td.location-name {
-    padding-left: 16px;
-}
-
-#location-table td:has(.location-column) {
-    vertical-align: top;
-}
-
-#location-table .location-column {
-    width: 100%;
-    height: 100%;
-}
-
-#location-table .location-column .spacer {
-    min-height: 24px;
-}
-
-.hide {
-    display: none;
+/* Allowing scrolling down a little further */
+.bottom-padding{
+  min-height: 33vh;
 }

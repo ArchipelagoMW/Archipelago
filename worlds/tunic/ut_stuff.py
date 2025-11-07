@@ -25,8 +25,8 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
             world.options.hexagon_quest_ability_type.value = world.passthrough.get("hexagon_quest_ability_type", 0)
             world.options.entrance_rando.value = world.passthrough["entrance_rando"]
             world.options.shuffle_ladders.value = world.passthrough["shuffle_ladders"]
-            # world.options.shuffle_fuses.value = world.passthrough.get("shuffle_fuses", 0)
-            # world.options.shuffle_bells.value = world.passthrough.get("shuffle_bells", 0)
+            world.options.shuffle_fuses.value = world.passthrough.get("shuffle_fuses", 0)
+            world.options.shuffle_bells.value = world.passthrough.get("shuffle_bells", 0)
             world.options.grass_randomizer.value = world.passthrough.get("grass_randomizer", 0)
             world.options.breakable_shuffle.value = world.passthrough.get("breakable_shuffle", 0)
             world.options.entrance_layout.value = EntranceLayout.option_standard
@@ -96,6 +96,7 @@ poptracker_data: dict[str, int] = {
     "[Southwest] Chest Guarded By Turret/Behind the Trees": 509342519,
     "[Northwest] Shadowy Corner Chest/Dark Ramps Chest": 509342520,
     "[Southwest] Obscured In Tunnel To Beach/Deep in the Wall": 509342521,
+    "[Southwest] Obscured In Tunnel To Beach/Deep between the Trees": 509342521,
     "[Southwest] Grapple Chest Over Walkway/Jeffry": 509342522,
     "[Northwest] Chest Beneath Quarry Gate/Across the Bridge": 509342523,
     "[Southeast] Chest Near Swamp/Under the Bridge": 509342524,

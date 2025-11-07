@@ -20,6 +20,8 @@ from worlds.tloz.Items import item_game_ids
 from worlds.tloz.Locations import location_ids
 from worlds.tloz import Items, Locations, Rom
 
+from settings import get_settings
+
 SYSTEM_MESSAGE_ID = 0
 
 CONNECTION_TIMING_OUT_STATUS = "Connection timing out. Please restart your emulator, then restart connector_tloz.lua"
@@ -341,13 +343,12 @@ if __name__ == '__main__':
     # Text Mode to use !hint and such with games that have no text entry
     Utils.init_logging("ZeldaClient")
 
-    options = Utils.get_options()
-    DISPLAY_MSGS = options["tloz_options"]["display_msgs"]
+    DISPLAY_MSGS = get_settings()["tloz_options"]["display_msgs"]
 
 
     async def run_game(romfile: str) -> None:
         auto_start = typing.cast(typing.Union[bool, str],
-                                 Utils.get_options()["tloz_options"].get("rom_start", True))
+                                 get_settings()["tloz_options"].get("rom_start", True))
         if auto_start is True:
             import webbrowser
             webbrowser.open(romfile)

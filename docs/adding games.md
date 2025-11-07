@@ -62,6 +62,24 @@ if possible.
 * If your client appears in the Archipelago Launcher, you may define an icon for it that differentiates it from
   other clients. The icon size is 48x48 pixels, but smaller or larger images will scale to that size.
 
+### Launcher Integration
+
+If you have a python client or want to utilize the integration features of the Archipelago Launcher (ex. Slot links in
+webhost) you can define a Component to be a part of the Launcher. `LauncherComponents.components` can be appended to
+with additional Components in order to automatically add them to the Launcher. Most Components only need a
+`display_name` and `func`, but `supports_uri` and `game_name` can be defined to support launching by webhost links,
+`icon` and `description` can be used to customize display in the Launcher UI, and `file_identifier` can be used to
+launch by file.
+
+Additionally, if you use `func` you have access to LauncherComponent.launch or launch_subprocess to run your
+function as a subprocesses that can be utilized side by side other clients.
+```py
+def my_func(*args: str):
+	from .client import run_client
+	LauncherComponent.launch(run_client, name="My Client", args=args)
+```
+
+
 ## World
 
 The world is your game integration for the Archipelago generator, webhost, and multiworld server. It contains all the

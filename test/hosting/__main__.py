@@ -3,6 +3,7 @@
 # Run with `python test/hosting` instead,
 import logging
 import traceback
+from pathlib import Path
 from tempfile import TemporaryDirectory
 from time import sleep
 from typing import Any
@@ -11,7 +12,7 @@ from test.hosting.client import Client
 from test.hosting.generate import generate_local
 from test.hosting.serve import ServeGame, LocalServeGame, WebHostServeGame
 from test.hosting.webhost import (create_room, get_app, get_multidata_for_room, set_multidata_for_room, start_room,
-                                  stop_autohost, upload_multidata)
+                                  stop_autogen, stop_autohost, upload_multidata, generate_remote)
 from test.hosting.world import copy as copy_world, delete as delete_world
 
 failure = False
@@ -56,35 +57,62 @@ else:
 
 
 if __name__ == "__main__":
+    import sys
     import warnings
+
     warnings.simplefilter("ignore", ResourceWarning)
     warnings.simplefilter("ignore", UserWarning)
+    warnings.simplefilter("ignore", DeprecationWarning)
 
     spacer = '=' * 80
 
     with TemporaryDirectory() as tempdir:
+        empty_file = str(Path(tempdir) / "empty")
+        open(empty_file, "w").close()
+        sys.argv += ["--config_override", empty_file]  # tests #5541
         multis = [["VVVVVV"], ["Temp World"], ["VVVVVV", "Temp World"]]
-        p1_games = []
-        data_paths = []
-        rooms = []
+        p1_games: list[str] = []
+        data_paths: list[Path | None] = []
+        rooms: list[str] = []
+        multidata: Path | None
 
         copy_world("VVVVVV", "Temp World")
         try:
             for n, games in enumerate(multis, 1):
-                print(f"Generating [{n}] {', '.join(games)}")
+                print(f"Generating [{n}] {', '.join(games)} offline")
                 multidata = generate_local(games, tempdir)
                 print(f"Generated [{n}] {', '.join(games)} as {multidata}\n")
-                p1_games.append(games[0])
                 data_paths.append(multidata)
+                p1_games.append(games[0])
         finally:
             delete_world("Temp World")
 
         webapp = get_app(tempdir)
         webhost_client = webapp.test_client()
+
         for n, multidata in enumerate(data_paths, 1):
+            assert multidata
             seed = upload_multidata(webhost_client, multidata)
+            print(f"Uploaded [{n}] {multidata} as {seed}\n")
             room = create_room(webhost_client, seed)
-            print(f"Uploaded [{n}] {multidata} as {room}\n")
+            print(f"Started [{n}] {seed} as {room}\n")
+            rooms.append(room)
+
+        # Generate 1 extra game on WebHost
+        from WebHostLib.autolauncher import autogen
+        for n, games in enumerate(multis[:1], len(multis) + 1):
+            multis.append(games)
+            try:
+                print(f"Generating [{n}] {', '.join(games)} online")
+                autogen(webapp.config)
+                sleep(5)  # until we have lazy loading of worlds, wait here for the process to start up
+                seed = generate_remote(webhost_client, games)
+                print(f"Generated [{n}] {', '.join(games)} as {seed}\n")
+            finally:
+                stop_autogen()
+            data_paths.append(None)  # WebHost-only
+            room = create_room(webhost_client, seed)
+            print(f"Started [{n}] {seed} as {room}\n")
             rooms.append(room)
 
         print("Starting autohost")
@@ -96,31 +124,10 @@ if __name__ == "__main__":
             for n, (multidata, room, game, multi_games) in enumerate(zip(data_paths, rooms, p1_games, multis), 1):
                 involved_games = {"Archipelago"} | set(multi_games)
                 for collected_items in range(3):
-                    print(f"\nTesting [{n}] {game} in {multidata} on MultiServer with {collected_items} items collected")
-                    with LocalServeGame(multidata) as host:
-                        with Client(host.address, game, "Player1") as client:
-                            local_data_packages = client.games_packages
-                            local_collected_items = len(client.checked_locations)
-                            if collected_items < 2:  # Don't collect anything on the last iteration
-                                client.collect_any()
-                            # TODO: Ctrl+C test here as well
-
-                    for game_name in sorted(involved_games):
-                        expect_true(game_name in local_data_packages,
-                                    f"{game_name} missing from MultiServer datap ackage")
-                        expect_true("item_name_groups" not in local_data_packages.get(game_name, {}),
-                                    f"item_name_groups are not supposed to be in MultiServer data for {game_name}")
-                        expect_true("location_name_groups" not in local_data_packages.get(game_name, {}),
-                                    f"location_name_groups are not supposed to be in MultiServer data for {game_name}")
-                    for game_name in local_data_packages:
-                        expect_true(game_name in involved_games,
-                                    f"Received unexpected extra data package for {game_name} from MultiServer")
-                    assert_equal(local_collected_items, collected_items,
-                                 "MultiServer did not load or save correctly")
-
                     print(f"\nTesting [{n}] {game} in {multidata} on customserver with {collected_items} items collected")
                     prev_host_adr: str
                     with WebHostServeGame(webhost_client, room) as host:
+                        sleep(.1)  # wait for the server to fully start before doing anything
                         prev_host_adr = host.address
                         with Client(host.address, game, "Player1") as client:
                             web_data_packages = client.games_packages
@@ -134,6 +141,7 @@ if __name__ == "__main__":
                                 autohost(webapp.config)  # this will spin the room right up again
                                 sleep(1)  # make log less annoying
                                 # if saving failed, the next iteration will fail below
+                        sleep(2)  # work around issue #5571
 
                     # verify server shut down
                     try:
@@ -156,6 +164,31 @@ if __name__ == "__main__":
                                  "customserver did not load or save correctly during/after "
                                  + ("Ctrl+C" if collected_items == 2 else "/exit"))
 
+                    if not multidata:
+                        continue  # games rolled on WebHost can not be tested against MultiServer
+
+                    print(f"\nTesting [{n}] {game} in {multidata} on MultiServer with {collected_items} items collected")
+                    with LocalServeGame(multidata) as host:
+                        with Client(host.address, game, "Player1") as client:
+                            local_data_packages = client.games_packages
+                            local_collected_items = len(client.checked_locations)
+                            if collected_items < 2:  # Don't collect anything on the last iteration
+                                client.collect_any()
+                            # TODO: Ctrl+C test here as well
+
+                    for game_name in sorted(involved_games):
+                        expect_true(game_name in local_data_packages,
+                                    f"{game_name} missing from MultiServer datapackage")
+                        expect_true("item_name_groups" not in local_data_packages.get(game_name, {}),
+                                    f"item_name_groups are not supposed to be in MultiServer data for {game_name}")
+                        expect_true("location_name_groups" not in local_data_packages.get(game_name, {}),
+                                    f"location_name_groups are not supposed to be in MultiServer data for {game_name}")
+                    for game_name in local_data_packages:
+                        expect_true(game_name in involved_games,
+                                    f"Received unexpected extra data package for {game_name} from MultiServer")
+                    assert_equal(local_collected_items, collected_items,
+                                 "MultiServer did not load or save correctly")
+
                     # compare customserver to MultiServer
                     expect_equal(local_data_packages, web_data_packages,
                                  "customserver datapackage differs from MultiServer")
@@ -176,10 +209,12 @@ if __name__ == "__main__":
             print(f"Restoring multidata for {room}")
             set_multidata_for_room(webhost_client, room, old_data)
             with WebHostServeGame(webhost_client, room) as host:
+                sleep(.1)  # wait for the server to fully start before doing anything
                 with Client(host.address, game, "Player1") as client:
                     assert_equal(len(client.checked_locations), 2,
                                  "Save was destroyed during exception in customserver")
                     print("Save file is not busted 🥳")
+                sleep(2)  # work around issue #5571
 
         finally:
             print("Stopping autohost")

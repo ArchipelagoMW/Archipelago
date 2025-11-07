@@ -3,6 +3,7 @@ import unittest
 from .bases import SVTestBase
 from ..options import ExcludeGingerIsland, Walnutsanity, ToolProgression, SkillProgression
 from ..strings.ap_names.ap_option_names import WalnutsanityOptionName
+from ..strings.ap_names.transport_names import Transportation
 
 
 class SVWalnutsanityTestBase(SVTestBase):
@@ -48,24 +49,27 @@ class TestWalnutsanityNone(SVWalnutsanityTestBase):
         self.collect("Island West Turtle")
         self.collect("Progressive House")
         self.collect("5 Golden Walnuts", 10)
+        self.assert_cannot_reach_location(Transportation.parrot_express)
 
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
         self.collect("Island North Turtle")
         self.collect("Island Resort")
         self.collect("Open Professor Snail Cave")
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Dig Site Bridge")
         self.collect("Island Farmhouse")
         self.collect("Qi Walnut Room")
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Combat Level", 10)
         self.collect("Mining Level", 10)
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
+
         self.collect("Progressive Slingshot")
         self.collect("Progressive Weapon", 5)
         self.collect("Progressive Pickaxe", 4)
         self.collect("Progressive Watering Can", 4)
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
 
 
 class TestWalnutsanityPuzzles(SVWalnutsanityTestBase):
@@ -155,9 +159,9 @@ class TestWalnutsanityPuzzlesAndBushes(SVWalnutsanityTestBase):
         self.collect("Island West Turtle")
         self.collect("5 Golden Walnuts", 5)
 
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         self.collect("Island North Turtle")
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
 
 
 class TestWalnutsanityDigSpots(SVWalnutsanityTestBase):
@@ -218,20 +222,20 @@ class TestWalnutsanityAll(SVWalnutsanityTestBase):
         # You need to receive 40, and collect 4
         self.collect("Island Obelisk")
         self.collect("Island West Turtle")
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("5 Golden Walnuts", 8)
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("3 Golden Walnuts", 14)
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         items = self.collect("Golden Walnut", 40)
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
         self.remove(items)
-        self.assertFalse(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_cannot_reach_location(Transportation.parrot_express)
         self.collect("5 Golden Walnuts", 4)
         self.collect("3 Golden Walnuts", 6)
         self.collect("Golden Walnut", 2)
-        self.assertTrue(self.multiworld.state.can_reach_location("Parrot Express", self.player))
+        self.assert_can_reach_location(Transportation.parrot_express)
