@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 import typing
 import enum
 import warnings
@@ -83,7 +84,7 @@ class NetworkSlot(typing.NamedTuple):
     name: str
     game: str
     type: SlotType
-    group_members: typing.Union[typing.List[int], typing.Tuple] = ()  # only populated if type == group
+    group_members: Sequence[int] = ()  # only populated if type == group
 
 
 class NetworkItem(typing.NamedTuple):
@@ -173,6 +174,8 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
+    __slots__ = ("socket",)
+
     socket: "ServerConnection"
 
     def __init__(self, socket):
@@ -469,6 +472,42 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
                         location_id in player_locations if
                         location_id not in checked])
+
+
+class MinimumVersions(typing.TypedDict):
+    server: tuple[int, int, int]
+    clients: dict[int, tuple[int, int, int]]
+
+
+class GamesPackage(typing.TypedDict, total=False):
+    item_name_groups: dict[str, list[str]]
+    item_name_to_id: dict[str, int]
+    location_name_groups: dict[str, list[str]]
+    location_name_to_id: dict[str, int]
+    checksum: str
+
+
+class DataPackage(typing.TypedDict):
+    games: dict[str, GamesPackage]
+
+
+class MultiData(typing.TypedDict):
+    slot_data: dict[int, Mapping[str, typing.Any]]
+    slot_info: dict[int, NetworkSlot]
+    connect_names: dict[str, tuple[int, int]]
+    locations: dict[int, dict[int, tuple[int, int, int]]]
+    checks_in_area: dict[int, dict[str, int | list[int]]]
+    server_options: dict[str, object]
+    er_hint_data: dict[int, dict[int, str]]
+    precollected_items: dict[int, list[int]]
+    precollected_hints: dict[int, set[Hint]]
+    version: tuple[int, int, int]
+    tags: list[str]
+    minimum_versions: MinimumVersions
+    seed_name: str
+    spheres: list[dict[int, set[int]]]
+    datapackage: dict[str, GamesPackage]
+    race_mode: int
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
