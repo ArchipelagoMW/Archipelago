@@ -48,7 +48,7 @@ A window will open with a few settings to enter:
 - **Slot name**: Put the player name you specified in your YAML config file in this field.
 - **Password**: If the server has a password, put it there.
 
-![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_ap.png)
+![Landstalker Archipelago Client user interface](ls_guide_ap.png)
 
 Once all those fields were filled appropriately, click on the `Connect to Archipelago` button below to try connecting to
 the Archipelago server.
@@ -67,7 +67,7 @@ You should see a window with settings to fill:
 - **Output ROM directory**: This is where the randomized ROMs will be put. No need to change this unless you want them 
   to be created in a very specific folder.
 
-![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_rom.png)
+![Landstalker Archipelago Client user interface](ls_guide_rom.png)
 
 There also a few cosmetic options you can fill before clicking the `Build ROM` button which should create your 
 randomized seed if everything went right.
@@ -83,7 +83,7 @@ the items you have received from other players.
 
 You should see the following window:
 
-![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_emu.png)
+![Landstalker Archipelago Client user interface](ls_guide_emu.png)
 
 As written, you have to open the newly generated ROM inside either Retroarch or Bizhawk using the Genesis Plus GX core. 
 Be careful to select that core, because any other core (e.g. BlastEm) won't work.
@@ -116,6 +116,6 @@ The client is packaged with both an **automatic item tracker** and an **automati
 If you don't know all checks in the game, don't be afraid: you can click the `Where is it?` button that will show 
 you a screenshot of where the location actually is.
 
-![Landstalker Archipelago Client user interface](/static/generated/docs/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/ls_guide_client.png)
+![Landstalker Archipelago Client user interface](ls_guide_client.png)
 
 Have fun!
