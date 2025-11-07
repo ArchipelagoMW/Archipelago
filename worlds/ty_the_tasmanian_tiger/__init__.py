@@ -1,5 +1,5 @@
 import dataclasses
-import typing
+from typing import List, Dict, Optional, Any
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Location
 from Options import OptionError, PerGameCommonOptions
 from worlds.AutoWorld import WebWorld, World
@@ -40,12 +40,15 @@ class Ty1World(World):
     item_name_to_id = {name: item.code for name, item in ty1_item_table.items()}
     location_name_to_id = {name: item.code for name, item in ty1_location_table.items()}
     region_name_to_code = {name: code for code, name in ty1_levels.items()}
-    portal_map: typing.List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
+    portal_map: List[int] = [Ty1LevelCode.A1.value, Ty1LevelCode.A2.value, Ty1LevelCode.A3.value,
                                     Ty1LevelCode.B1.value, Ty1LevelCode.B2.value, Ty1LevelCode.B3.value,
                                     Ty1LevelCode.C1.value, Ty1LevelCode.C2.value, Ty1LevelCode.C3.value]
     trap_weights = {}
 
     web = Ty1Web()
+
+    # UT Stuff Here
+    ut_can_gen_without_yaml = True
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -74,10 +77,15 @@ class Ty1World(World):
             "Opalsanity": self.options.opalsanity.value,
             "AdvancedLogic": self.options.logic_difficulty.value,
             "DeathLink": self.options.death_link.value,
-            "MulTyLink": self.options.mul_ty_link.value
+            "MulTyLink": self.options.mul_ty_link.value,
+            "ExtraTheggs": self.options.extra_theggs.value,
+            "ExtraCog": self.options.extra_cogs.value,
         }
 
     def generate_early(self) -> None:
+        # UT Stuff Here
+        self.handle_ut_yamless(None)
+
         extra_thegg_count = self.options.extra_theggs * 3
         extra_cog_count = self.options.extra_cogs
         empty_cog_checks = 90 - (self.options.cog_gating * 6)
@@ -148,7 +156,7 @@ class Ty1World(World):
     def set_rules(self):
         set_rules(self)
 
-    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         new_hint_data = {}
 
         for key, data in ty1_location_table.items():
@@ -179,3 +187,38 @@ class Ty1World(World):
 
             new_hint_data[location.address] = f"{portal_name} Portal"
             hint_data[self.player] = new_hint_data
+
+    def handle_ut_yamless(self, slot_data: Optional[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+
+        if not slot_data \
+                and hasattr(self.multiworld, "re_gen_passthrough") \
+                and isinstance(self.multiworld.re_gen_passthrough, dict) \
+                and self.game in self.multiworld.re_gen_passthrough:
+            slot_data = self.multiworld.re_gen_passthrough[self.game]
+
+        if not slot_data:
+            return None
+
+        # fill in options
+        self.options.goal.value = slot_data["Goal"]
+        self.options.progressive_elementals.value = slot_data["ProgressiveElementals"]
+        self.options.progressive_level.value = slot_data["ProgressiveLevel"]
+        self.options.level_unlock_style.value = slot_data["LevelUnlockStyle"]
+        self.options.thegg_gating.value = slot_data["TheggGating"]
+        self.options.cog_gating.value = slot_data["CogGating"]
+        self.options.req_bosses.value = slot_data["ReqBosses"]
+        self.options.gate_time_attacks.value = slot_data["GateTimeAttacks"]
+        self.portal_map = slot_data["PortalMap"]
+        self.options.frames_require_infra.value = slot_data["FramesRequireInfra"]
+        self.options.scalesanity.value = slot_data["Scalesanity"]
+        self.options.signsanity.value = slot_data["Signsanity"]
+        self.options.lifesanity.value = slot_data["Lifesanity"]
+        self.options.framesanity.value = slot_data["Framesanity"]
+        self.options.opalsanity.value = slot_data["Opalsanity"]
+        self.options.logic_difficulty.value = slot_data["AdvancedLogic"]
+        self.options.death_link.value = slot_data["DeathLink"]
+        self.options.mul_ty_link.value = slot_data["MulTyLink"]
+        self.options.extra_theggs.value = slot_data[ "ExtraTheggs"]
+        self.options.extra_cogs.value = slot_data[ "ExtraCog"]
+
+        return slot_data

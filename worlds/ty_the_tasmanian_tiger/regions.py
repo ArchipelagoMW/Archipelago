@@ -147,7 +147,7 @@ def create_regions(world: MultiWorld, options: Ty1Options, player: int):
 
 
 def connect_all_regions(world: MultiWorld, player: int, options: Ty1Options, portal_map: List[int]):
-    if options.level_shuffle:
+    if options.level_shuffle and not hasattr(world, "re_gen_passthrough"):
         world.random.shuffle(portal_map)
     connect_regions(world, player, "Menu",
                     "Rainbow Cliffs", "Menu -> Z1")
