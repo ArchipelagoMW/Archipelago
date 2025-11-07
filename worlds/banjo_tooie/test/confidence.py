@@ -8,7 +8,8 @@
 
 import math
 
-def count_confidence_interval(weights, N, z = 3.48076):
+
+def count_confidence_interval(weights, N, z=3.48076):
     """
     Computes the confidence interval for the counts of each item in a weighted random selection process.
 
@@ -36,6 +37,7 @@ def count_confidence_interval(weights, N, z = 3.48076):
         intervals[item] = (round(lower_bound), round(upper_bound))
 
     return intervals
+
 
 # Example usage:
 weights = {

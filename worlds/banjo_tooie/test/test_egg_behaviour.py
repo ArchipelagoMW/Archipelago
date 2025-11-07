@@ -3,6 +3,7 @@ from ..Options import EggsBehaviour, RandomizeBKMoveList, RandomizeBTMoveList, R
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
+
 class BlueEggStartVanillaMovesTest(BanjoTooieTestBase):
     options = {
         "randomize_bt_moves": RandomizeBTMoveList.option_false,
@@ -10,13 +11,13 @@ class BlueEggStartVanillaMovesTest(BanjoTooieTestBase):
     }
 
     def test_blue_egg_in_starting_inventory(self):
-        assert not itemName.BEGGS in [item.name for item in self.multiworld.itempool]
+        assert itemName.BEGGS not in [item.name for item in self.multiworld.itempool]
         assert itemName.BEGGS in [item.name for item in self.multiworld.precollected_items[self.player]]
 
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
         for egg in [itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
-            assert not egg in item_pool_names
+            assert egg not in item_pool_names
 
     def test_prefill(self) -> None:
         silos_to_vanilla_item = {
@@ -29,6 +30,7 @@ class BlueEggStartVanillaMovesTest(BanjoTooieTestBase):
         for silo, egg in silos_to_vanilla_item.items():
             assert self.world.get_location(silo).item.name == egg
 
+
 class BlueEggStartRandomizedMovesTest(BanjoTooieTestBase):
     options = {
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
@@ -36,13 +38,14 @@ class BlueEggStartRandomizedMovesTest(BanjoTooieTestBase):
     }
 
     def test_blue_egg_in_starting_inventory(self):
-        assert not itemName.BEGGS in [item.name for item in self.multiworld.itempool]
+        assert itemName.BEGGS not in [item.name for item in self.multiworld.itempool]
         assert itemName.BEGGS in [item.name for item in self.multiworld.precollected_items[self.player]]
 
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
         for egg in [itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
             assert egg in item_pool_names
+
 
 class RandomStartEggTest(BanjoTooieTestBase):
     options = {
@@ -66,7 +69,8 @@ class RandomStartEggTest(BanjoTooieTestBase):
         for egg in [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
             if egg in item_pool_names:
                 eggs_in_pool += 1
-        assert eggs_in_pool == 4 # One is in the starting inventory.
+        assert eggs_in_pool == 4  # One is in the starting inventory.
+
 
 class RandomSimpleStartEggTest(BanjoTooieTestBase):
     options = {
@@ -90,7 +94,8 @@ class RandomSimpleStartEggTest(BanjoTooieTestBase):
         for egg in [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
             if egg in item_pool_names:
                 eggs_in_pool += 1
-        assert eggs_in_pool == 4 # One is in the starting inventory.
+        assert eggs_in_pool == 4  # One is in the starting inventory.
+
 
 class ProgressiveEggsTest(BanjoTooieTestBase):
     options = {
@@ -99,15 +104,16 @@ class ProgressiveEggsTest(BanjoTooieTestBase):
     }
 
     def test_blue_egg_in_starting_inventory(self):
-        assert not itemName.BEGGS in [item.name for item in self.multiworld.itempool]
+        assert itemName.BEGGS not in [item.name for item in self.multiworld.itempool]
         assert itemName.BEGGS in [item.name for item in self.multiworld.precollected_items[self.player]]
 
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
         for egg in [itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]:
-            assert not egg in item_pool_names
+            assert egg not in item_pool_names
 
         assert item_pool_names.count(itemName.PEGGS) == 4
+
 
 class TestBlueEggStartVanillaMovesIntended(BlueEggStartVanillaMovesTest, IntendedLogic):
     options = {
@@ -115,11 +121,13 @@ class TestBlueEggStartVanillaMovesIntended(BlueEggStartVanillaMovesTest, Intende
         **BlueEggStartVanillaMovesTest.options,
     }
 
+
 class TestBlueEggStartVanillaMovesEasyTricks(BlueEggStartVanillaMovesTest, EasyTricksLogic):
     options = {
         **EasyTricksLogic.options,
         **BlueEggStartVanillaMovesTest.options,
     }
+
 
 class TestBlueEggStartVanillaMovesHardTricks(BlueEggStartVanillaMovesTest, HardTricksLogic):
     options = {
@@ -127,11 +135,13 @@ class TestBlueEggStartVanillaMovesHardTricks(BlueEggStartVanillaMovesTest, HardT
         **BlueEggStartVanillaMovesTest.options,
     }
 
+
 class TestBlueEggStartVanillaMovesGlitches(BlueEggStartVanillaMovesTest, GlitchesLogic):
     options = {
         **GlitchesLogic.options,
         **BlueEggStartVanillaMovesTest.options,
     }
+
 
 class TestBlueEggStartRandomizedMovesIntended(BlueEggStartRandomizedMovesTest, IntendedLogic):
     options = {
@@ -139,11 +149,13 @@ class TestBlueEggStartRandomizedMovesIntended(BlueEggStartRandomizedMovesTest, I
         **BlueEggStartRandomizedMovesTest.options,
     }
 
+
 class TestBlueEggStartRandomizedMovesEasyTricks(BlueEggStartRandomizedMovesTest, EasyTricksLogic):
     options = {
         **EasyTricksLogic.options,
         **BlueEggStartRandomizedMovesTest.options,
     }
+
 
 class TestBlueEggStartRandomizedMovesHardTricks(BlueEggStartRandomizedMovesTest, HardTricksLogic):
     options = {
@@ -151,11 +163,13 @@ class TestBlueEggStartRandomizedMovesHardTricks(BlueEggStartRandomizedMovesTest,
         **BlueEggStartRandomizedMovesTest.options,
     }
 
+
 class TestBlueEggStartRandomizedMovesGlitches(BlueEggStartRandomizedMovesTest, GlitchesLogic):
     options = {
         **GlitchesLogic.options,
         **BlueEggStartRandomizedMovesTest.options,
     }
+
 
 class TestRandomStartEggIntended(RandomStartEggTest, IntendedLogic):
     options = {
@@ -163,11 +177,13 @@ class TestRandomStartEggIntended(RandomStartEggTest, IntendedLogic):
         **RandomStartEggTest.options,
     }
 
+
 class TestRandomStartEggEasyTricks(RandomStartEggTest, EasyTricksLogic):
     options = {
         **EasyTricksLogic.options,
         **RandomStartEggTest.options,
     }
+
 
 class TestRandomStartEggHardTricks(RandomStartEggTest, HardTricksLogic):
     options = {
@@ -175,11 +191,13 @@ class TestRandomStartEggHardTricks(RandomStartEggTest, HardTricksLogic):
         **RandomStartEggTest.options,
     }
 
+
 class TestRandomStartEggGlitches(RandomStartEggTest, GlitchesLogic):
     options = {
         **GlitchesLogic.options,
         **RandomStartEggTest.options,
     }
+
 
 class TestProgressiveEggsIntended(ProgressiveEggsTest, IntendedLogic):
     options = {
@@ -187,17 +205,20 @@ class TestProgressiveEggsIntended(ProgressiveEggsTest, IntendedLogic):
         **ProgressiveEggsTest.options,
     }
 
+
 class TestProgressiveEggsEasyTricks(ProgressiveEggsTest, EasyTricksLogic):
     options = {
         **EasyTricksLogic.options,
         **ProgressiveEggsTest.options,
     }
 
+
 class TestProgressiveEggsHardTricks(ProgressiveEggsTest, HardTricksLogic):
     options = {
         **HardTricksLogic.options,
         **ProgressiveEggsTest.options,
     }
+
 
 class TestProgressiveEggsGlitches(ProgressiveEggsTest, GlitchesLogic):
     options = {

@@ -1,5 +1,5 @@
 from ..Names import locationName, regionName
-from ..Options import JamjarsSiloCosts, RandomizeBTMoveList, RandomizeWorldZones, RandomizeWorldOrder
+from ..Options import JamjarsSiloCosts, RandomizeBTMoveList, RandomizeWorldLoadingZones, RandomizeWorldOrder
 from . import BanjoTooieTestBase
 
 
@@ -8,6 +8,7 @@ class VanillaSiloCostTest(BanjoTooieTestBase):
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
         "jamjars_silo_costs": JamjarsSiloCosts.option_vanilla
     }
+
     def test_vanilla_costs(self) -> None:
         expected_silo_costs = {
             locationName.FEGGS: 45,
@@ -37,6 +38,7 @@ class VanillaSiloCostTest(BanjoTooieTestBase):
         }
         assert self.world.jamjars_siloname_costs == expected_silo_costs
 
+
 class ProgressiveSiloCostTest(BanjoTooieTestBase):
     options = {
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
@@ -44,7 +46,8 @@ class ProgressiveSiloCostTest(BanjoTooieTestBase):
     }
 
     def test_contains_vanilla_silo_costs(self) -> None:
-        vanilla_costs = [45,110,200,315,25,30,35,85,95,160,170,180,265,275,290,390,405,420,505,525,545,640,660,765]
+        vanilla_costs = [45, 110, 200, 315, 25, 30, 35, 85, 95, 160, 170,
+                         180, 265, 275, 290, 390, 405, 420, 505, 525, 545, 640, 660, 765]
         for cost in vanilla_costs:
             assert cost in self.world.jamjars_siloname_costs.values()
 
@@ -74,33 +77,39 @@ class ProgressiveSiloCostTest(BanjoTooieTestBase):
             previous_silo_cost = silo_cost
 
 # If worlds are not randomized, it is expected that progressive works the same as vanilla costs.
+
+
 class ProgressiveSiloCostVanillaLevelOrderTest(ProgressiveSiloCostTest, VanillaSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
         "randomize_worlds": RandomizeWorldOrder.option_false,
-        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_false
+        "randomize_world_entrance_loading_zones": RandomizeWorldLoadingZones.option_false
     }
+
 
 class ProgressiveSiloCostRandomLevelOrderTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
         "randomize_worlds": RandomizeWorldOrder.option_true,
-        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_false
+        "randomize_world_entrance_loading_zones": RandomizeWorldLoadingZones.option_false
     }
+
 
 class ProgressiveSiloCostRandomLevelLoadingZoneTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
         "randomize_worlds": RandomizeWorldOrder.option_false,
-        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_true
+        "randomize_world_entrance_loading_zones": RandomizeWorldLoadingZones.option_true
     }
+
 
 class ProgressiveSiloCostRandomLevelOrderAndLoadingZoneTest(ProgressiveSiloCostTest):
     options = {
         **ProgressiveSiloCostTest.options,
         "randomize_worlds": RandomizeWorldOrder.option_true,
-        "randomize_world_entrance_loading_zone": RandomizeWorldZones.option_true
+        "randomize_world_entrance_loading_zones": RandomizeWorldLoadingZones.option_true
     }
+
 
 class RandomSiloCostTest(BanjoTooieTestBase):
     options = {

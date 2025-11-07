@@ -79,6 +79,7 @@ class FillersTrapTestBase(BanjoTooieTestBase):
 
         return pool
 
+
 class TestMaxTrapsZero(FillersTrapTestBase):
     options = {
         "max_traps": 0,
@@ -93,6 +94,7 @@ class TestMaxTrapsZero(FillersTrapTestBase):
 
         assert sum(pool.filler_distribution.values()) == 16 + BASE_FILLERS
         assert sum(pool.trap_distribution.values()) == 0
+
 
 class TestMaxTrapsNonZero(FillersTrapTestBase):
     options = {
@@ -111,6 +113,7 @@ class TestMaxTrapsNonZero(FillersTrapTestBase):
         assert fillers > 0
         assert traps > 0
         assert fillers + traps == 16 + BASE_FILLERS
+
 
 class TestMaxTrapsZeroWithNestsanity(FillersTrapTestBase):
     options = {
@@ -158,6 +161,7 @@ class TestAllWeightsZeroAddPants(FillersTrapTestBase):
 
         assert pool.distribution[itemName.NONE] == 687 + BASE_FILLERS
 
+
 class TestAllFillerWeightsZeroAddRestPants(FillersTrapTestBase):
     options = {
         **ADD_687_FILLERS,
@@ -178,6 +182,7 @@ class TestAllFillerWeightsZeroAddRestPants(FillersTrapTestBase):
         assert pool.distribution[itemName.SQTRAP] == 87
         assert pool.distribution[itemName.NONE] == (687 + BASE_FILLERS) - 87
 
+
 class TestRespectDistribution(FillersTrapTestBase):
     options = {
         "max_traps": "unlimited",
@@ -193,9 +198,9 @@ class TestRespectDistribution(FillersTrapTestBase):
         "golden_eggs_weight": 0,
 
         "extra_doubloons_weight": 10,
-        "egg_nests_weight": 5, # will be doubled
+        "egg_nests_weight": 5,  # will be doubled
         "extra_notes_weight": 50,
-        "feather_nests_weight": 25, # will be doubled
+        "feather_nests_weight": 25,  # will be doubled
         "squish_trap_weight": 100,
         "tip_trap_weight": 100,
     }
@@ -211,10 +216,10 @@ class TestRespectDistribution(FillersTrapTestBase):
         assert pool.distribution[itemName.STRAP] == 0
         assert pool.distribution[itemName.TRTRAP] == 0
         assert pool.distribution[itemName.GNEST] == 0
-        assert   6 <= pool.distribution[itemName.DOUBLOON] <= 38
-        assert   6 <= pool.distribution[itemName.ENEST] <= 38
-        assert  75 <= pool.distribution[itemName.NOTE] <= 141
-        assert  75 <= pool.distribution[itemName.FNEST] <= 141
+        assert 6 <= pool.distribution[itemName.DOUBLOON] <= 38
+        assert 6 <= pool.distribution[itemName.ENEST] <= 38
+        assert 75 <= pool.distribution[itemName.NOTE] <= 141
+        assert 75 <= pool.distribution[itemName.FNEST] <= 141
         assert 174 <= pool.distribution[itemName.SQTRAP] <= 258
         assert 174 <= pool.distribution[itemName.TITRAP] <= 258
 
@@ -252,12 +257,13 @@ class TestRespectDistribution2(FillersTrapTestBase):
         assert pool.distribution[itemName.FNEST] == 0
         assert pool.distribution[itemName.SQTRAP] == 0
         assert pool.distribution[itemName.TITRAP] == 0
-        assert   6 <= pool.distribution[itemName.JIGGY] <= 35
-        assert   6 <= pool.distribution[itemName.NONE] <= 35
-        assert  75 <= pool.distribution[itemName.TTRAP] <= 141
-        assert  75 <= pool.distribution[itemName.STRAP] <= 141
+        assert 6 <= pool.distribution[itemName.JIGGY] <= 35
+        assert 6 <= pool.distribution[itemName.NONE] <= 35
+        assert 75 <= pool.distribution[itemName.TTRAP] <= 141
+        assert 75 <= pool.distribution[itemName.STRAP] <= 141
         assert 174 <= pool.distribution[itemName.TRTRAP] <= 258
         assert 174 <= pool.distribution[itemName.GNEST] <= 258
+
 
 class TestRespectMaxTraps(FillersTrapTestBase):
     options = {
@@ -280,6 +286,7 @@ class TestRespectMaxTraps(FillersTrapTestBase):
         assert 280 <= pool.filler_distribution[itemName.ENEST] <= 375
         assert 280 <= pool.filler_distribution[itemName.FNEST] <= 375
 
+
 class TestJiggiesHardLimit(FillersTrapTestBase):
     options = {
         **ZERO_FILLERS_WEIGHT,
@@ -292,7 +299,8 @@ class TestJiggiesHardLimit(FillersTrapTestBase):
         pool = self.pool()
 
         assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
-        assert pool.total_distribution[itemName.JIGGY] == 249 # One more for jingaling's
+        assert pool.total_distribution[itemName.JIGGY] == 249  # One more for jingaling's
+
 
 class TestDoubloonsHardLimit(FillersTrapTestBase):
     options = {
@@ -323,6 +331,7 @@ class TestNotesHardLimit(FillersTrapTestBase):
         assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         assert pool.total_distribution[itemName.NOTE] == 250
 
+
 class TestDefaultFillersWithNestsanityPlenty(FillersTrapTestBase):
     options = {
         **ADD_687_FILLERS,
@@ -334,8 +343,10 @@ class TestDefaultFillersWithNestsanityPlenty(FillersTrapTestBase):
 
         assert sum(pool.distribution.values()) == 687 + BASE_FILLERS
         # adding reasonable expectations here
+
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 120
         assert 20 <= pool.filler_distribution[itemName.JIGGY] <= 100
+
 
 class TestDefaultFillersWithoutNestsanityPlenty(FillersTrapTestBase):
     options = {
@@ -350,6 +361,7 @@ class TestDefaultFillersWithoutNestsanityPlenty(FillersTrapTestBase):
         # adding reasonable expectations here
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 90
         assert 20 <= pool.filler_distribution[itemName.JIGGY] <= 70
+
 
 class TestDefaultFillersWithoutNestsanityReasonable(FillersTrapTestBase):
     options = {
@@ -369,6 +381,7 @@ class TestDefaultFillersWithoutNestsanityReasonable(FillersTrapTestBase):
         # adding reasonable expectations here
         assert 0 <= pool.filler_distribution[itemName.NOTE] <= 90
         assert 15 <= pool.filler_distribution[itemName.JIGGY] <= 65
+
 
 class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
     options = {
@@ -397,7 +410,7 @@ class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
         assert pool.total_distribution[itemName.NOTE] * 5 \
                + pool.total_distribution[itemName.BASS] * 10 \
                + pool.total_distribution[itemName.TREBLE] * 20 \
-                   == 900
+               == 900
 
         assert pool.total_distribution[itemName.JIGGY] == 90
 
@@ -406,14 +419,15 @@ class TestNoReplaceExtraNotesAndJiggies(FillersTrapTestBase):
                + pool.filler_distribution[itemName.NOTE]\
                + 25 + BASE_FILLERS
 
-        assert pool.filler_distribution[itemName.JIGGY] == 20
-        # clefts account for 250 total.
+        assert pool.filler_distribution[itemName.JIGGY] == 0
+        # clefs account for 250 total.
         # leaving 650 by packs
         # 765 is progression (max cost for jamjars)
-        # all clefts are progression, so 515 is progression by packs
+        # all clefs are progression, so 515 is progression by packs
         # so 515 / 650 or 103 / 130
         # so leftover is 27
         assert pool.filler_distribution[itemName.NOTE] == 13
+
 
 class TestNoReplaceExtraJiggiesMinimalRespectCount(FillersTrapTestBase):
     options = {
@@ -429,7 +443,7 @@ class TestNoReplaceExtraJiggiesMinimalRespectCount(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert pool.total_distribution[itemName.JIGGY] == 90 - 9 - 1 # remove jinjos' and jingaling
+        assert pool.total_distribution[itemName.JIGGY] == 90 - 9 - 1  # remove jinjos' and jingaling
 
 
 class TestNoReplaceExtraJiggiesMaximalRespectCount(FillersTrapTestBase):
@@ -446,7 +460,7 @@ class TestNoReplaceExtraJiggiesMaximalRespectCount(FillersTrapTestBase):
     def test_fillers_and_traps_pool(self) -> None:
         pool = self.pool()
 
-        assert pool.total_distribution[itemName.JIGGY] == 90 - 9 - 1 # remove jinjos' and jingaling
+        assert pool.total_distribution[itemName.JIGGY] == 90 - 9 - 1  # remove jinjos' and jingaling
 
 
 class TestNoReplaceExtraNotesRespectCount(FillersTrapTestBase):
@@ -470,4 +484,4 @@ class TestNoReplaceExtraNotesRespectCount(FillersTrapTestBase):
         assert pool.total_distribution[itemName.NOTE] * 5 \
                + pool.total_distribution[itemName.BASS] * 10 \
                + pool.total_distribution[itemName.TREBLE] * 20 \
-                   == 900
+               == 900

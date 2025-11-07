@@ -5,6 +5,7 @@ from ..Options import RandomizeCheatoRewards
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
+
 class TestRandomizedCheatoRewards(BanjoTooieTestBase):
     options = {
         "cheato_rewards": RandomizeCheatoRewards.option_true,
@@ -27,6 +28,7 @@ class TestRandomizedCheatoRewards(BanjoTooieTestBase):
         for name in location_names:
             assert name in world_location_names
 
+
 class TestVanillaCheatoRewards(BanjoTooieTestBase):
     options = {
         "cheato_rewards": RandomizeCheatoRewards.option_false,
@@ -37,11 +39,13 @@ class TestVanillaCheatoRewards(BanjoTooieTestBase):
         for item in items:
             assert item.classification == ItemClassification.filler
 
+
 class TestRandomizedCheatoRewardsIntended(TestRandomizedCheatoRewards, IntendedLogic):
     options = {
         **TestRandomizedCheatoRewards.options,
         **IntendedLogic.options,
     }
+
 
 class TestRandomizedCheatoRewardsEasyTricks(TestRandomizedCheatoRewards, EasyTricksLogic):
     options = {
@@ -49,11 +53,13 @@ class TestRandomizedCheatoRewardsEasyTricks(TestRandomizedCheatoRewards, EasyTri
         **EasyTricksLogic.options,
     }
 
+
 class TestRandomizedCheatoRewardsHardTricks(TestRandomizedCheatoRewards, HardTricksLogic):
     options = {
         **TestRandomizedCheatoRewards.options,
         **HardTricksLogic.options,
     }
+
 
 class TestRandomizedCheatoRewardsGlitches(TestRandomizedCheatoRewards, GlitchesLogic):
     options = {
@@ -61,11 +67,13 @@ class TestRandomizedCheatoRewardsGlitches(TestRandomizedCheatoRewards, GlitchesL
         **GlitchesLogic.options,
     }
 
+
 class TestVanillaCheatoRewardsIntended(TestVanillaCheatoRewards, IntendedLogic):
     options = {
         **TestVanillaCheatoRewards.options,
         **IntendedLogic.options,
     }
+
 
 class TestVanillaCheatoRewardsEasyTricks(TestVanillaCheatoRewards, EasyTricksLogic):
     options = {
@@ -73,11 +81,13 @@ class TestVanillaCheatoRewardsEasyTricks(TestVanillaCheatoRewards, EasyTricksLog
         **EasyTricksLogic.options,
     }
 
+
 class TestVanillaCheatoRewardsHardTricks(TestVanillaCheatoRewards, HardTricksLogic):
     options = {
         **TestVanillaCheatoRewards.options,
         **HardTricksLogic.options,
     }
+
 
 class TestVanillaCheatoRewardsGlitches(TestVanillaCheatoRewards, GlitchesLogic):
     options = {

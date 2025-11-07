@@ -111,7 +111,7 @@ HPWARP = "Hailfire Peaks Warp Pads"
 CCWARP = "Cloud Cuckooland Warp Pads"
 CKWARP = "Cauldron Keep Warp Pads"
 
-#Bosses needed for Rando. Don't change these names
+# Bosses needed for Rando. Don't change these names
 MTBOSS  = "Targitzan's Really Sacred Chamber"
 GMBOSS  = "Inside Chuffy's Boiler"
 WWBOSS  = "Big Top Interior"

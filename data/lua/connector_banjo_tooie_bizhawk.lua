@@ -16,7 +16,7 @@ local math = require('math')
 require('common')
 
 local SCRIPT_VERSION = 5
-local BT_VERSION = "V4.8"
+local BT_VERSION = "V4.11.3"
 local PLAYER = ""
 local SEED = 0
 
@@ -162,7 +162,7 @@ local DEATH_MESSAGES = {
     [12] = {message = "Seeing this pathetic display,\nIs serotonin in my day"},
     [13] = {message = "What a selfish thing to do,\nYour friends just died because of you!"},
     [14] = {message = "You tried something rather stupid,\nI hope no one will try what you did"},
-    [15] = {message = "I see your having trouble with this seed,\nits too bad you never learned how to read."},
+    [15] = {message = "I see you're having trouble with this seed,\nit's too bad you never learned how to read."},
     [16] = {message = "You'll label that one unfair, but I found that beat was rare."},
     [17] = {message = "You were not prepared for trouble, so now my minions will be working on the double."},
     [18] = {message = "Seeing you trip and fall is rather funny, I get to watch you run out of honey."},
@@ -6176,6 +6176,7 @@ function BTHACK:setWorldEntrance(currentWorldId, newWorldId, entranceId, current
     then
         return false
     end
+
     local world_index = self.world_index * self.exit_map_struct_size
     self.world_index = self.world_index + 1
     mainmemory.write_u16_be(exit_maps_ptr + world_index + self.exit_on_map, currentMap)
@@ -6183,14 +6184,21 @@ function BTHACK:setWorldEntrance(currentWorldId, newWorldId, entranceId, current
     mainmemory.write_u16_be(exit_maps_ptr + world_index + self.exit_to_map, newWorldId)
     mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_to_exit, newEntanceId)
     mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_og_exit, entranceId)
-
+    local new_value
     for _, move_id in pairs(access)
     do
         local offset_byte = math.floor(move_id / 8)
         local bitbit = math.fmod(move_id, 8)
         local currentValue = mainmemory.readbyte(exit_maps_ptr + world_index + self.exit_access_rules + offset_byte);
-        local new_value = bit.set(currentValue, bitbit)
+        new_value = bit.set(currentValue, bitbit)
         mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_access_rules + offset_byte, new_value)
+    end
+    if new_value == nil
+    then
+        for offset_byte=0, self.exit_access_rules_size-1, 1
+        do
+            mainmemory.writebyte(exit_maps_ptr + world_index + self.exit_access_rules + offset_byte, 0)
+        end
     end
     return true
 end
@@ -6223,7 +6231,13 @@ function BTHACK:getPCHintPointer()
 end
 
 function BTHACK:getPCDeath()
-    return mainmemory.readbyte(self:getPCPointer() + self.pc_death_us);
+    local pcptr = self:getPCPointer()
+    if pcptr ~= nil
+    then
+        return mainmemory.readbyte(self:getPCPointer() + self.pc_death_us);
+    else
+        return BTHACK:getNLocalDeath()
+    end
 end
 
 function BTHACK:getPCTag()
@@ -6264,7 +6278,12 @@ function BTHACK:getNPointer()
 end
 
 function BTHACK:getNLocalDeath()
-   return mainmemory.readbyte(BTHACK:getNPointer() + self.n64_death_us);
+    local ptptr = BTHACK:getNPointer()
+    if ptptr ~= nil then
+        return mainmemory.readbyte(BTHACK:getNPointer() + self.n64_death_us);
+    else
+        return
+    end
 end
 
 function BTHACK:getNLocalTag()
@@ -8138,14 +8157,28 @@ function get_item_message_text(item_id, item, player)
         if DIALOG_CHARACTER == 110 or DIALOG_CHARACTER == 37
         then
             -- Humba flavor text
-            return own
-                and string.format("Wumba now make bear %s. Very %s!", transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
-                or string.format("%s told Wumba how to make bear %s. Very %s!", player, transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
+            if item_id == 1230182
+            then
+                    return own
+                        and string.format("Wumba now make bird %s. Very %s!", transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
+                        or string.format("%s told Wumba how to make bird %s. Very %s!", player, transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
+            else
+                return own
+                    and string.format("Wumba now make bear %s. Very %s!", transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
+                    or string.format("%s told Wumba how to make bear %s. Very %s!", player, transformation_names[item_id]["name"], transformation_names[item_id]["attribute"])
+            end
         else
             -- Basic text
-            return own
-                and string.format("Banjo can now be transformed into a %s.", transformation_names[item_id]["name"])
-                or string.format("%s has just unlocked the %s transformation.", player, transformation_names[item_id]["name"])
+            if item_id == 1230182
+            then
+                return own
+                    and string.format("Kazooie can now be transformed into a %s.", transformation_names[item_id]["name"])
+                    or string.format("%s has just unlocked the %s transformation.", player, transformation_names[item_id]["name"])
+            else
+                return own
+                    and string.format("Banjo can now be transformed into a %s.", transformation_names[item_id]["name"])
+                    or string.format("%s has just unlocked the %s transformation.", player, transformation_names[item_id]["name"])
+            end
         end
     elseif 1230870 <= item_id and item_id <= 1230876 -- Silos
     then
@@ -8703,14 +8736,6 @@ function process_slot(block)
     then
         TAG_LINK = true
     end
-    if block['slot_logic_type'] ~= nil and block['slot_logic_type'] ~= "false"
-    then
-        LOGIC = block['slot_logic_type']
-    end
-    if block['slot_activate_text'] ~= nil and block['slot_activate_text'] ~= "false"
-    then
-        ACTIVATE_TEXT_OVERLAY = true
-    end
     if block['slot_tower_of_tragedy'] ~= nil
     then
         SKIP_TOT = block['slot_tower_of_tragedy']
@@ -8783,7 +8808,7 @@ function process_slot(block)
     then
         BTH:setSettingKlungo(1)
     end
-    if block['slot_victory_condition'] ~= nil and block['slot_victory_condition'] ~= ""
+    if block['slot_victory_condition'] ~= nil
     then
         GOAL_TYPE = block['slot_victory_condition']
         BTH:setVictoryCondition(GOAL_TYPE)
@@ -8805,10 +8830,6 @@ function process_slot(block)
     then
         BTH:setEasyCanary(1)
     end
-    if block['slot_worlds'] ~= nil and block['slot_worlds'] ~= "false"
-    then
-        ENABLE_AP_WORLDS = true
-    end
     if block['slot_minigame_hunt_length'] ~= nil and block['slot_minigame_hunt_length'] ~= ""
     then
         MGH_LENGTH = block['slot_minigame_hunt_length']
@@ -8826,11 +8847,11 @@ function process_slot(block)
         TH_LENGTH = block['slot_token_hunt_length']
 
     end
-    if block['slot_world_order'] ~= nil
+    if block['slot_world_requirements'] ~= nil
     then
-        for level, jiggy_amt in pairs(block['slot_world_order'])
+        for level, jiggy_amt in pairs(block['slot_world_requirements'])
         do
-            local locationId = block['slot_keys'][level]
+            local locationId = block['slot_world_order'][level]
             if(level == "Mayahem Temple")
             then
                 BTH:setSettingJiggyRequirements(0, jiggy_amt)

@@ -1,8 +1,11 @@
 from typing import Dict
 from ..Names import itemName
-from ..Options import EnableNestsanity, ProgressiveBashAttack, ProgressiveBeakBuster, ProgressiveEggAim, ProgressiveFlight, ProgressiveShoes, ProgressiveWaterTraining, RandomizeBKMoveList, RandomizeBTMoveList, RandomizeNotes, RandomizeStopnSwap
+from ..Options import EnableNestsanity, ProgressiveBashAttack, ProgressiveBeakBuster, \
+    ProgressiveEggAim, ProgressiveFlight, ProgressiveShoes, ProgressiveWaterTraining, \
+    RandomizeBKMoveList, RandomizeBTMoveList, RandomizeNotes, RandomizeStopnSwap
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
+
 
 class TestProgressiveMove(BanjoTooieTestBase):
     options = {
@@ -18,6 +21,7 @@ class TestProgressiveMove(BanjoTooieTestBase):
         for item, expected_count in self.tested_items.items():
             assert item_pool_names.count(item) + starting_inventory_names.count(item) == expected_count
 
+
 class TestProgressiveBeakBuster(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -29,6 +33,7 @@ class TestProgressiveBeakBuster(TestProgressiveMove):
         itemName.BDRILL: 0
     }
 
+
 class TestNonProgressiveBeakBuster(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -39,6 +44,7 @@ class TestNonProgressiveBeakBuster(TestProgressiveMove):
         itemName.BBUST: 1,
         itemName.BDRILL: 1
     }
+
 
 class TestProgressiveShoes(TestProgressiveMove):
     options = {
@@ -54,6 +60,7 @@ class TestProgressiveShoes(TestProgressiveMove):
         itemName.CLAWBTS: 0,
     }
 
+
 class TestNonProgressiveShoes(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -66,6 +73,7 @@ class TestNonProgressiveShoes(TestProgressiveMove):
         itemName.SPRINGB: 1,
         itemName.CLAWBTS: 1,
     }
+
 
 class TestProgressiveAdvancedWaterTraining(TestProgressiveMove):
     options = {
@@ -82,6 +90,7 @@ class TestProgressiveAdvancedWaterTraining(TestProgressiveMove):
         itemName.AUQAIM: 0,
     }
 
+
 class TestProgressiveBasicWaterTraining(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -96,6 +105,7 @@ class TestProgressiveBasicWaterTraining(TestProgressiveMove):
         itemName.TTORP: 1,
         itemName.AUQAIM: 1,
     }
+
 
 class TestNonProgressiveWaterTraining(TestProgressiveMove):
     options = {
@@ -112,6 +122,7 @@ class TestNonProgressiveWaterTraining(TestProgressiveMove):
         itemName.AUQAIM: 1,
     }
 
+
 class TestProgressiveFlight(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -124,6 +135,7 @@ class TestProgressiveFlight(TestProgressiveMove):
         itemName.AIREAIM: 0,
     }
 
+
 class TestNonProgressiveFlight(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -135,6 +147,7 @@ class TestNonProgressiveFlight(TestProgressiveMove):
         itemName.BBOMB: 1,
         itemName.AIREAIM: 1,
     }
+
 
 class TestProgressiveAdvancedEggAim(TestProgressiveMove):
     options = {
@@ -150,6 +163,7 @@ class TestProgressiveAdvancedEggAim(TestProgressiveMove):
         itemName.BBLASTER: 0,
     }
 
+
 class TestProgressiveBasicEggAim(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -163,6 +177,7 @@ class TestProgressiveBasicEggAim(TestProgressiveMove):
         itemName.EGGAIM: 0,
         itemName.BBLASTER: 1,
     }
+
 
 class TestNonProgressiveEggAim(TestProgressiveMove):
     options = {
@@ -178,6 +193,7 @@ class TestNonProgressiveEggAim(TestProgressiveMove):
         itemName.BBLASTER: 1,
     }
 
+
 class TestProgressiveBash(TestProgressiveMove):
     options = {
         **TestProgressiveMove.options,
@@ -189,6 +205,7 @@ class TestProgressiveBash(TestProgressiveMove):
         itemName.GRAT: 0,
         itemName.BBASH: 0,
     }
+
 
 class TestNonProgressiveBash(TestProgressiveMove):
     options = {
@@ -202,11 +219,13 @@ class TestNonProgressiveBash(TestProgressiveMove):
         itemName.BBASH: 1,
     }
 
+
 class TestTestProgressiveBeakBusterIntended(TestProgressiveBeakBuster, IntendedLogic):
     options = {
         **TestProgressiveBeakBuster.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveBeakBusterEasyTricks(TestProgressiveBeakBuster, EasyTricksLogic):
     options = {
@@ -214,11 +233,13 @@ class TestTestProgressiveBeakBusterEasyTricks(TestProgressiveBeakBuster, EasyTri
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveBeakBusterHardTricks(TestProgressiveBeakBuster, HardTricksLogic):
     options = {
         **TestProgressiveBeakBuster.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveBeakBusterGlitches(TestProgressiveBeakBuster, GlitchesLogic):
     options = {
@@ -226,11 +247,13 @@ class TestTestProgressiveBeakBusterGlitches(TestProgressiveBeakBuster, GlitchesL
         **GlitchesLogic.options,
     }
 
+
 class TestTestNonProgressiveBeakBusterIntended(TestNonProgressiveBeakBuster, IntendedLogic):
     options = {
         **TestNonProgressiveBeakBuster.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveBeakBusterEasyTricks(TestNonProgressiveBeakBuster, EasyTricksLogic):
     options = {
@@ -238,11 +261,13 @@ class TestTestNonProgressiveBeakBusterEasyTricks(TestNonProgressiveBeakBuster, E
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveBeakBusterHardTricks(TestNonProgressiveBeakBuster, HardTricksLogic):
     options = {
         **TestNonProgressiveBeakBuster.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveBeakBusterGlitches(TestNonProgressiveBeakBuster, GlitchesLogic):
     options = {
@@ -259,6 +284,7 @@ class TestTestProgressiveShoesIntended(TestProgressiveShoes, IntendedLogic):
 
     }
 
+
 class TestTestProgressiveShoesEasyTricks(TestProgressiveShoes, EasyTricksLogic):
     options = {
         **TestProgressiveShoes.options,
@@ -266,6 +292,7 @@ class TestTestProgressiveShoesEasyTricks(TestProgressiveShoes, EasyTricksLogic):
         "nestsanity": EnableNestsanity.option_true
 
     }
+
 
 class TestTestProgressiveShoesHardTricks(TestProgressiveShoes, HardTricksLogic):
     options = {
@@ -275,6 +302,7 @@ class TestTestProgressiveShoesHardTricks(TestProgressiveShoes, HardTricksLogic):
 
     }
 
+
 class TestTestProgressiveShoesGlitches(TestProgressiveShoes, GlitchesLogic):
     options = {
         **TestProgressiveShoes.options,
@@ -283,11 +311,13 @@ class TestTestProgressiveShoesGlitches(TestProgressiveShoes, GlitchesLogic):
 
     }
 
+
 class TestTestNonProgressiveShoesIntended(TestNonProgressiveShoes, IntendedLogic):
     options = {
         **TestNonProgressiveShoes.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveShoesEasyTricks(TestNonProgressiveShoes, EasyTricksLogic):
     options = {
@@ -295,11 +325,13 @@ class TestTestNonProgressiveShoesEasyTricks(TestNonProgressiveShoes, EasyTricksL
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveShoesHardTricks(TestNonProgressiveShoes, HardTricksLogic):
     options = {
         **TestNonProgressiveShoes.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveShoesGlitches(TestNonProgressiveShoes, GlitchesLogic):
     options = {
@@ -307,11 +339,13 @@ class TestTestNonProgressiveShoesGlitches(TestNonProgressiveShoes, GlitchesLogic
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveAdvancedWaterTrainingIntended(TestProgressiveAdvancedWaterTraining, IntendedLogic):
     options = {
         **TestProgressiveAdvancedWaterTraining.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveAdvancedWaterTrainingEasyTricks(TestProgressiveAdvancedWaterTraining, EasyTricksLogic):
     options = {
@@ -319,11 +353,13 @@ class TestTestProgressiveAdvancedWaterTrainingEasyTricks(TestProgressiveAdvanced
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveAdvancedWaterTrainingHardTricks(TestProgressiveAdvancedWaterTraining, HardTricksLogic):
     options = {
         **TestProgressiveAdvancedWaterTraining.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveAdvancedWaterTrainingGlitches(TestProgressiveAdvancedWaterTraining, GlitchesLogic):
     options = {
@@ -331,11 +367,13 @@ class TestTestProgressiveAdvancedWaterTrainingGlitches(TestProgressiveAdvancedWa
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveBasicWaterTrainingIntended(TestProgressiveBasicWaterTraining, IntendedLogic):
     options = {
         **TestProgressiveBasicWaterTraining.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveBasicWaterTrainingEasyTricks(TestProgressiveBasicWaterTraining, EasyTricksLogic):
     options = {
@@ -343,11 +381,13 @@ class TestTestProgressiveBasicWaterTrainingEasyTricks(TestProgressiveBasicWaterT
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveBasicWaterTrainingHardTricks(TestProgressiveBasicWaterTraining, HardTricksLogic):
     options = {
         **TestProgressiveBasicWaterTraining.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveBasicWaterTrainingGlitches(TestProgressiveBasicWaterTraining, GlitchesLogic):
     options = {
@@ -355,11 +395,13 @@ class TestTestProgressiveBasicWaterTrainingGlitches(TestProgressiveBasicWaterTra
         **GlitchesLogic.options,
     }
 
+
 class TestTestNonProgressiveWaterTrainingIntended(TestNonProgressiveWaterTraining, IntendedLogic):
     options = {
         **TestNonProgressiveWaterTraining.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveWaterTrainingEasyTricks(TestNonProgressiveWaterTraining, EasyTricksLogic):
     options = {
@@ -367,11 +409,13 @@ class TestTestNonProgressiveWaterTrainingEasyTricks(TestNonProgressiveWaterTrain
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveWaterTrainingHardTricks(TestNonProgressiveWaterTraining, HardTricksLogic):
     options = {
         **TestNonProgressiveWaterTraining.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveWaterTrainingGlitches(TestNonProgressiveWaterTraining, GlitchesLogic):
     options = {
@@ -379,11 +423,13 @@ class TestTestNonProgressiveWaterTrainingGlitches(TestNonProgressiveWaterTrainin
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveFlightIntended(TestProgressiveFlight, IntendedLogic):
     options = {
         **TestProgressiveFlight.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveFlightEasyTricks(TestProgressiveFlight, EasyTricksLogic):
     options = {
@@ -391,11 +437,13 @@ class TestTestProgressiveFlightEasyTricks(TestProgressiveFlight, EasyTricksLogic
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveFlightHardTricks(TestProgressiveFlight, HardTricksLogic):
     options = {
         **TestProgressiveFlight.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveFlightGlitches(TestProgressiveFlight, GlitchesLogic):
     options = {
@@ -403,11 +451,13 @@ class TestTestProgressiveFlightGlitches(TestProgressiveFlight, GlitchesLogic):
         **GlitchesLogic.options,
     }
 
+
 class TestTestNonProgressiveFlightIntended(TestNonProgressiveFlight, IntendedLogic):
     options = {
         **TestNonProgressiveFlight.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveFlightEasyTricks(TestNonProgressiveFlight, EasyTricksLogic):
     options = {
@@ -415,11 +465,13 @@ class TestTestNonProgressiveFlightEasyTricks(TestNonProgressiveFlight, EasyTrick
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveFlightHardTricks(TestNonProgressiveFlight, HardTricksLogic):
     options = {
         **TestNonProgressiveFlight.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveFlightGlitches(TestNonProgressiveFlight, GlitchesLogic):
     options = {
@@ -427,11 +479,13 @@ class TestTestNonProgressiveFlightGlitches(TestNonProgressiveFlight, GlitchesLog
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveAdvancedEggAimIntended(TestProgressiveAdvancedEggAim, IntendedLogic):
     options = {
         **TestProgressiveAdvancedEggAim.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveAdvancedEggAimEasyTricks(TestProgressiveAdvancedEggAim, EasyTricksLogic):
     options = {
@@ -439,11 +493,13 @@ class TestTestProgressiveAdvancedEggAimEasyTricks(TestProgressiveAdvancedEggAim,
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveAdvancedEggAimHardTricks(TestProgressiveAdvancedEggAim, HardTricksLogic):
     options = {
         **TestProgressiveAdvancedEggAim.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveAdvancedEggAimGlitches(TestProgressiveAdvancedEggAim, GlitchesLogic):
     options = {
@@ -451,11 +507,13 @@ class TestTestProgressiveAdvancedEggAimGlitches(TestProgressiveAdvancedEggAim, G
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveBasicEggAimIntended(TestProgressiveBasicEggAim, IntendedLogic):
     options = {
         **TestProgressiveBasicEggAim.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveBasicEggAimEasyTricks(TestProgressiveBasicEggAim, EasyTricksLogic):
     options = {
@@ -463,11 +521,13 @@ class TestTestProgressiveBasicEggAimEasyTricks(TestProgressiveBasicEggAim, EasyT
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveBasicEggAimHardTricks(TestProgressiveBasicEggAim, HardTricksLogic):
     options = {
         **TestProgressiveBasicEggAim.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveBasicEggAimGlitches(TestProgressiveBasicEggAim, GlitchesLogic):
     options = {
@@ -475,11 +535,13 @@ class TestTestProgressiveBasicEggAimGlitches(TestProgressiveBasicEggAim, Glitche
         **GlitchesLogic.options,
     }
 
+
 class TestTestNonProgressiveEggAimIntended(TestNonProgressiveEggAim, IntendedLogic):
     options = {
         **TestNonProgressiveEggAim.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveEggAimEasyTricks(TestNonProgressiveEggAim, EasyTricksLogic):
     options = {
@@ -487,11 +549,13 @@ class TestTestNonProgressiveEggAimEasyTricks(TestNonProgressiveEggAim, EasyTrick
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveEggAimHardTricks(TestNonProgressiveEggAim, HardTricksLogic):
     options = {
         **TestNonProgressiveEggAim.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveEggAimGlitches(TestNonProgressiveEggAim, GlitchesLogic):
     options = {
@@ -499,11 +563,13 @@ class TestTestNonProgressiveEggAimGlitches(TestNonProgressiveEggAim, GlitchesLog
         **GlitchesLogic.options,
     }
 
+
 class TestTestProgressiveBashIntended(TestProgressiveBash, IntendedLogic):
     options = {
         **TestProgressiveBash.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestProgressiveBashEasyTricks(TestProgressiveBash, EasyTricksLogic):
     options = {
@@ -511,11 +577,13 @@ class TestTestProgressiveBashEasyTricks(TestProgressiveBash, EasyTricksLogic):
         **EasyTricksLogic.options,
     }
 
+
 class TestTestProgressiveBashHardTricks(TestProgressiveBash, HardTricksLogic):
     options = {
         **TestProgressiveBash.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestProgressiveBashGlitches(TestProgressiveBash, GlitchesLogic):
     options = {
@@ -523,11 +591,13 @@ class TestTestProgressiveBashGlitches(TestProgressiveBash, GlitchesLogic):
         **GlitchesLogic.options,
     }
 
+
 class TestTestNonProgressiveBashIntended(TestNonProgressiveBash, IntendedLogic):
     options = {
         **TestNonProgressiveBash.options,
         **IntendedLogic.options,
     }
+
 
 class TestTestNonProgressiveBashEasyTricks(TestNonProgressiveBash, EasyTricksLogic):
     options = {
@@ -535,11 +605,13 @@ class TestTestNonProgressiveBashEasyTricks(TestNonProgressiveBash, EasyTricksLog
         **EasyTricksLogic.options,
     }
 
+
 class TestTestNonProgressiveBashHardTricks(TestNonProgressiveBash, HardTricksLogic):
     options = {
         **TestNonProgressiveBash.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTestNonProgressiveBashGlitches(TestNonProgressiveBash, GlitchesLogic):
     options = {

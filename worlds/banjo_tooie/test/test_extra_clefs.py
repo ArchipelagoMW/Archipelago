@@ -4,11 +4,13 @@ from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, Intende
 from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from . import BanjoTooieTestBase
 
+
 class TestClefs(BanjoTooieTestBase):
     options = {
         "randomize_notes": RandomizeNotes.option_true,
         **ONLY_BIG_O_PANTS_FILLER
     }
+
     def test_clef_count(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
         assert item_pool_names.count(itemName.BASS) == self.world.options.bass_clef_amount
@@ -20,7 +22,12 @@ class TestClefs(BanjoTooieTestBase):
         # max jamjars cost is 765. There are 9 trebleclefs by default.
         progression_notes_default = int((765 - 9*20) / 5)
 
-        assert item_pool_names.count(itemName.NOTE) == max(progression_notes_default - 2 * self.world.options.bass_clef_amount - 4 * self.world.options.extra_trebleclefs_count, 0)
+        assert item_pool_names.count(itemName.NOTE)\
+            == max(progression_notes_default
+                   - 2 * self.world.options.bass_clef_amount
+                   - 4 * self.world.options.extra_trebleclefs_count,
+                   0)
+
 
 class TestMinClefs(TestClefs):
     options = {
@@ -29,12 +36,14 @@ class TestMinClefs(TestClefs):
         "extra_trebleclefs_count": 0
     }
 
+
 class TestNoBassSomeTrebles(TestClefs):
     options = {
         **TestClefs.options,
         "bass_clef_amount": 0,
         "extra_trebleclefs_count": 15
     }
+
 
 class TestSomeBassNoTrebles(TestClefs):
     options = {
@@ -43,12 +52,14 @@ class TestSomeBassNoTrebles(TestClefs):
         "extra_trebleclefs_count": 0
     }
 
+
 class TestSomeOfEach(TestClefs):
     options = {
         **TestClefs.options,
         "bass_clef_amount": 15,
         "extra_trebleclefs_count": 10
     }
+
 
 class TestMaxClefs(TestClefs):
     options = {
@@ -57,11 +68,13 @@ class TestMaxClefs(TestClefs):
         "extra_trebleclefs_count": TrebleclefNotes.range_end
     }
 
+
 class TestMinClefsIntended(TestMinClefs, IntendedLogic):
     options = {
         **TestMinClefs.options,
         **IntendedLogic.options
     }
+
 
 class TestMinClefsEasyTricks(TestMinClefs, EasyTricksLogic):
     options = {
@@ -69,11 +82,13 @@ class TestMinClefsEasyTricks(TestMinClefs, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestMinClefsHardTricks(TestMinClefs, HardTricksLogic):
     options = {
         **TestMinClefs.options,
         **HardTricksLogic.options
     }
+
 
 class TestMinClefsGlitches(TestMinClefs, GlitchesLogic):
     options = {
@@ -81,11 +96,13 @@ class TestMinClefsGlitches(TestMinClefs, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestNoBassSomeTreblesIntended(TestNoBassSomeTrebles, IntendedLogic):
     options = {
         **TestNoBassSomeTrebles.options,
         **IntendedLogic.options
     }
+
 
 class TestNoBassSomeTreblesEasyTricks(TestNoBassSomeTrebles, EasyTricksLogic):
     options = {
@@ -93,11 +110,13 @@ class TestNoBassSomeTreblesEasyTricks(TestNoBassSomeTrebles, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestNoBassSomeTreblesHardTricks(TestNoBassSomeTrebles, HardTricksLogic):
     options = {
         **TestNoBassSomeTrebles.options,
         **HardTricksLogic.options
     }
+
 
 class TestNoBassSomeTreblesGlitches(TestNoBassSomeTrebles, GlitchesLogic):
     options = {
@@ -105,11 +124,13 @@ class TestNoBassSomeTreblesGlitches(TestNoBassSomeTrebles, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestSomeBassNoTreblesIntended(TestSomeBassNoTrebles, IntendedLogic):
     options = {
         **TestSomeBassNoTrebles.options,
         **IntendedLogic.options
     }
+
 
 class TestSomeBassNoTreblesEasyTricks(TestSomeBassNoTrebles, EasyTricksLogic):
     options = {
@@ -117,11 +138,13 @@ class TestSomeBassNoTreblesEasyTricks(TestSomeBassNoTrebles, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestSomeBassNoTreblesHardTricks(TestSomeBassNoTrebles, HardTricksLogic):
     options = {
         **TestSomeBassNoTrebles.options,
         **HardTricksLogic.options
     }
+
 
 class TestSomeBassNoTreblesGlitches(TestSomeBassNoTrebles, GlitchesLogic):
     options = {
@@ -129,11 +152,13 @@ class TestSomeBassNoTreblesGlitches(TestSomeBassNoTrebles, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestMaxClefsIntended(TestMaxClefs, IntendedLogic):
     options = {
         **TestMaxClefs.options,
         **IntendedLogic.options
     }
+
 
 class TestMaxClefsEasyTricks(TestMaxClefs, EasyTricksLogic):
     options = {
@@ -141,11 +166,13 @@ class TestMaxClefsEasyTricks(TestMaxClefs, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestMaxClefsHardTricks(TestMaxClefs, HardTricksLogic):
     options = {
         **TestMaxClefs.options,
         **HardTricksLogic.options
     }
+
 
 class TestMaxClefsGlitches(TestMaxClefs, GlitchesLogic):
     options = {

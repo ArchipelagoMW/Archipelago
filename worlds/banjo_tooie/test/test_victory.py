@@ -4,13 +4,15 @@ from . import BanjoTooieTestBase
 from ..Names import locationName, itemName, regionName
 from .. import all_item_table, all_group_table
 
-#Tests and make sure that if the correct Victory Condition is set, enough Mumbo Tokens are placed
+# Tests and make sure that if the correct Victory Condition is set, enough Mumbo Tokens are placed
 # and the game is beatable.
+
+
 class TokenTest(BanjoTooieTestBase):
     mumbo_token_location_group = set()
 
-    def test_mumbo_tokens(self, amt = None) -> None:
-        if amt == None:
+    def test_mumbo_tokens(self, amt: int | None = None) -> None:
+        if amt is None:
             amt = len(self.mumbo_token_location_group)
 
         # Randomized tokens for Token Hunt
@@ -24,9 +26,10 @@ class TokenTest(BanjoTooieTestBase):
             try:
                 if "Mumbo Token" == self.world.multiworld.get_location(location, self.player).item.name:
                     mumbo_tokens += 1
-            except:
+            except Exception:
                 mumbo_tokens += 0
         assert amt == mumbo_tokens
+
 
 class TestVictoryHAG1(TokenTest):
     options = {
@@ -37,8 +40,10 @@ class TestVictoryHAG1(TokenTest):
         locationName.MUMBOTKNBOSS1,
         locationName.MUMBOTKNJINJO1
     }
+
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)
+
 
 class TestVictoryHAG1Intended(TestVictoryHAG1, IntendedLogic):
     options = {
@@ -46,11 +51,13 @@ class TestVictoryHAG1Intended(TestVictoryHAG1, IntendedLogic):
         **IntendedLogic.options
     }
 
+
 class TestVictoryHAG1EasyTricks(TestVictoryHAG1, EasyTricksLogic):
     options = {
         **TestVictoryHAG1.options,
         **EasyTricksLogic.options
     }
+
 
 class TestVictoryHAG1HardTricks(TestVictoryHAG1, HardTricksLogic):
     options = {
@@ -58,11 +65,13 @@ class TestVictoryHAG1HardTricks(TestVictoryHAG1, HardTricksLogic):
         **HardTricksLogic.options
     }
 
+
 class TestVictoryHAG1Glitches(TestVictoryHAG1, GlitchesLogic):
     options = {
         **TestVictoryHAG1.options,
         **GlitchesLogic.options
     }
+
 
 class TestVictoryMinigames(TokenTest):
     options = {
@@ -86,11 +95,13 @@ class TestVictoryMinigames(TokenTest):
         locationName.MUMBOTKNGAME15
     }
 
+
 class TestVictoryMinigamesShort(TestVictoryMinigames):
     options = {
         **TestVictoryMinigames.options,
         "minigame_hunt_length": MinigameHuntLength.range_start
     }
+
 
 class TestVictoryMinigamesLong(TestVictoryMinigames):
     options = {
@@ -98,11 +109,13 @@ class TestVictoryMinigamesLong(TestVictoryMinigames):
         "minigame_hunt_length": MinigameHuntLength.range_end
     }
 
+
 class TestVictoryMinigamesIntended(TestVictoryMinigames, IntendedLogic):
     options = {
         **TestVictoryMinigames.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryMinigamesEasyTricks(TestVictoryMinigames, EasyTricksLogic):
     options = {
@@ -110,11 +123,13 @@ class TestVictoryMinigamesEasyTricks(TestVictoryMinigames, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryMinigamesHardTricks(TestVictoryMinigames, HardTricksLogic):
     options = {
         **TestVictoryMinigames.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryMinigamesGlitches(TestVictoryMinigames, GlitchesLogic):
     options = {
@@ -122,11 +137,13 @@ class TestVictoryMinigamesGlitches(TestVictoryMinigames, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryMinigamesShortIntended(TestVictoryMinigamesShort, IntendedLogic):
     options = {
         **TestVictoryMinigamesShort.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryMinigamesShortEasyTricks(TestVictoryMinigamesShort, EasyTricksLogic):
     options = {
@@ -134,11 +151,13 @@ class TestVictoryMinigamesShortEasyTricks(TestVictoryMinigamesShort, EasyTricksL
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryMinigamesShortHardTricks(TestVictoryMinigamesShort, HardTricksLogic):
     options = {
         **TestVictoryMinigamesShort.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryMinigamesShortGlitches(TestVictoryMinigamesShort, GlitchesLogic):
     options = {
@@ -146,11 +165,13 @@ class TestVictoryMinigamesShortGlitches(TestVictoryMinigamesShort, GlitchesLogic
         **GlitchesLogic.options
     }
 
+
 class TestVictoryMinigamesLongIntended(TestVictoryMinigamesLong, IntendedLogic):
     options = {
         **TestVictoryMinigamesLong.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryMinigamesLongEasyTricks(TestVictoryMinigamesLong, EasyTricksLogic):
     options = {
@@ -158,11 +179,13 @@ class TestVictoryMinigamesLongEasyTricks(TestVictoryMinigamesLong, EasyTricksLog
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryMinigamesLongHardTricks(TestVictoryMinigamesLong, HardTricksLogic):
     options = {
         **TestVictoryMinigamesLong.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryMinigamesLongGlitches(TestVictoryMinigamesLong, GlitchesLogic):
     options = {
@@ -186,11 +209,13 @@ class TestVictoryBosses(TokenTest):
         locationName.MUMBOTKNBOSS8
     }
 
+
 class TestVictoryBossesShort(TestVictoryBosses):
     options = {
         **TestVictoryBosses.options,
         "boss_hunt_length": BossHuntLength.range_start
     }
+
 
 class TestVictoryBossesLong(TestVictoryBosses):
     options = {
@@ -198,11 +223,13 @@ class TestVictoryBossesLong(TestVictoryBosses):
         "boss_hunt_length": BossHuntLength.range_end
     }
 
+
 class TestVictoryBossesIntended(TestVictoryBosses, IntendedLogic):
     options = {
         **TestVictoryBosses.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesEasyTricks(TestVictoryBosses, EasyTricksLogic):
     options = {
@@ -210,11 +237,13 @@ class TestVictoryBossesEasyTricks(TestVictoryBosses, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesHardTricks(TestVictoryBosses, HardTricksLogic):
     options = {
         **TestVictoryBosses.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryBossesGlitches(TestVictoryBosses, GlitchesLogic):
     options = {
@@ -222,11 +251,13 @@ class TestVictoryBossesGlitches(TestVictoryBosses, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryBossesShortIntended(TestVictoryBossesShort, IntendedLogic):
     options = {
         **TestVictoryBossesShort.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesShortEasyTricks(TestVictoryBossesShort, EasyTricksLogic):
     options = {
@@ -234,11 +265,13 @@ class TestVictoryBossesShortEasyTricks(TestVictoryBossesShort, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesShortHardTricks(TestVictoryBossesShort, HardTricksLogic):
     options = {
         **TestVictoryBossesShort.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryBossesShortGlitches(TestVictoryBossesShort, GlitchesLogic):
     options = {
@@ -246,11 +279,13 @@ class TestVictoryBossesShortGlitches(TestVictoryBossesShort, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryBossesLongIntended(TestVictoryBossesLong, IntendedLogic):
     options = {
         **TestVictoryBossesLong.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesLongEasyTricks(TestVictoryBossesLong, EasyTricksLogic):
     options = {
@@ -258,17 +293,20 @@ class TestVictoryBossesLongEasyTricks(TestVictoryBossesLong, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesLongHardTricks(TestVictoryBossesLong, HardTricksLogic):
     options = {
         **TestVictoryBossesLong.options,
         **HardTricksLogic.options
     }
 
+
 class TestVictoryBossesLongGlitches(TestVictoryBossesLong, GlitchesLogic):
     options = {
         **TestVictoryBossesLong.options,
         **GlitchesLogic.options
     }
+
 
 class TestVictoryJinjos(TokenTest):
     options = {
@@ -287,11 +325,13 @@ class TestVictoryJinjos(TokenTest):
         locationName.MUMBOTKNJINJO9,
     }
 
+
 class TestVictoryJinjosShort(TestVictoryJinjos):
     options = {
         **TestVictoryJinjos.options,
         "jinjo_family_rescue_length": JinjoFamilyRescueLength.range_start
     }
+
 
 class TestVictoryJinjosLong(TestVictoryJinjos):
     options = {
@@ -299,11 +339,13 @@ class TestVictoryJinjosLong(TestVictoryJinjos):
         "jinjo_family_rescue_length": JinjoFamilyRescueLength.range_end
     }
 
+
 class TestVictoryJinjosIntended(TestVictoryJinjos, IntendedLogic):
     options = {
         **TestVictoryJinjos.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryJinjosEasyTricks(TestVictoryJinjos, EasyTricksLogic):
     options = {
@@ -311,11 +353,13 @@ class TestVictoryJinjosEasyTricks(TestVictoryJinjos, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryJinjosHardTricks(TestVictoryJinjos, HardTricksLogic):
     options = {
         **TestVictoryJinjos.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryJinjosGlitches(TestVictoryJinjos, GlitchesLogic):
     options = {
@@ -323,11 +367,13 @@ class TestVictoryJinjosGlitches(TestVictoryJinjos, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryJinjosShortIntended(TestVictoryJinjosShort, IntendedLogic):
     options = {
         **TestVictoryJinjosShort.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryJinjosShortEasyTricks(TestVictoryJinjosShort, EasyTricksLogic):
     options = {
@@ -335,11 +381,13 @@ class TestVictoryJinjosShortEasyTricks(TestVictoryJinjosShort, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryJinjosShortHardTricks(TestVictoryJinjosShort, HardTricksLogic):
     options = {
         **TestVictoryJinjosShort.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryJinjosShortGlitches(TestVictoryJinjosShort, GlitchesLogic):
     options = {
@@ -347,11 +395,13 @@ class TestVictoryJinjosShortGlitches(TestVictoryJinjosShort, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryJinjosLongIntended(TestVictoryJinjosLong, IntendedLogic):
     options = {
         **TestVictoryJinjosLong.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryJinjosLongEasyTricks(TestVictoryJinjosLong, EasyTricksLogic):
     options = {
@@ -359,17 +409,20 @@ class TestVictoryJinjosLongEasyTricks(TestVictoryJinjosLong, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryJinjosLongHardTricks(TestVictoryJinjosLong, HardTricksLogic):
     options = {
         **TestVictoryJinjosLong.options,
         **HardTricksLogic.options
     }
 
+
 class TestVictoryJinjosLongGlitches(TestVictoryJinjosLong, GlitchesLogic):
     options = {
         **TestVictoryJinjosLong.options,
         **GlitchesLogic.options
     }
+
 
 class TestVictoryWonderwing(TokenTest):
     options = {
@@ -410,11 +463,13 @@ class TestVictoryWonderwing(TokenTest):
         locationName.MUMBOTKNJINJO9,
     }
 
+
 class TestVictoryWonderwingIntended(TestVictoryWonderwing, IntendedLogic):
     options = {
         **TestVictoryWonderwing.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryWonderwingEasyTricks(TestVictoryWonderwing, EasyTricksLogic):
     options = {
@@ -422,17 +477,20 @@ class TestVictoryWonderwingEasyTricks(TestVictoryWonderwing, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryWonderwingHardTricks(TestVictoryWonderwing, HardTricksLogic):
     options = {
         **TestVictoryWonderwing.options,
         **HardTricksLogic.options
     }
 
+
 class TestVictoryWonderwingGlitches(TestVictoryWonderwing, GlitchesLogic):
     options = {
         **TestVictoryWonderwing.options,
         **GlitchesLogic.options
     }
+
 
 class TestVictoryBossesHAG1(TokenTest):
     options = {
@@ -449,11 +507,13 @@ class TestVictoryBossesHAG1(TokenTest):
         locationName.MUMBOTKNBOSS8
     }
 
+
 class TestVictoryBossesHAG1Short(TestVictoryBossesHAG1):
     options = {
         **TestVictoryBossesHAG1.options,
         "boss_hunt_length": BossHuntLength.range_start
     }
+
 
 class TestVictoryBossesHAG1Long(TestVictoryBossesHAG1):
     options = {
@@ -461,11 +521,13 @@ class TestVictoryBossesHAG1Long(TestVictoryBossesHAG1):
         "boss_hunt_length": BossHuntLength.range_end
     }
 
+
 class TestVictoryBossesHAG1Intended(TestVictoryBossesHAG1, IntendedLogic):
     options = {
         **TestVictoryBossesHAG1.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesHAG1EasyTricks(TestVictoryBossesHAG1, EasyTricksLogic):
     options = {
@@ -473,11 +535,13 @@ class TestVictoryBossesHAG1EasyTricks(TestVictoryBossesHAG1, EasyTricksLogic):
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesHAG1HardTricks(TestVictoryBossesHAG1, HardTricksLogic):
     options = {
         **TestVictoryBossesHAG1.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryBossesHAG1Glitches(TestVictoryBossesHAG1, GlitchesLogic):
     options = {
@@ -485,11 +549,13 @@ class TestVictoryBossesHAG1Glitches(TestVictoryBossesHAG1, GlitchesLogic):
         **GlitchesLogic.options
     }
 
+
 class TestVictoryBossesHAG1ShortIntended(TestVictoryBossesHAG1Short, IntendedLogic):
     options = {
         **TestVictoryBossesHAG1Short.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesHAG1ShortEasyTricks(TestVictoryBossesHAG1Short, EasyTricksLogic):
     options = {
@@ -497,11 +563,13 @@ class TestVictoryBossesHAG1ShortEasyTricks(TestVictoryBossesHAG1Short, EasyTrick
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesHAG1ShortHardTricks(TestVictoryBossesHAG1Short, HardTricksLogic):
     options = {
         **TestVictoryBossesHAG1Short.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryBossesHAG1ShortGlitches(TestVictoryBossesHAG1Short, GlitchesLogic):
     options = {
@@ -509,11 +577,13 @@ class TestVictoryBossesHAG1ShortGlitches(TestVictoryBossesHAG1Short, GlitchesLog
         **GlitchesLogic.options
     }
 
+
 class TestVictoryBossesHAG1LongIntended(TestVictoryBossesHAG1Long, IntendedLogic):
     options = {
         **TestVictoryBossesHAG1Long.options,
         **IntendedLogic.options
     }
+
 
 class TestVictoryBossesHAG1LongEasyTricks(TestVictoryBossesHAG1Long, EasyTricksLogic):
     options = {
@@ -521,11 +591,13 @@ class TestVictoryBossesHAG1LongEasyTricks(TestVictoryBossesHAG1Long, EasyTricksL
         **EasyTricksLogic.options
     }
 
+
 class TestVictoryBossesHAG1LongHardTricks(TestVictoryBossesHAG1Long, HardTricksLogic):
     options = {
         **TestVictoryBossesHAG1Long.options,
         **HardTricksLogic.options
     }
+
 
 class TestVictoryBossesHAG1LongGlitches(TestVictoryBossesHAG1Long, GlitchesLogic):
     options = {

@@ -4,6 +4,7 @@ from ..Locations import all_location_table
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
+
 class TestRandomizedClosedSilos(BanjoTooieTestBase):
     options = {
         "randomize_silos": RandomizeSilos.option_true,
@@ -14,6 +15,7 @@ class TestRandomizedClosedSilos(BanjoTooieTestBase):
         item_pool_names = [item.name for item in self.multiworld.itempool]
         for silo_name in silo_table.keys():
             assert silo_name in item_pool_names
+
 
 class TestRandomizedOpenSilos(BanjoTooieTestBase):
     options = {
@@ -31,6 +33,7 @@ class TestRandomizedOpenSilos(BanjoTooieTestBase):
         for silo_name in silo_table.keys():
             assert silo_name in precollected_item_names
 
+
 class TestVanillaClosedSilos(BanjoTooieTestBase):
     options = {
         "randomize_silos": RandomizeSilos.option_false,
@@ -43,12 +46,13 @@ class TestVanillaClosedSilos(BanjoTooieTestBase):
             assert silo_name not in item_pool_names
 
     def test_prefills(self) -> None:
-        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()\
+        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()
                                    if location_data.group == "Silos"]
-        vanilla_locations = [location for location in self.world.get_locations()\
+        vanilla_locations = [location for location in self.world.get_locations()
                              if location.name in vanilla_locations_names]
 
         assert len(vanilla_locations) == 0
+
 
 class TestVanillaOpenSilos(BanjoTooieTestBase):
     options = {
@@ -62,11 +66,12 @@ class TestVanillaOpenSilos(BanjoTooieTestBase):
             assert silo_name not in item_pool_names
 
     def test_locations(self) -> None:
-        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()\
+        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()
                                    if location_data.group == "Silos"]
-        vanilla_locations = [location for location in self.world.get_locations()\
+        vanilla_locations = [location for location in self.world.get_locations()
                              if location.name in vanilla_locations_names]
         assert len(vanilla_locations) == 0
+
 
 class TestRandomizedClosedSilosIntended(TestRandomizedClosedSilos, IntendedLogic):
     options = {
@@ -74,11 +79,13 @@ class TestRandomizedClosedSilosIntended(TestRandomizedClosedSilos, IntendedLogic
         **IntendedLogic.options,
     }
 
+
 class TestRandomizedClosedSilosEasyTricks(TestRandomizedClosedSilos, EasyTricksLogic):
     options = {
         **TestRandomizedClosedSilos.options,
         **EasyTricksLogic.options,
     }
+
 
 class TestRandomizedClosedSilosHardTricks(TestRandomizedClosedSilos, HardTricksLogic):
     options = {
@@ -86,11 +93,13 @@ class TestRandomizedClosedSilosHardTricks(TestRandomizedClosedSilos, HardTricksL
         **HardTricksLogic.options,
     }
 
+
 class TestRandomizedClosedSilosGlitches(TestRandomizedClosedSilos, GlitchesLogic):
     options = {
         **TestRandomizedClosedSilos.options,
         **GlitchesLogic.options,
     }
+
 
 class TestVanillaClosedSilosIntended(TestVanillaClosedSilos, IntendedLogic):
     options = {
@@ -98,17 +107,20 @@ class TestVanillaClosedSilosIntended(TestVanillaClosedSilos, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestVanillaClosedSilosEasyTricks(TestVanillaClosedSilos, EasyTricksLogic):
     options = {
         **TestVanillaClosedSilos.options,
         **EasyTricksLogic.options,
     }
 
+
 class TestVanillaClosedSilosHardTricks(TestVanillaClosedSilos, HardTricksLogic):
     options = {
         **TestVanillaClosedSilos.options,
         **HardTricksLogic.options,
     }
+
 
 class TestVanillaClosedSilosGlitches(TestVanillaClosedSilos, GlitchesLogic):
     options = {
@@ -117,12 +129,12 @@ class TestVanillaClosedSilosGlitches(TestVanillaClosedSilos, GlitchesLogic):
     }
 
 
-
 class TestRandomizedOpenSilosIntended(TestRandomizedOpenSilos, IntendedLogic):
     options = {
         **TestRandomizedOpenSilos.options,
         **IntendedLogic.options,
     }
+
 
 class TestRandomizedOpenSilosEasyTricks(TestRandomizedOpenSilos, EasyTricksLogic):
     options = {
@@ -130,11 +142,13 @@ class TestRandomizedOpenSilosEasyTricks(TestRandomizedOpenSilos, EasyTricksLogic
         **EasyTricksLogic.options,
     }
 
+
 class TestRandomizedOpenSilosHardTricks(TestRandomizedOpenSilos, HardTricksLogic):
     options = {
         **TestRandomizedOpenSilos.options,
         **HardTricksLogic.options,
     }
+
 
 class TestRandomizedOpenSilosGlitches(TestRandomizedOpenSilos, GlitchesLogic):
     options = {
@@ -142,11 +156,13 @@ class TestRandomizedOpenSilosGlitches(TestRandomizedOpenSilos, GlitchesLogic):
         **GlitchesLogic.options,
     }
 
+
 class TestVanillaOpenSilosIntended(TestVanillaOpenSilos, IntendedLogic):
     options = {
         **TestVanillaOpenSilos.options,
         **IntendedLogic.options,
     }
+
 
 class TestVanillaOpenSilosEasyTricks(TestVanillaOpenSilos, EasyTricksLogic):
     options = {
@@ -154,11 +170,13 @@ class TestVanillaOpenSilosEasyTricks(TestVanillaOpenSilos, EasyTricksLogic):
         **EasyTricksLogic.options,
     }
 
+
 class TestVanillaOpenSilosHardTricks(TestVanillaOpenSilos, HardTricksLogic):
     options = {
         **TestVanillaOpenSilos.options,
         **HardTricksLogic.options,
     }
+
 
 class TestVanillaOpenSilosGlitches(TestVanillaOpenSilos, GlitchesLogic):
     options = {

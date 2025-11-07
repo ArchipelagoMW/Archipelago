@@ -4,18 +4,20 @@ from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, Intende
 from . import BanjoTooieTestBase
 from ..Names import locationName, itemName
 
+
 class JinjosEnabled(BanjoTooieTestBase):
     options = {
         "randomize_jinjos": RandomizeJinjos.option_true,
         "world_requirements": "custom",
-        "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
+        "custom_worlds": "1,1,1,1,1,1,1,1,51",  # add jingaling's jiggy
     }
+
     def test_item_pool_jinjos(self) -> None:
         jinjo_count = 0
         jinjo_counter = 0
 
         for jinjo in self.world.item_name_groups["Jinjo"]:
-            banjoItem = all_item_table.get(jinjo)
+            banjoItem = all_item_table[jinjo]
             jinjo_count += banjoItem.qty
             for item in self.world.multiworld.itempool:
                 if jinjo == item.name:
@@ -24,15 +26,17 @@ class JinjosEnabled(BanjoTooieTestBase):
         assert jinjo_count == jinjo_counter
 
     def test_item_pool_jiggies(self) -> None:
-        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 50
-        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 20
+        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 55
+        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 15
+
 
 class JinjosDisabled(BanjoTooieTestBase):
     options = {
         "randomize_jinjos": RandomizeJinjos.option_false,
         "world_requirements": "custom",
-        "custom_worlds": "1,1,1,1,1,1,1,1,51", # add jingaling's jiggy
+        "custom_worlds": "1,1,1,1,1,1,1,1,51",  # add jingaling's jiggy
     }
+
     def test_disabled_item_pool(self) -> None:
         jinjo_counter = 0
 
@@ -48,7 +52,7 @@ class JinjosDisabled(BanjoTooieTestBase):
         jinjos = 0
         placed_correctly = 0
         for name in self.world.item_name_groups["Jinjo"]:
-            banjoItem = all_item_table.get(name)
+            banjoItem = all_item_table[name]
             jinjos += banjoItem.qty
             try:
                 location_item = ""
@@ -196,14 +200,15 @@ class JinjosDisabled(BanjoTooieTestBase):
                     location_item = self.multiworld.get_location(locationName.JINJOGI3, self.player).item.name
                     if location_item == name:
                         placed_correctly += 1
-            except:
+            except Exception:
                 print(f"Issue with Item: {name} Please Investigate")
                 placed_correctly += 0
         assert jinjos == placed_correctly
 
     def test_item_pool_jiggies(self) -> None:
-        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 41
-        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 20
+        assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 46
+        assert [item.name for item in self.multiworld.itempool if item.useful].count(itemName.JIGGY) == 15
+
 
 class TestJinjosEnabledIntended(JinjosEnabled, IntendedLogic):
     options = {
@@ -211,11 +216,13 @@ class TestJinjosEnabledIntended(JinjosEnabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestJinjosEnabledEasyTricks(JinjosEnabled, EasyTricksLogic):
     options = {
         **JinjosEnabled.options,
         **EasyTricksLogic.options,
     }
+
 
 class TestJinjosEnabledHardTricks(JinjosEnabled, HardTricksLogic):
     options = {
@@ -223,11 +230,13 @@ class TestJinjosEnabledHardTricks(JinjosEnabled, HardTricksLogic):
         **HardTricksLogic.options,
     }
 
+
 class TestJinjosEnabledGlitchesTricks(JinjosEnabled, GlitchesLogic):
     options = {
         **JinjosEnabled.options,
         **GlitchesLogic.options,
     }
+
 
 class TestJinjosDisabledIntended(JinjosDisabled, IntendedLogic):
     options = {
@@ -235,17 +244,20 @@ class TestJinjosDisabledIntended(JinjosDisabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestJinjosDisabledEasyTricks(JinjosDisabled, EasyTricksLogic):
     options = {
         **JinjosDisabled.options,
         **EasyTricksLogic.options,
     }
 
+
 class TestJinjosDisabledHardTricks(JinjosDisabled, HardTricksLogic):
     options = {
         **JinjosDisabled.options,
         **HardTricksLogic.options,
     }
+
 
 class TestJinjosDisabledGlitchesTricks(JinjosDisabled, GlitchesLogic):
     options = {

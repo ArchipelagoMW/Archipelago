@@ -4,10 +4,12 @@ from . import BanjoTooieTestBase
 from ..Names import itemName
 from .. import all_group_table
 
+
 class TreblesEnabled(BanjoTooieTestBase):
     options = {
         "randomize_treble": RandomizeTrebleClefs.option_true
     }
+
     def test_item_pool(self) -> None:
         treble_amt = 0
         treble_count = 0
@@ -18,13 +20,15 @@ class TreblesEnabled(BanjoTooieTestBase):
 
         for item in self.world.multiworld.itempool:
             if itemName.TREBLE == item.name:
-                    treble_count += 1
+                treble_count += 1
         assert treble_amt == treble_count
+
 
 class TreblesDisabled(BanjoTooieTestBase):
     options = {
         "randomize_treble": RandomizeTrebleClefs.option_false
     }
+
     def test_disabled_item_pool(self) -> None:
         adv_count = 0
         for item in self.world.multiworld.itempool:
@@ -47,7 +51,7 @@ class TreblesDisabled(BanjoTooieTestBase):
                     location_item = self.multiworld.get_location(name, self.player).item.name
                     if location_item == itemName.TREBLE:
                         treble_count += 1
-                except:
+                except Exception:
                     print(f"Issue with Item: {name} Please Investigate")
                     treble_count += 0
         assert treble_amt == treble_count
@@ -59,11 +63,13 @@ class TestTreblesEnabledIntended(TreblesEnabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestTreblesEnabledEasyTricks(TreblesEnabled, EasyTricksLogic):
     options = {
         **TreblesEnabled.options,
         **EasyTricksLogic.options,
     }
+
 
 class TestTreblesEnabledHardTricks(TreblesEnabled, HardTricksLogic):
     options = {
@@ -71,11 +77,13 @@ class TestTreblesEnabledHardTricks(TreblesEnabled, HardTricksLogic):
         **HardTricksLogic.options,
     }
 
+
 class TestTreblesEnabledGlitchesTricks(TreblesEnabled, GlitchesLogic):
     options = {
         **TreblesEnabled.options,
         **GlitchesLogic.options,
     }
+
 
 class TestTreblesDisabledIntended(TreblesDisabled, IntendedLogic):
     options = {
@@ -83,17 +91,20 @@ class TestTreblesDisabledIntended(TreblesDisabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestTreblesDisabledEasyTricks(TreblesDisabled, EasyTricksLogic):
     options = {
         **TreblesDisabled.options,
         **EasyTricksLogic.options,
     }
 
+
 class TestTreblesDisabledHardTricks(TreblesDisabled, HardTricksLogic):
     options = {
         **TreblesDisabled.options,
         **HardTricksLogic.options,
     }
+
 
 class TestTreblesDisabledGlitchesTricks(TreblesDisabled, GlitchesLogic):
     options = {

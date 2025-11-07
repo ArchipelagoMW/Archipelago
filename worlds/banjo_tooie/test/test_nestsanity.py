@@ -5,6 +5,7 @@ from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, Intende
 from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from . import BanjoTooieTestBase
 
+
 class TestNestsanityEnabled(BanjoTooieTestBase):
     options = {
         "nestsanity": EnableNestsanity.option_true,
@@ -19,6 +20,7 @@ class TestNestsanityEnabled(BanjoTooieTestBase):
         for name in self.tested_locations:
             assert name in world_location_names
 
+
 class TestNestsanityDisabled(BanjoTooieTestBase):
     options = {
         **ONLY_BIG_O_PANTS_FILLER
@@ -29,14 +31,14 @@ class TestNestsanityDisabled(BanjoTooieTestBase):
 
     def test_item_pool(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool]
-        assert not itemName.ENEST in item_pool_names
-        assert not itemName.FNEST in item_pool_names
-        assert not itemName.GNEST in item_pool_names
+        assert itemName.ENEST not in item_pool_names
+        assert itemName.FNEST not in item_pool_names
+        assert itemName.GNEST not in item_pool_names
 
     def test_locations(self) -> None:
         world_location_names = [location.name for location in self.world.get_locations()]
         for name in self.tested_locations:
-            assert not name in world_location_names
+            assert name not in world_location_names
 
 
 class TestNestsanityEnabledIntended(TestNestsanityEnabled, IntendedLogic):
@@ -45,11 +47,13 @@ class TestNestsanityEnabledIntended(TestNestsanityEnabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestNestsanityEnabledEasyTricks(TestNestsanityEnabled, EasyTricksLogic):
     options = {
         **TestNestsanityEnabled.options,
         **EasyTricksLogic.options,
     }
+
 
 class TestNestsanityEnabledHardTricks(TestNestsanityEnabled, HardTricksLogic):
     options = {
@@ -57,11 +61,13 @@ class TestNestsanityEnabledHardTricks(TestNestsanityEnabled, HardTricksLogic):
         **HardTricksLogic.options,
     }
 
+
 class TestNestsanityEnabledGlitches(TestNestsanityEnabled, GlitchesLogic):
     options = {
         **TestNestsanityEnabled.options,
         **GlitchesLogic.options,
     }
+
 
 class TestNestsanityDisabledIntended(TestNestsanityDisabled, IntendedLogic):
     options = {
@@ -69,17 +75,20 @@ class TestNestsanityDisabledIntended(TestNestsanityDisabled, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestNestsanityDisabledEasyTricks(TestNestsanityDisabled, EasyTricksLogic):
     options = {
         **TestNestsanityDisabled.options,
         **EasyTricksLogic.options,
     }
 
+
 class TestNestsanityDisabledHardTricks(TestNestsanityDisabled, HardTricksLogic):
     options = {
         **TestNestsanityDisabled.options,
         **HardTricksLogic.options,
     }
+
 
 class TestNestsanityDisabledGlitches(TestNestsanityDisabled, GlitchesLogic):
     options = {

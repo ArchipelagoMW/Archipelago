@@ -6,27 +6,29 @@ from .Names import locationName
 class BanjoTooieLocation(Location):
     game: str = "Banjo-Tooie"
 
+
 class LocationData(typing.NamedTuple):
-    #last good ID: 1231640 (CCL Bean 2)
-    #12C770 pointer instead (1230704)
-    btid: int = 0
+    # last good ID: 1231640 (CCL Bean 2)
+    # 12C770 pointer instead (1230704)
+    btid: int | None = 0
     # Save + mem addr
     memaddr: int = 0
     # some items have bitmasks. if bitmask>0 bitor to give item else
     bitmask: int = 0
     # some items are part of a group that needs to be processed seperately
-    group: str  = ""
+    group: str = ""
+
 
 SMLoc_table = {
     locationName.CHEATOSM1: LocationData(1230752, 0x59, 3, "Cheato Page"),
     locationName.JINJOIH5:  LocationData(1230595, 0x3F, 0, "Jinjo"),
-    locationName.ROYSTEN1:   LocationData(1230777, 0x36, 2), #obtained when breaking out roysten
-    locationName.ROYSTEN2:   LocationData(1230778, 0x9E, 6), #obtained when breaking out roysten
+    locationName.ROYSTEN1:   LocationData(1230777, 0x36, 2),  # obtained when breaking out roysten
+    locationName.ROYSTEN2:   LocationData(1230778, 0x9E, 6),  # obtained when breaking out roysten
 
     locationName.PMEGG:     LocationData(1230956, 0x77, 5, "Stop 'n' Swop"),
     locationName.BMEGG:     LocationData(1230957, 0x77, 3, "Stop 'n' Swop"),
 
-    #Nests don"t have a save flag in the base game.
+    # Nests don"t have a save flag in the base game.
     locationName.NESTSM1: LocationData(1231010, 0, 0, "Nest"),
     locationName.NESTSM2: LocationData(1231011, 0, 0, "Nest"),
     locationName.NESTSM3: LocationData(1231012, 0, 0, "Nest"),
@@ -65,9 +67,10 @@ CheatoRewardsLoc_table = {
 JVLoc_table = {
     locationName.JIGGYIH10: LocationData(1230685, 0x50, 1, "Jiggy"),
 
-    locationName.TREBLEJV:  LocationData(1230789, 0x97, 7, "Treble Clef"),  #Set last ID for Clef Family. Client Reasons
-    locationName.IKEY:      LocationData(1230958, 0, 0, "Stop 'n' Swop"), #Needs to be handled on client side
-    locationName.GOGGLES: LocationData(1231005, 0x1E, 0), #actually watching 0x30, bit 1
+    # Set last ID for Clef Family. Client Reasons
+    locationName.TREBLEJV:  LocationData(1230789, 0x97, 7, "Treble Clef"),
+    locationName.IKEY:      LocationData(1230958, 0, 0, "Stop 'n' Swop"),  # Needs to be handled on client side
+    locationName.GOGGLES: LocationData(1231005, 0x1E, 0),  # actually watching 0x30, bit 1
 
     locationName.NESTIH1: LocationData(1231035, 0, 0, "Nest"),
     locationName.NESTIH2: LocationData(1231036, 0, 0, "Nest"),
@@ -258,9 +261,9 @@ IHPLLoc_table = {
 HoneyBRewardsLoc_table = {
     locationName.HONEYBR1:  LocationData(1230997, 0x98, 2),
     locationName.HONEYBR2:  LocationData(1230998, 0x98, 3),
-    locationName.HONEYBR3:  LocationData(1230999, 0x98, 0), #binary. bit 2 and 3 is set
+    locationName.HONEYBR3:  LocationData(1230999, 0x98, 0),  # binary. bit 2 and 3 is set
     locationName.HONEYBR4:  LocationData(1231000, 0x98, 4),
-    locationName.HONEYBR5:  LocationData(1231001, 0x98, 0), #binary. bit 2 and 4 is set
+    locationName.HONEYBR5:  LocationData(1231001, 0x98, 0),  # binary. bit 2 and 4 is set
 }
 
 GMLoc_table = {
@@ -676,9 +679,9 @@ TLLoc_table = {
     locationName.NOTETDL14:  LocationData(1230877, 0x8F, 0, "Note"),
     locationName.NOTETDL15:  LocationData(1230878, 0x8F, 1, "Note"),
     locationName.NOTETDL16:  LocationData(1230879, 0x8F, 2, "Note"),
-    locationName.SCRUT:      LocationData(1231006, 0, 0), #Implement on Client Side
-    locationName.SCRAT:      LocationData(1231007, 0, 0), #Implement on Client Side
-    locationName.SCRIT:      LocationData(1231008, 0, 0), #Implement on Client Side
+    locationName.SCRUT:      LocationData(1231006, 0, 0),  # Implement on Client Side
+    locationName.SCRAT:      LocationData(1231007, 0, 0),  # Implement on Client Side
+    locationName.SCRIT:      LocationData(1231008, 0, 0),  # Implement on Client Side
     locationName.ROARDINO:   LocationData(1231009, 0x17, 7),
 
     locationName.NESTTL1: LocationData(1231259, 0, 0, "Nest"),
@@ -1206,7 +1209,7 @@ IHCTLoc_table = {
     locationName.NESTIH43: LocationData(1231077, 0, 0, "Nest"),
     locationName.NESTIH44: LocationData(1231078, 0, 0, "Nest"),
     locationName.NESTIH45: LocationData(1231079, 0, 0, "Nest"),
-    locationName.NESTIH64: LocationData(1231482, 0, 0, "Nest"), #Out of order.
+    locationName.NESTIH64: LocationData(1231482, 0, 0, "Nest"),  # Out of order.
 
     locationName.SIGNIH18:   LocationData(1231500, 0, 0, "Signpost"),
 

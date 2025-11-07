@@ -3,6 +3,7 @@ from ..Items import warp_pad_table
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
+
 class TestRandomizedWarpPads(BanjoTooieTestBase):
     options = {
         "randomize_warp_pads": RandomizeWarpPads.option_true,
@@ -34,11 +35,13 @@ class TestVanillaWarpPads(BanjoTooieTestBase):
         for warp_pad_data in warp_pad_table.values():
             assert warp_pad_data.default_location not in world_location_names
 
+
 class TestRandomizedWarpPadsIntended(TestRandomizedWarpPads, IntendedLogic):
     options = {
         **TestRandomizedWarpPads.options,
         **IntendedLogic.options,
     }
+
 
 class TestRandomizedWarpPadsEasyTricks(TestRandomizedWarpPads, EasyTricksLogic):
     options = {
@@ -46,11 +49,13 @@ class TestRandomizedWarpPadsEasyTricks(TestRandomizedWarpPads, EasyTricksLogic):
         **EasyTricksLogic.options,
     }
 
+
 class TestRandomizedWarpPadsHardTricks(TestRandomizedWarpPads, HardTricksLogic):
     options = {
         **TestRandomizedWarpPads.options,
         **HardTricksLogic.options,
     }
+
 
 class TestRandomizedWarpPadsGlitches(TestRandomizedWarpPads, GlitchesLogic):
     options = {
@@ -58,11 +63,13 @@ class TestRandomizedWarpPadsGlitches(TestRandomizedWarpPads, GlitchesLogic):
         **GlitchesLogic.options,
     }
 
+
 class TestVanillaWarpPadsIntended(TestVanillaWarpPads, IntendedLogic):
     options = {
         **TestVanillaWarpPads.options,
         **IntendedLogic.options,
     }
+
 
 class TestVanillaWarpPadsEasyTricks(TestVanillaWarpPads, EasyTricksLogic):
     options = {
@@ -70,11 +77,13 @@ class TestVanillaWarpPadsEasyTricks(TestVanillaWarpPads, EasyTricksLogic):
         **EasyTricksLogic.options,
     }
 
+
 class TestVanillaWarpPadsHardTricks(TestVanillaWarpPads, HardTricksLogic):
     options = {
         **TestVanillaWarpPads.options,
         **HardTricksLogic.options,
     }
+
 
 class TestVanillaWarpPadsGlitches(TestVanillaWarpPads, GlitchesLogic):
     options = {

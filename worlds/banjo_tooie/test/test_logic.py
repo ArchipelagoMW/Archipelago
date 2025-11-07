@@ -1,6 +1,8 @@
 from ..Options import LogicType, RandomizeBKMoveList, RandomizeBTMoveList, RandomizeNotes
 
 # Many tests inherit from logic tests, to make sure that the logic of all collectibles works.
+
+
 class IntendedLogic:
     options = {
         "logic_type": LogicType.option_intended,
@@ -8,6 +10,7 @@ class IntendedLogic:
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "randomize_notes": RandomizeNotes.option_true
     }
+
 
 class IntendedLogicNoBKShuffle:
     options = {
@@ -24,11 +27,13 @@ class EasyTricksLogic:
         "randomize_notes": RandomizeNotes.option_true
     }
 
+
 class EasyTricksLogicNoBKShuffle:
     options = {
         "logic_type": LogicType.option_easy_tricks,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
     }
+
 
 class HardTricksLogic:
     options = {
@@ -39,11 +44,13 @@ class HardTricksLogic:
 
     }
 
+
 class HardTricksLogicNoBKShuffle:
     options = {
         "logic_type": LogicType.option_hard_tricks,
         "randomize_bt_moves": RandomizeBTMoveList.option_true,
     }
+
 
 class GlitchesLogic:
     options = {
@@ -52,6 +59,7 @@ class GlitchesLogic:
         "randomize_bk_moves": RandomizeBKMoveList.option_all,
         "randomize_notes": RandomizeNotes.option_true
     }
+
 
 class GlitchesLogicNoBKShuffle:
     options = {

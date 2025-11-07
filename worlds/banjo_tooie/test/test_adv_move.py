@@ -3,6 +3,7 @@ from ..Options import LogicType, RandomizeBTMoveList
 from . import BanjoTooieTestBase
 from .. import all_item_table
 
+
 class AdvMovesEnabled(BanjoTooieTestBase):
     options = {
         "randomize_bt_moves": RandomizeBTMoveList.option_true
@@ -19,9 +20,10 @@ class AdvMovesEnabled(BanjoTooieTestBase):
         print(self.world.item_name_groups["Moves"])
         for adv_move in self.world.item_name_groups["Moves"]:
             if adv_move in item_pool_item_names:
-                    adv_count += 1
+                adv_count += 1
 
         assert adv_move_count == adv_count
+
 
 class AdvMovesDisabled(BanjoTooieTestBase):
     options = {
@@ -44,15 +46,16 @@ class AdvMovesDisabled(BanjoTooieTestBase):
         placed_correctly = 0
         for name in self.world.item_name_groups["Moves"]:
             adv_items += 1
-            banjoItem = all_item_table.get(name)
+            banjoItem = all_item_table[name]
             try:
                 location_item = self.multiworld.get_location(banjoItem.default_location, self.player).item.name
                 if location_item == name:
                     placed_correctly += 1
-            except:
+            except Exception:
                 print(f"Issue with Item: {name} Please Investigate")
                 placed_correctly += 0
         assert adv_items == placed_correctly
+
 
 class TestAdvMovesEnabledIntended(AdvMovesEnabled):
     options = {
@@ -60,11 +63,13 @@ class TestAdvMovesEnabledIntended(AdvMovesEnabled):
         "logic_type": LogicType.option_intended,
     }
 
+
 class TestAdvMovesEnabledEasyTricks(AdvMovesEnabled):
     options = {
         **AdvMovesEnabled.options,
         "logic_type": LogicType.option_easy_tricks,
     }
+
 
 class TestAdvMovesEnabledHardTricks(AdvMovesEnabled):
     options = {
@@ -72,11 +77,13 @@ class TestAdvMovesEnabledHardTricks(AdvMovesEnabled):
         "logic_type": LogicType.option_hard_tricks,
     }
 
+
 class TestAdvMovesEnabledGlitchesTricks(AdvMovesEnabled):
     options = {
         **AdvMovesEnabled.options,
         "logic_type": LogicType.option_glitches,
     }
+
 
 class TestAdvMovesDisabledIntended(AdvMovesDisabled):
     options = {
@@ -84,17 +91,20 @@ class TestAdvMovesDisabledIntended(AdvMovesDisabled):
         "logic_type": LogicType.option_intended,
     }
 
+
 class TestAdvMovesDisabledEasyTricks(AdvMovesDisabled):
     options = {
         **AdvMovesDisabled.options,
         "logic_type": LogicType.option_easy_tricks,
     }
 
+
 class TestAdvMovesDisabledHardTricks(AdvMovesDisabled):
     options = {
         **AdvMovesDisabled.options,
         "logic_type": LogicType.option_hard_tricks,
     }
+
 
 class TestAdvMovesDisabledGlitchesTricks(AdvMovesDisabled):
     options = {

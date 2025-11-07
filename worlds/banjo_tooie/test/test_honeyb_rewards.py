@@ -3,6 +3,7 @@ from ..Options import EnableHoneyBRewards
 from .test_logic import EasyTricksLogic, GlitchesLogic, HardTricksLogic, IntendedLogic
 from . import BanjoTooieTestBase
 
+
 class TestRandomizedHoneyBRewards(BanjoTooieTestBase):
     options = {
         "honeyb_rewards": EnableHoneyBRewards.option_true,
@@ -20,6 +21,7 @@ class TestRandomizedHoneyBRewards(BanjoTooieTestBase):
         for name in location_names:
             assert name in world_location_names
 
+
 class TestVanillaHoneyBRewards(BanjoTooieTestBase):
     options = {
         "honeyb_rewards": EnableHoneyBRewards.option_false,
@@ -35,7 +37,7 @@ class TestVanillaHoneyBRewards(BanjoTooieTestBase):
         ]
         world_location_names = [location.name for location in self.world.get_locations()]
         for name in location_names:
-            assert not name in world_location_names
+            assert name not in world_location_names
 
 
 class TestRandomizedHoneyBRewardsIntended(TestRandomizedHoneyBRewards, IntendedLogic):
@@ -44,11 +46,13 @@ class TestRandomizedHoneyBRewardsIntended(TestRandomizedHoneyBRewards, IntendedL
         **IntendedLogic.options,
     }
 
+
 class TestRandomizedHoneyBRewardsEasyTricks(TestRandomizedHoneyBRewards, EasyTricksLogic):
     options = {
         **TestRandomizedHoneyBRewards.options,
         **EasyTricksLogic.options,
     }
+
 
 class TestRandomizedHoneyBRewardsHardTricks(TestRandomizedHoneyBRewards, HardTricksLogic):
     options = {
@@ -56,11 +60,13 @@ class TestRandomizedHoneyBRewardsHardTricks(TestRandomizedHoneyBRewards, HardTri
         **HardTricksLogic.options,
     }
 
+
 class TestRandomizedHoneyBRewardsGlitches(TestRandomizedHoneyBRewards, GlitchesLogic):
     options = {
         **TestRandomizedHoneyBRewards.options,
         **GlitchesLogic.options,
     }
+
 
 class TestVanillaHoneyBRewardsIntended(TestVanillaHoneyBRewards, IntendedLogic):
     options = {
@@ -68,17 +74,20 @@ class TestVanillaHoneyBRewardsIntended(TestVanillaHoneyBRewards, IntendedLogic):
         **IntendedLogic.options,
     }
 
+
 class TestVanillaHoneyBRewardsEasyTricks(TestVanillaHoneyBRewards, EasyTricksLogic):
     options = {
         **TestVanillaHoneyBRewards.options,
         **EasyTricksLogic.options,
     }
 
+
 class TestVanillaHoneyBRewardsHardTricks(TestVanillaHoneyBRewards, HardTricksLogic):
     options = {
         **TestVanillaHoneyBRewards.options,
         **HardTricksLogic.options,
     }
+
 
 class TestVanillaHoneyBRewardsGlitches(TestVanillaHoneyBRewards, GlitchesLogic):
     options = {
