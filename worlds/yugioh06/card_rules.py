@@ -939,11 +939,11 @@ def counter_traps():
     return CardRule(c_traps, 15)
 
 
-def countinous_spells():
+def continuous_spells():
     blacklist = [
         "Spirit Message 'I'",
-        "Spirit Message 'N'"
-        "Spirit Message 'A'"
+        "Spirit Message 'N'",
+        "Spirit Message 'A'",
         "Spirit Message 'L'"
     ]
     c_spells = find_cards_with(card_type="Spell", spell_trap_type="Continuous")
