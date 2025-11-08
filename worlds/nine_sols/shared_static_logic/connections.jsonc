@@ -26,7 +26,9 @@
         { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" } // to reach the arena's upper enemy
     ] } ] }, // on logic_level: easy, this requires: [] because you can T-dash
     { "from": "AFE - Between Root Nodes", "to": "AFE - Upper Right Pagoda", "requires": [ { "anyOf": [
-        { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        { "item": "Grapple" },
+        [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
+        { "item": "Cloud Leap" }
     ] } ] }, // on logic_level: easy, AD is replaced by T-dash
     // moving boxes requires nothing to traverse (though the lower level of it is a trap without WC/LG/AD/CL),
     // which is why "Between Root Nodes" gets to remain a single region
