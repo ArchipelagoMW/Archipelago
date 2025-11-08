@@ -14,6 +14,7 @@ from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
+from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule
 from .Shapes import get_shapes
 from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
     base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
@@ -96,6 +97,7 @@ class FactorioBobs(World):
 
     def __init__(self, world, player: int):
         super(FactorioBobs, self).__init__(world, player)
+        self.additional_logic: dict[int, AndRule] = {}
         self.removed_technologies = useless_technologies.copy()
         self.advancement_technologies: set[Technology] = set()
         self.custom_recipes : typing.Dict[str, Recipe] = {}
@@ -146,8 +148,64 @@ class FactorioBobs(World):
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
             self.options.max_science_pack.value = len([x for x in self.custom_products.keys()
                                                       if x in MaxSciencePack.get_ordered_science_packs()]) - 1
-        else:
-            return
+
+        if self.options.additional_logic == self.options.additional_logic.option_none:
+            self.additional_logic = {}
+        elif self.options.additional_logic == self.options.additional_logic.default:
+            self.additional_logic = {
+                2: InternalItemRule(self, "gun-turret"),
+                3: AndRule(self,
+                           InternalItemRule(self, "lab"),
+                           InternalItemRule(self, "transport-belt"),
+                           InternalItemRule(self, "electric-mining-drill"),
+                           InternalItemRule(self, "bob-void-pump"),
+                           RecipeRule(self, "bob-basic-greenhouse-cycle"),
+                           TechRule(self, "bob-long-inserters-1")
+                           ),
+                5: AndRule(self,
+                           InternalItemRule(self, "modular-armor"),
+                           InternalItemRule(self, "personal-roboport-equipment"),
+                           InternalItemRule(self, "solar-panel-equipment"),
+                           InternalItemRule(self, "battery-equipment"),
+                           InternalItemRule(self, "construction-robot"),
+                           InternalItemRule(self, "constant-combinator"),
+                           TechRule(self, "bob-long-inserters-2"),
+                           OrRule(self,
+                                  AndRule(self,
+                                          InternalItemRule(self, "train-stop"),
+                                          InternalItemRule(self, "rail-signal"),
+                                          InternalItemRule(self, "rail"),
+                                          InternalItemRule(self, "locomotive"),
+                                          InternalItemRule(self, "cargo-wagon"),
+                                          InternalItemRule(self, "fluid-wagon")
+                                          ),
+                                  AndRule(self,
+                                          InternalItemRule(self, "roboport"),
+                                          InternalItemRule(self, "logistic-robot"),
+                                          InternalItemRule(self, "storage-chest"), # yes a chest is for storage
+                                          InternalItemRule(self, "requester-chest"),
+                                          InternalItemRule(self, "passive-provider-chest"),
+                                          InternalItemRule(self, "buffer-chest"),
+                                          InternalItemRule(self, "active-provider-chest")
+                                          )
+                                  )
+                           ),
+                7: AndRule(self,
+                           InternalItemRule(self, "train-stop"),
+                           InternalItemRule(self, "rail-signal"),
+                           InternalItemRule(self, "rail"),
+                           InternalItemRule(self, "locomotive"),
+                           InternalItemRule(self, "cargo-wagon"),
+                           InternalItemRule(self, "fluid-wagon"),
+                           InternalItemRule(self, "roboport"),
+                           InternalItemRule(self, "logistic-robot"),
+                           InternalItemRule(self, "storage-chest"), # yes a chest is for storage
+                           InternalItemRule(self, "requester-chest"),
+                           InternalItemRule(self, "passive-provider-chest"),
+                           InternalItemRule(self, "buffer-chest"),
+                           InternalItemRule(self, "active-provider-chest")
+                           )
+            }
 
     def create_regions(self):
         player = self.player
@@ -277,6 +335,7 @@ class FactorioBobs(World):
             #         all(state.has(technology.name, player) for technology in ingredient.all_unlocking_technologies())
             Rules.set_rule(location, lambda state, items=frozenset(ingredient.all_unlocking_technologies()): all(state.has(technology.name, player)
                                                        for technology in items))
+            self.logger.debug(f"{ingredient_name}: {frozenset(ingredient.all_unlocking_technologies())}")
 
         for location in self.science_locations:
             Rules.set_rule(location, lambda state: True)

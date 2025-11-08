@@ -517,6 +517,14 @@ class EnergyLink(Toggle):
     """Allow sending energy to other worlds. 25% of the energy is lost in the transfer."""
     display_name = "Energy Link"
 
+class AdditionalLogic(Choice):
+    """Add additional logic that can make progression nicer"""
+    display_name = "Additional logic"
+    default = 0
+
+    option_none = 0
+    option_default = 1
+
 
 @dataclass
 class FactorioOptions(PerGameCommonOptions):
@@ -558,6 +566,7 @@ class FactorioOptions(PerGameCommonOptions):
     death_link: DeathLink
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
+    additional_logic: AdditionalLogic
 
 
 option_groups: list[OptionGroup] = [
