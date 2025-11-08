@@ -1843,6 +1843,7 @@ option_to_progression: dict[tuple[str, int], (int, list[str])] = {
         "Pachirisu Unlock",
         "Shinx Unlock",
         "Caterpie Unlock",
+        "Butterfree Unlock",
         "Magikarp Unlock",
         "Shroomish Unlock",
         "Starly Unlock",

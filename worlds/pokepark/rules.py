@@ -202,6 +202,11 @@ def set_rules(world: "PokeparkWorld") -> None:
                       state.has("Caterpie Unlock", player)
     )
     set_rule_if_exists(
+        "Meadow Zone Main Area - Butterfree Power Competition -- Friendship",
+        lambda state: can_play_catch(state, player, options) and
+                      state.has("Butterfree Unlock", player)
+    )
+    set_rule_if_exists(
         "Meadow Zone Main Area - Weedle Tree -- Weedle Unlocked",
         lambda state: can_dash_overworld(state, player)
     )
@@ -1598,7 +1603,7 @@ def set_rules(world: "PokeparkWorld") -> None:
         lambda state: can_dash_overworld(state, player)
     )
     set_rule_if_exists(
-        "Haunted Zone Main Area - Kakuna Right Tree -- Metapod Unlocked",
+        "Haunted Zone Main Area - Kakuna Right Tree -- Kakuna Unlocked",
         lambda state: can_dash_overworld(state, player)
     )
     set_rule_if_exists(
