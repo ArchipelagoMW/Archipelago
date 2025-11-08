@@ -84,7 +84,7 @@ Wenn du einer Multiworld beitrittst, wirst du gefordert eine YAML-Datei bei dem 
 erhälst du (in der Regel) einen Link vom Host der Multiworld. Dieser führt dich zu einem Raum, in dem alle
 teilnehmenden Spieler (bzw. Welten) aufgelistet sind. Du solltest dich dann auf **deine** Welt konzentrieren
 und klicke dann auf `Download APZ5 File...`.
-![Screenshot of a Multiworld Room with an Ocarina of Time Player](/static/generated/docs/Ocarina%20of%20Time/MultiWorld-room_oot.png)
+![Screenshot of a Multiworld Room with an Ocarina of Time Player](MultiWorld-Room_oot.png)
 
 Führe die `.apz5`-Datei mit einem Doppelklick aus, um deinen Ocarina Of Time-Client zu starten, sowie das patchen
 deiner ROM. Ist dieser Prozess fertig (kann etwas dauern), startet sich der Client und der Emulator automatisch

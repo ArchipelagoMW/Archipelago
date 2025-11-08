@@ -34,6 +34,17 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
+
+# Workaround for an issue where importing kivy.core.window before loading sounds
+# will hang the whole application on Linux once the first sound is loaded.
+# kivymd imports kivy.core.window, so we have to do this before the first kivymd import.
+# No longer necessary when we switch to kivy 3.0.0, which fixes this issue.
+from kivy.core.audio import SoundLoader
+for classobj in SoundLoader._classes:
+    # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
+    # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
+    classobj.extensions()
+
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
@@ -720,13 +731,11 @@ class MessageBoxLabel(MDLabel):
 
 
 class MessageBox(Popup):
-
     def __init__(self, title, text, error=False, **kwargs):
-        label = MessageBoxLabel(text=text)
+        label = MessageBoxLabel(text=text, padding=("6dp", "0dp"))
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
         super().__init__(title=title, content=label, size_hint=(0.5, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
-        self.height += max(0, label.height - 18)
 
 
 class MDNavigationItemBase(MDNavigationItem):
@@ -840,15 +849,15 @@ class GameManager(ThemedApp):
         self.log_panels: typing.Dict[str, Widget] = {}
 
         # keep track of last used command to autofill on click
-        self.last_autofillable_command = "hint"
-        autofillable_commands = ("hint_location", "hint", "getitem")
+        self.last_autofillable_command = "!hint"
+        autofillable_commands = ("!hint_location", "!hint", "!getitem")
         original_say = ctx.on_user_say
 
         def intercept_say(text):
             text = original_say(text)
             if text:
                 for command in autofillable_commands:
-                    if text.startswith("!" + command):
+                    if text.startswith(command):
                         self.last_autofillable_command = command
                         break
             return text
@@ -1100,10 +1109,6 @@ class GameManager(ThemedApp):
     def update_hints(self):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
-
-    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
-    def open_settings(self, *largs):
-        pass
 
 
 class LogtoUI(logging.Handler):
