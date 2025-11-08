@@ -496,70 +496,74 @@ class WargrooveContext(CommonContext):
 
 async def game_watcher(ctx: WargrooveContext):
     while not ctx.exit_event.is_set():
-        if ctx.syncing == True:
-            sync_msg = [{'cmd': 'Sync'}]
-            if ctx.locations_checked:
-                sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
-            await ctx.send_msgs(sync_msg)
-            ctx.syncing = False
-        sending = []
-        victory = False
-        for root, dirs, files in os.walk(ctx.game_communication_path):
-            for file in files:
-                if file == "deathLinkSend" and ctx.has_death_link:
-                    with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
-                        failed_mission = f.read()
-                        if ctx.slot is not None:
-                            await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
-                    os.remove(os.path.join(ctx.game_communication_path, file))
-                if file.find("send") > -1:
-                    st = file.split("send", -1)[1]
-                    sending = sending+[(int(st))]
-                    os.remove(os.path.join(ctx.game_communication_path, file))
-                if file.find("victory") > -1:
-                    victory = True
-                    os.remove(os.path.join(ctx.game_communication_path, file))
-                if file == "unitSacrifice" or file == "unitSacrificeAI":
-                    if ctx.has_sacrifice_summon:
-                        stored_units_key = ctx.player_stored_units_key
-                        if file == "unitSacrificeAI":
-                            stored_units_key = ctx.ai_stored_units_key
+        try:
+            if ctx.syncing == True:
+                sync_msg = [{'cmd': 'Sync'}]
+                if ctx.locations_checked:
+                    sync_msg.append({"cmd": "LocationChecks", "locations": list(ctx.locations_checked)})
+                await ctx.send_msgs(sync_msg)
+                ctx.syncing = False
+            sending = []
+            victory = False
+            for root, dirs, files in os.walk(ctx.game_communication_path):
+                for file in files:
+                    if file == "deathLinkSend" and ctx.has_death_link:
                         with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
-                            unit_class = f.read()
-                            message = [{"cmd": 'Set', "key": stored_units_key,
-                                        "default": [],
-                                        "want_reply": True,
-                                        "operations": [{"operation": "add", "value": [unit_class[:64]]}]}]
-                            await ctx.send_msgs(message)
-                    os.remove(os.path.join(ctx.game_communication_path, file))
-                if file == "unitSummonRequestAI" or file == "unitSummonRequest":
-                    if ctx.has_sacrifice_summon:
-                        stored_units_key = ctx.player_stored_units_key
-                        if file == "unitSummonRequestAI":
-                            stored_units_key = ctx.ai_stored_units_key
-                        with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
-                            if stored_units_key in ctx.stored_data:
-                                stored_units = ctx.stored_data[stored_units_key]
-                                if stored_units is None:
-                                    stored_units = []
-                                wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
-                                if len(wg1_stored_units) != 0:
-                                    summoned_unit = random.choice(wg1_stored_units)
-                                    message = [{"cmd": 'Set', "key": stored_units_key,
-                                                "default": [],
-                                                "want_reply": True,
-                                                "operations": [{"operation": "remove", "value": summoned_unit[:64]}]}]
-                                    await ctx.send_msgs(message)
-                                    f.write(summoned_unit)
-                    os.remove(os.path.join(ctx.game_communication_path, file))
+                            failed_mission = f.read()
+                            if ctx.slot is not None:
+                                await ctx.send_death(f"{ctx.player_names[ctx.slot]} failed {failed_mission}")
+                        os.remove(os.path.join(ctx.game_communication_path, file))
+                    if file.find("send") > -1:
+                        st = file.split("send", -1)[1]
+                        sending = sending+[(int(st))]
+                        os.remove(os.path.join(ctx.game_communication_path, file))
+                    if file.find("victory") > -1:
+                        victory = True
+                        os.remove(os.path.join(ctx.game_communication_path, file))
+                    if file == "unitSacrifice" or file == "unitSacrificeAI":
+                        if ctx.has_sacrifice_summon:
+                            stored_units_key = ctx.player_stored_units_key
+                            if file == "unitSacrificeAI":
+                                stored_units_key = ctx.ai_stored_units_key
+                            with open(os.path.join(ctx.game_communication_path, file), 'r') as f:
+                                unit_class = f.read()
+                                message = [{"cmd": 'Set', "key": stored_units_key,
+                                            "default": [],
+                                            "want_reply": True,
+                                            "operations": [{"operation": "add", "value": [unit_class[:64]]}]}]
+                                await ctx.send_msgs(message)
+                        os.remove(os.path.join(ctx.game_communication_path, file))
+                    if file == "unitSummonRequestAI" or file == "unitSummonRequest":
+                        if ctx.has_sacrifice_summon:
+                            stored_units_key = ctx.player_stored_units_key
+                            if file == "unitSummonRequestAI":
+                                stored_units_key = ctx.ai_stored_units_key
+                            with open(os.path.join(ctx.game_communication_path, "unitSummonResponse"), 'w') as f:
+                                if stored_units_key in ctx.stored_data:
+                                    stored_units = ctx.stored_data[stored_units_key]
+                                    if stored_units is None:
+                                        stored_units = []
+                                    wg1_stored_units = [unit for unit in stored_units if unit in ctx.unit_classes]
+                                    if len(wg1_stored_units) != 0:
+                                        summoned_unit = random.choice(wg1_stored_units)
+                                        message = [{"cmd": 'Set', "key": stored_units_key,
+                                                    "default": [],
+                                                    "want_reply": True,
+                                                    "operations": [{"operation": "remove", "value": summoned_unit[:64]}]}]
+                                        await ctx.send_msgs(message)
+                                        f.write(summoned_unit)
+                        os.remove(os.path.join(ctx.game_communication_path, file))
 
-        ctx.locations_checked = sending
-        message = [{"cmd": 'LocationChecks', "locations": sending}]
-        await ctx.send_msgs(message)
-        if not ctx.finished_game and victory:
-            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            ctx.finished_game = True
-        await asyncio.sleep(0.1)
+            ctx.locations_checked = sending
+            message = [{"cmd": 'LocationChecks', "locations": sending}]
+            await ctx.send_msgs(message)
+            if not ctx.finished_game and victory:
+                await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                ctx.finished_game = True
+            await asyncio.sleep(0.1)
+
+        except Exception as err:
+            logger.warn("Exception in communication thread, a check may not have been sent: " + str(err))
 
 
 def print_error_and_close(msg):
