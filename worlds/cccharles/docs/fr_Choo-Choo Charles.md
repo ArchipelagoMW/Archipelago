@@ -9,8 +9,8 @@ Tous les débris ou n'importe quel objet ramassable au sol (excepté les Caisses
 ## Quel est le but de Choo-Choo Charles lorsqu'il est randomisé ?
 Vaincre le train démoniaque de l'Enfer nommé "Charles".
 
-## Comment le jeu est-il géré en mode Nightmare ?
-À sa mort, le joueur doit relancer une toute nouvelle partie, lui donnant la possibilité de rester en mode Nightmare ou de poursuivre la partie en mode Normal s'il considère la partie trop difficile.
+## Comment le jeu est-il géré en Mode Cauchemar ?
+À sa mort, le joueur doit relancer une toute nouvelle partie, lui donnant la possibilité de rester en Mode Cauchemar ou de poursuivre la partie en Mode Classique s'il considère la partie trop difficile.
 Dans ce cas, tous les objets collectés seront redistribués dans l'inventaire et les états des missions seront conservés.
 Le Deathlink n'est pas implémenté pour l'instant. Lorsque cette option sera disponible, un choix sera fourni pour :
 * Désactiver le Deathlink
@@ -29,7 +29,7 @@ La même méthode est utilisée pour les indices.
 Non, ceci est un travail en cours.
 Les options suivantes seront possibles une fois les implémentations disponibles :
 
-À n'importe quel moment, le joueur peu appuyer sur l'une des touches suivantes pour afficher la console dans le jeu :
+À n'importe quel moment, le joueur peut appuyer sur l'une des touches suivantes pour afficher la console dans le jeu :
 * "~" (qwerty)
 * "²" (azerty)
 * "F10"

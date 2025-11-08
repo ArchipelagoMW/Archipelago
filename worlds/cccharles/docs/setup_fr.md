@@ -4,7 +4,7 @@ Cette page est un guide simplifié de la [page du Mod Randomiseur Multiworld de 
 ## Exigences et Logiciels Nécessaires
 * Un ordinateur utilisant Windows (le Mod n'est pas utilisable sous Linux ou Mac)
 * [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-* Une copie légale du jeu original Choo-Choo Charles (peut être trouvé sur [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/)
+* Une copie légale du jeu original Choo-Choo Charles (peut être trouvé sur [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/))
 
 ## Installation du Mod pour jouer
 ### Téléchargement du Mod
