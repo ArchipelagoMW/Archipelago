@@ -613,7 +613,7 @@ class CrystalProjectWorld(World):
 
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
         return {
-            "apworldVersion": self.world_version,
+            "apworldVersion": self.world_version.as_simple_string(),
             "goal": self.options.goal.value,
             "clamshellGoalQuantity": self.get_goal_clamshells(),
             "extraClamshellsInPool": self.get_extra_clamshells(),
