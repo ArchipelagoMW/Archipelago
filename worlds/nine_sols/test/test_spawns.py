@@ -220,7 +220,7 @@ class TestGoSESpawn(NineSolsTestBase):
     }
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 20)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 19)
 
         self.assertReachableWith("GoS (East): Portal Below Root Node", [])
         self.assertReachableWith("GoS (Entry): Lower Left Caves", [])
@@ -235,7 +235,7 @@ class TestGoSESpawnAllShuffle(NineSolsTestBase):
     }
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 15)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 14)
 
         self.assertReachableWith("GoS (East): Portal Below Root Node", [])
         self.assertNotReachableWith("GoS (Entry): Lower Left Caves", [])  # because shuffle_ledge_grab
@@ -247,7 +247,7 @@ class TestGoSWSpawn(NineSolsTestBase):
     }
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 20)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 19)
 
         self.assertReachableWith("GoS (Entry): Near Greenhouse Roof", [])
         self.assertReachableWith("GoS (Entry): Lower Left Caves", [])

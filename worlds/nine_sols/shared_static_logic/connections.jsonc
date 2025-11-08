@@ -1016,8 +1016,10 @@
     { "from": "GoSE - Lower Exit", "to": "GoSY - Upper Right Exit", "requires": [] },
 
     // Grotto of Scriptures (East)
-    { "from": "GoSE - Lower Exit", "to": "GoSE - Spike Ball Hall Floor", "requires": [ { "item": "Cloud Leap" } ] },
-    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Lower Exit", "to": "GoSE - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
+    { "from": "GoSE - Above Lower Exit", "to": "GoSE - Lower Exit", "requires": [] },
+    { "from": "GoSE - Above Lower Exit", "to": "GoSE - Spike Ball Hall Floor", "requires": [] },
+    { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Above Lower Exit", "requires": [ { "item": "Cloud Leap" } ] },
     // on logic_level: ledge_storage, bow hover into parry vault might work, needs testing
     { "from": "GoSE - Spike Ball Hall Floor", "to": "GoSE - Spike Ball Hall Platforms", "requires": [
         { "item": "Cloud Leap" }, // the spike balls are slightly too large to single jump over

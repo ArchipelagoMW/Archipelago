@@ -1206,7 +1206,7 @@
     },
     {
         "address": 3102, "name": "GoS (East): Guarded By Phantom Ninja",
-        "region": "GoSE - Spike Ball Hall Floor", "requires": []
+        "region": "GoSE - Above Lower Exit", "requires": []
     },
     {
         "address": 3103, "name": "GoS (East): Spike Ball Hall Upper Right",
