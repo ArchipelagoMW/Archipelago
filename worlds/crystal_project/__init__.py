@@ -42,7 +42,6 @@ class CrystalProjectWeb(WebWorld):
 
 class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
-    apworld_version = "0.10.0"
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
     options: CrystalProjectOptions
@@ -612,15 +611,9 @@ class CrystalProjectWorld(World):
                 slot_data_removed_locations.append({"Id": location.code,
                                             "APRegion": location.ap_region})
 
-        # TODO: when 0.6.4 ships, get rid of this and just use the contents of the try directly in the return statement for apworld_version
-        try:
-            apworld_version = CrystalProjectWorld.apworld_version
-        except:
-            apworld_version = self.apworld_version
-
         # look into replacing this big chonky return block with self.options.as_dict() and then just adding the extras to the dict after
         return {
-            "apworldVersion": apworld_version,
+            "apworldVersion": CrystalProjectWorld.apworld_version,
             "goal": self.options.goal.value,
             "clamshellGoalQuantity": self.get_goal_clamshells(),
             "extraClamshellsInPool": self.get_extra_clamshells(),
