@@ -41,6 +41,7 @@
         { "item": "Wall Climb" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] },
+    { "from": "AFE - Lower Root Node", "to": "AFE - Statue Chest", "requires": [] }, // drop down
     { "from": "AFE - Right Exit", "to": "AFE - Baichang Arena", "requires": [] }, // one-way door
     { "from": "AFE - Baichang Arena", "to": "AFE - Lower Root Node", "requires": [
         { "item": "Cloud Leap" }
