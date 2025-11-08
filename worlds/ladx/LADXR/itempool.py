@@ -110,7 +110,7 @@ class ItemPool:
         for item, count in default_item_pool.items():
             self.add(item, count)
         goal = logic.world_setup.goal
-        if goal.startswith('='):
+        if isinstance(goal, str) and goal.startswith('='):
             instruments_to_remove = [i for i in range(1, 9) if str(i) not in goal]
             for i in instruments_to_remove:
                 self.remove(f"INSTRUMENT{i}")
