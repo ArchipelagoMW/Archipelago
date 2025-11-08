@@ -3,9 +3,9 @@
 ## ¿Dónde está la página de opciones?
 
 La Página de opciones de este juego contiene todas las opciones que necesitas para configurar y exportar un archivo de 
-configuración. El enlace a la página de opciones del jugador es el siguiente: [Página de opciones de SM64EX](../player-options).
+configuración. El enlace a la página de opciones es el siguiente: [Página de opciones de SM64EX](../player-options).
 
-## ¿Qué hace la randomización a este juego?
+## ¿Qué se randomiza en el juego?
 Las 120 Estrellas, los 3 Interruptores de las gorras, la Llave del Sótano y la Llave del Segundo Piso son ahora 
 localizaciones a revisar y pueden contener objetos de diferentes juegos, así
 como diferentes objetos de SM64.
@@ -15,9 +15,9 @@ abren cañones
 ## ¿Cuál es el objetivo de SM64EX cuando se randomiza?
 Como en la mayoría de los juegos de Mario, ¡Salvar a la princesa!
 
-## ¿Qué objetos pueden estar en el mundo de otro jugador?
-Cualquiera de las 120 Estrellas y las dos Llaves del Castillo. Además, los Interruptores de Cajas de Gorras también se 
-consideran "Objetos" y las cajas "!"  de cada gorra sólo estarán activas cuando alguien recoja el objeto 
+## ¿Qué objetos pueden estar en los mundos de otros jugadores?
+Cualquiera de las 120 Estrellas y las dos Llaves del Castillo. Además, los Interruptores de Cajas de las Gorras también
+se consideran "Objetos" y las cajas "!"  de cada gorra sólo estarán activas cuando alguien recoja el objeto 
 correspondiente del Interruptor de la gorra. (Si se añaden las cajas "!" amarillas o las bombas rojas tambien podrás 
 recivirlos de otros mundos)
 
