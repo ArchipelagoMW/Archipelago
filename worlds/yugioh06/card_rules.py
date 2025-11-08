@@ -301,7 +301,7 @@ def set_card_rules(world):
             ], 3, "each"),
         "TD38 Hamon, Lord of Striking Thunder":
             CardRule("Hamon, Lord of Striking Thunder", 3,
-                     additional_cards=countinous_spells()),
+                     additional_cards=continuous_spells()),
         "TD39 Raviel, Lord of Phantasms":
             CardRule(["Raviel, Lord of Phantasms", "Giant Germ"], 3, "each",
                      additional_cards=InnerCardRule([
