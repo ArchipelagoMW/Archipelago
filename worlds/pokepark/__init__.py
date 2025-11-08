@@ -423,10 +423,12 @@ class PokeparkWorld(World):
             "remove_hide_and_seek_power_comp_locations",
             "remove_errand_power_comp_locations",
             "remove_misc_power_comp_locations",
+            "remove_legendary_pokemon_power_comp_locations",
             "remove_power_training_locations",
             "remove_attraction_locations",
             "remove_attraction_prisma_locations",
-            "remove_pokemon_unlock_locations"
+            "remove_pokemon_unlock_locations",
+            "harder_enemy_ai"
 
         )
         return slot_data
