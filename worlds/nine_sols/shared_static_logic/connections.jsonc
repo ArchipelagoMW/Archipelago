@@ -14,7 +14,9 @@
 
     // Apeman Facility (Elevator)
     { "from": "AFE - Upper Root Node", "to": "AFE - Between Root Nodes", "requires": [ { "anyOf": [
-        { "item": "Grapple" }, { "item": "Air Dash" }, { "item": "Cloud Leap" }
+        { "item": "Grapple" },
+        [ { "item": "Air Dash" }, { "item": "Ledge Grab" } ],
+        { "item": "Cloud Leap" }
         // T-Dash works, but there's no enemy on this side. CS-Dash is too short.
         // Bow hover from the pagoda works, but you need AD or CL to get up there anyway.
         // Then the arena happens to require exactly Grapple OR (AD OR T-Dash) OR CL, so no change there.
