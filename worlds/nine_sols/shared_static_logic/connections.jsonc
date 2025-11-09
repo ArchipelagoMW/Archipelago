@@ -1385,7 +1385,7 @@
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
     ] }, // you could T-dash using the flying enemy, but it tends to knock you off the rope, and then you need
     // CL OR AD to reliably get back on the rope, so I'd rather leave this out of logic
-    { "from": "TRC - Lower Mutant Spike Room", "to": "TRC - Right Stairwell", "requires": [
+    { "from": "TRC - Lower Mutant Spike Room", "to": "TRC - Lower Right Stairwell", "requires": [
         { "item": "Super Mutant Buster" } // one-way mutant barrier
     ] },
     { "from": "TRC - Ground Floor & Exits", "to": "TRC - Lower Sickbay", "requires": [
@@ -1400,8 +1400,13 @@
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ] }
     ] }, // also a precise single jump I'd rather leave out of logic
     { "from": "TRC - Upper Levels", "to": "TRC - Root Node", "requires": [] }, // one-way door
-    { "from": "TRC - Upper Levels", "to": "TRC - Right Stairwell", "requires": [] }, // fall
-    { "from": "TRC - Right Stairwell", "to": "TRC - Ground Floor & Exits", "requires": [] }, // fall
+    { "from": "TRC - Upper Levels", "to": "TRC - Mutant Barrier Platform", "requires": [] }, // fall
+    { "from": "TRC - Upper Levels", "to": "TRC - Lower Right Stairwell", "requires": [] }, // fall
+    //{ "from": "TRC - Mutant Barrier Platform", "to": "TRC - Upper Levels", "requires": [] }, // on logic_level: ledge_storage, CL + LG + AD
+    { "from": "TRC - Lower Right Stairwell", "to": "TRC - Mutant Barrier Platform", "requires": [
+        [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
+    ] },
+    { "from": "TRC - Lower Right Stairwell", "to": "TRC - Ground Floor & Exits", "requires": [] }, // fall
     { "from": "TRC - Ground Floor & Exits", "to": "TRC - Dusk Guardian HQ Upper Levels", "requires": [
         { "item": "Super Mutant Buster" },
         // left node
@@ -1410,7 +1415,7 @@
         // center node
         { "region": "TRC - Upper Levels" }, // from root node level, jump left to the platform above this node
         // right node
-        { "region": "TRC - Right Stairwell" }
+        { "region": "TRC - Lower Right Stairwell" }
     ] }
     //{ "from": "TRC - Dusk Guardian HQ Upper Levels", "to": "TRC - Dusk Guardian HQ Lower Levels", "requires": [
     //    { "anyOf": [

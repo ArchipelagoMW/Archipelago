@@ -1610,11 +1610,11 @@
     },
     {
         "address": 3910, "name": "TRC: Behind Mutant Barrier",
-        "region": "TRC - Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
+        "region": "TRC - Mutant Barrier Platform", "requires": [ { "item": "Super Mutant Buster" } ]
     },
     {
         "address": 3911, "name": "TRC: Destroy Tendril Near Sol Statue",
-        "region": "TRC - Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
+        "region": "TRC - Lower Right Stairwell", "requires": [ { "item": "Super Mutant Buster" } ]
     },
     {
         "address": 3912, "name": "TRC: Chest Near Dusk Guardian HQ Screen",
