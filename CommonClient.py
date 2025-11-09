@@ -856,9 +856,9 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     server_url = urllib.parse.urlparse(address)
     if server_url.username:
-        ctx.username = server_url.username
+        ctx.username = urllib.parse.unquote(server_url.username)
     if server_url.password:
-        ctx.password = server_url.password
+        ctx.password = urllib.parse.unquote(server_url.password)
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""

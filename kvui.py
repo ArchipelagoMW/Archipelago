@@ -34,6 +34,17 @@ from kivy.config import Config
 Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
+
+# Workaround for an issue where importing kivy.core.window before loading sounds
+# will hang the whole application on Linux once the first sound is loaded.
+# kivymd imports kivy.core.window, so we have to do this before the first kivymd import.
+# No longer necessary when we switch to kivy 3.0.0, which fixes this issue.
+from kivy.core.audio import SoundLoader
+for classobj in SoundLoader._classes:
+    # The least invasive way to force a SoundLoader class to load its audio engine seems to be calling
+    # .extensions(), which e.g. in audio_sdl2.pyx then calls a function called "mix_init()"
+    classobj.extensions()
+
 from kivymd.uix.divider import MDDivider
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
@@ -1098,10 +1109,6 @@ class GameManager(ThemedApp):
     def update_hints(self):
         hints = self.ctx.stored_data.get(f"_read_hints_{self.ctx.team}_{self.ctx.slot}", [])
         self.hint_log.refresh_hints(hints)
-
-    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
-    def open_settings(self, *largs):
-        pass
 
 
 class LogtoUI(logging.Handler):

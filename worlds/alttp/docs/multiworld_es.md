@@ -88,9 +88,8 @@ Sólo hay que seguir estos pasos una vez.
 1. Comienza en la pantalla del menú principal de RetroArch.
 2. Ve a Ajustes --> Interfaz de usario. Configura "Mostrar ajustes avanzados" en ON.
 3. Ve a Ajustes --> Red. Pon "Comandos de red" en ON. (Se encuentra bajo Request Device 16.) Deja en 55355 el valor por defecto,
- el Puerto de comandos de red.
-
-![Captura de pantalla del ajuste Comandos de red](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   el Puerto de comandos de red. \
+   ![Captura de pantalla del ajuste Comandos de red](../../generic/docs/retroarch-network-commands-en.png)
 4. Ve a Menú principal --> Actualizador en línea --> Descargador de núcleos. Desplázate y selecciona "Nintendo - SNES /
    SFC (bsnes-mercury Performance)".
 
