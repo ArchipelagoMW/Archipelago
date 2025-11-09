@@ -117,7 +117,7 @@ class StartingJobQuantity(Range):
 
 class DisableSparks(Toggle):
     """
-    When enabled, sparks will completely ignore the player. Note that boss sparks will still chase the player incase Kill Bosses is turned on.
+    When enabled, sparks will completely ignore the player. Note that boss sparks will still chase the player if Kill Bosses is turned on.
     """
     display_name = "Disable Sparks"
 
