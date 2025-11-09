@@ -9,6 +9,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, Type, launch, icon_paths
 from .Common import *
 from . import ItemIconGuessing
 from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
@@ -27,6 +28,19 @@ from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptio
 from .Rom import LADXProcedurePatch, write_patch_data
 
 DEVELOPER_MODE = False
+
+
+def launch_client(*args):
+    from .LinksAwakeningClient import launch as ladx_launch
+    launch(ladx_launch, name=f"{LINKS_AWAKENING} Client", args=args)
+
+components.append(Component(f"{LINKS_AWAKENING} Client",
+                            func=launch_client,
+                            component_type=Type.CLIENT,
+                            icon=LINKS_AWAKENING,
+                            file_identifier=SuffixIdentifier('.apladx')))
+
+icon_paths[LINKS_AWAKENING] = "ap:worlds.ladx/assets/MarinV-3_small.png"
 
 
 class LinksAwakeningSettings(settings.Group):
@@ -71,7 +85,7 @@ class LinksAwakeningWebWorld(WebWorld):
         "setup/en",
         ["zig"]
     )]
-    theme = "dirt"
+    theme = "ocean"
     option_groups = ladx_option_groups
     options_presets: typing.Dict[str, typing.Dict[str, typing.Any]] = {
         "Keysanity": {
@@ -211,8 +225,6 @@ class LinksAwakeningWorld(World):
     def create_items(self) -> None:
         itempool = []
 
-        exclude = [item.name for item in self.multiworld.precollected_items[self.player]]
-
         self.prefill_original_dungeon = [ [], [], [], [], [], [], [], [], [] ]
         self.prefill_own_dungeons = []
         self.pre_fill_items = []
@@ -229,50 +241,46 @@ class LinksAwakeningWorld(World):
                 continue
             item_name = ladxr_item_to_la_item_name[ladx_item_name]
             for _ in range(count):
-                if item_name in exclude:
-                    exclude.remove(item_name)  # this is destructive. create unique list above
-                    self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
-                else:
-                    item = self.create_item(item_name)
+                item = self.create_item(item_name)
 
-                    if not self.options.tradequest and isinstance(item.item_data, TradeItemData):
-                        location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
-                        location.place_locked_item(item)
-                        location.show_in_spoiler = False
-                        continue
+                if not self.options.tradequest and isinstance(item.item_data, TradeItemData):
+                    location = self.multiworld.get_location(item.item_data.vanilla_location, self.player)
+                    location.place_locked_item(item)
+                    location.show_in_spoiler = False
+                    continue
 
-                    if isinstance(item.item_data, DungeonItemData):
-                        item_type = item.item_data.ladxr_id[:-1]
-                        shuffle_type = self.dungeon_item_types[item_type]
+                if isinstance(item.item_data, DungeonItemData):
+                    item_type = item.item_data.ladxr_id[:-1]
+                    shuffle_type = self.dungeon_item_types[item_type]
 
-                        if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT and shuffle_type == ShuffleInstruments.option_vanilla:
-                            # Find instrument, lock
-                            # TODO: we should be able to pinpoint the region we want, save a lookup table please
-                            found = False
-                            for r in self.multiworld.get_regions(self.player):
-                                if r.dungeon_index != item.item_data.dungeon_index:
+                    if item.item_data.dungeon_item_type == DungeonItemType.INSTRUMENT and shuffle_type == ShuffleInstruments.option_vanilla:
+                        # Find instrument, lock
+                        # TODO: we should be able to pinpoint the region we want, save a lookup table please
+                        found = False
+                        for r in self.multiworld.get_regions(self.player):
+                            if r.dungeon_index != item.item_data.dungeon_index:
+                                continue
+                            for loc in r.locations:
+                                if not isinstance(loc, LinksAwakeningLocation):
                                     continue
-                                for loc in r.locations:
-                                    if not isinstance(loc, LinksAwakeningLocation):
-                                        continue
-                                    if not isinstance(loc.ladxr_item, Instrument):
-                                        continue
-                                    loc.place_locked_item(item)
-                                    found = True
-                                    break
-                                if found:
-                                    break
-                        else:
-                            if shuffle_type == DungeonItemShuffle.option_original_dungeon:
-                                self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
-                                self.pre_fill_items.append(item)
-                            elif shuffle_type == DungeonItemShuffle.option_own_dungeons:
-                                self.prefill_own_dungeons.append(item)
-                                self.pre_fill_items.append(item)
-                            else:
-                                itempool.append(item)
+                                if not isinstance(loc.ladxr_item, Instrument):
+                                    continue
+                                loc.place_locked_item(item)
+                                found = True
+                                break
+                            if found:
+                                break
                     else:
-                        itempool.append(item)
+                        if shuffle_type == DungeonItemShuffle.option_original_dungeon:
+                            self.prefill_original_dungeon[item.item_data.dungeon_index - 1].append(item)
+                            self.pre_fill_items.append(item)
+                        elif shuffle_type == DungeonItemShuffle.option_own_dungeons:
+                            self.prefill_own_dungeons.append(item)
+                            self.pre_fill_items.append(item)
+                        else:
+                            itempool.append(item)
+                else:
+                    itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
 
