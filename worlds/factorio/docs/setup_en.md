@@ -92,7 +92,7 @@ appropriate to your operating system, and extract the folder to a convenient loc
 Archipelago is to place the extracted game folder into the `Archipelago` directory and rename it to just be "Factorio".
 
 
-![Factorio Download Options](/static/generated/docs/Factorio/factorio-download.png)
+![Factorio Download Options](factorio-download.png)
 
 Next, you should launch your Factorio Server by running `factorio.exe`, which is located at: `bin/x64/factorio.exe`. You
 will be asked to log in to your Factorio account using the same credentials you used on Factorio's website. After you
@@ -122,7 +122,7 @@ This allows you to host your own Factorio game.
    Archipelago if you chose to include it during the installation process.
 6. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
 
-![Factorio Client for Archipelago Connection Command](/static/generated/docs/Factorio/connect-to-ap-server.png)
+![Factorio Client for Archipelago Connection Command](connect-to-ap-server.png)
 
 7. Launch your Factorio Client
 8. Click on "Multiplayer" in the main menu
