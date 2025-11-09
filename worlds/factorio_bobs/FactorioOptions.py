@@ -520,7 +520,7 @@ class EnergyLink(Toggle):
 class AdditionalLogic(Choice):
     """Add additional logic that can make progression nicer"""
     display_name = "Additional logic"
-    default = 0
+    default = 1
 
     option_none = 0
     option_default = 1
