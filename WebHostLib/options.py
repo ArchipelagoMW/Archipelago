@@ -76,7 +76,7 @@ def filter_rst_to_html(text: str) -> str:
         lines = text.splitlines()
         text = lines[0] + "\n" + dedent("\n".join(lines[1:]))
 
-    return publish_parts(text, writer_name='html', settings=None, settings_overrides={
+    return publish_parts(text, writer='html', settings=None, settings_overrides={
         'raw_enable': False,
         'file_insertion_enabled': False,
         'output_encoding': 'unicode'
@@ -231,7 +231,7 @@ def generate_yaml(game: str):
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
-                if val != "0":
+                if val and val != "0":
                     options[key_parts[0]][key_parts[1]] = int(val)
                 del options[key]
 

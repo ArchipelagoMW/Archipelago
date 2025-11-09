@@ -32,7 +32,7 @@ if typing.TYPE_CHECKING:
 
 import colorama
 import websockets
-from websockets.extensions.permessage_deflate import PerMessageDeflate
+from websockets.extensions.permessage_deflate import PerMessageDeflate, ServerPerMessageDeflateFactory
 try:
     # ponyorm is a requirement for webhost, not default server, so may not be importable
     from pony.orm.dbapiprovider import OperationalError
@@ -49,6 +49,15 @@ from BaseClasses import ItemClassification
 
 min_client_version = Version(0, 5, 0)
 colorama.just_fix_windows_console()
+
+no_version = Version(0, 0, 0)
+assert isinstance(no_version, tuple)  # assert immutable
+
+server_per_message_deflate_factory = ServerPerMessageDeflateFactory(
+    server_max_window_bits=11,
+    client_max_window_bits=11,
+    compress_settings={"memLevel": 4},
+)
 
 
 def remove_from_list(container, value):
@@ -125,8 +134,31 @@ def get_saving_second(seed_name: str, interval: int = 60) -> int:
 
 
 class Client(Endpoint):
-    version = Version(0, 0, 0)
-    tags: typing.List[str]
+    __slots__ = (
+        "__weakref__",
+        "version",
+        "auth",
+        "team",
+        "slot",
+        "send_index",
+        "tags",
+        "messageprocessor",
+        "ctx",
+        "remote_items",
+        "remote_start_inventory",
+        "no_items",
+        "no_locations",
+        "no_text",
+    )
+
+    version: Version
+    auth: bool
+    team: int | None
+    slot: int | None
+    send_index: int
+    tags: list[str]
+    messageprocessor: ClientMessageProcessor
+    ctx: weakref.ref[Context]
     remote_items: bool
     remote_start_inventory: bool
     no_items: bool
@@ -135,6 +167,7 @@ class Client(Endpoint):
 
     def __init__(self, socket: "ServerConnection", ctx: Context) -> None:
         super().__init__(socket)
+        self.version = no_version
         self.auth = False
         self.team = None
         self.slot = None
@@ -142,6 +175,11 @@ class Client(Endpoint):
         self.tags = []
         self.messageprocessor = client_message_processor(ctx, self)
         self.ctx = weakref.ref(ctx)
+        self.remote_items = False
+        self.remote_start_inventory = False
+        self.no_items = False
+        self.no_locations = False
+        self.no_text = False
 
     @property
     def items_handling(self):
@@ -179,6 +217,7 @@ class Context:
                       "release_mode": str,
                       "remaining_mode": str,
                       "collect_mode": str,
+                      "countdown_mode": str,
                       "item_cheat": bool,
                       "compatibility": int}
     # team -> slot id -> list of clients authenticated to slot.
@@ -208,8 +247,8 @@ class Context:
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
-                 remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, compatibility: int = 2,
-                 log_network: bool = False, logger: logging.Logger = logging.getLogger()):
+                 countdown_mode: str = "auto", remaining_mode: str = "disabled", auto_shutdown: typing.SupportsFloat = 0, 
+                 compatibility: int = 2, log_network: bool = False, logger: logging.Logger = logging.getLogger()):
         self.logger = logger
         super(Context, self).__init__()
         self.slot_info = {}
@@ -242,6 +281,7 @@ class Context:
         self.release_mode: str = release_mode
         self.remaining_mode: str = remaining_mode
         self.collect_mode: str = collect_mode
+        self.countdown_mode: str = countdown_mode
         self.item_cheat = item_cheat
         self.exit_event = asyncio.Event()
         self.client_activity_timers: typing.Dict[
@@ -627,6 +667,7 @@ class Context:
                              "server_password": self.server_password, "password": self.password,
                              "release_mode": self.release_mode,
                              "remaining_mode": self.remaining_mode, "collect_mode": self.collect_mode,
+                             "countdown_mode": self.countdown_mode,
                              "item_cheat": self.item_cheat, "compatibility": self.compatibility}
 
         }
@@ -661,6 +702,7 @@ class Context:
             self.release_mode = savedata["game_options"]["release_mode"]
             self.remaining_mode = savedata["game_options"]["remaining_mode"]
             self.collect_mode = savedata["game_options"]["collect_mode"]
+            self.countdown_mode = savedata["game_options"].get("countdown_mode", self.countdown_mode)
             self.item_cheat = savedata["game_options"]["item_cheat"]
             self.compatibility = savedata["game_options"]["compatibility"]
 
@@ -1158,16 +1200,17 @@ def collect_hints(ctx: Context, team: int, slot: int, item: typing.Union[int, st
             found = location_id in ctx.location_checks[team, finding_player]
             entrance = ctx.er_hint_data.get(finding_player, {}).get(location_id, "")
 
+            hint_status = status  # Assign again because we're in a for loop
             if found:
-                status = HintStatus.HINT_FOUND
-            elif status is None:
+                hint_status = HintStatus.HINT_FOUND
+            elif hint_status is None:
                 if item_flags & ItemClassification.trap:
-                    status = HintStatus.HINT_AVOID
+                    hint_status = HintStatus.HINT_AVOID
                 else:
-                    status = HintStatus.HINT_PRIORITY
+                    hint_status = HintStatus.HINT_PRIORITY
 
             hints.append(
-                Hint(receiving_player, finding_player, location_id, item_id, found, entrance, item_flags, status)
+                Hint(receiving_player, finding_player, location_id, item_id, found, entrance, item_flags, hint_status)
             )
 
     return hints
@@ -1321,7 +1364,8 @@ class CommandProcessor(metaclass=CommandMeta):
                         argname += "=" + parameter.default
                 argtext += argname
                 argtext += " "
-            s += f"{self.marker}{command} {argtext}\n    {method.__doc__}\n"
+            doctext = '\n    '.join(inspect.getdoc(method).split('\n'))
+            s += f"{self.marker}{command} {argtext}\n    {doctext}\n"
         return s
 
     def _cmd_help(self):
@@ -1349,19 +1393,6 @@ class CommandProcessor(metaclass=CommandMeta):
 
 class CommonCommandProcessor(CommandProcessor):
     ctx: Context
-
-    def _cmd_countdown(self, seconds: str = "10") -> bool:
-        """Start a countdown in seconds"""
-        try:
-            timer = int(seconds, 10)
-        except ValueError:
-            timer = 10
-        else:
-            if timer > 60 * 60:
-                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
-
-        async_start(countdown(self.ctx, timer))
-        return True
 
     def _cmd_options(self):
         """List all current options. Warning: lists password."""
@@ -1503,6 +1534,23 @@ class ClientMessageProcessor(CommonCommandProcessor):
                     "Sorry, client collecting requires you to have beaten the game on this server."
                     " You can ask the server admin for a /collect")
                 return False
+
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
+        """Start a countdown in seconds"""
+        if self.ctx.countdown_mode == "disabled" or \
+           self.ctx.countdown_mode == "auto" and len(self.ctx.player_names) >= 30:
+            self.output("Sorry, client countdowns have been disabled on this server. You can ask the server admin for a /countdown")
+            return False
+        try:
+            timer = int(seconds, 10)
+        except ValueError:
+            timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
+        async_start(countdown(self.ctx, timer))
+        return True
 
     def _cmd_remaining(self) -> bool:
         """List remaining items in your game, but not their location or recipient"""
@@ -2259,6 +2307,19 @@ class ServerCommandProcessor(CommonCommandProcessor):
         self.output(f"Could not find player {player_name} to collect")
         return False
 
+    def _cmd_countdown(self, seconds: str = "10") -> bool:
+        """Start a countdown in seconds"""
+        try:
+            timer = int(seconds, 10)
+        except ValueError:
+            timer = 10
+        else:
+            if timer > 60 * 60:
+                raise ValueError(f"{timer} is invalid. Maximum is 1 hour.")
+
+        async_start(countdown(self.ctx, timer))
+        return True
+
     @mark_raw
     def _cmd_release(self, player_name: str) -> bool:
         """Send out the remaining items from a player to their intended recipients."""
@@ -2451,6 +2512,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
         elif value_type == str and option_name.endswith("password"):
             def value_type(input_text: str):
                 return None if input_text.lower() in {"null", "none", '""', "''"} else input_text
+        elif option_name == "countdown_mode":
+            valid_values = {"enabled", "disabled", "auto"}
+            if option_value.lower() not in valid_values:
+                self.output(f"Unrecognized {option_name} value '{option_value}', known: {', '.join(valid_values)}")
+                return False
         elif value_type == str and option_name.endswith("mode"):
             valid_values = {"goal", "enabled", "disabled"}
             valid_values.update(("auto", "auto_enabled") if option_name != "remaining_mode" else [])
@@ -2538,6 +2604,13 @@ def parse_args() -> argparse.Namespace:
                              goal:     !collect can be used after goal completion
                              auto-enabled: !collect is available and automatically triggered on goal completion
                              ''')
+    parser.add_argument('--countdown_mode', default=defaults["countdown_mode"], nargs='?',
+                        choices=['enabled', 'disabled', "auto"], help='''\
+                                Select !countdown Accessibility. (default: %(default)s)
+                                enabled:  !countdown is always available
+                                disabled: !countdown is never available
+                                auto:     !countdown is available for rooms with less than 30 players
+                                ''')
     parser.add_argument('--remaining_mode', default=defaults["remaining_mode"], nargs='?',
                         choices=['enabled', 'disabled', "goal"], help='''\
                              Select !remaining Accessibility. (default: %(default)s)
@@ -2603,7 +2676,7 @@ async def main(args: argparse.Namespace):
 
     ctx = Context(args.host, args.port, args.server_password, args.password, args.location_check_points,
                   args.hint_cost, not args.disable_item_cheat, args.release_mode, args.collect_mode,
-                  args.remaining_mode,
+                  args.countdown_mode, args.remaining_mode,
                   args.auto_shutdown, args.compatibility, args.log_network)
     data_filename = args.multidata
 
@@ -2638,7 +2711,13 @@ async def main(args: argparse.Namespace):
 
     ssl_context = load_server_cert(args.cert, args.cert_key) if args.cert else None
 
-    ctx.server = websockets.serve(functools.partial(server, ctx=ctx), host=ctx.host, port=ctx.port, ssl=ssl_context)
+    ctx.server = websockets.serve(
+        functools.partial(server, ctx=ctx),
+        host=ctx.host,
+        port=ctx.port,
+        ssl=ssl_context,
+        extensions=[server_per_message_deflate_factory],
+    )
     ip = args.host if args.host else Utils.get_public_ipv4()
     logging.info('Hosting game at %s:%d (%s)' % (ip, ctx.port,
                                                  'No password' if not ctx.password else 'Password: %s' % ctx.password))

@@ -97,7 +97,7 @@ def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
             "nag_messages",
             "ap_title_screen",
             "boots_controls",
-            # "stealing",
+            "stealing",
             "quickswap",
             "hard_mode",
             "low_hp_beep",
