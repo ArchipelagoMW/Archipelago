@@ -96,10 +96,10 @@ def set_location_rules(world: "EarthBoundWorld") -> None:
         set_rule(world.multiworld.get_location("Dusty Dunes - Mine Food Cart Slot 6", player), lambda state: state.has("Mining Permit", player))
         set_rule(world.multiworld.get_location("Dusty Dunes - Mine Food Cart Slot 7", player), lambda state: state.has("Mining Permit", player))
 
-        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 1", player), lambda state: state.has("Jar of Fly Honey", player))
-        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 2", player), lambda state: state.has("Jar of Fly Honey", player))
-        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 3", player), lambda state: state.has("Jar of Fly Honey", player))
-        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 4", player), lambda state: state.has("Jar of Fly Honey", player))
+        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 1", player), lambda state: state.has("Threed Tunnels Clear", player))
+        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 2", player), lambda state: state.has("Threed Tunnels Clear", player))
+        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 3", player), lambda state: state.has("Threed Tunnels Clear", player))
+        set_rule(world.multiworld.get_location("Saturn Valley Shop - Post-Belch Saturn Slot 4", player), lambda state: state.has("Threed Tunnels Clear", player))
 
         set_rule(world.multiworld.get_location("Deep Darkness - Arms Dealer Slot 1", player), lambda state: state.has("ATM Access", player))
         set_rule(world.multiworld.get_location("Deep Darkness - Arms Dealer Slot 2", player), lambda state: state.has("ATM Access", player))
