@@ -39,6 +39,15 @@ class FactorioRule(Rule):
         super().__init__(world)
 
 class TechRule(FactorioRule):
+    made_rules: dict[str, TechRule] = {}
+    def __new__(cls, world: "FactorioBobs", tech: str | Technology):
+        if tech is Technology:
+            tech = tech.name
+
+        if tech in cls.made_rules:
+            return cls.made_rules[tech]
+        return super(TechRule, cls).__new__(cls)
+
     def __init__(self, world: "FactorioBobs", tech: str | Technology):
         super().__init__(world)
         if type(tech) is str:
