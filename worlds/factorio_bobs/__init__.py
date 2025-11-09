@@ -207,6 +207,18 @@ class FactorioBobs(World):
                            )
             }
 
+        for complexity, rule in self.additional_logic.items():
+            if complexity <= self.options.max_science_pack.value + 1:
+                for tech in rule.needed_items():
+                    self.advancement_technologies.add(technology_table[tech])
+
+        # handle marking progressive techs as advancement
+        prog_add = set()
+        for tech in self.advancement_technologies:
+            if tech.name in tech_to_progressive_lookup:
+                prog_add.add(technology_table[tech_to_progressive_lookup[tech.name]])
+        self.advancement_technologies |= prog_add
+
     def create_regions(self):
         player = self.player
         random = self.random
@@ -662,12 +674,6 @@ class FactorioBobs(World):
         for item in needed_items:
             self.advancement_technologies |= item.all_unlocking_technologies()
 
-        # handle marking progressive techs as advancement
-        prog_add = set()
-        for tech in self.advancement_technologies:
-            if tech.name in tech_to_progressive_lookup:
-                prog_add.add(technology_table[tech_to_progressive_lookup[tech.name]])
-        self.advancement_technologies |= prog_add
 
     def create_item(self, name: str) -> FactorioItem:
         if name in tech_table:  # is a Technology
