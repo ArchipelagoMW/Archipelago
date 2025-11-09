@@ -263,7 +263,6 @@ def generate_itempool(world):
         ('Frog', 'Get Frog'),
         ('Missing Smith', 'Return Smith'),
         ('Floodgate', 'Open Floodgate'),
-        ('Agahnim 1', 'Beat Agahnim 1'),
         ('Flute Activation Spot', 'Activated Flute'),
         ('Capacity Upgrade Shop', 'Capacity Upgrade Shop')
     ]
