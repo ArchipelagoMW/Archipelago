@@ -22,6 +22,9 @@ class Rule:
     def optimize(self) -> Rule:
         return self
 
+    def needed_items(self) -> set[str]:
+        return set()
+
 
 class AndRule(Rule):
     def __init__(self, world: World, *rules: Rule):
@@ -42,6 +45,9 @@ class AndRule(Rule):
                 new_rule_set.add(optimized_rule)
         return AndRule(self.world, *new_rule_set)
 
+    def needed_items(self) -> set[str]:
+        return set(x for rule in self.rules for x in rule.needed_items())
+
 
 class OrRule(Rule):
     def __init__(self, world: World, *rules: Rule):
@@ -61,6 +67,9 @@ class OrRule(Rule):
             else:
                 new_rule_set.add(optimized_rule)
         return OrRule(self.world, *new_rule_set)
+
+    def needed_items(self) -> set[str]:
+        return set(x for rule in self.rules for x in rule.needed_items())
 
 class FactorioRule(Rule):
     def __init__(self, world: "FactorioBobs"):
@@ -86,6 +95,9 @@ class TechRule(FactorioRule):
 
     def eval(self, state: "CollectionState") -> bool:
         return state.has(self.tech_name, self.world.player)
+
+    def needed_items(self) -> set[str]:
+        return {self.tech_name,}
 
 class InternalItemRule(AndRule, FactorioRule):
     def __init__(self, world: "FactorioBobs", internal_item: InternalItem | str):
