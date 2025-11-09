@@ -2,18 +2,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import BaseClasses
 from worlds.AutoWorld import World
+from ..generic import Rules
+
+from .Technologies import Technology
 
 if TYPE_CHECKING:
-    from . import FactorioBobs, InternalItem, all_ingredients, Technology, Recipe, recipes
+    from . import FactorioBobs, InternalItem, all_ingredients, Recipe, recipes
 
 
 class Rule:
     def __init__(self, world: World):
         self.world = world
 
-    def eval(self, state: BaseClasses.CollectionState) -> bool:
+    def eval(self, state: Rules.CollectionRule) -> bool:
         raise NotImplementedError("You must implement this method")
 
     def optimize(self) -> Rule:
@@ -25,7 +27,7 @@ class AndRule(Rule):
         super().__init__(world)
         self.rules = rules
 
-    def eval(self, state: BaseClasses.CollectionState) -> bool:
+    def eval(self, state: Rules.CollectionRule) -> bool:
         return all(rule.eval(state) for rule in self.rules)
 
     def optimize(self) -> AndRule:
@@ -45,7 +47,7 @@ class OrRule(Rule):
         super().__init__(world)
         self.rules = rules
 
-    def eval(self, state: BaseClasses.CollectionState) -> bool:
+    def eval(self, state: Rules.CollectionRule) -> bool:
         return any(rule.eval(state) for rule in self.rules)
 
     def optimize(self) -> OrRule:
@@ -81,7 +83,7 @@ class TechRule(FactorioRule):
         else:
             self.tech_name = tech.name
 
-    def eval(self, state: BaseClasses.CollectionState) -> bool:
+    def eval(self, state: Rules.CollectionRule) -> bool:
         return state.has(self.tech_name, self.world.player)
 
 class InternalItemRule(AndRule, FactorioRule):
