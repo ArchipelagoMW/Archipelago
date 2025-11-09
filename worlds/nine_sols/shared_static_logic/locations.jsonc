@@ -334,8 +334,8 @@
     {
         "address": 706, "name": "CTH: Hack 2 Statues",
         "region": "CTH - Lower Exits", "requires": [
-            { "item": "Tai-Chi Kick" } // both to disable the statue here, and to reach the other statue
-            // statue in vents requires hacking AND (TCK AND (WC OR CL))
+            { "item": "Tai-Chi Kick" }, // to disable the statue down here
+            { "region": "CTH - Vents Statue" }
         ]
     },
 
