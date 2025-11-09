@@ -37,9 +37,9 @@ class AndRule(Rule):
             optimized_rule = rule.optimize()
             if isinstance(rule, AndRule):
                 rule: AndRule # makes the type checker happy
-                new_rule_set.union(optimized_rule.rules)
+                new_rule_set = new_rule_set.union(optimized_rule.rules)
             else:
-                new_rule_set.add(rule)
+                new_rule_set.add(optimized_rule)
         return AndRule(self.world, *new_rule_set)
 
 
@@ -57,9 +57,9 @@ class OrRule(Rule):
             optimized_rule = rule.optimize()
             if isinstance(rule, OrRule):
                 rule: OrRule # makes the type checker happy
-                new_rule_set.union(optimized_rule.rules)
+                new_rule_set = new_rule_set.union(optimized_rule.rules)
             else:
-                new_rule_set.add(rule)
+                new_rule_set.add(optimized_rule)
         return OrRule(self.world, *new_rule_set)
 
 class FactorioRule(Rule):
