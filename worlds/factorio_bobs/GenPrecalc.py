@@ -1,4 +1,5 @@
 import sys
+import timeit
 from pathlib import Path
 
 if __name__ == '__main__' and (__package__ is None or __package__ == ''):
@@ -19,6 +20,7 @@ import json
 from .InternalItem import all_ingredients
 
 def main():
+    start = timeit.default_timer()
     output = {}
     for name, item in all_ingredients.items():
         raw, best, tech, cat = item.eval()
@@ -27,6 +29,7 @@ def main():
                         "technologies": list(sorted(technology.name for technology in tech)),
                         "category": list(sorted(cat))}
     json.dump(output, open("data/precalc.json", "w"), indent=4, sort_keys=True)
+    print(f"Done in {(timeit.default_timer() - start):.2f} seconds")
 
 
 if __name__ == '__main__':
