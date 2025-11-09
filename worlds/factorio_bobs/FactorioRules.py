@@ -9,13 +9,17 @@ from .Technologies import Technology
 
 if TYPE_CHECKING:
     from . import FactorioBobs, InternalItem, all_ingredients, Recipe, recipes
+    import BaseClasses
+    CollectionState = BaseClasses.CollectionState
+else:
+    CollectionState = object
 
 
 class Rule:
     def __init__(self, world: World):
         self.world = world
 
-    def eval(self, state: Rules.CollectionRule) -> bool:
+    def eval(self, state: CollectionState) -> bool:
         raise NotImplementedError("You must implement this method")
 
     def optimize(self) -> Rule:
@@ -27,7 +31,7 @@ class AndRule(Rule):
         super().__init__(world)
         self.rules = rules
 
-    def eval(self, state: Rules.CollectionRule) -> bool:
+    def eval(self, state: CollectionState) -> bool:
         return all(rule.eval(state) for rule in self.rules)
 
     def optimize(self) -> AndRule:
@@ -47,7 +51,7 @@ class OrRule(Rule):
         super().__init__(world)
         self.rules = rules
 
-    def eval(self, state: Rules.CollectionRule) -> bool:
+    def eval(self, state: CollectionState) -> bool:
         return any(rule.eval(state) for rule in self.rules)
 
     def optimize(self) -> OrRule:
