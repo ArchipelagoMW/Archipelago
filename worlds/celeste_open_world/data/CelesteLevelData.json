@@ -37055,6 +37055,10 @@
                                 {
                                     "dest": "north-west",
                                     "rule": [ [ "double_dash_refills", "springs", "dash_switches" ] ]
+                                },
+                                {
+                                    "dest": "south-east-door",
+                                    "rule": []
                                 }
                             ]
                         },
@@ -37080,10 +37084,6 @@
                                 },
                                 {
                                     "dest": "north-east-door",
-                                    "rule": []
-                                },
-                                {
-                                    "dest": "south-east-door",
                                     "rule": []
                                 },
                                 {

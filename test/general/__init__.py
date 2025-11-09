@@ -1,6 +1,6 @@
 from argparse import Namespace
 import random
-from typing import List, Optional, Tuple, Type, Union
+from typing import Any, List, Optional, Tuple, Type
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from Generate import get_seed_name
@@ -33,8 +33,8 @@ def setup_solo_multiworld(
     return setup_multiworld(world_type, steps, seed)
 
 
-def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple[str, ...] = gen_steps,
-                     seed: Optional[int] = None) -> MultiWorld:
+def setup_multiworld(worlds: list[type[World]] | type[World], steps: tuple[str, ...] = gen_steps,
+                     seed: int | None = None, options: dict[str, Any] | list[dict[str, Any]] = None) -> MultiWorld:
     """
     Creates a multiworld with a player for each provided world type, allowing duplicates, setting default options, and
     calling the provided gen steps.
@@ -42,10 +42,17 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     :param worlds: Type/s of worlds to generate a multiworld for
     :param steps: Gen steps that should be called before returning. Default calls through pre_fill
     :param seed: The seed to be used when creating this multiworld
+    :param options: Options to set on each world. If just one dict of options is passed, it will be used for all worlds.
     :return: The generated multiworld
     """
     if not isinstance(worlds, list):
         worlds = [worlds]
+
+    if options is None:
+        options = [{}] * len(worlds)
+    elif not isinstance(options, list):
+        options = [options] * len(worlds)
+
     players = len(worlds)
     multiworld = MultiWorld(players)
     multiworld.game = {player: world_type.game for player, world_type in enumerate(worlds, 1)}
@@ -54,10 +61,10 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     random.seed(multiworld.seed)
     multiworld.seed_name = get_seed_name(random)  # only called to get the same RNG progression as Generate.py
     args = Namespace()
-    for player, world_type in enumerate(worlds, 1):
+    for player, (world_type, option_overrides) in enumerate(zip(worlds, options), 1):
         for key, option in world_type.options_dataclass.type_hints.items():
             updated_options = getattr(args, key, {})
-            updated_options[player] = option.from_any(option.default)
+            updated_options[player] = option.from_any(option_overrides.get(key, option.default))
             setattr(args, key, updated_options)
     multiworld.set_options(args)
     multiworld.state = CollectionState(multiworld)

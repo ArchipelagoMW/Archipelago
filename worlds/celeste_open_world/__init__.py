@@ -1,5 +1,6 @@
 from copy import deepcopy
 import math
+from typing import TextIO
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Region, Tutorial
 from Utils import visualize_regions
@@ -40,6 +41,8 @@ class CelesteOpenWorld(World):
     web = CelesteOpenWebWorld()
     options_dataclass = CelesteOptions
     options: CelesteOptions
+
+    apworld_version = 10005
 
     level_data: dict[str, Level] = load_logic_data()
 
@@ -251,7 +254,7 @@ class CelesteOpenWorld(World):
 
     def fill_slot_data(self):
         return {
-            "apworld_version": 10004,
+            "apworld_version": self.apworld_version,
             "min_mod_version": 10000,
 
             "death_link": self.options.death_link.value,
@@ -291,6 +294,13 @@ class CelesteOpenWorld(World):
             "require_cassettes": self.options.require_cassettes.value,
             "chosen_poem": self.random.randint(0, 119),
         }
+
+    @classmethod
+    def stage_write_spoiler_header(cls, multiworld: MultiWorld, spoiler_handle: TextIO):
+        major: int = cls.apworld_version // 10000
+        minor: int = (cls.apworld_version % 10000) // 100
+        bugfix: int = (cls.apworld_version % 100)
+        spoiler_handle.write(f"\nCeleste (Open World) APWorld v{major}.{minor}.{bugfix}\n")
 
     def output_active_traps(self) -> dict[int, int]:
         trap_data = {}
