@@ -16,6 +16,9 @@ class Rule:
     def eval(self, state: BaseClasses.CollectionState) -> bool:
         raise NotImplementedError("You must implement this method")
 
+    def optimize(self) -> Rule:
+        return self
+
 
 class AndRule(Rule):
     def __init__(self, world: World, *rules: Rule):
@@ -25,6 +28,17 @@ class AndRule(Rule):
     def eval(self, state: BaseClasses.CollectionState) -> bool:
         return all(rule.eval(state) for rule in self.rules)
 
+    def optimize(self) -> AndRule:
+        new_rule_set = set()
+        for rule in self.rules:
+            optimized_rule = rule.optimize()
+            if isinstance(rule, AndRule):
+                rule: AndRule # makes the type checker happy
+                new_rule_set.union(optimized_rule.rules)
+            else:
+                new_rule_set.add(rule)
+        return AndRule(self.world, *new_rule_set)
+
 
 class OrRule(Rule):
     def __init__(self, world: World, *rules: Rule):
@@ -33,6 +47,17 @@ class OrRule(Rule):
 
     def eval(self, state: BaseClasses.CollectionState) -> bool:
         return any(rule.eval(state) for rule in self.rules)
+
+    def optimize(self) -> OrRule:
+        new_rule_set = set()
+        for rule in self.rules:
+            optimized_rule = rule.optimize()
+            if isinstance(rule, OrRule):
+                rule: OrRule # makes the type checker happy
+                new_rule_set.union(optimized_rule.rules)
+            else:
+                new_rule_set.add(rule)
+        return OrRule(self.world, *new_rule_set)
 
 class FactorioRule(Rule):
     def __init__(self, world: "FactorioBobs"):
