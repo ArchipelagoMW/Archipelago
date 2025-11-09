@@ -1445,8 +1445,9 @@
     // Empyrean Dist. (Living Area)
     {
         "address": 3601, "name": "ED (Living Area): Above Right Elevator",
-        "region": "EDLA - Root Node & Lower Elevator", "requires": [ { "item": "Cloud Leap" } ]
-        // we can't use LS here because you need LG to get onto the elevator in the first place
+        "region": "EDLA - East Building Interior Part 1", "requires": [ { "item": "Cloud Leap" } ]
+        // feels weird to call this "Interior", but you do need to climb up to the right elevator to get here
+        // we can't use LS to replace CL here because you would need LG to get onto the elevator in the first place
     },
     {
         "address": 3602, "name": "ED (Living Area): Retrieve Chip From Shanhai 9000",
