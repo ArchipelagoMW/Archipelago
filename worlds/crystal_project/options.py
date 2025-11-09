@@ -352,7 +352,7 @@ class ItemInfoMode(Choice):
     """
     For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
 
-    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back later.
+    For Earned, all treasure and store icons on the map will display as mimics until you collect 50% of the checks in your seed.
 
     For Obscured, all treasure and store icons on the map will display as mimics permanently.
     If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
