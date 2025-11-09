@@ -9,6 +9,10 @@ on:
   repository_dispatch:
     types: [trigger-build-apworld]
 
+concurrency:
+  group: "build-release-apworld"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: windows-latest
@@ -73,29 +77,60 @@ jobs:
           echo "✅ Relevant changes detected — proceed with build/release."
           echo "should_build=true" >> $GITHUB_OUTPUT
 
-      - name: Run PowerShell build script
+      - name: Set up Python
         if: steps.changes.outputs.should_build == 'true'
-        shell: pwsh
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        if: steps.changes.outputs.should_build == 'true'
         run: |
-          $ErrorActionPreference = "Stop"
-          $rootDir = "${{ github.workspace }}"
-          Set-Location $rootDir
+          python -m pip install --upgrade pip setuptools wheel factorio-rcon-py nest-asyncio pyinstaller pillow requests zstandard pyevermizer dolphin-memory-engine Pymem --disable-pip-version-check || true  # ignore failures for other worlds
+          pip install -r requirements.txt
 
-          $worldFolder = Join-Path $rootDir "worlds/rac3"
-          $zipPath = Join-Path $rootDir "rac3.zip"
-          $apworldPath = Join-Path $rootDir "rac3.apworld"
-
-          Write-Host "🧹 Cleaning old build artifacts..."
-          if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-          if (Test-Path $apworldPath) { Remove-Item $apworldPath -Force }
-
-          Write-Host "📦 Creating zip from: $worldFolder"
-          Compress-Archive -Path $worldFolder -DestinationPath $zipPath -Force
-
-          Write-Host "🔄 Renaming rac3.zip → rac3.apworld..."
-          Rename-Item -Path $zipPath -NewName "rac3.apworld"
-
-          Write-Host "✅ Done! Output: $apworldPath"
+      - name: Build .apworld for rac3
+        if: steps.changes.outputs.should_build == 'true'
+        shell: bash
+        run: |
+          echo "📦 Building rac3.apworld..."
+          python3 - <<'EOF'
+          import sys, os, zipfile
+          sys.stdout.reconfigure(encoding='utf-8')
+      
+          sys.path.insert(0, os.path.abspath("."))  # Ensure local imports work
+          from worlds import Files
+          from Utils import Version
+      
+          class MyWorldContainer(Files.APWorldContainer):
+              def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+                  # Write archipelago.json at root (handled by base class)
+                  super().write_contents(opened_zipfile)
+      
+                  # Include all files from world_folder inside rac3/
+                  for root, dirs, files in os.walk(self.world_folder):
+                      for file in files:
+                          if file.endswith(".pyc") or file == "archipelago.json":
+                              continue
+                          full_path = os.path.join(root, file)
+                          rel_path = os.path.relpath(full_path, self.world_folder)
+                          zip_path = os.path.join("rac3", rel_path).replace("\\", "/")  # POSIX paths
+                          opened_zipfile.write(full_path, zip_path)
+      
+          src_folder = "worlds/rac3"
+          dest_file = "rac3.apworld"
+      
+          # Create container
+          world = MyWorldContainer(dest_file)
+          world.game = "RaC3"
+          world.world_folder = src_folder
+          world.world_version = Version(1, 0, 0)
+          world.minimum_ap_version = Version(0, 5, 0)
+      
+          # Write the .apworld
+          world.write()
+          print(f"Successfully created {dest_file} with all files under rac3/")
+          EOF
 
       - name: Upload build artifact
         if: steps.changes.outputs.should_build == 'true'
@@ -121,6 +156,9 @@ jobs:
         with:
           name: rac3.apworld
           path: .
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Determine next semantic version
         id: semver
@@ -148,7 +186,6 @@ jobs:
 
           # Strip leading "v" if present
           tag_stripped="${latest_tag#v}"
-
           # Split version safely (defaults if missing)
           IFS='.' read -r major minor patch <<< "$tag_stripped"
           major=${major:-0}
@@ -168,6 +205,72 @@ jobs:
           echo "✅ Next version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
+
+      - name: Add manifest to .apworld
+        shell: bash
+        run: |
+          set -e
+          echo "🧾 Updating archipelago.json manifest..."
+
+          version="${{ steps.semver.outputs.version }}"
+          version="${version#v}"
+          version="${version%-pre}"
+
+          # Get authors from git history
+          git fetch origin ${{ needs.build.outputs.branch }}
+          authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
+
+          # Add custom authors. Example: ("NewContributor" "AnotherDev")
+          custom_authors=("1theory")
+          for a in "${custom_authors[@]}"; do
+            if ! echo "$authors" | grep -Fxq "$a"; then
+              authors="${authors}"$'\n'"${a}"
+            fi
+          done
+
+          # Default if no authors found
+          if [ -z "$authors" ]; then
+            authors="Unknown"
+          fi
+
+          # Convert authors to JSON array
+          authors_json=$(echo "$authors" | jq -R . | jq -s .)
+
+          # Extract AP version
+          ap_version=$(grep '^__version__ = ' Utils.py | cut -d'"' -f2)
+          echo "Maximum AP version: $ap_version"
+
+          # Unzip the built .apworld
+          mkdir -p tmp_unzip
+          unzip -o -q rac3.apworld -d tmp_unzip
+
+          # Update only root archipelago.json
+          jq --arg world_version "$version" \
+             --argjson authors "$authors_json" \
+             --arg min_ap "0.6.3" \
+             --arg max_ap "$ap_version" \
+             '.world_version = $world_version
+              | .authors = $authors
+              | .minimum_ap_version = $min_ap
+              | .maximum_ap_version = $max_ap' \
+             tmp_unzip/archipelago.json > tmp_unzip/archipelago.json.tmp
+
+          # Replace the old file with the updated one
+          mv tmp_unzip/archipelago.json.tmp tmp_unzip/archipelago.json
+
+          # Remove nested archipelago.json but keep the root one
+          find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
+          echo "🗑️ Removed extra archipelago.json"
+
+          # Rezip the .apworld
+          cd tmp_unzip
+          zip -qr ../rac3.apworld *
+          cd ..
+
+          echo "✅ Updated archipelago.json at root"
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -194,7 +297,6 @@ jobs:
 
           echo "🔍 All recent tags (descending):"
           git tag --sort=-v:refname | head -n 10 || true
-
           # Get previous tag (latest before new_tag)
           if [[ "$branch" == "main" ]]; then
             # previous stable release (ignore -pre)
@@ -215,7 +317,6 @@ jobs:
           echo "Previous tag: ${prev_tag:-<none>}"
           echo "New tag: $new_tag"
           echo "Changelog link: $changelog"
-
           # Only show commits between the two tags
           if [[ -n "$prev_tag" ]]; then
             commit_list=$(git log "${prev_tag}..${new_tag}" --pretty=format:"- %s (%h)")
