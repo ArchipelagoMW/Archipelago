@@ -315,27 +315,20 @@ class FactorioBobs(World):
         player = self.player
         shapes = get_shapes(self)
 
-        for ingredient_name in self.options.max_science_pack.get_allowed_packs():
-            if ingredient_name == "automation-science-pack":
+        science_packs = self.options.max_science_pack.get_ordered_science_packs()[:self.options.max_science_pack.value+1]
+        for complexity, science_pack in enumerate(science_packs, start=1):
+            if science_pack == "automation-science-pack":
                 continue
+            location = self.get_location(f"Automate {science_pack}")
+            science_pack_item: InternalItem = self.get_internal_item(science_pack)
 
-            location = self.get_location(f"Automate {ingredient_name}")
-            ingredient: InternalItem = self.get_internal_item(ingredient_name)
+            if complexity in self.additional_logic:
+                rule = AndRule(self, InternalItemRule(self, science_pack_item), self.additional_logic[complexity])
+            else:
+                rule = InternalItemRule(self, science_pack_item)
 
-            # if self.options.recipe_ingredients:
-            #     custom_recipe = self.custom_recipes[ingredient_name]
-            #
-            #     location.access_rule = lambda state: \
-            #         (not technology_table[ingredient.name].unlocks or state.has(ingredient.name, player)) and \
-            #         all(state.has(technology.name, player) for technology in ingredient.all_unlocking_technologies())
-            #     print(f"{ingredient}: {ingredient.all_unlocking_technologies()}")
-            #
-            # else:
-            #     location.access_rule = lambda state: \
-            #         all(state.has(technology.name, player) for technology in ingredient.all_unlocking_technologies())
-            Rules.set_rule(location, lambda state, items=frozenset(ingredient.all_unlocking_technologies()): all(state.has(technology.name, player)
-                                                       for technology in items))
-            self.logger.debug(f"{ingredient_name}: {frozenset(ingredient.all_unlocking_technologies())}")
+            optimized_rule = rule.optimize()
+            Rules.set_rule(location, optimized_rule.eval)
 
         for location in self.science_locations:
             Rules.set_rule(location, lambda state: True)
