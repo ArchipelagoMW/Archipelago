@@ -115,6 +115,12 @@ class StartingJobQuantity(Range):
     range_end = 6
     default = 6
 
+class DisableSparks(Toggle):
+    """
+    When enabled, sparks will completely ignore the player. Note that boss sparks will still chase the player incase Kill Bosses is turned on.
+    """
+    display_name = "Disable Sparks"
+
 class KillBossesMode(Toggle):
     """
     When enabled, defeating a boss will provide checks.
@@ -401,6 +407,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     extra_clamshells_in_pool: ExtraClamshellsInPool
     job_rando: JobRando
     starting_job_quantity: StartingJobQuantity
+    disable_sparks: DisableSparks
     kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
@@ -428,7 +435,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
