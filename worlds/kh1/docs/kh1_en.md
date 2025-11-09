@@ -102,7 +102,7 @@ You need at least one magic spell before you can use summons.
 
 <h3 style="text-transform:none";>Why am I not sending or receiving any items despite being connected to the server?</h3>
 
-Make sure you are using the KH1 Client and not the Text Client. You will need to open the client manually, either via the Archipelago Launcher or by opening "ArchipelagoKH1Client".
+Make sure you are using the KH1 Client and not the Text Client. You will need to open the client manually via the Archipelago Launcher.
 
 <h3 style="text-transform:none";>Why don't I have any worlds on the world map?</h3>
 
