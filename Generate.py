@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse():
+def mystery_argparse(argv: list[str] | None = None):
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -57,7 +57,7 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.skip_output and args.spoiler_only:
         parser.error("Cannot mix --skip_output and --spoiler_only")
@@ -189,6 +189,11 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                            elif key == "triggers":
+                                if "triggers" not in yaml[category_name]:
+                                    yaml[category_name][key] = []
+                                for trigger in option:
+                                    yaml[category_name][key].append(trigger)
                             else:
                                 yaml[category_name][key] = option
 
@@ -384,6 +389,8 @@ def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
