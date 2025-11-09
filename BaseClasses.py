@@ -495,6 +495,10 @@ class MultiWorld():
         self.state.collect(item, True)
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
+        if location.item is not None:
+            raise Exception(f"{location} is already filled with {item}")
+        if item.location is not None:
+            raise Exception(f"{item} is already placed at {location}")
         location.item = item
         item.location = location
         if collect:
