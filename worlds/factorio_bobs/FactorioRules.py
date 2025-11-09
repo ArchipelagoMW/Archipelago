@@ -5,10 +5,11 @@ from typing import TYPE_CHECKING
 from worlds.AutoWorld import World
 from ..generic import Rules
 
-from .Technologies import Technology
+from .Technologies import Technology, base_technology_table
+from .InternalItem import all_ingredients, recipes
 
 if TYPE_CHECKING:
-    from . import FactorioBobs, InternalItem, all_ingredients, Recipe, recipes
+    from . import FactorioBobs, InternalItem, Recipe
     import BaseClasses
     CollectionState = BaseClasses.CollectionState
 else:
@@ -82,7 +83,7 @@ class TechRule(FactorioRule):
     def __init__(self, world: "FactorioBobs", tech: str | Technology):
         super().__init__(world)
         if type(tech) is str:
-            assert tech in self.world.technologies, f"{tech} is not a valid tech for rules"
+            assert tech in base_technology_table, f"{tech} is not a valid tech for rules"
             self.tech_name = tech
         else:
             self.tech_name = tech.name
