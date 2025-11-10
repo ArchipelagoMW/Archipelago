@@ -20,9 +20,8 @@ RetroArch 1.9.x will not work, as it is older than 1.10.3.
    - "Sega - MS/GG/MD/CD (Genesis Plus GX)
 3. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
 4. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
-   Network Command Port at 55355.
-
-![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Network Command Port at 55355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
 
 ### Linux Setup
 

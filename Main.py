@@ -1,10 +1,11 @@
 import collections
+from collections.abc import Mapping
 import concurrent.futures
 import logging
 import os
-import pickle
 import tempfile
 import time
+from typing import Any
 import zipfile
 import zlib
 
@@ -14,7 +15,7 @@ from Fill import FillError, balance_multiworld_progression, distribute_items_res
     parse_planned_blocks, distribute_planned_blocks, resolve_early_locations_for_planned
 from NetUtils import convert_to_base_types
 from Options import StartInventoryPool
-from Utils import __version__, output_path, version_tuple
+from Utils import __version__, output_path, restricted_dumps, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
 from worlds.generic.Rules import exclusion_rules, locality_rules
@@ -36,7 +37,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger = logging.getLogger()
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
-    multiworld.plando_options = args.plando_options
+    multiworld.plando_options = args.plando
     multiworld.game = args.game.copy()
     multiworld.player_name = args.name.copy()
     multiworld.sprite = args.sprite.copy()
@@ -53,12 +54,17 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
-    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
-    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    world_classes = AutoWorld.AutoWorldRegister.world_types.values()
+
+    version_count = max(len(cls.world_version.as_simple_string()) for cls in world_classes)
+    item_count = len(str(max(len(cls.item_names) for cls in world_classes)))
+    location_count = len(str(max(len(cls.location_names) for cls in world_classes)))
 
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f" {name:{longest_name}}: Items: {len(cls.item_names):{item_count}} | "
+            logger.info(f" {name:{longest_name}}: "
+                        f"v{cls.world_version.as_simple_string():{version_count}} | "
+                        f"Items: {len(cls.item_names):{item_count}} | "
                         f"Locations: {len(cls.location_names):{location_count}}")
 
     del item_count, location_count
@@ -93,6 +99,15 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     del local_early
             del early
 
+        # items can't be both local and non-local, prefer local
+        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
+        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
+
+    # Clear non-applicable local and non-local items.
+    if multiworld.players == 1:
+        multiworld.worlds[1].options.non_local_items.value = set()
+        multiworld.worlds[1].options.local_items.value = set()
+
     logger.info('Creating MultiWorld.')
     AutoWorld.call_all(multiworld, "create_regions")
 
@@ -100,12 +115,6 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     AutoWorld.call_all(multiworld, "create_items")
 
     logger.info('Calculating Access Rules.')
-
-    for player in multiworld.player_ids:
-        # items can't be both local and non-local, prefer local
-        multiworld.worlds[player].options.non_local_items.value -= multiworld.worlds[player].options.local_items.value
-        multiworld.worlds[player].options.non_local_items.value -= set(multiworld.local_early_items[player])
-
     AutoWorld.call_all(multiworld, "set_rules")
 
     for player in multiworld.player_ids:
@@ -126,11 +135,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
         multiworld.worlds[player].options.priority_locations.value -= world_excluded_locations
 
     # Set local and non-local item rules.
+    # This function is called so late because worlds might otherwise overwrite item_rules which are how locality works
     if multiworld.players > 1:
         locality_rules(multiworld)
-    else:
-        multiworld.worlds[1].options.non_local_items.value = set()
-        multiworld.worlds[1].options.local_items.value = set()
 
     multiworld.plando_item_blocks = parse_planned_blocks(multiworld)
 
@@ -174,7 +181,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     multiworld.link_items()
 
-    if any(multiworld.item_links.values()):
+    if any(world.options.item_links for world in multiworld.worlds.values()):
         multiworld._all_state = None
 
     logger.info("Running Item Plando.")
@@ -239,11 +246,13 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
             def write_multidata():
                 import NetUtils
                 from NetUtils import HintStatus
-                slot_data = {}
-                client_versions = {}
-                games = {}
-                minimum_versions = {"server": AutoWorld.World.required_server_version, "clients": client_versions}
-                slot_info = {}
+                slot_data: dict[int, Mapping[str, Any]] = {}
+                client_versions: dict[int, tuple[int, int, int]] = {}
+                games: dict[int, str] = {}
+                minimum_versions: NetUtils.MinimumVersions = {
+                    "server": AutoWorld.World.required_server_version, "clients": client_versions
+                }
+                slot_info: dict[int, NetUtils.NetworkSlot] = {}
                 names = [[name for player, name in sorted(multiworld.player_name.items())]]
                 for slot in multiworld.player_ids:
                     player_world: AutoWorld.World = multiworld.worlds[slot]
@@ -258,7 +267,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                                                            group_members=sorted(group["players"]))
                 precollected_items = {player: [item.code for item in world_precollected if type(item.code) == int]
                                       for player, world_precollected in multiworld.precollected_items.items()}
-                precollected_hints = {player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))}
+                precollected_hints: dict[int, set[NetUtils.Hint]] = {
+                    player: set() for player in range(1, multiworld.players + 1 + len(multiworld.groups))
+                }
 
                 for slot in multiworld.player_ids:
                     slot_data[slot] = multiworld.worlds[slot].fill_slot_data()
@@ -315,7 +326,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     if current_sphere:
                         spheres.append(dict(current_sphere))
 
-                multidata = {
+                multidata: NetUtils.MultiData | bytes = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
@@ -325,7 +336,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "er_hint_data": er_hint_data,
                     "precollected_items": precollected_items,
                     "precollected_hints": precollected_hints,
-                    "version": tuple(version_tuple),
+                    "version": (version_tuple.major, version_tuple.minor, version_tuple.build),
                     "tags": ["AP"],
                     "minimum_versions": minimum_versions,
                     "seed_name": multiworld.seed_name,
@@ -333,12 +344,13 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     "datapackage": data_package,
                     "race_mode": int(multiworld.is_race),
                 }
+                # TODO: change to `"version": version_tuple` after getting better serialization
                 AutoWorld.call_all(multiworld, "modify_multidata", multidata)
 
                 for key in ("slot_data", "er_hint_data"):
                     multidata[key] = convert_to_base_types(multidata[key])
 
-                multidata = zlib.compress(pickle.dumps(multidata), 9)
+                multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format

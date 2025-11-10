@@ -33,6 +33,10 @@ description: {{ yaml_dump("Default %s Template" % game) }}
 game: {{ yaml_dump(game) }}
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
+  {%- if world_version != "0.0.0" %}
+  game:
+    {{ yaml_dump(game) }}: {{ world_version }} # Version of the world required for this yaml to work as expected.
+  {%- endif %}
 
 {%- macro range_option(option) %}
     # You can define additional values between the minimum and maximum values.
@@ -46,7 +50,9 @@ requires:
 
 {{ yaml_dump(game) }}:
   {%- for group_name, group_options in option_groups.items() %}
-  # {{ group_name }}
+  ##{% for _ in group_name %}#{% endfor %}##
+  # {{ group_name }} #
+  ##{% for _ in group_name %}#{% endfor %}##
 
   {%- for option_key, option in group_options.items() %}
   {{ option_key }}:

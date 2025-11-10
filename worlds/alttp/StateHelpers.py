@@ -14,13 +14,13 @@ def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bo
 
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
-    return any(shop.region.player == player and shop.has_unlimited(item) and shop.region.can_reach(state) for
-               shop in state.multiworld.shops)
+    return any(shop.has_unlimited(item) and shop.region.can_reach(state) for
+               shop in state.multiworld.worlds[player].shops)
 
 
 def can_buy(state: CollectionState, item: str, player: int) -> bool:
-    return any(shop.region.player == player and shop.has(item) and shop.region.can_reach(state) for
-               shop in state.multiworld.shops)
+    return any(shop.has(item) and shop.region.can_reach(state) for
+               shop in state.multiworld.worlds[player].shops)
 
 
 def can_shoot_arrows(state: CollectionState, player: int, count: int = 0) -> bool:
