@@ -651,4 +651,5 @@ class CrystalProjectWorld(World):
             # "moddedShopsForUT": self.modded_shops,
             "starterRegion": self.starter_ap_region, # stored for UT re-gen
             "prefillMap": bool(self.options.fill_full_map.value),
+            "disableSparks": bool(self.options.disable_sparks.value),
         }

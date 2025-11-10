@@ -115,6 +115,13 @@ class StartingJobQuantity(Range):
     range_end = 6
     default = 6
 
+class DisableSparks(Toggle):
+    """
+    When enabled, sparks will completely ignore the player. Note that boss sparks will still chase the player if Kill Bosses is turned on.
+    If enabled there will be a new menu option where the player can turn them back on if they wish to grind money / exp
+    """
+    display_name = "Disable Sparks"
+
 class KillBossesMode(Toggle):
     """
     When enabled, defeating a boss will provide checks.
@@ -352,7 +359,7 @@ class ItemInfoMode(Choice):
     """
     For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
 
-    For Earned, all treasure and store icons on the map will display as mimics until you obtain the map-revealing item that is not yet implemented idk come back later.
+    For Earned, all treasure and store icons on the map will display as mimics until you collect 50% of the checks in your seed.
 
     For Obscured, all treasure and store icons on the map will display as mimics permanently.
     If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
@@ -401,6 +408,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     extra_clamshells_in_pool: ExtraClamshellsInPool
     job_rando: JobRando
     starting_job_quantity: StartingJobQuantity
+    disable_sparks: DisableSparks
     kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
@@ -428,7 +436,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, KillBossesMode, Shopsanity, Regionsanity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
