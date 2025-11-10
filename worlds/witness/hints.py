@@ -129,7 +129,7 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Shadows Laser",
         ]
 
-        if world.options.shuffle_doors >= 2:
+        if world.options.shuffle_doors >= "doors":
             priority.add("Desert Laser")
             priority.update(world.random.sample(lasers, 5))
 

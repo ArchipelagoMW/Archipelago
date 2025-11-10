@@ -9,6 +9,7 @@ import subprocess
 import sys
 import sysconfig
 import threading
+import urllib.error
 import urllib.request
 import warnings
 import zipfile
@@ -16,8 +17,12 @@ from collections.abc import Iterable, Sequence
 from hashlib import sha3_512
 from pathlib import Path
 
+
+SNI_VERSION = "v0.0.100"  # change back to "latest" once tray icon issues are fixed
+
+
 # This is a bit jank. We need cx-Freeze to be able to run anything from this script, so install it
-requirement = 'cx-Freeze==8.0.0'
+requirement = 'cx-Freeze==8.4.0'
 try:
     import pkg_resources
     try:
@@ -25,7 +30,7 @@ try:
         install_cx_freeze = False
     except pkg_resources.ResolutionError:
         install_cx_freeze = True
-except ImportError:
+except (AttributeError, ImportError):
     install_cx_freeze = True
     pkg_resources = None  # type: ignore[assignment]
 
@@ -57,11 +62,9 @@ from Utils import version_tuple, is_windows, is_linux
 from Cython.Build import cythonize
 
 
-# On  Python < 3.10 LogicMixin is not currently supported.
 non_apworlds: set[str] = {
     "A Link to the Past",
     "Adventure",
-    "ArchipIDLE",
     "Archipelago",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -74,9 +77,6 @@ non_apworlds: set[str] = {
     "Wargroove",
 }
 
-# LogicMixin is broken before 3.10 import revamp
-if sys.version_info < (3,10):
-    non_apworlds.add("Hollow Knight")
 
 def download_SNI() -> None:
     print("Updating SNI")
@@ -89,7 +89,8 @@ def download_SNI() -> None:
     machine_name = platform.machine().lower()
     # force amd64 on macos until we have universal2 sni, otherwise resolve to GOARCH
     machine_name = "universal" if platform_name == "darwin" else machine_to_go.get(machine_name, machine_name)
-    with urllib.request.urlopen("https://api.github.com/repos/alttpo/sni/releases/latest") as request:
+    sni_version_ref = "latest" if SNI_VERSION == "latest" else f"tags/{SNI_VERSION}"
+    with urllib.request.urlopen(f"https://api.github.com/repos/alttpo/SNI/releases/{sni_version_ref}") as request:
         data = json.load(request)
     files = data["assets"]
 
@@ -103,8 +104,8 @@ def download_SNI() -> None:
             # prefer "many" builds
             if "many" in download_url:
                 break
-            # prefer the correct windows or windows7 build
-            if platform_name == "windows" and ("windows7" in download_url) == (sys.version_info < (3, 9)):
+            # prefer non-windows7 builds to get up-to-date dependencies
+            if platform_name == "windows" and "windows7" not in download_url:
                 break
 
     if source_url and source_url.endswith(".zip"):
@@ -143,15 +144,25 @@ def download_SNI() -> None:
         print(f"No SNI found for system spec {platform_name} {machine_name}")
 
 
-signtool: str | None
-if os.path.exists("X:/pw.txt"):
-    print("Using signtool")
-    with open("X:/pw.txt", encoding="utf-8-sig") as f:
-        pw = f.read()
-    signtool = r'signtool sign /f X:/_SITS_Zertifikat_.pfx /p "' + pw + \
-               r'" /fd sha256 /td sha256 /tr http://timestamp.digicert.com/ '
-else:
-    signtool = None
+signtool: str | None = None
+try:
+    import socket
+
+    sign_host, sign_port = "192.168.206.4", 12345
+    # check if the sign_host is on a local network
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect((sign_host, sign_port))
+    if s.getsockname()[0].rsplit(".", 1)[0] != sign_host.rsplit(".", 1)[0]:
+        raise ConnectionError()  # would go through default route
+    # configure signtool
+    with urllib.request.urlopen(f"http://{sign_host}:{sign_port}/connector/status") as response:
+        html = response.read()
+    if b"status=OK\n" in html:
+        signtool = (r'signtool sign /sha1 6df76fe776b82869a5693ddcb1b04589cffa6faf /fd sha256 /td sha256 '
+                    r'/tr http://timestamp.digicert.com/ ')
+        print("Using signtool")
+except (ConnectionError, TimeoutError, urllib.error.URLError) as e:
+    pass
 
 
 build_platform = sysconfig.get_platform()
@@ -196,9 +207,10 @@ extra_libs = ["libssl.so", "libcrypto.so"] if is_linux else []
 
 
 def remove_sprites_from_folder(folder: Path) -> None:
-    for file in os.listdir(folder):
-        if file != ".gitignore":
-            os.remove(folder / file)
+    if os.path.isdir(folder):
+        for file in os.listdir(folder):
+            if file != ".gitignore":
+                os.remove(folder / file)
 
 
 def _threaded_hash(filepath: str | Path) -> str:
@@ -368,6 +380,7 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
         os.makedirs(self.buildfolder / "Players" / "Templates", exist_ok=True)
         from Options import generate_yaml_templates
         from worlds.AutoWorld import AutoWorldRegister
+        from worlds.Files import APWorldContainer
         assert not non_apworlds - set(AutoWorldRegister.world_types), \
             f"Unknown world {non_apworlds - set(AutoWorldRegister.world_types)} designated for .apworld"
         folders_to_remove: list[str] = []
@@ -376,13 +389,36 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
             if worldname not in non_apworlds:
                 file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
                 world_directory = self.libfolder / "worlds" / file_name
+                if os.path.isfile(world_directory / "archipelago.json"):
+                    with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                        manifest = json.load(manifest_file)
+
+                    assert "game" in manifest, (
+                        f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                        "does not define a \"game\"."
+                    )
+                    assert manifest["game"] == worldtype.game, (
+                        f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                        f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
+                    )
+                else:
+                    manifest = {}
                 # this method creates an apworld that cannot be moved to a different OS or minor python version,
                 # which should be ok
-                with zipfile.ZipFile(self.libfolder / "worlds" / (file_name + ".apworld"), "x", zipfile.ZIP_DEFLATED,
+                zip_path = self.libfolder / "worlds" / (file_name + ".apworld")
+                apworld = APWorldContainer(str(zip_path))
+                apworld.minimum_ap_version = version_tuple
+                apworld.maximum_ap_version = version_tuple
+                apworld.game = worldtype.game
+                manifest.update(apworld.get_manifest())
+                apworld.manifest_path = f"{file_name}/archipelago.json"
+                with zipfile.ZipFile(zip_path, "x", zipfile.ZIP_DEFLATED,
                                      compresslevel=9) as zf:
                     for path in world_directory.rglob("*.*"):
                         relative_path = os.path.join(*path.parts[path.parts.index("worlds")+1:])
-                        zf.write(path, relative_path)
+                        if not relative_path.endswith("archipelago.json"):
+                            zf.write(path, relative_path)
+                    zf.writestr(apworld.manifest_path, json.dumps(manifest))
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
@@ -407,13 +443,14 @@ class BuildExeCommand(cx_Freeze.command.build_exe.build_exe):
                 os.system(signtool + os.path.join(self.buildfolder, "lib", "worlds", "oot", "data", *exe_path))
 
         remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttpr")
+        remove_sprites_from_folder(self.buildfolder / "data" / "sprites" / "alttp" / "remote")
 
         self.create_manifest()
 
         if is_windows:
             # Inno setup stuff
             with open("setup.ini", "w") as f:
-                min_supported_windows = "6.2.9200" if sys.version_info > (3, 9) else "6.0.6000"
+                min_supported_windows = "6.2.9200"
                 f.write(f"[Data]\nsource_path={self.buildfolder}\nmin_windows={min_supported_windows}\n")
             with open("installdelete.iss", "w") as f:
                 f.writelines("Type: filesandordirs; Name: \"{app}\\lib\\worlds\\"+world_directory+"\"\n"
