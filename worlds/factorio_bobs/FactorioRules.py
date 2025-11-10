@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from worlds.AutoWorld import World
 
-from .Technologies import Technology, base_technology_table
+from . import Technologies
 from .InternalItem import all_ingredients, recipes
 
 if TYPE_CHECKING:
@@ -77,18 +77,18 @@ class FactorioRule(Rule):
 
 class TechRule(FactorioRule):
     made_rules: dict[str, TechRule] = {}
-    def __new__(cls, world: "FactorioBobs", tech: str | Technology):
-        if tech is Technology:
+    def __new__(cls, world: "FactorioBobs", tech: str | Technologies.Technology):
+        if tech is Technologies.Technology:
             tech = tech.name
 
         if tech in cls.made_rules:
             return cls.made_rules[tech]
         return super(TechRule, cls).__new__(cls)
 
-    def __init__(self, world: "FactorioBobs", tech: str | Technology):
+    def __init__(self, world: "FactorioBobs", tech: str | Technologies.Technology):
         super().__init__(world)
         if type(tech) is str:
-            assert tech in base_technology_table, f"{tech} is not a valid tech for rules"
+            assert tech in Technologies.base_technology_table, f"{tech} is not a valid tech for rules"
             self.tech_name = tech
         else:
             self.tech_name = tech.name
