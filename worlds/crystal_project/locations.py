@@ -10,6 +10,7 @@ from .constants.region_passes import *
 from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.crystal_locations import *
+from .constants.level_requirements import *
 
 class LocationData(NamedTuple):
     ap_region: str
@@ -959,9 +960,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Reserve main
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 54)), #Shedding 1
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 54)), #Shedding 2
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #Shedding 3
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 1
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 2
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 3
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
