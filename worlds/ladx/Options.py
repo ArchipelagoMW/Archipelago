@@ -325,6 +325,18 @@ class HardMode(Choice, LADXROption):
     default = option_none
 
 
+class Stealing(Choice, LADXROption):
+    """
+    Puts stealing from the shop in logic if the player has a sword.
+    """
+    display_name = "Stealing"
+    ladxr_name = "steal"
+    option_in_logic = 1
+    option_out_of_logic = 2
+    option_disabled = 3
+    default = option_out_of_logic
+
+
 class Overworld(Choice, LADXROption):
     """
     **Open Mabe:** Replaces rock on the east side of Mabe Village with bushes,
@@ -656,6 +668,7 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     nag_messages: NagMessages
     ap_title_screen: APTitleScreen
     boots_controls: BootsControls
+    stealing: Stealing
     quickswap: Quickswap
     hard_mode: HardMode
     low_hp_beep: LowHpBeep

@@ -9,6 +9,10 @@ on:
   repository_dispatch:
     types: [trigger-build-apworld]
 
+concurrency:
+  group: "build-release-apworld"
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: windows-latest
@@ -35,7 +39,7 @@ jobs:
           ref: ${{ steps.branch.outputs.branch }}
           fetch-depth: 0
 
-      - name: Check if build should run (skip workflow/README-only changes)
+      - name: Check if build should run (skip yml/md-only changes)
         id: changes
         shell: bash
         run: |
@@ -60,11 +64,11 @@ jobs:
             exit 0
           fi
 
-          # Skip if only workflows or README changed
-          if echo "$changed_files" | grep -Eq '^(\.github/workflows/|README\.md)'; then
-            non_workflow_changes=$(echo "$changed_files" | grep -Ev '^(\.github/workflows/|README\.md)' || true)
+          # Skip if only yml or md files changed
+          if echo "$changed_files" | grep -Eq '\.(md|ya?ml)$'; then
+            non_workflow_changes=$(echo "$changed_files" | grep -Ev '\.(md|ya?ml)$' || true)
             if [[ -z "$non_workflow_changes" ]]; then
-              echo "🟡 Only workflow/README changes detected — skipping build."
+              echo "🟡 Only yml/md file changes detected — skipping build."
               echo "should_build=false" >> $GITHUB_OUTPUT
               exit 0
             fi
@@ -73,29 +77,60 @@ jobs:
           echo "✅ Relevant changes detected — proceed with build/release."
           echo "should_build=true" >> $GITHUB_OUTPUT
 
-      - name: Run PowerShell build script
+      - name: Set up Python
         if: steps.changes.outputs.should_build == 'true'
-        shell: pwsh
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python dependencies
+        if: steps.changes.outputs.should_build == 'true'
         run: |
-          $ErrorActionPreference = "Stop"
-          $rootDir = "${{ github.workspace }}"
-          Set-Location $rootDir
+          python -m pip install --upgrade pip setuptools wheel factorio-rcon-py nest-asyncio pyinstaller pillow requests zstandard pyevermizer dolphin-memory-engine Pymem --disable-pip-version-check || true  # ignore failures for other worlds
+          pip install -r requirements.txt
 
-          $worldFolder = Join-Path $rootDir "worlds/rac3"
-          $zipPath = Join-Path $rootDir "rac3.zip"
-          $apworldPath = Join-Path $rootDir "rac3.apworld"
-
-          Write-Host "🧹 Cleaning old build artifacts..."
-          if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-          if (Test-Path $apworldPath) { Remove-Item $apworldPath -Force }
-
-          Write-Host "📦 Creating zip from: $worldFolder"
-          Compress-Archive -Path $worldFolder -DestinationPath $zipPath -Force
-
-          Write-Host "🔄 Renaming rac3.zip → rac3.apworld..."
-          Rename-Item -Path $zipPath -NewName "rac3.apworld"
-
-          Write-Host "✅ Done! Output: $apworldPath"
+      - name: Build .apworld for rac3
+        if: steps.changes.outputs.should_build == 'true'
+        shell: bash
+        run: |
+          echo "📦 Building rac3.apworld..."
+          python3 - <<'EOF'
+          import sys, os, zipfile
+          sys.stdout.reconfigure(encoding='utf-8')
+      
+          sys.path.insert(0, os.path.abspath("."))  # Ensure local imports work
+          from worlds import Files
+          from Utils import Version
+      
+          class MyWorldContainer(Files.APWorldContainer):
+              def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
+                  # Write archipelago.json at root (handled by base class)
+                  super().write_contents(opened_zipfile)
+      
+                  # Include all files from world_folder inside rac3/
+                  for root, dirs, files in os.walk(self.world_folder):
+                      for file in files:
+                          if file.endswith(".pyc") or file == "archipelago.json":
+                              continue
+                          full_path = os.path.join(root, file)
+                          rel_path = os.path.relpath(full_path, self.world_folder)
+                          zip_path = os.path.join("rac3", rel_path).replace("\\", "/")  # POSIX paths
+                          opened_zipfile.write(full_path, zip_path)
+      
+          src_folder = "worlds/rac3"
+          dest_file = "rac3.apworld"
+      
+          # Create container
+          world = MyWorldContainer(dest_file)
+          world.game = "RaC3"
+          world.world_folder = src_folder
+          world.world_version = Version(1, 0, 0)
+          world.minimum_ap_version = Version(0, 5, 0)
+      
+          # Write the .apworld
+          world.write()
+          print(f"Successfully created {dest_file} with all files under rac3/")
+          EOF
 
       - name: Upload build artifact
         if: steps.changes.outputs.should_build == 'true'
@@ -121,6 +156,9 @@ jobs:
         with:
           name: rac3.apworld
           path: .
+
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Determine next semantic version
         id: semver
@@ -148,7 +186,6 @@ jobs:
 
           # Strip leading "v" if present
           tag_stripped="${latest_tag#v}"
-
           # Split version safely (defaults if missing)
           IFS='.' read -r major minor patch <<< "$tag_stripped"
           major=${major:-0}
@@ -169,64 +206,147 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
 
-      - name: Create release notes
-        id: notes
+      - name: Add manifest to .apworld
+        shell: bash
+        run: |
+          set -e
+          echo "🧾 Updating archipelago.json manifest..."
+
+          version="${{ steps.semver.outputs.version }}"
+          version="${version#v}"
+          version="${version%-pre}"
+
+          # Get authors from git history
+          git fetch origin ${{ needs.build.outputs.branch }}
+          authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
+
+          # Add custom authors. Example: ("NewContributor" "AnotherDev")
+          custom_authors=("1theory")
+          for a in "${custom_authors[@]}"; do
+            if ! echo "$authors" | grep -Fxq "$a"; then
+              authors="${authors}"$'\n'"${a}"
+            fi
+          done
+
+          # Default if no authors found
+          if [ -z "$authors" ]; then
+            authors="Unknown"
+          fi
+
+          # Convert authors to JSON array
+          authors_json=$(echo "$authors" | jq -R . | jq -s .)
+
+          # Extract AP version
+          ap_version=$(grep '^__version__ = ' Utils.py | cut -d'"' -f2)
+          echo "Maximum AP version: $ap_version"
+
+          # Unzip the built .apworld
+          mkdir -p tmp_unzip
+          unzip -o -q rac3.apworld -d tmp_unzip
+
+          # Update only root archipelago.json
+          jq --arg world_version "$version" \
+             --argjson authors "$authors_json" \
+             --arg min_ap "0.6.3" \
+             --arg max_ap "$ap_version" \
+             '.world_version = $world_version
+              | .authors = $authors
+              | .minimum_ap_version = $min_ap
+              | .maximum_ap_version = $max_ap' \
+             tmp_unzip/archipelago.json > tmp_unzip/archipelago.json.tmp
+
+          # Replace the old file with the updated one
+          mv tmp_unzip/archipelago.json.tmp tmp_unzip/archipelago.json
+
+          # Remove nested archipelago.json but keep the root one
+          find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
+          echo "🗑️ Removed extra archipelago.json"
+
+          # Rezip the .apworld
+          cd tmp_unzip
+          zip -qr ../rac3.apworld *
+          cd ..
+
+          echo "✅ Updated archipelago.json at root"
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            rac3.apworld
+            RaC3.yaml
+          tag_name: v${{ steps.semver.outputs.version }}
+          name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
+          body: "Generating release notes..."
+          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate release notes
         shell: bash
         run: |
           set -e
           repo_url="https://github.com/${{ github.repository }}"
           branch="${{ steps.semver.outputs.branch }}"
           new_tag="v${{ steps.semver.outputs.version }}"
-          short_sha=$(git rev-parse --short HEAD)
 
-          # Find previous release tag (one before the new tag)
-          prev_tag=$(git tag --sort=-v:refname | head -n 2 | tail -n 1 || true)
-          if [[ -z "$prev_tag" || "$prev_tag" == "$new_tag" ]]; then
-            echo "⚠️ No previous release tag found — will show recent commits."
-            prev_tag=""
+          git fetch --tags
+
+          echo "🔍 All recent tags (descending):"
+          git tag --sort=-v:refname | head -n 10 || true
+          # Get previous tag (latest before new_tag)
+          if [[ "$branch" == "main" ]]; then
+            # previous stable release (ignore -pre)
+            prev_tag=$(git tag --sort=-v:refname | grep -v -- '-pre' | grep -v "^$new_tag\$" | head -n 1)
+          else
+            # previous tag of any type for pre-release
+            prev_tag=$(git tag --sort=-v:refname | grep -v "^$new_tag\$" | head -n 1)
           fi
 
-          # Build changelog link
-          if [[ -n "$prev_tag" ]]; then
-            changelog="${repo_url}/compare/${prev_tag}...${new_tag}"
-          else
+          # Full compare link
+          if [[ -z "$prev_tag" ]]; then
+            echo "⚠️ No previous relevant tag found — showing full history"
             changelog="${repo_url}/commits/${branch}"
-          fi
-
-          echo "🔍 Using changelog link: $changelog"
-
-          # Gather commit list (limit 200, count total)
-          if [[ -n "$prev_tag" ]]; then
-            total_commits=$(git rev-list --count "${prev_tag}..HEAD")
-            commit_list=$(git log "${prev_tag}..HEAD" --pretty=format:"- %s (%h)" -n 200)
           else
-            total_commits=$(git rev-list --count HEAD)
-            commit_list=$(git log -n 200 --pretty=format:"- %s (%h)")
+            changelog="${repo_url}/compare/${prev_tag}...${new_tag}"
           fi
 
-          if [[ -z "$commit_list" ]]; then
-            commit_list="- (no new commits since last release)"
+          echo "Previous tag: ${prev_tag:-<none>}"
+          echo "New tag: $new_tag"
+          echo "Changelog link: $changelog"
+          # Only show commits between the two tags
+          if [[ -n "$prev_tag" ]]; then
+            commit_list=$(git log "${prev_tag}..${new_tag}" --pretty=format:"- %s (%h)")
+            total_commits=$(git rev-list "${prev_tag}..${new_tag}" --count)
+          else
+            commit_list=$(git log "${new_tag}" --pretty=format:"- %s (%h)")
+            total_commits=$(git rev-list "${new_tag}" --count)
           fi
 
-          if [[ $total_commits -gt 200 ]]; then
-            extra_commits=$((total_commits - 200))
-            commit_list="${commit_list}\n- ...and ${extra_commits} more commits."
+          if [[ $total_commits -eq 0 ]]; then
+              commit_list="- (no new commits since last relevant release)"
+              echo "🟡 No new commits since last release"
+          elif [[ $total_commits -gt 200 ]]; then
+              extra_commits=$((total_commits - 200))
+              commit_list="${commit_list}\n- ...and ${extra_commits} more commits."
           fi
 
           cat <<EOF > release_notes.md
           ## RaC3 APWorld ${new_tag}
-
+      
           **Branch:** ${branch}  
-          **Commit:** ${short_sha}  
           **Date:** $(date -u +"%Y-%m-%d %H:%M UTC")
-
+      
           <details>
-          <summary><strong>📜 Summary (Last ${total_commits} Commits)</strong></summary>
-
+          <summary><strong>📜 Summary (${total_commits} changes since ${prev_tag:-initial commit})</strong></summary>
+      
           ${commit_list}
-
+      
           </details>
-
+      
           **Full changelog and compare**: ${changelog}
 
           ### Notes
@@ -235,17 +355,13 @@ jobs:
 
           ### If a location is broken and does not get sent out
           Go to the server console (locally or via the Archipelago room page) and run:  
-          \`/send_location <player_name> <location>\`  
-          Example: \`/send_location TaoshiRaC3 "Crash Site: Infobot: Aridia"\`
+          \`/send_location <player_name> <location>\` Example: \`/send_location TaoshiRaC3 "Crash Site: Infobot: Aridia"\`
           EOF
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: rac3.apworld
-          tag_name: v${{ steps.semver.outputs.version }}
-          name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
-          body_path: release_notes.md
-          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+      - name: Update GitHub Release with generated notes
+        shell: bash
+        run: |
+          new_tag="v${{ steps.semver.outputs.version }}"
+          gh release edit "$new_tag" --notes-file release_notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
