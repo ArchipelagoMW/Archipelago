@@ -122,7 +122,7 @@ class NineSolsWorld(World):
         apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "archipelago.json").decode("utf-8"))
         slot_data["apworld_version"] = apworld_manifest["world_version"]
         # The version is stored on Worlds, so when we're ready to bump our min AP version to 0.6.4, we can do this:
-        # slot_data["apworld_version"] = self.world_version
+        # slot_data["apworld_version"] = self.world_version.to_simple_string()
         return slot_data
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
