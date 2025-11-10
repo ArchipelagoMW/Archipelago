@@ -946,7 +946,8 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Chest - North edge 2", 2917 + treasure_index_offset), #Lake Delende map chest
 
         #NPCs
-        LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Dust
+        #Atop Salmon River Dam
+        LocationData(ATOP_DAM_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset), #Dust
 
         #Quintar Reserve
         #Treasure chests
