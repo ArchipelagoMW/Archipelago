@@ -485,40 +485,421 @@ class RAC3TAG:
 
 # Todo: Missions, Skill Points, and anything that will trigger an item collection
 class RAC3LOCATION:
-    pass
+    VELDIN_FIRST_RANGER = "Veldin: First Ranger"
+    VELDIN_SECOND_RANGER = "Veldin: Second Ranger"
+    VELDIN_SAVE_VELDIN = "Veldin: Save Veldin"
+    FLORANA_DEFEAT_QWARK = "Florana: Defeat Qwark"
+    PHOENIX_MEET_SASHA = "Phoenix: Meet Sasha on the Bridge"
+    PHOENIX_ASSAULT = "Phoenix: Post Hideout Assault"
+    PHOENIX_GRAND_PRIZE = "Phoenix: Return after winning Grand Prize Bout"
+    PHOENIX_STAR_MAP = "Phoenix: Deliver the Star Map to Qwark"
+    PHOENIX_HACKER = "Phoenix: Received Hacker"
+    PHOENIX_HYPERSHOT = "Phoenix: Received Hypershot"
+    PHOENIX_VR_TRAINING = "Phoenix: VR: VR Gadget Training"
+    PHOENIX_VR_WARM_UP = "Phoenix: VR: Warm Up"
+    PHOENIX_VR_D_L_D = "Phoenix: VR: Don't Look Down"
+    PHOENIX_VR_SPEED_ROUND = "Phoenix: VR: Speed Round"
+    PHOENIX_VR_HOT_STEPPER = "Phoenix: VR: Hot Stepper"
+    PHOENIX_VR_90_SECOND = "Phoenix: VR: 90 Second Slayer"
+    PHOENIX_VR_SHOCKER = "Phoenix: VR: The Shocker"
+    PHOENIX_VR_WRENCH = "Phoenix: VR: Wrench Beatdown"
+    PHOENIX_VR_NERVES = "Phoenix: VR: Nerves of Titanium"
+    PHOENIX_MASTER_PLAN = "Phoenix: Give Al the Master Plan"
+    PHOENIX_VID_COMIC_1_CLEAR = "Phoenix: Qwark VidComic 1 Clear"
+    PHOENIX_VID_COMIC_2_CLEAR = "Phoenix: Qwark VidComic 2 Clear"
+    PHOENIX_VID_COMIC_3_CLEAR = "Phoenix: Qwark VidComic 3 Clear"
+    PHOENIX_VID_COMIC_4_CLEAR = "Phoenix: Qwark VidComic 4 Clear"
+    PHOENIX_VID_COMIC_5_CLEAR = "Phoenix: Qwark VidComic 5 Clear"
+    MARCADIA_MISSION_1 = "Marcadia: Operation IRON SHIELD: Secure the Area"
+    MARCADIA_MISSION_2 = "Marcadia: Operation IRON SHIELD: Air Assault"
+    MARCADIA_MISSION_3 = "Marcadia: Operation IRON SHIELD: Turret Command"
+    MARCADIA_MISSION_4 = "Marcadia: Operation IRON SHIELD: Under the Gun"
+    MARCADIA_MISSION_5 = "Marcadia: Operation IRON SHIELD: Hit n' Run"
+    MARCADIA_REFRACTOR = "Marcadia: Received Refractor"
+    MARCADIA_MEET_AL = "Marcadia: Meet Al"
+    NATION_TYHRRA_GUISE = "Annihilation Nation: Received Tyhrra-Guise"
+    NATION_GRAND_PRIZE_BOUT = "Annihilation Nation: Grand Prize Bout"
+    NATION_THE_TERRIBLE_TWO = "Annihilation Nation: The Terrible Two"
+    NATION_ROBOT_RAMPAGE = "Annihilation Nation: Robot Rampage"
+    NATION_TWO_MINUTE_WARNING = "Annihilation Nation: Two Minute Warning"
+    NATION_90_SECONDS = "Annihilation Nation: 90 Seconds of Carnage"
+    NATION_ONSLAUGHT = "Annihilation Nation: Onslaught"
+    NATION_WHIP_IT_GOOD = "Annihilation Nation: Whip it Good"
+    NATION_HYDRA_N_SEEK = "Annihilation Nation: Hydra'n Seek"
+    NATION_CHAMPIONSHIP_BOUT = "Annihilation Nation: Championship Bout"
+    NATION_MEET_COURTNEY = "Annihilation Nation 2: Meet Courtney"
+    NATION_INFOBOT_HOLOSTAR = "Annihilation Nation 2: Infobot: Holostar Studios"
+    NATION_NINJA_CHALLENGE = "Annihilation Nation 2: Ninja Challenge"
+    NATION_COUNTING_DUCKS = "Annihilation Nation 2: Counting Ducks"
+    NATION_CYCLING_WEAPONS = "Annihilation Nation 2: Cycling Weapons"
+    NATION_ONE_HIT_WONDER = "Annihilation Nation 2: One Hit Wonder"
+    NATION_TIME_TO_SUCK = "Annihilation Nation 2: Time to Suck"
+    NATION_NAPTIME = "Annihilation Nation 2: Naptime"
+    NATION_MORE_CYCLING_WEAPONS = "Annihilation Nation 2: More Cycling Weapons"
+    NATION_DODGE_THE_TWINS = "Annihilation Nation 2: Dodge the Twins"
+    NATION_CHOP_CHOP = "Annihilation Nation 2: Chop Chop"
+    NATION_SLEEP_INDUCER = "Annihilation Nation 2: Sleep Inducer"
+    NATION_THE_OTHER_WHITE_MEAT = "Annihilation Nation 2: The Other White Meat"
+    NATION_CHAMPIONSHIP_BOUT_II = "Annihilation Nation 2: Championship Bout II"
+    NATION_QWARKTASTIC_BATTLE = "Annihilation Nation 2: Qwarktastic Battle"
+    NATION_HEAT_STREET = "Annihilation Nation: Heat Street"
+    NATION_CRISPY_CRITTER = "Annihilation Nation: Crispy Critter"
+    NATION_PYRO_PLAYGROUND = "Annihilation Nation: Pyro Playground"
+    NATION_SUICIDE_RUN = "Annihilation Nation: Suicide Run"
+    NATION_BBQ_BOULEVARD = "Annihilation Nation 2: BBQ Boulevard"
+    NATION_MAZE_OF_BLAZE = "Annihilation Nation 2: Maze of Blaze"
+    NATION_CREMATION_STATION = "Annihilation Nation 2: Cremation Station"
+    NATION_THE_ANNIHILATOR = "Annihilation Nation 2: The Annihilator (Gauntlet)"
+    TYHRRANOSIS_BOSS = "Tyhrranosis: Destroy the Momma Tyhrranoid"
+    TYHRRANOSIS_MISSION_1 = "Tyhrranosis: Operation ISLAND STRIKE: Assault on Kavu Island"
+    TYHRRANOSIS_MISSION_2 = "Tyhrranosis: Operation ISLAND STRIKE: Dogfight over Kavu Island"
+    TYHRRANOSIS_MISSION_3 = "Tyhrranosis: Operation ISLAND STRIKE: Operation Thunderbolt"
+    TYHRRANOSIS_MISSION_4 = "Tyhrranosis: Operation ISLAND STRIKE: The Final Battle"
+    DAXX_CHARGE_BOOTS = "Daxx: Received Charge Boots"
+    DAXX_FACILITY = "Daxx: Infiltrate Weapons Facility"
+    DAXX_GUNSHIP = "Daxx: Gunship"
+    OBANI_GEMINI_SKIDD = "Obani Gemini: Infobot: Blackwater City"
+    BLACKWATER_CITY_MISSION_1 = "Blackwater City: Operation BLACK TIDE: The Battle of Blackwater City"
+    BLACKWATER_CITY_MISSION_2 = "Blackwater City: Operation BLACK TIDE: The Bridge"
+    BLACKWATER_CITY_MISSION_3 = "Blackwater City: Operation BLACK TIDE: Counterattack"
+    BLACKWATER_CITY_COMPLETE = "Blackwater City: Received Gravity Boots"
+    SKIDD_CAPTURED = "Skidd is captured"
+    DRACO_COURTNEY = "Obani Draco: Defeat Courtney Gears"
+    ZELDRIN_STARPORT_ITEM = "Zeldrin Starport: Received Bolt Grabber V2"
+    ZELDRIN_STARPORT_SHIP = "Zeldrin Starport: Escape the Exploding Ship"
+    METROPOLIS_METAL_NOIDS = "Metropolis: Metal-Noids"
+    METROPOLIS_DEFEAT_KLUNK = "Metropolis: Defeat Klunk"
+    METROPOLIS_MISSION_1 = "Metropolis: Operation URBAN STORM: Countdown"
+    METROPOLIS_MISSION_2 = "Metropolis: Operation URBAN STORM: Urban Combat"
+    METROPOLIS_MISSION_3 = "Metropolis: Operation URBAN STORM: Tower Attack"
+    METROPOLIS_MISSION_4 = "Metropolis: Operation URBAN STORM: Air Superiority"
+    METROPOLIS_MISSION_5 = "Metropolis: Operation URBAN STORM: Turret Command"
+    METROPOLIS_MAP_O_MATIC = "Metropolis: Received Map-O-Matic"
+    CRASH_SITE_NANO_PAK = "Crash Site: Received Nano-Pak"
+    CRASH_SITE_ESCAPE_POD = "Crash Site: Escape Pod"
+    CRASH_SITE_INFOBOT_ARIDIA = "Crash Site: Infobot: Aridia"
+    ARIDIA_WARP_PAD = "Aridia: Received Warp Pad"
+    ARIDIA_MISSION_1 = "Aridia: Operation DEATH VALLEY: The Tunnels of Outpost X12"
+    ARIDIA_MISSION_2 = "Aridia: Operation DEATH VALLEY: Ambush in Red Rock Valley"
+    ARIDIA_MISSION_3 = "Aridia: Operation DEATH VALLEY: Assassination"
+    ARIDIA_MISSION_4 = "Aridia: Operation DEATH VALLEY: Reclaim the Valley"
+    ARIDIA_MISSION_5 = "Aridia: Operation DEATH VALLEY: X12 Endgame"
+    HIDEOUT_PDA = "Qwarks Hideout: Received Gadgetron PDA"
+    HIDEOUT_QWARK = "Qwarks Hideout: Find Qwark"
+    KOROS_BASE = "Koros: Infobot: Command Center"
+    COMMAND_CENTER_NEFARIOUS = "Command Center: Dr. Nefarious Defeated!"
+    COMMAND_CENTER_BIOBLITERATOR = "Command Center: Biobliterator Defeated!"
+
+
+class RAC3VENDOR:
+    FLORANA_WHIP = "Florana: Received Plasma Whip"
+    FLORANA_N60 = "Florana: Received N60 Storm"
+    PHOENIX_SUCK = "Phoenix: Received Suck Cannon"
+    PHOENIX_INFECTOR = "Phoenix: Received Infector"
+    PHOENIX_MAGNA_ARMOR = "Phoenix: Received Magna Plate Armor"
+    PHOENIX_ADAMANTINE = "Phoenix: Received Adamantine Armor"
+    PHOENIX_AEGIS_ARMOR = "Phoenix: Received Aegis Mark V Armor"
+    PHOENIX_INFERNOX = "Phoenix: Received Infernox Armor"
+    MARCADIA_HYDRA = "Marcadia: Received Spitting Hydra"
+    NATION_AGENTS = "Annihilation Nation: Received Agents of Doom"
+    AQUATOS_FLUX_RIFLE = "Aquatos: Received Flux Rifle"
+    AQUATOS_MINI_TURRET = "Aquatos: Received Mini-Turret Glove"
+    AQUATOS_LAVA_GUN = "Aquatos: Received Lava Gun"
+    AQUATOS_SHIELD_CHARGER = "Aquatos: Received Shield Charger"
+    AQUATOS_BOUNCER = "Aquatos: Received Bouncer"
+    AQUATOS_PLASMA_COIL = "Aquatos: Received Plasma Coil"
+    TYHRRANOSIS_ANNIHILATOR = "Tyhrranosis: Received Annihilator"
+    TYHRRANOSIS_SHIELD_GLOVE = "Tyhrranosis: Received Holo-Shield Glove"
+    OBANI_GEMINI_DISC = "Obani Gemini: Received Disc-Blade Gun"
+    HOLOSTAR_RIFT_INDUCER = "Holostar: Received Rift Inducer"
+    ARIDIA_QWACK_O_RAY = "Aridia: Received Qwack-O-Ray"
+
+
+class RAC3TROPHY:
+    FLORANA_RATCHET = "Florana: Trophy: 2nd Building Upstairs North-East"
+    TYHRRANOSIS_AL = "Tyhrranosis: Trophy: North East Pillar"
+    DAXX_PLUMBER = "Daxx: Trophy: Ledge overlooking Ship"
+    HOLOSTAR_CLANK = "Holostar: Trophy: After tall Elevator"
+    METROPOLIS_SKRUNCH = "Metropolis: Trophy: 2nd Building Window"
+    CRASH_NEFARIOUS = "Crash Site: Trophy: Near first corner"
+    HIDEOUT_QWARK = "Qwarks Hideout: Trophy: Outside Qwarks Room"
+    KOROS_COURTNEY = "Koros: Trophy: Glass House"
+    COMMAND_LAWRENCE = "Command Center: Trophy: Up a Ladder"
+    PHOENIX_TITANIUM_COLLECTOR = "Phoenix: Long Term Trophy: Titanium Collector"
+    PHOENIX_FRIEND_OF_THE_RANGERS = "Phoenix: Long Term Trophy: Friend of the Rangers"
+    PHOENIX_ANNIHILATION_NATION_CHAMPION = "Phoenix: Long Term Trophy: Annihilation Nation Champion"
+    PHOENIX_SKILL_MASTER = "Phoenix: Long Term Trophy: Skill Master"
+
+
+class RAC3TBOLT:
+    FLORANA_BELOW_VENDOR = "Florana: T-Bolt: Below Gadgetron Vendor"
+    FLORANA_PATH_OF_DEATH = "Florana: T-Bolt: Path of Death"
+    PHOENIX_VR_TRAINING = "Phoenix: T-Bolt: VR Gadget Training"
+    PHOENIX_VR_NERVES = "Phoenix: T-Bolt: VR Nerves of Titanium"
+    PHOENIX_VID_COMIC_1 = "Phoenix: T-Bolt: VidComic 1 100%"
+    PHOENIX_VID_COMIC_2 = "Phoenix: T-Bolt: VidComic 2 100%"
+    PHOENIX_VID_COMIC_3 = "Phoenix: T-Bolt: VidComic 3 100%"
+    PHOENIX_VID_COMIC_4 = "Phoenix: T-Bolt: VidComic 4 100%"
+    PHOENIX_VID_COMIC_5 = "Phoenix: T-Bolt: VidComic 5 100%"
+    MARCADIA_POOL = "Marcadia: T-Bolt: After Pool of Water"
+    MARCADIA_LAST_REFRACTOR = "Marcadia: T-Bolt: Last Refractor Room"
+    MARCADIA_BEFORE_AL = "Marcadia: T-Bolt: Ceiling just before Al"
+    NATION_CLIFF = "Annihilation Nation: T-Bolt: Cliff"
+    NATION_PLATFORM = "Annihilation Nation 2: T-Bolt: Platform"
+    AQUATOS_BRIDGE = "Aquatos: T-Bolt: Under the Bridge"
+    AQUATOS_UNDERWATER = "Aquatos: T-Bolt: Underwater Bolt"
+    AQUATOS_GATE = "Aquatos: T-Bolt: Behind the Locked Gate"
+    SEWER_PIPE = "Aquatos: T-Bolt: Top Left Bolt"
+    SEWER_SWING = "Aquatos: T-Bolt: Swinging Bolt"
+    TYHRRANOSIS_CANNON = "Tyhrranosis: T-Bolt: South East Cannon"
+    TYHRRANOSIS_CAVE = "Tyhrranosis: T-Bolt: Underground Cave Bolt"
+    DAXX_TAXI = "Daxx: T-Bolt: Right of the Taxi"
+    DAXX_DOOR = "Daxx: T-Bolt: Time Sensitive Door"
+    OBANI_GEMINI_1 = "Obani Gemini: T-Bolt: Follow the Lava"
+    OBANI_GEMINI_2 = "Obani Gemini: T-Bolt: Between the Twin Towers"
+    HOLOSTAR_CHAIRS = "Holostar: T-Bolt: Atop the Chairs"
+    HOLOSTAR_GRAV_RAMP = "Holostar: T-Bolt: Lot 42's Gravity Ramp"
+    HOLOSTAR_KAMIKAZE_NOIDS = "Holostar: T-Bolt: Kamikaze Noids"
+    ZELDRIN_STARPORT_1 = "Zeldrin Starport: T-Bolt: Inside the Second Ship"
+    ZELDRIN_STARPORT_2 = "Zeldrin Starport: T-Bolt: Atop the Twin Shooters"
+    METROPOLIS_SWING = "Metropolis: T-Bolt: Across the Gap"
+    METROPOLIS_BEHIND = "Metropolis: T-Bolt: Before Grav-wall"
+    METROPOLIS_MISSION = "Metropolis: T-Bolt: Tall Tower (Hovership)"
+    CRASH_SITE = "Crash Site: T-Bolt: Turn Around"
+    ARIDIA_BRIDGE = "Aridia: T-Bolt: Under the Bridge (Assassination)"
+    ARIDIA_BASE = "Aridia: T-Bolt: Behind the Base (X12 Endgame)"
+    HIDEOUT = "Qwarks Hideout: T-Bolt: Glide from the Ramp"
+    KOROS_FENCE = "Koros: T-Bolt: Behind the Metal Fence"
+    KOROS_GLASS = "Koros: T-Bolt: Pair of Towers"
+    COMMAND_CENTER = "Command Center: T-Bolt: Behind the Forcefield"
 
 
 class RAC3SKILLPOINT:
-    GO_FOR_HANG_TIME = "Go for hang time"  # 0x001D54B0,
-    STAY_SQUEAKY_CLEAN = "Stay Squeaky Clean"  # 0x001D54B1,
-    ARCADE_PERFECTION = "Strive for arcade perfection"  # 0x001D54B2,
-    BEAT_HELGAS_BEST_TIME = "Beat Helga's best time"  # 0x001D54B3,
-    TURN_UP_THE_HEAT = "Turn Up The Heat"  # 0x001D54B4,
-    MONKEYING_AROUND = "Monkeying around"  # 0x001D54B5,
-    REFLECT_TO_SCORE = "Reflect on how to score"  # 0x001D54B6,
-    BUGS_TO_BIRDIE = "Bugs to Birdie"  # 0x001D54B7,
-    BASH_THE_BUG = "Bash the bug"  # 0x001D54B8,
-    EIGHT_TIME_CHAMP = "Be an eight time champ"  # 0x001D54B9,
-    FLEE_FLAWLESSLY = "Flee Flawlessly"  # 0x001D54BA,
-    LIGHTS_CAMERA_ACTION = "Lights, camera action!"  # 0x001D54BB,
-    SUNKEN_TREASURE = "Search for sunken treasure"  # 0x001D54BC,
-    BE_A_SHARPSHOOTER = "Be a Sharpshooter"  # 0x001D54BD,
-    GET_TO_THE_BELT = "Get to the belt"  # 0x001D54BE,
-    BASH_THE_PARTY = "Bash the party"  # 0x001D54BF,
-    FEELING_LUCKY = "Feeling Lucky"  # 0x001D54C0,
-    YOU_BREAK_IT = "You break it, you win it"  # 0x001D54C1,
-    GOOD_YEAR = "2002 was a good year in the city"  # 0x001D54C2,
-    SUCK_IT_UP = "Suck it up!"  # 0x001D54C3,
-    AIM_HIGH = "Aim High"  # 0x001D54C4,
-    ZAP_BACK_AT_YA = "Zap back at ya'"  # 0x001D54C5,
-    BREAK_THE_DAN = "Break the Dan"  # 0x001D54C6,
-    SPREAD_YOUR_GERMS = "Spread your germs"  # 0x001D54C7,
-    HIT_THE_MOTHERLOAD = "Hit the motherload"  # 0x001D54C8,
-    PIRATE_BOOTY = "Pirate booty - set a new record for qwark"  # 0x001D54C9,
-    DEJA_Q_ALL_OVER_AGAIN = "Deja Q All over Again - set a new record for qwark"  # 0x001D54CA,
-    ARRIBA_AMOEBA = "Arriba Amoeba! - set a new record for qwark"  # 0x001D54CB,
-    SHADOW_OF_THE_ROBOT = "Shadow of the robot - set a new record for qwark"  # 0x001D54CC,
-    THE_SHAMING_OF_THE_Q = "The Shaming of the Q - set a new record for qwark"  # 0x001D54CD,
+    ARIDIA_HANG_TIME = "Aridia: Skillpoint: Go for hang time"  # 0x001D54B0,
+    FLORANA_PATH = "Florana: Skillpoint: Stay Squeaky Clean"  # 0x001D54B1,
+    PHOENIX_ARCADE = "Phoenix: Skillpoint: Strive for arcade perfection"  # 0x001D54B2,
+    PHOENIX_VR_TRAINING = "Phoenix: Skillpoint: Beat Helga's best time"  # 0x001D54B3,
+    PHOENIX_ARMOR = "Phoenix: Skillpoint: Turn Up The Heat"  # 0x001D54B4,
+    PHOENIX_MONKEY = "Phoenix: Skillpoint: Monkeying around"  # 0x001D54B5,
+    MARCADIA_REFLECT = "Marcadia: Skillpoint: Reflect on how to score"  # 0x001D54B6,
+    DAXX_BUGS = "Daxx: Skillpoint: Bugs to Birdie"  # 0x001D54B7,
+    NATION_BASH = "Annihilation Nation: Skillpoint: Bash the bug"  # 0x001D54B8,
+    NATION_EIGHT = "Annihilation Nation: Skillpoint: Be an eight time champ"  # 0x001D54B9,
+    NATION_FLEE = "Annihilation Nation: Skillpoint: Flee Flawlessly"  # 0x001D54BA,
+    NATION_CAMERA = "Annihilation Nation: Skillpoint: Lights, camera action!"  # 0x001D54BB,
+    AQUATOS_SUNKEN = "Aquatos: Skillpoint: Search for sunken treasure"  # 0x001D54BC,
+    TYHRRANOSIS_SHARPSHOOTER = "Tyhrranosis: Skillpoint: Be a Sharpshooter"  # 0x001D54BD,
+    GEMINI_BELT = "Obani Gemini: Skillpoint: Get to the belt"  # 0x001D54BE,
+    BLACKWATER_BASH = "Blackwater City: Skillpoint: Bash the party"  # 0x001D54BF,
+    HOLOSTAR_LUCKY = "Holostar: Skillpoint: Feeling Lucky"  # 0x001D54C0,
+    KOROS_BREAK = "Koros: Skillpoint: You break it, you win it"  # 0x001D54C1,
+    METROPOLIS_GOOD_YEAR = "Metropolis: Skillpoint: 2002 was a good year in the city"  # 0x001D54C2,
+    CRASH_SITE_SUCK = "Crash Site: Skillpoint: Suck it up!"  # 0x001D54C3,
+    CRASH_SITE_AIM_HIGH = "Crash Site: Skillpoint: Aim High"  # 0x001D54C4,
+    ARIDIA_ZAP = "Aridia: Skillpoint: Zap back at ya'"  # 0x001D54C5,
+    HIDEOUT_DAN = "Hideout: Skillpoint: Break the Dan"  # 0x001D54C6,
+    COMMAND_CENTER_GERMS = "Command Center: Skillpoint: Spread your germs"  # 0x001D54C7,
+    SEWER_MOTHERLOAD = "Aquatos Sewer: Skillpoint: Hit the motherload"  # 0x001D54C8,
+    PHOENIX_COMIC_1 = "Phoenix: Skillpoint: Pirate booty - set a new record for qwark"  # 0x001D54C9,
+    PHOENIX_COMIC_4 = "Phoenix: Skillpoint: Deja Q All over Again - set a new record for qwark"  # 0x001D54CA,
+    PHOENIX_COMIC_2 = "Phoenix: Skillpoint: Arriba Amoeba! - set a new record for qwark"  # 0x001D54CB,
+    PHOENIX_COMIC_3 = "Phoenix: Skillpoint: Shadow of the robot - set a new record for qwark"  # 0x001D54CC,
+    PHOENIX_COMIC_5 = "Phoenix: Skillpoint: The Shaming of the Q - set a new record for qwark"  # 0x001D54CD,
+
+
+class RAC3SEWER:
+    TRADE_1 = "Aquatos: 1 Sewer Crystal Traded"
+    TRADE_2 = "Aquatos: 2 Sewer Crystal Traded"
+    TRADE_3 = "Aquatos: 3 Sewer Crystal Traded"
+    TRADE_4 = "Aquatos: 4 Sewer Crystal Traded"
+    TRADE_5 = "Aquatos: 5 Sewer Crystal Traded"
+    TRADE_6 = "Aquatos: 6 Sewer Crystal Traded"
+    TRADE_7 = "Aquatos: 7 Sewer Crystal Traded"
+    TRADE_8 = "Aquatos: 8 Sewer Crystal Traded"
+    TRADE_9 = "Aquatos: 9 Sewer Crystal Traded"
+    TRADE_10 = "Aquatos: 10 Sewer Crystal Traded"
+    TRADE_11 = "Aquatos: 11 Sewer Crystal Traded"
+    TRADE_12 = "Aquatos: 12 Sewer Crystal Traded"
+    TRADE_13 = "Aquatos: 13 Sewer Crystal Traded"
+    TRADE_14 = "Aquatos: 14 Sewer Crystal Traded"
+    TRADE_15 = "Aquatos: 15 Sewer Crystal Traded"
+    TRADE_16 = "Aquatos: 16 Sewer Crystal Traded"
+    TRADE_17 = "Aquatos: 17 Sewer Crystal Traded"
+    TRADE_18 = "Aquatos: 18 Sewer Crystal Traded"
+    TRADE_19 = "Aquatos: 19 Sewer Crystal Traded"
+    TRADE_20 = "Aquatos: 20 Sewer Crystal Traded"
+    TRADE_21 = "Aquatos: 21 Sewer Crystal Traded"
+    TRADE_22 = "Aquatos: 22 Sewer Crystal Traded"
+    TRADE_23 = "Aquatos: 23 Sewer Crystal Traded"
+    TRADE_24 = "Aquatos: 24 Sewer Crystal Traded"
+    TRADE_25 = "Aquatos: 25 Sewer Crystal Traded"
+    TRADE_26 = "Aquatos: 26 Sewer Crystal Traded"
+    TRADE_27 = "Aquatos: 27 Sewer Crystal Traded"
+    TRADE_28 = "Aquatos: 28 Sewer Crystal Traded"
+    TRADE_29 = "Aquatos: 29 Sewer Crystal Traded"
+    TRADE_30 = "Aquatos: 30 Sewer Crystal Traded"
+    TRADE_31 = "Aquatos: 31 Sewer Crystal Traded"
+    TRADE_32 = "Aquatos: 32 Sewer Crystal Traded"
+    TRADE_33 = "Aquatos: 33 Sewer Crystal Traded"
+    TRADE_34 = "Aquatos: 34 Sewer Crystal Traded"
+    TRADE_35 = "Aquatos: 35 Sewer Crystal Traded"
+    TRADE_36 = "Aquatos: 36 Sewer Crystal Traded"
+    TRADE_37 = "Aquatos: 37 Sewer Crystal Traded"
+    TRADE_38 = "Aquatos: 38 Sewer Crystal Traded"
+    TRADE_39 = "Aquatos: 39 Sewer Crystal Traded"
+    TRADE_40 = "Aquatos: 40 Sewer Crystal Traded"
+    TRADE_41 = "Aquatos: 41 Sewer Crystal Traded"
+    TRADE_42 = "Aquatos: 42 Sewer Crystal Traded"
+    TRADE_43 = "Aquatos: 43 Sewer Crystal Traded"
+    TRADE_44 = "Aquatos: 44 Sewer Crystal Traded"
+    TRADE_45 = "Aquatos: 45 Sewer Crystal Traded"
+    TRADE_46 = "Aquatos: 46 Sewer Crystal Traded"
+    TRADE_47 = "Aquatos: 47 Sewer Crystal Traded"
+    TRADE_48 = "Aquatos: 48 Sewer Crystal Traded"
+    TRADE_49 = "Aquatos: 49 Sewer Crystal Traded"
+    TRADE_50 = "Aquatos: 50 Sewer Crystal Traded"
+    TRADE_51 = "Aquatos: 51 Sewer Crystal Traded"
+    TRADE_52 = "Aquatos: 52 Sewer Crystal Traded"
+    TRADE_53 = "Aquatos: 53 Sewer Crystal Traded"
+    TRADE_54 = "Aquatos: 54 Sewer Crystal Traded"
+    TRADE_55 = "Aquatos: 55 Sewer Crystal Traded"
+    TRADE_56 = "Aquatos: 56 Sewer Crystal Traded"
+    TRADE_57 = "Aquatos: 57 Sewer Crystal Traded"
+    TRADE_58 = "Aquatos: 58 Sewer Crystal Traded"
+    TRADE_59 = "Aquatos: 59 Sewer Crystal Traded"
+    TRADE_60 = "Aquatos: 60 Sewer Crystal Traded"
+    TRADE_61 = "Aquatos: 61 Sewer Crystal Traded"
+    TRADE_62 = "Aquatos: 62 Sewer Crystal Traded"
+    TRADE_63 = "Aquatos: 63 Sewer Crystal Traded"
+    TRADE_64 = "Aquatos: 64 Sewer Crystal Traded"
+    TRADE_65 = "Aquatos: 65 Sewer Crystal Traded"
+    TRADE_66 = "Aquatos: 66 Sewer Crystal Traded"
+    TRADE_67 = "Aquatos: 67 Sewer Crystal Traded"
+    TRADE_68 = "Aquatos: 68 Sewer Crystal Traded"
+    TRADE_69 = "Aquatos: 69 Sewer Crystal Traded"
+    TRADE_70 = "Aquatos: 70 Sewer Crystal Traded"
+    TRADE_71 = "Aquatos: 71 Sewer Crystal Traded"
+    TRADE_72 = "Aquatos: 72 Sewer Crystal Traded"
+    TRADE_73 = "Aquatos: 73 Sewer Crystal Traded"
+    TRADE_74 = "Aquatos: 74 Sewer Crystal Traded"
+    TRADE_75 = "Aquatos: 75 Sewer Crystal Traded"
+    TRADE_76 = "Aquatos: 76 Sewer Crystal Traded"
+    TRADE_77 = "Aquatos: 77 Sewer Crystal Traded"
+    TRADE_78 = "Aquatos: 78 Sewer Crystal Traded"
+    TRADE_79 = "Aquatos: 79 Sewer Crystal Traded"
+    TRADE_80 = "Aquatos: 80 Sewer Crystal Traded"
+    TRADE_81 = "Aquatos: 81 Sewer Crystal Traded"
+    TRADE_82 = "Aquatos: 82 Sewer Crystal Traded"
+    TRADE_83 = "Aquatos: 83 Sewer Crystal Traded"
+    TRADE_84 = "Aquatos: 84 Sewer Crystal Traded"
+    TRADE_85 = "Aquatos: 85 Sewer Crystal Traded"
+    TRADE_86 = "Aquatos: 86 Sewer Crystal Traded"
+    TRADE_87 = "Aquatos: 87 Sewer Crystal Traded"
+    TRADE_88 = "Aquatos: 88 Sewer Crystal Traded"
+    TRADE_89 = "Aquatos: 89 Sewer Crystal Traded"
+    TRADE_90 = "Aquatos: 90 Sewer Crystal Traded"
+    TRADE_91 = "Aquatos: 91 Sewer Crystal Traded"
+    TRADE_92 = "Aquatos: 92 Sewer Crystal Traded"
+    TRADE_93 = "Aquatos: 93 Sewer Crystal Traded"
+    TRADE_94 = "Aquatos: 94 Sewer Crystal Traded"
+    TRADE_95 = "Aquatos: 95 Sewer Crystal Traded"
+    TRADE_96 = "Aquatos: 96 Sewer Crystal Traded"
+    TRADE_97 = "Aquatos: 97 Sewer Crystal Traded"
+    TRADE_98 = "Aquatos: 98 Sewer Crystal Traded"
+    TRADE_99 = "Aquatos: 99 Sewer Crystal Traded"
+
+
+class RAC3NANOTECH:
+    LEVEL_11 = "Nanotech Milestone: 11"
+    LEVEL_12 = "Nanotech Milestone: 12"
+    LEVEL_13 = "Nanotech Milestone: 13"
+    LEVEL_14 = "Nanotech Milestone: 14"
+    LEVEL_15 = "Nanotech Milestone: 15"
+    LEVEL_16 = "Nanotech Milestone: 16"
+    LEVEL_17 = "Nanotech Milestone: 17"
+    LEVEL_18 = "Nanotech Milestone: 18"
+    LEVEL_19 = "Nanotech Milestone: 19"
+    LEVEL_20 = "Nanotech Milestone: 20"
+    LEVEL_21 = "Nanotech Milestone: 21"
+    LEVEL_22 = "Nanotech Milestone: 22"
+    LEVEL_23 = "Nanotech Milestone: 23"
+    LEVEL_24 = "Nanotech Milestone: 24"
+    LEVEL_25 = "Nanotech Milestone: 25"
+    LEVEL_26 = "Nanotech Milestone: 26"
+    LEVEL_27 = "Nanotech Milestone: 27"
+    LEVEL_28 = "Nanotech Milestone: 28"
+    LEVEL_29 = "Nanotech Milestone: 29"
+    LEVEL_30 = "Nanotech Milestone: 30"
+    LEVEL_31 = "Nanotech Milestone: 31"
+    LEVEL_32 = "Nanotech Milestone: 32"
+    LEVEL_33 = "Nanotech Milestone: 33"
+    LEVEL_34 = "Nanotech Milestone: 34"
+    LEVEL_35 = "Nanotech Milestone: 35"
+    LEVEL_36 = "Nanotech Milestone: 36"
+    LEVEL_37 = "Nanotech Milestone: 37"
+    LEVEL_38 = "Nanotech Milestone: 38"
+    LEVEL_39 = "Nanotech Milestone: 39"
+    LEVEL_40 = "Nanotech Milestone: 40"
+    LEVEL_41 = "Nanotech Milestone: 41"
+    LEVEL_42 = "Nanotech Milestone: 42"
+    LEVEL_43 = "Nanotech Milestone: 43"
+    LEVEL_44 = "Nanotech Milestone: 44"
+    LEVEL_45 = "Nanotech Milestone: 45"
+    LEVEL_46 = "Nanotech Milestone: 46"
+    LEVEL_47 = "Nanotech Milestone: 47"
+    LEVEL_48 = "Nanotech Milestone: 48"
+    LEVEL_49 = "Nanotech Milestone: 49"
+    LEVEL_50 = "Nanotech Milestone: 50"
+    LEVEL_51 = "Nanotech Milestone: 51"
+    LEVEL_52 = "Nanotech Milestone: 52"
+    LEVEL_53 = "Nanotech Milestone: 53"
+    LEVEL_54 = "Nanotech Milestone: 54"
+    LEVEL_55 = "Nanotech Milestone: 55"
+    LEVEL_56 = "Nanotech Milestone: 56"
+    LEVEL_57 = "Nanotech Milestone: 57"
+    LEVEL_58 = "Nanotech Milestone: 58"
+    LEVEL_59 = "Nanotech Milestone: 59"
+    LEVEL_60 = "Nanotech Milestone: 60"
+    LEVEL_61 = "Nanotech Milestone: 61"
+    LEVEL_62 = "Nanotech Milestone: 62"
+    LEVEL_63 = "Nanotech Milestone: 63"
+    LEVEL_64 = "Nanotech Milestone: 64"
+    LEVEL_65 = "Nanotech Milestone: 65"
+    LEVEL_66 = "Nanotech Milestone: 66"
+    LEVEL_67 = "Nanotech Milestone: 67"
+    LEVEL_68 = "Nanotech Milestone: 68"
+    LEVEL_69 = "Nanotech Milestone: 69"
+    LEVEL_70 = "Nanotech Milestone: 70"
+    LEVEL_71 = "Nanotech Milestone: 71"
+    LEVEL_72 = "Nanotech Milestone: 72"
+    LEVEL_73 = "Nanotech Milestone: 73"
+    LEVEL_74 = "Nanotech Milestone: 74"
+    LEVEL_75 = "Nanotech Milestone: 75"
+    LEVEL_76 = "Nanotech Milestone: 76"
+    LEVEL_77 = "Nanotech Milestone: 77"
+    LEVEL_78 = "Nanotech Milestone: 78"
+    LEVEL_79 = "Nanotech Milestone: 79"
+    LEVEL_80 = "Nanotech Milestone: 80"
+    LEVEL_81 = "Nanotech Milestone: 81"
+    LEVEL_82 = "Nanotech Milestone: 82"
+    LEVEL_83 = "Nanotech Milestone: 83"
+    LEVEL_84 = "Nanotech Milestone: 84"
+    LEVEL_85 = "Nanotech Milestone: 85"
+    LEVEL_86 = "Nanotech Milestone: 86"
+    LEVEL_87 = "Nanotech Milestone: 87"
+    LEVEL_88 = "Nanotech Milestone: 88"
+    LEVEL_89 = "Nanotech Milestone: 89"
+    LEVEL_90 = "Nanotech Milestone: 90"
+    LEVEL_91 = "Nanotech Milestone: 91"
+    LEVEL_92 = "Nanotech Milestone: 92"
+    LEVEL_93 = "Nanotech Milestone: 93"
+    LEVEL_94 = "Nanotech Milestone: 94"
+    LEVEL_95 = "Nanotech Milestone: 95"
+    LEVEL_96 = "Nanotech Milestone: 96"
+    LEVEL_97 = "Nanotech Milestone: 97"
+    LEVEL_98 = "Nanotech Milestone: 98"
+    LEVEL_99 = "Nanotech Milestone: 99"
+    LEVEL_100 = "Nanotech Milestone: 100"
 
 
 class RAC3DEATH:
@@ -811,36 +1192,36 @@ FILLER_LIST: list[str] = [
     RAC3ITEM.JACKPOT,
 ]
 SIMPLE_SKILL_POINTS = [
-    RAC3SKILLPOINT.REFLECT_TO_SCORE,
-    RAC3SKILLPOINT.LIGHTS_CAMERA_ACTION,
-    RAC3SKILLPOINT.SUNKEN_TREASURE,
-    RAC3SKILLPOINT.BE_A_SHARPSHOOTER,
-    RAC3SKILLPOINT.BUGS_TO_BIRDIE,
-    RAC3SKILLPOINT.GET_TO_THE_BELT,
-    RAC3SKILLPOINT.BASH_THE_PARTY,
-    RAC3SKILLPOINT.GOOD_YEAR,
-    RAC3SKILLPOINT.AIM_HIGH,
-    RAC3SKILLPOINT.SUCK_IT_UP,
-    RAC3SKILLPOINT.GO_FOR_HANG_TIME,
-    RAC3SKILLPOINT.ZAP_BACK_AT_YA,
-    RAC3SKILLPOINT.BREAK_THE_DAN,
-    RAC3SKILLPOINT.YOU_BREAK_IT,
-    RAC3SKILLPOINT.SPREAD_YOUR_GERMS,
-    # RAC3SKILLPOINT.STAY_SQUEAKY_CLEAN,
-    # RAC3SKILLPOINT.MONKEYING_AROUND,
-    # RAC3SKILLPOINT.BEAT_HELGAS_BEST_TIME,
-    # RAC3SKILLPOINT.TURN_UP_THE_HEAT,
-    # RAC3SKILLPOINT.FLEE_FLAWLESSLY,
-    # RAC3SKILLPOINT.BASH_THE_BUG,
-    # RAC3SKILLPOINT.FEELING_LUCKY,
-    # RAC3SKILLPOINT.EIGHT_TIME_CHAMP,
-    # RAC3SKILLPOINT.HIT_THE_MOTHERLOAD,
-    # RAC3SKILLPOINT.PIRATE_BOOTY,
-    # RAC3SKILLPOINT.DEJA_Q_ALL_OVER_AGAIN,
-    # RAC3SKILLPOINT.ARRIBA_AMOEBA,
-    # RAC3SKILLPOINT.SHADOW_OF_THE_ROBOT,
-    # RAC3SKILLPOINT.THE_SHAMING_OF_THE_Q,
-    # RAC3SKILLPOINT.ARCADE_PERFECTION,
+    RAC3SKILLPOINT.MARCADIA_REFLECT,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.AQUATOS_SUNKEN,
+    RAC3SKILLPOINT.TYHRRANOSIS_SHARPSHOOTER,
+    RAC3SKILLPOINT.DAXX_BUGS,
+    RAC3SKILLPOINT.GEMINI_BELT,
+    RAC3SKILLPOINT.BLACKWATER_BASH,
+    RAC3SKILLPOINT.METROPOLIS_GOOD_YEAR,
+    RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH,
+    RAC3SKILLPOINT.CRASH_SITE_SUCK,
+    RAC3SKILLPOINT.ARIDIA_HANG_TIME,
+    RAC3SKILLPOINT.ARIDIA_ZAP,
+    RAC3SKILLPOINT.HIDEOUT_DAN,
+    RAC3SKILLPOINT.KOROS_BREAK,
+    RAC3SKILLPOINT.COMMAND_CENTER_GERMS,
+    # RAC3SKILLPOINT.FLORANA_PATH,
+    # RAC3SKILLPOINT.PHOENIX_MONKEY,
+    # RAC3SKILLPOINT.PHOENIX_VR_TRAINING,
+    # RAC3SKILLPOINT.PHOENIX_ARMOR,
+    # RAC3SKILLPOINT.NATION_FLEE,
+    # RAC3SKILLPOINT.NATION_BASH,
+    # RAC3SKILLPOINT.HOLOSTAR_LUCKY,
+    # RAC3SKILLPOINT.NATION_EIGHT,
+    # RAC3SKILLPOINT.SEWER_MOTHERLOAD,
+    # RAC3SKILLPOINT.PHOENIX_COMIC_1,
+    # RAC3SKILLPOINT.PHOENIX_COMIC_2,
+    # RAC3SKILLPOINT.PHOENIX_COMIC_3,
+    # RAC3SKILLPOINT.PHOENIX_COMIC_4,
+    # RAC3SKILLPOINT.PHOENIX_COMIC_5,
+    # RAC3SKILLPOINT.PHOENIX_ARCADE,
 ]
 DEATH_FROM_ACTION: dict[int, str] = {
     0x31: RAC3DEATH.EATEN,
