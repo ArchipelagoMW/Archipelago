@@ -13,10 +13,7 @@ if TYPE_CHECKING:
 
 
 class Rule:
-    def __init__(self, world: World):
-        self.world = world
-
-    def eval(self, state: "CollectionState") -> bool:
+    def eval(self, world: World, state: "CollectionState") -> bool:
         raise NotImplementedError("You must implement this method")
 
     def optimize(self) -> Rule:
@@ -27,12 +24,12 @@ class Rule:
 
 
 class AndRule(Rule):
-    def __init__(self, world: World, *rules: Rule):
-        super().__init__(world)
+    def __init__(self, *rules: Rule):
+        super().__init__()
         self.rules = rules
 
-    def eval(self, state: "CollectionState") -> bool:
-        return all(rule.eval(state) for rule in self.rules)
+    def eval(self, world: World, state: "CollectionState") -> bool:
+        return all(rule.eval(world, state) for rule in self.rules)
 
     def optimize(self) -> AndRule:
         new_rule_set = set()
@@ -43,19 +40,19 @@ class AndRule(Rule):
                 new_rule_set = new_rule_set.union(optimized_rule.rules)
             else:
                 new_rule_set.add(optimized_rule)
-        return AndRule(self.world, *new_rule_set)
+        return AndRule(*new_rule_set)
 
     def needed_items(self) -> set[str]:
         return set(x for rule in self.rules for x in rule.needed_items())
 
 
 class OrRule(Rule):
-    def __init__(self, world: World, *rules: Rule):
-        super().__init__(world)
+    def __init__(self, *rules: Rule):
+        super().__init__()
         self.rules = rules
 
-    def eval(self, state: "CollectionState") -> bool:
-        return any(rule.eval(state) for rule in self.rules)
+    def eval(self, world: World, state: "CollectionState") -> bool:
+        return any(rule.eval(world, state) for rule in self.rules)
 
     def optimize(self) -> OrRule:
         new_rule_set = set()
@@ -66,18 +63,18 @@ class OrRule(Rule):
                 new_rule_set = new_rule_set.union(optimized_rule.rules)
             else:
                 new_rule_set.add(optimized_rule)
-        return OrRule(self.world, *new_rule_set)
+        return OrRule(*new_rule_set)
 
     def needed_items(self) -> set[str]:
         return set(x for rule in self.rules for x in rule.needed_items())
 
 class FactorioRule(Rule):
-    def __init__(self, world: "FactorioBobs"):
-        super().__init__(world)
+    def eval(self, world: "FactorioBobs", state: "CollectionState") -> bool:
+        raise NotImplementedError("You must implement this method")
 
 class TechRule(FactorioRule):
     made_rules: dict[str, TechRule] = {}
-    def __new__(cls, world: "FactorioBobs", tech: str | Technologies.Technology):
+    def __new__(cls, tech: str | Technologies.Technology):
         if tech is Technologies.Technology:
             tech = tech.name
 
@@ -85,35 +82,34 @@ class TechRule(FactorioRule):
             return cls.made_rules[tech]
         return super(TechRule, cls).__new__(cls)
 
-    def __init__(self, world: "FactorioBobs", tech: str | Technologies.Technology):
-        super().__init__(world)
+    def __init__(self, tech: str | Technologies.Technology):
+        super().__init__()
         if type(tech) is str:
             assert tech in Technologies.base_technology_table, f"{tech} is not a valid tech for rules"
             self.tech_name = tech
         else:
             self.tech_name = tech.name
 
-    def eval(self, state: "CollectionState") -> bool:
-        return state.has(self.tech_name, self.world.player)
+    def eval(self, world: "FactorioBobs", state: "CollectionState") -> bool:
+        return state.has(self.tech_name, world.player)
 
     def needed_items(self) -> set[str]:
         return {self.tech_name,}
 
 class InternalItemRule(AndRule, FactorioRule):
-    def __init__(self, world: "FactorioBobs", internal_item: InternalItem | str):
+    def __init__(self, internal_item: InternalItem | str):
         if type(internal_item) is str:
             assert internal_item in all_ingredients, f"{InternalItem} is not a valid item for rules"
             self.internalItem = all_ingredients[internal_item]
         else:
             self.internalItem = internal_item
-        super().__init__(world, *(TechRule(world, tech) for tech in self.internalItem.all_unlocking_technologies()))
-        # self.rules = tuple(TechRule(world, tech) for tech in self.internal_item.all_unlocking_technologies())
+        super().__init__(*(TechRule(tech) for tech in self.internalItem.all_unlocking_technologies()))
 
 class RecipeRule(AndRule, FactorioRule):
-    def __init__(self, world: "FactorioBobs", recipe: Recipe | str):
+    def __init__(self, recipe: Recipe | str):
         if type(recipe) is str:
             assert recipe in recipes, f"{recipe} is not a valid recipe for rules"
             self.recipe = recipes[recipe]
         else:
             self.recipe = recipe
-        super().__init__(world, *(TechRule(world, tech) for tech in self.recipe.all_unlocking_technologies()))
+        super().__init__(*(TechRule(tech) for tech in self.recipe.all_unlocking_technologies()))

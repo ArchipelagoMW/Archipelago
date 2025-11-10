@@ -153,57 +153,51 @@ class FactorioBobs(World):
             self.additional_logic = {}
         elif self.options.additional_logic == self.options.additional_logic.default:
             self.additional_logic = {
-                2: InternalItemRule(self, "gun-turret"),
-                3: AndRule(self,
-                           InternalItemRule(self, "lab"),
-                           InternalItemRule(self, "transport-belt"),
-                           InternalItemRule(self, "electric-mining-drill"),
-                           InternalItemRule(self, "bob-void-pump"),
-                           RecipeRule(self, "bob-basic-greenhouse-cycle"),
-                           TechRule(self, "bob-long-inserters-1")
+                2: InternalItemRule("gun-turret"),
+                3: AndRule(InternalItemRule("lab"),
+                           InternalItemRule("transport-belt"),
+                           InternalItemRule("electric-mining-drill"),
+                           InternalItemRule("bob-void-pump"),
+                           RecipeRule("bob-basic-greenhouse-cycle"),
+                           TechRule("bob-long-inserters-1")
                            ),
-                5: AndRule(self,
-                           InternalItemRule(self, "modular-armor"),
-                           InternalItemRule(self, "personal-roboport-equipment"),
-                           InternalItemRule(self, "solar-panel-equipment"),
-                           InternalItemRule(self, "battery-equipment"),
-                           InternalItemRule(self, "construction-robot"),
-                           InternalItemRule(self, "constant-combinator"),
-                           TechRule(self, "bob-long-inserters-2"),
-                           OrRule(self,
-                                  AndRule(self,
-                                          InternalItemRule(self, "train-stop"),
-                                          InternalItemRule(self, "rail-signal"),
-                                          InternalItemRule(self, "rail"),
-                                          InternalItemRule(self, "locomotive"),
-                                          InternalItemRule(self, "cargo-wagon"),
-                                          InternalItemRule(self, "fluid-wagon")
+                5: AndRule(InternalItemRule("modular-armor"),
+                           InternalItemRule("personal-roboport-equipment"),
+                           InternalItemRule("solar-panel-equipment"),
+                           InternalItemRule("battery-equipment"),
+                           InternalItemRule("construction-robot"),
+                           InternalItemRule("constant-combinator"),
+                           TechRule("bob-long-inserters-2"),
+                           OrRule(AndRule(InternalItemRule("train-stop"),
+                                          InternalItemRule("rail-signal"),
+                                          InternalItemRule("rail"),
+                                          InternalItemRule("locomotive"),
+                                          InternalItemRule("cargo-wagon"),
+                                          InternalItemRule("fluid-wagon")
                                           ),
-                                  AndRule(self,
-                                          InternalItemRule(self, "roboport"),
-                                          InternalItemRule(self, "logistic-robot"),
-                                          InternalItemRule(self, "storage-chest"), # yes a chest is for storage
-                                          InternalItemRule(self, "requester-chest"),
-                                          InternalItemRule(self, "passive-provider-chest"),
-                                          InternalItemRule(self, "buffer-chest"),
-                                          InternalItemRule(self, "active-provider-chest")
+                                  AndRule(InternalItemRule("roboport"),
+                                          InternalItemRule("logistic-robot"),
+                                          InternalItemRule("storage-chest"), # yes a chest is for storage
+                                          InternalItemRule("requester-chest"),
+                                          InternalItemRule("passive-provider-chest"),
+                                          InternalItemRule("buffer-chest"),
+                                          InternalItemRule("active-provider-chest")
                                           )
                                   )
                            ),
-                7: AndRule(self,
-                           InternalItemRule(self, "train-stop"),
-                           InternalItemRule(self, "rail-signal"),
-                           InternalItemRule(self, "rail"),
-                           InternalItemRule(self, "locomotive"),
-                           InternalItemRule(self, "cargo-wagon"),
-                           InternalItemRule(self, "fluid-wagon"),
-                           InternalItemRule(self, "roboport"),
-                           InternalItemRule(self, "logistic-robot"),
-                           InternalItemRule(self, "storage-chest"), # yes a chest is for storage
-                           InternalItemRule(self, "requester-chest"),
-                           InternalItemRule(self, "passive-provider-chest"),
-                           InternalItemRule(self, "buffer-chest"),
-                           InternalItemRule(self, "active-provider-chest")
+                7: AndRule(InternalItemRule("train-stop"),
+                           InternalItemRule("rail-signal"),
+                           InternalItemRule("rail"),
+                           InternalItemRule("locomotive"),
+                           InternalItemRule("cargo-wagon"),
+                           InternalItemRule("fluid-wagon"),
+                           InternalItemRule("roboport"),
+                           InternalItemRule("logistic-robot"),
+                           InternalItemRule("storage-chest"), # yes a chest is for storage
+                           InternalItemRule("requester-chest"),
+                           InternalItemRule("passive-provider-chest"),
+                           InternalItemRule("buffer-chest"),
+                           InternalItemRule("active-provider-chest")
                            )
             }
 
@@ -335,12 +329,12 @@ class FactorioBobs(World):
             science_pack_item: InternalItem = self.get_internal_item(science_pack)
 
             if complexity in self.additional_logic:
-                rule = AndRule(self, InternalItemRule(self, science_pack_item), self.additional_logic[complexity])
+                rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
             else:
-                rule = InternalItemRule(self, science_pack_item)
+                rule = InternalItemRule(science_pack_item)
 
             optimized_rule = rule.optimize()
-            Rules.set_rule(location, optimized_rule.eval)
+            Rules.set_rule(location, lambda state: optimized_rule.eval(self, state))
 
         for location in self.science_locations:
             Rules.set_rule(location, lambda state: True)
