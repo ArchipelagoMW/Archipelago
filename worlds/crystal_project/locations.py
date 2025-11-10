@@ -569,36 +569,43 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Poko Poko Desert
         #Treasure chests
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Butter Cutter chest
-        # if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Hatchet chest
+        #Poko Poko Desert main
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset),  # West Lookout Token chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Butter Cutter chest
+        #if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Hatchet chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME)),  # Dueller
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_vertical_movement(state)), #North Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME)), #Dueller
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Stormy first floor of ruins", 2676 + treasure_index_offset), #Fenix Juice chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset), #West Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasn't that bad)", 1189 + treasure_index_offset), #Central Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Balance beam", 97 + treasure_index_offset), #Scope Specs chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Past Lost Son", 1667 + treasure_index_offset), #Ether Pouch chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Salmon Bay map chest
+        #Poko Poko Desert Eastern Plateau
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasn't that bad)", 1189 + treasure_index_offset),  # Central Lookout Token chest
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Balance beam", 97 + treasure_index_offset),  # Scope Specs chest
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Past Lost Son", 1667 + treasure_index_offset),  # Ether Pouch chest
+        #Tower of Zot
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset), #Salmon Bay map chest
 
         #NPCs
-        #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
+        #NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map - not
+        #Poko Poko Desert main
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver beneath overhang in ruins south of shrine", 2675 + npc_index_offset), #Dust
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
         # if you're Good At Jumping you can get to this rocky outcropping gold with no mounts
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver atop ruins", 2677 + npc_index_offset), #Ore
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver atop ruins", 2677 + npc_index_offset),  # Ore
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in desert arch shade", 2682 + npc_index_offset),  # Ingot
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ingot
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on far end of the Tower of Zot", 2816 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset), #Ore
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
+        #Poko Poko Eastern Plateau
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset),  # Ore
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Ingot
+        #Poko Poko Sara Sara Beach West Mountain Pass
+        LocationData(POKO_POKO_BEACH_WEST_PASS_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - High western gold (approach from the Lookout Tower or the Beach Nest)", 2711 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
+        #Tower of Zot
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Diamond bedazzling the Tower of Zot", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold bedazzling the Tower of Zot", 2816 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
 
         #Sara Sara Bazaar
         #Treasure chests
@@ -693,7 +700,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Chest - Cliff diving", 2975 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ether Pouch chest
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Chest - Across the bridge", 2974 + treasure_index_offset), #Potion Pouch chest
-        LocationData(SALMON_BAY_AP_REGION, "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
+        LocationData(SALMON_RIVER_MOUTH_AP_REGION, "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
         
         #NPCs
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),

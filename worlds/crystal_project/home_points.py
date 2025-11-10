@@ -62,7 +62,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(CASTLE_SEQUOIA_AP_REGION, "Castle Sequoia Foyer", 514),
 
-        LocationData(POKO_POKO_DESERT_AP_REGION, "Labyrinth Encampment", 2712, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)),
+        LocationData(TOWER_OF_ZOT_AP_REGION, "Labyrinth Encampment", 2712),
 
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "Sara Sara Bazaar Port", 941),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "Poko Poko West Gate", 3783),

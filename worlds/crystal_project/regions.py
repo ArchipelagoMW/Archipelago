@@ -309,10 +309,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
 
     connect_menu_region(world, options)
 
-    fancy_add_exits(world, SPAWNING_MEADOWS_AP_REGION, [DELENDE_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION],
+    fancy_add_exits(world, SPAWNING_MEADOWS_AP_REGION, [DELENDE_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION],
                     {CONTINENTAL_TRAM_AP_REGION: lambda state: logic.has_swimming(state) and logic.obscure_routes_on(state),
                      MERCURY_SHRINE_AP_REGION: lambda state: logic.has_vertical_movement(state),
-                     POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.obscure_routes_on(state),
+                     POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.obscure_routes_on(state),
                      BEAURIOR_VOLCANO_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      YAMAGAWA_MA_AP_REGION: lambda state: logic.has_swimming(state) or logic.has_vertical_movement(state)})
     fancy_add_exits(world, DELENDE_AP_REGION, [GRAN_AP_REGION, BELOW_GRAN_AP_REGION, SPAWNING_MEADOWS_AP_REGION, SOILED_DENLENDE_AP_REGION, THE_PALE_GROTTO_AP_REGION, YAMAGAWA_MA_AP_REGION, SEASIDE_CLIFFS_AP_REGION, MERCURY_SHRINE_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_EAST_AP_REGION, PROVING_MEADOWS_AP_REGION, LAKE_DELENDE_AP_REGION],
@@ -414,13 +414,15 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, SALMON_PASS_EAST_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION, SALMON_PASS_WEST_AP_REGION, DELENDE_AP_REGION],
                     {SALMON_PASS_WEST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
                      DELENDE_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, SALMON_PASS_WEST_AP_REGION, [SALMON_PASS_EAST_AP_REGION, SALMON_RIVER_AP_REGION],
-                    {SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state)})
+    fancy_add_exits(world, SALMON_PASS_WEST_AP_REGION, [SALMON_PASS_EAST_AP_REGION, SALMON_RIVER_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION],
+                    {SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
+                     SOUTH_SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state)})
     #Salmon River start
-    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [POSEIDON_SHRINE_PROPER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SALMON_PASS_WEST_AP_REGION, SALMON_BAY_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
+    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [POSEIDON_SHRINE_PROPER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, SALMON_PASS_WEST_AP_REGION, SALMON_BAY_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
                     #Note: connection to Tall Tall can be with goat (obscure), owl, (rental salmon + ibek (obscure), quintar + ibek) via poseidon shrine/salmon shack roof, or poseidon stone + ibek/owl
                     {POSEIDON_SHRINE_PROPER_AP_REGION: lambda state: (logic.has_swimming(state) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state),
                      RIVER_CATS_EGO_AP_REGION: lambda state: (logic.obscure_routes_on(state) and logic.has_rental_salmon(state)) or logic.has_swimming(state),
+                     SOUTH_SALMON_RIVER_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      LOWER_ICE_LAKES_AP_REGION: lambda state: (logic.has_vertical_movement(state) and logic.obscure_routes_on(state)) or logic.has_glide(state)})
     fancy_add_exits(world, POSEIDON_SHRINE_PROPER_AP_REGION, [SALMON_RIVER_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, MUSHROOM_MOUNTAIN_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
                     {POSEIDON_SHRINE_ROOF_AP_REGION: lambda state: logic.has_vertical_movement(state),
@@ -435,13 +437,32 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, MUSHROOM_MOUNTAIN_AP_REGION, [SALMON_RIVER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SALMON_BAY_AP_REGION],
                     {SALMON_RIVER_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or logic.has_swimming(state),
                      RIVER_CATS_EGO_AP_REGION: lambda state: logic.has_glide(state) and logic.has_swimming(state)})
+    fancy_add_exits(world, SOUTH_SALMON_RIVER_AP_REGION, [SALMON_RIVER_AP_REGION, SALMON_RIVER_MOUTH_AP_REGION, SALMON_PASS_WEST_AP_REGION, LAKE_DELENDE_AP_REGION],
+                    {SALMON_RIVER_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
+                     SALMON_RIVER_MOUTH_AP_REGION: lambda state: logic.has_swimming(state) or logic.has_vertical_movement(state) or logic.has_glide(state),
+                     SALMON_PASS_WEST_AP_REGION: lambda state: logic.has_swimming(state)})
     #Salmon River end
-    fancy_add_exits(world, POKO_POKO_DESERT_AP_REGION, [SARA_SARA_BAZAAR_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, LAKE_DELENDE_AP_REGION, SALMON_BAY_AP_REGION, ANCIENT_LABYRINTH_AP_REGION],
-                    {ANCIENT_RESERVOIR_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
-                     LAKE_DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state),
-                     SALMON_BAY_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
-                     ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled) and (state.has(ANCIENT_TABLET_A, player) or logic.obscure_routes_on(state)) and logic.has_vertical_movement(state) and logic.has_glide(state)})
-    fancy_add_exits(world, SARA_SARA_BAZAAR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
+    #Poko Poko Desert start
+    fancy_add_exits(world, POKO_POKO_DESERT_AP_REGION, [POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_BEACH_WEST_PASS_AP_REGION, TOWER_OF_ZOT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, ANCIENT_RESERVOIR_AP_REGION],
+                    {POKO_POKO_EAST_PLATEAU_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     POKO_POKO_BEACH_WEST_PASS_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
+                     TOWER_OF_ZOT_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
+                     ANCIENT_RESERVOIR_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY)})
+    fancy_add_exits(world, POKO_POKO_EAST_PLATEAU_AP_REGION, [POKO_POKO_DESERT_AP_REGION, TOWER_OF_ZOT_AP_REGION, POKO_POKO_LAKE_DELENDE_PASS_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, SARA_SARA_BAZAAR_AP_REGION],
+                    {TOWER_OF_ZOT_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
+                     POKO_POKO_LAKE_DELENDE_PASS_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, POKO_POKO_BEACH_WEST_PASS_AP_REGION, [POKO_POKO_DESERT_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION])
+    fancy_add_exits(world, TOWER_OF_ZOT_AP_REGION, [POKO_POKO_DESERT_AP_REGION, POKO_POKO_EAST_PLATEAU_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, ANCIENT_LABYRINTH_AP_REGION, SALMON_BAY_AP_REGION],
+                    {POKO_POKO_EAST_PLATEAU_AP_REGION: lambda state: logic.has_glide(state),
+                     ANCIENT_LABYRINTH_AP_REGION: lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled) and (state.has(ANCIENT_TABLET_A, player) or logic.obscure_routes_on(state)) and logic.has_vertical_movement(state) and logic.has_glide(state),
+                     SALMON_BAY_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, POKO_POKO_LAKE_DELENDE_PASS_AP_REGION, [POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, LAKE_DELENDE_AP_REGION, SALMON_RIVER_MOUTH_AP_REGION],
+                    {POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION: lambda state: logic.has_glide(state),
+                     SALMON_RIVER_MOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)})
+    fancy_add_exits(world, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, [POKO_POKO_EAST_PLATEAU_AP_REGION, SPAWNING_MEADOWS_AP_REGION])
+    #Poko Poko Desert end
+    fancy_add_exits(world, SARA_SARA_BAZAAR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, POKO_POKO_EAST_PLATEAU_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION],
                     {SARA_SARA_BEACH_WEST_AP_REGION: lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME),
                      SHOUDU_PROVINCE_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and state.has(FERRY_PASS, player),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
@@ -450,18 +471,25 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {IBEK_CAVE_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      BEAURIOR_VOLCANO_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, SARA_SARA_BEACH_WEST_AP_REGION, [POKO_POKO_DESERT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, THE_OPEN_SEA_AP_REGION],
-                    {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_vertical_movement(state),
+    fancy_add_exits(world, SARA_SARA_BEACH_WEST_AP_REGION, [POKO_POKO_BEACH_WEST_PASS_AP_REGION, TOWER_OF_ZOT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, THE_OPEN_SEA_AP_REGION],
+                    {POKO_POKO_BEACH_WEST_PASS_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     TOWER_OF_ZOT_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
                      SARA_SARA_BAZAAR_AP_REGION: lambda state: logic.has_horizontal_movement(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    #Ancient Reservoir start
     fancy_add_exits(world, ANCIENT_RESERVOIR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, IBEK_CAVE_AP_REGION, BELOW_GRAN_AP_REGION],
                     {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
                      BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, IBEK_CAVE_AP_REGION, [SARA_SARA_BEACH_EAST_AP_REGION],
                     {SARA_SARA_BEACH_EAST_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, SALMON_BAY_AP_REGION, [THE_OPEN_SEA_AP_REGION, SALMON_RIVER_AP_REGION],
+    #Ancient Reservoir end
+    #Salmon Bay start
+    fancy_add_exits(world, SALMON_BAY_AP_REGION, [THE_OPEN_SEA_AP_REGION, SALMON_RIVER_MOUTH_AP_REGION],
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
-                     SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state)})
+                     SALMON_RIVER_MOUTH_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, SALMON_RIVER_MOUTH_AP_REGION, [SALMON_BAY_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, POKO_POKO_EAST_PLATEAU_AP_REGION],
+                    {SOUTH_SALMON_RIVER_AP_REGION: lambda state: (logic.has_vertical_movement(state) and logic.has_glide(state)) or logic.has_swimming(state)})
+    #Salmon Bay end
     fancy_add_exits(world, THE_OPEN_SEA_AP_REGION, [SEASIDE_CLIFFS_AP_REGION, PROVING_MEADOWS_AP_REGION, OKIMOTO_NS_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_WEST_AP_REGION, SALMON_BAY_AP_REGION, SHOUDU_PROVINCE_AP_REGION, THE_UNDERCITY_AP_REGION, JIDAMBA_ATOLLS_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION, THE_DEEP_SEA_AP_REGION],
                     {SEASIDE_CLIFFS_AP_REGION: lambda state: logic.has_swimming(state),
                      PROVING_MEADOWS_AP_REGION: lambda state: logic.has_swimming(state),
@@ -494,8 +522,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {BEAURIOR_ROCK_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, BEAURIOR_ROCK_AP_REGION, [BEAURIOR_VOLCANO_AP_REGION])
-    fancy_add_exits(world, LAKE_DELENDE_AP_REGION, [POKO_POKO_DESERT_AP_REGION, DELENDE_AP_REGION],
-                    {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_vertical_movement(state),
+    fancy_add_exits(world, LAKE_DELENDE_AP_REGION, [POKO_POKO_LAKE_DELENDE_PASS_AP_REGION, DELENDE_AP_REGION],
+                    {POKO_POKO_LAKE_DELENDE_PASS_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     #Quintar Reserve start
     fancy_add_exits(world, QUINTAR_RESERVE_AP_REGION, [SHOUDU_PROVINCE_AP_REGION, DIONE_SHRINE_AP_REGION, QUINTAR_MAUSOLEUM_AP_REGION],
@@ -684,7 +712,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, CONTINENTAL_TRAM_AP_REGION, [PIPELINE_SOUTH_AP_REGION, SARA_SARA_BAZAAR_AP_REGION],
                     {SARA_SARA_BAZAAR_AP_REGION: lambda state: logic.has_swimming(state) or state.has(TRAM_KEY, player)})
     #Ancient Labyrinth section start
-    fancy_add_exits(world, ANCIENT_LABYRINTH_AP_REGION, [POKO_POKO_DESERT_AP_REGION, LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION],
+    fancy_add_exits(world, ANCIENT_LABYRINTH_AP_REGION, [TOWER_OF_ZOT_AP_REGION, LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION],
+                    #TODO: check if your starting point is Ancient Labyrinth if you can push the block out to Poko Poko Desert, with or without the Poko Poko Desert Pass
                     {LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION: lambda state: state.has(ANCIENT_TABLET_B, player) or logic.obscure_routes_on(state)})
     fancy_add_exits(world, LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION, [LABYRINTH_CORE_AP_REGION],
                     {LABYRINTH_CORE_AP_REGION: lambda state: state.has(ANCIENT_TABLET_C, player) or logic.obscure_routes_on(state)})

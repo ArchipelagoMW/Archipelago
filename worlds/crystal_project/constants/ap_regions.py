@@ -81,11 +81,20 @@ POSEIDON_SHRINE_ROOF_AP_REGION = "Poseidon Shrine Roof"
 RIVER_CATS_EGO_AP_REGION = "River Cat's Ego"
 #if you add a Mushroom Mountain Teleport location the rules around locations and regions need to be updated; e.g. the checks that require only fish no longer make sense
 MUSHROOM_MOUNTAIN_AP_REGION = "Mushroom Mountain"
+SOUTH_SALMON_RIVER_AP_REGION = "South Salmon River"
 #Salmon River end
 SHOUDU_WATERFRONT_AP_REGION = "Shoudu Waterfront"
 SHOUDU_WATERFRONT_AP_REGION_TELEPORT_LOCATION = "722,98,-168"
+#Poko Poko Desert start
 POKO_POKO_DESERT_AP_REGION = "Poko Poko Desert"
+#Mars Shrine entrance
 POKO_POKO_DESERT_AP_REGION_TELEPORT_LOCATION = "-189,111,-94"
+POKO_POKO_EAST_PLATEAU_AP_REGION = "Poko Poko Eastern Plateau"
+POKO_POKO_BEACH_WEST_PASS_AP_REGION = "Poko Poko Sara Sara Beach West Mountain Pass"
+TOWER_OF_ZOT_AP_REGION = "Tower of Zot"
+POKO_POKO_LAKE_DELENDE_PASS_AP_REGION = "Poko Poko Lake Delende Mountain Pass"
+POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION = "Poko Poko Spawning Meadows Mountain Pass"
+#Poko Poko Desert end
 SARA_SARA_BAZAAR_AP_REGION = "Sara Sara Bazaar"
 SARA_SARA_BAZAAR_AP_REGION_TELEPORT_LOCATION = "-137,101,54"
 SARA_SARA_BEACH_EAST_AP_REGION = "Sara Sara Beach East"
@@ -95,8 +104,11 @@ SARA_SARA_BEACH_WEST_AP_REGION_TELEPORT_LOCATION = "-265,97,-37"
 ANCIENT_RESERVOIR_AP_REGION = "Ancient Reservoir"
 ANCIENT_RESERVOIR_AP_REGION_TELEPORT_LOCATION = "-42,102,-136"
 IBEK_CAVE_AP_REGION = "Ibek Cave"
+#Salmon Bay start
 SALMON_BAY_AP_REGION = "Salmon Bay"
 SALMON_BAY_AP_REGION_TELEPORT_LOCATION = "-37,97,-265"
+SALMON_RIVER_MOUTH_AP_REGION = "Salmon River Mouth"
+#Salmon Bay end
 #Expert
 #The Open Sea start
 THE_OPEN_SEA_AP_REGION = "The Open Sea"
