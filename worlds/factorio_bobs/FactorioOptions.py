@@ -6,7 +6,8 @@ import typing
 from schema import Schema, Optional, And, Or, SchemaError
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions, OptionGroup
+    StartInventoryPool, PerGameCommonOptions, OptionGroup, OptionList, Visibility
+from worlds.factorio_bobs import FactorioRules
 
 
 # schema helpers
@@ -24,6 +25,25 @@ class FloatRange:
 
 
 LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
+
+class RuleSchema:
+    @staticmethod
+    def validate(value) -> dict[str, str | list]:
+        if not isinstance(value, dict):
+            raise SchemaError(f"should be instance of dict with value of and, or, item, recipe, tech but was {value!r}")
+        if len(value) != 1:
+            raise SchemaError(f"{value} is not a pair")
+        if "item" in value or "recipe" in value or "tech" in value:
+            if type(list(value.values())[0]) is not str:
+                raise SchemaError(f"item, recipe, tech must be string but was {value}")
+            return value
+        if "and" in value or "or" in value:
+            if type(list(value.values())[0]) is not list:
+                raise SchemaError(f"and, or rule must contain a list but was {value}")
+            for rule in list(value.values())[0]:
+                RuleSchema.validate(rule)
+            return value
+        raise SchemaError(f"key should be value of and, or, item, recipe, tech but was {value}")
 
 
 class MaxSciencePack(Choice):
@@ -518,12 +538,23 @@ class EnergyLink(Toggle):
     display_name = "Energy Link"
 
 class AdditionalLogic(Choice):
-    """Add additional logic that can make progression nicer"""
+    """Add additional logic that can make progression nicer.
+    If you use custom, you must define the logic in custom_additional_logic
+    An example for this can be found: https://discord.com/channels/731205301247803413/1426234278462750860/1437568465987829975"""
     display_name = "Additional logic"
     default = 1
 
+    option_custom = -1
     option_none = 0
     option_default = 1
+
+test = {}
+
+class CustomAdditionalLogic(OptionDict):
+    display_name = "Custom Additional Logic"
+    visibility = Visibility.none
+    schema = Schema({Optional(Or(num+1, name)): RuleSchema()
+                     for name, num in MaxSciencePack.options.items() if num != 0})
 
 
 @dataclass
@@ -567,6 +598,7 @@ class FactorioOptions(PerGameCommonOptions):
     energy_link: EnergyLink
     start_inventory_from_pool: StartInventoryPool
     additional_logic: AdditionalLogic
+    custom_additional_logic: CustomAdditionalLogic
 
 
 option_groups: list[OptionGroup] = [
