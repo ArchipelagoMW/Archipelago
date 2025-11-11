@@ -1,162 +1,179 @@
-# Donkey Kong Country 3 Randomizer Setup Guide
+# Guiá de configuración del randomizer de Donkey Kong Country 3
 
-## Required Software
+## Software requerido
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 
-- Hardware or software capable of loading and playing SNES ROM files
-    - An emulator capable of connecting to SNI such as:
-        - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - An SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware
-- Your legally obtained Donkey Kong Country 3 ROM file, probably named `Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`
+- Hardware o software capaz de cargar y ejecutar Roms de SNES.
+    - Un emulador capaz de conectarse a SNI, como por ejemplo:
+        - snes9x-rr desde: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
+        - BizHawk desde: [TASVideos](https://tasvideos.org/BizHawk),
+        - RetroArch 1.10.3 o mas reciente: [RetroArch Website](https://retroarch.com?page=platforms). O,
+    - Un SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), u otro
+      hardware compatible.
+- Una copia legal de Donkey Kong Country 3, nombrada regularmente como 
+`Donkey Kong Country 3 - Dixie Kong's Double Trouble! (USA) (En,Fr).sfc`.
 
-## Optional Software
-- Donkey Kong Country 3 Tracker
-	- PopTracker from: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/)
-	- Donkey Kong Country 3 Archipelago PopTracker pack from: [DKC3 AP Tracker Releases Page](https://github.com/PoryGone/DKC3_AP_Tracker/releases/)
+## Software Opcional
+- Tracker para Donkey Kong Country 3
+	- PopTracker desde: [PopTracker Releases Page](https://github.com/black-sliver/PopTracker/releases/),
+	- Donkey Kong Country 3 Archipelago PopTracker pack desde: [DKC3 AP Tracker Releases Page](https://github.com/PoryGone/DKC3_AP_Tracker/releases/)
 
-## Installation Procedures
+## Procedimientos de instalación
 
-### Windows Setup
+### Configuración para Windows
 
-1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
-   file is located in the assets section at the bottom of the version information.**
-2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
-   This is your Donkey Kong Country 3 ROM file. This only needs to be done once.
-3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
-   files.
-    1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
-    2. Right-click on a ROM file and select **Open with...**
-    3. Check the box next to **Always use this app to open .sfc files**
-    4. Scroll to the bottom of the list and click the grey text **Look for another App on this PC**
-    5. Browse for your emulator's `.exe` file and click **Open**. This file should be located inside the folder you
-       extracted in step one.
+1. Descarga e instala [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **El archivo de 
+   instalación se encuentra en la sección de recursos, en la parte inferior de los cambios de la versión.**
+2. La primera vez que hagas una generación o parche del juego, aparecerá una ventana solicitándote donde están 
+   ubicados los archivos base del juego (ROM).
+   Este archivo es tu copia de Donkey Kong Counry 3. Una vez que lo selecciones, ya no se te preguntará por él en el 
+   futuro.
+3. Si estás usando un emulador, necesitarás asignarlo como el LUA predeterminado para abrir ese tipo de archivos.
+    1. Extrae tu emulador en una carpeta en tu escritorio o cualquier otro lugar que recuerdes.
+    2. Haz clic derecho en cualquier Rom de SNES y selecciona **Abrir con...**
+    3. Marca la casilla **Usar siempre esta aplicación para abrir archivos .sfc**.
+    4. Baja hasta el final de la lista y da clic en el texto en gris que dice: **Buscar otra aplicación en este PC**.
+    5. Navega hasta la carpeta donde se encuentra el emulador que usarás, da click en el archivo `.exe` y luego en 
+    **Abrir**. Este archivo ejecutable debe de encontrarse en la carpeta que obtuviste en el paso uno.
 
-## Create a Config (.yaml) File
+## Crea un archivo de configuración (.yaml)
 
-### What is a config file and why do I need one?
+### ¿Qué es un archivo de configuración, y por qué necesito uno?
 
-See the guide on setting up a basic YAML at the Archipelago setup
-guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
+Consulte la guía sobre cómo configurar un YAML básico en la guía de configuración de 
+Archipelago: [Guía básica de configuración para Multiworld](/tutorial/Archipelago/setup/en)
 
-### Where do I get a config file?
+### ¿Dónde consigo el archivo de configuración para este juego?
 
-The Player Options page on the website allows you to configure your personal options and export a config file from
-them. Player options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
+El archivo de configuración se encuentra en la página web de archipelago. En esta página se te permitirá configurar 
+los ajustes de tu partida de la manera que tú prefieras y podrás exportar dichos ajustes desde la misma página. 
+La página de configuración es la siguiente: [Página de opciones del jugador para Donkey Kong Country 3](/games/Donkey%20Kong%20Country%203/player-options)
 
-### Verifying your config file
+### Verifica tu archivo de configuración (.yaml)
 
-If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/check)
+Si deseas verificar que tu archivo funcionara o está estructurado correctamente, puedes usar cualquier página para 
+verificar archivos YAML. Puedes usar esta por ejemplo: [Página para validación de YAML](/check)
 
-## Generating a Single-Player Game
+## Generar una partida de un solo jugador
 
-1. Navigate to the Player Options page, configure your options, and click the "Generate Game" button.
-    - Player Options page: [Donkey Kong Country 3 Player Options Page](/games/Donkey%20Kong%20Country%203/player-options)
-2. You will be presented with a "Seed Info" page.
-3. Click the "Create New Room" link.
-4. You will be presented with a server page, from which you can download your patch file.
-5. Double-click on your patch file, and the Donkey Kong Country 3 Client will launch automatically, create your ROM from the
-   patch file, and open your emulator for you.
+1. Navega a la página de configuración de Donkey Kong Country 3, configura tus opciones y preferencias, y, por último, 
+   haz clic en el botón "Generate Game".
+    - Página de configuración: [Página de opciones del jugador para Donkey Kong Country 3](/games/Donkey%20Kong%20Country%203/player-options)
+2. Se te mostrará una página titulada "Seed Info".
+3. Haz clic en el texto "Create New Room".
+4. Se te mostrará otra página titulada ¨Server Page¨, donde podrás descargar tu archivo/parche del juego.
+5. Haz doble clic en tu archivo/parche, y el cliente de archipelago con la estancia de Donkey Kong Country 3 se abrirá 
+   de manera automática. Se te pedirá que abras tu ROM de Donkey Kong Country 3 y el emulador se abrirá de manera 
+   automática.
 
-## Joining a MultiWorld Game
+## Unirse a una partida Multiworld
 
-### Obtain your patch file and create your ROM
+### Obtén tu archivo/parche y crea tu ROM
 
-When you join a multiworld game, you will be asked to provide your config file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your patch file, or with a zip file containing everyone's patch
-files. Your patch file should have a `.apdkc3` extension.
+Cuando te unas a un juego multiworld, se te pedirá que proporciones tu archivo de configuración al anfitrión (YAML). 
+Una vez hecho esto, el anfitrión te proporcionará un enlace para descargar tu archivo de parche o un archivo ZIP que 
+contiene los archivos de parche de todos los jugadores. Tu archivo de parche debe tener la extensión ".apdkc3".⁣
 
-Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
-client, and will also create your ROM in the same place as your patch file.
+Coloca el archivo/parche en tu escritorio o en algún lugar de tu preferencia, luego haz doble clic en él. Esto deberá 
+abrir de manera automática el launcher del cliente de archipelago. Se te pedirá que elijas tu ROM y se creará la ROM 
+con el parche en la misma carpeta donde se encuentra el archivo/parche que se te otorgó al inicio.
 
-### Connect to the client
+### Conectarse al cliente
 
-#### With an emulator
+#### Con un emulador
 
-When the client launched automatically, SNI should have also automatically launched in the background. If this is its
-first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+Cuando el launcher del cliente se abra de manera automática, y el emulador se abra junto a este. Se ejecutará en 
+simultáneo una instancia SNI de fondo. Si es tu primera vez ejecutando el parche, se te podría preguntar que permitas 
+la comunicación del programa en el Firewall de Windows.
 
 ##### snes9x-rr
 
-1. Load your ROM file if it hasn't already been loaded.
-2. Click on the File menu and hover on **Lua Scripting**
-3. Click on **New Lua Script Window...**
-4. In the new window, click **Browse...**
-5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
-6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of
-the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
+1. Carga tu ROM parchada si el emulador no se ejecutó.
+2. Haz clic en ¨File¨ en el menú superior y luego clic en **Lua Scripting**
+3. Haz clic en **New Lua Script Window...**
+4. En la ventana que se abrirá, haz clic en **Browse...**
+5. Selecciona el archivo `Connector.lua`, que se incluye al instalar archipelago launcher:
+    - Busca en la carpeta de instalación de Archipelago, normalmente se encuentra en la ruta; `/SNI/lua/Connector.lua`
+6. Si al cargar el script aparece un error que indica que `falta socket.dll` o algo similar, ve a la carpeta del lua 
+   que estás utilizando en el explorador de archivos y copia el archivo `socket.dll` en la carpeta base de la instalación 
+   de tu emulador snes9x.
 
 ##### BizHawk
 
-1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
-    - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
-    - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
-2. Load your ROM file if it hasn't already been loaded.
-   If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
-3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
-    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
-    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
-      with the file picker.
+1. Asegúrate de que tienes configurado el núcleo BSNES como predeterminado. Esto se puede hacer en el menú principal, 
+en los apartados:
+    - Si tienes la versión 2.8 o inferior: `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
+    - Si tienes la versión 2.9 o superior: `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
+2. Carga tu ROM con parche si aún no lo has hecho o si el emulador no la abrió de manera automática.
+   Si cambiaste el núcleo preferido después de cargar la ROM, no olvides recargar el emulador. 
+   (Puedes usar las teclas CTRL + R)
+3. Arrastra y suelta el archivo `Connector.lua` que se incluye al instalar archipelago launcher:
+    - Busca en la carpeta de instalación de Archipelago, normalmente se encuentra en la ruta; `/SNI/lua/Connector.lua`.
+      - Puedes abrir la consola Lua de manera manual, si así lo deseas, haz clic en `Script 〉 Open Script`, 
+       luego dirígete a la ruta donde se encuentre el `Connector.lua` y selecciónalo.
 
 ##### RetroArch 1.10.3 or newer
 
-You only have to do these steps once. Note, RetroArch 1.9.x will not work as it is older than 1.10.3.
+Solo tendrás que realizar estos pasos una vez. Nota, RetroArch 1.9.x ya no funcionará, ya que es una versión más vieja 
+que la versión 1.10.3.
 
-1. Enter the RetroArch main menu screen.
-2. Go to Settings --> User Interface. Set "Show Advanced Settings" to ON.
-3. Go to Settings --> Network. Set "Network Commands" to ON. (It is found below Request Device 16.) Leave the default
-   Network Command Port at 55355. \
-  ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
-4. Go to Main Menu --> Online Updater --> Core Downloader. Scroll down and select "Nintendo - SNES / SFC (bsnes-mercury
-   Performance)".
+1. Dirígete al menú principal de RetroArch.
+2. Dirígete al apartado "Settings" --> "User Interface". Y asegúrate de que el apartado "Show Advanced Settings" esté 
+   encendido.
+3. Dirígete al apartado "Settings" --> "Network". Asegúrate de que el apartado "Network Commands" esté encendido. 
+   (Se encuentra debajo de Solicitar dispositivo 16). Deje el puerto de comando de red predeterminado en 55355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-en.png)
+4. Dirígete al menú principal --> "Online Updater" --> "Core Downloader". Baja un poco en el apartado y selecciona 
+   "Nintendo - SNES /SFC (bsnes-mercury Performace)".
 
-When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
-read ROM data.
+Cuando cargues la ROM parchada, asegúrate de que tengas elegido el núcleo **bsnes-mercury**. Estos son los únicos 
+núcleos que permiten herramientas externas para poder leer los datos de las ROM.
 
-#### With hardware
+#### Con Hardware
 
-This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do
-this now. SD2SNES and FXPak Pro users may download the appropriate firmware on the SD2SNES releases page. SD2SNES
-releases page: [SD2SNES Releases Page](https://github.com/RedGuyyyy/sd2snes/releases)
+Esta guía asume que cuentas con el firmware correcto para tu dispositivo. Si no lo tienes aún, por favor, hazlo ahora. 
+Los usuarios de SD2SNES y FXPak Pro deben de descargar el Firmware apropiado en la página de SD2SNES en el apartado de 
+lanzamientos: [Pagina de lanzamientos de SD2SNES](https://github.com/RedGuyyyy/sd2snes/releases)
 
-Other hardware may find helpful information on the usb2snes platforms
-page: [usb2snes Supported Platforms Page](http://usb2snes.com/#supported-platforms)
+Otro tipo de hardware podría contar con información útil en 
+la página de usb2snes: [Página de plataformas compatibles de usb2snes](http://usb2snes.com/#supported-platforms)
 
-1. Close your emulator, which may have auto-launched.
-2. Power on your device and load the ROM.
+1. Cuando apliques el parche a tu ROM, cierra el emulador que se abrirá de manera automática. 
+2. Enciende tu dispositivo SNES y ejecuta la ROM parchada.
 
-### Connect to the Archipelago Server
+### Conéctate al servidor de Archipelago
 
-The patch file which launched your client should have automatically connected you to the AP Server. There are a few
-reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the
-client window shows "Server Status: Not Connected", simply ask the host for the address of the server, and copy/paste it
-into the "Server" input field then press enter.
+El archivo/parche deberá de abrir de manera automática el cliente de archipelago, y este, en consecuencia, se 
+conectará al servidor AP. Aun así, existen casos en donde esto no pasa, incluido el caso donde la partida/servidor se 
+hostea en la página web, pero la semilla se generó en otra parte. Si la ventana del cliente muestra el texto 
+"Server Status: Not Connected", pídele al host de la partida que te comparta la dirección IP y el puerto de la partida 
+(Debe verse algo como: archipelago.gg:12345), copia la IP y pégala en el recuadro de texto que aparece en la consola 
+y presiona Enter.
 
-The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
+El cliente intentará conectarse al servidor con esa nueva dirección IP y puerto, y en unos momentos lanzará un nuevo 
+texto; "Server Status: Connected", lo cual indicará que ya estás dentro de la partida del servidor.
 
-### Play the game
+### Empezar a jugar
 
-When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
-successfully joining a multiworld game!
+Cuando el cliente indique que tanto el dispositivo SNES como el Servidor están conectados, puedes comenzar a jugar. 
+¡Felicidades, te has unido de manera exitosa a una partida multiworld!
 
-## Hosting a MultiWorld game
+## Alojar una partida multiworld
 
-The recommended way to host a game is to use our hosting service. The process is relatively simple:
+La forma recomendada de alojar un juego es utilizar nuestro servicio de alojamiento. 
+El proceso es relativamente sencillo:
 
-1. Collect config files from your players.
-2. Create a zip file containing your players' config files.
-3. Upload that zip file to the Generate page above.
-    - Generate page: [WebHost Seed Generation Page](/generate)
-4. Wait a moment while the seed is generated.
-5. When the seed is generated, you will be redirected to a "Seed Info" page.
-6. Click "Create New Room". This will take you to the server page. Provide the link to this page to your players, so
-   they may download their patch files from there.
-7. Note that a link to a MultiWorld Tracker is at the top of the room page. The tracker shows the progress of all
-   players in the game. Any observers may also be given the link to this page.
-8. Once all players have joined, you may begin playing.
+1. Recopila los archivos de configuración de tus jugadores.
+2. Crea un archivo zip que contenga los archivos de configuración de tus jugadores.
+3. Sube ese archivo ZIP a la página para generar partidas que se encuentra arriba.
+    - Página para generar partidas: [Página WebHost de generación de semillas](/generate)
+4. Espera un momento mientras la semilla se genera.
+5. Cuando se genere la semilla, se te redirigirá a la página "Seed Info".
+6. Haz clic en "Create New Room". Esto te enviará a la página del servidor. Proporciona el enlace a esta página a tus 
+   jugadores para que puedan descargar sus archivos de parche desde allí.
+7. Ten en cuenta que hay un enlace a "MultiWorld Tracker" en la parte superior de la página de la sala. 
+   El tracker muestra el progreso de todos los jugadores en el juego. 
+   También se puede proporcionar el enlace a esta página a cualquier espectador.
+8. Una vez que todos los jugadores se hayan unido, pueden comenzar a jugar.
