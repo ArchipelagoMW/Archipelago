@@ -181,7 +181,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
 
     for display_region in display_region_levels_dictionary:
-        if world.options.regionsanity.value != world.options.regionsanity.option_disabled and display_region != MODDED_ZONE_AP_REGION:
+        if world.options.regionsanity.value != world.options.regionsanity.option_disabled and display_region != MODDED_ZONE_AP_REGION and display_region != MENU_AP_REGION:
             rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0])
                                                                                                       and state.has(display_region_name_to_pass_dict[lambda_region], player))
 
