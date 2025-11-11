@@ -113,3 +113,18 @@ class RecipeRule(AndRule, FactorioRule):
         else:
             self.recipe = recipe
         super().__init__(*(TechRule(tech) for tech in self.recipe.all_unlocking_technologies()))
+
+
+def process_yaml_rule(rule_pair: dict[str, str | list]) -> Rule:
+    rule_type, rule_value = next(iter(rule_pair.items()))
+    if rule_type == "and":
+        return AndRule(*(process_yaml_rule(rule) for rule in rule_value))
+    if rule_type == "or":
+        return OrRule(*(process_yaml_rule(rule) for rule in rule_value))
+    if rule_type == "tech":
+        return TechRule(rule_value)
+    if rule_type == "item":
+        return InternalItemRule(rule_value)
+    if rule_type == "recipe":
+        return RecipeRule(rule_value)
+    raise ValueError(f"Unknown rule type {rule_type}")
