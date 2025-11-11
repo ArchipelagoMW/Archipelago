@@ -117,8 +117,11 @@ class StartingJobQuantity(Range):
 
 class DisableSparks(Toggle):
     """
-    When enabled, sparks will completely ignore the player. Note that boss sparks will still chase the player if Kill Bosses is turned on.
-    If enabled there will be a new menu option where the player can turn them back on if they wish to grind money / exp
+    When enabled, enemy sparks are disabled: enemies will completely ignore the player, and touching them does not start combat.
+    An Enable/Disable Sparks button will appear in the game's menu that you can use to toggle spark disabling on and off.
+    Explore unbothered by fiery plebeians, re-enable them when you deign to grind XP or earn money, and re-disable them when you've had enough of their nonsense!
+
+    However: if Kill Bosses is enabled, then boss sparks still have your number (a.k.a. chase you and start combat). They can sense your murderous intent.
     """
     display_name = "Disable Sparks"
 
@@ -359,7 +362,7 @@ class ItemInfoMode(Choice):
     """
     For Full, all treasure and store icons on the map will display if they are progression, useful, or filler items.
 
-    For Earned, all treasure and store icons on the map will display as mimics until you collect 50% of the checks in your seed.
+    For Earned, all treasure and store icons on the map will display as mimics until you complete 50% of your checks.
 
     For Obscured, all treasure and store icons on the map will display as mimics permanently.
     If you find skipping treasures is distasteful but part of your brain always wants to be efficient, this option is for you!
