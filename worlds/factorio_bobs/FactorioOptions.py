@@ -34,13 +34,13 @@ class RuleSchema:
         if len(value) != 1:
             raise SchemaError(f"{value} is not a pair")
         if "item" in value or "recipe" in value or "tech" in value:
-            if type(list(value.values())[0]) is not str:
+            if type(next(iter(value.values()))) is not str:
                 raise SchemaError(f"item, recipe, tech must be string but was {value}")
             return value
         if "and" in value or "or" in value:
-            if type(list(value.values())[0]) is not list:
+            if type(next(iter(value.values()))) is not list:
                 raise SchemaError(f"and, or rule must contain a list but was {value}")
-            for rule in list(value.values())[0]:
+            for rule in next(iter(value.values())):
                 RuleSchema.validate(rule)
             return value
         raise SchemaError(f"key should be value of and, or, item, recipe, tech but was {value}")
