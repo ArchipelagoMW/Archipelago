@@ -721,19 +721,22 @@ class Range(NumericOption):
                 return cls.from_any(cls.default)
             else:  # "false"
                 return cls(0)
-        elif not text[1:].isnumeric() if text[0] == "-" else not text.isnumeric():
-            # text is not a number (isnumeric doesn't account for "-")
-            # Handle conditionally acceptable values here rather than in the f-string
-            default = ""
-            truefalse = ""
-            if hasattr(cls, "default"):
-                default = ", default"
-                if cls.range_start == 0 and cls.default != 0:
-                    truefalse = ", \"true\", \"false\""
-            raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
-                            f"<int>{default}, high, low{truefalse}, "
-                            f"{', '.join(cls._RANDOM_OPTS)}.")
-        return cls(int(text))
+        else:
+            try:
+                return cls(int(text))
+            except ValueError:
+                # text is not a number
+                # Handle conditionally acceptable values here rather than in the f-string
+                default = ""
+                truefalse = ""
+                if hasattr(cls, "default"):
+                    default = ", default"
+                    if cls.range_start == 0 and cls.default != 0:
+                        truefalse = ", \"true\", \"false\""
+                raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
+                                f"<int>{default}, high, low{truefalse}, "
+                                f"{', '.join(cls._RANDOM_OPTS)}.")
+        
 
     @classmethod
     def weighted_range(cls, text) -> Range:
