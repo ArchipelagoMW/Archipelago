@@ -6,6 +6,7 @@ import typing
 
 import Utils
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
@@ -14,7 +15,7 @@ from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
-from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule
+from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
 from .Shapes import get_shapes
 from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
     base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
@@ -151,7 +152,7 @@ class FactorioBobs(World):
 
         if self.options.additional_logic == self.options.additional_logic.option_none:
             self.additional_logic = {}
-        elif self.options.additional_logic == self.options.additional_logic.default:
+        elif self.options.additional_logic == self.options.additional_logic.option_default:
             self.additional_logic = {
                 2: InternalItemRule("gun-turret"),
                 3: AndRule(InternalItemRule("lab"),
@@ -200,6 +201,14 @@ class FactorioBobs(World):
                            InternalItemRule("active-provider-chest")
                            )
             }
+        elif self.options.additional_logic == self.options.additional_logic.option_custom:
+            self.additional_logic = {complexity if type(complexity) is int else
+                                     self.options.max_science_pack.aliases[complexity] + 1:
+                                        process_yaml_rule(yaml_rule)
+                                     for complexity, yaml_rule in self.options.custom_additional_logic.value.items()}
+        else:
+            raise OptionError("additional_logic is invalid type")
+
 
         for complexity, rule in self.additional_logic.items():
             if complexity <= self.options.max_science_pack.value + 1:
