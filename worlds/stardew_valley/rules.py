@@ -1036,7 +1036,7 @@ def set_secrets_rules(logic: StardewLogic, rule_collector: StardewRuleCollector,
         rule_collector.set_location_rule("Decorative Trash Can", logic.fishing.can_fish_at(Region.town))
         rule_collector.set_location_rule("Iridium Krobus", logic.fishing.can_fish_with_cast_distance(Region.forest, 7))
         rule_collector.set_location_rule("Pyramid Decal", logic.fishing.can_fish_with_cast_distance(Region.desert, 4))
-        rule_collector.set_location_rule("'Vista'", logic.fishing.can_fish_at(Region.railroad))
+        rule_collector.set_location_rule("'Vista'", logic.fishing.can_fish_at(Region.railroad) & logic.season.has_any_not_winter())
         rule_collector.set_location_rule("Wall Basket", logic.fishing.can_fish_at(Region.secret_woods))
 
     if SecretsanityOptionName.difficult in world_options.secretsanity:
