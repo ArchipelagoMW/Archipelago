@@ -184,4 +184,4 @@ class CrystalProjectLogic:
         return has_combat
 
     def can_fight_gran(self, state: CollectionState) -> bool:
-        return (state.has(SCHOLAR_JOB, self.player) and state.has(REVERSE_POLARITY, self.player)) or self.is_area_in_level_range(state, 30)
+        return (state.has(SCHOLAR_JOB, self.player) and state.has(REVERSE_POLARITY, self.player)) or self.is_area_in_level_range(state, GRAN_FIGHT_LEVEL)
