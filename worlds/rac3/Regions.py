@@ -1,12 +1,19 @@
-from BaseClasses import Region
 from typing import TYPE_CHECKING
 
-from Rac3Addresses import RAC3ITEM, RAC3REGION, SIMPLE_SKILL_POINTS
-from .Types import GameLocation
-from .Locations import location_table
+from BaseClasses import Location, Region
+from constants.locations.Rac3Skillpoints import SIMPLE_SKILL_POINTS
+from constants.Rac3Items import RAC3ITEM
+from constants.Rac3Options import RAC3OPTION
+from constants.Rac3Region import RAC3REGION
+from Locations import location_table
 
 if TYPE_CHECKING:
-    from . import RaC3World
+    from worlds.rac3 import RaC3World
+
+
+class GameLocation(Location):
+    game = RAC3OPTION.GAME_TITLE_FULL
+
 
 # Making an array with every 5 nanotech
 every_5_nanotech = [f"Nanotech Milestone: {x}" for x in range(15, 101, 5)]

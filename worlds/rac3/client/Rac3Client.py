@@ -1,12 +1,13 @@
 # Common import
-import asyncio
-import multiprocessing
-import traceback
+from asyncio import create_task, run, sleep, Task
+from multiprocessing import freeze_support
+from traceback import format_exc
 from typing import Optional
 
-import Utils
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from Rac3Addresses import RAC3OPTION, RAC3REGION
+from constants.Rac3Options import RAC3OPTION
+from constants.Rac3Region import RAC3REGION
+from Utils import Any, async_start, Dict, init_logging
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -21,10 +22,10 @@ except ImportError:
     print("ERROR: Universal Tracker is not loaded")
 
 # Game title dedicated
-from . import Locations
+from worlds.rac3 import Locations
 # from .data.Constants import EPISODES
-from .Rac3Interface import Rac3Interface
-from .Rac3Callbacks import init, update
+from Rac3Interface import Rac3Interface
+from Rac3Callbacks import init, update
 
 CLIENT_INIT_LOG = f"{RAC3OPTION.GAME_TITLE}_Client"
 CLIENT_VERSION = "0.1.0"
@@ -67,10 +68,10 @@ class Rac3Context(CommonContext):
     command_processor = CommandProcessor
     game_interface: Rac3Interface
     game = RAC3OPTION.GAME_TITLE_FULL
-    pcsx2_sync_task: Optional[asyncio.Task] = None
+    pcsx2_sync_task: Optional[Task] = None
     is_connected_to_game: bool = False
     is_connected_to_server: bool = False
-    slot_data: Optional[dict[str, Utils.Any]] = None
+    slot_data: Optional[dict[str, Any]] = None
     last_error_message: Optional[str] = None
     notification_queue: list[str] = []
     notification_timestamp: float = 0
@@ -92,7 +93,7 @@ class Rac3Context(CommonContext):
         self.notification_queue.append(text)
 
     # TODO: make this work
-    def on_deathlink(self, data: Utils.Dict[str, Utils.Any]) -> None:
+    def on_deathlink(self, data: Dict[str, Any]) -> None:
         super().on_deathlink(data)
         if self.death_link_enabled:
             self.queued_deaths += 1
@@ -128,9 +129,9 @@ class Rac3Context(CommonContext):
             # Set death link tag if it was requested in options
             if "death_link" in args["slot_data"]:
                 self.death_link_enabled = bool(args["slot_data"]["death_link"])
-                Utils.async_start(self.update_death_link(
+                async_start(self.update_death_link(
                     bool(args["slot_data"]["death_link"])))
-                Utils.async_start(self.send_msgs([{
+                async_start(self.send_msgs([{
                     "cmd": "LocationScouts",
                     "locations": [
                         Locations.location_table[location].ap_code
@@ -170,8 +171,8 @@ async def pcsx2_sync_task(ctx: Rac3Context):
             if isinstance(e, RuntimeError):
                 logger.error(str(e))
             else:
-                logger.error(traceback.format_exc())
-            await asyncio.sleep(3)
+                logger.error(format_exc())
+            await sleep(3)
             continue
 
 
@@ -188,36 +189,36 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
     if ctx.server:
         ctx.last_error_message = None
         if not ctx.slot:
-            await asyncio.sleep(1)
+            await sleep(1)
             return
     else:
         message = "Waiting for player to connect to server"
         if ctx.last_error_message is not message:
             logger.info("Waiting for player to connect to server")
             ctx.last_error_message = message
-        await asyncio.sleep(1)
+        await sleep(1)
 
-    await asyncio.sleep(1)
+    await sleep(1)
 
 
 async def _handle_game_not_ready(ctx: Rac3Context):
     """If the game is not connected, this will attempt to retry connecting to the game."""
     ctx.game_interface.connect_to_game()
-    await asyncio.sleep(3)
+    await sleep(3)
 
 
 def launch_client():
-    Utils.init_logging(CLIENT_INIT_LOG)
+    init_logging(CLIENT_INIT_LOG)
 
     async def main():
-        multiprocessing.freeze_support()
+        freeze_support()
         logger.info("main")
         parser = get_base_parser()
         args = parser.parse_args()
         ctx = Rac3Context(args.connect, args.password)
 
         logger.info("Connecting to server...")
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="Server Loop")
+        ctx.server_task = create_task(server_loop(ctx), name="Server Loop")
 
         # Runs Universal Tracker's internal generator
         if tracker_loaded:
@@ -231,7 +232,7 @@ def launch_client():
         ctx.run_cli()
 
         logger.info("Running game...")
-        ctx.pcsx2_sync_task = asyncio.create_task(pcsx2_sync_task(ctx), name="PCSX2 Sync")
+        ctx.pcsx2_sync_task = create_task(pcsx2_sync_task(ctx), name="PCSX2 Sync")
 
         await ctx.exit_event.wait()
         ctx.server_address = None
@@ -239,14 +240,14 @@ def launch_client():
         await ctx.shutdown()
 
         if ctx.pcsx2_sync_task:
-            await asyncio.sleep(3)
+            await sleep(3)
             await ctx.pcsx2_sync_task
 
     import colorama
 
     colorama.init()
 
-    asyncio.run(main())
+    run(main())
     colorama.deinit()
 
 

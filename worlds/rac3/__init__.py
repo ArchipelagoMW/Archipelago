@@ -1,30 +1,27 @@
-import logging
+from logging import DEBUG, getLogger
 from typing import Any, ClassVar, Optional
 
-from BaseClasses import Item, MultiWorld, Tutorial
-from Rac3Addresses import RAC3_ITEM_DATA_TABLE, RAC3ITEM, RAC3OPTION
-from worlds.AutoWorld import CollectionState, WebWorld, World
+from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
+from constants.data.Rac3ItemData import RAC3_ITEM_DATA_TABLE
+from constants.Rac3Items import RAC3ITEM
+from constants.Rac3Options import RAC3OPTION
+from Items import create_item, create_itempool, get_filler_item_selection, starting_weapons
+from Locations import get_level_locations, get_location_names, get_regions, get_total_locations, location_groups
+from Rac3Options import RaC3Options
+from Regions import create_regions
+from Rules import set_rules
+from UniversalTracker import setup_options_from_slot_data, tracker_world
+from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, SuffixIdentifier, Type
-from . import UniversalTracker
-from .Items import create_item, create_itempool, get_filler_item_selection
-from .Locations import get_level_locations, get_location_names, get_regions, get_total_locations, location_groups
-from .Rac3Options import create_option_groups, RaC3Options
-from .Regions import create_regions
-from .Rules import set_rules
-
-rac3_logger = logging.getLogger(RAC3OPTION.GAME_TITLE_FULL)
-rac3_logger.setLevel(logging.DEBUG)
 
 
 def run_client(_url: Optional[str] = None):
-    from .Rac3Client import launch_client
+    from client.Rac3Client import launch_client
     launch_subprocess(launch_client, name=f"{RAC3OPTION.GAME_TITLE}Client")
 
 
-components.append(
-    Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client", func=run_client, component_type=Type.CLIENT,
-              file_identifier=SuffixIdentifier(".aprac3"))
-)
+components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client", func=run_client, component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier(".aprac3")))
 
 
 class RaC3Web(WebWorld):
@@ -38,6 +35,10 @@ class RaC3Web(WebWorld):
         "setup/en",
         ["Bread"]
     )]
+
+
+rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
+rac3_logger.setLevel(DEBUG)
 
 
 class RaC3World(World):
@@ -58,7 +59,7 @@ class RaC3World(World):
     passthrough: dict[str, Any]
     ut_can_gen_without_yaml = True
     disable_ut = False
-    tracker_world: ClassVar = UniversalTracker.tracker_world
+    tracker_world: ClassVar = tracker_world
 
     for region in get_regions():
         location_name_groups[region] = set(get_level_locations(region))
@@ -78,21 +79,21 @@ class RaC3World(World):
                             self.player_name)
         self.preplaced_items = [RAC3ITEM.VELDIN, RAC3ITEM.HELI_PACK, RAC3ITEM.THRUSTER_PACK]
         # implement .yaml-less Universal Tracker support
-        UniversalTracker.setup_options_from_slot_data(self)
+        setup_options_from_slot_data(self)
         create_regions(self)
 
         for item in self.preplaced_items:
             self.push_precollected(self.create_item(item))
-        starting_weapons = Items.starting_weapons(self, self.options.starting_weapons.value)
+        starting_weapon_list = starting_weapons(self, self.options.starting_weapons.value)
         starting_planets = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]
 
-        if len(starting_weapons) > 0:
-            self.get_location("Veldin: First Ranger").place_locked_item(self.create_item(starting_weapons[0]))
-            if len(starting_weapons) > 1:
-                self.get_location("Veldin: Second Ranger").place_locked_item(self.create_item(starting_weapons[1]))
+        if len(starting_weapon_list) > 0:
+            self.get_location("Veldin: First Ranger").place_locked_item(self.create_item(starting_weapon_list[0]))
+            if len(starting_weapon_list) > 1:
+                self.get_location("Veldin: Second Ranger").place_locked_item(self.create_item(starting_weapon_list[1]))
         self.get_location("Veldin: Save Veldin").place_locked_item(self.create_item(starting_planets[0]))
         self.get_location("Florana: Defeat Qwark").place_locked_item(self.create_item(starting_planets[1]))
-        self.preplaced_items.extend(starting_weapons)
+        self.preplaced_items.extend(starting_weapon_list)
         self.preplaced_items.extend(starting_planets)
 
     def create_items(self):

@@ -1,14 +1,16 @@
-import logging
+from logging import DEBUG, getLogger
 from typing import Callable, TYPE_CHECKING
 
-from Rac3Addresses import INFOBOT_LIST, RAC3REGION, RAC3ITEM, RAC3OPTION
+from constants.Rac3Items import INFOBOT_LIST, RAC3ITEM
+from constants.Rac3Options import RAC3OPTION
+from constants.Rac3Region import RAC3REGION
 from worlds.generic.Rules import add_rule
 
 if TYPE_CHECKING:
-    from . import RaC3World
+    from worlds.rac3 import RaC3World
 
-rac3_logger = logging.getLogger(RAC3OPTION.GAME_TITLE_FULL)
-rac3_logger.setLevel(logging.DEBUG)
+rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
+rac3_logger.setLevel(DEBUG)
 
 
 def set_rules(world: "RaC3World"):

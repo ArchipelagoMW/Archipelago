@@ -1,18 +1,22 @@
-import random
-import struct
 from dataclasses import dataclass
 from enum import IntEnum
 from logging import Logger
+from random import randint
+from struct import unpack
 from typing import Dict, Optional
 
-from Rac3Addresses import (DEATH_FROM_ACTION, GADGET_LIST, PLANET_FROM_INFOBOT, PROGRESSIVE_DICT, QUICK_SELECT_LIST,
-                           RAC3_REGION_DATA_TABLE,
-                           RAC3_STATUS_DATA_TABLE, RAC3OPTION, RAC3STATUS, UPGRADE_DICT, WEAPON_LIST)
-from . import Locations
-from .pcsx2_interface.pine import Pine
-from .Rac3Addresses import (CHECK_TYPE, COMPARE_TYPE, EQUIP_LIST, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, LOCATIONS,
-                            INFOBOT_LIST, PLANET_NAME_FROM_ID, RAC3_ITEM_DATA_TABLE, RAC3ITEM, RAC3REGION, SHIP_SLOTS,
-                            VIDCOMIC_LIST)
+from constants.data.Rac3ItemData import ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, RAC3_ITEM_DATA_TABLE
+from constants.data.Rac3LocationData import LOCATIONS
+from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
+from constants.Rac3Deaths import DEATH_FROM_ACTION
+from constants.Rac3Items import (EQUIP_LIST, GADGET_LIST, INFOBOT_LIST, PROG_TO_NAME_DICT, QUICK_SELECT_LIST, RAC3ITEM,
+                                 UPGRADE_DICT, VIDCOMIC_LIST, WEAPON_LIST)
+from constants.Rac3Options import RAC3OPTION
+from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from constants.Rac3Status import RAC3STATUS
+from Locations import location_table
+from pcsx2_interface.pine import Pine
 
 
 class Dummy(IntEnum):
@@ -46,7 +50,7 @@ class GameInterface:
         return self.pcsx2_interface.read_bytes(address, n)
 
     def _read_float(self, address: int):
-        return struct.unpack('f', self.pcsx2_interface.read_bytes(address, 4))[0]
+        return unpack('f', self.pcsx2_interface.read_bytes(address, 4))[0]
 
     def _write8(self, address: int, value: int):
         self.pcsx2_interface.write_int8(address, value)
@@ -106,6 +110,23 @@ class UnlockData:
         self.unlock_delay = unlock_delay
 
 
+CHECK_TYPE = {
+    "bit": 0,
+    "int": 1,
+    "uint": 2,
+    "byte": 3,
+    "short": 4,
+    "falseBit": 5,
+    "long": 6,
+    "nibble": 7,
+}
+COMPARE_TYPE = {
+    "Match": 0,
+    "GreaterThan": 1,
+    "LessThan": 2,
+}
+
+
 class Rac3Interface(GameInterface):
     ########################################
     # Mandatory functions                  #
@@ -147,7 +168,7 @@ class Rac3Interface(GameInterface):
     @staticmethod
     def get_victory_code():
         victory_name = "Command Center: Biobliterator Defeated!"  # This must can be changed by option
-        return Locations.location_table[victory_name].ap_code
+        return location_table[victory_name].ap_code
 
     def check_main_menu(self):
         if self._read32(RAC3STATUS.MAIN_MENU):
@@ -175,10 +196,7 @@ class Rac3Interface(GameInterface):
 
     def item_received(self, item_code):
         # self.logger.info(f'{item_code}')
-        name = ITEM_FROM_AP_CODE[item_code]
-
-        if name in PROGRESSIVE_DICT.keys():
-            name = PROGRESSIVE_DICT[name]
+        name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code])
 
         if name in INFOBOT_LIST:
             for slot in SHIP_SLOTS:
@@ -200,19 +218,19 @@ class Rac3Interface(GameInterface):
                 pass
             case RAC3ITEM.BOLTS:
                 bolt = self._read32(RAC3STATUS.BOLTS)
-                self._write32(RAC3STATUS.BOLTS, bolt + 1000 * random.randint(1, 100))
+                self._write32(RAC3STATUS.BOLTS, bolt + 1000 * randint(1, 100))
             case RAC3ITEM.INFERNO_MODE:
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
-                self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + random.randint(1, 100))
+                self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + randint(1, 100))
             case RAC3ITEM.JACKPOT:
                 addr = RAC3STATUS.JACKPOT_TIMER
                 timer = self._read32(addr)
-                self._write32(addr, timer + 1000 + random.randint(1, 100))
+                self._write32(addr, timer + 1000 + randint(1, 100))
                 # Activate Jackpot
                 self._write8(RAC3STATUS.JACKPOT, 1)
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
-                self._write32(RAC3STATUS.NANOTECH_EXP, exp + 1000 + random.randint(1, 100))
+                self._write32(RAC3STATUS.NANOTECH_EXP, exp + 1000 + randint(1, 100))
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
                 for weapon_name in WEAPON_LIST:
@@ -222,7 +240,7 @@ class Rac3Interface(GameInterface):
                             valid_weapons.append(weapon_name)
 
                 if valid_weapons:
-                    weapon_num = random.randint(0, len(valid_weapons) - 1)
+                    weapon_num = randint(0, len(valid_weapons) - 1)
                     self.weapon_level_up(valid_weapons[weapon_num])
 
         if name in EQUIP_LIST:

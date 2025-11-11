@@ -1,10 +1,10 @@
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
 
-from Rac3Addresses import RAC3REGION, RAC3TAG
-from .Types import EventData, LocData
+from constants.locations.Rac3Tags import RAC3TAG
+from constants.Rac3Region import RAC3REGION
 
 if TYPE_CHECKING:
-    from . import RaC3World
+    from worlds.rac3 import RaC3World
 
 
 def get_total_locations(world: "RaC3World") -> int:
@@ -20,6 +20,11 @@ def get_location_names() -> Dict[str, int]:
 def get_regions() -> list:
     regions = [data.region for _, data in location_table.items()]
     return regions
+
+
+class LocData(NamedTuple):
+    ap_code: Optional[int]
+    region: Optional[str]
 
 
 rac3_locations = {
@@ -497,16 +502,21 @@ nanotech_milestones = {
     "Nanotech Milestone: 100": LocData(50250100, "Nanotech Levels")
 }
 
-rac3_events = {  # Events have no ap_code
-    "Cleared Veldin": EventData(None, RAC3REGION.VELDIN),
-    "Cleared Florana": EventData(None, RAC3REGION.FLORANA),
-    "Cleared Marcadia": EventData(None, RAC3REGION.MARCADIA),
-    "Cleared Annihilation Nation 1": EventData(None, RAC3REGION.ANNIHILATION_NATION),
-    "Cleared Annihilation Nation 2": EventData(None, RAC3REGION.ANNIHILATION_NATION_2),
-    "Cleared Aquatos": EventData(None, RAC3REGION.AQUATOS),
-    "Cleared Tyhrranosis": EventData(None, RAC3REGION.TYHRRANOSIS),
-    "Cleared Daxx": EventData(None, RAC3REGION.DAXX),
-}
+# class EventData(NamedTuple):
+#     ap_code: None
+#     region: Optional[str]
+#
+#
+# rac3_events = {  # Events have no ap_code
+#     "Cleared Veldin": EventData(None, RAC3REGION.VELDIN),
+#     "Cleared Florana": EventData(None, RAC3REGION.FLORANA),
+#     "Cleared Marcadia": EventData(None, RAC3REGION.MARCADIA),
+#     "Cleared Annihilation Nation 1": EventData(None, RAC3REGION.ANNIHILATION_NATION),
+#     "Cleared Annihilation Nation 2": EventData(None, RAC3REGION.ANNIHILATION_NATION_2),
+#     "Cleared Aquatos": EventData(None, RAC3REGION.AQUATOS),
+#     "Cleared Tyhrranosis": EventData(None, RAC3REGION.TYHRRANOSIS),
+#     "Cleared Daxx": EventData(None, RAC3REGION.DAXX),
+# }
 
 location_table: dict[str, LocData] = {
     **rac3_locations,
@@ -658,12 +668,6 @@ location_groups: dict[str, set[str]] = {
 }
 
 
-# class EventData(NamedTuple):
-#    name:       str
-#    ap_code:    Optional[int] = None
-# class LocData(NamedTuple):
-#    ap_code: Optional[int]
-#    region: Optional[str]
 def get_level_locations(region):
     return map(lambda l: l[0], get_level_location_data(region))
 

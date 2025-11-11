@@ -1,17 +1,21 @@
-import logging
+from logging import DEBUG, getLogger
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from Rac3Addresses import (FILLER_LIST, GADGET_LIST, INFOBOT_LIST, PROGRESSIVE_DICT, RAC3_ITEM_DATA_TABLE, RAC3ITEM,
-                           RAC3ITEMDATA, RAC3OPTION, WEAPON_LIST)
-
-from .Types import GameItem
+from constants.data.Rac3ItemData import item_counts, item_table, prog_dict, RAC3_ITEM_DATA_TABLE, weapon_dict
+from constants.Rac3Items import RAC3ITEM
+from constants.Rac3Options import RAC3OPTION
 
 if TYPE_CHECKING:
-    from . import RaC3World
+    from worlds.rac3 import RaC3World
 
-rac3_logger = logging.getLogger(RAC3OPTION.GAME_TITLE_FULL)
-rac3_logger.setLevel(logging.DEBUG)
+
+class GameItem(Item):
+    game = RAC3OPTION.GAME_TITLE_FULL
+
+
+rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
+rac3_logger.setLevel(DEBUG)
 
 
 def create_itempool(world: "RaC3World") -> List[Item]:
@@ -42,7 +46,7 @@ def create_itempool(world: "RaC3World") -> List[Item]:
             item_amount += options.extra_armor_upgrade.value
 
         # Catch accidental duplicates
-        if item_amount > 1 and name not in PROGRESSIVE_DICT.keys():
+        if item_amount > 1 and name not in prog_dict.keys():
             rac3_logger.warning(f"multiple copies of {name} added to the item pool")
 
         itempool += create_multiple_items(world, name, item_amount, item_type)
@@ -84,45 +88,6 @@ def get_filler_item_selection(world: "RaC3World"):
     #     traps = trap_items.copy()
     #     frequencies.update(traps)
     return [name for name, count in frequencies.items() for _ in range(count)]
-
-
-def get_dict(item_list) -> dict[str, RAC3ITEMDATA]:
-    return dict(filter(lambda data_kv: data_kv[0] in item_list, RAC3_ITEM_DATA_TABLE.items()))
-
-
-weapon_dict: dict[str, RAC3ITEMDATA] = get_dict(WEAPON_LIST)
-prog_dict: dict[str, RAC3ITEMDATA] = get_dict(PROGRESSIVE_DICT.keys())
-gadget_dict: dict[str, RAC3ITEMDATA] = get_dict(GADGET_LIST)
-planet_dict: dict[str, RAC3ITEMDATA] = get_dict(INFOBOT_LIST)
-filler_dict: dict[str, RAC3ITEMDATA] = get_dict(FILLER_LIST)
-
-item_counts: dict[str, int] = {
-    **dict.fromkeys(weapon_dict.keys(), 1),
-    **dict.fromkeys(prog_dict.keys(), 5),
-    **dict.fromkeys(gadget_dict.keys(), 1),
-    **dict.fromkeys(planet_dict.keys(), 1),
-    RAC3ITEM.VICTORY: 0
-}
-
-item_table: dict[str, RAC3ITEMDATA] = {
-    **weapon_dict,
-    **prog_dict,
-    **gadget_dict,
-    **planet_dict,
-    # **filler_dict,
-}
-
-# Todo: Add Item Groups (see location_groups)
-item_group = {
-
-}
-
-# class ItemData(NamedTuple):
-#    ap_code: Optional[int]
-#    classification: ItemClassification
-#    count: Optional[int] = 1
-
-default_starting_weapons = {name: 1 for name in weapon_dict.keys()}
 
 
 def filter_items(classification):

@@ -1,9 +1,12 @@
 from typing import Any, TYPE_CHECKING
 
-from .Rac3Addresses import LOCATIONS, RAC3_REGION_DATA_TABLE, RAC3OPTION, RAC3REGION
+from constants.data.Rac3LocationData import LOCATIONS
+from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from constants.Rac3Options import RAC3OPTION
+from constants.Rac3Region import RAC3REGION
 
 if TYPE_CHECKING:
-    from . import RaC3World
+    from worlds.rac3 import RaC3World
 
 
 def setup_options_from_slot_data(world: "RaC3World") -> None:

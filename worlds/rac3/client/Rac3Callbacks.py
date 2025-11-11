@@ -8,7 +8,7 @@ from NetUtils import ClientStatus
 # Only change point: Change filename/Class name  #
 ##################################################
 if TYPE_CHECKING:
-    from .Rac3Client import Rac3Context as Context
+    from client.Rac3Client import Rac3Context as Context
 
 
 ##################################################

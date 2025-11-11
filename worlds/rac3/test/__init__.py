@@ -1,5 +1,5 @@
+from constants.Rac3Options import RAC3OPTION
 from test.bases import WorldTestBase
-from worlds.rac3 import RAC3OPTION
 
 
 class RAC3TestBase(WorldTestBase):
