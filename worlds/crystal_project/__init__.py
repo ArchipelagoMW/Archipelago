@@ -102,9 +102,6 @@ class CrystalProjectWorld(World):
         self.starting_progressive_levels: int = 1
 
     def generate_early(self):
-        if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
-            self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
-
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
@@ -134,6 +131,9 @@ class CrystalProjectWorld(World):
                     # self.modded_locations = slot_data["moddedLocationsForUT"]
                     # self.modded_shops = slot_data["moddedShopsForUT"]
                     self.starter_ap_region = slot_data["starterRegion"]
+        
+        if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
+            self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
 
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
         self.multiworld.push_precollected(self.create_item(ARCHIPELAGO_STONE))
