@@ -26,7 +26,16 @@ class CelesteOpenWebWorld(WebWorld):
         authors=["PoryGone"]
     )
 
-    tutorials = [setup_en]
+    setup_es = Tutorial(
+        tutorial_name="Guía de Inicio",
+        description="Una guía para jugar Celeste (Open World) en Archipelago.",
+        language="Español",
+        file_name="guide_es.md",
+        link="guide/es",
+        authors=["GreenMarco"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
     option_groups = celeste_option_groups
 
