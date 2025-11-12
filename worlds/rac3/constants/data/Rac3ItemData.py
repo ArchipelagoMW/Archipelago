@@ -2,9 +2,10 @@ from dataclasses import dataclass
 from typing import Optional
 
 from BaseClasses import ItemClassification
-from constants.Rac3Items import (FILLER_LIST, GADGET_LIST, INFOBOT_LIST, PROG_TO_NAME_DICT, RAC3ITEM, UPGRADE_DICT,
+from constants.Rac3Items import (ARMOR_LIST, FILLER_LIST, GADGET_LIST, INFOBOT_LIST, PROG_TO_NAME_DICT, RAC3ITEM, UPGRADE_DICT, VIDCOMIC_LIST,
                                  WEAPON_LIST)
 from constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.Rac3ItemTags import RAC3ITEMTAG
 
 
 @dataclass
@@ -452,6 +453,15 @@ item_table: dict[str, RAC3ITEMDATA] = {
 default_starting_weapons: dict[str, int] = {name: 1 for name in WEAPON_LIST}
 
 # Todo: Add Item Groups (see location_groups)
-item_group = {
+item_group: dict[str, set[str]] = {
+    RAC3ITEMTAG.INFOBOT: set(INFOBOT_LIST),
+    RAC3ITEMTAG.GADGET: set(GADGET_LIST),
+    RAC3ITEMTAG.WEAPON: set(WEAPON_LIST),
+    RAC3ITEMTAG.PROGRESSIVE: set(PROG_TO_NAME_DICT.keys()),
+    RAC3ITEMTAG.FILLER: set(FILLER_LIST),
+    RAC3ITEMTAG.ARMOR: set(ARMOR_LIST + [RAC3ITEM.PROGRESSIVE_ARMOR]),
+    RAC3ITEMTAG.VIDCOMIC: set(VIDCOMIC_LIST + [RAC3ITEM.PROGRESSIVE_VIDCOMIC]),
+    RAC3ITEMTAG.GOAL: set([RAC3ITEM.VICTORY]),
 
+    #RAC3TAG.INFOBOT: set(item for item in RAC3_ITEM_DATA_TABLE.keys() if RAC3TAG.INFOBOT in item)
 }
