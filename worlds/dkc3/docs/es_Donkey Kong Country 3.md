@@ -15,11 +15,11 @@ los objetos puede obligar al jugador a acceder a ciertas zonas antes de lo previ
 
 Se pueden elegir dos objetivos:
 - `Knautilus`: Recolecta monedas extra y engranajes Krematoa para llegar al submarino de K. Rool en Krematoa.
-- `Caza de pájaros plátano`: Recolecta pajaros plátano para liberar a la madre pájaro plátano.
+- `Banana Bird Hunt`: Recolecta pajaros plátano para liberar a la madre pájaro plátano.
 
 ## ¿Qué objetos y ubicaciones se mezclan?
 
-Todas las monedas de bonificación, monedas DK y pájaros plátano (si se trata del objetivo 'Caza de pájaros plátano') 
+Todas las monedas de bonificación, monedas DK y pájaros plátano (si se trata del objetivo 'Banana Bird Hunt') 
 se distribuyen de manera aleatoria. Además, al completar un nivel se obtendra un objeto del randomizer. Se incluyen el 
 Parche y dos Esquís necesarios para mejorar el bote. Se proporcionan monedas oso si se necesitan objetos adicionales 
 para los objetos en el randomizer. Cuatro de los cinco engranajes de Krematoa están mezclados, pero el último siempre 
