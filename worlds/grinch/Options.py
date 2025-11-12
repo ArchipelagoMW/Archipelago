@@ -12,6 +12,7 @@ from Options import (
     OptionList,
     PerGameCommonOptions,
     OptionSet,
+    OptionCounter,
 )
 
 
@@ -59,11 +60,10 @@ class Missionsanity(Choice):
 
 class ExcludeEnvironments(OptionSet):
     """
-    Allows entire environments to be an excluded location to ensure you are not logically required to enter the environment along
-    with any and all checks that are in that environment too.
+    Allows entire environments to be entirely removed to ensure you are not logically required to enter the environment
+    along with any and all checks that are in that environment too. [NOT IMPLEMENTED]
 
-    WARNING: Excluding too many environments may cause generation to fail.
-    [NOT IMPLEMENTED]
+    WARNING: Removing too many environments may cause generation to fail.
 
     Valid keys: "Whoville", "Who Forest", "Who Dump", "Who Lake", "Post Office", "Clock Tower", "City Hall",
                   "Ski Resort", "Civic Center", "Minefield", "Power Plant", "Generator Building", "Scout's Hut",
@@ -100,7 +100,9 @@ class ProgressiveGadget(Toggle):  # DefaultOnToggle
 
 
 class Supadow(Toggle):
-    """Enables completing minigames through the Supadows in Mount Crumpit as checks. NOT IMPLEMENTED]"""
+    """
+    Enables completing minigames through the Supadows in Mount Crumpit as checks. [NOT IMPLEMENTED]
+    """
 
     display_name = "Supadow Minigames"
 
@@ -108,7 +110,7 @@ class Supadow(Toggle):
 class Gifts(Range):
     """
     Considers how many gifts must be squashed per check.
-    Enabling this will also enable squashing all gifts in a region mission along side this. [NOT IMPLEMENTED]
+    Enabling this will also enable squashing all gifts in a region mission alongside this. [NOT IMPLEMENTED]
     """
 
     display_name = "Gifts Squashed per Check"
@@ -116,30 +118,97 @@ class Gifts(Range):
     range_end = 300
     default = 0
 
+class Gadgetrando(DefaultOnToggle):
+    """
+    Determines whether the Grinch's gadgets will be randomized or not.
+    """
+
+    display_name = "Randomize Gadgets"
+
+class Gadgetrandolist(OptionSet):
+    """
+    If "Randomize Gadgets" is enabled, gadgets that you add to the dictionary will be randomized. [NOT IMPLEMENTED]
+    """
+
+    display_name = "Gadgets Randomized"
+    default = [
+        "Binoculars",
+        "Rotten Egg Launcher",
+        "Rocket Spring",
+        "Slime Shooter",
+        "Octopus Climbing Device",
+        "Marine Mobile",
+        "Grinch Copter",
+    ]
 
 class Moverando(Toggle):
-    """Randomizes Grinch's moveset along with randomizing max into the pool. [NOT IMPLEMENTED]"""
+    """
+    Determines whether the Grinch's moves will be randomized or not.
+    """
+
+    display_name = "Randomize Moves"
+
+class Moverandolist(OptionSet):
+    """
+    If "Randomize Moves" is enabled, the Grinch's moves that you add to the dictionary will be randomized. [NOT IMPLEMENTED]
+    """
 
     display_name = "Moves Randomized"
+    default = [
+        "Pancake",
+        "Bad Breath",
+        "Seize",
+        "Max",
+        "Sneak",
+    ]
 
 
 class UnlimitedEggs(Toggle):
-    """Determine whether or not you run out of rotten eggs when you utilize your gadgets."""
+    """
+    Determine whether or not you run out of rotten eggs when you utilize your gadgets.
+    """
 
     display_name = "Unlimited Rotten Eggs"
 
 
 class RingLinkOption(Toggle):
-    """Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled."""
+    """
+    Whenever this is toggled, your ammo is linked with other ringlink-compatible games that also have this enabled.
+    """
 
     display_name = "Ring Link"
 
 
 class TrapLinkOption(Toggle):
-    """If a trap is sent from Grinch, traps that are compatible with other games are triggered as well. [NOT IMPLEMENTED]"""
+    """
+    If a trap is sent from Grinch, traps that are compatible with other games are triggered as well. [NOT IMPLEMENTED]
+    """
 
     display_name = "Trap Link"
 
+class FillerWeight(OptionCounter):
+    """
+    Determines which filler is added to the pool. [NOT IMPLEMENTED]
+    """
+
+    display_name = "Filler Weights"
+    default = {
+        "5 Rotten Eggs": 50,
+        "10 Rotten Eggs": 25,
+        "20 Rotten Eggs": 25,
+    }
+
+class TrapWeight(OptionCounter):
+    """
+    Determines which traps are replaced with filler in the pool. [NOT IMPLEMENTED]
+    """
+
+    display_name = "Trap Weights"
+    default = {
+        "Dump it to Crumpit": 33,
+        "Who sent me back?": 33,
+        "Depletion Trap": 34,
+    }
 
 @dataclass
 class GrinchOptions(PerGameCommonOptions):  # DeathLinkMixin
@@ -150,8 +219,12 @@ class GrinchOptions(PerGameCommonOptions):  # DeathLinkMixin
     progressive_gadget: ProgressiveGadget
     supadow_minigames: Supadow
     giftsanity: Gifts
+    gadget_rando: Gadgetrando
+    gadgets_to_randomize: Gadgetrandolist
     move_rando: Moverando
+    moves_to_randomize: Moverandolist
     unlimited_eggs: UnlimitedEggs
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
     filler_weight: FillerWeight
+    trap_weight: TrapWeight
