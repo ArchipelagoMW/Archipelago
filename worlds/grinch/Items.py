@@ -341,7 +341,17 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 }
 
 # Sleigh Parts
-# SLEIGH_PARTS_TABLE: dict[str, GrinchItemData] = {
+SLEIGH_TABLE: dict[str, GrinchItemData] = {
+    grinch_items.keys.SLEIGH_ROOM_KEY: GrinchItemData(
+        [
+            grinch_categories.SLEIGH_ROOM,
+            grinch_categories.REQUIRED_ITEM,
+        ],
+        410,
+        IC.progression,
+        [
+            GrinchRamData(0x010200, binary_bit_pos=6),
+            GrinchRamData(0x0100AA, binary_bit_pos=5),
 #     "Exhaust Pipes": GrinchItemData(["Sleigh Parts"], 300, IC.progression_skip_balancing,
 #         [GrinchRamData(0x0101FB, binary_bit_pos=2)]),
 #     "GPS": GrinchItemData(["Sleigh Parts"], 301, IC.useful,
@@ -352,7 +362,9 @@ MISSION_ITEMS_TABLE: dict[str, GrinchItemData] = {
 #         [GrinchRamData(0x0101FB, binary_bit_pos=3)]),
 #     "Twin-End Tuba": GrinchItemData(["Sleigh Parts"], 304, IC.progression_skip_balancing,
 #         [GrinchRamData(0x0101FB, binary_bit_pos=6)])
-# }
+        ],
+    ),
+}
 
 # Access Keys
 KEYS_TABLE: dict[str, GrinchItemData] = {
@@ -380,31 +392,24 @@ KEYS_TABLE: dict[str, GrinchItemData] = {
         IC.progression,
         [GrinchRamData(0x0100AA, binary_bit_pos=4)],
     ),
-    # "Progressive Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 404, IC.progression,
-    #     [GrinchRamData()]),
-    # "Spin N' Win Door Unlock": GrinchItemData(["Supadow Door Unlocks"], 405, IC.progression,
-    #     [GrinchRamData()]),
-    # "Dankamania Door Unlock": GrinchItemData(["Supadow Door Unlocks"], 406, IC.progression,
-    #     [GrinchRamData()]),
-    # "The Copter Race Contest Door Unlock": GrinchItemData("Supadow Door Unlocks", 407, IC.progression,
-    #     [GrinchRamData()]),
-    # "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
-    #     [GrinchRamData()]),
-    # "Bike Race Access": GrinchItemData(["Supadow Door Unlocks", 409, IC.progression,
-    #     [GrinchRamData()])
-    grinch_items.keys.SLEIGH_ROOM_KEY: GrinchItemData(
-        [
-            grinch_categories.SLEIGH_ROOM,
-            grinch_categories.REQUIRED_ITEM,
-        ],
-        410,
-        IC.progression,
-        [
-            GrinchRamData(0x010200, binary_bit_pos=6),
-            GrinchRamData(0x0100AA, binary_bit_pos=5),
-        ],
-    ),
 }
+
+
+# Supadow
+# SUPADOW_TABLE: dict[str. GrinchItemData] = {
+# "Progressive Vacuum Tube": GrinchItemData(["Vacuum Tubes"], 404, IC.progression,
+#     [GrinchRamData()]),
+# "Spin N' Win Door Unlock": GrinchItemData(["Supadow Door Unlocks"], 405, IC.progression,
+#     [GrinchRamData()]),
+# "Dankamania Door Unlock": GrinchItemData(["Supadow Door Unlocks"], 406, IC.progression,
+#     [GrinchRamData()]),
+# "The Copter Race Contest Door Unlock": GrinchItemData("Supadow Door Unlocks", 407, IC.progression,
+#     [GrinchRamData()]),
+# "Progressive Supadow Door Unlock": GrinchItemData("Supadow Door Unlocks", 408, IC.progression,
+#     [GrinchRamData()]),
+# "Bike Race Access": GrinchItemData(["Supadow Door Unlocks", 409, IC.progression,
+#     [GrinchRamData()])
+# }
 
 # Misc Items
 MISC_ITEMS_TABLE: dict[str, GrinchItemData] = {
@@ -580,8 +585,9 @@ ALL_ITEMS_TABLE: dict[str, GrinchItemData] = {
     **MISC_ITEMS_TABLE,
     **TRAPS_TABLE,
     **USEFUL_ITEMS_TABLE,
-    # **SLEIGH_PARTS_TABLE,
-    # **MOVES_TABLE,
+    **SLEIGH_TABLE,
+    **MOVES_TABLE,
+    # **SUPADOW_TABLE,
 }
 
 # Psuedocoding traplink table

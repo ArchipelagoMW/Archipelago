@@ -13,7 +13,8 @@ from .Items import (
     GADGETS_TABLE,
     KEYS_TABLE,
     GrinchItemData,
-)  # , SLEIGH_PARTS_TABLE
+    SLEIGH_TABLE,
+)
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 
@@ -417,6 +418,7 @@ class GrinchClient(BizHawkClient):
         items_to_check: dict[str, GrinchItemData] = {
             **KEYS_TABLE,
             **MISSION_ITEMS_TABLE,
+            **SLEIGH_TABLE,
         }
 
         for item_name, item_data in items_to_check.items():
