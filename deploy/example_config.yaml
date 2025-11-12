@@ -8,3 +8,7 @@ SELFLAUNCH: false
 # Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
 # Set as your local IP (192.168.x.x) to serve over LAN.
 HOST_ADDRESS: localhost
+
+# Asset redistribution rights.  If true, the host affirms they have been given explicit permission to redistribute
+# the proprietary assets in WebHostLib
+#ASSET_RIGHTS: false
