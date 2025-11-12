@@ -578,7 +578,7 @@ def create_eatsanity_enzyme_items(item_factory: StardewItemFactory, options: Sta
 
     # These items unlock progressively stronger ability to digest food items that give the associated buff
     # Upon receiving the enzyme, you also get a temporary buff of whatever the effect is
-    # Duplicates exist to make them easier to find, and past the practical max, they only give the temporary buff.
+    # Stamina and Health items can go beyond their original max value, but the buffs cannot.
     items.extend(item_factory(item) for item in ["Stamina Enzyme"]*10)
     items.extend(item_factory(item) for item in ["Health Enzyme"]*10)
     items.extend(item_factory(item) for item in ["Speed Enzyme"]*5)
