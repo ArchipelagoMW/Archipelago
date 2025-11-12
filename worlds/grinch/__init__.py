@@ -1,7 +1,7 @@
 from BaseClasses import Region, Item, ItemClassification
 from .Locations import grinch_locations_to_id, grinch_locations, GrinchLocation, get_location_names_per_category
 from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE, get_item_names_per_category, \
-    MOVES_TABLE
+    MOVES_TABLE, USEFUL_ITEMS_TABLE
 from .Regions import connect_regions
 from .Rules import set_location_rules
 
@@ -65,7 +65,7 @@ class GrinchWorld(World):
     def create_items(self):  # Generates all items for the multiworld
         self_itempool: list[GrinchItem] = []
 
-        for item, data in ALL_ITEMS_TABLE.items():
+        for item, data in {**MISSION_ITEMS_TABLE}.items():
             self_itempool.append(self.create_item(item))
 
             if item == "Heart of Stone":
@@ -85,6 +85,18 @@ class GrinchWorld(World):
                 self_itempool.append(self.create_item(gadgets_added))
             else:
                 self.multiworld.push_precollected(self.create_item(gadgets_added))
+
+        for vacuums_added in KEYS_TABLE:
+            if self.options.starting_area == 0:
+                self.multiworld.push_precollected(self.create_item("Whoville Vacuum Tube"))
+            elif self.options.starting_area == 1:
+                self.multiworld.push_precollected(self.create_item("Who Forest Vacuum Tube"))
+            elif self.options.starting_area == 2:
+                self.multiworld.push_precollected(self.create_item("Who Dump Vacuum Tube"))
+            elif self.options.starting_area == 3:
+                self.multiworld.push_precollected((self.create_item("Who Lake Vacuum Tube")))
+            else:
+                self.itempool.append(self.create_item(vacuums_added))
 
 
         # Get number of current unfilled locations
