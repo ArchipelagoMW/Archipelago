@@ -1968,15 +1968,15 @@ def get_location_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
     for location in get_crystal_locations(-1, None):
-        categories.setdefault("Crystal", set()).add(location.name)
+        categories.setdefault("Crystals", set()).add(location.name)
 
     for location in get_shop_locations(-1, None):
-        categories.setdefault("Shop", set()).add(location.name)
+        categories.setdefault("Shops", set()).add(location.name)
 
     for location in get_boss_locations(-1, None):
-        categories.setdefault("Boss", set()).add(location.name)
+        categories.setdefault("Bosses", set()).add(location.name)
 
     for location in get_region_completion_locations(-1, None):
-        categories.setdefault("Region Completion", set()).add(location.name)
+        categories.setdefault("Region Completions", set()).add(location.name)
 
     return categories

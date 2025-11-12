@@ -282,6 +282,21 @@ class ObscureRoutes(Toggle):
     """
     display_name = "Obscure Routes"
 
+class PrioritizeCrystals(DefaultOnToggle):
+    """
+    When enabled, crystals will be prioritized when placing progression items.
+
+    While you're here, did you know that all YAMLs for all worlds include a priority_locations and an exclude_locations option?
+    You can use these to flag any individual location or a location group as priority or excluded.
+    Priority locations will be chosen first when placing progression items, and excluded locations will be chosen last.
+
+    Here's an example:
+    priority_locations = ["Crystals", "Region Completions", "Bosses", "Salmon River NPC - Win the Salmon Race"]
+
+    Crystal Project's location groups: Crystals, Bosses, Region Completions, and Shops
+    """
+    display_name = "Prioritize Crystals"
+
 class AutoSpendLP(Toggle):
     """
     When enabled, every time a character earns LP, it will automatically spend LP on abilities or passives.
@@ -423,6 +438,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     max_level: MaxLevel
     key_mode: KeyMode
     obscure_routes: ObscureRoutes
+    prioritize_crystals: PrioritizeCrystals
     auto_spend_lp: AutoSpendLP
     auto_equip_passives: AutoEquipPassives
     easy_leveling: EasyLeveling
@@ -440,7 +456,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, AutoSpendLP, AutoEquipPassives, EasyLeveling],
+    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }

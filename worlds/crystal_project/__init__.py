@@ -102,9 +102,8 @@ class CrystalProjectWorld(World):
         self.starting_progressive_levels: int = 1
 
     def generate_early(self):
-        # Default all crystals to priority locations
-        if len(self.options.priority_locations.value) == 0:
-            self.options.priority_locations.value = get_location_names_per_category()["Crystal"]
+        if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
+            self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
 
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
