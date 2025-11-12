@@ -570,7 +570,7 @@ rules_dict: dict[str, list[list[str]]] = {
         ],
     ],
     # Who Dump Blueprints
-    "WD - OCD BP inside Middle Pipe": [
+    "WD - OCD BP inside Pipe near Vacuum Tube": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
@@ -588,7 +588,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WD - OCD BP inside Right Pipe": [
+    "WD - OCD BP inside Pipe on right side": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
@@ -608,7 +608,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WD - OCD BP inside Left Pipe": [
+    "WD - OCD BP inside Pipe on left side": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
