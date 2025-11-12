@@ -198,6 +198,16 @@ class FillerWeight(OptionCounter):
         "20 Rotten Eggs": 25,
     }
 
+class TrapPercentage(Range):
+    """
+    Determines how much filler is replaced with traps. [NOT IMPLEMENTED]
+    """
+
+    display_name = "Trap Percentage"
+    range_start = 0
+    range_end = 100
+    default = 10
+
 class TrapWeight(OptionCounter):
     """
     Determines which traps are replaced with filler in the pool. [NOT IMPLEMENTED]
@@ -227,4 +237,5 @@ class GrinchOptions(PerGameCommonOptions):  # DeathLinkMixin
     ring_link: RingLinkOption
     trap_link: TrapLinkOption
     filler_weight: FillerWeight
+    trap_percentage: TrapPercentage
     trap_weight: TrapWeight
