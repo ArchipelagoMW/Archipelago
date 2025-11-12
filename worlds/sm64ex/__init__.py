@@ -21,8 +21,8 @@ class SM64Web(WebWorld):
     )
 
     setup_es = Tutorial(
-        setup_en.tutorial_name,
-        setup_en.description,
+        "Guía de Configuración Multiworld",
+        "Guía para configurar SM64EX para MultiWorld.",
         "Español",
         "setup_es.md",
         "setup/es",
