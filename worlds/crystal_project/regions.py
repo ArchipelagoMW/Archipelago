@@ -451,7 +451,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #Poko Poko Desert start
     fancy_add_exits(world, POKO_POKO_DESERT_AP_REGION, [POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_BEACH_WEST_PASS_AP_REGION, TOWER_OF_ZOT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, ANCIENT_RESERVOIR_AP_REGION],
                     {POKO_POKO_EAST_PLATEAU_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
-                     POKO_POKO_BEACH_WEST_PASS_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state),
+                     POKO_POKO_BEACH_WEST_PASS_AP_REGION: lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state),
                      TOWER_OF_ZOT_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
                      ANCIENT_RESERVOIR_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY)})
     fancy_add_exits(world, POKO_POKO_EAST_PLATEAU_AP_REGION, [POKO_POKO_DESERT_AP_REGION, TOWER_OF_ZOT_AP_REGION, POKO_POKO_LAKE_DELENDE_PASS_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, SARA_SARA_BAZAAR_AP_REGION],
