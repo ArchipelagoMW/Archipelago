@@ -12214,27 +12214,66 @@ function tip_check()
             end
         end
 		-- Wayroom Tips
-		--local wayroom_check = wayroom_tip_check()
-		--if wayroom_check ~= nil
-		--then
-		--	checks[wayroom_check] = true
-		--end
+		local wayroom_check = wayroom_tip_check()
+		if wayroom_check ~= nil
+		then
+			for ap_id, res in pairs wayroom_check
+			do
+				checks[ap_id] = res
+			end
+		end
     return checks
 end
 
+-- function wayroom_tip_check()
+-- 	if CURRENT_MAP == 0x2A
+-- 	then
+--     	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+--     	local wayroomBaseIndex = hackPointerIndex + self.wayroom_locations
+-- 		local currentWayroomId = mainmemory.readbyte(wayroomBaseIndex + self.wayroom_id)
+-- 		local wayroomOffset = wayroomBaseIndex + (currentWayroomId * self.wayroom_size)
+--         if mainmemory.readbyte(wayroomOffset + self.wayroom_collected) == 0x0
+--         then
+--             return nil
+--         else
+--             return WAYROOM_TIPS_TABLE[currentWayroomId]
+--         end
+-- 	end
+-- 	return nil
+-- end
+
 function wayroom_tip_check()
+	local check_table = {}
 	if CURRENT_MAP == 0x2A
 	then
-    	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
-    	local wayroomBaseIndex = hackPointerIndex + self.wayroom_locations
-		local currentWayroomId = mainmemory.readbyte(wayroomBaseIndex + self.wayroom_id)
-		local wayroomOffset = wayroomBaseIndex + (currentWayroomId * self.wayroom_size)
-        if mainmemory.readbyte(wayroomOffset + self.wayroom_collected) == 0x0
-        then
-            return nil
-        else
-            return WAYROOM_TIPS_TABLE[currentWayroomId]
-        end
+		local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+		local wayroomStartIndex = hackPointerIndex + self.wayroom_locations
+		for table_id, ap_id in pairs(WAYROOM_TIPS_TABLE)
+		do
+			local addr_location = 0
+			if table_id == 1
+			then
+				addr_location = 0
+			else
+				addr_location = self.wayroom_size * (table_id - 1)
+			end
+			local rom_id = mainmemory.readbyte(wayroomBaseIndex + addr_location + self.wayroom_id)
+			if(rom_id ~= ap_id)
+			then
+				print("Check Wayroom Location Address Math...")
+				print(ap_id)
+				print(rom_id)
+				return nil
+			end
+			if(mainmemory.readbyte(wayroomBaseIndex + addr_location + self.wayroom_collected) == 0x01) --Collected
+			then
+				if ap_id == 0x000 then
+					check_table["12345"] = true
+				else
+					check_table[ap_id] = true
+				end
+		end
+		return check_table
 	end
 	return nil
 end
