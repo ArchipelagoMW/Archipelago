@@ -26212,11 +26212,6 @@
 					},
 					{
 						"ballRequirement": false,
-						"regionIndex": 10,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": false,
 						"regionIndex": 12,
 						"trickDifficulty": 0
 					}
