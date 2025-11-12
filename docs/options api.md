@@ -268,7 +268,7 @@ Marks locations given here as `LocationProgressType.Excluded` so that neither pr
 placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing non-deprioritized progression items on them if any are available in
+Marks locations given here as `LocationProgressType.Priority` forcing progression items (except ones also flagged as deprioritized) on them if any are available in
 the pool.
 
 ### ItemLinks
