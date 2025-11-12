@@ -278,13 +278,15 @@
         { "anyOf": [ { "item": "Wall Climb" }, { "item": "Air Dash" } ] }
     ] }, // on logic_level: easy, just T-dash
     { "from": "CTH - Lower Left Vents", "to": "CTH - Stairs Near Large Shaft", "requires": [ { "item": "Wall Climb" } ] },
-    { "from": "CTH - Lower Left Vents", "to": "CTH - Root Node", "requires": [ { "item": "Wall Climb" } ] },
+    { "from": "CTH - Lower Left Vents", "to": "CTH - Under Root Node", "requires": [] }, // single jump is enough
+    { "from": "CTH - Under Root Node", "to": "CTH - Root Node", "requires": [ { "item": "Wall Climb" } ] },
     // on logic_level: ledge storage, wall slide works (with AD or CL setup)
-    { "from": "CTH - Root Node", "to": "CTH - Lower Left Vents", "requires": [
+    { "from": "CTH - Root Node", "to": "CTH - Under Root Node", "requires": [] }, // fall
+    { "from": "CTH - Under Root Node", "to": "CTH - Lower Left Vents", "requires": [
         { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
     ] },
     { "from": "CTH - Root Node", "to": "CTH - Stairs Near Large Shaft", "requires": [] }, // one-way door
-    { "from": "CTH - Lower Left Vents", "to": "CTH - Lower Right Vents", "requires": [ { "anyOf": [
+    { "from": "CTH - Under Root Node", "to": "CTH - Lower Right Vents", "requires": [ { "anyOf": [
         { "item": "Tai-Chi Kick" },
         [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
     ] } ] }, // on logic_level: easy, swift runner AND AD AND LG also works
