@@ -53,9 +53,11 @@ class CrystalProjectWorld(World):
     boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, options)}
     shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, options)}
     region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completions(-1, options)}
+
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
     location_name_to_id.update(region_completion_name_to_id)
+
     item_name_groups = get_item_names_per_category()
     base_game_jobs: set[str] = item_name_groups[JOB].copy()
 
@@ -73,9 +75,9 @@ class CrystalProjectWorld(World):
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
     for home_point in home_points:
-        item_name_to_id[home_point.name] = (home_point.code + home_point_location_index_offset)
+        item_name_to_id[home_point.name] = (home_point.code + home_point_item_index_offset)
         item_name_groups.setdefault(HOME_POINT, set()).add(home_point.name)
-        location_name_to_id[home_point.name] = (home_point.code + home_point_item_index_offset)
+        location_name_to_id[home_point.name] = (home_point.code + home_point_location_index_offset)
 
     modded_locations = get_modded_locations(mod_info)
 
