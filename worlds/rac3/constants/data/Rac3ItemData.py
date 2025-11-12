@@ -109,7 +109,7 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_vidcomic(idx: int):
-        address = idx + 0x001D5454
+        address: int = idx - 0xFB + RAC3STATUS.VIDCOMIC
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression)
 
     @staticmethod

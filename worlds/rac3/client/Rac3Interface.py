@@ -458,13 +458,13 @@ class Rac3Interface(GameInterface):
     def vidcomic_cycler(self):
         # self.logger.debug("---------VidComicCycler Start---------")
         comic = self.UnlockItem[RAC3ITEM.PROGRESSIVE_VIDCOMIC]
-        for name in range(5):
-            addr = RAC3_ITEM_DATA_TABLE[VIDCOMIC_LIST[name]].UNLOCK_ADDRESS
-            if name + 1 > comic.status:
+        for num in range(5):
+            addr = RAC3_ITEM_DATA_TABLE[VIDCOMIC_LIST[num]].UNLOCK_ADDRESS
+            if num + 1 > comic.status:
                 self._write8(addr, 0)  # Disable Vidcomics not unlocked yet
-            elif name + 1 <= comic.status:
+            elif num + 1 <= comic.status:
                 unlock_delay_count = 1
-                if name == 2:
+                if num == 2:
                     unlock_delay_count = 30  # WA for Annihilation Nation Proceeding
                 comic.unlock_delay += 1
                 if comic.unlock_delay > unlock_delay_count:
