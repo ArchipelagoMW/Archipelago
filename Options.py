@@ -1421,7 +1421,7 @@ class ExcludeLocations(LocationSet):
 
 
 class PriorityLocations(LocationSet):
-    """Try to place a progression item (which is not also de-prioritized) in these locations."""
+    """Priority locations will be chosen first when placing non-deprioritized progression items."""
     display_name = "Priority Locations"
     rich_text_doc = True
 
