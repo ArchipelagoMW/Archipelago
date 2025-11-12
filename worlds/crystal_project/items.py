@@ -48,6 +48,7 @@ equipment_index_offset = 1001
 summon_index_offset = 10001
 scholar_index_offset = 100001
 trap_index_offset = 1000001
+home_point_item_index_offset = 10000001
 
 item_table: Dict[str, ItemData] = {
     #Jobs

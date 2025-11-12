@@ -5,7 +5,6 @@ from .rules import CrystalProjectLogic
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
-from .constants.ap_regions import *
 from .constants.region_passes import *
 from .constants.display_regions import *
 from .constants.teleport_stones import *
@@ -24,6 +23,7 @@ crystal_index_offset = 100000
 boss_index_offset = 1000000
 shop_index_offset = 10000000
 regionsanity_index_offset = 100000000
+home_point_location_index_offset = 1000000000
 
 def get_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
