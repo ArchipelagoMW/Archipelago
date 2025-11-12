@@ -93,7 +93,7 @@ class SkillLogic(BaseLogic):
 
         if buff_levels <= 0:
             return self.logic.true_
-        elif buff_levels >= 6:
+        if buff_levels >= 6:
             return self.logic.false_
 
         potential_foods = {
