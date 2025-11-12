@@ -1415,13 +1415,13 @@ class StartLocationHints(LocationSet):
 
 
 class ExcludeLocations(LocationSet):
-    """Prevent these locations from having a progression or useful item."""
+    """Prevent these locations from having an important item."""
     display_name = "Excluded Locations"
     rich_text_doc = True
 
 
 class PriorityLocations(LocationSet):
-    """Priority locations will be chosen first when placing non-deprioritized progression items."""
+    """Prevent these locations from having an unimportant item."""
     display_name = "Priority Locations"
     rich_text_doc = True
 
