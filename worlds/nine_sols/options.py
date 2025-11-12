@@ -137,13 +137,16 @@ class FirstRootNode(Choice):
     The first root node you can teleport to from Four Seasons Pavilion after starting a randomized game.
     This is often referred to as your "spawn", although you technically always spawn in FSP.
 
-    Many root nodes are intentionally excluded from this list, usually because they would be "overly restrictive starts"
-    (i.e. few if any locations would be checkable with no items, especially when Grapple, Ledge Grab and Wall Climb are
-    all shuffled).
+    Many root nodes are intentionally excluded from this list, usually because if you started there
+    no locations would be checkable at the start of the game when you have no items yet.
 
-    Some first_root_nodes may require certain items to be placed early.
-    For example, if galactic_dock is your first node, Nymph or Tai-Chi Kick will be placed early.
-    See the descriptions of shuffle_grapple, shuffle_wall_climb and shuffle_ledge_grab for similar cases.
+    Some first_root_nodes will force items to be placed early, since the randomizer would be unbeatable otherwise:
+    - galactic_dock early-places one of Nymph or Tai-Chi Kick
+    - central_transport_hub early-places Tai-Chi Kick
+    - factory_underground early-places one of Air Dash or Cloud Leap
+    - inner_warehouse early-places Wall Climb and one of Cloud Leap, Air Dash or Ledge Grab
+    - power_reservoir_west early-places one of Cloud Leap, Air Dash or Tai-Chi Kick
+    See the descriptions of shuffle_grapple, shuffle_wall_climb and shuffle_ledge_grab for additional cases.
     """
     display_name = "First Root Node"
     default = 0
@@ -157,6 +160,13 @@ class FirstRootNode(Choice):
     option_grotto_of_scriptures_entry = 7
     option_grotto_of_scriptures_east = 8
     option_grotto_of_scriptures_west = 9
+    option_agrarian_hall = 10
+    option_radiant_pagoda = 11
+    option_apeman_facility_depths = 12
+    option_central_transport_hub = 13
+    option_factory_underground = 14
+    option_inner_warehouse = 15
+    option_power_reservoir_west = 16
 
 
 class ShuffleGrapple(Toggle):

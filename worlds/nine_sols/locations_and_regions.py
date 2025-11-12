@@ -224,6 +224,20 @@ def create_regions(world: "NineSolsWorld") -> None:
         first_node_region = "GoSE - Root Node"
     elif options.first_root_node == FirstRootNode.option_grotto_of_scriptures_west:
         first_node_region = "GoSW - Root Node"
+    elif options.first_root_node == FirstRootNode.option_agrarian_hall:
+        first_node_region = "AH - Root Node"
+    elif options.first_root_node == FirstRootNode.option_radiant_pagoda:
+        first_node_region = "RP - Root Node"
+    elif options.first_root_node == FirstRootNode.option_apeman_facility_depths:
+        first_node_region = "AFD - Root Node"
+    elif options.first_root_node == FirstRootNode.option_central_transport_hub:
+        first_node_region = "CTH - Root Node"
+    elif options.first_root_node == FirstRootNode.option_factory_underground:
+        first_node_region = "FU - Root Node & Lower Elevator"
+    elif options.first_root_node == FirstRootNode.option_inner_warehouse:
+        first_node_region = "IW - Root Node"
+    elif options.first_root_node == FirstRootNode.option_power_reservoir_west:
+        first_node_region = "PRW - Root Node"
     else:
         raise Exception("Unrecognized first_root_node")
 

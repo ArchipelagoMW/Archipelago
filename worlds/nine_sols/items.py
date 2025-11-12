@@ -211,6 +211,7 @@ def create_items(world: "NineSolsWorld") -> None:
         if options.shuffle_wall_climb.value:
             multiworld.local_early_items[player]["Wall Climb"] = 1
     if options.first_root_node == FirstRootNode.option_galactic_dock:
+        # from GD you can only go to CH, and CH has two other single-item exits:
         early_item = random.choice(["Mystic Nymph: Scout Mode", "Tai-Chi Kick"])
         multiworld.local_early_items[player][early_item] = 1
     if options.first_root_node == FirstRootNode.option_yinglong_canal:
@@ -221,4 +222,21 @@ def create_items(world: "NineSolsWorld") -> None:
                 multiworld.get_location("Yinglong Canal: Near Root Node", player).place_locked_item(create_item(player, "Grapple"))
             else:
                 multiworld.local_early_items[player]["Grapple"] = 1
+    if options.first_root_node == FirstRootNode.option_central_transport_hub:
+        # the only non-dead end from CTH node is across the TCK tutorial pit, and TCK is its only single-item solution
+        multiworld.local_early_items[player]["Tai-Chi Kick"] = 1
+    if options.first_root_node == FirstRootNode.option_factory_underground:
+        # Either go left with AD, or right with AD OR CL. Going down is a dead end and going up needs multiple items.
+        early_item = random.choice(["Air Dash", "Cloud Leap"])
+        multiworld.local_early_items[player][early_item] = 1
+    if options.first_root_node == FirstRootNode.option_inner_warehouse:
+        # Riding crates is the only way to progress from IW node.
+        multiworld.local_early_items[player]["Wall Climb"] = 1
+        # The last jump to upper IW needs a movement item
+        second_early_item = random.choice(["Cloud Leap", "Air Dash", "Ledge Grab"])
+        multiworld.local_early_items[player][second_early_item] = 1
+    if options.first_root_node == FirstRootNode.option_power_reservoir_west:
+        # PRW itself needs multiple items to progress, but you can go to AFD and use any of these movement items.
+        early_item = random.choice(["Cloud Leap", "Air Dash", "Tai-Chi Kick"])
+        multiworld.local_early_items[player][early_item] = 1
 
