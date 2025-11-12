@@ -69,7 +69,7 @@ class GrinchWorld(World):
             self_itempool.append(self.create_item(item))
 
             if item == "Heart of Stone":
-                for _ in range(3):
+                for _ in range(4):
                     self_itempool.append(self.create_item(item))
 
         # Add moves
@@ -101,7 +101,7 @@ class GrinchWorld(World):
 
         # Get number of current unfilled locations
         unfilled_locations: int = (
-            len(self.multiworld.get_unfilled_locations(self.player)) - len(ALL_ITEMS_TABLE.keys()) - 3
+            len(self.multiworld.get_unfilled_locations(self.player)) - len(ALL_ITEMS_TABLE.keys()) - 4
         )
 
         for _ in range(unfilled_locations):
