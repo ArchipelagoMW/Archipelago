@@ -1,6 +1,7 @@
 from BaseClasses import Region, Item, ItemClassification
 from .Locations import grinch_locations_to_id, grinch_locations, GrinchLocation, get_location_names_per_category
-from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE, get_item_names_per_category
+from .Items import grinch_items_to_id, GrinchItem, ALL_ITEMS_TABLE, MISC_ITEMS_TABLE, get_item_names_per_category, \
+    MOVES_TABLE
 from .Regions import connect_regions
 from .Rules import set_location_rules
 
@@ -70,6 +71,21 @@ class GrinchWorld(World):
             if item == "Heart of Stone":
                 for _ in range(3):
                     self_itempool.append(self.create_item(item))
+
+        # Add moves
+        for moves_added in MOVES_TABLE:
+            if self.options.move_rando and moves_added in self.options.moves_to_randomize:
+                self_itempool.append(self.create_item(moves_added))
+            else:
+                self.multiworld.push_precollected(self.create_item(moves_added))
+
+        # Adds gadgets
+        for gadgets_added in GADGETS_TABLE:
+            if self.options.gadget_rando and gadgets_added in self.options.moves_to_randomize:
+                self_itempool.append(self.create_item(gadgets_added))
+            else:
+                self.multiworld.push_precollected(self.create_item(gadgets_added))
+
 
         # Get number of current unfilled locations
         unfilled_locations: int = (
