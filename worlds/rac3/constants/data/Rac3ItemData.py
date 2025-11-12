@@ -453,7 +453,7 @@ item_table: dict[str, RAC3ITEMDATA] = {
 default_starting_weapons: dict[str, int] = {name: 1 for name in WEAPON_LIST}
 
 # Todo: Add Item Groups (see location_groups)
-item_group: dict[str, set[str]] = {
+item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.INFOBOT: set(INFOBOT_LIST),
     RAC3ITEMTAG.GADGET: set(GADGET_LIST),
     RAC3ITEMTAG.WEAPON: set(WEAPON_LIST),

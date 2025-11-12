@@ -2,7 +2,7 @@ from logging import DEBUG, getLogger
 from typing import Any, ClassVar, Optional
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
-from constants.data.Rac3ItemData import RAC3_ITEM_DATA_TABLE
+from constants.data.Rac3ItemData import RAC3_ITEM_DATA_TABLE, item_groups
 from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 from Items import create_item, create_itempool, get_filler_item_selection, starting_weapons
@@ -51,6 +51,7 @@ class RaC3World(World):
     item_name_to_id = {name: data.AP_CODE for name, data in RAC3_ITEM_DATA_TABLE.items()}
     location_name_to_id = get_location_names()
     location_name_groups = location_groups
+    item_name_groups = item_groups
     preplaced_items: list[str] = []
     filler_items: list[str] = []
     # Config for Universal Tracker
