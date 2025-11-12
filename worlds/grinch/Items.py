@@ -63,7 +63,7 @@ class grinch_items:
     class moves:
         PANCAKE: str = "Pancake"
         BAD_BREATH: str = "Bad Breath"
-        SIEZE: str = "Seize"
+        SEIZE: str = "Seize"
         MAX: str = "Max"
         SNEAK: str = "Sneak"
 
