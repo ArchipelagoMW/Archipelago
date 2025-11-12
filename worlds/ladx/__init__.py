@@ -283,12 +283,6 @@ class LinksAwakeningWorld(World):
                     itempool.append(item)
 
         self.multi_key = self.generate_multi_key()
-
-        # Add special case for trendy shop access
-        trendy_region = self.multiworld.get_region("Trendy Shop", self.player)
-        event_location = Location(self.player, "Can Play Trendy Game", parent=trendy_region)
-        trendy_region.locations.insert(0, event_location)
-        event_location.place_locked_item(self.create_event("Can Play Trendy Game"))
        
         self.dungeon_locations_by_dungeon = [[], [], [], [], [], [], [], [], []]     
         for r in self.multiworld.get_regions(self.player):
@@ -303,54 +297,57 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
-        if self.options.tarins_gift != "any_item":
-            self.force_start_item(itempool)
-
+        self.local_front_fill(itempool, self.options.expand_start)
 
         self.multiworld.itempool += itempool
 
-    def force_start_item(self, itempool):
-        start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
-        if not start_loc.item:
-            """
-            Find an item that forces progression or a bush breaker for the player, depending on settings.
-            """
-            def is_possible_start_item(item):
-                return item.advancement and item.name not in self.options.non_local_items
 
-            def opens_new_regions(item):
-                collection_state = base_collection_state.copy()
+    def local_front_fill(self, itempool, target: int) -> None:
+        """
+        Tries to fill progression locally until the target number of locations can be reached.
+        """
+        to_place: dict[Location, Item] = {}
+        base_collection_state = CollectionState(self.multiworld)
+
+        def get_reachable_locations(additional_item: Item | None = None) -> list[Location]:
+            collection_state = base_collection_state.copy()
+            reachable_locations: list[Location] = []
+            for item in to_place.values():
                 collection_state.collect(item, prevent_sweep=True)
-                collection_state.sweep_for_advancements(self.get_locations())
-                return len(collection_state.reachable_regions[self.player]) > reachable_count
+            if additional_item:
+                collection_state.collect(additional_item, prevent_sweep=True)
+            for location in self.get_locations():
+                if location.can_reach(collection_state):
+                    reachable_locations.append(location)
+            return reachable_locations
 
-            start_items = [item for item in itempool if is_possible_start_item(item)]
-            self.random.shuffle(start_items)
+        reachable_locations = get_reachable_locations()
+        if len(reachable_locations) >= target:
+            return
 
-            if self.options.tarins_gift == "bush_breaker":
-                start_item = next((item for item in start_items if item.name in links_awakening_item_name_groups["Bush Breakers"]), None)
+        available_items = [item for item in itempool if item.advancement and item.name not in self.options.non_local_items]
+        self.random.shuffle(available_items)
 
-            else:  # local_progression
-                entrance_mapping = self.ladxr_logic.world_setup.entrance_mapping
-                # Tail key opens a region but not a location if d1 entrance is not mapped to d1 or d4
-                # exclude it in these cases to avoid fill errors
-                if entrance_mapping['d1'] not in ['d1', 'd4']:
-                    start_items = [item for item in start_items if item.name != 'Tail Key']
-                # Exclude shovel unless starting in Mabe Village
-                if entrance_mapping['start_house'] not in ['start_house', 'shop']:
-                    start_items = [item for item in start_items if item.name != 'Shovel']
-                base_collection_state = CollectionState(self.multiworld)
-                base_collection_state.sweep_for_advancements(self.get_locations())
-                reachable_count = len(base_collection_state.reachable_regions[self.player])
-                start_item = next((item for item in start_items if opens_new_regions(item)), None)
+        # Making one pass over itempool wouldnt really work for a full fill but we're just filling a handful of
+        # locations and failing to hit the target isn't that big of an issue.
+        for item in available_items:
+            new_reachable_locations = get_reachable_locations(item)
+            if len(new_reachable_locations) <= len(reachable_locations):
+                continue # This item doesn't open anything
+            
+            possible_locations = [loc for loc in reachable_locations if not loc.item and loc not in to_place]
+            if not possible_locations:
+                break
+            to_place[self.random.choice(possible_locations)] = item
 
-            if start_item:
-                # Make sure we're removing the same copy of the item that we're placing
-                # (.remove checks __eq__, which could be a different copy, so we find the first index and use .pop)
-                start_item = itempool.pop(itempool.index(start_item))
-                start_loc.place_locked_item(start_item)
-            else:
-                logging.getLogger("Link's Awakening Logger").warning(f"No {self.options.tarins_gift.current_option_name} available for Tarin's Gift.")
+            if len(new_reachable_locations) >= target:
+                break
+
+            reachable_locations = new_reachable_locations
+
+        for location, item in to_place.items():
+            item_from_pool = itempool.pop(itempool.index(item))
+            location.place_locked_item(item_from_pool)
 
 
     def get_pre_fill_items(self):
