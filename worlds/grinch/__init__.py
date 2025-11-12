@@ -65,7 +65,7 @@ class GrinchWorld(World):
     def create_items(self):  # Generates all items for the multiworld
         self_itempool: list[GrinchItem] = []
 
-        for item, data in {**MISSION_ITEMS_TABLE}.items():
+        for item, data in {**MISSION_ITEMS_TABLE, **SLEIGH_TABLE}.items():
             self_itempool.append(self.create_item(item))
 
             if item == "Heart of Stone":
