@@ -291,6 +291,14 @@ do
     WORLDS_TABLE[item] = index
 end
 
+local WAYROOM_TIPS_TABLE = {
+	0x000,
+	0x11A,
+	0x271,
+	0x3C9,
+	0x534,
+	0x671
+}
 
 -- Address Map for Glover
 local ADDRESS_MAP = {
@@ -8023,6 +8031,7 @@ local ADDRESS_MAP = {
 				['offset'] = 79,
 			},
 		},
+		["ENEMY_GARIBS"] = {},
 		["ENEMIES"] = {
 			["1861"] = {
 				['id'] = 0x745,
@@ -12204,7 +12213,30 @@ function tip_check()
                 end
             end
         end
+		-- Wayroom Tips
+		--local wayroom_check = wayroom_tip_check()
+		--if wayroom_check ~= nil
+		--then
+		--	checks[wayroom_check] = true
+		--end
     return checks
+end
+
+function wayroom_tip_check()
+	if CURRENT_MAP == 0x2A
+	then
+    	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+    	local wayroomBaseIndex = hackPointerIndex + self.wayroom_locations
+		local currentWayroomId = mainmemory.readbyte(wayroomBaseIndex + self.wayroom_id)
+		local wayroomOffset = wayroomBaseIndex + (currentWayroomId * self.wayroom_size)
+        if mainmemory.readbyte(wayroomOffset + self.wayroom_collected) == 0x0
+        then
+            return nil
+        else
+            return WAYROOM_TIPS_TABLE[currentWayroomId]
+        end
+	end
+	return nil
 end
 
 function enemy_check()
@@ -12253,6 +12285,11 @@ function goal_check()
 			end
 		end
 	return check
+end
+
+function cheat_chicken_check()
+    local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
+	return mainmemory.readbyte(hackPointerIndex + self.chicken_collected)
 end
 
 function ball_returned_check()
@@ -12809,6 +12846,7 @@ function SendToClient()
     retTable["potions"] = potion_check()
 	retTable["goal"] = goal_check()
 	retTable["ball_returns"] = ball_returned_check()
+	retTable["chicken_collected"] = cheat_chicken_check()
 	retTable["outro"] = WORLD_NAME == "AP_OUTRO"
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
