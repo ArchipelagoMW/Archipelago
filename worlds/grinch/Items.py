@@ -551,7 +551,7 @@ MOVES_TABLE: dict[str, GrinchItemData] = {
             GrinchRamData(0x0100BB, binary_bit_pos=2),
         ],
     ),
-    grinch_items.moves.SIEZE: GrinchItemData(
+    grinch_items.moves.SEIZE: GrinchItemData(
         [grinch_categories.MOVES],
         702,
         IC.progression,
