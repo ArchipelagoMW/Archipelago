@@ -320,15 +320,15 @@ class TestBuildApworld(unittest.TestCase):
 
         _, component = Launcher.identify(LAUNCHER_COMPONENT)
 
-        Launcher.main({
-            "args": {
-                "--skip_open_folder"
-            },
-            "component": component,
-            "update_settings": False
-        })
-
         try:
+            Launcher.main({
+                "args": {
+                    "--suppress-open"
+                },
+                "component": component,
+                "update_settings": False
+            })
+
             self.assertTrue(os.path.exists(apworlds_path))
             self.assertEqual(len(AutoWorldRegister.world_types), len(os.listdir(apworlds_path)))
         finally:
@@ -341,16 +341,16 @@ class TestBuildApworld(unittest.TestCase):
 
         _, component = Launcher.identify(LAUNCHER_COMPONENT)
 
-        Launcher.main({
-            "args": {
-                "--skip_open_folder",
-                "Archipelago"
-            },
-            "component": component,
-            "update_settings": False
-        })
-
         try:
+            Launcher.main({
+                "args": {
+                    "--suppress-open",
+                    "Archipelago"
+                },
+                "component": component,
+                "update_settings": False
+            })
+
             self.assertTrue(os.path.exists(os.path.join(apworlds_path, "generic.apworld")))
             self.assertEqual(1, len(os.listdir(apworlds_path)))
         finally:
