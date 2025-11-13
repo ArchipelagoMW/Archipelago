@@ -15,7 +15,7 @@ import orjson
 
 import Launcher
 from build_apworld import MANIFEST_NAME, ZIP_EXCLUDE, build_apworld
-from general import TestWorld
+from test.general import TestWorld
 from worlds import AutoWorldRegister
 from worlds.AutoWorld import World
 

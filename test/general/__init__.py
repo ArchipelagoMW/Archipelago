@@ -2,7 +2,7 @@ from argparse import Namespace
 from typing import Any, List, Optional, Tuple, Type
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
-from general.stub_world import TestWorld
+from test.general.stub_world import TestWorld
 from worlds.AutoWorld import World, call_all
 
 gen_steps = (
