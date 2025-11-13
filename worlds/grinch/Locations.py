@@ -689,7 +689,7 @@ grinch_locations = {
         1004,
         [GrinchRamData(0x010252, binary_bit_pos=4)],
     ),
-    "WD - OCD BP near right side of Power Plant Wall": GrinchLocationData(
+    "WD - OCD BP near Right Side of Power Plant Wall": GrinchLocationData(
         "Who Dump",
         [
             "Octopus Climbing Device Blueprints",
