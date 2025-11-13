@@ -5,13 +5,14 @@ from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
-from constants.data.Rac3ItemData import ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID, RAC3_ITEM_DATA_TABLE
+from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
+                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, vidcomic_data,
+                                         weapon_upgrade_data)
 from constants.data.Rac3LocationData import LOCATIONS
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
 from constants.Rac3Deaths import DEATH_FROM_ACTION
-from constants.Rac3Items import (EQUIP_LIST, GADGET_LIST, INFOBOT_LIST, PROG_TO_NAME_DICT, QUICK_SELECT_LIST, RAC3ITEM,
-                                 UPGRADE_DICT, VIDCOMIC_LIST, WEAPON_LIST)
+from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
 from constants.Rac3Status import RAC3STATUS
@@ -198,7 +199,7 @@ class Rac3Interface(GameInterface):
         # self.logger.info(f'{item_code}')
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code])
 
-        if name in INFOBOT_LIST:
+        if name in planet_data.keys():
             for slot in SHIP_SLOTS:
                 table = RAC3_REGION_DATA_TABLE[slot]
                 self.logger.debug(f'{slot}: ID: {table.ID}, Address: {table.SLOT_ADDRESS}')
@@ -233,9 +234,9 @@ class Rac3Interface(GameInterface):
                 self._write32(RAC3STATUS.NANOTECH_EXP, exp + 1000 + randint(1, 100))
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
-                for weapon_name in WEAPON_LIST:
+                for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
-                        level = self._read8(RAC3_ITEM_DATA_TABLE[weapon_name].LEVEL)
+                        level = self._read8(non_prog_weapon_data[weapon_name].LEVEL)
                         if level < 5:
                             valid_weapons.append(weapon_name)
 
@@ -243,9 +244,9 @@ class Rac3Interface(GameInterface):
                     weapon_num = randint(0, len(valid_weapons) - 1)
                     self.weapon_level_up(valid_weapons[weapon_num])
 
-        if name in EQUIP_LIST:
-            if RAC3_ITEM_DATA_TABLE[name].AMMO:
-                self._write8(RAC3_ITEM_DATA_TABLE[name].AMMO_ADDRESS, RAC3_ITEM_DATA_TABLE[name].AMMO)
+        if name in equipable_data.keys():
+            if equipable_data[name].AMMO:
+                self._write8(equipable_data[name].AMMO_ADDRESS, equipable_data[name].AMMO)
             self.update_equip(name)
 
     def is_location_checked(self, ap_code):
@@ -395,10 +396,8 @@ class Rac3Interface(GameInterface):
     # interval update function: Check unlock/lock status of items
     def weapon_cycler(self):
         # self.logger.debug('---------WeaponCycler Start---------')
-        for name in WEAPON_LIST:
-            # self._write8(RAC3_ITEM_DATA_TABLE[name].UNLOCK_ADDRESS, self.UnlockItem[name].status & 1)
-
-            addr = RAC3_ITEM_DATA_TABLE[name].UNLOCK_ADDRESS
+        for name in non_prog_weapon_data.keys():
+            addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
@@ -423,13 +422,13 @@ class Rac3Interface(GameInterface):
                     if last_2 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_2)).status:
                         replace_equip = last_2
                     else:
-                        replace_equip = RAC3_ITEM_DATA_TABLE[RAC3ITEM.WRENCH].ID
+                        replace_equip = equipable_data[RAC3ITEM.WRENCH].ID
         if replace_equip:
             self._write8(RAC3STATUS.EQUIPPED, replace_equip)
 
     def gadget_cycler(self):
-        for name in GADGET_LIST:
-            addr = RAC3_ITEM_DATA_TABLE[name].UNLOCK_ADDRESS
+        for name in gadget_data.keys():
+            addr = gadget_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
                 if self.UnlockItem[name].unlock_delay:
                     self._write8(addr, 1)
@@ -441,8 +440,8 @@ class Rac3Interface(GameInterface):
 
     def planet_cycler(self):
         # self.logger.debug('---------PlanetCycler Start---------')
-        for name in INFOBOT_LIST:
-            planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
+        for name in planet_data.keys():
+            planet = planet_data[PLANET_FROM_INFOBOT[name]]
             addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
             if self.UnlockItem[name].status:
                 # Don't allow planets that can softlock
@@ -458,13 +457,15 @@ class Rac3Interface(GameInterface):
     def vidcomic_cycler(self):
         # self.logger.debug("---------VidComicCycler Start---------")
         comic = self.UnlockItem[RAC3ITEM.PROGRESSIVE_VIDCOMIC]
-        for num in range(5):
-            addr = RAC3_ITEM_DATA_TABLE[VIDCOMIC_LIST[num]].UNLOCK_ADDRESS
-            if num + 1 > comic.status:
+        for index, name in enumerate(vidcomic_data.keys()):
+            addr = vidcomic_data[name].UNLOCK_ADDRESS
+            if index == 0:
+                continue
+            if index > comic.status:
                 self._write8(addr, 0)  # Disable Vidcomics not unlocked yet
-            elif num + 1 <= comic.status:
+            elif index <= comic.status:
                 unlock_delay_count = 1
-                if num == 2:
+                if index == 2:
                     unlock_delay_count = 30  # WA for Annihilation Nation Proceeding
                 comic.unlock_delay += 1
                 if comic.unlock_delay > unlock_delay_count:
@@ -472,7 +473,7 @@ class Rac3Interface(GameInterface):
                     comic.unlock_delay = 0
 
     def armor_cycler(self):
-        addr = RAC3_ITEM_DATA_TABLE[RAC3ITEM.PROGRESSIVE_ARMOR]
+        addr = armor_data[RAC3ITEM.PROGRESSIVE_ARMOR]
         armor = self.UnlockItem[RAC3ITEM.PROGRESSIVE_ARMOR]
         current_armor_value = self._read8(addr.UNLOCK_ADDRESS)
 
@@ -498,35 +499,35 @@ class Rac3Interface(GameInterface):
     def weapon_exp_cycler(self):
         """Keep weapon level tied to item count"""
         # TODO: Track weapon EXP
-        for weapon_name in WEAPON_LIST:
+        for weapon_name in non_prog_weapon_data.keys():
             target_level = self.UnlockItem[weapon_name].status
             self.logger.debug(f'weapon: {weapon_name}, target: {target_level}')
             if target_level:
                 target_id = UPGRADE_DICT[weapon_name][target_level]
                 target_name = ITEM_NAME_FROM_ID[target_id]
-                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
+                target_xp = weapon_upgrade_data[target_name].XP_THRESHOLD
                 self.logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
-                self._write8(RAC3_ITEM_DATA_TABLE[weapon_name].XP_ADDRESS, target_xp)
+                self._write8(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
 
     def weapon_level_up(self, weapon_name):
         """Level up a weapon from xp reward"""
-        weapon_data = RAC3_ITEM_DATA_TABLE[weapon_name]
+        weapon_data = non_prog_weapon_data[weapon_name]
         current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID
         if current_level < 5:
             target_level = current_level + 1
-            target_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][target_level]]].XP_THRESHOLD
+            target_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][target_level]]].XP_THRESHOLD
             self._write32(weapon_data.XP_ADDRESS, target_xp)
 
     # Equip the most recently collected weapon/gadget, update recent uses
     def update_equip(self, name):
-        if RAC3_ITEM_DATA_TABLE[name].ID:
+        if equipable_data[name].ID:
             self._write8(RAC3STATUS.LAST_USED_2, self._read8(RAC3STATUS.LAST_USED_1))
             self._write8(RAC3STATUS.LAST_USED_1, self._read8(RAC3STATUS.LAST_USED_0))
-            self._write8(RAC3STATUS.LAST_USED_0, RAC3_ITEM_DATA_TABLE[name].ID)
-            self._write8(RAC3STATUS.EQUIPPED, RAC3_ITEM_DATA_TABLE[name].ID)
+            self._write8(RAC3STATUS.LAST_USED_0, equipable_data[name].ID)
+            self._write8(RAC3STATUS.EQUIPPED, equipable_data[name].ID)
             for slot in QUICK_SELECT_LIST:
                 if not self._read8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS):
-                    self._write8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS, RAC3_ITEM_DATA_TABLE[name].ID)
+                    self._write8(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS, equipable_data[name].ID)
                     break
             self.verify_quick_select_and_last_used()
 
