@@ -5,7 +5,7 @@ import weakref
 from enum import Enum, auto
 from typing import Callable, Iterable, List, Optional, Tuple
 
-from Utils import is_frozen, is_kivy_running, local_path, open_filename
+from Utils import is_frozen, is_kivy_running, local_path, open_file, open_filename, user_path
 
 
 class Type(Enum):
@@ -204,6 +204,18 @@ def install_apworld(apworld_path: str = "") -> None:
         Utils.messagebox("Install complete.", f"Installed APWorld from {source}.")
 
 
+def export_datapackage() -> None:
+    import json
+
+    from worlds import network_data_package
+
+    path = user_path("datapackage_export.json")
+    with open(path, "w") as f:
+        json.dump(network_data_package, f, indent=4)
+
+    open_file(path)
+
+
 components: List[Component] = [
     # Launcher
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
@@ -230,8 +242,10 @@ components: List[Component] = [
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
 
-    # MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
+    #MegaMan Battle Network 3
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
+
+    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL),
 ]
 
 # if registering an icon from within an apworld, the format "ap:module.name/path/to/file.png" can be used
