@@ -150,23 +150,23 @@ class FirstRootNode(Choice):
     """
     display_name = "First Root Node"
     default = 0
-    option_apeman_facility_monitoring = 0
-    option_galactic_dock = 1
-    option_power_reservoir_east = 2
-    option_lake_yaochi_ruins = 3
-    option_yinglong_canal = 4
-    option_factory_great_hall = 5
-    option_outer_warehouse = 6
-    option_grotto_of_scriptures_entry = 7
-    option_grotto_of_scriptures_east = 8
-    option_grotto_of_scriptures_west = 9
-    option_agrarian_hall = 10
-    option_radiant_pagoda = 11
-    option_apeman_facility_depths = 12
-    option_central_transport_hub = 13
-    option_factory_underground = 14
-    option_inner_warehouse = 15
-    option_power_reservoir_west = 16
+    option_agrarian_hall = 1
+    option_apeman_facility_depths = 2
+    option_apeman_facility_monitoring = 0  # default
+    option_central_transport_hub = 3
+    option_factory_great_hall = 4
+    option_factory_underground = 5
+    option_galactic_dock = 6
+    option_outer_warehouse = 7
+    option_grotto_of_scriptures_entry = 8
+    option_grotto_of_scriptures_east = 9
+    option_grotto_of_scriptures_west = 10
+    option_inner_warehouse = 11
+    option_lake_yaochi_ruins = 12
+    option_power_reservoir_east = 13
+    option_power_reservoir_west = 14
+    option_radiant_pagoda = 15
+    option_yinglong_canal = 16
 
 
 class ShuffleGrapple(Toggle):
