@@ -244,8 +244,6 @@ def set_rules_hard_location(world):
     # "Koros: T-Bolt: Pair of Towers"
 
     # ----- Planet Command Center -----#
-    add_rule(world.get_location("Command Center: Trophy: Up a Ladder"),
-             lambda state: state.has_all(["Hypershot", "Gravity-Boots", "Tyhrra-Guise"], world.player))
     add_rule(world.get_location("Command Center: Dr. Nefarious Defeated!"),
              lambda state: state.has_all(["Hypershot", "Gravity-Boots", "Tyhrra-Guise",
                                           "Hacker", "Refractor"], world.player))
@@ -403,6 +401,9 @@ def set_rules_hard_location(world):
         # Qwark's Hideout
         add_rule(world.get_location("Qwarks Hideout: Trophy: Outside Qwarks Room"),
                  lambda state: state.has_all(["Warp Pad", "Hypershot"], world.player))
+        # Command Center
+        add_rule(world.get_location("Command Center: Trophy: Up a Ladder"),
+                lambda state: state.has_all(["Hypershot", "Gravity-Boots", "Tyhrra-Guise"], world.player))
 
     # ----- Long Term Trophies -----#
     if world.options.trophies.value > 1:
