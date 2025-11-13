@@ -656,7 +656,7 @@ grinch_locations = {
         1001,
         [GrinchRamData(0x010252, binary_bit_pos=3)],
     ),
-    "WD - OCD BP inside Pipe on right side": GrinchLocationData(
+    "WD - OCD BP inside Pipe on Minefield side": GrinchLocationData(
         "Who Dump",
         [
             "Octopus Climbing Device Blueprints",
@@ -678,7 +678,7 @@ grinch_locations = {
         1003,
         [GrinchRamData(0x010252, binary_bit_pos=1)],
     ),
-    "WD - OCD BP inside Pipe on left side": GrinchLocationData(
+    "WD - OCD BP inside Pipe on Power Plant side": GrinchLocationData(
         "Who Dump",
         [
             "Octopus Climbing Device Blueprints",
@@ -689,7 +689,7 @@ grinch_locations = {
         1004,
         [GrinchRamData(0x010252, binary_bit_pos=4)],
     ),
-    "WD - OCD BP near Right Side of Power Plant Wall": GrinchLocationData(
+    "WD - OCD BP near right side of Power Plant Wall": GrinchLocationData(
         "Who Dump",
         [
             "Octopus Climbing Device Blueprints",
