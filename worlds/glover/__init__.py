@@ -393,6 +393,8 @@ class GloverWorld(World):
         item_data = find_item_data(self, name)
         item_id = item_data.glid
         match item_data.type:
+            case "Proguseful":
+                item_classification = ItemClassification.progression | ItemClassification.useful
             case "Progression":
                 item_classification = ItemClassification.progression
             case "Useful":
@@ -402,7 +404,15 @@ class GloverWorld(World):
             case "Trap":
                 item_classification = ItemClassification.trap
             case "Garib":
-                item_classification = ItemClassification.progression_deprioritized
+                #If the garibs have no use, they're filler
+                if self.options.difficulty_logic.value == 0 and not self.options.bonus_levels:
+                    item_classification = ItemClassification.filler
+                #If they're part of World Sorting logic, don't skip balancing for them
+                elif self.options.garib_sorting.value == 0:
+                    item_classification = ItemClassification.progression_deprioritized
+                #Otherwise, skip balancing too
+                else:
+                    item_classification = ItemClassification.progression_deprioritized_skip_balancing
         name_for_use = name
         #Garibsanity is just Garib
         if name == "Garibsanity":
@@ -873,7 +883,6 @@ class GloverWorld(World):
         #Mr. Tip Hints
         self.mr_hints = hint_groups[0]
         #Chicken Hints
-        self.player_name
         self.chicken_hints = hint_groups[1]
 
     def lua_world_name(self, original_name):

@@ -8031,7 +8031,6 @@ local ADDRESS_MAP = {
 				['offset'] = 79,
 			},
 		},
-		["ENEMY_GARIBS"] = {},
 		["ENEMIES"] = {
 			["1861"] = {
 				['id'] = 0x745,
@@ -11297,43 +11296,42 @@ local GARIB_GROUPS_MAP = {
 	},
 	["AP_SPACE_L2"] = {
 		["Above Mashers Garibs"] = {
-			["id"] = "11716",
+			["id"] = "11717",
 			["garibs"] = {
-				"1716",
 				"1717",
 				"1718",
 				"1719",
-				"1720"
+				"1720",
+				"1721"
 			}
 		},
 		["Before Mashers Garibs"] = {
-			["id"] = "11721",
+			["id"] = "11722",
 			["garibs"] = {
-				"1721",
 				"1722",
 				"1723",
-				"1724"
+				"1724",
+				"1725"
 			}
 		},
 		["Behind Spawn Garibs"] = {
-			["id"] = "11725",
+			["id"] = "11726",
 			["garibs"] = {
-				"1725",
 				"1726",
-				"1727"
+				"1727",
+				"1728"
 			}
 		},
 		["Metal Walkway Garibs"] = {
-			["id"] = "11728",
+			["id"] = "11729",
 			["garibs"] = {
-				"1728",
-				"1729"
+				"1729",
+				"1730"
 			}
 		},
 		["Pyramid Garibs"] = {
-			["id"] = "11730",
+			["id"] = "11731",
 			["garibs"] = {
-				"1730",
 				"1731",
 				"1732",
 				"1733",
@@ -11344,140 +11342,139 @@ local GARIB_GROUPS_MAP = {
 				"1738",
 				"1739",
 				"1740",
-				"1741"
+				"1741",
+				"1742"
 			}
 		},
 		["Race Bridge Garibs"] = {
-			["id"] = "11742",
+			["id"] = "11743",
 			["garibs"] = {
-				"1742",
 				"1743",
 				"1744",
 				"1745",
 				"1746",
-				"1747"
+				"1747",
+				"1748"
 			}
 		},
 		["Ramp Jump Arch Garibs"] = {
-			["id"] = "11748",
+			["id"] = "11749",
 			["garibs"] = {
-				"1748",
 				"1749",
 				"1750",
 				"1751",
-				"1752"
+				"1752",
+				"1753"
 			}
 		},
 		["Spike Wall Garibs"] = {
-			["id"] = "11753",
+			["id"] = "11754",
 			["garibs"] = {
-				"1753",
 				"1754",
-				"1755"
+				"1755",
+				"1756"
 			}
 		},
 		["Under Spike Garibs"] = {
-			["id"] = "11756",
+			["id"] = "11757",
 			["garibs"] = {
-				"1756",
 				"1757",
 				"1758",
-				"1759"
+				"1759",
+				"1760"
 			}
 		},
 		["Crusher Wind-Up Garibs"] = {
-			["id"] = "11760",
+			["id"] = "11761",
 			["garibs"] = {
-				"1760",
-				"1761"
+				"1761",
+				"1762"
 			}
 		},
 		["Slope Wind-Up Garibs"] = {
-			["id"] = "11762",
+			["id"] = "11763",
 			["garibs"] = {
-				"1762",
 				"1763",
 				"1764",
-				"1765"
+				"1765",
+				"1766"
 			}
 		},
 	},
 	["AP_SPACE_L3"] = {
 		["Above Fan Garibs"] = {
-			["id"] = "11779",
+			["id"] = "11781",
 			["garibs"] = {
-				"1779",
-				"1780",
 				"1781",
 				"1782",
 				"1783",
 				"1784",
 				"1785",
 				"1786",
-				"1787"
+				"1787",
+				"1788",
+				"1789"
 			}
 		},
 		["Conveyor Island Garibs"] = {
-			["id"] = "11788",
+			["id"] = "11790",
 			["garibs"] = {
-				"1788",
-				"1789",
-				"1790"
+				"1790",
+				"1791",
+				"1792"
 			}
 		},
 		["First Conveyor Garibs"] = {
-			["id"] = "11791",
+			["id"] = "11793",
 			["garibs"] = {
-				"1791",
-				"1792",
 				"1793",
-				"1794"
+				"1794",
+				"1795",
+				"1796"
 			}
 		},
 		["Glass Pyramids Garibs"] = {
-			["id"] = "11795",
+			["id"] = "11797",
 			["garibs"] = {
-				"1795",
-				"1796",
 				"1797",
 				"1798",
 				"1799",
-				"1800"
+				"1800",
+				"1801",
+				"1802"
 			}
 		},
 		["Last Conveyor Garibs"] = {
-			["id"] = "11801",
+			["id"] = "11803",
 			["garibs"] = {
-				"1801",
-				"1802",
 				"1803",
-				"1804"
+				"1804",
+				"1805",
+				"1806"
 			}
 		},
 		["Left Guard Rail Garibs"] = {
-			["id"] = "11805",
+			["id"] = "11807",
 			["garibs"] = {
-				"1805",
-				"1806",
 				"1807",
 				"1808",
-				"1809"
+				"1809",
+				"1810",
+				"1811"
 			}
 		},
 		["Middle Conveyor Garibs"] = {
-			["id"] = "11810",
+			["id"] = "11812",
 			["garibs"] = {
-				"1810",
-				"1811",
 				"1812",
-				"1813"
+				"1813",
+				"1814",
+				"1815"
 			}
 		},
 		["Pinwheel Garibs"] = {
-			["id"] = "11814",
+			["id"] = "11816",
 			["garibs"] = {
-				"1814",
-				"1815",
 				"1816",
 				"1817",
 				"1818",
@@ -11487,152 +11484,154 @@ local GARIB_GROUPS_MAP = {
 				"1822",
 				"1823",
 				"1824",
-				"1825"
+				"1825",
+				"1826",
+				"1827"
 			}
 		},
 		["Ramp Garibs"] = {
-			["id"] = "11826",
+			["id"] = "11828",
 			["garibs"] = {
-				"1826",
-				"1827",
 				"1828",
 				"1829",
 				"1830",
 				"1831",
-				"1832"
+				"1832",
+				"1833",
+				"1834"
 			}
 		},
 		["Right Guard Rail Garibs"] = {
-			["id"] = "11833",
+			["id"] = "11835",
 			["garibs"] = {
-				"1833",
-				"1834",
 				"1835",
 				"1836",
-				"1837"
+				"1837",
+				"1838",
+				"1839"
 			}
 		},
 		["Split Path Left Garibs"] = {
-			["id"] = "11838",
+			["id"] = "11840",
 			["garibs"] = {
-				"1838",
-				"1839",
 				"1840",
 				"1841",
 				"1842",
 				"1843",
-				"1844"
+				"1844",
+				"1845",
+				"1846"
 			}
 		},
 		["Split Path Right Garibs"] = {
-			["id"] = "11845",
+			["id"] = "11847",
 			["garibs"] = {
-				"1845",
-				"1846",
 				"1847",
 				"1848",
 				"1849",
-				"1850"
+				"1850",
+				"1851",
+				"1852"
 			}
 		},
 		["Walkway Corner Garibs"] = {
-			["id"] = "11851",
+			["id"] = "11853",
 			["garibs"] = {
-				"1851",
-				"1852",
 				"1853",
 				"1854",
 				"1855",
 				"1856",
 				"1857",
-				"1858"
+				"1858",
+				"1859",
+				"1860"
 			}
 		},
 	},
 	["AP_SPACE_BONUS"] = {
 		["Bottom Ring Garibs"] = {
-			["id"] = "11876",
+			["id"] = "11879",
 			["garibs"] = {
-				"1876",
-				"1877",
-				"1878",
 				"1879",
 				"1880",
-				"1881"
+				"1881",
+				"1882",
+				"1883",
+				"1884"
 			}
 		},
 		["Column A Garibs"] = {
-			["id"] = "11882",
+			["id"] = "11885",
 			["garibs"] = {
-				"1882",
-				"1883",
-				"1884",
 				"1885",
 				"1886",
 				"1887",
 				"1888",
-				"1889"
+				"1889",
+				"1890",
+				"1891",
+				"1892"
 			}
 		},
 		["Column B Garibs"] = {
-			["id"] = "11890",
+			["id"] = "11893",
 			["garibs"] = {
-				"1890",
-				"1891",
-				"1892",
 				"1893",
 				"1894",
 				"1895",
 				"1896",
-				"1897"
+				"1897",
+				"1898",
+				"1899",
+				"1900"
 			}
 		},
 		["Column C Garibs"] = {
-			["id"] = "11898",
+			["id"] = "11901",
 			["garibs"] = {
-				"1898",
-				"1899",
-				"1900",
 				"1901",
 				"1902",
 				"1903",
 				"1904",
-				"1905"
+				"1905",
+				"1906",
+				"1907",
+				"1908"
 			}
 		},
 		["Column D Garibs"] = {
-			["id"] = "11906",
+			["id"] = "11909",
 			["garibs"] = {
-				"1906",
-				"1907",
-				"1908",
 				"1909",
 				"1910",
 				"1911",
 				"1912",
-				"1913"
+				"1913",
+				"1914",
+				"1915",
+				"1916"
 			}
 		},
 		["Middle Ring Garibs"] = {
-			["id"] = "11914",
+			["id"] = "11917",
 			["garibs"] = {
-				"1914",
-				"1915",
-				"1916",
 				"1917",
 				"1918",
-				"1919"
+				"1919",
+				"1920",
+				"1921",
+				"1922"
 			}
 		},
 		["Top Ring Garibs"] = {
-			["id"] = "11920",
+			["id"] = "11923",
 			["garibs"] = {
-				"1920",
-				"1921",
-				"1922",
 				"1923",
 				"1924",
-				"1925"
+				"1925",
+				"1926",
+				"1927",
+				"1928"
 			}
 		},
 	}
@@ -12217,7 +12216,7 @@ function tip_check()
 		local wayroom_check = wayroom_tip_check()
 		if wayroom_check ~= nil
 		then
-			for ap_id, res in pairs wayroom_check
+			for ap_id, res in pairs(wayroom_check)
 			do
 				checks[ap_id] = res
 			end
@@ -12246,32 +12245,29 @@ function wayroom_tip_check()
 	local check_table = {}
 	if CURRENT_MAP == 0x2A
 	then
-		local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
-		local wayroomStartIndex = hackPointerIndex + self.wayroom_locations
+		local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer);
+		local wayroomBaseIndex = hackPointerIndex + GVR.wayroom_locations
 		for table_id, ap_id in pairs(WAYROOM_TIPS_TABLE)
 		do
-			local addr_location = 0
-			if table_id == 1
+			local addr_location = GVR.wayroom_size * (table_id - 1)
+			local rom_id = mainmemory.readbyte(wayroomBaseIndex + addr_location + GVR.wayroom_id)
+			if rom_id > 4
 			then
-				addr_location = 0
-			else
-				addr_location = self.wayroom_size * (table_id - 1)
+				rom_id = rom_id - 1
 			end
-			local rom_id = mainmemory.readbyte(wayroomBaseIndex + addr_location + self.wayroom_id)
-			if(rom_id ~= ap_id)
+			if(rom_id == table_id - 1)
 			then
-				print("Check Wayroom Location Address Math...")
-				print(ap_id)
-				print(rom_id)
-				return nil
-			end
-			if(mainmemory.readbyte(wayroomBaseIndex + addr_location + self.wayroom_collected) == 0x01) --Collected
-			then
-				if ap_id == 0x000 then
-					check_table["12345"] = true
-				else
-					check_table[ap_id] = true
+				if(mainmemory.readbyte(wayroomBaseIndex + addr_location + GVR.wayroom_collected) == 0x01) --Collected
+				then
+					if ap_id == 0x000 then
+						check_table["1972"] = true
+					else
+						check_table[ap_id] = true
+					end
 				end
+			else
+				print("Check wayroom math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
+			end
 		end
 		return check_table
 	end
@@ -12327,8 +12323,8 @@ function goal_check()
 end
 
 function cheat_chicken_check()
-    local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
-	return mainmemory.readbyte(hackPointerIndex + self.chicken_collected)
+    local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer);
+	return mainmemory.readbyte(hackPointerIndex + GVR.chicken_collected)
 end
 
 function ball_returned_check()

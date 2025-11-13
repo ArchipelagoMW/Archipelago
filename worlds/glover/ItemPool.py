@@ -438,20 +438,20 @@ def construct_blank_world_garibs(world_prefixes : list[str], level_prefixes : li
 	return output_table
 
 ability_table = {
-	"Jump" : 									ItemData(BASE_ID + 329, 1, "Progression", None),
+	"Jump" : 									ItemData(BASE_ID + 329, 1, "Proguseful", None),
 	"Cartwheel" : 								ItemData(BASE_ID + 330, 1, "Progression", None),
 	"Crawl" : 									ItemData(BASE_ID + 331, 1, "Progression", None),
 	"Double Jump" : 							ItemData(BASE_ID + 332, 1, "Progression", None),
-	"Fist Slam" : 								ItemData(BASE_ID + 333, 1, "Progression", None),
+	"Fist Slam" : 								ItemData(BASE_ID + 333, 1, "Proguseful", None),
 	"Ledge Grab" : 								ItemData(BASE_ID + 334, 1, "Progression", None),
 	"Push" : 									ItemData(BASE_ID + 335, 1, "Progression", None),
 	"Locate Garibs" : 							ItemData(BASE_ID + 336, 1, "Useful", None),
 	"Locate Ball" : 							ItemData(BASE_ID + 337, 1, "Progression", None),
-	"Dribble" : 								ItemData(BASE_ID + 338, 1, "Progression", None),
+	"Dribble" : 								ItemData(BASE_ID + 338, 1, "Proguseful", None),
 	"Quick Swap" : 								ItemData(BASE_ID + 339, 1, "Progression", None),
-	"Slap" : 									ItemData(BASE_ID + 340, 1, "Progression", None),
-	"Throw" : 									ItemData(BASE_ID + 341, 1, "Progression", None),
-	"Ball Toss" : 								ItemData(BASE_ID + 342, 1, "Progression", None),
+	"Slap" : 									ItemData(BASE_ID + 340, 1, "Proguseful", None),
+	"Throw" : 									ItemData(BASE_ID + 341, 1, "Proguseful", None),
+	"Ball Toss" : 								ItemData(BASE_ID + 342, 1, "Proguseful", None),
 	"Beachball Potion" : 						ItemData(BASE_ID + 343, 1, "Progression", None),
 	"Death Potion" : 							ItemData(BASE_ID + 344, 1, "Progression", None),
 	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1, "Progression", None),
@@ -461,11 +461,11 @@ ability_table = {
 	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1, "Progression", None),
 	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1, "Progression", None),
 	"Grab" : 									ItemData(BASE_ID + 351, 1, "Progression", None),
-	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1, "Progression", None),
-	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1, "Progression", None),
-	"Ball Bearing" : 							ItemData(BASE_ID + 354, 1, "Progression", None),
+	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1, "Proguseful", None),
+	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1, "Proguseful", None),
+	"Ball Bearing" : 							ItemData(BASE_ID + 354, 1, "Proguseful", None),
 	"Crystal" : 								ItemData(BASE_ID + 355, 1, "Progression", None),
-	"Power Ball" : 								ItemData(BASE_ID + 356, 1, "Progression", None)
+	"Power Ball" : 								ItemData(BASE_ID + 356, 1, "Proguseful", None)
 	}
 
 filler_table = {
@@ -560,7 +560,7 @@ all_items = {
 	**trap_table, 
 	**world_garib_table, 
 	**garibsanity_world_table,
-	**{"Garibsanity" : garbinsanity},
+	**{"Garib" : garbinsanity},
 	**decoupled_garib_table
 }
 
