@@ -243,6 +243,12 @@ class Rac3Interface(GameInterface):
                 if valid_weapons:
                     weapon_num = randint(0, len(valid_weapons) - 1)
                     self.weapon_level_up(valid_weapons[weapon_num])
+            case RAC3ITEM.OHKO_TRAP:
+                self._write8(RAC3STATUS.HEALTH, 1)
+            case RAC3ITEM.NO_AMMO_TRAP:
+                for weapon_name in non_prog_weapon_data.keys():
+                    if self.UnlockItem[weapon_name].status:
+                        self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
