@@ -2,7 +2,7 @@ from logging import DEBUG, getLogger
 from typing import Any, ClassVar, Optional
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
-from constants.data.Rac3ItemData import RAC3_ITEM_DATA_TABLE, item_groups
+from constants.data.Rac3ItemData import item_groups, RAC3_ITEM_DATA_TABLE
 from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 from Items import create_item, create_itempool, get_filler_item_selection, starting_weapons

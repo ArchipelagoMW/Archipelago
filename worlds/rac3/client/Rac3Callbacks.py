@@ -130,20 +130,19 @@ async def handle_checked_locations(ctx: 'Context') -> None:
 
 async def handle_deathlink(ctx: 'Context') -> None:
     """Receive and send deathlink"""
-    if not ctx.death_link_enabled:
+    if not ctx.death_link:
         return
 
-    if time() - ctx.deathlink_timestamp > 10:
+    if time() - ctx.last_death_link > 10:
         alive, message = ctx.game_interface.alive()
         if alive:
             if ctx.queued_deaths > 0:
                 if ctx.game_interface.kill_player():
-                    ctx.queued_deaths -= 1
-                    ctx.deathlink_timestamp = time()
+                    ctx.queued_deaths = 0
+                    ctx.last_death_link = time()
         else:
-            # Maybe add something that writes a cause?
             await ctx.send_death(message)
-            ctx.deathlink_timestamp = time()
+            ctx.last_death_link = time()
 
 
 async def handle_check_goal(ctx: 'Context') -> None:

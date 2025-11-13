@@ -3,6 +3,7 @@ from typing import Any, List
 
 from constants.Rac3Options import RAC3OPTION
 from Options import OptionGroup, StartInventoryPool
+from options.Deathlink import Deathlink
 from options.Exclude import RAC3ExcludeLocations
 from options.ExtraArmor import ExtraArmorUpgrade
 from options.Multiplier import BoltAndXPMultiplier
@@ -29,6 +30,7 @@ def create_option_groups() -> List[OptionGroup]:
 
 @dataclass
 class RaC3Options(PerGameCommonOptions):
+    deathlink: Deathlink
     start_inventory_from_pool: StartInventoryPool
     starting_weapons: StartingWeapons
     bolt_and_xp_multiplier: BoltAndXPMultiplier
@@ -46,12 +48,14 @@ class RaC3Options(PerGameCommonOptions):
 
 
 rac3_option_groups: dict[str, List[Any]] = {
-    "General Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
+    "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
                         ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
+    "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
 
 slot_data_options: list[str] = [
+    RAC3OPTION.DEATHLINK,
     RAC3OPTION.START_INVENTORY_FROM_POOL,
     RAC3OPTION.STARTING_WEAPONS,
     RAC3OPTION.BOLT_AND_XP_MULTIPLIER,
@@ -61,5 +65,9 @@ slot_data_options: list[str] = [
     RAC3OPTION.TROPHIES,
     RAC3OPTION.TITANIUM_BOLTS,
     RAC3OPTION.NANOTECH_MILESTONES,
-    RAC3OPTION.EXCLUDE
+    RAC3OPTION.EXCLUDE,
+    RAC3OPTION.SHIP_NOSE,
+    RAC3OPTION.SHIP_WINGS,
+    RAC3OPTION.SHIP_SKIN,
+    RAC3OPTION.SKIN,
 ]

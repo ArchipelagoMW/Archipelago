@@ -57,10 +57,18 @@ class CommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.update()
 
-    def _cmd_death_link_toggle(self):
+    def _cmd_deathlink(self):
+        """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.death_link_enabled = not self.ctx.death_link_enabled
-            logger.info(f'Death Link set to {self.ctx.death_link_enabled}')
+            if RAC3OPTION.DEATHLINK in self.ctx.slot_data.keys():
+                if self.ctx.slot_data[RAC3OPTION.DEATHLINK] == "toggle":
+                    self.ctx.death_link = not self.ctx.death_link
+                    self.output(f'Death Link set to {self.ctx.death_link}')
+                else:
+                    self.output(f"Death Link is not set to 'toggle' for this seed")
+                    self.output(f"Death Link = {self.ctx.slot_data[RAC3OPTION.DEATHLINK]}")
+            else:
+                self.output(f"Death Link not found in slot_data. You are probably not connected")
 
 
 class Rac3Context(CommonContext):
@@ -73,11 +81,7 @@ class Rac3Context(CommonContext):
     is_connected_to_server: bool = False
     slot_data: Optional[dict[str, Any]] = None
     last_error_message: Optional[str] = None
-    notification_queue: list[str] = []
-    notification_timestamp: float = 0
-    showing_notification: bool = False
-    deathlink_timestamp: float = 0
-    death_link_enabled = False
+    death_link = False
     queued_deaths: int = 0
     current_planet: str = RAC3REGION.GALAXY
     main_menu: bool = True
@@ -89,19 +93,15 @@ class Rac3Context(CommonContext):
         super().__init__(server_address, password)
         self.game_interface = Rac3Interface(logger)
 
-    def notification(self, text: str):
-        self.notification_queue.append(text)
-
-    # TODO: make this work
     def on_deathlink(self, data: Dict[str, Any]) -> None:
-        super().on_deathlink(data)
-        if self.death_link_enabled:
+        self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"Death Link: {text}")
+        else:
+            logger.info(f"Death Link: Received from {data['source']}")
+        if self.death_link:
             self.queued_deaths += 1
-            cause = data.get("cause", "")
-            if cause:
-                self.notification(f"DeathLink: {cause}")
-            else:
-                self.notification(f"DeathLink: Received from {data['source']}")
 
     def make_gui(self):
         ui = super().make_gui()
@@ -127,17 +127,17 @@ class Rac3Context(CommonContext):
             self.game_interface.proc_option(self.slot_data)
 
             # Set death link tag if it was requested in options
-            if "death_link" in args["slot_data"]:
-                self.death_link_enabled = bool(args["slot_data"]["death_link"])
+            if RAC3OPTION.DEATHLINK in self.slot_data:
+                self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
                 async_start(self.update_death_link(
-                    bool(args["slot_data"]["death_link"])))
-                async_start(self.send_msgs([{
-                    "cmd": "LocationScouts",
-                    "locations": [
-                        Locations.location_table[location].ap_code
-                        for location in Locations.location_groups["Purchase"]
-                    ]
-                }]))
+                    bool(self.slot_data[RAC3OPTION.DEATHLINK])))
+                # async_start(self.send_msgs([{
+                #     "cmd": "LocationScouts",
+                #     "locations": [
+                #         Locations.location_table[location].ap_code
+                #         for location in Locations.location_groups["Purchase"]
+                #     ]
+                # }]))
 
 
 def update_connection_status(ctx: Rac3Context, status: bool):
