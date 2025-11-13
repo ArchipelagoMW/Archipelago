@@ -268,8 +268,8 @@ Marks locations given here as `LocationProgressType.Excluded` so that neither pr
 placed on them.
 
 ### PriorityLocations
-Marks locations given here as `LocationProgressType.Priority` forcing progression items (except ones also flagged as deprioritized) on them if any are available in
-the pool.
+Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
+the pool. If an item has both a progression *and* a deprioritized flag, then it will not be placed in a priority location.
 
 ### ItemLinks
 Allows users to share their item pool with other players. Currently item links are per game. A link of one game between
