@@ -140,6 +140,11 @@ class RAC3ITEMDATA:
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=[RAC3ITEMTAG.VIDCOMIC])
 
     @staticmethod
+    def construct_trap(idx: int,
+                       address: Optional[int] = None):
+        return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.trap, tags=[RAC3ITEMTAG.TRAP])
+
+    @staticmethod
     def construct_other(idx: int,
                         address: Optional[int] = None):
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.filler, tags=[RAC3ITEMTAG.FILLER])
@@ -419,10 +424,13 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.WEAPON_XP: RAC3ITEMDATA.construct_other(0x101),
     RAC3ITEM.PLAYER_XP: RAC3ITEMDATA.construct_other(0x102),
     RAC3ITEM.BOLTS: RAC3ITEMDATA.construct_other(0x103, RAC3STATUS.BOLTS),
-    RAC3ITEM.INFERNO_MODE: RAC3ITEMDATA.construct_other(0x104),
-    RAC3ITEM.JACKPOT: RAC3ITEMDATA.construct_other(0x105),
+    RAC3ITEM.JACKPOT: RAC3ITEMDATA.construct_other(0x104),
+    # Traps
+    RAC3ITEM.INFERNO_MODE: RAC3ITEMDATA.construct_trap(0x105),
+    RAC3ITEM.OHKO_TRAP: RAC3ITEMDATA.construct_trap(0x106),
+    RAC3ITEM.NO_AMMO_TRAP: RAC3ITEMDATA.construct_trap(0x107),
     # Goal
-    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x106),
+    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x108),
 }
 
 
@@ -449,6 +457,7 @@ ngplus_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NGPLUS)
 non_prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NON_PROG_WEAPON)
 prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROG_WEAPON)
 progressive_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROGRESSIVE)
+trap_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.TRAP)
 unused_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.UNUSED)
 vidcomic_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.VIDCOMIC)
 weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.WEAPON)
@@ -487,6 +496,7 @@ item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.NON_PROG_WEAPON: set(non_prog_weapon_data.keys()),
     RAC3ITEMTAG.PROG_WEAPON: set(prog_weapon_data.keys()),
     RAC3ITEMTAG.PROGRESSIVE: set(progressive_data.keys()),
+    RAC3ITEMTAG.TRAP: set(trap_data.keys()),
     RAC3ITEMTAG.UNUSED: set(unused_data.keys()),
     RAC3ITEMTAG.VIDCOMIC: set(vidcomic_data.keys()),
     RAC3ITEMTAG.WEAPON: set(weapon_data.keys()),
