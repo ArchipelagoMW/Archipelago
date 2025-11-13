@@ -18,3 +18,4 @@ class RAC3OPTION:
     SHIP_SKIN = "ship_skin"
     SKIN = "skin"
     DEATHLINK = "death_link"
+    ENABLE_TRAPS = "enable_traps"
