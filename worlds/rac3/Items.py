@@ -2,7 +2,8 @@ from logging import DEBUG, getLogger
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from constants.data.Rac3ItemData import item_counts, item_table, prog_dict, RAC3_ITEM_DATA_TABLE, weapon_dict
+from constants.data.Rac3ItemData import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT, non_prog_weapon_data,
+                                         prog_weapon_data, progressive_data)
 from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 
@@ -23,7 +24,9 @@ def create_itempool(world: "RaC3World") -> List[Item]:
     options = world.options
 
     for name in item_table.keys():
-        item_type: ItemClassification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
+        item_type: ItemClassification = item_table[name].AP_CLASSIFICATION
+        if item_type == ItemClassification.filler:
+            continue
         item_amount: int = item_counts.get(name)
 
         # Already placed items (Starting items and vanilla)
@@ -35,10 +38,10 @@ def create_itempool(world: "RaC3World") -> List[Item]:
 
         # Progressive Weapons option
         if not options.enable_progressive_weapons.value:
-            if name in prog_dict.keys():
+            if name in prog_weapon_data.keys():
                 continue
         else:  # options.EnableProgressiveWeapons.value:
-            if name in weapon_dict.keys():
+            if name in non_prog_weapon_data.keys():
                 continue
 
         # ExtraArmorUpgrade option
@@ -46,7 +49,7 @@ def create_itempool(world: "RaC3World") -> List[Item]:
             item_amount += options.extra_armor_upgrade.value
 
         # Catch accidental duplicates
-        if item_amount > 1 and name not in prog_dict.keys():
+        if item_amount > 1 and name not in progressive_data.keys():
             rac3_logger.warning(f"multiple copies of {name} added to the item pool")
 
         itempool += create_multiple_items(world, name, item_amount, item_type)
@@ -58,7 +61,7 @@ def create_itempool(world: "RaC3World") -> List[Item]:
 
 def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
                           item_type: ItemClassification = ItemClassification.progression) -> List[Item]:
-    data = RAC3_ITEM_DATA_TABLE[name]
+    data = item_table[name]
     itemlist: List[Item] = []
 
     for i in range(count):
@@ -68,7 +71,7 @@ def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
 
 
 def create_item(world: "RaC3World", name: str) -> Item:
-    data = RAC3_ITEM_DATA_TABLE[name]
+    data = item_table.get(name, goal_data.get(name))
     return GameItem(name, data.AP_CLASSIFICATION, data.AP_CODE, world.player)
 
 
@@ -90,14 +93,6 @@ def get_filler_item_selection(world: "RaC3World"):
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
-def filter_items(classification):
-    return filter(lambda l: l[1].AP_CLASSIFICATION == classification, RAC3_ITEM_DATA_TABLE.items())
-
-
-def filter_item_names(classification):
-    return map(lambda entry: entry[0], filter_items(classification))
-
-
 def starting_weapons(world, dictionary: dict[str, int]) -> list[str]:
     weapon_list: list[str] = []
     for name in dictionary:
@@ -105,8 +100,8 @@ def starting_weapons(world, dictionary: dict[str, int]) -> list[str]:
         if count == 0:
             continue
         if world.options.enable_progressive_weapons.value:
-            for i in range(count):
-                weapon_list.append(f"Progressive {name}")
+            for _ in range(count):
+                weapon_list.append(NAME_TO_PROG_DICT[name])
         else:
             weapon_list.append(name)
     world.random.shuffle(weapon_list)

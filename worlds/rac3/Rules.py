@@ -1,7 +1,8 @@
 from logging import DEBUG, getLogger
 from typing import Callable, TYPE_CHECKING
 
-from constants.Rac3Items import INFOBOT_LIST, RAC3ITEM
+from constants.data.Rac3ItemData import planet_data
+from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import RAC3REGION
 from worlds.generic.Rules import add_rule
@@ -231,7 +232,7 @@ def set_rules(world: "RaC3World"):
         # Klunk Fight
 
         # ----- Planet Crash Site -----#
-        # "Crash Site: T-Bolt: Turn Around": None)
+        # "Crash Site: T-Bolt: Turn Around": None
         "Crash Site: Received Nano-Pak":
             lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.HYPERSHOT], world.player),
         # Escape Pod: None
@@ -490,23 +491,23 @@ def set_rules(world: "RaC3World"):
             for level in range(15, 101, 5):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
+                         lambda state: state.has_from_list(planet_data.keys(), world.player, check))
         case 2:  # 10 nanotech level is a check
             for level in range(20, 101, 10):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
+                         lambda state: state.has_from_list(planet_data.keys(), world.player, check))
         case 3:  # 20 nanotech level is a check
             for level in range(20, 101, 20):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
+                         lambda state: state.has_from_list(planet_data.keys(), world.player, check))
 
         case 4:  # Every nanotech level is a check
             for level in range(11, 101):
                 check = (level - 10) // 5
                 add_rule(world.get_location(f"Nanotech Milestone: {level}"),
-                         lambda state: state.has_from_list(INFOBOT_LIST, world.player, check))
+                         lambda state: state.has_from_list(planet_data.keys(), world.player, check))
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])
