@@ -17,7 +17,7 @@ Puedes hacerlo.
 La [página de opciones de partida para este juego](../player-options) contiene todas las opciones que necesitas para
 exportar tu archivo de configuraciones.
 
-## ¿Que hace la rondomización de este juego?
+## ¿Que hace la randomización de este juego?
 
 Por defecto, el Prólogo, los niveles normales (llamadas caras A) desde el 1 hasta el 7 son incluídos en este radomizer.
 Sin embargo, algunas de las opciones pueden incluír los niveles de caras B y C, al igual que incluír los niveles del
