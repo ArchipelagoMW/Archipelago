@@ -96,12 +96,12 @@ class GrinchWorld(World):
             elif self.options.starting_area == 3:
                 self.multiworld.push_precollected((self.create_item("Who Lake Vacuum Tube")))
             else:
-                self.itempool.append(self.create_item(vacuums_added))
+                self_itempool.append(self.create_item(vacuums_added))
 
 
         # Get number of current unfilled locations
         unfilled_locations: int = (
-            len(self.multiworld.get_unfilled_locations(self.player)) - len(ALL_ITEMS_TABLE.keys()) - 4
+            len(self.multiworld.get_unfilled_locations(self.player)) - len(self_itempool)
         )
 
         for _ in range(unfilled_locations):
