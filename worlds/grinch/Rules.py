@@ -588,7 +588,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WD - OCD BP inside Pipe on right side": [
+    "WD - OCD BP inside Pipe on Minefield side": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
@@ -608,7 +608,7 @@ rules_dict: dict[str, list[list[str]]] = {
             grinch_items.gadgets.GRINCH_COPTER,
         ],
     ],
-    "WD - OCD BP inside Pipe on left side": [
+    "WD - OCD BP inside Pipe on Power Plant side": [
         [
             grinch_items.gadgets.ROCKET_EGG_LAUNCHER,
             grinch_items.gadgets.ROCKET_SPRING,
