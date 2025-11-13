@@ -496,8 +496,10 @@ class MultiWorld():
 
     def push_item(self, location: Location, item: Item, collect: bool = True):
         if location.item is not None:
+            # get_name_string_for_object includes the player name in the string, whereas, if an item is not placed,
+            # `str(item)` would only include the player ID.
             raise Exception(f"{location} is already filled with {location.item}."
-                            f" {item} cannot be placed at an already filled location.")
+                            f" {self.get_name_string_for_object(item)} cannot be placed at an already filled location.")
         if item.location is not None:
             raise Exception(f"{item} is already placed at {item.location}."
                             f" {location} cannot be filled with an already placed item.")
