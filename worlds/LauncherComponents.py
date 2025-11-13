@@ -252,7 +252,7 @@ if not is_frozen():
         import argparse
         parser = argparse.ArgumentParser("Build script for APWorlds")
         parser.add_argument("worlds", type=str, default=(), nargs="*", help="Names of APWorlds to build.")
-        parser.add_argument("--suppress-open", action="store_true", help="Prevent opening the built apworlds folder after building.")
+        parser.add_argument("--skip_open_folder", action="store_true", help="Prevent opening the built apworlds folder after building.")
         args = parser.parse_args(launch_args)
 
         if args.worlds:
@@ -274,7 +274,7 @@ if not is_frozen():
                 world_type=worldtype
             )
 
-        if not args.suppress_open:
+        if not args.skip_open_folder:
             open_folder(apworlds_folder)
 
 

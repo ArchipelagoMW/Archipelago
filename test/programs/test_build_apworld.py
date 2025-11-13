@@ -322,7 +322,7 @@ class TestBuildApworld(unittest.TestCase):
 
         Launcher.main({
             "args": {
-                "--suppress-open"
+                "--skip_open_folder"
             },
             "component": component,
             "update_settings": False
@@ -343,7 +343,7 @@ class TestBuildApworld(unittest.TestCase):
 
         Launcher.main({
             "args": {
-                "--suppress-open",
+                "--skip_open_folder",
                 "Archipelago"
             },
             "component": component,
