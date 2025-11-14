@@ -3,6 +3,7 @@ from enum import IntEnum
 from logging import Logger
 from random import randint
 from struct import unpack
+import time
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
@@ -252,11 +253,11 @@ class Rac3Interface(GameInterface):
                     if self.UnlockItem[weapon_name].status:
                         self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
             case RAC3ITEM.LOCK_TRAP:
-                locked = self._read8(RAC3STATUS.WEAPON_LOCK)
+                already_locked = self._read8(RAC3STATUS.WEAPON_LOCK)
 
                 # skip if already locked like in weapon challenges or weapon cycle challenges
-                if locked != 0:
-                    self.trap_timers[name] = 10 # lock for 10 update cycles (~10 sec)
+                if already_locked != 0:
+                    self.trap_timers[name] = int(time.time()) + 10
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
@@ -561,8 +562,7 @@ class Rac3Interface(GameInterface):
 
     def trap_cycler(self):
         for name in list(self.trap_timers.keys()):
-            self.trap_timers[name] -= 1
-            trap_active = int(self.trap_timers[name] > 0)
+            trap_active = int(time.time() < self.trap_timers[name])
             if name in trap_to_status:
                 self._write8(trap_to_status[name], trap_active)
             if not trap_active:
