@@ -313,6 +313,7 @@ class GloverContext(CommonContext):
         self.switch_table = {}
         self.goal_table = {}
         self.ball_return_list = {}
+        self.chicken = False
 
         self.current_world = 0
         self.current_hub = 0
@@ -607,6 +608,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
+    chicken = payload["chicken_collected"]
     checkpointslist = payload["checkpoint"]
     switchslist = payload["switch"]
     ball_return_list = payload["ball_returns"]
@@ -729,6 +731,32 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             for locationId, value in ball_return_list.items():
                 if value == True:
                     locs1.append((int(locationId)))
+        if ctx.chicken != chicken:
+            ctx.chicken = chicken
+            if chicken:
+                locs1.append(1945)
+                chicken_hints = ctx.slot_data["chicken_hints_locations"]
+                chicken_hints_type = ctx.slot_data["chicken_hints"]
+                #For when chicken hints are off
+                if isinstance(chicken_hints, list):
+                    chicken_hints = {}
+                for hintName, hint in chicken_hints.items():
+                    #If the hint should render
+                    hint_number = int(hintName[-1]) - 1
+                    if chicken_hints_type != 0 and hint_number - glover_hub >= 0:
+                        #And you are aware of the player
+                        if ctx.slot_concerns_self(hint["player_id"]):
+                            id = hint['location_id']
+                            #If the log's not vauge, make it an actual hint
+                            if chicken_hints_type != 2:
+                                if not id in ctx.handled_scouts:
+                                    scouts1.append(id)
+                            #Log the vauge hint instead
+                            else:
+                                if not id in ctx.handled_scouts:
+                                    scoutsVague.append(id)
+                                    logger.info(hint['vague_hint'])
+        #TODO: Make it so rechecking Chicken Hint at later hubs works in-game
 
         if len(locs1) > 0:
             await ctx.send_msgs([{

@@ -90,20 +90,15 @@ class LocationData(NamedTuple):
     rom_ids : List[int]
     methods : List[AccessMethod]
 
-def valid_methods_exist(self : GloverWorld, check_methods : list[AccessMethod]) -> bool:
+def remove_higher_difficulty_methods(self : GloverWorld, check_methods : list[AccessMethod]) -> list[AccessMethod]:
+    out_methods : list[AccessMethod] = []
     #Find something of the correct difficulty based on logic methods
-    lowest_difficulty : int = 3
     for each_method in check_methods:
-        if each_method.difficulty < lowest_difficulty:
-            lowest_difficulty = each_method.difficulty
-    #Difficulty Logic
-    match self.options.difficulty_logic:
-        case DifficultyLogic.option_intended:
-            return lowest_difficulty == 0
-        case DifficultyLogic.option_easy_tricks:
-            return lowest_difficulty <= 1
-        case DifficultyLogic.option_hard_tricks:
-            return lowest_difficulty <= 2
+        #Difficulty Logic
+        if each_method.difficulty <= self.options.difficulty_logic.value:
+            out_methods.append(each_method)
+    return out_methods
+
 
 def create_location_data(self : GloverWorld, check_name : str, check_info : list, level_name : str) -> list[LocationData]:
     prefix = level_name + ": "
@@ -112,8 +107,12 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
         methods.append(create_access_method(check_method, level_name))
+    #Remove methods from a higher difficulty
+    for each_method in methods:
+        each_method.difficulty
     #Only create if there's a method for it
-    if not valid_methods_exist(self, methods):
+    methods = remove_higher_difficulty_methods(self, methods)
+    if len(methods) == 0:
         return outputs
     ap_ids : list[int] = []
     rom_ids : list[int] = []
@@ -183,14 +182,16 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
     
     #Ball regions that work
     ball_region_exists : bool = False
-    if valid_methods_exist(self, ball_region_methods):
+    ball_region_methods = remove_higher_difficulty_methods(self, ball_region_methods)
+    if len(ball_region_methods) > 0:
         multiworld.regions.append(ball_region)
         ball_region_exists = True
         ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), ball_region_methods))
     
     #No ball regions that exist
     no_ball_region_exists : bool = False
-    if valid_methods_exist(self, no_ball_region_methods):
+    no_ball_region_methods = remove_higher_difficulty_methods(self, no_ball_region_methods)
+    if len(no_ball_region_methods) > 0:
         multiworld.regions.append(no_ball_region)
         no_ball_region_exists = True
         no_ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), no_ball_region_methods))

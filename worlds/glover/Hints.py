@@ -140,14 +140,15 @@ def get_catagories(set_option, option_origin) -> list[ItemClassification] | None
 
 def get_valid_items(self, item_classes : list[ItemClassification] | None) -> list[Item]:
     #No items
-    if item_classes == None or not self.options.mr_tip_checks:
+    if item_classes == None:
         return []
-    #All items are valid choices
-    if item_classes == []:
-        return self.multiworld.itempool.copy()
-    #Only items from the catagory are valid choices
     valid_items : list[Item] = []
     for each_item in self.multiworld.itempool:
-        if each_item.classification in item_classes:
-            valid_items.append(each_item)
+        #Only items from the catagory are valid choices
+        if (not each_item.classification in item_classes) and item_classes != []:
+            continue
+        #Only items that are in your game [If feature implimented, may change]
+        if each_item.location.player != self.player:
+            continue
+        valid_items.append(each_item)
     return valid_items

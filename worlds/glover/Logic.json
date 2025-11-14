@@ -200,7 +200,7 @@
 			"Tip": [
 				{
 					"AP_IDS": [
-						"0x000"
+						"0x7B4"
 					],
 					"IDS": [
 						"0x76"
@@ -30742,12 +30742,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 16,
 					"TYPE": 10
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 3,
-					"regionIndex": 16,
-					"trickDifficulty": 0
 				}
 			],
 			"Pinwheel": {
@@ -32046,12 +32040,6 @@
 					"ck0": "Atlantis Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Atlantis Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Carnival Hub Entry": [
@@ -32061,12 +32049,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 7
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Carnival Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				},
 				{
 					"ballRequirement": false,
@@ -32112,12 +32094,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 7
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Fortress of Fear Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				},
 				{
 					"ballRequirement": false,
@@ -32170,12 +32146,6 @@
 					"ck0": "Out of This World Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Out of This World Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Pirates Hub Entry": [
@@ -32191,12 +32161,6 @@
 					"ck0": "Pirate's Cove Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Pirate's Cove Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Prehistoric Hub Entry": [
@@ -32206,12 +32170,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 7
-				},
-				{
-					"ballRequirement": false,
-					"ck0": "Prehistoric Gate",
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				},
 				{
 					"ballRequirement": false,
