@@ -1,14 +1,14 @@
+import time
 from dataclasses import dataclass
 from enum import IntEnum
 from logging import Logger
 from random import randint
 from struct import unpack
-import time
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
-                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, trap_to_status, vidcomic_data,
-                                         weapon_upgrade_data)
+                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, trap_to_status,
+                                         vidcomic_data, weapon_upgrade_data)
 from constants.data.Rac3LocationData import LOCATIONS
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
@@ -159,6 +159,7 @@ class Rac3Interface(GameInterface):
         self.weapon_cycler()
         self.vidcomic_cycler()
         self.armor_cycler()
+        self.trap_cycler()
         self.verify_quick_select_and_last_used()
         # Proc Options
         self._write8(RAC3STATUS.MULTIPLIER, self.boltAndXPMultiplierValue)
@@ -167,7 +168,6 @@ class Rac3Interface(GameInterface):
         # Logic Fixes
         self.logic_fixes()
         self.tracker_update()
-        self.trap_cycler()
 
     @staticmethod
     def get_victory_code():
@@ -257,7 +257,10 @@ class Rac3Interface(GameInterface):
 
                 # skip if already locked like in weapon challenges or weapon cycle challenges
                 if already_locked == 0:
-                    self.trap_timers[name] = int(time.time()) + 10
+                    if self.trap_timers.get(name, False):
+                        self.trap_timers[name] += 10
+                    else:
+                        self.trap_timers[name] = int(time.time()) + 10
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
@@ -561,23 +564,24 @@ class Rac3Interface(GameInterface):
         pass
 
     def trap_cycler(self):
-        for name in list(self.trap_timers.keys()):
-            trap_active = int(time.time() < self.trap_timers[name])
-            if name in trap_to_status:
-                self._write8(trap_to_status[name], trap_active)
-            if not trap_active:
-                del self.trap_timers[name]
+        for name in self.trap_timers.keys():
+            if time.time() < self.trap_timers[name]:
+                self._write8(trap_to_status[name], 1)
+            else:
+                self.trap_timers.pop(name)
 
-                # Special case for lock trap 
+                # Special case for lock trap
                 # Clear when timer ends directly rather than from the trap cleanup loop below
-                if name == RAC3ITEM.LOCK_TRAP:
-                    self._write8(RAC3STATUS.WEAPON_LOCK, 0)
+                match name:
+                    case RAC3ITEM.LOCK_TRAP:
+                        # Todo: Check for arena mission
+                        self._write8(RAC3STATUS.WEAPON_LOCK, 0)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
-        for trap_name, status_address in trap_to_status.items():
-            if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
-                self._write8(status_address, 0)
+        # for trap_name, status_address in trap_to_status.items():
+        #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
+        #         self._write8(status_address, 0)
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):

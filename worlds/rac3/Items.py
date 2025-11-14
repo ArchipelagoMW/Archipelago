@@ -3,7 +3,7 @@ from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 from constants.data.Rac3ItemData import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT, non_prog_weapon_data,
-                                         prog_weapon_data, progressive_data, trap_data)
+                                         prog_weapon_data, progressive_data)
 from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 
@@ -81,13 +81,13 @@ def get_filler_item_selection(world: "RaC3World"):
         RAC3ITEM.WEAPON_XP: 0,
         RAC3ITEM.PLAYER_XP: 5,
         RAC3ITEM.BOLTS: 10,
-        #RAC3ITEM.INFERNO_MODE: 1,
+        # RAC3ITEM.INFERNO_MODE: 1,
         RAC3ITEM.JACKPOT: 10,
     }
     if not world.options.enable_progressive_weapons.value:
         weapon_exp: dict[str, int] = {RAC3ITEM.WEAPON_XP: 5}
         frequencies.update(weapon_exp)
-    if world.options.enable_traps.value:
+    if world.options.traps_enabled.value:
         traps = world.options.trap_weight.value
         frequencies.update(traps)
     return [name for name, count in frequencies.items() for _ in range(count)]

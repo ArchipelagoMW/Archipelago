@@ -27,7 +27,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.ship_wings = world.passthrough[RAC3OPTION.SHIP_WINGS]
             world.options.ship_skin = world.passthrough[RAC3OPTION.SHIP_SKIN]
             world.options.skin = world.passthrough[RAC3OPTION.SKIN]
-            world.options.enable_traps.value = world.passthrough[RAC3OPTION.ENABLE_TRAPS]
+            world.options.traps_enabled.value = world.passthrough[RAC3OPTION.ENABLE_TRAPS]
             world.options.trap_weight.value = world.passthrough[RAC3OPTION.TRAP_WEIGHT]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
         else:
