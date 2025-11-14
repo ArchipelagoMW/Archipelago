@@ -76,56 +76,60 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Delende
         #Treasure chests
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of camp", 263 + treasure_index_offset), #Money chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery lower level", 210 + treasure_index_offset), #Money chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Return from fish hatchery", 34 + treasure_index_offset), #Bracer chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Looking for love in all the high places (glide to the heart tarn)", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state) and logic.has_glide(state)), #Chartreuse chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Mushroom underpass", 262 + treasure_index_offset), #Cotton Hood chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fallen log parkour", 208 + treasure_index_offset), #Earring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river", 213 + treasure_index_offset), #Earring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Next to river", 43 + treasure_index_offset), #Underground Ether chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under ambush tree", 212 + treasure_index_offset), #Fenix Juice chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - On west mountainside", 209 + treasure_index_offset), #Iron Sword chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river from fish hatchery", 123 + treasure_index_offset), #Looters Ring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - High up west mountainside", 33 + treasure_index_offset), #Mages Robe chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Up near hatchery", 169 + treasure_index_offset), #Protect Amulet chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Outside spooky cave", 27 + treasure_index_offset), #Storm Hood chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In fish hatchery", 39 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fish hatchery approach", 79 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under tree", 261 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Top of spooky cave", 73 + treasure_index_offset), #Tincture Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Troll", 451 + treasure_index_offset), #Tincture Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Off north path", 259 + treasure_index_offset), #Tonic chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Before Proving Meadows", 216 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset), #Tonic Pouch chest
+        #Delende Plains
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fallen log parkour", 208 + treasure_index_offset),  # Earring chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - On west mountainside", 209 + treasure_index_offset),  # Iron Sword chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Off north path", 259 + treasure_index_offset),  # Tonic chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fish hatchery approach", 79 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery lower level", 210 + treasure_index_offset),  # Money chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Up near hatchery", 169 + treasure_index_offset),  # Protect Amulet chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset),  # Tonic Pouch chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In fish hatchery", 39 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river from fish hatchery", 123 + treasure_index_offset),  # Looters Ring chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Return from fish hatchery", 34 + treasure_index_offset),  # Bracer chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under tree", 261 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Mushroom underpass", 262 + treasure_index_offset),  # Cotton Hood chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of camp", 263 + treasure_index_offset),  # Money chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under ambush tree", 212 + treasure_index_offset),  # Fenix Juice chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Outside spooky cave", 27 + treasure_index_offset),  # Storm Hood chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river", 213 + treasure_index_offset),  # Earring chest
+        #Eastern Delende (High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Hollow riverbank", 43 + treasure_index_offset),  # Underground Ether chest
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Before Proving Meadows", 216 + treasure_index_offset),  # Tonic Pouch chest
+        #Delende High Bridges
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - High up west mountainside", 33 + treasure_index_offset), #Mages Robe chest
+        # Gran's House (Delende High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 1", 87 + treasure_index_offset),  # (126, 128, -58) style: blank
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 2", 100 + treasure_index_offset),  # (127, 128, -58) style: weapon
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 3", 177 + treasure_index_offset),  # (137, 128, -57) style: consumable
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 4", 178 + treasure_index_offset),  # (137, 128, -56) style: consumable
+        # Basement (Delende High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Basement Chest - Gran...?", 179 + treasure_index_offset),  # Empty chest
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Basement Chest - Gran......?", 180 + treasure_index_offset),  # Digested Head chest
+        # Below Gran
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Cracks in Gran's foundation", 3653 + treasure_index_offset),  # (126, 115, -102) Basement map chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 1", 181 + treasure_index_offset),  # (129, 98, -111) Fenix Juice Pouch chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 2", 182 + treasure_index_offset),  # (128, 98, -111) Plate of Wolf chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement loner", 3671 + treasure_index_offset),  # (119, 98, -110) Underpass Scrap
+        #Mesa Above Spooky Cave
+        LocationData(DELENDE_MESA_OVER_SPOOKY_CAVE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Top of spooky cave", 73 + treasure_index_offset), #Tincture Pouch chest
+        #Delende Peak
+        LocationData(DELENDE_PEAK_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Troll", 451 + treasure_index_offset), #Tincture Pouch chest
+        #Heart Tarn
+        LocationData(HEART_TARN_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Looking for love in all the high places (glide to the heart tarn)", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state)),  # Chartreuse chest
 
         #NPCs
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Astley gives you a home point stone", 28 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has(DOG_BONE, player, 3)),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
-        #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Cartographer", 1153 + npc_index_offset), #guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher (Z2_FisherOnDock ID 121 (166, 133, -208))
-        #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
-
-        #Grans House (Delende)
-        #Treasure chests
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 1", 87 + treasure_index_offset), #(126, 128, -58) style: blank
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 2", 100 + treasure_index_offset), #(127, 128, -58) style: weapon
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 3", 177 + treasure_index_offset), #(137, 128, -57) style: consumable
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 4", 178 + treasure_index_offset), #(137, 128, -56) style: consumable
-
-        #Basement (Somehow Not Delende)
-        #Treasure chests
-        LocationData(DELENDE_AP_REGION, "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
-        LocationData(DELENDE_AP_REGION, "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Cracks in Gran's foundation", 3653 + treasure_index_offset), #(126, 115, -102) Basement map chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 1", 181 + treasure_index_offset), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 2", 182 + treasure_index_offset), #(128, 98, -111) Plate of Wolf chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement loner", 3671 + treasure_index_offset), #(119, 98, -110) Underpass Scrap
+        #NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
+        #NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
+        #Delende Plains
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Astley gives you a home point stone", 28 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Not-at-all shady guy", 124 + npc_index_offset),  # (181, 132, -200); Rotten Salmon
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher (Z2_FisherOnDock ID 121 (166, 133, -208))
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset),  # (276, 116, -204); Fervor Charm
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has(DOG_BONE, player, 3)),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Cartographer", 1153 + npc_index_offset),  # guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
 
         #Soiled Den
         #Treasure chests
@@ -215,7 +219,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Dead end", 3056 + treasure_index_offset), #Tonic chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Hidden stairway", 757 + treasure_index_offset), #Tonic Pouch chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Drop down to mountain balcony", 290 + treasure_index_offset), #Torpid Cuffs chest
-        LocationData(YAMAGAWA_MA_AP_REGION, "Overpass Chest - Hop over from Yamagawa to dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
+        #Fencer's Keep Chest
+        LocationData(FENCERS_KEEP_CHEST_AP_REGION, "Overpass Chest - Hop over from Yamagawa to dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " NPC - Hidden inside waterfall source", 628 + npc_index_offset, lambda state: logic.has_swimming(state)), #Autumns Oath
@@ -250,7 +255,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
         #Treasure chests
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Beyond the courtyard wall", 2671 + treasure_index_offset), #Tonic Pouch chest
+        #Moat Shallows
+        LocationData(MOAT_SHALLOWS_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Beyond the courtyard wall", 2671 + treasure_index_offset), #Tonic Pouch chest
+        #Capital Sequoia
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Inn room", 1388 + treasure_index_offset), #Craftwork Staff chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Second story by Master Rogue", 158 + treasure_index_offset), #Craftwork Dagger chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Magic store attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
@@ -1403,7 +1410,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
 
         #Bosses
         #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, TROLL_FIGHT_LEVEL)), #Monster ID: 8
+        LocationData(DELENDE_PEAK_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, TROLL_FIGHT_LEVEL)), #Monster ID: 8
         LocationData(GRAN_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Gran...?", 183 + boss_index_offset), #Monster ID: 28 (min level 30)
         LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, BONE_THIEF_FIGHT_LEVEL)), #Monster ID: 12
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, GUARDIAN_FIGHT_LEVEL)), #Monster ID: 23
@@ -1412,7 +1419,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(PROVING_MEADOWS_AP_REGION, PROVING_MEADOWS_DISPLAY_NAME + " Boss - Knight", 128 + boss_index_offset, lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, KNIGHT_FIGHT_LEVEL)), #Monster ID: 212 (using Z7_CrystalCheckerNPC)
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, PARASITE_FIGHT_LEVEL)), #Monster ID: 38
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Defeat L60 dummy and it shall appear...!", 3530 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, DUMMY_BOSS_FIGHT_LEVEL)), #Monster ID: 303
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, ENAMI_FIGHT_LEVEL)), #Monster ID: 49
+        LocationData(MOAT_SHALLOWS_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENAMI_FIGHT_LEVEL)), #Monster ID: 49
         LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, BLOOD_SLOP_FIGHT_LEVEL)), #Monster ID: 4
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, FANCY_QUINTAR_FIGHT_LEVEL)), #Monster ID: 68
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, WARDEN_FIGHT_LEVEL)), #Monster ID: 37
@@ -1468,44 +1475,44 @@ def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Shop - Nans Stew 2", 20014 + shop_index_offset),
 
         #Delende
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 1", 10052 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 2", 20052 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 3", 30052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 1", 10052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 2", 20052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 3", 30052 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 1", 10063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 2", 20063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 3", 30063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 4", 40063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 5", 50063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 6", 60063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 7", 70063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 8", 80063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 1", 10063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 2", 20063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 3", 30063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 4", 40063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 5", 50063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 6", 60063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 7", 70063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 8", 80063 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 1", 10199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 2", 20199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 3", 30199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 4", 40199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 5", 50199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 6", 60199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 1", 10199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 2", 20199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 3", 30199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 4", 40199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 5", 50199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 6", 60199 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 1", 10115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 2", 20115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 3", 30115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 4", 40115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 5", 50115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 1", 10115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 2", 20115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 3", 30115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 4", 40115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 5", 50115 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 1", 10446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 2", 20446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 3", 30446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 4", 40446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 5", 50446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 6", 60446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 7", 70446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 8", 80446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 1", 10446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 2", 20446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 3", 30446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 4", 40446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 5", 50446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 6", 60446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 7", 70446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 8", 80446 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 1", 10266 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 2", 20266 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 3", 30266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 1", 10266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 2", 20266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 3", 30266 + shop_index_offset),
 
         #Seaside Cliffs
         LocationData(SEASIDE_CLIFFS_AP_REGION, SEASIDE_CLIFFS_DISPLAY_NAME + " Shop - Camp Merchant 1", 10116 + shop_index_offset),
@@ -1893,7 +1900,7 @@ def get_region_completion_locations(player: int, options: CrystalProjectOptions)
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
         LocationData(MERCURY_SHRINE_AP_REGION, MERCURY_SHRINE_DISPLAY_NAME + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
         LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Region Completion", 6003 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Region Completion", 6004 + regionsanity_index_offset, regionsanity=True),
