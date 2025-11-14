@@ -314,12 +314,8 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove when removing get_options
-
-
 def get_options() -> Settings:
-    # TODO: switch to Utils.deprecate after 0.4.4
-    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
 
 
