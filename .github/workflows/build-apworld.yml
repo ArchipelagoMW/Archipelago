@@ -172,9 +172,14 @@ jobs:
 
           # Get the latest tag, depending on branch type
           if [[ "$branch" == "main" ]]; then
-            latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre' | head -n 1 || true)
+              latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre$' | head -n 1 || true)
           else
-            latest_tag=$(git tag --sort=-v:refname | head -n 1 || true)
+              latest_tag=$(git tag --sort=-v:refname | grep -- '-pre$' | head -n 1 || true)
+          
+              # fallback: if no -pre tags exist yet
+              if [[ -z "$latest_tag" ]]; then
+                  latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre$' | head -n 1 || true)
+              fi
           fi
 
           if [[ -z "$latest_tag" ]]; then
