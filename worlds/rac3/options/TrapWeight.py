@@ -4,9 +4,9 @@ from worlds.rac3 import RAC3OPTION
 
 class TrapWeight(ItemDict):
     """
-    Sets the relative weight of trap items in the item pool.
-    A higher value increases the likelihood of traps appearing.
-    Has no effect if traps are disabled.
+    Sets the relative weights of trap items in the item pool.
+    A higher value increases the likelihood of a particular trap to appear in the item pool.
+    This option has no effect when traps are disabled.
     """
     display_name = RAC3OPTION.TRAP_WEIGHT
     min = 0
