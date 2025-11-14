@@ -18,9 +18,11 @@ from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningIt
 from .LADXR.itempool import ItemPool as LADXRItemPool
 from .LADXR.locations.constants import CHEST_ITEMS
 from .LADXR.locations.instrument import Instrument
+from .LADXR.locations.itemInfo import ItemInfo as LADXRItemInfo
 from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
+from .LADXR.explorer import Explorer as LADXRExplorer
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id,
                         links_awakening_location_name_groups)
@@ -305,47 +307,54 @@ class LinksAwakeningWorld(World):
     def local_front_fill(self, itempool, target: int) -> None:
         """
         Tries to fill progression locally until the target number of locations can be reached.
+        Uses LADXR logic to fill because AP doesnt account for randomized entrances at this step.
         """
-        to_place: dict[Location, Item] = {}
-        base_collection_state = CollectionState(self.multiworld)
+        to_place: dict[LADXRItemInfo, LinksAwakeningItem] = {}
 
-        def get_reachable_locations(additional_item: Item | None = None) -> list[Location]:
-            collection_state = base_collection_state.copy()
-            reachable_locations: list[Location] = []
+        # Feed filled locations into LADXR logic
+        for location in self.multiworld.get_filled_locations(self.player):
+            if not hasattr(location, 'ladxr_item'):
+                continue
+            for ladxr_location in self.ladxr_logic.location_list: # ladxr_location is more like a region in ap
+                for ladxr_item in ladxr_location.items: # ladxr_item is more like a location in ap
+                    if f"{ladxr_item.metadata.name} ({ladxr_item.metadata.area})" == location.name:
+                        if location.item.player == self.player:
+                            ladxr_item.item = location.item.item_data.ladxr_id
+                        else:
+                            ladxr_item.item = 'MESSAGE' # Nothing item
+
+        def explore(additional_item: str | None = None) -> tuple[list[LADXRItemInfo], list[LinksAwakeningItem]]:
+            explorer = LADXRExplorer()
             for item in to_place.values():
-                collection_state.collect(item, prevent_sweep=True)
+                explorer.addItem(item.item_data.ladxr_id, 1)
             if additional_item:
-                collection_state.collect(additional_item, prevent_sweep=True)
-            for location in self.get_locations():
-                if location.can_reach(collection_state):
-                    reachable_locations.append(location)
-            return reachable_locations
+                explorer.addItem(additional_item.item_data.ladxr_id, 1)
+            explorer.visit(self.ladxr_logic.start)
+            reachable_locations = [l for l in explorer.getAccessableLocations() for l in l.items]
+            advancement_ladxr_ids = list(explorer.getRequiredItemsForNextLocations())
+            advancement_items = [i for i in itempool if i.item_data.ladxr_id in advancement_ladxr_ids]
+            self.random.shuffle(advancement_items)
+            return reachable_locations, advancement_items
 
-        reachable_locations = get_reachable_locations()
-        if len(reachable_locations) >= target:
-            return
+        reachable_locations, advancement_items = explore()
+        available_locations = [l for l in reachable_locations if not l.item]
+        failed_to_place_item = False
+        while not failed_to_place_item and len(reachable_locations) < target and available_locations:
+            has_placed_item = False
+            for item in advancement_items:
+                new_reachable_locations, new_advancement_items = explore(item)
+                if len(new_reachable_locations) > len(reachable_locations):
+                    to_place[self.random.choice(available_locations)] = item
+                    has_placed_item = True
+                    reachable_locations = new_reachable_locations
+                    advancement_items = new_advancement_items
+                    available_locations = [l for l in reachable_locations if l not in to_place]
+                    break
+            failed_to_place_item = not has_placed_item
 
-        available_items = [item for item in itempool if item.advancement and item.name not in self.options.non_local_items]
-        self.random.shuffle(available_items)
-
-        # Making one pass over itempool wouldnt really work for a full fill but we're just filling a handful of
-        # locations and failing to hit the target isn't that big of an issue.
-        for item in available_items:
-            new_reachable_locations = get_reachable_locations(item)
-            if len(new_reachable_locations) <= len(reachable_locations):
-                continue # This item doesn't open anything
-            
-            possible_locations = [loc for loc in reachable_locations if not loc.item and loc not in to_place]
-            if not possible_locations:
-                break
-            to_place[self.random.choice(possible_locations)] = item
-
-            if len(new_reachable_locations) >= target:
-                break
-
-            reachable_locations = new_reachable_locations
-
-        for location, item in to_place.items():
+        for ladxr_item, item in to_place.items():
+            name = f"{ladxr_item.metadata.name} ({ladxr_item.metadata.area})"
+            location = self.multiworld.get_location(name, self.player)
             item_from_pool = itempool.pop(itempool.index(item))
             location.place_locked_item(item_from_pool)
 
