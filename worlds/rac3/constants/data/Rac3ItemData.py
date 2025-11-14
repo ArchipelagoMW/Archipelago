@@ -429,8 +429,9 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.INFERNO_MODE: RAC3ITEMDATA.construct_trap(0x105),
     RAC3ITEM.OHKO_TRAP: RAC3ITEMDATA.construct_trap(0x106),
     RAC3ITEM.NO_AMMO_TRAP: RAC3ITEMDATA.construct_trap(0x107),
+    RAC3ITEM.LOCK_TRAP: RAC3ITEMDATA.construct_trap(0x108),
     # Goal
-    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x108),
+    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x109),
 }
 
 
@@ -483,6 +484,10 @@ item_table: dict[str, RAC3ITEMDATA] = {
     **filler_data,
 }
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
+
+trap_to_status: dict[str, RAC3STATUS] = {
+    RAC3ITEM.LOCK_TRAP: RAC3STATUS.WEAPON_LOCK,
+    }
 
 # Todo: Add Item Groups (see location_groups)
 item_groups: dict[str, set[str]] = {

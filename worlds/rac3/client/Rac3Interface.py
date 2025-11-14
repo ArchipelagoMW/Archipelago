@@ -6,7 +6,7 @@ from struct import unpack
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
-                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, vidcomic_data,
+                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, trap_to_status, vidcomic_data,
                                          weapon_upgrade_data)
 from constants.data.Rac3LocationData import LOCATIONS
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
@@ -140,6 +140,7 @@ class Rac3Interface(GameInterface):
     ship = 0
     ship_skin = 0
     skin = 0
+    trap_timers: dict[str, int] = {}
 
     # Called at once when client started
     def init(self):
@@ -165,6 +166,7 @@ class Rac3Interface(GameInterface):
         # Logic Fixes
         self.logic_fixes()
         self.tracker_update()
+        self.trap_cycler()
 
     @staticmethod
     def get_victory_code():
@@ -249,6 +251,8 @@ class Rac3Interface(GameInterface):
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
                         self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
+            case RAC3ITEM.LOCK_TRAP:
+                self.trap_timers[name] = 10 # lock for 10 update cycles (~10 sec)
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
@@ -370,6 +374,7 @@ class Rac3Interface(GameInterface):
         # self.UnlockItem[RAC3ITEM.FLORANA].status = 1
         # self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status = 1
         # self.UnlockItem[RAC3ITEM.MUSEUM].status = 1
+        self.trap_timers.clear()
 
         self.weapon_cycler()
         self.gadget_cycler()
@@ -378,6 +383,7 @@ class Rac3Interface(GameInterface):
         self.armor_cycler()
         self.verify_quick_select_and_last_used()
         self.weapon_exp_cycler()
+        self.trap_cycler()
 
     def undo_collections(self):
         pass
@@ -548,6 +554,20 @@ class Rac3Interface(GameInterface):
 
     def tracker_update(self):
         pass
+
+    def trap_cycler(self):
+        for name in list(self.trap_timers.keys()):
+            self.trap_timers[name] -= 1
+            trap_active = int(self.trap_timers[name] > 0)
+            if name in trap_to_status:
+                self._write8(trap_to_status[name], trap_active)
+            if not trap_active:
+                del self.trap_timers[name]
+
+        # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
+        for trap_name, status_address in trap_to_status.items():
+            if trap_name not in self.trap_timers:
+                self._write8(status_address, 0)
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):
