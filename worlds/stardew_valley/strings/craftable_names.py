@@ -131,6 +131,7 @@ class Furniture:
     single_bed = "Single Bed"
     cursed_mannequin = "Cursed Mannequin"
     crane_game_house_plant = "House Plant 13 (Crane Game)"
+    exotic_double_bed = "Exotic Double Bed"
 
 
 class Storage:

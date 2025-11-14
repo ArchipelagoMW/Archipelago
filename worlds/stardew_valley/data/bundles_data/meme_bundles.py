@@ -71,8 +71,9 @@ tilesanity_items = [wood_floor.as_amount(100), rustic_plank_floor.as_amount(100)
                     crystal_path.as_amount(100)]
 tilesanity_bundle = BundleTemplate(CCRoom.boiler_room, MemeBundleName.tilesanity, tilesanity_items, 4, 4)
 
-cap_items = [vacation_shirt, wood.as_amount(999), sap.as_amount(999), pine_cone.as_amount(100), acorn.as_amount(100), maple_seed.as_amount(100), moss.as_amount(500)]
-cap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cap, cap_items, 6, 4)
+cap_items = [vacation_shirt, wood.as_amount(999), sap.as_amount(999), pine_cone.as_amount(100), acorn.as_amount(100),
+             maple_seed.as_amount(100), moss.as_amount(500), exotic_double_bed.as_amount(1)]
+cap_bundle = BundleTemplate(CCRoom.bulletin_board, MemeBundleName.cap, cap_items, 8, 4)
 
 big_grapes_items = [coconut]
 big_grapes_bundle = BundleTemplate(CCRoom.pantry, MemeBundleName.big_grapes, big_grapes_items, 4, 4)

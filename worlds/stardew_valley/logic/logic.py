@@ -68,7 +68,7 @@ from ..strings.artisan_good_names import ArtisanGood
 from ..strings.boot_names import tier_by_boots
 from ..strings.building_names import Building
 from ..strings.catalogue_names import items_by_catalogue
-from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting, WildSeeds
+from ..strings.craftable_names import Consumable, Ring, Fishing, Lighting, WildSeeds, Furniture
 from ..strings.crop_names import Fruit, Vegetable
 from ..strings.currency_names import Currency
 from ..strings.decoration_names import Decoration
@@ -255,6 +255,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_scythe(),
             Fossil.snake_skull: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.hoe),
             Fossil.snake_vertebrae: self.region.can_reach(Region.island_west) & self.tool.has_tool(Tool.hoe),
+            Furniture.exotic_double_bed: self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50),
             Geode.artifact_trove: self.has(Geode.omni) & self.region.can_reach(Region.desert),
             Geode.frozen: self.mine.can_mine_in_the_mines_floor_41_80(),
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
