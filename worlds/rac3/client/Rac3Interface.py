@@ -256,7 +256,7 @@ class Rac3Interface(GameInterface):
                 already_locked = self._read8(RAC3STATUS.WEAPON_LOCK)
 
                 # skip if already locked like in weapon challenges or weapon cycle challenges
-                if already_locked != 0:
+                if already_locked == 0:
                     self.trap_timers[name] = int(time.time()) + 10
 
         if name in equipable_data.keys():
