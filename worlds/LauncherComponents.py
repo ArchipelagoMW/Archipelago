@@ -225,6 +225,7 @@ components: List[Component] = [
               description="Host a generated multiworld on your computer."),
     Component('Generate', 'Generate', cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
+    Component("Generate (UI)", "GeneratorUI", description="Open the interactive seed generator."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,

@@ -1,0 +1,94 @@
+
+<OutlinedGrid@MDGridLayout>:
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        Line:
+            width: 2
+            rectangle: self.x, self.y, self.width, self.height
+
+<MarkupLabel@SelectableLabel>
+    markup: True
+    size_hint: 1, None
+    padding: [2, 2, 2, 2]
+    on_ref_press: app.on_ref_press(*args)
+    adaptive_height: True
+
+MDBoxLayout:
+    orientation: "vertical"
+    padding: [10, 10, 10, 10]
+    spacing: 10
+    md_bg_color: self.theme_cls.backgroundColor
+
+    MDButton:
+        text: "Archipelago Generator"
+        size_hint: None, 0.1
+        pos_hint: {"right": 1}
+        on_press: app.open_file()
+
+        MDButtonIcon:
+            icon: "file-plus"
+
+        MDButtonText:
+            text: "Add File"
+
+    ScrollView:
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            Line:
+                width: 2
+                rectangle: self.x, self.y, self.width, self.height
+
+        padding: [10, 10, 10, 10]
+        MDGridLayout:
+            id: player_table
+            adaptive_height: True
+            row_default_height: 30
+            cols: 5
+            pos_hint: {"center_x": 0.5}
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        adaptive_height: True
+        spacing: "5dp"
+
+        MDLabel:
+            text: "Additional options :"
+            height: "30dp"
+            adaptive_width: True
+
+        TextInput:
+            id: options_field
+            multiline: False
+            height: "30dp"
+            size_hint_y: None
+            background_color: app.theme_cls.backgroundColor
+            cursor_color: app.theme_cls.primaryColor
+            foreground_color: app.theme_cls.primaryColor
+
+    MDButton:
+        style: "filled"
+        size_hint: None, 0.1
+        pos_hint: {"center_x": 0.5}
+        on_press: app.generate()
+
+        MDButtonText:
+            text: "Generate"
+
+    MDLabel:
+        style: "filled"
+        size_hint: None, 0.1
+        text: "Output"
+
+    UILog:
+        id: ui_log
+        viewclass: "MarkupLabel"
+        padding: [5, 5, 5, 5]
+
+        canvas.before:
+            Color:
+                rgba: (1, 1, 1, 0.2)
+            Rectangle:
+                size: self.size
+                pos: self.pos
