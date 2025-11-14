@@ -330,7 +330,7 @@ class LinksAwakeningWorld(World):
             if additional_item:
                 explorer.addItem(additional_item.item_data.ladxr_id, 1)
             explorer.visit(self.ladxr_logic.start)
-            reachable_locations = [l for l in explorer.getAccessableLocations() for l in l.items]
+            reachable_locations = [l for l in explorer.getAccessableLocations() for l in l.items if l.metadata.area != "None"]
             advancement_ladxr_ids = list(explorer.getRequiredItemsForNextLocations())
             advancement_items = [i for i in itempool if i.item_data.ladxr_id in advancement_ladxr_ids]
             self.random.shuffle(advancement_items)
