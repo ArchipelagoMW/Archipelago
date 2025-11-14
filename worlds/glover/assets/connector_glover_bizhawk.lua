@@ -241,6 +241,10 @@ local ROM_ITEM_TABLE = {
 	"AP_TRAINING_WORLD_SANDPIT",
 	"AP_TRAINING_WORLD_LOWER_TARGET",
 	"AP_TRAINING_WORLD_STAIRS",
+	"AP_FROG_TRAP",
+    "AP_CAMERA_TRAP",
+    "AP_CURSE_BALL",
+    "AP_CBALL_TRAP",
     "AP_MAX_ITEM",
 };
 
@@ -11641,7 +11645,7 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
-    base_pointer = 0x400000,
+	base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
     ap_world = 0x7A8,
@@ -11694,13 +11698,13 @@ GLOVERHACK = {
       taglink = 0x4,
     hub_map = 0x8,
     world_map = 0x9,
-    pc_deathlink = 0x725,
-    n64_deathlink = 0x728,
-    pc_taglink = 0x726,
-    n64_taglink = 0x729,
-    ROM_MAJOR_VERSION = 0x7A2,
-    ROM_MINOR_VERSION = 0x7A3,
-    ROM_PATCH_VERSION = 0x7A4
+    pc_deathlink = 0x726,
+    n64_deathlink = 0x729,
+    pc_taglink = 0x727,
+    n64_taglink = 0x72A,
+    ROM_MAJOR_VERSION = 0x7A4,
+    ROM_MINOR_VERSION = 0x7A5,
+    ROM_PATCH_VERSION = 0x7A6
 }
 
 function GLOVERHACK:new(t)
