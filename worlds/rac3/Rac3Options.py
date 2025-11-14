@@ -17,6 +17,7 @@ from options.Skillpoints import SkillPoints
 from options.StartingWeapons import StartingWeapons
 from options.TitaniumBolts import TitaniumBolts
 from options.Traps import EnableTraps
+from options.TrapWeight import TrapWeight
 from options.Trophies import Trophies
 from worlds.AutoWorld import PerGameCommonOptions
 
@@ -47,11 +48,12 @@ class RaC3Options(PerGameCommonOptions):
     ship_skin: ShipSkin
     skin: RatchetSkin
     traps_enabled: EnableTraps
+    trap_weight: TrapWeight
 
 
 rac3_option_groups: dict[str, List[Any]] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps],
+                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -73,4 +75,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.SHIP_SKIN,
     RAC3OPTION.SKIN,
     RAC3OPTION.ENABLE_TRAPS,
+    RAC3OPTION.TRAP_WEIGHT,
 ]

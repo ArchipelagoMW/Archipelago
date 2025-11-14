@@ -19,3 +19,4 @@ class RAC3OPTION:
     SKIN = "skin"
     DEATHLINK = "death_link"
     ENABLE_TRAPS = "enable_traps"
+    TRAP_WEIGHT = "trap_weight"
