@@ -252,7 +252,11 @@ class Rac3Interface(GameInterface):
                     if self.UnlockItem[weapon_name].status:
                         self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
             case RAC3ITEM.LOCK_TRAP:
-                self.trap_timers[name] = 10 # lock for 10 update cycles (~10 sec)
+                locked = self._read8(RAC3STATUS.WEAPON_LOCK)
+
+                # skip if already locked like in weapon challenges or weapon cycle challenges
+                if locked != 0:
+                    self.trap_timers[name] = 10 # lock for 10 update cycles (~10 sec)
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
@@ -564,9 +568,15 @@ class Rac3Interface(GameInterface):
             if not trap_active:
                 del self.trap_timers[name]
 
+                # Special case for lock trap 
+                # Clear when timer ends directly rather than from the trap cleanup loop below
+                if name == RAC3ITEM.LOCK_TRAP:
+                    self._write8(RAC3STATUS.WEAPON_LOCK, 0)
+
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
+        # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
         for trap_name, status_address in trap_to_status.items():
-            if trap_name not in self.trap_timers:
+            if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
                 self._write8(status_address, 0)
 
     # Todo: Deathlink
