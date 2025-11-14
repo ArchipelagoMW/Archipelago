@@ -17,6 +17,7 @@ from .cooking_logic import CookingLogicMixin
 from .crafting_logic import CraftingLogicMixin
 from .farming_logic import FarmingLogicMixin
 from .festival_logic import FestivalLogicMixin
+from .fish_pond_logic import FishPondLogicMixin
 from .fishing_logic import FishingLogicMixin
 from .gift_logic import GiftLogicMixin
 from .goal_logic import GoalLogicMixin
@@ -103,7 +104,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin, HarvestingLogicMixin, SourceLogicMixin,
                    RequirementLogicMixin, BookLogicMixin, GrindLogicMixin, FestivalLogicMixin, WalnutLogicMixin, GoalLogicMixin, SpecialItemsLogicMixin,
-                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, TailoringLogicMixin):
+                   MovieLogicMixin, MemeItemsLogicMixin, HatLogicMixin, ShirtLogicMixin, TailoringLogicMixin, FishPondLogicMixin):
     player: int
     options: StardewValleyOptions
     content: StardewContent
@@ -178,8 +179,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.large_milk: self.animal.has_happy_animal(Animal.cow),
             AnimalProduct.milk: self.animal.has_animal(Animal.cow),
             AnimalProduct.rabbit_foot: self.animal.has_happy_animal(Animal.rabbit),
-            AnimalProduct.roe: self.fishing.can_fish_anywhere() & self.building.has_building(Building.fish_pond),
-            AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
+            AnimalProduct.roe: self.fish_pond.can_get_fish_pond_reward(Fish.any, 1, AnimalProduct.roe),
+            AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | self.fish_pond.can_get_fish_pond_reward(Fish.squid, 1, AnimalProduct.squid_ink) | self.fish_pond.can_get_fish_pond_reward(Fish.midnight_squid, 1, AnimalProduct.squid_ink),
             AnimalProduct.truffle: self.animal.has_animal(Animal.pig) & self.season.has_any_not_winter(),
             AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter),  # Should also check void chicken if there was an alternative to obtain it without void egg
             AnimalProduct.wool: self.animal.has_animal(Animal.rabbit) | self.animal.has_animal(Animal.sheep),
@@ -187,13 +188,13 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
             AnimalProduct.slime_egg_purple: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(9),
-            AnimalProduct.slime_egg_tiger: self.can_fish_pond(Fish.lionfish, *(Forageable.ginger, Fruit.pineapple, Fruit.mango)) & self.time.has_lived_months(12) &
+            AnimalProduct.slime_egg_tiger: self.fish_pond.can_get_fish_pond_reward(Fish.lionfish, 9, AnimalProduct.slime_egg_tiger) & self.time.has_lived_months(12) &
                                             self.building.has_building(Building.slime_hutch) & self.monster.can_kill(Monster.tiger_slime),
             AnimalProduct.duck_egg_starter: self.logic.false_,  # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
             AnimalProduct.dinosaur_egg_starter: self.logic.false_,  # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
             AnimalProduct.egg_starter: self.logic.false_,  # It could be purchased at the Desert Festival, but festival logic is quite a mess, so not considering it yet...
             AnimalProduct.golden_egg_starter: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
-            AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
+            AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000),
             ArtisanGood.aged_roe: self.artisan.can_preserves_jar(AnimalProduct.roe),
             ArtisanGood.battery_pack: (self.has(Machine.lightning_rod) & self.season.has_any_not_winter()) | self.has(Machine.solar_panel),
             ArtisanGood.cheese: (self.has(AnimalProduct.cow_milk) & self.has(Machine.cheese_press)) | (self.region.can_reach(Region.desert) & self.artisan.can_replicate_gem(Mineral.emerald)),
@@ -258,13 +259,13 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Geode.frozen: self.mine.can_mine_in_the_mines_floor_41_80(),
             Geode.geode: self.mine.can_mine_in_the_mines_floor_1_40(),
             Geode.golden_coconut: self.region.can_reach(Region.island_north),
-            Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.building.has_building(Building.fish_pond)),
-            Geode.omni: self.count(2, *(self.mine.can_mine_in_the_mines_floor_81_120(), self.region.can_reach_all((Region.desert, Region.oasis, Region.sewer)), self.tool.has_pan(ToolMaterial.iron), (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)), (self.region.can_reach_all((Region.island_west, Region.island_north,)) & self.has(Consumable.treasure_totem)))),
+            Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120(),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.lava_eel, 9, Geode.magma) but it makes a logic loop
+            Geode.omni: self.count(2, *(self.mine.can_mine_in_the_mines_floor_81_120(), self.region.can_reach_all((Region.desert, Region.oasis, Region.sewer)), self.tool.has_pan(ToolMaterial.iron), (self.region.can_reach_all((Region.island_west, Region.island_north,)) & self.has(Consumable.treasure_totem)))),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.octopus, 9, Geode.omni) but it makes a logic loop
             Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.festival.has_golden_pumpkin(),
             Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_building(Building.kitchen) & (self.has(Consumable.rain_totem) | self.season.has_any_not_winter()),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
-            Gift.pearl: (self.has(Fish.blobfish) & self.building.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
+            Gift.pearl: self.fish_pond.can_get_fish_pond_reward(Fish.blobfish, 9, Gift.pearl) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
             Gift.void_ghost_pendant: self.money.can_trade_at(Region.desert, Loot.void_essence, 200) & self.relationship.has_hearts(NPC.krobus, 10),
             Gift.wilted_bouquet: self.has(Machine.furnace) & self.has(Gift.bouquet) & self.has(Material.coal),
@@ -305,7 +306,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Mineral.any_gem: self.museum.has_any_gem(),
             Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(),
             Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.gold),
-            Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_pan(ToolMaterial.iridium))),
+            Ore.iridium: self.ability.can_mine_perfectly_in_the_skull_cavern() | (self.mine.can_mine_in_the_skull_cavern() & self.tool.has_pan(ToolMaterial.gold)),  # Could add self.fish_pond.can_get_fish_pond_reward(Fish.super_cucumber, 9, Ore.iridium) but it makes a logic loop
             Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_pan(ToolMaterial.iron),
             Ore.radioactive: self.special_order.can_get_radioactive_ore(),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
@@ -430,12 +431,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
 
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
         return self.region.can_reach(Region.farm) & self.building.has_wizard_building(obelisk)
-
-    def can_fish_pond(self, fish: str, *items: str) -> StardewRule:
-        rule = self.building.has_building(Building.fish_pond) & self.has(fish)
-        if items:
-            rule = rule & self.has_all(*items)
-        return rule
 
     def can_purchase_statue_of_endless_fortune(self) -> StardewRule:
         return self.money.can_spend_at(Region.casino, 1_000_000)
