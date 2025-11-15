@@ -415,7 +415,10 @@ def generate_itempool(world):
             new_items.append("Bomb Upgrade (50)")
         elif world.options.shuffle_capacity_upgrades == "on":
             new_items += ["Bomb Upgrade (+5)"] * 6
-            new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+            if not progressive:
+                new_items.append("Bomb Upgrade (+10)")
+            else:
+                new_items += ["Bomb Upgrade (+5)"] * 2
         if world.options.shuffle_capacity_upgrades != "on_combined" and world.options.bombless_start:
             if not progressive:
                 new_items.append("Bomb Upgrade (+10)")
