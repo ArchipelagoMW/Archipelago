@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import ItemClassification
-from Fill import FillError
+from Options import OptionError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_location, ShopType
@@ -476,7 +476,7 @@ def generate_itempool(world):
                     if items_were_cut:
                         break
                 else:
-                    raise Exception(f"Failed to limit item pool size for player {player}")
+                    raise OptionError(f"Failed to limit item pool size for player {player}")
     if len(items) < pool_count:
         items += removed_filler[len(items) - pool_count:]
 
