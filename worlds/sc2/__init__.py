@@ -486,8 +486,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 item.flags |= ItemFilterFlags.FilterExcluded
                 continue
         if not zerg_missions and item.data.race == SC2Race.ZERG:
-            if item.data.type != item_tables.ZergItemType.Ability \
-                    and item.data.type != ZergItemType.Level:
+            if (item.data.type != item_tables.ZergItemType.Ability
+                and item.data.type != ZergItemType.Level
+            ):
                 item.flags |= ItemFilterFlags.FilterExcluded
                 continue
         if not protoss_missions and item.data.race == SC2Race.PROTOSS:
@@ -641,7 +642,7 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove Spear of Adun passives
-        if item.name in item_tables.spear_of_adun_castable_passives and not soa_passive_presence:
+        if item.name in item_groups.spear_of_adun_passives and not soa_passive_presence:
             item.flags |= ItemFilterFlags.FilterExcluded
 
         # Remove matchup-specific items if you don't play that matchup

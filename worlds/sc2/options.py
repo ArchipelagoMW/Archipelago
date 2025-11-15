@@ -7,12 +7,10 @@ from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
     PerGameCommonOptions, Option, VerifyKeys, StartInventory,
     is_iterable_except_str, OptionGroup, Visibility, ItemDict,
-    Accessibility, ProgressionBalancing
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
-from .item import item_names, item_tables
-from .item.item_groups import kerrigan_active_abilities, kerrigan_passives, nova_weapons, nova_gadgets
+from .item import item_names, item_tables, item_groups
 from .mission_tables import (
     SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_missions_with_any_flags_in_list,
     campaign_mission_table, SC2Race, MissionFlag
@@ -700,7 +698,7 @@ class KerriganMaxActiveAbilities(Range):
     """
     display_name = "Kerrigan Maximum Active Abilities"
     range_start = 0
-    range_end = len(kerrigan_active_abilities)
+    range_end = len(item_groups.kerrigan_active_abilities)
     default = range_end
 
 
@@ -711,7 +709,7 @@ class KerriganMaxPassiveAbilities(Range):
     """
     display_name = "Kerrigan Maximum Passive Abilities"
     range_start = 0
-    range_end = len(kerrigan_passives)
+    range_end = len(item_groups.kerrigan_passives)
     default = range_end
 
 
@@ -829,7 +827,7 @@ class SpearOfAdunMaxAutocastAbilities(Range):
     """
     display_name = "Spear of Adun Maximum Passive Abilities"
     range_start = 0
-    range_end = sum(item.quantity for item_name, item in item_tables.get_full_item_list().items() if item_name in item_tables.spear_of_adun_castable_passives)
+    range_end = sum(item_tables.item_table[item_name].quantity for item_name in item_groups.spear_of_adun_passives)
     default = range_end
 
 
@@ -883,7 +881,7 @@ class NovaMaxWeapons(Range):
     """
     display_name = "Nova Maximum Weapons"
     range_start = 0
-    range_end = len(nova_weapons)
+    range_end = len(item_groups.nova_weapons)
     default = range_end
 
 
@@ -897,7 +895,7 @@ class NovaMaxGadgets(Range):
     """
     display_name = "Nova Maximum Gadgets"
     range_start = 0
-    range_end = len(nova_gadgets)
+    range_end = len(item_groups.nova_gadgets)
     default = range_end
 
 
@@ -974,7 +972,6 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
         self.value = new_value
         for item_name in self.value:
             if item_name not in world.item_names:
-                from .item import item_groups
                 picks = get_fuzzy_results(
                     item_name,
                     list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
