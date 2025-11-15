@@ -415,25 +415,18 @@ def generate_itempool(world):
             new_items.append("Bomb Upgrade (50)")
         elif world.options.shuffle_capacity_upgrades == "on":
             new_items += ["Bomb Upgrade (+5)"] * 6
-            if not progressive:
-                new_items.append("Bomb Upgrade (+10)")
-            else:
-                new_items += ["Bomb Upgrade (+5)"] * 2
-        if world.options.shuffle_capacity_upgrades != "on_combined" and world.options.bombless_start:
-            if not progressive:
-                new_items.append("Bomb Upgrade (+10)")
-            else:
-                new_items += ["Bomb Upgrade (+5)"] * 2
+            new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+            if world.options.bombless_start:
+                new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+        elif world.options.bombless_start:
+            new_items.append("Bomb Upgrade (+10)")
 
         if world.options.shuffle_capacity_upgrades and not world.options.retro_bow:
             if world.options.shuffle_capacity_upgrades == "on_combined":
                 new_items += ["Arrow Upgrade (70)"]
             else:
                 new_items += ["Arrow Upgrade (+5)"] * 6
-                if not progressive:
-                    new_items.append("Arrow Upgrade (+10)")
-                else:
-                    new_items += ["Arrow Upgrade (+5)"] * 2
+                new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
     items += [item_factory(item, world) for item in new_items]
     removed_filler = []
