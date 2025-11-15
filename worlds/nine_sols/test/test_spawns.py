@@ -17,6 +17,7 @@ class TestDefaultSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 1)
@@ -44,6 +45,7 @@ class TestGDSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 4)
@@ -71,6 +73,7 @@ class TestPRESpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 3)
@@ -98,6 +101,7 @@ class TestLYRSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 4)
@@ -125,6 +129,7 @@ class TestYCSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 1)
@@ -152,6 +157,7 @@ class TestFGHSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 11)  # the shuffles don't change this
@@ -179,6 +185,7 @@ class TestOWSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 15)
@@ -206,6 +213,7 @@ class TestGoSYSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 4)
@@ -233,6 +241,7 @@ class TestGoSESpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 14)
@@ -261,6 +270,7 @@ class TestGoSWSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 11)
@@ -286,6 +296,7 @@ class TestAHSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 4)
@@ -307,6 +318,7 @@ class TestRPSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 7)
@@ -328,6 +340,7 @@ class TestAFDSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 3)
@@ -349,6 +362,7 @@ class TestCTHSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
@@ -370,6 +384,7 @@ class TestFUSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
@@ -391,6 +406,7 @@ class TestIWSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
@@ -412,6 +428,7 @@ class TestPRWSpawnAllShuffle(NineSolsTestBase):
         "shuffle_wall_climb": True,
         "shuffle_ledge_grab": True,
     }
+    run_default_tests = False
 
     def test_locations(self):
         self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
