@@ -690,7 +690,7 @@ class Range(NumericOption):
 
     _RANDOM_OPTS = [
         "random", "random-low", "random-middle", "random-high", 
-        "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>"
+        "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
         "random-range-high-<min>-<max>", "random-range-<min>-<max>",
     ]
 
@@ -719,24 +719,24 @@ class Range(NumericOption):
             # these are the conditions where "true" and "false" make sense
             if text == "true":
                 return cls.from_any(cls.default)
-            else:  # "false"
-                return cls(0)
-        else:
-            try:
-                return cls(int(text))
-            except ValueError:
-                # text is not a number
-                # Handle conditionally acceptable values here rather than in the f-string
-                default = ""
-                truefalse = ""
-                if hasattr(cls, "default"):
-                    default = ", default"
-                    if cls.range_start == 0 and cls.default != 0:
-                        truefalse = ", \"true\", \"false\""
-                raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
-                                f"<int>{default}, high, low{truefalse}, "
-                                f"{', '.join(cls._RANDOM_OPTS)}.")
-        
+            # "false"
+            return cls(0)
+
+        try:
+            return cls(int(text))
+        except ValueError:
+            # text is not a number
+            # Handle conditionally acceptable values here rather than in the f-string
+            default = ""
+            truefalse = ""
+            if hasattr(cls, "default"):
+                default = ", default"
+                if cls.range_start == 0 and cls.default != 0:
+                    truefalse = ", \"true\", \"false\""
+            raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
+                            f"<int>{default}, high, low{truefalse}, "
+                            f"{', '.join(cls._RANDOM_OPTS)}.")
+
 
     @classmethod
     def weighted_range(cls, text) -> Range:
