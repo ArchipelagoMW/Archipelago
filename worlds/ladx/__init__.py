@@ -493,7 +493,7 @@ class LinksAwakeningWorld(World):
                             loc.ladxr_item.item = 'PIECE_OF_POWER'
                         else:
                             loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.custom_item_name = loc.item.name
+                        loc.ladxr_item.setCustomItemName(loc.item.name)
 
                     if loc.item:
                         loc.ladxr_item.item_owner = loc.item.player
