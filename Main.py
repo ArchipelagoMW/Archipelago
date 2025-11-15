@@ -23,6 +23,118 @@ from worlds.generic.Rules import exclusion_rules, locality_rules
 __all__ = ["main"]
 
 
+def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfilebase: str) -> None:
+    """Export rolled player options to yaml files in the temp directory."""
+    import yaml
+    from collections import Counter
+    from dataclasses import asdict
+    from Options import Visibility, PlandoItem
+    from Utils import get_file_safe_name
+    
+    logger = logging.getLogger()
+    
+    def plando_item_to_dict(item: PlandoItem) -> dict:
+        """Convert a PlandoItem dataclass to a dictionary for YAML export."""
+        # Use asdict to convert the dataclass to a dict
+        result = asdict(item)
+        
+        # Handle items - single item can be shown as "item: value" instead of "items: [value]"
+        if isinstance(result.get("items"), list) and len(result["items"]) == 1:
+            result["item"] = result["items"][0]
+            del result["items"]
+        
+        # Handle locations - single location can be shown as "location: value" instead of "locations: [value]"
+        if isinstance(result.get("locations"), list) and len(result["locations"]) == 1:
+            result["location"] = result["locations"][0]
+            del result["locations"]
+        
+        # Remove default values to keep YAML clean
+        if result.get("from_pool") == True:  # default is True
+            del result["from_pool"]
+        if result.get("force") == "silent":  # default is "silent"
+            del result["force"]
+        if result.get("world") is False:  # default is False
+            del result["world"]
+        if result.get("count") is False:  # default is False
+            del result["count"]
+        if result.get("percentage") == 100:  # default is 100
+            del result["percentage"]
+        
+        return result
+    
+    for player in multiworld.player_ids:
+        world = multiworld.worlds[player]
+        player_name = multiworld.get_player_name(player)
+        game_name = multiworld.game[player]
+        
+        game_options = {}
+        for option_key, option_class in world.options_dataclass.type_hints.items():
+            option = getattr(world.options, option_key)
+            # Only export hidden options if they are not the default value
+            if option.visibility == Visibility.none and option.value == option.default:
+                continue
+            
+            # Plando serves no purpose once the generation is done, so we don't include it in the yaml files
+            if option_key == "plando_items":
+                continue
+
+            try:
+                if hasattr(option, 'value'):
+                    current_key: str
+                    try:
+                        # Choice options, we can use the name of the value
+                        game_options[option_key] = option.current_key
+                    except:
+                        # Not a Choice option, we use the value directly
+                        val = option.value
+                        
+                        if isinstance(val, Counter):
+                            # Convert Counter to dict for YAML
+                            game_options[option_key] = dict(val)
+                        elif isinstance(val, set):
+                            # Convert set to sorted list for YAML
+                            game_options[option_key] = sorted(list(val))
+                        elif val is None:
+                            # Technically valid yaml syntax, so we just remove the option.
+                            continue
+                        else:
+                            # Custom type, use the value directly
+                            game_options[option_key] = val
+                else:
+                    # Using value did not work, so we try to convert to a basic type
+                    try:
+                        val = option
+                        if isinstance(val, Counter):
+                            # Convert Counter to dict for YAML
+                            game_options[option_key] = dict(val)
+                        elif isinstance(val, set):
+                            game_options[option_key] = list(val)
+                        elif val is not None:
+                            game_options[option_key] = val
+                    except Exception:
+                        # option that can't be serialized
+                        logger.info(f'Skipping option {option_key} for Player {player} - cannot serialize')
+                        continue
+            except Exception as e:
+                logging.info(f'Error exporting option {option_key} for Player {player}: {e}')
+                continue
+        
+        yaml_data = {
+            "name": player_name,
+            "game": game_name,
+            "description": f"Generated options for {player_name} ({game_name})",
+            game_name: game_options
+        }
+        
+        # Write to temp directory with file-safe names
+        safe_player_name = get_file_safe_name(player_name)
+        yaml_filename = os.path.join(temp_dir, f'{outfilebase}_P{player}_{safe_player_name}_options.yaml')
+        with open(yaml_filename, 'w', encoding='utf-8') as f:
+            yaml.dump(yaml_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        
+        logger.debug(f'Exported options for Player {player} ({player_name}) to {yaml_filename}')
+
+
 def main(args, seed=None, baked_server_options: dict[str, object] | None = None):
     if not baked_server_options:
         baked_server_options = get_settings().server_options.as_dict()
@@ -375,6 +487,9 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
         if args.spoiler:
             multiworld.spoiler.to_file(os.path.join(temp_dir, '%s_Spoiler.txt' % outfilebase))
+
+        if getattr(args, 'output_option_yamls', False):
+            export_world_options_to_yaml(multiworld, temp_dir, outfilebase)
 
         zipfilename = output_path(f"AP_{multiworld.seed_name}.zip")
         logger.info(f"Creating final archive at {zipfilename}")

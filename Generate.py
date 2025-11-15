@@ -57,6 +57,8 @@ def mystery_argparse(argv: list[str] | None = None):
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
+    parser.add_argument("--output-option-yamls", action="store_true",
+                        help="Output rolled player options to yaml (useful if using randomised options).")
     args = parser.parse_args(argv)
 
     if args.skip_output and args.spoiler_only:
