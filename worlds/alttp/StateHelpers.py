@@ -146,8 +146,7 @@ def can_kill_standard_start(state: CollectionState, player: int, enemies: int = 
                 or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
                 or state.has_any(["Bow", "Progressive Bow"], player)
                 or state.has('Fire Rod', player)
-                or (state.multiworld.worlds[player].options.enemy_health in ("easy", "default")
-                    and can_use_bombs(state, player, enemies * 4)))
+                or can_use_bombs(state, player, enemies)) # Escape assist is set
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:
