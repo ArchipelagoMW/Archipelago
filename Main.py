@@ -33,35 +33,6 @@ def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfileb
     
     logger = logging.getLogger()
     
-    def plando_item_to_dict(item: PlandoItem) -> dict:
-        """Convert a PlandoItem dataclass to a dictionary for YAML export."""
-        # Use asdict to convert the dataclass to a dict
-        result = asdict(item)
-        
-        # Handle items - single item can be shown as "item: value" instead of "items: [value]"
-        if isinstance(result.get("items"), list) and len(result["items"]) == 1:
-            result["item"] = result["items"][0]
-            del result["items"]
-        
-        # Handle locations - single location can be shown as "location: value" instead of "locations: [value]"
-        if isinstance(result.get("locations"), list) and len(result["locations"]) == 1:
-            result["location"] = result["locations"][0]
-            del result["locations"]
-        
-        # Remove default values to keep YAML clean
-        if result.get("from_pool") == True:  # default is True
-            del result["from_pool"]
-        if result.get("force") == "silent":  # default is "silent"
-            del result["force"]
-        if result.get("world") is False:  # default is False
-            del result["world"]
-        if result.get("count") is False:  # default is False
-            del result["count"]
-        if result.get("percentage") == 100:  # default is 100
-            del result["percentage"]
-        
-        return result
-    
     for player in multiworld.player_ids:
         world = multiworld.worlds[player]
         player_name = multiworld.get_player_name(player)
