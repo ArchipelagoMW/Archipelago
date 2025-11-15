@@ -162,14 +162,14 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
 [Hero] Switch version hero mode, double damage, no heart/fairy drops.
 [One hit KO] You die on a single hit, always."""),
             Setting('steal', 'Gameplay', 't', 'Stealing from the shop',
-                options=[('always', 'a', 'Always'), ('never', 'n', 'Never'), ('default', '', 'Normal')], default='default',
-                description="""Effects when you can steal from the shop. Stealing is bad and never in logic.
+                options=[('inlogic', 'a', 'In logic'), ('disabled', 'n', 'Disabled'), ('outoflogic', '', 'Out of logic')], default='outoflogic',
+                description="""Effects when you can steal from the shop and if it is in logic.
 [Normal] requires the sword before you can steal.
 [Always] you can always steal from the shop
 [Never] you can never steal from the shop."""),
             Setting('bowwow', 'Special', 'g', 'Good boy mode', options=[('normal', '', 'Disabled'), ('always', 'a', 'Enabled'), ('swordless', 's', 'Enabled (swordless)')], default='normal',
                 description='Allows BowWow to be taken into any area, damage bosses and more enemies. If enabled you always start with bowwow. Swordless option removes the swords from the game and requires you to beat the game without a sword and just bowwow.'),
-            Setting('overworld', 'Special', 'O', 'Overworld', options=[('normal', '', 'Normal'), ('dungeondive', 'D', 'Dungeon dive'), ('nodungeons', 'N', 'No dungeons'), ('random', 'R', 'Randomized')], default='normal',
+            Setting('overworld', 'Special', 'O', 'Overworld', options=[('normal', '', 'Normal'), ('dungeondive', 'D', 'Dungeon dive'), ('nodungeons', 'N', 'No dungeons'), ('random', 'R', 'Randomized'), ('openmabe', 'M', 'Open Mabe')], default='normal',
                 description="""
 [Dungeon Dive] Create a different overworld where all the dungeons are directly accessible and almost no chests are located in the overworld.
 [No dungeons] All dungeons only consist of a boss fight and a instrument reward. Rest of the dungeon is removed.
@@ -181,7 +181,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
             Setting('quickswap', 'User options', 'Q', 'Quickswap', options=[('none', '', 'Disabled'), ('a', 'a', 'Swap A button'), ('b', 'b', 'Swap B button')], default='none',
                 description='Adds that the select button swaps with either A or B. The item is swapped with the top inventory slot. The map is not available when quickswap is enabled.',
                 aesthetic=True),
-            Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('default', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
+            Setting('textmode', 'User options', 'f', 'Text mode', options=[('fast', '', 'Fast'), ('normal', 'd', 'Normal'), ('none', 'n', 'No-text')], default='fast',
                 description="""[Fast] makes text appear twice as fast.
 [No-Text] removes all text from the game""", aesthetic=True),
             Setting('lowhpbeep', 'User options', 'p', 'Low HP beeps', options=[('none', 'D', 'Disabled'), ('slow', 'S', 'Slow'), ('default', 'N', 'Normal')], default='slow',
@@ -286,7 +286,7 @@ Note, some entrances can lead into water, use the warp-to-home from the save&qui
         if self.goal in ("bingo", "bingo-full"):
             req("overworld", "normal", "Bingo goal does not work with dungeondive")
             req("accessibility", "all", "Bingo goal needs 'all' accessibility")
-            dis("steal", "never", "default", "With bingo goal, stealing should be allowed")
+            dis("steal", "disabled", "default", "With bingo goal, stealing should be allowed")
             dis("boss", "random", "shuffle", "With bingo goal, bosses need to be on normal or shuffle")
             dis("miniboss", "random", "shuffle", "With bingo goal, minibosses need to be on normal or shuffle")
         if self.overworld == "dungeondive":

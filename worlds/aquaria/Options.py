@@ -15,7 +15,10 @@ class IngredientRandomizer(Choice):
     """
     display_name = "Randomize Ingredients"
     option_off = 0
+    alias_false = 0
     option_common_ingredients = 1
+    alias_on = 1
+    alias_true = 1
     option_all_ingredients = 2
     default = 0
 
@@ -29,14 +32,43 @@ class TurtleRandomizer(Choice):
     """Randomize the transportation turtle."""
     display_name = "Turtle Randomizer"
     option_none = 0
+    alias_off = 0
+    alias_false = 0
     option_all = 1
     option_all_except_final = 2
+    alias_on = 2
+    alias_true = 2
     default = 2
 
 
-class EarlyEnergyForm(DefaultOnToggle):
-    """ Force the Energy Form to be in a location early in the game """
-    display_name = "Early Energy Form"
+class EarlyBindSong(Choice):
+    """
+    Force the Bind song to be in a location early in the multiworld (or directly in your world if Early and Local is
+    selected).
+    """
+    display_name = "Early Bind song"
+    option_off = 0
+    alias_false = 0
+    option_early = 1
+    alias_on = 1
+    alias_true = 1
+    option_early_and_local = 2
+    default = 1
+
+
+class EarlyEnergyForm(Choice):
+    """
+    Force the Energy form to be in a location early in the multiworld (or directly in your world if Early and Local is
+    selected).
+    """
+    display_name = "Early Energy form"
+    option_off = 0
+    alias_false = 0
+    option_early = 1
+    alias_on = 1
+    alias_true = 1
+    option_early_and_local = 2
+    default = 1
 
 
 class AquarianTranslation(Toggle):
@@ -47,7 +79,7 @@ class AquarianTranslation(Toggle):
 class BigBossesToBeat(Range):
     """
     The number of big bosses to beat before having access to the creator (the final boss). The big bosses are
-    "Fallen God", "Mithalan God", "Drunian God", "Sun God" and "The Golem".
+    "Fallen God", "Mithalan God", "Drunian God", "Lumerean God" and "The Golem".
     """
     display_name = "Big bosses to beat"
     range_start = 0
@@ -104,7 +136,7 @@ class LightNeededToGetToDarkPlaces(DefaultOnToggle):
     display_name = "Light needed to get to dark places"
 
 
-class BindSongNeededToGetUnderRockBulb(Toggle):
+class BindSongNeededToGetUnderRockBulb(DefaultOnToggle):
     """
     Make sure that the bind song can be acquired before having to obtain sing bulbs under rocks.
     """
@@ -121,13 +153,18 @@ class BlindGoal(Toggle):
 
 class UnconfineHomeWater(Choice):
     """
-    Open the way out of the Home Water area so that Naija can go to open water and beyond without the bind song.
+    Open the way out of the Home Waters area so that Naija can go to open water and beyond without the bind song.
+    Note that if you turn this option off, it is recommended to turn on the Early Energy form and Early Bind Song
+    options.
     """
-    display_name = "Unconfine Home Water Area"
+    display_name = "Unconfine Home Waters Area"
     option_off = 0
+    alias_false = 0
     option_via_energy_door = 1
     option_via_transturtle = 2
     option_via_both = 3
+    alias_on = 3
+    alias_true = 3
     default = 0
 
 
@@ -142,6 +179,7 @@ class AquariaOptions(PerGameCommonOptions):
     big_bosses_to_beat: BigBossesToBeat
     turtle_randomizer: TurtleRandomizer
     early_energy_form: EarlyEnergyForm
+    early_bind_song: EarlyBindSong
     light_needed_to_get_to_dark_places: LightNeededToGetToDarkPlaces
     bind_song_needed_to_get_under_rock_bulb: BindSongNeededToGetUnderRockBulb
     unconfine_home_water: UnconfineHomeWater

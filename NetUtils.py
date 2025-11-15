@@ -1,13 +1,23 @@
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 import typing
 import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
-import websockets
+if typing.TYPE_CHECKING:
+    from websockets import WebSocketServerProtocol as ServerConnection
 
 from Utils import ByValue, Version
+
+
+class HintStatus(ByValue, enum.IntEnum):
+    HINT_UNSPECIFIED = 0
+    HINT_NO_PRIORITY = 10
+    HINT_AVOID = 20
+    HINT_PRIORITY = 30
+    HINT_FOUND = 40
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -19,6 +29,8 @@ class JSONMessagePart(typing.TypedDict, total=False):
     player: int
     # if type == item indicates item flags
     flags: int
+    # if type == hint_status
+    hint_status: HintStatus
 
 
 class ClientStatus(ByValue, enum.IntEnum):
@@ -72,7 +84,7 @@ class NetworkSlot(typing.NamedTuple):
     name: str
     game: str
     type: SlotType
-    group_members: typing.Union[typing.List[int], typing.Tuple] = ()  # only populated if type == group
+    group_members: Sequence[int] = ()  # only populated if type == group
 
 
 class NetworkItem(typing.NamedTuple):
@@ -93,6 +105,27 @@ def _scan_for_TypedTuples(obj: typing.Any) -> typing.Any:
     if isinstance(obj, dict):
         return {key: _scan_for_TypedTuples(value) for key, value in obj.items()}
     return obj
+
+
+_base_types = str | int | bool | float | None | tuple["_base_types", ...] | dict["_base_types", "base_types"]
+
+
+def convert_to_base_types(obj: typing.Any) -> _base_types:
+    if isinstance(obj, (tuple, list, set, frozenset)):
+        return tuple(convert_to_base_types(o) for o in obj)
+    elif isinstance(obj, dict):
+        return {convert_to_base_types(key): convert_to_base_types(value) for key, value in obj.items()}
+    elif obj is None or type(obj) in (str, int, float, bool):
+        return obj
+    # unwrap simple types to their base, such as StrEnum
+    elif isinstance(obj, str):
+        return str(obj)
+    elif isinstance(obj, int):
+        return int(obj)
+    elif isinstance(obj, float):
+        return float(obj)
+    else:
+        raise Exception(f"Cannot handle {type(obj)}")
 
 
 _encode = JSONEncoder(
@@ -141,7 +174,9 @@ decode = JSONDecoder(object_hook=_object_hook).decode
 
 
 class Endpoint:
-    socket: websockets.WebSocketServerProtocol
+    __slots__ = ("socket",)
+
+    socket: "ServerConnection"
 
     def __init__(self, socket):
         self.socket = socket
@@ -184,6 +219,7 @@ class JSONTypes(str, enum.Enum):
     location_name = "location_name"
     location_id = "location_id"
     entrance_name = "entrance_name"
+    hint_status = "hint_status"
 
 
 class JSONtoTextParser(metaclass=HandlerMeta):
@@ -224,7 +260,7 @@ class JSONtoTextParser(metaclass=HandlerMeta):
 
     def _handle_player_id(self, node: JSONMessagePart):
         player = int(node["text"])
-        node["color"] = 'magenta' if player == self.ctx.slot else 'yellow'
+        node["color"] = 'magenta' if self.ctx.slot_concerns_self(player) else 'yellow'
         node["text"] = self.ctx.player_names[player]
         return self._handle_color(node)
 
@@ -265,6 +301,10 @@ class JSONtoTextParser(metaclass=HandlerMeta):
         node["color"] = 'blue'
         return self._handle_color(node)
 
+    def _handle_hint_status(self, node: JSONMessagePart):
+        node["color"] = status_colors.get(node["hint_status"], "red")
+        return self._handle_color(node)
+
 
 class RawJSONtoTextParser(JSONtoTextParser):
     def _handle_color(self, node: JSONMessagePart):
@@ -297,6 +337,27 @@ def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) 
     parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
+status_names: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "(found)",
+    HintStatus.HINT_UNSPECIFIED: "(unspecified)",
+    HintStatus.HINT_NO_PRIORITY: "(no priority)",
+    HintStatus.HINT_AVOID: "(avoid)",
+    HintStatus.HINT_PRIORITY: "(priority)",
+}
+status_colors: typing.Dict[HintStatus, str] = {
+    HintStatus.HINT_FOUND: "green",
+    HintStatus.HINT_UNSPECIFIED: "white",
+    HintStatus.HINT_NO_PRIORITY: "slateblue",
+    HintStatus.HINT_AVOID: "salmon",
+    HintStatus.HINT_PRIORITY: "plum",
+}
+
+
+def add_json_hint_status(parts: list, hint_status: HintStatus, text: typing.Optional[str] = None, **kwargs):
+    parts.append({"text": text if text != None else status_names.get(hint_status, "(unknown)"),
+                  "hint_status": hint_status, "type": JSONTypes.hint_status, **kwargs})
+
+
 class Hint(typing.NamedTuple):
     receiving_player: int
     finding_player: int
@@ -305,14 +366,21 @@ class Hint(typing.NamedTuple):
     found: bool
     entrance: str = ""
     item_flags: int = 0
+    status: HintStatus = HintStatus.HINT_UNSPECIFIED
 
     def re_check(self, ctx, team) -> Hint:
-        if self.found:
+        if self.found and self.status == HintStatus.HINT_FOUND:
             return self
         found = self.location in ctx.location_checks[team, self.finding_player]
         if found:
-            return Hint(self.receiving_player, self.finding_player, self.location, self.item, found, self.entrance,
-                        self.item_flags)
+            return self._replace(found=found, status=HintStatus.HINT_FOUND)
+        return self
+    
+    def re_prioritize(self, ctx, status: HintStatus) -> Hint:
+        if self.found and status != HintStatus.HINT_FOUND:
+            status = HintStatus.HINT_FOUND
+        if status != self.status:
+            return self._replace(status=status)
         return self
 
     def __hash__(self):
@@ -334,10 +402,7 @@ class Hint(typing.NamedTuple):
         else:
             add_json_text(parts, "'s World")
         add_json_text(parts, ". ")
-        if self.found:
-            add_json_text(parts, "(found)", type="color", color="green")
-        else:
-            add_json_text(parts, "(not found)", type="color", color="red")
+        add_json_hint_status(parts, self.status)
 
         return {"cmd": "PrintJSON", "data": parts, "type": "Hint",
                 "receiving": self.receiving_player,
@@ -383,6 +448,8 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         checked = state[team, slot]
         if not checked:
             # This optimizes the case where everyone connects to a fresh game at the same time.
+            if slot not in self:
+                raise KeyError(slot)
             return []
         return [location_id for
                 location_id in self[slot] if
@@ -405,6 +472,42 @@ class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tu
         return sorted([(player_locations[location_id][1], player_locations[location_id][0]) for
                         location_id in player_locations if
                         location_id not in checked])
+
+
+class MinimumVersions(typing.TypedDict):
+    server: tuple[int, int, int]
+    clients: dict[int, tuple[int, int, int]]
+
+
+class GamesPackage(typing.TypedDict, total=False):
+    item_name_groups: dict[str, list[str]]
+    item_name_to_id: dict[str, int]
+    location_name_groups: dict[str, list[str]]
+    location_name_to_id: dict[str, int]
+    checksum: str
+
+
+class DataPackage(typing.TypedDict):
+    games: dict[str, GamesPackage]
+
+
+class MultiData(typing.TypedDict):
+    slot_data: dict[int, Mapping[str, typing.Any]]
+    slot_info: dict[int, NetworkSlot]
+    connect_names: dict[str, tuple[int, int]]
+    locations: dict[int, dict[int, tuple[int, int, int]]]
+    checks_in_area: dict[int, dict[str, int | list[int]]]
+    server_options: dict[str, object]
+    er_hint_data: dict[int, dict[int, str]]
+    precollected_items: dict[int, list[int]]
+    precollected_hints: dict[int, set[Hint]]
+    version: tuple[int, int, int]
+    tags: list[str]
+    minimum_versions: MinimumVersions
+    seed_name: str
+    spheres: list[dict[int, set[int]]]
+    datapackage: dict[str, GamesPackage]
+    race_mode: int
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub

@@ -2,7 +2,7 @@ from typing import List, TYPE_CHECKING, Dict, Any
 from schema import Schema, Optional
 from dataclasses import dataclass
 from worlds.AutoWorld import PerGameCommonOptions
-from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup
+from Options import Range, Toggle, DeathLink, Choice, OptionDict, DefaultOnToggle, OptionGroup, StartInventoryPool
 
 if TYPE_CHECKING:
     from . import HatInTimeWorld
@@ -338,7 +338,7 @@ class MinExtraYarn(Range):
     There must be at least this much more yarn over the total number of yarn needed to craft all hats.
     For example, if this option's value is 10, and the total yarn needed to craft all hats is 40,
     there must be at least 50 yarn in the pool."""
-    display_name = "Max Extra Yarn"
+    display_name = "Min Extra Yarn"
     range_start = 5
     range_end = 15
     default = 10
@@ -623,8 +623,27 @@ class ParadeTrapWeight(Range):
     default = 20
 
 
+class DeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link.
+    0 means that every death will send a Death Link."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 20
+    default = 0
+
+
+class DWDeathLinkAmnesty(Range):
+    """Amount of forgiven deaths before sending a Death Link during Death Wish levels."""
+    display_name = "Death Wish Amnesty"
+    range_start = 0
+    range_end = 30
+    default = 5
+
+
 @dataclass
 class AHITOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+
     EndGoal:                  EndGoal
     ActRandomizer:            ActRandomizer
     ActPlando:                ActPlando
@@ -698,6 +717,8 @@ class AHITOptions(PerGameCommonOptions):
     ParadeTrapWeight:         ParadeTrapWeight
 
     death_link:               DeathLink
+    death_link_amnesty:       DeathLinkAmnesty
+    dw_death_link_amnesty:    DWDeathLinkAmnesty
 
 
 ahit_option_groups: Dict[str, List[Any]] = {
@@ -767,4 +788,6 @@ slot_data_options: List[str] = [
     "MaxPonCost",
 
     "death_link",
+    "death_link_amnesty",
+    "dw_death_link_amnesty",
 ]

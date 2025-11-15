@@ -5,6 +5,8 @@ Description: Unit test used to test accessibility of locations with and without 
 """
 
 from . import AquariaTestBase
+from ..Items import ItemNames
+from ..Locations import AquariaLocationNames
 
 
 class BeastForArnassiArmormAccessTest(AquariaTestBase):
@@ -13,27 +15,27 @@ class BeastForArnassiArmormAccessTest(AquariaTestBase):
     def test_beast_form_arnassi_armor_location(self) -> None:
         """Test locations that require beast form or arnassi armor"""
         locations = [
-            "Mithalas City Castle, beating the Priests",
-            "Arnassi Ruins, Crab Armor",
-            "Arnassi Ruins, Song Plant Spore",
-            "Mithalas City, first bulb at the end of the top path",
-            "Mithalas City, second bulb at the end of the top path",
-            "Mithalas City, bulb in the top path",
-            "Mithalas City, Mithalas Pot",
-            "Mithalas City, urn in the Castle flower tube entrance",
-            "Mermog cave, Piranha Egg",
-            "Mithalas Cathedral, Mithalan Dress",
-            "Kelp Forest top left area, Jelly Egg",
-            "The Veil top right area, bulb in the middle of the wall jump cliff",
-            "The Veil top right area, bulb at the top of the waterfall",
-            "Sunken City, bulb on top of the boss area",
-            "Octopus Cave, Dumbo Egg",
-            "Beating the Golem",
-            "Beating Mergog",
-            "Beating Crabbius Maximus",
-            "Beating Octopus Prime",
-            "Beating Mithalan priests",
-            "Sunken City cleared"
+            AquariaLocationNames.MITHALAS_CITY_CASTLE_BEATING_THE_PRIESTS,
+            AquariaLocationNames.ARNASSI_RUINS_CRAB_ARMOR,
+            AquariaLocationNames.ARNASSI_RUINS_SONG_PLANT_SPORE,
+            AquariaLocationNames.MITHALAS_CITY_FIRST_BULB_AT_THE_END_OF_THE_TOP_PATH,
+            AquariaLocationNames.MITHALAS_CITY_SECOND_BULB_AT_THE_END_OF_THE_TOP_PATH,
+            AquariaLocationNames.MITHALAS_CITY_BULB_IN_THE_TOP_PATH,
+            AquariaLocationNames.MITHALAS_CITY_MITHALAS_POT,
+            AquariaLocationNames.MITHALAS_CITY_URN_IN_THE_CASTLE_FLOWER_TUBE_ENTRANCE,
+            AquariaLocationNames.MERMOG_CAVE_PIRANHA_EGG,
+            AquariaLocationNames.MITHALAS_CATHEDRAL_MITHALAN_DRESS,
+            AquariaLocationNames.KELP_FOREST_TOP_LEFT_AREA_JELLY_EGG,
+            AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_IN_THE_MIDDLE_OF_THE_WALL_JUMP_CLIFF,
+            AquariaLocationNames.THE_VEIL_TOP_RIGHT_AREA_BULB_AT_THE_TOP_OF_THE_WATERFALL,
+            AquariaLocationNames.SUNKEN_CITY_BULB_ON_TOP_OF_THE_BOSS_AREA,
+            AquariaLocationNames.OCTOPUS_CAVE_DUMBO_EGG,
+            AquariaLocationNames.BEATING_THE_GOLEM,
+            AquariaLocationNames.BEATING_MERGOG,
+            AquariaLocationNames.BEATING_CRABBIUS_MAXIMUS,
+            AquariaLocationNames.BEATING_OCTOPUS_PRIME,
+            AquariaLocationNames.BEATING_MITHALAN_PRIESTS,
+            AquariaLocationNames.SUNKEN_CITY_CLEARED
         ]
-        items = [["Beast form", "Arnassi Armor"]]
+        items = [[ItemNames.BEAST_FORM, ItemNames.ARNASSI_ARMOR]]
         self.assertAccessDependency(locations, items)

@@ -1,15 +1,15 @@
-from typing import Dict, List, Set, NamedTuple, Optional
+from typing import NamedTuple
 
 
 # ladders in overworld, since it is the most complex area for ladder storage
 class OWLadderInfo(NamedTuple):
-    ladders: Set[str]  # ladders where the top or bottom is at the same elevation
-    portals: List[str]  # portals at the same elevation, only those without doors
-    regions: List[str]  # regions where a melee enemy can hit you out of ladder storage
+    ladders: set[str]  # ladders where the top or bottom is at the same elevation
+    portals: list[str]  # portals at the same elevation, only those without doors
+    regions: list[str]  # regions where a melee enemy can hit you out of ladder storage
 
 
 # groups for ladders at the same elevation, for use in determing whether you can ls to entrances in diff rulesets
-ow_ladder_groups: Dict[str, OWLadderInfo] = {
+ow_ladder_groups: dict[str, OWLadderInfo] = {
     # lowest elevation
     "LS Elev 0": OWLadderInfo({"Ladders in Overworld Town", "Ladder to Ruined Atoll", "Ladder to Swamp"},
                               ["Swamp Redux 2_conduit", "Overworld Cave_", "Atoll Redux_lower", "Maze Room_",
@@ -17,7 +17,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
                               ["Overworld Beach"]),
     # also the east filigree room
     "LS Elev 1": OWLadderInfo({"Ladders near Weathervane", "Ladders in Overworld Town", "Ladder to Swamp"},
-                              ["Furnace_gyro_lower", "Swamp Redux 2_wall"],
+                              ["Furnace_gyro_lower", "Furnace_gyro_west", "Swamp Redux 2_wall"],
                               ["Overworld Tunnel Turret"]),
     # also the fountain filigree room and ruined passage door
     "LS Elev 2": OWLadderInfo({"Ladders near Weathervane", "Ladders to West Bell"},
@@ -49,7 +49,7 @@ ow_ladder_groups: Dict[str, OWLadderInfo] = {
 
 # ladders accessible within different regions of overworld, only those that are relevant
 # other scenes will just have them hardcoded since this type of structure is not necessary there
-region_ladders: Dict[str, Set[str]] = {
+region_ladders: dict[str, set[str]] = {
     "Overworld": {"Ladders near Weathervane", "Ladders near Overworld Checkpoint", "Ladders near Dark Tomb",
                   "Ladders in Overworld Town", "Ladder to Swamp", "Ladders in Well"},
     "Overworld Beach": {"Ladder to Ruined Atoll"},
@@ -63,11 +63,11 @@ region_ladders: Dict[str, Set[str]] = {
 class LadderInfo(NamedTuple):
     origin: str  # origin region
     destination: str  # destination portal
-    ladders_req: Optional[str] = None  # ladders required to do this
+    ladders_req: str | None = None  # ladders required to do this
     dest_is_region: bool = False  # whether it is a region that you are going to
 
 
-easy_ls: List[LadderInfo] = [
+easy_ls: list[LadderInfo] = [
     # In the furnace
     # Furnace ladder to the fuse entrance
     LadderInfo("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north"),
@@ -78,9 +78,11 @@ easy_ls: List[LadderInfo] = [
 
     # West Garden
     # exit after Garden Knight
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_upper"),
+    LadderInfo("West Garden before Boss", "Archipelagos Redux, Overworld Redux_upper"),
     # West Garden laurels exit
-    LadderInfo("West Garden", "Archipelagos Redux, Overworld Redux_lowest"),
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, Overworld Redux_lowest"),
+    # Magic dagger house, only relevant with combat logic on
+    LadderInfo("West Garden after Terry", "Archipelagos Redux, archipelagos_house_"),
 
     # Atoll, use the little ladder you fix at the beginning
     LadderInfo("Ruined Atoll", "Atoll Redux, Overworld Redux_lower"),
@@ -126,7 +128,7 @@ easy_ls: List[LadderInfo] = [
 ]
 
 # if we can gain elevation or get knocked down, add the harder ones
-medium_ls: List[LadderInfo] = [
+medium_ls: list[LadderInfo] = [
     # region-destination versions of easy ls spots
     LadderInfo("East Forest", "East Forest Dance Fox Spot", dest_is_region=True),
     # fortress courtyard knockdowns are never logically relevant, the fuse requires upper
@@ -159,22 +161,23 @@ medium_ls: List[LadderInfo] = [
     LadderInfo("Quarry Back", "Quarry Redux, Monastery_back"),
 
     LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_2_"),
-    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Front", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Entry", dest_is_region=True),
+    LadderInfo("Rooted Ziggurat Lower Back", "Rooted Ziggurat Lower Mid Checkpoint", dest_is_region=True),
 
     # Swamp to Overworld upper
     LadderInfo("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall", "Ladders in Swamp"),
     LadderInfo("Back of Swamp", "Swamp Redux 2, Overworld Redux_wall"),
 ]
 
-hard_ls: List[LadderInfo] = [
+hard_ls: list[LadderInfo] = [
     # lower ladder, go into the waterfall then above the bonfire, up a ramp, then through the right wall
     LadderInfo("Beneath the Well Front", "Sewer, Sewer_Boss_", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Sewer, Overworld Redux_west_aqueduct", "Ladders in Well"),
     LadderInfo("Beneath the Well Front", "Beneath the Well Back", "Ladders in Well", dest_is_region=True),
     # go through the hexagon engraving above the vault door
-    LadderInfo("Frog's Domain", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
+    LadderInfo("Frog's Domain Front", "frog cave main, Frog Stairs_Exit", "Ladders to Frog's Domain"),
     # the turret at the end here is not affected by enemy rando
-    LadderInfo("Frog's Domain", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
+    LadderInfo("Frog's Domain Front", "Frog's Domain Back", "Ladders to Frog's Domain", dest_is_region=True),
     # todo: see if we can use that new laurels strat here
     # LadderInfo("Rooted Ziggurat Lower Back", "ziggurat2020_3, ziggurat2020_FTRoom_"),
     # go behind the cathedral to reach the door, pretty easily doable
