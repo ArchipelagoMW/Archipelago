@@ -723,7 +723,7 @@ class Range(NumericOption):
             return cls(0)
 
         try:
-            return cls(int(text))
+            num = int(text)
         except ValueError:
             # text is not a number
             # Handle conditionally acceptable values here rather than in the f-string
@@ -736,6 +736,8 @@ class Range(NumericOption):
             raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
                             f"<int>{default}, high, low{truefalse}, "
                             f"{', '.join(cls._RANDOM_OPTS)}.")
+
+        return cls(num)
 
 
     @classmethod
