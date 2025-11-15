@@ -1168,7 +1168,7 @@ def set_endgame_locations_rules(logic: StardewLogic, rule_collector: StardewRule
             rule_collector.set_location_rule("Purchase Key To The Town", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 20))
             rule_collector.set_location_rule("Purchase Mini-Shipping Bin", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 60))
             rule_collector.set_location_rule("Purchase Exotic Double Bed", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 50))
-            rule_collector.set_location_rule("Purchase Golden Egg", logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
+            rule_collector.set_location_rule("Purchase Golden Egg", logic.received(AnimalProduct.golden_egg) & logic.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100))
 
 
 def set_friendsanity_rules(logic: StardewLogic, rule_collector: StardewRuleCollector, content: StardewContent):
