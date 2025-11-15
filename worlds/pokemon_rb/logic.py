@@ -34,7 +34,7 @@ def can_flash(state, world, player):
 
 def can_learn_hm(state, world, move, player):
     hm_mons = world.local_hm_mons_cache[move]
-    return hm_mons and state.has_any(hm_mons, player)
+    return state.has_any(hm_mons, player)
 
 
 def can_get_hidden_items(state, world, player):
