@@ -1228,7 +1228,7 @@ if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         SC2WOL_ITEM_ID_OFFSET = 1000
         SC2HOTS_ITEM_ID_OFFSET = 2000
-        SC2LOTV_ITEM_ID_OFFSET = 2000
+        SC2LOTV_ITEM_ID_OFFSET = 3000
         SC2_KEY_ITEM_ID_OFFSET = 4000
         NCO_LOCATION_ID_LOW = 20004500
         NCO_LOCATION_ID_HIGH = NCO_LOCATION_ID_LOW + 1000
