@@ -398,7 +398,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
 
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
-        spear_of_adun_actives = [item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_calldowns]
+        spear_of_adun_actives = [item_name for item_name in world_item_names if item_name in item_groups.spear_of_adun_actives]
 
         self.assertLessEqual(len(spear_of_adun_actives), target_number)
 
@@ -419,7 +419,7 @@ class TestSupportedUseCases(Sc2SetupTestBase):
         self.generate_world(world_options)
         world_item_names = [item.name for item in self.multiworld.itempool]
         spear_of_adun_autocasts = [
-            item_name for item_name in world_item_names if item_name in item_tables.spear_of_adun_passives
+            item_name for item_name in world_item_names if item_name in item_groups.spear_of_adun_passives
         ]
 
         self.assertLessEqual(len(spear_of_adun_autocasts), target_number)
