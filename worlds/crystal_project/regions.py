@@ -932,87 +932,50 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                          DIONE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, THE_SEQUOIA_AP_REGION, THE_CHALICE_OF_TAR_AP_REGION,
                          THE_OPEN_SEA_AP_REGION,  CONTINENTAL_TRAM_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION,
                          NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
-                        {SPAWNING_MEADOWS_AP_REGION: lambda state: (options.regionsanity.value == options.regionsanity.option_disabled
-                                                                    or state.has("HomePoint - AP Spawn Point", world.player)
-                                                                    or state.has("HomePoint - Old Nan's Watering Hole", world.player)),
-                         DELENDE_PLAINS_AP_REGION: lambda state: (state.has("HomePoint - The Pale Grotto Entrance", world.player)
-                                                                  or state.has("HomePoint - Soiled Den", world.player)
-                                                                  or state.has("HomePoint - Fish Hatchery", world.player)),
-                         DELENDE_HIGH_BRIDGES_AP_REGION: lambda state: (
-                                     state.has("HomePoint - Cabin On The Cliff", world.player)
-                                     or state.has("HomePoint - Delende Falls", world.player)),
+                        {SPAWNING_MEADOWS_AP_REGION: lambda state: (options.regionsanity.value == options.regionsanity.option_disabled or state.has("HomePoint - AP Spawn Point", world.player) or state.has("HomePoint - Old Nan's Watering Hole", world.player)),
+                         DELENDE_PLAINS_AP_REGION: lambda state: (state.has("HomePoint - The Pale Grotto Entrance", world.player) or state.has("HomePoint - Soiled Den", world.player) or state.has("HomePoint - Fish Hatchery", world.player)),
+                         DELENDE_HIGH_BRIDGES_AP_REGION: lambda state: (state.has("HomePoint - Cabin On The Cliff", world.player) or state.has("HomePoint - Delende Falls", world.player)),
                          DELENDE_PEAK_AP_REGION: lambda state: state.has("HomePoint - Delende Peak", world.player),
-                         MERCURY_SHRINE_AP_REGION: lambda state: (state.has(MERCURY_STONE, world.player)
-                                                                  or state.has("HomePoint - Mercury Shrine", world.player)),
+                         MERCURY_SHRINE_AP_REGION: lambda state: (state.has(MERCURY_STONE, world.player) or state.has("HomePoint - Mercury Shrine", world.player)),
                          THE_PALE_GROTTO_AP_REGION: lambda state: state.has("HomePoint - The Pale Grotto Ruins", world.player),
                          SEASIDE_CLIFFS_AP_REGION: lambda state: state.has("HomePoint - Seaside Cliffs Camp", world.player),
                          YAMAGAWA_MA_AP_REGION: lambda state: state.has("HomePoint - Yamagawa M.A. Summit", world.player),
                          PROVING_MEADOWS_AP_REGION: lambda state: state.has("HomePoint - Proving Meadows Camp", world.player),
-                         SKUMPARADISE_AP_REGION: lambda state: (state.has("HomePoint - Skumparadise Entrance", world.player)
-                                                                or state.has("HomePoint - Skumparadise Depths", world.player)),
-                         CAPITAL_SEQUOIA_AP_REGION: lambda state: (state.has(GAEA_STONE, world.player)
-                                                                   or state.has("HomePoint - Skumparadise Exit", world.player)
-                                                                   or state.has("HomePoint - Gaea Shrine", world.player)
-                                                                   or state.has("HomePoint - East Market District", world.player)
-                                                                   or state.has("HomePoint - Bulletin Square", world.player)
-                                                                   or state.has("HomePoint - Know-It-All Ducks' House", world.player)
-                                                                   or state.has("HomePoint - West Market District", world.player)
-                                                                   or state.has("HomePoint - Training Grounds", world.player)),
-                         CAPITAL_JAIL_AP_REGION: lambda state: (state.has("HomePoint - Capital Jail Entrance", world.player)
-                                                                or state.has("HomePoint - Capital Jail Dark Wing", world.player)),
-                         ROLLING_QUINTAR_FIELDS_AP_REGION: lambda state: (state.has("HomePoint - Quintar Enthusiast's House", world.player)
-                                                                or state.has("HomePoint - Rent-A-Quintar", world.player)
-                                                                or state.has("HomePoint - Quintar Sanctum", world.player)),
+                         SKUMPARADISE_AP_REGION: lambda state: (state.has("HomePoint - Skumparadise Entrance", world.player) or state.has("HomePoint - Skumparadise Depths", world.player)),
+                         CAPITAL_SEQUOIA_AP_REGION: lambda state: (state.has(GAEA_STONE, world.player) or state.has("HomePoint - Skumparadise Exit", world.player) or state.has("HomePoint - Gaea Shrine", world.player) or state.has("HomePoint - East Market District", world.player) or state.has("HomePoint - Bulletin Square", world.player) or state.has("HomePoint - Know-It-All Ducks' House", world.player) or state.has("HomePoint - West Market District", world.player) or state.has("HomePoint - Training Grounds", world.player)),
+                         CAPITAL_JAIL_AP_REGION: lambda state: (state.has("HomePoint - Capital Jail Entrance", world.player) or state.has("HomePoint - Capital Jail Dark Wing", world.player)),
+                         ROLLING_QUINTAR_FIELDS_AP_REGION: lambda state: (state.has("HomePoint - Quintar Enthusiast's House", world.player) or state.has("HomePoint - Rent-A-Quintar", world.player) or state.has("HomePoint - Quintar Sanctum", world.player)),
                          QUINTAR_SANCTUM_AP_REGION: lambda state: state.has("HomePoint - Quintar Nameko", world.player),
                          BOOMER_SOCIETY_AP_REGION: lambda state: state.has("HomePoint - Boomer Society", world.player),
-                         OKIMOTO_NS_AP_REGION: lambda state: (state.has("HomePoint - Okimoto N.S. Base", world.player)
-                                                                  or state.has("HomePoint - Ninja Yashiki", world.player)),
+                         OKIMOTO_NS_AP_REGION: lambda state: (state.has("HomePoint - Okimoto N.S. Base", world.player) or state.has("HomePoint - Ninja Yashiki", world.player)),
                          SALMON_PASS_EAST_AP_REGION: lambda state: state.has("HomePoint - Salmon Pass Entrance", world.player),
                          SALMON_RIVER_AP_REGION: lambda state: state.has("HomePoint - Salmon Shack", world.player),
                          CASTLE_SEQUOIA_AP_REGION: lambda state: state.has("HomePoint - Castle Sequoia Foyer", world.player),
                          POKO_POKO_DESERT_AP_REGION: lambda state: state.has(MARS_STONE, world.player),
                          TOWER_OF_ZOT_AP_REGION: lambda state: state.has("HomePoint - Labyrinth Encampment", world.player),
-                         SARA_SARA_BAZAAR_AP_REGION: lambda state: (state.has("HomePoint - Sara Sara Bazaar Port", world.player)
-                                                                   or state.has("HomePoint - Poko Poko West Gate", world.player)
-                                                                   or state.has("HomePoint - Poko Poko East Gate", world.player)),
+                         SARA_SARA_BAZAAR_AP_REGION: lambda state: (state.has("HomePoint - Sara Sara Bazaar Port", world.player) or state.has("HomePoint - Poko Poko West Gate", world.player) or state.has("HomePoint - Poko Poko East Gate", world.player)),
                          SARA_SARA_BEACH_EAST_AP_REGION: lambda state: state.has("HomePoint - Ibek's Cave", world.player),
                          SARA_SARA_BEACH_WEST_AP_REGION: lambda state: state.has("HomePoint - Beach Bird's Nest", world.player),
                          BEAURIOR_VOLCANO_AP_REGION: lambda state: state.has("HomePoint - Beaurior Rock", world.player),
-                         BEAURIOR_ROCK_AP_REGION: lambda state: (state.has("HomePoint - Beaurior Volcano Peak", world.player)
-                                                                 or state.has("HomePoint - Boss Room", world.player)),
-                         ANCIENT_RESERVOIR_AP_REGION: lambda state: (state.has("HomePoint - Ancient Reservoir Entrance", world.player)
-                                                                     or state.has("HomePoint - Main Reservoir Chamber", world.player)),
-                         SHOUDU_PROVINCE_AP_REGION: lambda state: (state.has("HomePoint - Shoudu Fields", world.player)
-                                                                   or state.has("HomePoint - Shoudu Market", world.player)
-                                                                   or state.has("HomePoint - Shoudu Port", world.player)
-                                                                   or state.has("HomePoint - Shanty Inn", world.player)
-                                                                   or state.has("HomePoint - Sky Arena", world.player)
-                                                                   or state.has("HomePoint - Prize Counter", world.player)
-                                                                   or state.has("HomePoint - Shoudu Elevator", world.player)),
-                         GANYMEDE_SHRINE_AP_REGION: lambda state: (state.has(GANYMEDE_STONE, world.player)
-                                                                   or state.has("HomePoint - Ganymede Shrine", world.player)),
+                         BEAURIOR_ROCK_AP_REGION: lambda state: (state.has("HomePoint - Beaurior Volcano Peak", world.player) or state.has("HomePoint - Boss Room", world.player)),
+                         ANCIENT_RESERVOIR_AP_REGION: lambda state: (state.has("HomePoint - Ancient Reservoir Entrance", world.player) or state.has("HomePoint - Main Reservoir Chamber", world.player)),
+                         SHOUDU_PROVINCE_AP_REGION: lambda state: (state.has("HomePoint - Shoudu Fields", world.player) or state.has("HomePoint - Shoudu Market", world.player) or state.has("HomePoint - Shoudu Port", world.player) or state.has("HomePoint - Shanty Inn", world.player) or state.has("HomePoint - Sky Arena", world.player) or state.has("HomePoint - Prize Counter", world.player) or state.has("HomePoint - Shoudu Elevator", world.player)),
+                         GANYMEDE_SHRINE_AP_REGION: lambda state: (state.has(GANYMEDE_STONE, world.player) or state.has("HomePoint - Ganymede Shrine", world.player)),
                          THE_UNDERCITY_AP_REGION: lambda state: state.has("HomePoint - The Undercity", world.player),
                          PIPELINE_NORTH_AP_REGION: lambda state: state.has("HomePoint - Capital Pipeline", world.player),
                          PIPELINE_SOUTH_AP_REGION: lambda state: state.has("HomePoint - East Capital Pipeline", world.player),
                          SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION: lambda state: state.has("HomePoint - Sequoia Athenaeum", world.player),
-                         LOWER_ICE_LAKES_AP_REGION: lambda state: (state.has("HomePoint - Ice Pass", world.player)
-                                                                   or state.has("HomePoint - Land's End Cottage", world.player)
-                                                                   or state.has("HomePoint - Ice Fisher's Hut", world.player)),
+                         LOWER_ICE_LAKES_AP_REGION: lambda state: (state.has("HomePoint - Ice Pass", world.player) or state.has("HomePoint - Land's End Cottage", world.player) or state.has("HomePoint - Ice Fisher's Hut", world.player)),
                          SOUVENIR_SHOP_AP_REGION: lambda state: state.has("HomePoint - Tall, Tall Souvenir Shop", world.player),
                          SLIP_GLIDE_RIDE_EXIT_AP_REGION: lambda state: state.has("HomePoint - Slip Glide Ride Exit", world.player),
-                         UPPER_ICE_LAKES_AP_REGION: lambda state: (state.has(TRITON_STONE, world.player)
-                                                                   or state.has("HomePoint - Triton Shrine", world.player)),
+                         UPPER_ICE_LAKES_AP_REGION: lambda state: (state.has(TRITON_STONE, world.player) or state.has("HomePoint - Triton Shrine", world.player)),
                          TALL_TALL_SAVE_POINT_AP_REGION: lambda state: state.has("HomePoint - Tall, Tall Heights", world.player),
-                         PEAK_RAMPARTS_AP_REGION: lambda state: (state.has("HomePoint - East Ramparts", world.player)
-                                                                 or state.has("HomePoint - West Ramparts", world.player)),
+                         PEAK_RAMPARTS_AP_REGION: lambda state: (state.has("HomePoint - East Ramparts", world.player) or state.has("HomePoint - West Ramparts", world.player)),
                          SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION: lambda state: state.has("HomePoint - Slip Glide Ride Entrance", world.player),
-                         LANDS_END_AP_REGION: lambda state: (state.has(CALLISTO_STONE, world.player)
-                                                                 or state.has("HomePoint - Summit Shrine", world.player)),
+                         LANDS_END_AP_REGION: lambda state: (state.has(CALLISTO_STONE, world.player) or state.has("HomePoint - Summit Shrine", world.player)),
                          QUINTAR_RESERVE_AP_REGION: lambda state: state.has("HomePoint - Dione Shrine", world.player),
-                         EUROPA_SHRINE_AP_REGION: lambda state: (state.has(EUROPA_STONE, world.player)
-                                                                 or state.has("HomePoint - Europa Shrine", world.player)),
-                         JIDAMBA_EACLANEYA_AP_REGION: lambda state: (state.has("HomePoint - Eaclaneya Entrance", world.player)
-                                                                     or state.has("HomePoint - Salmon Room", world.player)),
+                         EUROPA_SHRINE_AP_REGION: lambda state: (state.has(EUROPA_STONE, world.player) or state.has("HomePoint - Europa Shrine", world.player)),
+                         JIDAMBA_EACLANEYA_AP_REGION: lambda state: (state.has("HomePoint - Eaclaneya Entrance", world.player) or state.has("HomePoint - Salmon Room", world.player)),
                          LABYRINTH_CORE_AP_REGION: lambda state: state.has("HomePoint - Ancient Labyrinth Core", world.player),
                          DIONE_SHRINE_AP_REGION: lambda state: state.has("HomePoint - Flyer's Lookout", world.player),
                          DIONE_ROOF_AP_REGION: lambda state: state.has(DIONE_STONE, world.player),
@@ -1021,13 +984,9 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                          THE_OPEN_SEA_AP_REGION: lambda state: state.has("HomePoint - Sailor's Raft", world.player),
                          CONTINENTAL_TRAM_AP_REGION: lambda state: state.has("HomePoint - Platform A", world.player),
                          POSEIDON_SHRINE_ROOF_AP_REGION: lambda state: state.has(POSEIDON_STONE, world.player),
-                         NEPTUNE_SHRINE_AP_REGION: lambda state: (state.has(NEPTUNE_STONE, world.player)
-                                                                  or state.has("HomePoint - Neptune Shrine", world.player)),
+                         NEPTUNE_SHRINE_AP_REGION: lambda state: (state.has(NEPTUNE_STONE, world.player) or state.has("HomePoint - Neptune Shrine", world.player)),
                          THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
-                         THE_NEW_WORLD_AP_REGION: lambda state: (logic.new_world_requirements(state)
-                                                                 or state.has("HomePoint - Astley's Shrine", world.player)
-                                                                 or state.has("HomePoint - Astley's Keep", world.player)
-                                                                 or state.has("HomePoint - Discipline Hollow", world.player))
+                         THE_NEW_WORLD_AP_REGION: lambda state: (logic.new_world_requirements(state) or state.has("HomePoint - Astley's Shrine", world.player) or state.has("HomePoint - Astley's Keep", world.player) or state.has("HomePoint - Discipline Hollow", world.player))
                          })
     else:
         fancy_add_exits(world, MENU_AP_REGION,
