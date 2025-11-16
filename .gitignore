@@ -199,3 +199,4 @@ Thumbs.db
 
 # Crystal Project Mods Folder
 crystal_project_mods/
+/fuzz_output

@@ -98,7 +98,7 @@ class CrystalProjectLogic:
 
     def old_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_true_astley:
-            return self.has_swimming(state) and state.has(DEITY_EYE, self.player, 4) and state.has(STEM_WARD, self.player) and (self.options.regionsanity.value == self.options.regionsanity.option_disabled or state.has(THE_DEPTHS_PASS, self.player, 1))
+            return self.has_swimming(state) and state.has(DEITY_EYE, self.player, 4) and state.has(STEM_WARD, self.player) and state.can_reach(THE_DEPTHS_AP_REGION, player=self.player)
         else:
             return state.has(OLD_WORLD_STONE, self.player)
 

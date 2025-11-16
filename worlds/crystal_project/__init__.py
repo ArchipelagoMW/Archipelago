@@ -494,10 +494,10 @@ class CrystalProjectWorld(World):
                         (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
                         name == THE_NEW_WORLD_PASS):
                     amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
-                # Same goes for old world pass
+                # Same goes for old world pass, the depths pass, the deep sea pass, and the open sea pass (so you can get to Gabriel)
                 elif (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         self.options.goal.value == self.options.goal.option_true_astley and
-                        name == THE_OLD_WORLD_PASS):
+                        (name == THE_OLD_WORLD_PASS or name == THE_DEPTHS_PASS or name == THE_DEEP_SEA_PASS or name == THE_OPEN_SEA_PASS)):
                     amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                 # adds Astley goal required item if it doesn't already exist (aka the map!)
                 if self.options.goal.value == self.options.goal.option_astley and name == THE_NEW_WORLD_MAP:
@@ -552,18 +552,14 @@ class CrystalProjectWorld(World):
 
     def set_rules(self) -> None:
         logic = CrystalProjectLogic(self.player, self.options)
-        win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
-            win_condition_item = NEW_WORLD_STONE # todo should this still be here if we auto-hand you the stone?
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value)
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
-            win_condition_item = OLD_WORLD_STONE
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and logic.old_world_requirements(state)
+            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
-            win_condition_item = CLAMSHELL
-            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshell_goal_quantity.value)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(CLAMSHELL, self.player, self.options.clamshell_goal_quantity.value) and state.can_reach(SEASIDE_CLIFFS_AP_REGION, player=self.player)
 
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
