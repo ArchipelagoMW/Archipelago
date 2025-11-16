@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, Set, Tuple, NamedTuple, Optional, List, TYPE_CHECKING
 from BaseClasses import ItemClassification
 from .constants.item_groups import *
@@ -1892,8 +1893,9 @@ def get_random_starting_jobs(self, count:int) -> List[str]:
     else:
         return self.random.sample(list(self.base_game_jobs), count)
 
-def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
+def set_jobs_at_default_locations(world: "CrystalProjectWorld", player_name:str) -> Tuple[int, List[str]]:
     job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy() #if we don't use copy it means updating job_crystal_dictionary messes with the beginner dict too
+    jobs_not_to_exclude: List[str] = []
 
     if world.options.included_regions.value == world.options.included_regions.option_advanced:
         job_crystal_dictionary.update(job_crystal_advanced_dictionary)
@@ -1904,8 +1906,14 @@ def set_jobs_at_default_locations(world: "CrystalProjectWorld"):
         job_crystal_dictionary.update(job_crystal_expert_dictionary)
 
     for job_name in job_crystal_dictionary:
-        world.get_location(job_crystal_dictionary[job_name]).place_locked_item(world.create_item(job_name))
-        #message = "Placing" + job_name + " at " + job_crystal_dictionary[job_name]
-        #world.logger.info(message)
+        try:
+            world.get_location(job_crystal_dictionary[job_name]).place_locked_item(world.create_item(job_name))
+            #message = "Placing" + job_name + " at " + job_crystal_dictionary[job_name]
+            #world.logger.info(message)
+        except KeyError:
+            jobs_not_to_exclude.append(job_name)
+            message = f"For player {player_name}: the crystal where {job_name} was placed was updated by a mod. It has been forced to be randomized instead of in its default location."
+            logging.getLogger().info(message)
 
-    return len(job_crystal_dictionary)
+
+    return len(job_crystal_dictionary), jobs_not_to_exclude
