@@ -27,8 +27,7 @@ def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfileb
     """Export rolled player options to yaml files in the temp directory."""
     import yaml
     from collections import Counter
-    from dataclasses import asdict
-    from Options import Visibility, PlandoItem
+    from Options import Visibility
     from Utils import get_file_safe_name
 
     logger = logging.getLogger()
