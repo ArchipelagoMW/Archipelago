@@ -14,8 +14,8 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     display_region_name_to_pass_dict, home_point_item_index_offset
 from .home_points import get_home_points
-from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData, get_location_names_per_category, \ 
-    home_point_location_index_offset, get_location_name_to_id, get_crystal_locations
+from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
+    get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
 from .presets import crystal_project_options_presets
 from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
