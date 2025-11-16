@@ -107,7 +107,7 @@ def create_events(world: APQuestWorld) -> None:
     final_boss_room = world.get_region("Final Boss Room")
 
     # One way to create an event is simply to use one of the normal methods of creating a location.
-    button_in_top_left_room = Location(world.player, "Top Left Room Button", None, top_left_room)
+    button_in_top_left_room = APQuestLocation(world.player, "Top Left Room Button", None, top_left_room)
     top_left_room.locations.append(button_in_top_left_room)
 
     # We then need to put an event item onto the location.
