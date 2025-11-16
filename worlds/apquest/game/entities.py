@@ -217,7 +217,7 @@ class Enemy(Entity, InteractableMixin):
     dead: bool = False
 
     enemy_graphic_by_health: ClassVar[dict[int, Graphic]] = {
-        2: Graphic.NORMAL_ENEMY_2_HEATLH,
+        2: Graphic.NORMAL_ENEMY_2_HEALTH,
         1: Graphic.NORMAL_ENEMY_1_HEALTH,
     }
     enemy_default_graphic = Graphic.NORMAL_ENEMY_1_HEALTH

@@ -21,7 +21,7 @@ graphic_to_char = {
     Graphic.CHEST: "C",
     Graphic.BUSH: "T",
     Graphic.BREAKABLE_BLOCK: "~",
-    Graphic.NORMAL_ENEMY_2_HEATLH: "2",
+    Graphic.NORMAL_ENEMY_2_HEALTH: "2",
     Graphic.NORMAL_ENEMY_1_HEALTH: "1",
     Graphic.BOSS_5_HEALTH: "5",
     Graphic.BOSS_4_HEALTH: "4",

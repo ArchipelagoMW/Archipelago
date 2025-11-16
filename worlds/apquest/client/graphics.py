@@ -1,65 +1,82 @@
 import pkgutil
 from enum import Enum
 from io import BytesIO
+from typing import NamedTuple
 
+from bokeh.protocol import Protocol
 from kivy.uix.image import CoreImage
 
 from .. import game
 from ..game.graphics import Graphic
 
+
+# The import "from kivy.graphics.texture import Texture" does not work correctly.
+# We never need the class directly, so we need to use a protocol.
+class Texture(Protocol):
+    def get_region(self, x: int, y: int, w: int, h: int) -> "Texture": ...
+
+
+class RelatedTexture(NamedTuple):
+    base_texture_file: str
+    x: int
+    y: int
+    width: int
+    height: int
+
+
 IMAGE_GRAPHICS = {
     Graphic.EMPTY: None,
-    Graphic.WALL: "wall.png",
-    Graphic.BUTTON_NOT_ACTIVATED: "button_not_activated.png",
-    Graphic.BUTTON_ACTIVATED: "button_activated.png",
-    Graphic.KEY_DOOR: "key_door.png",
-    Graphic.BUTTON_DOOR: "button_door.png",
-    Graphic.CHEST: "chest.png",
-    Graphic.BUSH: "bush.png",
-    Graphic.BREAKABLE_BLOCK: "breakable_wall.png",
-    Graphic.NORMAL_ENEMY_2_HEATLH: "normal_enemy_2.png",
-    Graphic.NORMAL_ENEMY_1_HEALTH: "normal_enemy_1.png",
-    Graphic.BOSS_5_HEALTH: "boss_5.png",
-    Graphic.BOSS_4_HEALTH: "boss_4.png",
-    Graphic.BOSS_3_HEALTH: "boss_3.png",
-    Graphic.BOSS_2_HEALTH: "boss_2.png",
-    Graphic.BOSS_1_HEALTH: "boss_1.png",
-    Graphic.KEY: "key.png",
-    Graphic.SHIELD: "shield.png",
-    Graphic.HAMMER: "hammer.png",
-    Graphic.SWORD: "sword.png",
-    Graphic.HEART: "full_heart.png",
-    Graphic.HALF_HEART: "half_heart.png",
-    Graphic.EMPTY_HEART: "empty_heart.png",
-    Graphic.CONFETTI_CANNON: "confetti_cannon.png",
-    Graphic.REMOTE_ITEM: "ap_item.png",
+    Graphic.WALL: RelatedTexture("inanimates.png", 16, 32, 16, 16),
+    Graphic.BREAKABLE_BLOCK: RelatedTexture("inanimates.png", 32, 32, 16, 16),
+    Graphic.CHEST: RelatedTexture("inanimates.png", 0, 16, 16, 16),
+    Graphic.BUSH: RelatedTexture("inanimates.png", 16, 16, 16, 16),
+    Graphic.KEY_DOOR: RelatedTexture("inanimates.png", 32, 16, 16, 16),
+    Graphic.BUTTON_NOT_ACTIVATED: RelatedTexture("inanimates.png", 0, 0, 16, 16),
+    Graphic.BUTTON_ACTIVATED: RelatedTexture("inanimates.png", 16, 0, 16, 16),
+    Graphic.BUTTON_DOOR: RelatedTexture("inanimates.png", 32, 0, 16, 16),
+    Graphic.NORMAL_ENEMY_1_HEALTH: RelatedTexture("normal_enemy.png", 0, 0, 16, 16),
+    Graphic.NORMAL_ENEMY_2_HEALTH: RelatedTexture("normal_enemy.png", 16, 0, 16, 16),
+    Graphic.BOSS_5_HEALTH: RelatedTexture("boss.png", 16, 16, 16, 16),
+    Graphic.BOSS_4_HEALTH: RelatedTexture("boss.png", 0, 16, 16, 16),
+    Graphic.BOSS_3_HEALTH: RelatedTexture("boss.png", 32, 32, 16, 16),
+    Graphic.BOSS_2_HEALTH: RelatedTexture("boss.png", 16, 32, 16, 16),
+    Graphic.BOSS_1_HEALTH: RelatedTexture("boss.png", 0, 32, 16, 16),
+    Graphic.EMPTY_HEART: RelatedTexture("hearts.png", 0, 0, 16, 16),
+    Graphic.HEART: RelatedTexture("hearts.png", 16, 0, 16, 16),
+    Graphic.HALF_HEART: RelatedTexture("hearts.png", 32, 0, 16, 16),
+    Graphic.REMOTE_ITEM: RelatedTexture("items.png", 0, 16, 16, 16),
+    Graphic.CONFETTI_CANNON: RelatedTexture("items.png", 16, 16, 16, 16),
+    Graphic.HAMMER: RelatedTexture("items.png", 32, 16, 16, 16),
+    Graphic.KEY: RelatedTexture("items.png", 0, 0, 16, 16),
+    Graphic.SHIELD: RelatedTexture("items.png", 16, 0, 16, 16),
+    Graphic.SWORD: RelatedTexture("items.png", 32, 0, 16, 16),
     Graphic.ITEMS_TEXT: "items_text.png",
-    Graphic.UNKNOWN: "unknown.png",
-    Graphic.ZERO: "Number_0.png",
-    Graphic.ONE: "Number_1.png",
-    Graphic.TWO: "Number_2.png",
-    Graphic.THREE: "Number_3.png",
-    Graphic.FOUR: "Number_4.png",
-    Graphic.FIVE: "Number_5.png",
-    Graphic.SIX: "Number_6.png",
-    Graphic.SEVEN: "Number_7.png",
-    Graphic.EIGHT: "Number_8.png",
-    Graphic.NINE: "Number_9.png",
-    Graphic.LETTER_M: "Letter_M.png",
-    Graphic.LETTER_A: "Letter_A.png",
-    Graphic.LETTER_T: "Letter_T.png",
-    Graphic.LETTER_H: "Letter_H.png",
-    Graphic.LETTER_I: "Letter_I.png",
-    Graphic.LETTER_E: "Letter_E.png",
-    Graphic.PLUS: "Symbol_Plus.png",
-    Graphic.MINUS: "Symbol_Minus.png",
-    Graphic.TIMES: "Symbol_Times.png",
-    Graphic.DIVIDE: "Symbol_Divide.png",
-    Graphic.EQUALS: "Symbol_Equals.png",
-    Graphic.NO: "No.png",
+    Graphic.ZERO: RelatedTexture("numbers.png", 0, 16, 16, 16),
+    Graphic.ONE: RelatedTexture("numbers.png", 16, 16, 16, 16),
+    Graphic.TWO: RelatedTexture("numbers.png", 32, 16, 16, 16),
+    Graphic.THREE: RelatedTexture("numbers.png", 48, 16, 16, 16),
+    Graphic.FOUR: RelatedTexture("numbers.png", 64, 16, 16, 16),
+    Graphic.FIVE: RelatedTexture("numbers.png", 0, 0, 16, 16),
+    Graphic.SIX: RelatedTexture("numbers.png", 16, 0, 16, 16),
+    Graphic.SEVEN: RelatedTexture("numbers.png", 32, 0, 16, 16),
+    Graphic.EIGHT: RelatedTexture("numbers.png", 48, 0, 16, 16),
+    Graphic.NINE: RelatedTexture("numbers.png", 64, 0, 16, 16),
+    Graphic.LETTER_A: RelatedTexture("letters.png", 0, 16, 16, 16),
+    Graphic.LETTER_E: RelatedTexture("letters.png", 16, 16, 16, 16),
+    Graphic.LETTER_H: RelatedTexture("letters.png", 32, 16, 16, 16),
+    Graphic.LETTER_I: RelatedTexture("letters.png", 0, 0, 16, 16),
+    Graphic.LETTER_M: RelatedTexture("letters.png", 16, 0, 16, 16),
+    Graphic.LETTER_T: RelatedTexture("letters.png", 32, 0, 16, 16),
+    Graphic.DIVIDE: RelatedTexture("symbols.png", 0, 16, 16, 16),
+    Graphic.EQUALS: RelatedTexture("symbols.png", 16, 16, 16, 16),
+    Graphic.MINUS: RelatedTexture("symbols.png", 32, 16, 16, 16),
+    Graphic.PLUS: RelatedTexture("symbols.png", 0, 0, 16, 16),
+    Graphic.TIMES: RelatedTexture("symbols.png", 16, 0, 16, 16),
+    Graphic.NO: RelatedTexture("symbols.png", 32, 0, 16, 16),
+    Graphic.UNKNOWN: RelatedTexture("symbols.png", 32, 0, 16, 16),  # Same as "No"
 }
 
-BACKGROUND_TILE = "grass.png"
+BACKGROUND_TILE = RelatedTexture("inanimates.png", 0, 32, 16, 16)
 
 
 class PlayerSprite(Enum):
@@ -72,28 +89,28 @@ class PlayerSprite(Enum):
 
 PLAYER_GRAPHICS = {
     Graphic.PLAYER_DOWN: {
-        PlayerSprite.HUMAN: "human_down.png",
-        PlayerSprite.DUCK: "duck_down.png",
-        PlayerSprite.HORSE: "horse_down.png",
-        PlayerSprite.CAT: "cat_down.png",
+        PlayerSprite.HUMAN: RelatedTexture("human.png", 0, 16, 16, 16),
+        PlayerSprite.DUCK: RelatedTexture("duck.png", 0, 16, 16, 16),
+        PlayerSprite.HORSE: RelatedTexture("horse.png", 0, 16, 16, 16),
+        PlayerSprite.CAT: RelatedTexture("cat.png", 0, 16, 16, 16),
     },
     Graphic.PLAYER_UP: {
-        PlayerSprite.HUMAN: "human_up.png",
-        PlayerSprite.DUCK: "duck_up.png",
-        PlayerSprite.HORSE: "horse_up.png",
-        PlayerSprite.CAT: "cat_up.png",
+        PlayerSprite.HUMAN: RelatedTexture("human.png", 16, 0, 16, 16),
+        PlayerSprite.DUCK: RelatedTexture("duck.png", 16, 0, 16, 16),
+        PlayerSprite.HORSE: RelatedTexture("horse.png", 16, 0, 16, 16),
+        PlayerSprite.CAT: RelatedTexture("cat.png", 16, 0, 16, 16),
     },
     Graphic.PLAYER_LEFT: {
-        PlayerSprite.HUMAN: "human_left.png",
-        PlayerSprite.DUCK: "duck_left.png",
-        PlayerSprite.HORSE: "horse_left.png",
-        PlayerSprite.CAT: "cat_left.png",
+        PlayerSprite.HUMAN: RelatedTexture("human.png", 16, 16, 16, 16),
+        PlayerSprite.DUCK: RelatedTexture("duck.png", 16, 16, 16, 16),
+        PlayerSprite.HORSE: RelatedTexture("horse.png", 16, 16, 16, 16),
+        PlayerSprite.CAT: RelatedTexture("cat.png", 16, 16, 16, 16),
     },
     Graphic.PLAYER_RIGHT: {
-        PlayerSprite.HUMAN: "human_right.png",
-        PlayerSprite.DUCK: "duck_right.png",
-        PlayerSprite.HORSE: "horse_right.png",
-        PlayerSprite.CAT: "cat_right.png",
+        PlayerSprite.HUMAN: RelatedTexture("human.png", 0, 0, 16, 16),
+        PlayerSprite.DUCK: RelatedTexture("duck.png", 0, 0, 16, 16),
+        PlayerSprite.HORSE: RelatedTexture("horse.png", 0, 0, 16, 16),
+        PlayerSprite.CAT: RelatedTexture("cat.png", 0, 0, 16, 16),
     },
 }
 
@@ -103,8 +120,30 @@ ALL_GRAPHICS = [
     *[graphic for sub_dict in PLAYER_GRAPHICS.values() for graphic in sub_dict.values()],
 ]
 
-TEXTURES = {
-    file_name: CoreImage(BytesIO(pkgutil.get_data(game.__name__, f"graphics/{file_name}")), ext="png").texture
-    for file_name in ALL_GRAPHICS
-    if file_name is not None
-}
+_textures = {}
+
+
+def get_texture(texture_identifier: str | RelatedTexture) -> Texture:
+    if texture_identifier in _textures:
+        return _textures[texture_identifier]
+
+    if isinstance(texture_identifier, str):
+        texture = CoreImage(
+            BytesIO(pkgutil.get_data(game.__name__, f"graphics/{texture_identifier}")), ext="png"
+        ).texture
+        texture.mag_filter = "nearest"
+        _textures[texture_identifier] = texture
+        return texture
+
+    print(texture_identifier)
+    base_texture_filename, x, y, w, h = texture_identifier
+
+    base_texture = get_texture(base_texture_filename)
+
+    sub_texture = base_texture.get_region(x, y, w, h)
+    sub_texture.mag_filter = "nearest"
+    _textures[texture_identifier] = sub_texture
+    return sub_texture
+
+
+TEXTURES = {file_name: get_texture(file_name) for file_name in ALL_GRAPHICS if file_name is not None}

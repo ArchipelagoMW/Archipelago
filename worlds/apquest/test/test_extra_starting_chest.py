@@ -1,4 +1,3 @@
-
 from .bases import APQuestTestBase
 
 

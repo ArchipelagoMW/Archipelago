@@ -13,6 +13,7 @@ from . import items, locations, options, regions, rules, web_world
 # we also have this document specifying the entire world api:
 # https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md
 
+
 # The world class is the heart and soul of an apworld implementation.
 # It holds all the data and functions required to build the world and submit it to the multiworld generator.
 # You could have all your world code in just this one class, but for readability and better structure,
@@ -25,6 +26,7 @@ class APQuestWorld(World):
     APQuest is a minimal 8bit-era inspired adventure game with grid-like movement.
     Good games don't need more than six checks.
     """
+
     # The docstring should contain a description of the game, to be displayed on the WebHost.
 
     # You must override the "game" field to say the name of the game.

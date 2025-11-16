@@ -17,7 +17,7 @@ from CommonClient import logger
 from ..game.game import Game
 from ..game.graphics import Graphic
 from .custom_views import APQuestControlsView, APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
-from .graphics import IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
+from .graphics import BACKGROUND_TILE, IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
 from .sounds import SoundManager
 
 if TYPE_CHECKING:
@@ -140,7 +140,7 @@ class APQuestManager(GameManager):
                     image.color = (0.45, 0.35, 0.1)
                     image.texture = None
                     continue
-                image.texture = TEXTURES["grass.png"]
+                image.texture = TEXTURES[BACKGROUND_TILE]
                 image.texture.mag_filter = "nearest"
                 image.color = (1.0, 1.0, 1.0)
 
