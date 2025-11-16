@@ -1,12 +1,10 @@
 from typing import List, Optional
 
-from .options import CrystalProjectOptions
-from .rules import CrystalProjectLogic
-from .locations import LocationData
-from .constants.ap_regions import *
 from .constants.display_regions import *
 from .constants.keys import *
-from .constants.teleport_stones import *
+from .locations import LocationData
+from .options import CrystalProjectOptions
+from .rules import CrystalProjectLogic
 
 def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)

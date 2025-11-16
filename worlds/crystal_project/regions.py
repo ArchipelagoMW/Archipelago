@@ -815,3 +815,8 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      NEPTUNE_SHRINE_AP_REGION: lambda state: state.has(NEPTUNE_STONE, world.player),
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
                      THE_NEW_WORLD_AP_REGION: lambda state: logic.new_world_requirements(state)})
+
+    if options.home_point_hustle.value == options.home_point_hustle.option_true:
+        fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, DELENDE_AP_REGION],
+                        {SPAWNING_MEADOWS_AP_REGION: lambda state: state.has("HomePoint - AP Spawn Point", world.player) or state.has("HomePoint - Old Nan's Watering Hole", world.player)},
+                        {DELENDE_AP_REGION: lambda state: state.has("HomePoint - The Pale Grotto Entrance", world.player)})
