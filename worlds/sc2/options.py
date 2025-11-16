@@ -938,7 +938,9 @@ class Sc2ItemDict(OptionCounter, VerifyKeys, Mapping[str, int]):
     verify_item_name = True
     # convert_name_groups = True
     display_name = 'Unnamed dictionary'
-    min: int = -1
+    # Note(phaneros): Limiting minimum to -1 means that if two triggers add -1 to the same item,
+    # the validation fails. So give trigger people space to stack a bunch of triggers.
+    min: int = -1000
     max: int = 1000
     valid_keys = set(item_tables.item_table) | set(item_groups.item_name_groups)
 
