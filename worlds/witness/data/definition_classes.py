@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
-from typing import FrozenSet, List, NamedTuple
+from typing import NamedTuple
 
 # A WitnessRule is just an or-chain of and-conditions.
 # It represents the set of all options that could fulfill this requirement.
 # E.g. if something requires "Dots or (Shapers and Stars)", it'd be represented as: {{"Dots"}, {"Shapers, "Stars"}}
 # {} is an unusable requirement.
 # {{}} is an always usable requirement.
-WitnessRule = FrozenSet[FrozenSet[str]]
+WitnessRule = frozenset[frozenset[str]]
 
 
 @dataclass
 class AreaDefinition:
     name: str
-    regions: List[str] = field(default_factory=list)
+    regions: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -20,8 +20,8 @@ class RegionDefinition:
     name: str
     short_name: str
     area: AreaDefinition
-    logical_entities: List[str] = field(default_factory=list)
-    physical_entities: List[str] = field(default_factory=list)
+    logical_entities: list[str] = field(default_factory=list)
+    physical_entities: list[str] = field(default_factory=list)
 
 
 class ConnectionDefinition(NamedTuple):
