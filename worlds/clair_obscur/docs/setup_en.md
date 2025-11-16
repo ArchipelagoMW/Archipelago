@@ -20,7 +20,7 @@
 3. Generate your game
 4. Host the game, either locally or via the archipelago web hosting service
 5. Download the right file in the release tab of the mod client. (Steam or gamepass version).
-6. Extract it in the root of the game folder. To be sure that is well extract, you need to find 3 files called ClairObscurRandomizer.smth in `\Sandfall\Content\Paks\LogicMods` and ue4ss folder in `\Sandfall\Binaries\[WinGDK or Win64]`
+6. Extract it in the root of the game folder. To be sure that is well extract, you need to find 3 files called ClairObscurRandomizer.pak, ClairObscurRandomizer.ucas and ClairObscurRandomizer.utoc in `\Sandfall\Content\Paks\LogicMods` and ue4ss folder in `\Sandfall\Binaries\[WinGDK or Win64]`
 7. Profit !
 
 ## Connecting to a game
@@ -35,3 +35,4 @@
 
 ## Further Reading
 - [wiki](https://github.com/Demorck/ClairObscur_APWorld/wiki/)
+
