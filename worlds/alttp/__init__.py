@@ -305,6 +305,8 @@ class ALTTPWorld(World):
         self.required_medallions = ["Ether", "Quake"]
         self.escape_assist = []
         self.shops = []
+        self.logical_heart_containers = 10
+        self.logical_heart_pieces = 24
         super(ALTTPWorld, self).__init__(*args, **kwargs)
 
     @classmethod
