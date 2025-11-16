@@ -41,7 +41,16 @@ class DKC3Web(WebWorld):
         ["PoryGone"]
     )
 
-    tutorials = [setup_en]
+    setup_es = Tutorial(
+        "Guía de Configuración para Multiworld",
+        "Una guía para configurar el randomizer de Donkey Kong Country 3 conectado a un Multiworld de Archipelago.",
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["PantoUwUr"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
     option_groups = dkc3_option_groups
 
