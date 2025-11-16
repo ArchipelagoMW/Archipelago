@@ -270,8 +270,6 @@ class Factorio(World):
                 else:
                     raise Exception(
                         f"No recipe found for {location.crafted_item} for Craftsanity for player {self.player}")
-            if location.crafted_item != recipe.name:
-                print(location.crafted_item + ": " + recipe.name)
             location.access_rule = lambda state, recipe=recipe: \
                 state.has_all({technology.name for technology in recipe.recursive_unlocking_technologies}, player)
 
@@ -289,10 +287,11 @@ class Factorio(World):
             silo_recipe = self.get_recipe("rocket-silo")
             cargo_pad_recipe = self.get_recipe("cargo-landing-pad")
         part_recipe = self.custom_recipes["rocket-part"]
-        satellite_recipe = None
-        if self.options.goal == Goal.option_satellite:
-            satellite_recipe = self.get_recipe("satellite")
-        victory_tech_names = get_rocket_requirements(silo_recipe, part_recipe, satellite_recipe, cargo_pad_recipe)
+        satellite_recipe = self.get_recipe("satellite")
+        victory_tech_names = get_rocket_requirements(
+            silo_recipe, part_recipe,
+            satellite_recipe if self.options.goal == Goal.option_satellite else None,
+            cargo_pad_recipe)
         if self.options.silo == Silo.option_spawn:
             victory_tech_names -= {"rocket-silo"}
         else:
@@ -565,7 +564,8 @@ class Factorio(World):
         needed_recipes = self.options.max_science_pack.get_allowed_packs() | {"rocket-part"}
         if self.options.silo != Silo.option_spawn:
             needed_recipes |= {"rocket-silo", "cargo-landing-pad"}
-        if self.options.goal.value == Goal.option_satellite:
+        if (self.options.goal.value == Goal.option_satellite
+                or "Craft satellite" in self.multiworld.regions.location_cache[self.player]):
             needed_recipes |= {"satellite"}
 
         needed_items = {location.crafted_item for location in self.craftsanity_locations}
