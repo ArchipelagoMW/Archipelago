@@ -103,6 +103,24 @@ class TestItemFiltering(Sc2SetupTestBase):
         self.assertNotIn(item_names.NOVA_BLAZEFIRE_GUNBLADE, itempool)
         self.assertNotIn(item_names.NOVA_ENERGY_SUIT_MODULE, itempool)
 
+    def test_exclude_2_beats_unexclude_1(self) -> None:
+        world_options = {
+            options.OPTION_NAME[options.ExcludedItems]: {
+                item_names.MARINE: 2,
+            },
+            options.OPTION_NAME[options.UnexcludedItems]: {
+                item_names.MARINE: 1,
+            },
+            # Ensure enough locations that marine doesn't get culled
+            options.OPTION_NAME[options.SelectedRaces]: {
+                SC2Race.TERRAN.get_title(),
+            },
+            options.OPTION_NAME[options.VictoryCache]: 9,
+        }
+        self.generate_world(world_options)
+        itempool = [item.name for item in self.multiworld.itempool]
+        self.assertNotIn(item_names.MARINE, itempool)
+
     def test_excluding_groups_excludes_all_items_in_group(self):
         world_options = {
             'excluded_items': [
