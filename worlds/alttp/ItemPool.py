@@ -466,9 +466,10 @@ def generate_itempool(world):
                     if len(reduce_item) == 2:
                         items_were_cut = items_were_cut or cut_item(items, *reduce_item)
                     elif len(reduce_item) == 4:
-                        if (reduce_item[0] != "Piece of Heart" or items.count(reduce_item[0])
-                                > difficulties[world.options.item_pool.current_key].heart_piece_limit):
-                            items_were_cut = items_were_cut or condense_items(items, *reduce_item)
+                        items_were_cut = items_were_cut or condense_items(items, *reduce_item)
+                        if reduce_item[0] == "Piece of Heart" and world.logical_heart_pieces:
+                            world.logical_heart_pieces -= reduce_item[2]
+                            world.logical_heart_containers += reduce_item[3]
                     elif len(reduce_item) == 1:  # Bottles
                         bottles = [item for item in items if item.name in item_name_groups["Bottles"]]
                         if len(bottles) > 4:

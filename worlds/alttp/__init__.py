@@ -384,6 +384,8 @@ class ALTTPWorld(World):
                     self.options.local_items.value |= self.dungeon_local_item_names
 
         self.difficulty_requirements = difficulties[self.options.item_pool.current_key]
+        self.logical_heart_pieces = self.difficulty_requirements.heart_piece_limit
+        self.logical_heart_containers = self.difficulty_requirements.boss_heart_container_limit
 
         # enforce pre-defined local items.
         if self.options.goal in ["local_triforce_hunt", "local_ganon_triforce_hunt"]:

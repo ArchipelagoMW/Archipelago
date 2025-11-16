@@ -59,10 +59,11 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
-    diff = state.multiworld.worlds[player].difficulty_requirements
-    return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
+    max_heart_pieces = state.multiworld.worlds[player].logical_heart_pieces
+    max_heart_containers = state.multiworld.worlds[player].logical_heart_containers
+    return min(state.count('Boss Heart Container', player), max_heart_containers) \
         + state.count('Sanctuary Heart Container', player) \
-        + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
+        + min(state.count('Piece of Heart', player), max_heart_pieces) // 4 \
         + 3  # starting hearts
 
 
