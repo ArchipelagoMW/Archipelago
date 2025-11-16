@@ -12,12 +12,12 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SPAWNING_MEADOWS_AP_REGION, "HomePoint - AP Spawn Point", 5003),
         LocationData(SPAWNING_MEADOWS_AP_REGION, "HomePoint - Old Nan's Watering Hole", 59),
 
-        LocationData(DELENDE_AP_REGION, "HomePoint - The Pale Grotto Entrance", 44),
-        LocationData(DELENDE_AP_REGION, "HomePoint - Soiled Den", 66),
-        LocationData(DELENDE_AP_REGION, "HomePoint - Cabin On The Cliff", 94),
-        LocationData(DELENDE_AP_REGION, "HomePoint - Fish Hatchery", 127),
-        LocationData(DELENDE_AP_REGION, "HomePoint - Delende Peak", 160),
-        LocationData(DELENDE_AP_REGION, "HomePoint - Delende Falls", 186),
+        LocationData(DELENDE_PLAINS_AP_REGION, "HomePoint - The Pale Grotto Entrance", 44),
+        LocationData(DELENDE_PLAINS_AP_REGION, "HomePoint - Soiled Den", 66),
+        LocationData(DELENDE_PLAINS_AP_REGION, "HomePoint - Fish Hatchery", 127),
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "HomePoint - Cabin On The Cliff", 94),
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "HomePoint - Delende Falls", 186),
+        LocationData(DELENDE_PEAK_AP_REGION, "HomePoint - Delende Peak", 160),
 
         LocationData(MERCURY_SHRINE_AP_REGION, "HomePoint - Mercury Shrine", 152),
 
@@ -60,7 +60,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(CASTLE_SEQUOIA_AP_REGION, "HomePoint - Castle Sequoia Foyer", 514),
 
-        LocationData(POKO_POKO_DESERT_AP_REGION, "HomePoint - Labyrinth Encampment", 2712, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)),
+        LocationData(TOWER_OF_ZOT_AP_REGION, "HomePoint - Labyrinth Encampment", 2712),
 
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "HomePoint - Sara Sara Bazaar Port", 941),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "HomePoint - Poko Poko West Gate", 3783),

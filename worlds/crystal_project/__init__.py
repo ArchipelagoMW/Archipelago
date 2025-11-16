@@ -14,7 +14,8 @@ from .items import item_table, optional_scholar_abilities, get_random_starting_j
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
     display_region_name_to_pass_dict, home_point_item_index_offset
 from .home_points import get_home_points
-from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData, home_point_location_index_offset
+from .locations import get_locations, get_bosses, get_shops, get_region_completions, LocationData, get_location_names_per_category, \ 
+    home_point_location_index_offset, get_location_name_to_id, get_crystal_locations
 from .presets import crystal_project_options_presets
 from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -49,16 +50,11 @@ class CrystalProjectWorld(World):
     topology_present = True  # show path to required location checks in spoiler
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations(-1, options)}
-    boss_name_to_id = {boss.name: boss.code for boss in get_bosses(-1, options)}
-    shop_name_to_id = {shop.name: shop.code for shop in get_shops(-1, options)}
-    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completions(-1, options)}
+    location_name_to_id = get_location_name_to_id()
 
-    location_name_to_id.update(boss_name_to_id)
-    location_name_to_id.update(shop_name_to_id)
-    location_name_to_id.update(region_completion_name_to_id)
 
     item_name_groups = get_item_names_per_category()
+    location_name_groups = get_location_names_per_category()
     base_game_jobs: set[str] = item_name_groups[JOB].copy()
 
     mod_info = get_mod_info()
@@ -144,6 +140,9 @@ class CrystalProjectWorld(World):
                     # self.modded_locations = slot_data["moddedLocationsForUT"]
                     # self.modded_shops = slot_data["moddedShopsForUT"]
                     self.starter_ap_region = slot_data["starterRegion"]
+        
+        if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
+            self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
 
         self.multiworld.push_precollected(self.create_item(HOME_POINT_STONE))
         self.multiworld.push_precollected(self.create_item(ARCHIPELAGO_STONE))
@@ -176,14 +175,15 @@ class CrystalProjectWorld(World):
     def create_regions(self) -> None:
         init_ap_region_to_display_region_dictionary()
 
-        locations = get_locations(self.player, self.options)
+        locations = get_treasure_and_npc_locations(self.player, self.options)
+        locations.extend(get_crystal_locations(self.player, self.options))
 
         if self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true:
-            bosses = get_bosses(self.player, self.options)
+            bosses = get_boss_locations(self.player, self.options)
             locations.extend(bosses)
 
         if self.options.shopsanity.value != self.options.shopsanity.option_disabled:
-            shops = get_shops(self.player, self.options)
+            shops = get_shop_locations(self.player, self.options)
             locations.extend(shops)
 
         if self.options.use_mods.value == self.options.use_mods.option_true:
@@ -225,7 +225,7 @@ class CrystalProjectWorld(World):
 
         #Regionsanity completion locations need to be added after all other locations so they can be removed if the region is empty (e.g. Neptune Shrine w/o Shopsanity)
         if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
-            region_completions = get_region_completions(self.player, self.options)
+            region_completions = get_region_completion_locations(self.player, self.options)
             for completion in region_completions:
                 display_region_empty = True
                 for location in locations:

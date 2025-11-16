@@ -1,4 +1,4 @@
-from typing import List, Optional, Callable, NamedTuple
+from typing import List, Optional, Callable, NamedTuple, Dict, Set
 from BaseClasses import CollectionState
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
@@ -9,6 +9,7 @@ from .constants.region_passes import *
 from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.crystal_locations import *
+from .constants.level_requirements import *
 
 class LocationData(NamedTuple):
     ap_region: str
@@ -25,7 +26,20 @@ shop_index_offset = 10000000
 regionsanity_index_offset = 100000000
 home_point_location_index_offset = 1000000000
 
-def get_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
+def get_location_name_to_id() -> dict[str, int]:
+    location_name_to_id = {location.name: location.code for location in get_treasure_and_npc_locations(-1, None)}
+    crystal_name_to_id = {crystal.name: crystal.code for crystal in get_crystal_locations(-1, None)}
+    boss_name_to_id = {boss.name: boss.code for boss in get_boss_locations(-1, None)}
+    shop_name_to_id = {shop.name: shop.code for shop in get_shop_locations(-1, None)}
+    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completion_locations(-1, None)}
+    location_name_to_id.update(crystal_name_to_id)
+    location_name_to_id.update(boss_name_to_id)
+    location_name_to_id.update(shop_name_to_id)
+    location_name_to_id.update(region_completion_name_to_id)
+
+    return location_name_to_id
+
+def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -62,56 +76,60 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #Delende
         #Treasure chests
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of camp", 263 + treasure_index_offset), #Money chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery lower level", 210 + treasure_index_offset), #Money chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Return from fish hatchery", 34 + treasure_index_offset), #Bracer chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Looking for love in all the high places (glide to the heart tarn)", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state) and logic.has_glide(state)), #Chartreuse chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Mushroom underpass", 262 + treasure_index_offset), #Cotton Hood chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fallen log parkour", 208 + treasure_index_offset), #Earring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river", 213 + treasure_index_offset), #Earring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Next to river", 43 + treasure_index_offset), #Underground Ether chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under ambush tree", 212 + treasure_index_offset), #Fenix Juice chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - On west mountainside", 209 + treasure_index_offset), #Iron Sword chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river from fish hatchery", 123 + treasure_index_offset), #Looters Ring chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - High up west mountainside", 33 + treasure_index_offset), #Mages Robe chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Up near hatchery", 169 + treasure_index_offset), #Protect Amulet chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Outside spooky cave", 27 + treasure_index_offset), #Storm Hood chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In fish hatchery", 39 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fish hatchery approach", 79 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under tree", 261 + treasure_index_offset), #Tincture chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Top of spooky cave", 73 + treasure_index_offset), #Tincture Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Troll", 451 + treasure_index_offset), #Tincture Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Off north path", 259 + treasure_index_offset), #Tonic chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Before Proving Meadows", 216 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset), #Tonic Pouch chest
+        #Delende Plains
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fallen log parkour", 208 + treasure_index_offset),  # Earring chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - On west mountainside", 209 + treasure_index_offset),  # Iron Sword chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Off north path", 259 + treasure_index_offset),  # Tonic chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Fish hatchery approach", 79 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery lower level", 210 + treasure_index_offset),  # Money chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Up near hatchery", 169 + treasure_index_offset),  # Protect Amulet chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of fish hatchery below tree", 2997 + treasure_index_offset),  # Tonic Pouch chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In fish hatchery", 39 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river from fish hatchery", 123 + treasure_index_offset),  # Looters Ring chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Return from fish hatchery", 34 + treasure_index_offset),  # Bracer chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under tree", 261 + treasure_index_offset),  # Tincture chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Mushroom underpass", 262 + treasure_index_offset),  # Cotton Hood chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - In front of camp", 263 + treasure_index_offset),  # Money chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Under ambush tree", 212 + treasure_index_offset),  # Fenix Juice chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Outside spooky cave", 27 + treasure_index_offset),  # Storm Hood chest
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Across river", 213 + treasure_index_offset),  # Earring chest
+        #Eastern Delende (High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Hollow riverbank", 43 + treasure_index_offset),  # Underground Ether chest
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Before Proving Meadows", 216 + treasure_index_offset),  # Tonic Pouch chest
+        #Delende High Bridges
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - High up west mountainside", 33 + treasure_index_offset), #Mages Robe chest
+        # Gran's House (Delende High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 1", 87 + treasure_index_offset),  # (126, 128, -58) style: blank
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 2", 100 + treasure_index_offset),  # (127, 128, -58) style: weapon
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 3", 177 + treasure_index_offset),  # (137, 128, -57) style: consumable
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 4", 178 + treasure_index_offset),  # (137, 128, -56) style: consumable
+        # Basement (Delende High Bridges)
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Basement Chest - Gran...?", 179 + treasure_index_offset),  # Empty chest
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Basement Chest - Gran......?", 180 + treasure_index_offset),  # Digested Head chest
+        # Below Gran
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Cracks in Gran's foundation", 3653 + treasure_index_offset),  # (126, 115, -102) Basement map chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 1", 181 + treasure_index_offset),  # (129, 98, -111) Fenix Juice Pouch chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 2", 182 + treasure_index_offset),  # (128, 98, -111) Plate of Wolf chest
+        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement loner", 3671 + treasure_index_offset),  # (119, 98, -110) Underpass Scrap
+        #Mesa Above Spooky Cave
+        LocationData(DELENDE_MESA_OVER_SPOOKY_CAVE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Top of spooky cave", 73 + treasure_index_offset), #Tincture Pouch chest
+        #Delende Peak
+        LocationData(DELENDE_PEAK_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Troll", 451 + treasure_index_offset), #Tincture Pouch chest
+        #Heart Tarn
+        LocationData(HEART_TARN_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Looking for love in all the high places (glide to the heart tarn)", 1554 + treasure_index_offset, lambda state: logic.has_swimming(state)),  # Chartreuse chest
 
         #NPCs
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Astley gives you a home point stone", 28 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has(DOG_BONE, player, 3)),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset), #(276, 116, -204); Fervor Charm
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Not-at-all shady guy", 124 + npc_index_offset), #(181, 132, -200); Rotten Salmon
-        #Todo NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Cartographer", 1153 + npc_index_offset), #guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher (Z2_FisherOnDock ID 121 (166, 133, -208))
-        #Todo NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
-
-        #Grans House (Delende)
-        #Treasure chests
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 1", 87 + treasure_index_offset), #(126, 128, -58) style: blank
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 2", 100 + treasure_index_offset), #(127, 128, -58) style: weapon
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 3", 177 + treasure_index_offset), #(137, 128, -57) style: consumable
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Chest - Gran's House 4", 178 + treasure_index_offset), #(137, 128, -56) style: consumable
-
-        #Basement (Somehow Not Delende)
-        #Treasure chests
-        LocationData(DELENDE_AP_REGION, "Basement Chest - Gran...?", 179 + treasure_index_offset), #Empty chest
-        LocationData(DELENDE_AP_REGION, "Basement Chest - Gran......?", 180 + treasure_index_offset), #Digested Head chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Cracks in Gran's foundation", 3653 + treasure_index_offset), #(126, 115, -102) Basement map chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 1", 181 + treasure_index_offset), #(129, 98, -111) Fenix Juice Pouch chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement pair 2", 182 + treasure_index_offset), #(128, 98, -111) Plate of Wolf chest
-        LocationData(BELOW_GRAN_AP_REGION, "Underpass Chest - Gran's subbasement loner", 3671 + treasure_index_offset), #(119, 98, -110) Underpass Scrap
+        #NPCs Shortcuts: shortcut girl (Z2_Collector Sister ID 3769 (169, 132, -89))
+        #NPCs Shortcuts: Rabbit Claws shortcut guy (Z2_RoosterFeetGuy ID 74(281, 128, -159))
+        #Delende Plains
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Astley gives you a home point stone", 28 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Not-at-all shady guy", 124 + npc_index_offset),  # (181, 132, -200); Rotten Salmon
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Fish at the hatchery", 121 + npc_index_offset, lambda state: state.has("Item - Flimsy Rod", player) and state.has("Item - Plug Lure", player)),  # Fisher (Z2_FisherOnDock ID 121 (166, 133, -208))
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dizzy noob chucks something at your face", 831 + npc_index_offset),  # (276, 116, -204); Fervor Charm
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone Guy", 31 + npc_index_offset, lambda state: state.has(DOG_BONE, player, 3)),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone south of Soiled Den", 184 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Dog Bone in spooky cave", 1915 + npc_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Cartographer", 1153 + npc_index_offset),  # guy who gives you a map of Delende if you don't have one (Z2_MapMan (198, 131, -74)) Fixed Missable
 
         #Soiled Den
         #Treasure chests
@@ -143,9 +161,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         
         #NPCs
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " NPC - Reid gives you gently worn armor", 1166 + npc_index_offset), #Pale Grotto Temple map (Z2_ReidCamp (273, 122, -327)) gives you Ring Mail
-
-        #Crystals
-        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + FENCER_JOB_CRYSTAL_LOCATION, 130 + crystal_index_offset),
 
         #Seaside Cliffs
         #Treasure chests
@@ -192,9 +207,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Chest - Straight shot", 82 + treasure_index_offset), #Torch chest
         LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Chest - Ring around the rosy", 81 + treasure_index_offset), #Tonic Pouch chest
 
-        #Crystals
-        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + SHAMAN_JOB_CRYSTAL_LOCATION, 35 + crystal_index_offset),
-
         #Mercury Shrine
         #Treasure chests
         LocationData(MERCURY_SHRINE_AP_REGION, MERCURY_SHRINE_DISPLAY_NAME + " Chest - Pinnacle", 155 + treasure_index_offset, lambda state: state.has(MERCURY_STONE, player) or logic.has_vertical_movement(state)), #Contract chest
@@ -207,14 +219,12 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Dead end", 3056 + treasure_index_offset), #Tonic chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Hidden stairway", 757 + treasure_index_offset), #Tonic Pouch chest
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Chest - Drop down to mountain balcony", 290 + treasure_index_offset), #Torpid Cuffs chest
-        LocationData(YAMAGAWA_MA_AP_REGION, "Overpass Chest - Hop over from Yamagawa to dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
+        #Fencer's Keep Chest
+        LocationData(FENCERS_KEEP_CHEST_AP_REGION, "Overpass Chest - Hop over from Yamagawa to dead tree by Fencers Keep", 3537 + treasure_index_offset), #(148, 151, -114) 6th Overpass Scrap on Overpass main map
 
         #NPCs
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " NPC - Hidden inside waterfall source", 628 + npc_index_offset, lambda state: logic.has_swimming(state)), #Autumns Oath
         #Todo NPCs Job Masters: Yamagawa M.A. Temple map has Master Scholar ID 3574 (59, 151, -98); gives you Scholar Seal in exchange for job mastery
-
-        #Crystals
-        LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + SCHOLAR_JOB_CRYSTAL_LOCATION, 166 + crystal_index_offset),
 
         #Proving Meadows
         #Treasure chests
@@ -242,13 +252,12 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Chest - Accompanied by yellow flower in tunnel", 1110 + treasure_index_offset), #Fenix Juice chest
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Chest - Behind boss", 332 + treasure_index_offset), #Money chest
 
-        #Crystals
-        LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + AEGIS_JOB_CRYSTAL_LOCATION, 68 + crystal_index_offset),
-
         #Zones (Advanced)
         #Capital Sequoia (smushed Capital Courtyard in)
         #Treasure chests
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Beyond the courtyard wall", 2671 + treasure_index_offset), #Tonic Pouch chest
+        #Moat Shallows
+        LocationData(MOAT_SHALLOWS_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Beyond the courtyard wall", 2671 + treasure_index_offset), #Tonic Pouch chest
+        #Capital Sequoia
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Inn room", 1388 + treasure_index_offset), #Craftwork Staff chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Second story by Master Rogue", 158 + treasure_index_offset), #Craftwork Dagger chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Magic store attic", 1389 + treasure_index_offset), #Craftwork Scythe chest
@@ -319,9 +328,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Library roof Lost Penguin", 594 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Library Morii of the East!", 1948 + npc_index_offset), #(440, 171, -296) Z14_Library Scholar
 
-        #Crystals
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
-
         #Jojo Sewers
         #Treasure chests
         #Sewer Main (lol)
@@ -390,9 +396,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " NPC - South of sewers Silver", 850 + npc_index_offset), #Ingot
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + " NPC - Silver on the way out", 755 + npc_index_offset), #Ore
 
-        #Crystals
-        LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
-
         #Quintar Sanctum
         #Treasure chests
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Chest - West wall big bounce", 810 + treasure_index_offset), #Money chest
@@ -412,9 +415,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " NPC - Big bounce Silver", 754 + npc_index_offset), #Ore
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " NPC - Two Toads bestow Princess Toadstool", 963 + npc_index_offset),
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " NPC - Two Toads crown Bowsette", 964 + npc_index_offset),
-
-        #Crystals
-        LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
 
         #Capital Jail
         #Treasure chests
@@ -455,9 +455,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in East Wing bedroom", 782 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dust
         #Dark Wing
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Dust
-
-        #Crystals
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
 
         #Capital Pipeline
         #Treasure chests
@@ -510,9 +507,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Lets get down to business western Silver", 429 + npc_index_offset), #Ore
         LocationData(OKIMOTO_NS_AP_REGION, "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, lambda state: logic.has_swimming(state)), #Springs Oath (632, 243, -261) Overpass main map
 
-        #Crystals
-        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + NINJA_JOB_CRYSTAL_LOCATION, 699 + crystal_index_offset),
-
         #Greenshire Reprise
         #Treasure chests
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Jump off bridge 4", 483 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ambush Knife chest
@@ -563,42 +557,45 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Mushroom Mountain
         LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
-        #Crystals
-        #River Cat's Ego
-        LocationData(RIVER_CATS_EGO_AP_REGION, RIVER_CATS_EGO_AP_REGION + NOMAD_JOB_CRYSTAL_LOCATION, 630 + crystal_index_offset), #River Cats Ego
-
         #Poko Poko Desert
         #Treasure chests
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Butter Cutter chest
-        # if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Hatchet chest
+        #Poko Poko Desert main
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset),  # West Lookout Token chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Quintar leapfrog", 1080 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Butter Cutter chest
+        #if you're Good At Jumping you can get to this chest south of rocky outcropping gold with no mounts
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - South of tricky Quintar Gold", 1082 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Hatchet chest
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME)),  # Dueller
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - North Lookout Tower", 1190 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME) or logic.has_vertical_movement(state)), #North Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - This chests (on) a butte", 1169 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, SARA_SARA_BAZAAR_DISPLAY_NAME)), #Dueller
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Stormy first floor of ruins", 2676 + treasure_index_offset), #Fenix Juice chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - West Lookout Tower", 1170 + treasure_index_offset), #West Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasn't that bad)", 1189 + treasure_index_offset), #Central Lookout Token chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Balance beam", 97 + treasure_index_offset), #Scope Specs chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Past Lost Son", 1667 + treasure_index_offset), #Ether Pouch chest
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Salmon Bay map chest
+        #Poko Poko Desert Eastern Plateau
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Potion chest to fortify you for jumping puzzle from hell", 2708 + treasure_index_offset),
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Central Lookout Tower (ok maybe that jumping puzzle wasn't that bad)", 1189 + treasure_index_offset),  # Central Lookout Token chest
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Balance beam", 97 + treasure_index_offset),  # Scope Specs chest
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Past Lost Son", 1667 + treasure_index_offset),  # Ether Pouch chest
+        #Tower of Zot
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Chest - Cooling off in the tent before the Tower of Zot", 2914 + treasure_index_offset), #Salmon Bay map chest
 
         #NPCs
-        #Todo NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map
+        #NPCs CheckOrNot: three Quintar Eggs in Poko Poko Desert (Nest) map - not
+        #Poko Poko Desert main
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver beneath overhang in ruins south of shrine", 2675 + npc_index_offset), #Dust
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver slumbering in broken house NE of shrine", 1081 + npc_index_offset), #Ingot
         # if you're Good At Jumping you can get to this rocky outcropping gold with no mounts
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Rocky outcropping Gold will put your Quintar to the test", 2817 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in desert arch shade", 2682 + npc_index_offset), #Ingot
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver atop ruins", 2677 + npc_index_offset), #Ore
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver atop ruins", 2677 + npc_index_offset),  # Ore
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold Ingot atop ridge south of North Lookout Tower", 2818 + npc_index_offset),
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Thirsty Lad", 1201 + npc_index_offset, lambda state: state.has(SPECIAL_MILK, player)),
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in desert arch shade", 2682 + npc_index_offset),  # Ingot
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Silver in the sandstorm on ruins 2nd floor", 2680 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Ingot
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold accessible from beach reacharound", 2711 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Diamond on Tower of Zots outside", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on far end of the Tower of Zot", 2816 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
-        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset), #Ore
+        LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Stormy Silver on ruined building floor", 2681 + npc_index_offset), #Ore
+        #Poko Poko Eastern Plateau
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold on an outcropping by long loop-around chest", 2706 + npc_index_offset),  # Ore
+        LocationData(POKO_POKO_EAST_PLATEAU_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold overlooking Sara Sara Bazaar", 2707 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Ingot
+        #Poko Poko Sara Sara Beach West Mountain Pass
+        LocationData(POKO_POKO_BEACH_WEST_PASS_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - High western gold (approach from the Lookout Tower or the Beach Nest)", 2711 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
+        #Tower of Zot
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Diamond bedazzling the Tower of Zot", 2879 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Dust
+        LocationData(TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " NPC - Gold bedazzling the Tower of Zot", 2816 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #Ore
 
         #Sara Sara Bazaar
         #Treasure chests
@@ -678,9 +675,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in odd flooded room 1", 2695 + npc_index_offset), #Ingot
         LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in odd flooded room 2", 1675 + npc_index_offset), #Ore
 
-        #Crystals
-        LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + DERVISH_JOB_CRYSTAL_LOCATION, 1121 + crystal_index_offset),
-
         #Ibek Cave
         #Treasure chests
         LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
@@ -693,7 +687,7 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Treasure chests
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Chest - Cliff diving", 2975 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ether Pouch chest
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Chest - Across the bridge", 2974 + treasure_index_offset), #Potion Pouch chest
-        LocationData(SALMON_BAY_AP_REGION, "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
+        LocationData(SALMON_RIVER_MOUTH_AP_REGION, "Overpass Chest - Lonely scrap among half-dead pines above Salmon Bay", 3677 + treasure_index_offset), #8th Scrap in Overpass main map
         
         #NPCs
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " NPC - Ancient Tablet B on moodlit shore behind waterfall", 2438 + npc_index_offset),
@@ -813,49 +807,46 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Near sky fishing 2", 2986 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Under the dry kid pit", 1365 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #The Immovable chest
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Fall through broken grate in building west of Sky Arena Prize Counter", 2951 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Potion chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)),  # Money chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)),  # Bone Mail chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)),  # Cutlass chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 4", 2796 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)), #Tonic Pouch
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 5", 2748 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)), #Soul Kris chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 1", 2812 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Money chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 2", 2723 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Gaia Axe chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 3", 2813 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Money chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 4", 2753 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Gaia Vest chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Gravedigger chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Malifice chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Wizards Wall chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(753, 134, -263) Yasha chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(754, 134, -264) Muramasa chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(755, 134, -263) Shadow Gi chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(754, 130, -264) Zether chest
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(755, 130, -263) Z-Potion chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins Room 1", 2794 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)),  # Money chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins Room 2", 2751 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)),  # Bone Mail chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 3", 2747 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)),  # Cutlass chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 4", 2796 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)), #Tonic Pouch
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 2 Sky Arena Wins room 5", 2748 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)), #Soul Kris chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 1", 2812 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Money chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 2", 2723 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Gaia Axe chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 3", 2813 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Money chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 5 Sky Arena Wins room 4", 2753 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Gaia Vest chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 1", 2665 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, EIGHTH_SKY_ARENA_FIGHT_LEVEL)), #Gravedigger chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 2", 2805 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, EIGHTH_SKY_ARENA_FIGHT_LEVEL)), #Malifice chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 8 Sky Arena Wins room 3", 2800 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, EIGHTH_SKY_ARENA_FIGHT_LEVEL)), #Wizards Wall chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 1", 2756 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(753, 134, -263) Yasha chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 2", 2928 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(754, 134, -264) Muramasa chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - 10 Sky Arena Wins room 3", 2929 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(755, 134, -263) Shadow Gi chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Fall through floorboards of 10 Sky Arena Wins room 1", 3763 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(754, 130, -264) Zether chest
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Chest - Fall through floorboards of 10 Sky Arena Wins room 2", 3764 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(755, 130, -263) Z-Potion chest
 
         #NPCs
         #Todo NPCs Job Masters: Master Assassin ID 3605 (769, 123, -201); gives you Assassin Seal in exchange for job mastery
         #Todo NPCs Job Masters: Master Samurai ID 3576 (800, 115, -221); gives you Samurai Seal in exchange for job mastery
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Chloe and Talon sky fishing", 3702 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #(765, 125, -248) Fixed Missable; removed post-sparkle
         #NPCs Multichecks: Shoudu Province (Sky Arena) map Z38_SkyArenaPrizes ID 1921 (765, 125, -248) gives 5 prizes in exchange for winning fights
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 1 Sky Arena Win Prize", 51921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 30)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 4 Sky Arena Wins Prize", 51922 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 40)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 6 Sky Arena Wins Prize", 51923 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 48)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 7 Sky Arena Wins Prize", 51924 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 52)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 9 Sky Arena Wins Prize", 1921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 56)), #(765, 125, -248)
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(752, 133, -262) Dust
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(756, 133, -261) Ingot
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #(753, 130, -264) Ore
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 1 Sky Arena Win Prize", 51921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIRST_SKY_ARENA_FIGHT_LEVEL)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 4 Sky Arena Wins Prize", 51922 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FOURTH_SKY_ARENA_FIGHT_LEVEL)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 6 Sky Arena Wins Prize", 51923 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SIXTH_SKY_ARENA_FIGHT_LEVEL)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 7 Sky Arena Wins Prize", 51924 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SEVENTH_SKY_ARENA_FIGHT_LEVEL)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 9 Sky Arena Wins Prize", 1921 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, NINTH_SKY_ARENA_FIGHT_LEVEL)), #(765, 125, -248)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 10 Sky Arena Wins room Diamond 1", 2833 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(752, 133, -262) Dust
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - 10 Sky Arena Wins room Diamond 2", 2811 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(756, 133, -261) Ingot
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Diamond through a hole in the 10 Sky Arena Wins room floor", 2832 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #(753, 130, -264) Ore
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold at back reservoir wall", 2827 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.has_swimming(state)), #Ingot
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in farmland on way to shrine", 2821 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot
         LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold near sky fishing", 2834 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 2 Sky Arena Wins room", 2829 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 32)), #Dust
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 1", 2720 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Ore
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 2", 2722 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Ingot
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 3", 2721 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 44)), #Dust
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Ingot
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 54)), #Ore
-
-        #Crystals
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + SAMURAI_JOB_CRYSTAL_LOCATION, 1206 + crystal_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 35)),
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 2 Sky Arena Wins room", 2829 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, SECOND_SKY_ARENA_FIGHT_LEVEL)), #Dust
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 1", 2720 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Ore
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 2", 2722 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Ingot
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 5 Sky Arena Wins room 3", 2721 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, FIFTH_SKY_ARENA_FIGHT_LEVEL)), #Dust
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 8 Sky Arena Wins room 1", 2830 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, EIGHTH_SKY_ARENA_FIGHT_LEVEL)), #Ingot
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " NPC - Gold in 8 Sky Arena Wins room 2", 2831 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, EIGHTH_SKY_ARENA_FIGHT_LEVEL)), #Ore
 
         #The Undercity
         #Treasures
@@ -889,10 +880,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " NPC - Gold in the sewer offshoot", 1696 + npc_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player)), #Dust
         #Undercity Inn area
         LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " NPC - Storage room Gold of the Undercity Inns", 1694 + npc_index_offset, lambda state: logic.has_swimming(state) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player)), #Ingot
-
-        #Crystals
-        #Can just swim or defeat the Undercity Masters; Blade Master: Ibek or Owl, Shadow Master: Horizontal or Fish, Duel Master: Ibek or Owl; to defeat all masters, you either need both ibek + quintar, owl, or fish
-        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + ASSASSIN_JOB_CRYSTAL_LOCATION, 1204 + crystal_index_offset, lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state) or logic.has_swimming(state)),
 
         #Ganymede Shrine
         #Treasure chests
@@ -930,16 +917,14 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " NPC - B1 Magic Well friendos hiding in the pillars", 2824 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_horizontal_movement(state)), #Ore
         LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_VOLCANO_DISPLAY_NAME + " NPC - Summit Gold", 2836 + npc_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)), #Ore Beaurior Volcano but it's at the top so Rock it is
 
-        #Crystals
-	    LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_VOLCANO_DISPLAY_NAME + VALKYRIE_JOB_CRYSTAL_LOCATION, 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
-
         #Lake Delende
         #Treasure chests
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Chest - North edge 1", 1263 + treasure_index_offset), #Float Shoes chest
         LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Chest - North edge 2", 2917 + treasure_index_offset), #Lake Delende map chest
 
         #NPCs
-        LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset, lambda state: logic.has_vertical_movement(state)), #Dust
+        #Atop Salmon River Dam
+        LocationData(ATOP_DAM_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " NPC - Panning for Gold down Salmon Creek without a paddle", 2854 + npc_index_offset), #Dust
 
         #Quintar Reserve
         #Treasure chests
@@ -951,9 +936,9 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #Reserve main
         #Todo NPCs CheckOrNot: 3 Quintar Eggs here
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 54)), #Shedding 1
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, 54)), #Shedding 2
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, 54)), #Shedding 3
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 1
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 2
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 3
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
@@ -1100,9 +1085,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Chest - Past the mean Ibek jump", 1282 + treasure_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY)), #Sages Walker chest
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Chest - Nickelodeon slime time :)", 1269 + treasure_index_offset), #Seekers Garb chest
 
-        #Crystals
-        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + SUMMONER_JOB_CRYSTAL_LOCATION, 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
-
         #Sequoia Athenaeum
         #Treasure chests
         LocationData(SEQUOIA_ATHENAEUM_AP_REGION, SEQUOIA_ATHENAEUM_DISPLAY_NAME + " Chest - Atop the shelves above the books door", 2932 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(412, 200, -551) Spellsword Helm chest
@@ -1136,10 +1118,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Western Gold above spikes", 2843 + npc_index_offset, lambda state: logic.has_glide(state)), #(354, 231, -429) Ingot
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Eastern Gold above spikes", 2842 + npc_index_offset, lambda state: logic.has_glide(state)), #(458, 231, -436) Ore
 
-        #Crystals
-        #Peak Ramparts
-        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + BEASTMASTER_JOB_CRYSTAL_LOCATION, 1370 + crystal_index_offset, lambda state: logic.has_glide(state)), #(404, 243, -386)
-
         #The Chalice of Tar
         #Treasure chests
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - At the tippy-top", 3544 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #The Chalice of Tar map chest
@@ -1149,9 +1127,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
         #NPCs
         #Todo NPCs Job Masters: The Chalice of Tar has Master Mimic ID 3606 (526, 234, -438); gives you Mimic Seal in exchange for job mastery
         LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Gold sparkling above the Overpass on the way up", 2841 + npc_index_offset), #Ore
-
-        #Crystals
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
 
         #Flyers Crag
         #Treasure chests
@@ -1228,9 +1203,6 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
         #NPCs
         #1 Diamond Dust on Jidamba Eaclaneya Fish Floor map has been categorized under the Capital Pipeline
-
-        #Crystals
-        LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + WEAVER_JOB_CRYSTAL_LOCATION, 2403 + crystal_index_offset),
 
         #The Deep Sea
         #Treasure chests
@@ -1388,68 +1360,99 @@ def get_locations(player: int, options: CrystalProjectOptions | None) -> List[Lo
 
     return location_table
 
-def get_bosses(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
+
+def get_crystal_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
+    logic = CrystalProjectLogic(player, options)
+    location_table: List[LocationData] = [
+        # Zones (Beginner)
+        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + FENCER_JOB_CRYSTAL_LOCATION, 130 + crystal_index_offset),
+        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + SHAMAN_JOB_CRYSTAL_LOCATION, 35 + crystal_index_offset),
+        LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + SCHOLAR_JOB_CRYSTAL_LOCATION, 166 + crystal_index_offset),
+        LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + AEGIS_JOB_CRYSTAL_LOCATION, 68 + crystal_index_offset),
+        # Zones (Advanced)
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
+        LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + NINJA_JOB_CRYSTAL_LOCATION, 699 + crystal_index_offset),
+        LocationData(RIVER_CATS_EGO_AP_REGION, RIVER_CATS_EGO_AP_REGION + NOMAD_JOB_CRYSTAL_LOCATION, 630 + crystal_index_offset),
+        LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + DERVISH_JOB_CRYSTAL_LOCATION, 1121 + crystal_index_offset),
+        # Zones (Expert)
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + SAMURAI_JOB_CRYSTAL_LOCATION, 1206 + crystal_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, THIRD_SKY_ARENA_FIGHT_LEVEL)),
+        # Can just swim or defeat the Undercity Masters; Blade Master: Ibek or Owl, Shadow Master: Horizontal or Fish, Duel Master: Ibek or Owl; to defeat all masters, you either need both ibek + quintar, owl, or fish
+        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + ASSASSIN_JOB_CRYSTAL_LOCATION, 1204 + crystal_index_offset, lambda state: (logic.has_horizontal_movement(state) and logic.has_vertical_movement(state)) or logic.has_glide(state) or logic.has_swimming(state)),
+        LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_VOLCANO_DISPLAY_NAME + VALKYRIE_JOB_CRYSTAL_LOCATION, 1086 + crystal_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY)),
+        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + SUMMONER_JOB_CRYSTAL_LOCATION, 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
+        # (404, 243, -386)
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + BEASTMASTER_JOB_CRYSTAL_LOCATION, 1370 + crystal_index_offset, lambda state: logic.has_glide(state)),
+        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + WEAVER_JOB_CRYSTAL_LOCATION, 2403 + crystal_index_offset),
+    ]
+
+    return location_table
+
+def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         #IDs here are specifically the spark IDs or NPC IDs for where you go to fight them from Crystal Edit
         #Summons
         #Not included: Pinga (unused)
-        LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Boss - Shaku Summon", 477 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #(118, 109, 10) Monster ID: 102
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Niltsi Summon", 1109 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 54)), #376, 178, -345 (Capital Sequoia (Maze) map) Monster ID: 93
-        LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Boss - Guaba Summon", 1138 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #-50, 91, -330 Monster ID: 94
-        LocationData(THE_UNDERCITY_AP_REGION, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #614, 91, -213 Monster ID: 97
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player)) and logic.is_area_in_level_range(state, 57)), #(720, 138, -278) Monster ID: 98
-        LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 57)), #97, 126, -211 Monster ID: 92
-        LocationData(PAMOA_TREE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 53)), #498, 218, -412 Monster ID: 91
-        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(672, 124, 106) Monster ID: 99
+        LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Boss - Shaku Summon", 477 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, SHAKU_FIGHT_LEVEL)), #(118, 109, 10) Monster ID: 102
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Niltsi Summon", 1109 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, NILTSI_FIGHT_LEVEL)), #376, 178, -345 (Capital Sequoia (Maze) map) Monster ID: 93
+        LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Boss - Guaba Summon", 1138 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, GUABA_FIGHT_LEVEL)), #-50, 91, -330 Monster ID: 94
+        LocationData(THE_UNDERCITY_AP_REGION, "Underpass Boss - Pah Summon", 1130 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_glide(state)) and state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, PAH_FIGHT_LEVEL)), #614, 91, -213 Monster ID: 97
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Tira Summon", 1132 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and (logic.has_vertical_movement(state) or logic.has_glide(state) or state.can_reach(QUINTAR_RESERVE_AP_REGION, player=player) or state.can_reach(GANYMEDE_SHRINE_AP_REGION, player=player)) and logic.is_area_in_level_range(state, TIRA_FIGHT_LEVEL)), #(720, 138, -278) Monster ID: 98
+        LocationData(LAKE_DELENDE_AP_REGION, LAKE_DELENDE_DISPLAY_NAME + " Boss - Ioske Summon", 1111 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, IOSKE_FIGHT_LEVEL)), #97, 126, -211 Monster ID: 92
+        LocationData(PAMOA_TREE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Pamoa Summon", 1136 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, PAMOA_FIGHT_LEVEL)), #498, 218, -412 Monster ID: 91
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Boss - Juses Summon", 1134 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, JUSES_FIGHT_LEVEL)), #(672, 124, 106) Monster ID: 99
         #Mind's Delusion is part of the Coyote fight
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, 58)), #(-60, 53, 202) Monster ID: 95
+        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Boss - Coyote Summon", 1140 + boss_index_offset, lambda state: state.has(SUMMONER_JOB, player) and logic.is_area_in_level_range(state, COYOTE_FIGHT_LEVEL)), #(-60, 53, 202) Monster ID: 95
 
         #Bosses
         #Not included: Bone Drinker (unused), Rexosaur (too RNG), Astley/Chloe/Reid/Talon Final Fights, Buttermint (you monster)
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 8
+        LocationData(DELENDE_PEAK_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Troll", 153 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, TROLL_FIGHT_LEVEL)), #Monster ID: 8
         LocationData(GRAN_AP_REGION, DELENDE_DISPLAY_NAME + " Boss - Gran...?", 183 + boss_index_offset), #Monster ID: 28 (min level 30)
-        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 12
-        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 23
-        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 12)), #Monster ID: 18
-        LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 18)), #Monster ID: 27
-        LocationData(PROVING_MEADOWS_AP_REGION, PROVING_MEADOWS_DISPLAY_NAME + " Boss - Knight", 128 + boss_index_offset, lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, 10)), #Monster ID: 212 (using Z7_CrystalCheckerNPC)
-        LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 19)), #Monster ID: 38
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Defeat L60 dummy and it shall appear...!", 3530 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 303
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: (logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 49
-        LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)), #Monster ID: 4
-        LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 26)), #Monster ID: 68
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, 27)), #Monster ID: 37
-        LocationData(COBBLESTONE_CRAG_AP_REGION, COBBLESTONE_CRAG_DISPLAY_NAME + " Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 50)), #Monster ID: 217
-        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 29)), #Monster ID: 63
-        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 35)), #Monster ID: 221
-        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Final Sky Arena Fight: Arachlea", 1366 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 58)), #Monster ID: 252 (SkyArenaRegistrar)
-        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Blade Master", 1939 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 145
-        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Shadow Master", 1940 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 144
-        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Duel Master", 1941 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, 40)), #Monster ID: 146
-        LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, 39)), #Monster ID: 59
-        LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, 40)), #Monster ID: 78 and 100
-        LocationData(EASTERN_CHASM_AP_REGION, EASTERN_CHASM_DISPLAY_NAME + " Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 293
-        LocationData(SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 55)), #Monster ID: 309
-        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Boss - The Owlbear", 2104 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 47)), #Monster ID: 143
-        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, 49)), #Monster ID: 224
-        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, 54)), #Monster ID: 222
-        LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 60)), #Monster ID: 242
-        LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 62)), #Monster ID: 117
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)), #Monster ID: 192
-        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)), #Monster ID: 171
-        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)), #Monster ID: 170
-        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 65)), #Monster ID: 172
-        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Peacekeeper", 2579 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 63)), #Monster ID: 169
-        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - With STEM WARD in hand, offer 4 Deity Eyes to battle Gabriel", 2580 + boss_index_offset, lambda state: state.has(DEITY_EYE, player, 4) and state.has(STEM_WARD, player) and logic.is_area_in_level_range(state, 65)), #Monster ID: 241
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Parasite X", 1457 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 56)), #Monster ID: 198 (Castle Sequoia (Skums) Z58_TrapdoorGuard)
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Neo Warden", 1477 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 57)), #Monster ID: 200 (Castle Sequoia (Bounce) Z58_F2TrapdoorGuard)
-        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Akamanto", 1503 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, 58)), #Monster ID: 201 (Castle Sequoia (Ice) Z58_F3TrapdoorGuard)
+        LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Boss - Bone Thief", 175 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, BONE_THIEF_FIGHT_LEVEL)), #Monster ID: 12
+        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Boss - Guardian", 143 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, GUARDIAN_FIGHT_LEVEL)), #Monster ID: 23
+        LocationData(DRAFT_SHAFT_CONDUIT_AP_REGION, DRAFT_SHAFT_CONDUIT_DISPLAY_NAME + " Boss - Canal Beast", 138 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CANAL_BEAST_FIGHT_LEVEL)), #Monster ID: 18
+        LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " Boss - Sepulchra", 167 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, SEPULCHRA_FIGHT_LEVEL)), #Monster ID: 27
+        LocationData(PROVING_MEADOWS_AP_REGION, PROVING_MEADOWS_DISPLAY_NAME + " Boss - Knight", 128 + boss_index_offset, lambda state: logic.has_jobs(state, 3) and logic.is_area_in_level_range(state, KNIGHT_FIGHT_LEVEL)), #Monster ID: 212 (using Z7_CrystalCheckerNPC)
+        LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + " Boss - Parasite", 333 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, PARASITE_FIGHT_LEVEL)), #Monster ID: 38
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Defeat L60 dummy and it shall appear...!", 3530 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, DUMMY_BOSS_FIGHT_LEVEL)), #Monster ID: 303
+        LocationData(MOAT_SHALLOWS_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Boss - Enami", 458 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENAMI_FIGHT_LEVEL)), #Monster ID: 49
+        LocationData(JOJO_SEWERS_AP_REGION, JOJO_SEWERS_DISPLAY_NAME + " Boss - Blood Slop", 758 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, BLOOD_SLOP_FIGHT_LEVEL)), #Monster ID: 4
+        LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Boss - Fancy Quintar", 971 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, FANCY_QUINTAR_FIGHT_LEVEL)), #Monster ID: 68
+        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Boss - Warden", 907 + boss_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY) and logic.is_area_in_level_range(state, WARDEN_FIGHT_LEVEL)), #Monster ID: 37
+        LocationData(COBBLESTONE_CRAG_AP_REGION, COBBLESTONE_CRAG_DISPLAY_NAME + " Boss - Crag Demon", 1118 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CRAG_DEMON_FIGHT_LEVEL)), #Monster ID: 217
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Boss - Kuromanto", 698 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, KUROMANTO_FIGHT_LEVEL)), #Monster ID: 63
+        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Boss - Possessor", 1674 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, POSSESSOR_FIGHT_LEVEL)), #Monster ID: 221
+        LocationData(SHOUDU_PROVINCE_AP_REGION, SHOUDU_PROVINCE_DISPLAY_NAME + " Boss - Final Sky Arena Fight: Arachlea", 1366 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, ARACHLEA_FIGHT_LEVEL)), #Monster ID: 252 (SkyArenaRegistrar)
+        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Blade Master", 1939 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, BLADE_MASTER_FIGHT_LEVEL)), #Monster ID: 145
+        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Shadow Master", 1940 + boss_index_offset, lambda state: (logic.has_swimming(state) or logic.has_horizontal_movement(state)) and logic.is_area_in_level_range(state, SHADOW_MASTER_FIGHT_LEVEL)), #Monster ID: 144
+        LocationData(THE_UNDERCITY_AP_REGION, THE_UNDERCITY_DISPLAY_NAME + " Boss - Duel Master", 1941 + boss_index_offset, lambda state: (logic.has_vertical_movement(state) or logic.has_glide(state)) and logic.is_area_in_level_range(state, DUEL_MASTER_FIGHT_LEVEL)), #Monster ID: 146
+        LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Ancient Sword", 821 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 2) and logic.is_area_in_level_range(state, ANCIENT_SWORD_FIGHT_LEVEL)), #Monster ID: 59
+        LocationData(BEAURIOR_ROCK_AP_REGION, BEAURIOR_ROCK_DISPLAY_NAME + " Boss - Iguanadon & Iguanadin", 862 + boss_index_offset, lambda state: logic.has_key(state, SMALL_KEY, 4) and logic.has_key(state, BEAURIOR_BOSS_KEY) and logic.is_area_in_level_range(state, IGUANADON_AND_DIN_FIGHT_LEVEL)), #Monster ID: 78 and 100
+        LocationData(EASTERN_CHASM_AP_REGION, EASTERN_CHASM_DISPLAY_NAME + " Boss - Undergrowth", 3476 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, UNDERGROWTH_FIGHT_LEVEL)), #Monster ID: 293
+        LocationData(SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, TALL_TALL_HEIGHTS_DISPLAY_NAME + " Boss - Hermetic", 3637 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, HERMETIC_FIGHT_LEVEL)), #Monster ID: 309
+        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Boss - The Owlbear", 2104 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, OWLBEAR_FIGHT_LEVEL)), #Monster ID: 143
+        LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + " Boss - Red Guardian", 1713 + boss_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3) and logic.is_area_in_level_range(state, RED_GUARDIAN_FIGHT_LEVEL)), #Monster ID: 224
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, RAMPART_DEMON_FIGHT_LEVEL)), #Monster ID: 222
+        LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CONSCRIPT_FIGHT_LEVEL)), #Monster ID: 242
+        LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ANUBIS_FIGHT_LEVEL)), #Monster ID: 117
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, SPIRIT_CAGE_FIGHT_LEVEL)), #Monster ID: 192
+        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, DEVOURER_FIGHT_LEVEL)), #Monster ID: 171
+        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, OLD_ONE_FIGHT_LEVEL)), #Monster ID: 170
+        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENFORCER_FIGHT_LEVEL)), #Monster ID: 172
+        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Peacekeeper", 2579 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, PEACEKEEPER_FIGHT_LEVEL)), #Monster ID: 169
+        LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - With STEM WARD in hand, offer 4 Deity Eyes to battle Gabriel", 2580 + boss_index_offset, lambda state: state.has(DEITY_EYE, player, 4) and state.has(STEM_WARD, player) and logic.is_area_in_level_range(state, GABRIEL_FIGHT_LEVEL)), #Monster ID: 241
+        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Parasite X", 1457 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, PARASITE_X_FIGHT_LEVEL)), #Monster ID: 198 (Castle Sequoia (Skums) Z58_TrapdoorGuard)
+        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Neo Warden", 1477 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, NEO_WARDEN_FIGHT_LEVEL)), #Monster ID: 200 (Castle Sequoia (Bounce) Z58_F2TrapdoorGuard)
+        LocationData(CASTLE_SEQUOIA_AP_REGION, CASTLE_SEQUOIA_DISPLAY_NAME + " Boss - Akamanto", 1503 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, AKAMANTO_FIGHT_LEVEL)), #Monster ID: 201 (Castle Sequoia (Ice) Z58_F3TrapdoorGuard)
         LocationData(THE_OLD_WORLD_AP_REGION, THE_OLD_WORLD_DISPLAY_NAME + " Boss - Periculum", 3650 + boss_index_offset), #Monster ID: 268 (min level 70)
         ]
     return location_table
 
-def get_shops(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
+def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
 
     location_table: List[LocationData] = [
@@ -1472,44 +1475,44 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Shop - Nans Stew 2", 20014 + shop_index_offset),
 
         #Delende
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 1", 10052 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 2", 20052 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 3", 30052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 1", 10052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 2", 20052 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Weapon Merchant 3", 30052 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 1", 10063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 2", 20063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 3", 30063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 4", 40063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 5", 50063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 6", 60063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 7", 70063 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 8", 80063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 1", 10063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 2", 20063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 3", 30063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 4", 40063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 5", 50063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 6", 60063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 7", 70063 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Armor Merchant 8", 80063 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 1", 10199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 2", 20199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 3", 30199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 4", 40199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 5", 50199 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 6", 60199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 1", 10199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 2", 20199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 3", 30199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 4", 40199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 5", 50199 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Fish Hatchery Fish Merchant 6", 60199 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 1", 10115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 2", 20115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 3", 30115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 4", 40115 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 5", 50115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 1", 10115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 2", 20115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 3", 30115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 4", 40115 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Weapons Merchant camped in front of Pale Grotto 5", 50115 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 1", 10446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 2", 20446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 3", 30446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 4", 40446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 5", 50446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 6", 60446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 7", 70446 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 8", 80446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 1", 10446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 2", 20446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 3", 30446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 4", 40446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 5", 50446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 6", 60446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 7", 70446 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Armor Merchant camped in front of Pale Grotto 8", 80446 + shop_index_offset),
 
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 1", 10266 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 2", 20266 + shop_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 3", 30266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 1", 10266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 2", 20266 + shop_index_offset),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Shop - Item Merchant camped in front of Pale Grotto 3", 30266 + shop_index_offset),
 
         #Seaside Cliffs
         LocationData(SEASIDE_CLIFFS_AP_REGION, SEASIDE_CLIFFS_DISPLAY_NAME + " Shop - Camp Merchant 1", 10116 + shop_index_offset),
@@ -1893,11 +1896,11 @@ def get_shops(player: int, options: CrystalProjectOptions | None) -> List[Locati
     ]
     return location_table
 
-def get_region_completions(player: int, options: CrystalProjectOptions) -> List[LocationData]:
+def get_region_completion_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
     location_table: List[LocationData] = [
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
+        LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
         LocationData(MERCURY_SHRINE_AP_REGION, MERCURY_SHRINE_DISPLAY_NAME + " Region Completion", 6007 + regionsanity_index_offset, regionsanity=True),
         LocationData(SOILED_DENLENDE_AP_REGION, SOILED_DEN_DISPLAY_NAME + " Region Completion", 6003 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Region Completion", 6004 + regionsanity_index_offset, regionsanity=True),
@@ -1960,3 +1963,20 @@ def get_region_completions(player: int, options: CrystalProjectOptions) -> List[
         LocationData(THE_OLD_WORLD_AP_REGION, THE_OLD_WORLD_DISPLAY_NAME + " Region Completion", 6064 + regionsanity_index_offset, regionsanity=True),
     ]
     return location_table
+
+def get_location_names_per_category() -> Dict[str, Set[str]]:
+    categories: Dict[str, Set[str]] = {}
+
+    for location in get_crystal_locations(-1, None):
+        categories.setdefault("Crystals", set()).add(location.name)
+
+    for location in get_shop_locations(-1, None):
+        categories.setdefault("Shops", set()).add(location.name)
+
+    for location in get_boss_locations(-1, None):
+        categories.setdefault("Bosses", set()).add(location.name)
+
+    for location in get_region_completion_locations(-1, None):
+        categories.setdefault("Region Completions", set()).add(location.name)
+
+    return categories

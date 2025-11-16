@@ -7,7 +7,7 @@ class TestSpawningMeadows(CrystalProjectTestBase):
         self.assertTrue(self.can_reach_region(SPAWNING_MEADOWS_AP_REGION))
 
     def test_region_connections_no_items(self):
-        self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions=(DELENDE_AP_REGION,), unreachable_regions=(MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION))
+        self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions=(DELENDE_PLAINS_AP_REGION,), unreachable_regions=(MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION))
 
 class TestSpawningMeadowsObscureRoutes(CrystalProjectTestBase):
     options = {
@@ -18,12 +18,12 @@ class TestSpawningMeadowsObscureRoutes(CrystalProjectTestBase):
 
     def test_obscure_routes(self):
         unreachable_regions = (MERCURY_SHRINE_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
-        reachable_regions = (DELENDE_AP_REGION, POKO_POKO_DESERT_AP_REGION,)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION,)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         unreachable_regions = (MERCURY_SHRINE_AP_REGION, BEAURIOR_VOLCANO_AP_REGION)
-        reachable_regions = (DELENDE_AP_REGION, POKO_POKO_DESERT_AP_REGION, CONTINENTAL_TRAM_AP_REGION, YAMAGAWA_MA_AP_REGION)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, CONTINENTAL_TRAM_AP_REGION, YAMAGAWA_MA_AP_REGION)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
 class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
@@ -34,23 +34,23 @@ class TestSpawningMeadowsNoObscureRoutes(CrystalProjectTestBase):
     }
 
     def test_obscure_routes(self):
-        unreachable_regions = (MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
-        reachable_regions = (DELENDE_AP_REGION,)
+        unreachable_regions = (MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, CONTINENTAL_TRAM_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION,)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
         self.collect(self.get_item_by_name(IBEK_BELL))
         unreachable_regions = (CONTINENTAL_TRAM_AP_REGION,)
-        reachable_regions = (DELENDE_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
         unreachable_regions = (CONTINENTAL_TRAM_AP_REGION,)
-        reachable_regions = (DELENDE_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
         self.collect_mounts()
         unreachable_regions = (CONTINENTAL_TRAM_AP_REGION,)
-        reachable_regions = (DELENDE_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_DESERT_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
+        reachable_regions = (DELENDE_PLAINS_AP_REGION, MERCURY_SHRINE_AP_REGION, POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, YAMAGAWA_MA_AP_REGION)
         self.assert_region_entrances(SPAWNING_MEADOWS_AP_REGION, reachable_regions, unreachable_regions)
 
 class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
@@ -66,7 +66,7 @@ class TestSpawningMeadowsConnectionRulesNoLevelGating(CrystalProjectTestBase):
 
     def test_poko_poko_connection(self):
         self.collect_by_name(IBEK_BELL)
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_DESERT_AP_REGION))
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION))
 
     def test_tram_connection(self):
         self.collect_by_name(PROGRESSIVE_SALMON_VIOLA)
@@ -98,18 +98,18 @@ class TestSpawningMeadowsConnectionRulesWithLevelGating(CrystalProjectTestBase):
     # Poko Poko Desert: 30
     def test_poko_poko_connection_fails_with_ibek_no_level_cap(self):
         self.collect_by_name(IBEK_BELL)
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_DESERT_AP_REGION))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION))
 
     def test_poko_poko_connection_fails_with_level_cap_no_ibek(self):
         self.collect_progressive_levels(2)
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_DESERT_AP_REGION))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION))
 
     def test_poko_poko_connection_succeeds_with_ibek_and_level_cap(self):
         self.collect_by_name(IBEK_BELL)
         self.collect_progressive_levels(3)
-        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_DESERT_AP_REGION))
+        self.assertFalse(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION))
         self.collect_progressive_levels(1)
-        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_DESERT_AP_REGION))
+        self.assertTrue(self.can_reach_entrance(SPAWNING_MEADOWS_AP_REGION + " -> " + POKO_POKO_SPAWNING_MEADOWS_PASS_AP_REGION))
 
     # Continental Tram
     def test_tram_connection_fails_with_obscure_routes_off(self):
