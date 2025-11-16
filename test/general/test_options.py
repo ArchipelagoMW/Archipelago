@@ -1,8 +1,9 @@
 import unittest
 
 from BaseClasses import PlandoOptions
-from Options import Choice, ItemLinks, PlandoConnections, PlandoItems, PlandoTexts
+from Options import Choice, ItemLinks, OptionSet, PlandoConnections, PlandoItems, PlandoTexts
 from Utils import restricted_dumps
+
 from worlds.AutoWorld import AutoWorldRegister
 
 
@@ -81,6 +82,19 @@ class TestOptions(unittest.TestCase):
                         restricted_dumps(option.from_any(option.default))
                         if issubclass(option, Choice) and option.default in option.name_lookup:
                             restricted_dumps(option.from_text(option.name_lookup[option.default]))
+
+    def test_option_set_keys_random(self):
+        """Tests that option sets do not contain 'random' and its variants as valid keys"""
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            if game_name not in ("Archipelago", "Sudoku", "Super Metroid"):
+                for option_key, option in world_type.options_dataclass.type_hints.items():
+                    if issubclass(option, OptionSet):
+                        with self.subTest(game=game_name, option=option_key):
+                            self.assertFalse(any(random_key in option.valid_keys for random_key in ("random",
+                                                                                                    "random-high",
+                                                                                                    "random-low")))
+                            for key in option.valid_keys:
+                                self.assertFalse("random-range" in key)
     
     def test_pickle_dumps_plando(self):
         """Test that plando options using containers of a custom type can be pickled"""
