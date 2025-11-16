@@ -374,22 +374,27 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     Handles `excluded_items`, `locked_items`, and `start_inventory`
     Returns a list of all possible non-filler items that can be added, with an accompanying flags bitfield.
     """
-    excluded_items = world.options.excluded_items
-    unexcluded_items = world.options.unexcluded_items
-    locked_items = world.options.locked_items
-    start_inventory = world.options.start_inventory
+    excluded_items: dict[str, int] = world.options.excluded_items.value
+    unexcluded_items: dict[str, int] = world.options.unexcluded_items.value
+    locked_items: dict[str, int] = world.options.locked_items.value
+    start_inventory: dict[str, int] = world.options.start_inventory.value
     key_items = world.custom_mission_order.get_items_to_lock()
 
-    def resolve_count(count: Optional[int], max_count: int) -> int:
-        if count == 0:
+    def resolve_exclude(count: int, max_count: int) -> int:
+        if count < 0:
             return max_count
-        if count is None:
-            return 0
-        if max_count == 0:
-            return count
-        return min(count, max_count)
+        return count
+
+    def resolve_count(count: int, max_count: int, negative_value: int | None = None) -> int:
+        if count < 0:
+            if negative_value is None:
+                return max_count
+            return negative_value
+        if max_count and count > max_count:
+            return max_count
+        return count
     
-    auto_excludes = {item_name: 1 for item_name in item_groups.legacy_items}
+    auto_excludes = Counter({item_name: 1 for item_name in item_groups.legacy_items})
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
             auto_excludes[item_name] = 1
@@ -402,27 +407,24 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
             elif item_name in item_groups.nova_equipment:
                 continue
             else:
-                auto_excludes[item_name] = 0
+                auto_excludes[item_name] = item_data.quantity
 
 
     result: List[FilterItem] = []
     for item_name, item_data in item_tables.item_table.items():
         max_count = item_data.quantity
-        auto_excluded_count = auto_excludes.get(item_name)
+        auto_excluded_count = auto_excludes.get(item_name, 0)
         excluded_count = excluded_items.get(item_name, auto_excluded_count)
-        unexcluded_count = unexcluded_items.get(item_name)
-        locked_count = locked_items.get(item_name)
-        start_count: Optional[int] = start_inventory.get(item_name)
+        unexcluded_count = unexcluded_items.get(item_name, 0)
+        locked_count = locked_items.get(item_name, 0)
+        start_count = start_inventory.get(item_name, 0)
         key_count = key_items.get(item_name, 0)
-        # specifying 0 in the yaml means exclude / lock all
-        # start_inventory doesn't allow specifying 0
-        # not specifying means don't exclude/lock/start
-        excluded_count = resolve_count(excluded_count, max_count)
-        unexcluded_count = resolve_count(unexcluded_count, max_count)
+        # specifying a negative number in the yaml means exclude / lock all
+        excluded_count = resolve_count(
+            resolve_exclude(excluded_count, max_count) - resolve_exclude(unexcluded_count, max_count), max_count, negative_value=0
+        )
         locked_count = resolve_count(locked_count, max_count)
         start_count = resolve_count(start_count, max_count)
-
-        excluded_count = max(0, excluded_count - unexcluded_count)
 
         # Priority: start_inventory >> locked_items >> excluded_items >> unspecified
         if max_count == 0:

@@ -18,19 +18,19 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             **self.ALL_CAMPAIGNS,
             'locked_items': {
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
                 item_names.MEDIVAC: 1,
                 item_names.FIREBAT: 1,
-                item_names.ZEALOT: 0,
+                item_names.ZEALOT: -1,
                 item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL: 2,
             },
             'excluded_items': {
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
-                item_names.MEDIVAC: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
+                item_names.MEDIVAC: -1,
                 item_names.FIREBAT: 1,
-                item_names.ZERGLING: 0,
+                item_names.ZERGLING: -1,
                 item_names.PROGRESSIVE_REGENERATIVE_BIO_STEEL: 2,
             }
         }
@@ -50,38 +50,38 @@ class TestItemFiltering(Sc2SetupTestBase):
         world_options = {
             'grant_story_tech': options.GrantStoryTech.option_grant,
             'excluded_items': {
-                item_groups.ItemGroupNames.NOVA_EQUIPMENT: 15,
+                item_groups.ItemGroupNames.NOVA_EQUIPMENT: -1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
                 item_names.MARAUDER_PROGRESSIVE_STIMPACK: 2,
-                item_names.MARINE: 0,
-                item_names.MARAUDER: 0,
+                item_names.MARINE: -1,
+                item_names.MARAUDER: -1,
                 item_names.REAPER: 1,
-                item_names.DIAMONDBACK: 0,
+                item_names.DIAMONDBACK: -1,
                 item_names.HELLION: 1,
                 # Additional excludes to increase the likelihood that unexcluded items actually appear
-                item_groups.ItemGroupNames.STARPORT_UNITS: 0,
-                item_names.WARHOUND: 0,
-                item_names.VULTURE: 0,
-                item_names.WIDOW_MINE: 0,
-                item_names.THOR: 0,
-                item_names.GHOST: 0,
-                item_names.SPECTRE: 0,
-                item_groups.ItemGroupNames.MENGSK_UNITS: 0,
-                item_groups.ItemGroupNames.TERRAN_VETERANCY_UNITS: 0,
+                item_groups.ItemGroupNames.STARPORT_UNITS: -1,
+                item_names.WARHOUND: -1,
+                item_names.VULTURE: -1,
+                item_names.WIDOW_MINE: -1,
+                item_names.THOR: -1,
+                item_names.GHOST: -1,
+                item_names.SPECTRE: -1,
+                item_groups.ItemGroupNames.MENGSK_UNITS: -1,
+                item_groups.ItemGroupNames.TERRAN_VETERANCY_UNITS: -1,
             },
             'unexcluded_items': {
-                item_names.NOVA_PLASMA_RIFLE: 1,      # Necessary to pass logic
-                item_names.NOVA_PULSE_GRENADES: 0,    # Necessary to pass logic
-                item_names.NOVA_JUMP_SUIT_MODULE: 0,  # Necessary to pass logic
-                item_groups.ItemGroupNames.BARRACKS_UNITS: 0,
+                item_names.NOVA_PLASMA_RIFLE: 1,       # Necessary to pass logic
+                item_names.NOVA_PULSE_GRENADES: -1,    # Necessary to pass logic
+                item_names.NOVA_JUMP_SUIT_MODULE: -1,  # Necessary to pass logic
+                item_groups.ItemGroupNames.BARRACKS_UNITS: -1,
                 item_names.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: 1,
                 item_names.HELLION: 1,
                 item_names.MARINE_PROGRESSIVE_STIMPACK: 1,
-                item_names.MARAUDER_PROGRESSIVE_STIMPACK: 0,
+                item_names.MARAUDER_PROGRESSIVE_STIMPACK: -1,
                 # Additional unexcludes for logic
-                item_names.MEDIVAC: 0,
-                item_names.BATTLECRUISER: 0,
-                item_names.SCIENCE_VESSEL: 0,
+                item_names.MEDIVAC: -1,
+                item_names.BATTLECRUISER: -1,
+                item_names.SCIENCE_VESSEL: -1,
             },
             # Terran-only
             'enabled_campaigns': {
@@ -337,9 +337,9 @@ class TestItemFiltering(Sc2SetupTestBase):
             # Options under test
             'vanilla_items_only': True,
             'unexcluded_items': {
-                item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: 0,
+                item_names.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM: -1,
                 item_names.WARHOUND: 1,
-                item_groups.ItemGroupNames.TERRAN_STIMPACKS: 0,
+                item_groups.ItemGroupNames.TERRAN_STIMPACKS: -1,
             },
             # Avoid options that lock non-vanilla items for logic
             'required_tactics': options.RequiredTactics.option_any_units,
@@ -1249,7 +1249,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_false,
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
-            'locked_items': {item_name: 0 for item_name in unreleased_items},
+            'locked_items': {item_name: -1 for item_name in unreleased_items},
         }
 
         self.generate_world(world_options)

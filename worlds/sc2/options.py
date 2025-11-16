@@ -5,8 +5,9 @@ from datetime import timedelta
 
 from Options import (
     Choice, Toggle, DefaultOnToggle, OptionSet, Range,
-    PerGameCommonOptions, Option, VerifyKeys, StartInventory,
+    PerGameCommonOptions, VerifyKeys, StartInventory,
     is_iterable_except_str, OptionGroup, Visibility, ItemDict,
+    OptionCounter,
 )
 from Utils import get_fuzzy_results
 from BaseClasses import PlandoOptions
@@ -930,33 +931,46 @@ class TakeOverAIAllies(Toggle):
     display_name = "Take Over AI Allies"
 
 
-class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
-    """A branch of ItemDict that supports item counts of 0"""
+class Sc2ItemDict(OptionCounter, VerifyKeys, Mapping[str, int]):
+    """A branch of ItemDict that supports negative item counts"""
     default = {}
     supports_weighting = False
     verify_item_name = True
     # convert_name_groups = True
     display_name = 'Unnamed dictionary'
-    minimum_value: int = 0
+    min: int = -1
+    max: int = 1000
+    valid_keys = set(item_tables.item_table) | set(item_groups.item_name_groups)
 
-    def __init__(self, value: Dict[str, int]):
+    def __init__(self, value: dict[str, int]):
         self.value = {key: val for key, val in value.items()}
 
     @classmethod
-    def from_any(cls, data: Union[List[str], Dict[str, int]]) -> 'Sc2ItemDict':
+    def from_any(cls, data: list[str] | dict[str, int]) -> 'Sc2ItemDict':
         if isinstance(data, list):
             # This is a little default that gets us backwards compatibility with lists.
-            # It doesn't play nice with trigger merging dicts and lists together, though, so best not to advertise it overmuch.
-            data = {item: 0 for item in data}
+            # It doesn't play nice with trigger merging dicts and lists together, though,
+            # so best not to advertise it overmuch.
+            data = {item: -1 for item in data}
         if isinstance(data, dict):
             for key, value in data.items():
                 if not isinstance(value, int):
-                    raise ValueError(f"Invalid type in '{cls.display_name}': element '{key}' maps to '{value}', expected an integer")
-                if value < cls.minimum_value:
-                    raise ValueError(f"Invalid value for '{cls.display_name}': element '{key}' maps to {value}, which is less than the minimum ({cls.minimum_value})")
+                    raise ValueError(
+                        f"Invalid type in '{cls.display_name}': "
+                        f"element '{key}' maps to '{value}', expected an integer"
+                    )
+                if value < cls.min:
+                    raise ValueError(
+                        f"Invalid value for '{cls.display_name}': "
+                        f"element '{key}' maps to {value}, which is less than the minimum ({cls.min})"
+                    )
+                if value > cls.max:
+                    raise ValueError(f"Invalid value for '{cls.display_name}': "
+                    f"element '{key}' maps to {value}, which is greater than the maximum ({cls.max})"
+                )
             return cls(data)
         else:
-            raise NotImplementedError(f"Cannot Convert from non-dictionary, got {type(data)}")
+            raise NotImplementedError(f"{cls.display_name}: Cannot Convert from non-dictionary, got {type(data)}")
 
     def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
@@ -977,9 +991,11 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
                     list(world.item_names) + list(item_groups.ItemGroupNames.get_all_group_names()),
                     limit=1,
                 )
-                raise Exception(f"Item {item_name} from option {self} "
-                                f"is not a valid item name from {world.game}. "
-                                f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)")
+                raise Exception(
+                    f"Item {item_name} from option {self} "
+                    f"is not a valid item name from {world.game}. "
+                    f"Did you mean '{picks[0][0]}' ({picks[0][1]}% sure)"
+                )
 
     def get_option_name(self, value):
         return ", ".join(f"{key}: {v}" for key, v in value.items())
@@ -995,25 +1011,25 @@ class Sc2ItemDict(Option[Dict[str, int]], VerifyKeys, Mapping[str, int]):
 
 
 class Sc2StartInventory(Sc2ItemDict):
-    """Start with these items."""
+    """Start with these items. Use an amount of -1 to start with all copies of an item."""
     display_name = StartInventory.display_name
 
 
 class LockedItems(Sc2ItemDict):
     """Guarantees that these items will be unlockable, in the amount specified.
-    Specify an amount of 0 to lock all copies of an item."""
+    Specify an amount of -1 to lock all copies of an item."""
     display_name = "Locked Items"
 
 
 class ExcludedItems(Sc2ItemDict):
     """Guarantees that these items will not be unlockable, in the amount specified.
-    Specify an amount of 0 to exclude all copies of an item."""
+    Specify an amount of -1 to exclude all copies of an item."""
     display_name = "Excluded Items"
 
 
 class UnexcludedItems(Sc2ItemDict):
     """Undoes an item exclusion; useful for whitelisting or fine-tuning a category.
-    Specify an amount of 0 to unexclude all copies of an item."""
+    Specify an amount of -1 to unexclude all copies of an item."""
     display_name = "Unexcluded Items"
 
 
