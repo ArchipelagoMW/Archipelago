@@ -14,12 +14,12 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SPAWNING_MEADOWS_AP_REGION, "AP Spawn Point", 5003),
         LocationData(SPAWNING_MEADOWS_AP_REGION, "Old Nan's Watering Hole", 59),
 
-        LocationData(DELENDE_AP_REGION, "The Pale Grotto Entrance", 44),
-        LocationData(DELENDE_AP_REGION, "Soiled Den", 66),
-        LocationData(DELENDE_AP_REGION, "Cabin On The Cliff", 94),
-        LocationData(DELENDE_AP_REGION, "Fish Hatchery", 127),
-        LocationData(DELENDE_AP_REGION, "Delende Peak", 160),
-        LocationData(DELENDE_AP_REGION, "Delende Falls", 186),
+        LocationData(DELENDE_PLAINS_AP_REGION, "The Pale Grotto Entrance", 44),
+        LocationData(DELENDE_PLAINS_AP_REGION, "Soiled Den", 66),
+        LocationData(DELENDE_PLAINS_AP_REGION, "Fish Hatchery", 127),
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Cabin On The Cliff", 94),
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, "Delende Falls", 186),
+        LocationData(DELENDE_PEAK_AP_REGION, "Delende Peak", 160),
 
         LocationData(MERCURY_SHRINE_AP_REGION, "Mercury Shrine", 152),
 

@@ -6,7 +6,7 @@ from .constants.display_regions import *
 def get_unused_locations() -> List[LocationData]:
     location_table: List[LocationData] = [
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " NPC - Slow Nan walk", 4 + npc_index_offset),
-        LocationData(DELENDE_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Master Fencer", 3573 + npc_index_offset),
+        LocationData(DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_DISPLAY_NAME + " NPC - Master Fencer", 3573 + npc_index_offset),
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + " NPC - Master Scholar", 3574 + npc_index_offset),
         LocationData(SEASIDE_CLIFFS_AP_REGION, SEASIDE_CLIFFS_DISPLAY_NAME + " NPC - Master Shaman", 3572 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Master Beatsmith", 3560 + npc_index_offset),
