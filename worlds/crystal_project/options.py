@@ -20,7 +20,8 @@ class Goal(Choice):
     
     Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs (starting Jobs don't count).
 
-    True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit. Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
+    True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit.
+    Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
     
     Clamshells: Collect enough clamshells for Mañana Man in Seaside Cliffs.
     """
@@ -98,7 +99,8 @@ class JobRando(Choice):
 
     Crystal: all vanilla Jobs normally received from crystals are chucked into the item pool.
 
-    Full: your starting jobs are randomized, and the rest of the vanilla Jobs are added to the item pool. Adjust the Starting Job Quantity (see below) for how many random Jobs you start with.
+    Full: your starting jobs are randomized, and the rest of the vanilla Jobs are added to the item pool.
+    Adjust the Starting Job Quantity (see below) for how many random Jobs you start with.
     """
     display_name = "Job Rando"
     option_none = 0
@@ -118,7 +120,7 @@ class StartingJobQuantity(Range):
 class DisableSparks(Toggle):
     """
     When enabled, enemy sparks are disabled: enemies will completely ignore the player, and touching them does not start combat.
-    An Enable/Disable Sparks button will appear in the game's menu that you can use to toggle spark disabling on and off.
+    An Enable/Disable Sparks button will appear in the game's Archipelago menu that you can use to toggle spark disabling on and off.
     Explore unbothered by fiery plebeians, re-enable them when you deign to grind XP or earn money, and re-disable them when you've had enough of their nonsense!
 
     However: if Kill Bosses is enabled, then boss sparks still have your number (a.k.a. chase you and start combat). They can sense your murderous intent.
@@ -175,7 +177,7 @@ class Regionsanity(Choice):
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
     """
-    When enabled, all mount items are combined into a Progressive Mount Instrument and will be received in the approximate order you would receive them in the vanilla game every time:
+    When enabled, all mount items are combined into a Progressive Mount Instrument and will be received in the approximate order you would receive them in the vanilla game:
        Quintar Pass -> Quintar Flute -> Ibek Bell -> Owl Drum -> Salmon Violin -> Salmon Cello -> Quintar Ocarina
 
     When disabled, different mount types are separated:
@@ -214,7 +216,8 @@ class LevelGating(Choice):
 
 class LevelComparedToEnemies(Range):
     """
-    If Level Gating is on, this option changes what level you're expected to fight enemies. Set it higher if you want to be a higher level than enemies when you enter a region, or lower if you want to be lower.
+    If Level Gating is on, this option changes what level you're expected to fight enemies.
+    Set it higher if you want to be a higher level than enemies when you enter a region, or lower if you want to be lower.
 
     For example, if this is set to 5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 17 (or for Level Capped, max level 17) for that region.
     If it's set to -5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 7 (or for Level Capped, max level 7) for that region.
@@ -308,7 +311,7 @@ class AutoEquipPassives(Toggle):
     """
     When enabled, every time a character unlocks a new passive, it will equip it immediately if enough passive points are available.
     Passives with drawbacks, that enable equipping more gear types, or that modify threat are not automatically equipped.
-    If mods are enabled all passives are auto-equipped with no exclusions.
+    If mods are enabled, all passives are auto-equipped with no exclusions.
     """
     display_name = "Automatically Equip Passives"
 
@@ -353,7 +356,8 @@ class IncludeSummonAbilities(DefaultOnToggle):
     """
     When enabled, Summons are added to the item pool.
 
-    Note: It is not recommended to turn this off with Job Rando: Full and a low number of starting Jobs. You don't want to get stuck with just a Summoner who can only summon Pinga! (I'm sorry, Pinga.)
+    Note: It is not recommended to turn this off with Job Rando: Full and a low number of starting Jobs. You don't want to get stuck with just a Summoner who can only summon Pinga!
+    (I'm sorry, Pinga.)
     """
     display_name = "Include Summons in the item pool"
     
@@ -397,7 +401,8 @@ class RandomizeMusic(Toggle):
 
 class UseMods(Toggle):
     """
-    WARNING: This setting is very in beta right now! Enabling it is not recommended for: multiworlds that do not allow releasing items or with Regionsanity enabled (some mods add items to regions but don't place them anywhere near that region).
+    WARNING: This setting is very in beta right now! Enabling it is not recommended for: multiworlds that do not allow releasing items or with Regionsanity enabled
+    (some mods add items to regions but don't place them anywhere near that region).
 
     When enabled, items and locations added by other Crystal Project mods will be added to the item and location pools at generation. Mods newer than Editor version 30 are incompatible.
 
@@ -405,11 +410,13 @@ class UseMods(Toggle):
     1. In order to select the mods you'd like to include in randomization, make a folder named "crystal_project_mods" inside your root Archipelago directory.
     2. Go to your Steam installation folder for Crystal Project (<YourSteamInstallFolder>/steamapps/workshop/content/1637730) and find the individual folders for the mods you'd like to include.
     3. Inside each mod's folder is a mod json. Copy that json to the crystal_project_mods folder you made inside the Archipelago directory.
-    4. If you have a specific order you want to apply the mods, rename the jsons such that they are in alphabetical order in the order you want them to be applied. E.g. name the first mod a_modname, the second b_modname, etc.
+    4. If you have a specific order you want to apply the mods, rename the jsons such that they are in alphabetical order in the order you want them to be applied.
+       E.g. name the first mod a_modname, the second b_modname, etc.
 
     NOTE: When this setting is on, all Crystal Project players in the multiworld with this setting enabled MUST use the same mods.
 
-    The in-game tracking will use special icons for modded locations that will not display their accessibility (as we can only guess at how accessible they are based on coordinates, and would prefer the tracking to be as accurate as possible).
+    The in-game tracking will use special icons for modded locations that will not display their accessibility (as we can only guess at how accessible they are based on coordinates,
+    and would prefer the tracking to be as accurate as possible).
 
     When disabled, only base game locations and items will be randomized. You can still use other mods - at your own risk, adventurer - they just won't add checks.
 
