@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from math import sqrt
 from random import choice, random
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from kivy.core.window import Keyboard, Window
 from kivy.graphics import Color, Triangle
@@ -49,7 +49,7 @@ class APQuestGameView(MDRecycleView):
     _keyboard: Keyboard | None = None
     input_function: Callable[[Input], None]
 
-    def __init__(self, input_function: Callable[[Input], None], **kwargs) -> None:
+    def __init__(self, input_function: Callable[[Input], None], **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.input_function = input_function
         self.bind_keyboard()
@@ -69,7 +69,7 @@ class APQuestGameView(MDRecycleView):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
-    def _on_keyboard_down(self, _, keycode, _1, _2) -> bool:
+    def _on_keyboard_down(self, _: Any, keycode: tuple[int, str], _1: Any, _2: Any) -> bool:
         if keycode[1] in INPUT_MAP:
             self.input_function(INPUT_MAP[keycode[1]])
         return True
@@ -110,7 +110,7 @@ class Confetti:
     triangle2: Triangle | None = None
     color_instruction: Color | None = None
 
-    def update_speed(self, dt: float):
+    def update_speed(self, dt: float) -> None:
         if self.x_speed > 0:
             self.x_speed -= 2.7 * dt
             if self.x_speed < 0:
@@ -129,7 +129,7 @@ class Confetti:
             if self.y_speed > -0.03:
                 self.y_speed = -0.03
 
-    def move(self, dt: float):
+    def move(self, dt: float) -> None:
         self.update_speed(dt)
 
         if self.y_pos > 1:
@@ -145,9 +145,9 @@ class Confetti:
         self.x_pos += self.x_speed * dt
         self.y_pos += self.y_speed * dt
 
-    def render(self, offset_x, offset_y, max_x, max_y) -> None:
+    def render(self, offset_x: float, offset_y: float, max_x: int, max_y: int) -> None:
         if self.x_speed == 0 and self.y_speed == 0:
-            x_normalized, y_normalized = 0, 1
+            x_normalized, y_normalized = 0.0, 1.0
         else:
             speed_magnitude = sqrt(self.x_speed**2 + self.y_speed**2)
             x_normalized, y_normalized = self.x_speed / speed_magnitude, self.y_speed / speed_magnitude
@@ -209,7 +209,7 @@ class Confetti:
 class ConfettiView(MDRecycleView):
     confetti: list[Confetti]
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.confetti = []
 
@@ -237,7 +237,7 @@ class ConfettiView(MDRecycleView):
         except Exception as e:
             logger.exception(e)
 
-    def add_confetti(self, initial_position: tuple[float, float], amount: int):
+    def add_confetti(self, initial_position: tuple[float, float], amount: int) -> None:
         for i in range(amount):
             self.confetti.append(
                 Confetti(

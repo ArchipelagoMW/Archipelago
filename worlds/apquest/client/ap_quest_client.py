@@ -8,7 +8,8 @@ from CommonClient import CommonContext, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
 from ..game.events import ConfettiFired, LocationClearedEvent, MathProblemSolved, MathProblemStarted, VictoryEvent
-from ..game.game import Game, Input
+from ..game.game import Game
+from ..game.inputs import Input
 from ..game.items import Item
 from ..game.locations import Location
 from .game_manager import APQuestManager
@@ -81,7 +82,7 @@ class APQuestContext(CommonContext):
         await self.get_username()
         await self.send_connect(game=self.game)
 
-    def handle_connection_loss(self, msg: str):
+    def handle_connection_loss(self, msg: str) -> None:
         self.ui.allow_intro_song()
         super().handle_connection_loss(msg)
 
@@ -133,7 +134,7 @@ class APQuestContext(CommonContext):
 
             await asyncio.sleep(0.1)
 
-    def on_package(self, cmd: str, args: dict) -> None:
+    def on_package(self, cmd: str, args: dict[str, Any]) -> None:
         if cmd == "ConnectionRefused":
             self.ui.allow_intro_song()
 
@@ -176,20 +177,23 @@ class APQuestContext(CommonContext):
             self.connection_status = ConnectionStatus.GAME_RUNNING
             self.ui.game_started()
 
-    async def disconnect(self, *args, **kwargs) -> None:
+    async def disconnect(self, *args: Any, **kwargs: Any) -> None:
         self.finished_game = False
         self.locations_checked = set()
         self.connection_status = ConnectionStatus.NOT_CONNECTED
         await super().disconnect(*args, **kwargs)
 
     def render(self) -> None:
+        if self.ap_quest_game is None:
+            raise RuntimeError("Tried to render before self.ap_quest_game was initialized.")
+
         self.ui.render(self.ap_quest_game, self.player_sprite)
         self.handle_game_events()
 
     def location_checked_side_effects(self, location: int) -> None:
         network_item = self.locations_info[location]
 
-        if network_item.player == self.slot and network_item.item == Item.MATH_TRAP:
+        if network_item.player == self.slot and network_item.item == Item.MATH_TRAP.value:
             # In case of a local math trap, we only play the math trap trigger jingle
             return
 
@@ -249,8 +253,11 @@ class APQuestContext(CommonContext):
 
         from kivy.lang import Builder
 
-        data = pkgutil.get_data(__name__, "ap_quest_client.kv").decode()
-        Builder.load_string(data)
+        data = pkgutil.get_data(__name__, "ap_quest_client.kv")
+        if data is None:
+            raise RuntimeError("ap_quest_client.kv could not be loaded.")
+
+        Builder.load_string(data.decode())
 
 
 async def main(args: Namespace) -> None:
@@ -273,7 +280,7 @@ async def main(args: Namespace) -> None:
     await ctx.shutdown()
 
 
-def launch(*args) -> None:
+def launch(*args: str) -> None:
     from .launch import launch_ap_quest_client
 
     launch_ap_quest_client(*args)

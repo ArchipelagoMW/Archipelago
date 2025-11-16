@@ -1,7 +1,9 @@
 import asyncio
 import pkgutil
 from asyncio import Task
+from collections.abc import Buffer
 from pathlib import Path
+from typing import cast
 
 from kivy import Config
 from kivy.core.audio import Sound, SoundLoader
@@ -60,7 +62,7 @@ class SoundManager:
     current_background_music_volume: float = 1.0
     background_music_target_volume: float = 0.0
 
-    background_music_task: Task | None = None
+    background_music_task: Task[None] | None = None
     background_music_last_position: int = 0
 
     volume_percentage: int = 0
@@ -112,7 +114,8 @@ class SoundManager:
                 data = pkgutil.get_data(game.__name__, f"audio/{sound}")
                 if data is None:
                     logger.exception(f"Unable to extract sound {sound} to Archipelago/data")
-                sound_file.write(data)
+                    continue
+                sound_file.write(cast(Buffer, data))
 
         self.sound_paths = sound_paths
 
@@ -172,7 +175,7 @@ class SoundManager:
             self.background_music_target_volume = 0
             self.set_background_music_volume(0)
 
-    def set_background_music_volume(self, volume: float):
+    def set_background_music_volume(self, volume: float) -> None:
         self.current_background_music_volume = volume
 
         for song_filename, song in self.bgm_songs.items():
@@ -187,7 +190,7 @@ class SoundManager:
         else:
             self.background_music_target_volume = 0
 
-    def set_volume_percentage(self, volume_percentage: float):
+    def set_volume_percentage(self, volume_percentage: float) -> None:
         volume_percentage_int = int(volume_percentage)
         if self.volume_percentage != volume_percentage:
             self.volume_percentage = volume_percentage_int
@@ -228,7 +231,7 @@ class SoundManager:
                     song.play()
                     song.seek(0)
 
-    def update_active_song(self):
+    def update_active_song(self) -> None:
         new_active_song = self.determine_correct_song()
         if new_active_song == self.active_bgm_song:
             return

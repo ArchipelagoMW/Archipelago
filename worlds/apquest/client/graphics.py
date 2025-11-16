@@ -1,10 +1,13 @@
 import pkgutil
+from collections.abc import Buffer
 from enum import Enum
 from io import BytesIO
-from typing import NamedTuple
+from typing import Literal, NamedTuple, cast
 
 from bokeh.protocol import Protocol
 from kivy.uix.image import CoreImage
+
+from CommonClient import logger
 
 from .. import game
 from ..game.graphics import Graphic
@@ -13,6 +16,8 @@ from ..game.graphics import Graphic
 # The import "from kivy.graphics.texture import Texture" does not work correctly.
 # We never need the class directly, so we need to use a protocol.
 class Texture(Protocol):
+    mag_filter: Literal["nearest"]
+
     def get_region(self, x: int, y: int, w: int, h: int) -> "Texture": ...
 
 
@@ -24,9 +29,7 @@ class RelatedTexture(NamedTuple):
     height: int
 
 
-IMAGE_GRAPHICS = {
-    Graphic.EMPTY: None,
-
+IMAGE_GRAPHICS: dict[Graphic, str | RelatedTexture] = {
     Graphic.WALL: RelatedTexture("inanimates.png", 16, 32, 16, 16),
     Graphic.BREAKABLE_BLOCK: RelatedTexture("inanimates.png", 32, 32, 16, 16),
     Graphic.CHEST: RelatedTexture("inanimates.png", 0, 16, 16, 16),
@@ -130,25 +133,27 @@ ALL_GRAPHICS = [
     *[graphic for sub_dict in PLAYER_GRAPHICS.values() for graphic in sub_dict.values()],
 ]
 
-_textures = {}
+_textures: dict[str | RelatedTexture, Texture] = {}
 
 
-def get_texture(texture_identifier: str | RelatedTexture) -> Texture:
+def get_texture_by_identifier(texture_identifier: str | RelatedTexture) -> Texture:
     if texture_identifier in _textures:
         return _textures[texture_identifier]
 
     if isinstance(texture_identifier, str):
-        texture = CoreImage(
-            BytesIO(pkgutil.get_data(game.__name__, f"graphics/{texture_identifier}")), ext="png"
-        ).texture
+        image_data = pkgutil.get_data(game.__name__, f"graphics/{texture_identifier}")
+        if image_data is None:
+            raise RuntimeError(f'Could not find file "graphics/{texture_identifier}" for texture {texture_identifier}')
+
+        image_bytes = BytesIO(cast(Buffer, image_data))
+        texture = cast(Texture, CoreImage(image_bytes, ext="png").texture)
         texture.mag_filter = "nearest"
         _textures[texture_identifier] = texture
         return texture
 
-    print(texture_identifier)
     base_texture_filename, x, y, w, h = texture_identifier
 
-    base_texture = get_texture(base_texture_filename)
+    base_texture = get_texture_by_identifier(base_texture_filename)
 
     sub_texture = base_texture.get_region(x, y, w, h)
     sub_texture.mag_filter = "nearest"
@@ -156,4 +161,21 @@ def get_texture(texture_identifier: str | RelatedTexture) -> Texture:
     return sub_texture
 
 
-TEXTURES = {file_name: get_texture(file_name) for file_name in ALL_GRAPHICS if file_name is not None}
+def get_texture(graphic: Graphic | Literal["Grass"], player_sprite: PlayerSprite | None = None) -> Texture | None:
+    if graphic == Graphic.EMPTY:
+        return None
+
+    if graphic == "Grass":
+        return get_texture_by_identifier(BACKGROUND_TILE)
+
+    if graphic in IMAGE_GRAPHICS:
+        return get_texture_by_identifier(IMAGE_GRAPHICS[graphic])
+
+    if graphic in PLAYER_GRAPHICS:
+        if player_sprite is None:
+            raise ValueError("Tried to load a player graphic without specifying a player_sprite")
+
+        return get_texture_by_identifier(PLAYER_GRAPHICS[graphic][player_sprite])
+
+    logger.exception(f"Tried to load unknown graphic {graphic}.")
+    return get_texture(Graphic.UNKNOWN)

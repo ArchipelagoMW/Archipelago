@@ -4,6 +4,7 @@ from enum import Enum
 from operator import add, mul, sub, truediv
 from typing import NamedTuple
 
+_random = random.Random()
 
 class NumberChoiceConstraints(NamedTuple):
     num_1_min: int
@@ -36,7 +37,7 @@ class MathProblem(NamedTuple):
     result: int
 
 
-def generate_math_problem(random_object=random):
+def generate_math_problem(random_object: random.Random = _random) -> MathProblem:
     problem_type: MathProblemType = random_object.choice(list(MathProblemType))
     number_choice_constraints = MATH_PROBLEM_CONSTRAINTS[problem_type]
 
@@ -58,4 +59,4 @@ def generate_math_problem(random_object=random):
                 num_1, num_2 = num_2, num_1
         break
 
-    return MathProblem(problem_type, num_1, num_2, result)
+    return MathProblem(problem_type, num_1, num_2, result_int)

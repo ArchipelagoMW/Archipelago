@@ -4,7 +4,7 @@ from __future__ import annotations
 from kvui import GameManager, MDNavigationItemBase
 
 # isort: on
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
@@ -12,12 +12,9 @@ from kivy.uix.image import Image
 from kivy.uix.layout import Layout
 from kivymd.uix.recycleview import MDRecycleView
 
-from CommonClient import logger
-
 from ..game.game import Game
-from ..game.graphics import Graphic
 from .custom_views import APQuestControlsView, APQuestGameView, APQuestGrid, ConfettiView, VolumeSliderView
-from .graphics import BACKGROUND_TILE, IMAGE_GRAPHICS, PLAYER_GRAPHICS, TEXTURES, PlayerSprite
+from .graphics import PlayerSprite, get_texture
 from .sounds import SoundManager
 
 if TYPE_CHECKING:
@@ -42,7 +39,7 @@ class APQuestManager(GameManager):
 
     bottom_grid_is_grass: bool
 
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.sound_manager = SoundManager()
         self.sound_manager.allow_intro_to_play = not self.ctx.delay_intro_song
@@ -50,10 +47,10 @@ class APQuestManager(GameManager):
         self.bottom_image_grid = []
         self.bottom_grid_is_grass = False
 
-    def allow_intro_song(self):
+    def allow_intro_song(self) -> None:
         self.sound_manager.allow_intro_to_play = True
 
-    def add_confetti(self, position: tuple[float, float], amount: int):
+    def add_confetti(self, position: tuple[float, float], amount: int) -> None:
         self.confetti_view.add_confetti(position, amount)
 
     def play_jingle(self, audio_filename: str) -> None:
@@ -92,34 +89,28 @@ class APQuestManager(GameManager):
 
         for gameboard_row, image_row in zip(rendered_gameboard, self.top_image_grid, strict=False):
             for graphic, image in zip(gameboard_row, image_row[:11], strict=False):
-                if graphic in PLAYER_GRAPHICS:
-                    image_name = PLAYER_GRAPHICS[graphic].get(player_sprite, IMAGE_GRAPHICS[Graphic.UNKNOWN])
-                    if image_name is None:
-                        logger.exception(f"Couldn't find player sprite graphics for player sprite {player_sprite}")
-                else:
-                    image_name = IMAGE_GRAPHICS[graphic]
+                texture = get_texture(graphic, player_sprite)
 
-                if image_name is None:
+                if texture is None:
                     image.opacity = 0
                     image.texture = None
                     continue
 
-                image.texture = TEXTURES.get(image_name, TEXTURES[IMAGE_GRAPHICS[Graphic.UNKNOWN]])
-                image.texture.mag_filter = "nearest"
+                image.texture = texture
                 image.opacity = 1
 
     def render_item_column(self, game: Game) -> None:
         rendered_item_column = game.render_health_and_inventory(vertical=True)
         for item_graphic, image_row in zip(rendered_item_column, self.top_image_grid, strict=False):
             image = image_row[-1]
-            image_name = IMAGE_GRAPHICS[item_graphic]
-            if image_name is None:
+
+            texture = get_texture(item_graphic)
+            if texture is None:
                 image.opacity = 0
                 image.texture = None
                 continue
 
-            image.texture = TEXTURES.get(image_name, TEXTURES[IMAGE_GRAPHICS[Graphic.UNKNOWN]])
-            image.texture.mag_filter = "nearest"
+            image.texture = texture
             image.opacity = 1
 
     def render_background_game_grid(self, size: tuple[int, int], grass: bool) -> None:
@@ -140,8 +131,7 @@ class APQuestManager(GameManager):
                     image.color = (0.45, 0.35, 0.1)
                     image.texture = None
                     continue
-                image.texture = TEXTURES[BACKGROUND_TILE]
-                image.texture.mag_filter = "nearest"
+                image.texture = get_texture("Grass")
                 image.color = (1.0, 1.0, 1.0)
 
         self.bottom_grid_is_grass = grass

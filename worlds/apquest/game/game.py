@@ -51,7 +51,7 @@ class Game:
                 self.currently_typed_in_math_result,
             )
 
-        if self.active_math_problem is not None:
+        if self.active_math_problem is not None and self.active_math_problem_input is not None:
             return self.gameboard.render_math_problem(
                 self.active_math_problem, self.active_math_problem_input, self.currently_typed_in_math_result
             )
@@ -118,7 +118,7 @@ class Game:
             self.player.remove_item(Item.CONFETTI_CANNON)
             self.queued_events.append(ConfettiFired(self.player.current_x, self.player.current_y))
 
-    def math_problem_success(self):
+    def math_problem_success(self) -> None:
         self.active_math_problem = None
         self.active_math_problem_input = None
         self.queued_events.append(MathProblemSolved())
@@ -134,19 +134,22 @@ class Game:
 
         return number
 
-    def check_math_problem_result(self):
+    def check_math_problem_result(self) -> None:
+        if self.active_math_problem is None:
+            return
+
         if self.currently_typed_in_math_result == self.active_math_problem.result:
             self.math_problem_success()
 
     def math_problem_input(self, input: int) -> None:
-        if len(self.active_math_problem_input) >= 2:
+        if self.active_math_problem_input is None or len(self.active_math_problem_input) >= 2:
             return
 
         self.active_math_problem_input.append(input)
         self.check_math_problem_result()
 
     def math_problem_delete(self) -> None:
-        if len(self.active_math_problem_input) == 0:
+        if self.active_math_problem_input is None or len(self.active_math_problem_input) == 0:
             return
         self.active_math_problem_input.pop()
         self.check_math_problem_result()
