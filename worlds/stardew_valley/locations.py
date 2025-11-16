@@ -2,15 +2,18 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
+from typing import Dict, Protocol, List, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
 from .content.game_content import StardewContent
+from .content.override import override
+from .content.vanilla.ginger_island import ginger_island_content_pack
+from .content.vanilla.qi_board import qi_board_content_pack
 from .data.game_item import ItemTag
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
+from .options import ArcadeMachineLocations, SpecialOrderLocations, Museumsanity, \
     FestivalLocations, ElevatorProgression, BackpackProgression, FarmType
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
@@ -115,35 +118,42 @@ class LocationTags(enum.Enum):
 
 @dataclass(frozen=True)
 class LocationData:
-    code_without_offset: Optional[int]
+    code_without_offset: int | None
     region: str
     name: str
-    mod_name: Optional[str] = None
-    tags: FrozenSet[LocationTags] = frozenset()
+    tags: frozenset[LocationTags] = frozenset()
+    content_packs: frozenset[str] = frozenset()
+    """All the content packs required for this location to be active."""
 
     @property
-    def code(self) -> Optional[int]:
+    def code(self) -> int | None:
         return LOCATION_CODE_OFFSET + self.code_without_offset if self.code_without_offset is not None else None
 
 
 class StardewLocationCollector(Protocol):
-    def __call__(self, name: str, code: Optional[int], region: str) -> None:
+    def __call__(self, name: str, code: int | None, region: str) -> None:
         raise NotImplementedError
 
 
 def load_location_csv() -> List[LocationData]:
     from importlib.resources import files
 
+    locations = []
     with files(data).joinpath("locations.csv").open() as file:
-        reader = csv.DictReader(file)
-        return [LocationData(int(location["id"]) if location["id"] else None,
-                             location["region"],
-                             location["name"],
-                             str(location["mod_name"]) if location["mod_name"] else None,
-                             frozenset(LocationTags[group]
-                                       for group in location["tags"].split(",")
-                                       if group))
-                for location in reader]
+        location_reader = csv.DictReader(file)
+        for location in location_reader:
+            location_id = int(location["id"]) if location["id"] else None
+            groups = frozenset(LocationTags[group] for group in location["tags"].split(",") if group)
+
+            content_packs = frozenset(cp for cp in location["content_packs"].split(",") if cp)
+            if LocationTags.GINGER_ISLAND in groups:
+                content_packs |= {ginger_island_content_pack.name}
+            if LocationTags.SPECIAL_ORDER_QI in groups or LocationTags.REQUIRES_QI_ORDERS in groups:
+                content_packs |= {qi_board_content_pack.name}
+
+            locations.append(LocationData(location_id, location["region"], location["name"], groups, content_packs))
+
+    return locations
 
 
 events_locations = [
@@ -250,7 +260,11 @@ def extend_friendsanity_locations(randomized_locations: List[LocationData], cont
 
     for villager in content.villagers.values():
         for heart in friendsanity.get_randomized_hearts(villager):
-            randomized_locations.append(location_table[friendsanity.to_location_name(villager.name, heart)])
+            location = location_table[friendsanity.to_location_name(villager.name, heart)]
+            if ModNames.jasper == villager.mod_name and ModNames.sve in location.content_packs:
+                # The override is needed because some locations are shared between jasper mod and sve. We need to create the locations with the correct mod.
+                location = override(location, content_packs=frozenset({villager.mod_name}))
+            randomized_locations.append(location)
 
     for heart in friendsanity.get_pet_randomized_hearts():
         randomized_locations.append(location_table[friendsanity.to_location_name(NPC.pet, heart)])
@@ -307,16 +321,15 @@ def extend_special_order_locations(randomized_locations: List[LocationData], opt
         board_locations = filter_disabled_locations(options, content, locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD])
         randomized_locations.extend(board_locations)
 
-    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    if options.special_order_locations & SpecialOrderLocations.value_qi and include_island:
+    if content.is_enabled(qi_board_content_pack):
         include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
         qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
                      include_arcade or LocationTags.JUNIMO_KART not in location.tags]
         randomized_locations.extend(qi_orders)
 
 
-def extend_walnut_purchase_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+def extend_walnut_purchase_locations(randomized_locations: list[LocationData], content: StardewContent):
+    if content.is_disabled(ginger_island_content_pack):
         return
     randomized_locations.append(location_table["Repair Ticket Machine"])
     randomized_locations.append(location_table["Repair Boat Hull"])
@@ -332,11 +345,11 @@ def extend_mandatory_locations(randomized_locations: List[LocationData], options
     randomized_locations.extend(filtered_mandatory_locations)
 
 
-def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.quest_locations.has_no_story_quests():
         return
-    if ModNames.distant_lands in options.mods:
-        if ModNames.alecto in options.mods:
+    if content.is_enabled(ModNames.distant_lands) and content.is_enabled(ginger_island_content_pack):
+        if content.is_enabled(ModNames.alecto):
             randomized_locations.append(location_table[ModQuest.WitchOrder])
         else:
             randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
@@ -351,19 +364,19 @@ def extend_bundle_locations(randomized_locations: List[LocationData], bundle_roo
             randomized_locations.append(location_table[bundle.name])
 
 
-def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+def extend_backpack_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.backpack_progression == BackpackProgression.option_vanilla:
         return
     backpack_locations = [location for location in locations_by_tag[LocationTags.BACKPACK]]
-    filtered_backpack_locations = filter_modded_locations(options, backpack_locations)
+    filtered_backpack_locations = filter_content_packs_locations(backpack_locations, content)
     randomized_locations.extend(filtered_backpack_locations)
 
 
-def extend_elevator_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+def extend_elevator_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
     if options.elevator_progression == ElevatorProgression.option_vanilla:
         return
     elevator_locations = [location for location in locations_by_tag[LocationTags.ELEVATOR]]
-    filtered_elevator_locations = filter_modded_locations(options, elevator_locations)
+    filtered_elevator_locations = filter_content_packs_locations(elevator_locations, content)
     randomized_locations.extend(filtered_elevator_locations)
 
 
@@ -487,12 +500,12 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_mandatory_locations(randomized_locations, options, content)
     extend_bundle_locations(randomized_locations, bundle_rooms)
-    extend_backpack_locations(randomized_locations, options)
+    extend_backpack_locations(randomized_locations, options, content)
 
     if content.features.tool_progression.is_progressive:
         randomized_locations.extend(locations_by_tag[LocationTags.TOOL_UPGRADE])
 
-    extend_elevator_locations(randomized_locations, options)
+    extend_elevator_locations(randomized_locations, options, content)
 
     skill_progression = content.features.skill_progression
     if skill_progression.is_progressive:
@@ -516,7 +529,7 @@ def create_locations(location_collector: StardewLocationCollector,
 
     extend_festival_locations(randomized_locations, options, random)
     extend_special_order_locations(randomized_locations, options, content)
-    extend_walnut_purchase_locations(randomized_locations, options)
+    extend_walnut_purchase_locations(randomized_locations, content)
 
     extend_monstersanity_locations(randomized_locations, options, content)
     extend_shipsanity_locations(randomized_locations, options, content)
@@ -528,9 +541,11 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_walnutsanity_locations(randomized_locations, options)
 
     # Mods
-    extend_situational_quest_locations(randomized_locations, options)
+    extend_situational_quest_locations(randomized_locations, options, content)
 
     for location_data in randomized_locations:
+        assert content.are_all_enabled(location_data.content_packs), \
+            f"Location [{location_data.name}] requires {location_data.content_packs} but {location_data.content_packs.difference(content.registered_packs)} are not enabled, {content.registered_packs} are enabled."
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
@@ -546,16 +561,6 @@ def filter_farm_type(options: StardewValleyOptions, locations: Iterable[Location
         return (location for location in locations if location.name != Quest.feeding_animals)
 
 
-def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    return (location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags)
-
-
-def filter_qi_order_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    include_qi_orders = options.special_order_locations & SpecialOrderLocations.value_qi
-    return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
-
-
 def filter_masteries_locations(content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     # FIXME Remove once recipes are handled by the content packs
     if content.features.skill_progression.are_masteries_shuffled:
@@ -563,15 +568,13 @@ def filter_masteries_locations(content: StardewContent, locations: Iterable[Loca
     return (location for location in locations if LocationTags.REQUIRES_MASTERIES not in location.tags)
 
 
-def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
-    return (location for location in locations if location.mod_name is None or location.mod_name in options.mods)
+def filter_content_packs_locations(locations: Iterable[LocationData], content: StardewContent) -> Iterable[LocationData]:
+    return (location for location in locations if content.are_all_enabled(location.content_packs))
 
 
 def filter_disabled_locations(options: StardewValleyOptions, content: StardewContent, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     locations_deprecated_filter = filter_deprecated_locations(locations)
     locations_farm_filter = filter_farm_type(options, locations_deprecated_filter)
-    locations_island_filter = filter_ginger_island(options, locations_farm_filter)
-    locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
-    locations_masteries_filter = filter_masteries_locations(content, locations_qi_filter)
-    locations_mod_filter = filter_modded_locations(options, locations_masteries_filter)
-    return locations_mod_filter
+    locations_masteries_filter = filter_masteries_locations(content, locations_farm_filter)
+    locations_content_packs_filter = filter_content_packs_locations(locations_masteries_filter, content)
+    return locations_content_packs_filter

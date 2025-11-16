@@ -2,8 +2,8 @@ from functools import cached_property
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
+from ..content.vanilla.base import base_game
 from ..data.harvest import HarvestCropSource
-from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, true_, True_, False_
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
@@ -89,10 +89,12 @@ class SkillLogic(BaseLogic):
             return True_()
 
         if self.content.features.skill_progression.is_progressive:
-            skills_items = vanilla_skill_items
+            skills = base_game.skills
             if allow_modded_skills:
-                skills_items += get_mod_skill_levels(self.options.mods)
-            return self.logic.received_n(*skills_items, count=level)
+                skills = self.content.skills.values()
+            skill_items = [skill.level_name for skill in skills]
+
+            return self.logic.received_n(*skill_items, count=level)
 
         months_with_4_skills = max(1, (level // 4) - 1)
         months_with_5_skills = max(1, (level // 5) - 1)

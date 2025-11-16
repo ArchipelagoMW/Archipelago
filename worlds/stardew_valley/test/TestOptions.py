@@ -9,7 +9,7 @@ from .options.option_names import all_option_choices
 from .options.presets import allsanity_no_mods_6_x_x, allsanity_mods_6_x_x
 from .. import items_by_group, Group
 from ..locations import locations_by_tag, LocationTags, location_table
-from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, SpecialOrderLocations, ArcadeMachineLocations
+from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapDifficulty, SpecialOrderLocations, ArcadeMachineLocations, Mods
 from ..strings.goal_names import Goal as GoalName
 from ..strings.season_names import Season
 from ..strings.special_order_names import SpecialOrder
@@ -143,8 +143,9 @@ class TestTraps(SVTestCase):
             world_options = allsanity_mods_6_x_x()
             world_options.update({TrapDifficulty.internal_name: trap_option.options[value]})
             with solo_multiworld(world_options) as (multi_world, _):
-                trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if
-                              Group.DEPRECATED not in item_data.groups and item_data.mod_name is None]
+                trap_items = [item_data.name
+                              for item_data in items_by_group[Group.TRAP]
+                              if Group.DEPRECATED not in item_data.groups]
                 multiworld_items = [item.name for item in multi_world.get_items()]
                 for item in trap_items:
                     with self.subTest(f"Option: {value}, Item: {item}"):
@@ -162,7 +163,10 @@ class TestSpecialOrders(SVTestCase):
                 self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
     def test_given_board_only_then_no_qi_order_in_pool(self):
-        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board}
+        world_options = {
+            SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board,
+            Mods.internal_name: frozenset(Mods.valid_keys),
+        }
         with solo_multiworld(world_options) as (multi_world, _):
 
             locations_in_pool = {location.name for location in multi_world.get_locations() if location.name in location_table}
@@ -171,31 +175,30 @@ class TestSpecialOrders(SVTestCase):
                 self.assertNotIn(LocationTags.SPECIAL_ORDER_QI, location.tags)
 
             for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-                if board_location.mod_name:
-                    continue
                 self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_then_all_orders_in_pool(self):
-        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories,
-                         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
+        world_options = {
+            SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+            ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_victories,
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+            Mods.internal_name: frozenset(Mods.valid_keys),
+        }
         with solo_multiworld(world_options) as (multi_world, _):
 
             locations_in_pool = {location.name for location in multi_world.get_locations()}
             for qi_location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI]:
-                if qi_location.mod_name:
-                    continue
                 self.assertIn(qi_location.name, locations_in_pool)
 
             for board_location in locations_by_tag[LocationTags.SPECIAL_ORDER_BOARD]:
-                if board_location.mod_name:
-                    continue
                 self.assertIn(board_location.name, locations_in_pool)
 
     def test_given_board_and_qi_without_arcade_machines_then_lets_play_a_game_not_in_pool(self):
-        world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-                         ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
-                         ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
+        world_options = {
+            SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+            ArcadeMachineLocations.internal_name: ArcadeMachineLocations.option_disabled,
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false,
+        }
         with solo_multiworld(world_options) as (multi_world, _):
             locations_in_pool = {location.name for location in multi_world.get_locations()}
             self.assertNotIn(SpecialOrder.lets_play_a_game, locations_in_pool)
