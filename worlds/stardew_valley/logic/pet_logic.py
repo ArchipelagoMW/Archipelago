@@ -3,6 +3,7 @@ import math
 from .base_logic import BaseLogicMixin, BaseLogic
 from ..content.feature.friendsanity import pet_heart_item_name
 from ..stardew_rule import StardewRule, True_
+from ..strings.building_names import Building
 from ..strings.region_names import Region
 
 
@@ -36,7 +37,7 @@ class PetLogic(BaseLogic):
         points_per_month = 12 * 14
         points_per_water_month = 18 * 14
         farm_rule = self.logic.region.can_reach(Region.farm)
-        time_with_water_rule = self.logic.tool.can_water(0) & self.logic.time.has_lived_months(points // points_per_water_month)
+        time_with_water_rule = self.logic.tool.can_water() & self.logic.time.has_lived_months(points // points_per_water_month)
         time_without_water_rule = self.logic.time.has_lived_months(points // points_per_month)
         time_rule = time_with_water_rule | time_without_water_rule
-        return farm_rule & time_rule
+        return farm_rule & time_rule & self.logic.building.has_building(Building.pet_bowl)
