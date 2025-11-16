@@ -137,7 +137,7 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     else:
                         weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
-                        
+
             except Exception as e:
                 raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
 

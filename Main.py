@@ -30,21 +30,21 @@ def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfileb
     from dataclasses import asdict
     from Options import Visibility, PlandoItem
     from Utils import get_file_safe_name
-    
+
     logger = logging.getLogger()
-    
+
     for player in multiworld.player_ids:
         world = multiworld.worlds[player]
         player_name = multiworld.get_player_name(player)
         game_name = multiworld.game[player]
-        
+
         game_options = {}
         for option_key, option_class in world.options_dataclass.type_hints.items():
             option = getattr(world.options, option_key)
             # Only export hidden options if they are not the default value
             if option.visibility == Visibility.none and option.value == option.default:
                 continue
-            
+
             # Plando serves no purpose once the generation is done, so we don't include it in the yaml files
             if option_key == "plando_items":
                 continue
@@ -58,7 +58,7 @@ def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfileb
                     except:
                         # Not a Choice option, we use the value directly
                         val = option.value
-                        
+
                         if isinstance(val, Counter):
                             # Convert Counter to dict for YAML
                             game_options[option_key] = dict(val)
@@ -89,20 +89,20 @@ def export_world_options_to_yaml(multiworld: MultiWorld, temp_dir: str, outfileb
             except Exception as e:
                 logging.info(f'Error exporting option {option_key} for Player {player}: {e}')
                 continue
-        
+
         yaml_data = {
             "name": player_name,
             "game": game_name,
             "description": f"Generated options for {player_name} ({game_name})",
             game_name: game_options
         }
-        
+
         # Write to temp directory with file-safe names
         safe_player_name = get_file_safe_name(player_name)
         yaml_filename = os.path.join(temp_dir, f'{outfilebase}_P{player}_{safe_player_name}_options.yaml')
         with open(yaml_filename, 'w', encoding='utf-8') as f:
             yaml.dump(yaml_data, f, default_flow_style=False, sort_keys=False, allow_unicode=True)
-        
+
         logger.debug(f'Exported options for Player {player} ({player_name}) to {yaml_filename}')
 
 
