@@ -884,7 +884,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("RS: Homeward Bone - balcony by Farron Keep", "Homeward Bone x2"),
         DS3LocationData("RS: Titanite Shard - woods, surrounded by enemies", "Titanite Shard"),
         DS3LocationData("RS: Twin Dragon Greatshield - woods by Crucifixion Woods bonfire",
-                        "Twin Dragon Greatshield"),
+                        "Twin Dragon Greatshield", missable=True), # After Eclipse
         DS3LocationData("RS: Sorcerer Hood - water beneath stronghold", "Sorcerer Hood",
                         hidden=True),  # Hidden fall
         DS3LocationData("RS: Sorcerer Robe - water beneath stronghold", "Sorcerer Robe",
@@ -1887,7 +1887,7 @@ location_tables: Dict[str, List[DS3LocationData]] = {
         DS3LocationData("AL: Twinkling Titanite - lizard after light cathedral #2",
                         "Twinkling Titanite", lizard=True),
         DS3LocationData("AL: Aldrich's Ruby - dark cathedral, miniboss", "Aldrich's Ruby",
-                        miniboss=True),  # Deep Accursed drop
+                        miniboss=True, missable=True),  # Deep Accursed drop, missable after defeating Aldrich
         DS3LocationData("AL: Aldrich Faithful - water reserves, talk to McDonnel", "Aldrich Faithful",
                         hidden=True),  # Behind illusory wall
 

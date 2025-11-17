@@ -33,6 +33,8 @@ class Group(enum.Enum):
     SKILL_MASTERY = enum.auto()
     BUILDING = enum.auto()
     WIZARD_BUILDING = enum.auto()
+    DESERT_TRANSPORTATION = enum.auto()
+    ISLAND_TRANSPORTATION = enum.auto()
     ARCADE_MACHINE_BUFFS = enum.auto()
     BASE_RESOURCE = enum.auto()
     WARP_TOTEM = enum.auto()

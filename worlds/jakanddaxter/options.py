@@ -1,22 +1,78 @@
 from dataclasses import dataclass
 from functools import cached_property
-from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionCounter
+from Options import PerGameCommonOptions, StartInventoryPool, Toggle, Choice, Range, DefaultOnToggle, OptionCounter, \
+    AssembleOptions
 from .items import trap_item_table
 
 
-class StaticGetter:
-    def __init__(self, func):
-        self.fget = func
+class readonly_classproperty:
+    """This decorator is used for getting friendly or unfriendly range_end values for options like FireCanyonCellCount
+    and CitizenOrbTradeAmount. We only need to provide a getter as we will only be setting a single int to one of two
+    values."""
+    def __init__(self, getter):
+        self.getter = getter
 
     def __get__(self, instance, owner):
-        return self.fget(owner)
+        return self.getter(owner)
 
 
-@StaticGetter
+@readonly_classproperty
 def determine_range_end(cls) -> int:
-    from . import JakAndDaxterWorld
-    enforce_friendly_options = JakAndDaxterWorld.settings.enforce_friendly_options
-    return cls.friendly_maximum if enforce_friendly_options else cls.absolute_maximum
+    from . import JakAndDaxterWorld  # Avoid circular imports.
+    friendly = JakAndDaxterWorld.settings.enforce_friendly_options
+    return cls.friendly_maximum if friendly else cls.absolute_maximum
+
+
+class classproperty:
+    """This decorator (?) is used for getting and setting friendly or unfriendly option values for the Orbsanity
+    options."""
+    def __init__(self, getter, setter):
+        self.getter = getter
+        self.setter = setter
+
+    def __get__(self, obj, value):
+        return self.getter(obj)
+
+    def __set__(self, obj, value):
+        self.setter(obj, value)
+
+
+class AllowedChoiceMeta(AssembleOptions):
+    """This metaclass overrides AssembleOptions and provides inheriting classes a way to filter out "disallowed" values
+    by way of implementing get_disallowed_options. This function is used by Jak and Daxter to check host.yaml settings
+    without circular imports or breaking the settings API."""
+    _name_lookup: dict[int, str]
+    _options: dict[str, int]
+
+    def __new__(mcs, name, bases, attrs):
+        ret = super().__new__(mcs, name, bases, attrs)
+        ret._name_lookup = attrs["name_lookup"]
+        ret._options = attrs["options"]
+        return ret
+
+    def set_name_lookup(cls, value : dict[int, str]):
+        cls._name_lookup = value
+
+    def get_name_lookup(cls) -> dict[int, str]:
+        cls._name_lookup = {k: v for k, v in cls._name_lookup.items() if k not in cls.get_disallowed_options()}
+        return cls._name_lookup
+
+    def set_options(cls, value: dict[str, int]):
+        cls._options = value
+
+    def get_options(cls) -> dict[str, int]:
+        cls._options = {k: v for k, v in cls._options.items() if v not in cls.get_disallowed_options()}
+        return cls._options
+
+    def get_disallowed_options(cls):
+        return {}
+
+    name_lookup = classproperty(get_name_lookup, set_name_lookup)
+    options = classproperty(get_options, set_options)
+
+
+class AllowedChoice(Choice, metaclass=AllowedChoiceMeta):
+    pass
 
 
 class EnableMoveRandomizer(Toggle):
@@ -44,12 +100,13 @@ class EnableOrbsanity(Choice):
     default = 0
 
 
-class GlobalOrbsanityBundleSize(Choice):
+class GlobalOrbsanityBundleSize(AllowedChoice):
     """The orb bundle size for Global Orbsanity. This only applies if "Enable Orbsanity" is set to "Global."
     There are 2000 orbs in the game, so your bundle size must be a factor of 2000.
 
-    Multiplayer Minimum: 10
-    Multiplayer Maximum: 200"""
+    This value is restricted to safe minimum and maximum values to ensure valid singleplayer games and
+    non-disruptive multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options
+    in host.yaml."""
     display_name = "Global Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
@@ -75,12 +132,33 @@ class GlobalOrbsanityBundleSize(Choice):
     friendly_maximum = 200
     default = 20
 
+    @classmethod
+    def get_disallowed_options(cls) -> set[int]:
+        try:
+            from . import JakAndDaxterWorld
+            if JakAndDaxterWorld.settings.enforce_friendly_options:
+                return {cls.option_1_orb,
+                        cls.option_2_orbs,
+                        cls.option_4_orbs,
+                        cls.option_5_orbs,
+                        cls.option_8_orbs,
+                        cls.option_250_orbs,
+                        cls.option_400_orbs,
+                        cls.option_500_orbs,
+                        cls.option_1000_orbs,
+                        cls.option_2000_orbs}
+        except ImportError:
+            pass
+        return set()
 
-class PerLevelOrbsanityBundleSize(Choice):
+
+class PerLevelOrbsanityBundleSize(AllowedChoice):
     """The orb bundle size for Per Level Orbsanity. This only applies if "Enable Orbsanity" is set to "Per Level."
     There are 50, 150, or 200 orbs per level, so your bundle size must be a factor of 50.
 
-    Multiplayer Minimum: 10"""
+    This value is restricted to safe minimum and maximum values to ensure valid singleplayer games and
+    non-disruptive multiplayer games, but the host can remove this restriction by turning off enforce_friendly_options
+    in host.yaml."""
     display_name = "Per Level Orbsanity Bundle Size"
     option_1_orb = 1
     option_2_orbs = 2
@@ -90,6 +168,18 @@ class PerLevelOrbsanityBundleSize(Choice):
     option_50_orbs = 50
     friendly_minimum = 10
     default = 25
+
+    @classmethod
+    def get_disallowed_options(cls) -> set[int]:
+        try:
+            from . import JakAndDaxterWorld
+            if JakAndDaxterWorld.settings.enforce_friendly_options:
+                return {cls.option_1_orb,
+                        cls.option_2_orbs,
+                        cls.option_5_orbs}
+        except ImportError:
+            pass
+        return set()
 
 
 class FireCanyonCellCount(Range):
@@ -234,7 +324,7 @@ class CompletionCondition(Choice):
     option_cross_fire_canyon = 69
     option_cross_mountain_pass = 87
     option_cross_lava_tube = 89
-    option_defeat_dark_eco_plant = 6
+    # option_defeat_dark_eco_plant = 6
     option_defeat_klaww = 86
     option_defeat_gol_and_maia = 112
     option_open_100_cell_door = 116
