@@ -37,7 +37,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
 
     logger = logging.getLogger()
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
-    multiworld.plando_options = args.plando_options
+    multiworld.plando_options = args.plando
     multiworld.game = args.game.copy()
     multiworld.player_name = args.name.copy()
     multiworld.sprite = args.sprite.copy()
@@ -54,12 +54,17 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
     logger.info(f"Found {len(AutoWorld.AutoWorldRegister.world_types)} World Types:")
     longest_name = max(len(text) for text in AutoWorld.AutoWorldRegister.world_types)
 
-    item_count = len(str(max(len(cls.item_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
-    location_count = len(str(max(len(cls.location_names) for cls in AutoWorld.AutoWorldRegister.world_types.values())))
+    world_classes = AutoWorld.AutoWorldRegister.world_types.values()
+
+    version_count = max(len(cls.world_version.as_simple_string()) for cls in world_classes)
+    item_count = len(str(max(len(cls.item_names) for cls in world_classes)))
+    location_count = len(str(max(len(cls.location_names) for cls in world_classes)))
 
     for name, cls in AutoWorld.AutoWorldRegister.world_types.items():
         if not cls.hidden and len(cls.item_names) > 0:
-            logger.info(f" {name:{longest_name}}: Items: {len(cls.item_names):{item_count}} | "
+            logger.info(f" {name:{longest_name}}: "
+                        f"v{cls.world_version.as_simple_string():{version_count}} | "
+                        f"Items: {len(cls.item_names):{item_count}} | "
                         f"Locations: {len(cls.location_names):{location_count}}")
 
     del item_count, location_count
@@ -321,7 +326,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                     if current_sphere:
                         spheres.append(dict(current_sphere))
 
-                multidata: NetUtils.MultiData | bytes = {
+                multidata: NetUtils.MultiData = {
                     "slot_data": slot_data,
                     "slot_info": slot_info,
                     "connect_names": {name: (0, player) for player, name in multiworld.player_name.items()},
@@ -345,11 +350,11 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 for key in ("slot_data", "er_hint_data"):
                     multidata[key] = convert_to_base_types(multidata[key])
 
-                multidata = zlib.compress(restricted_dumps(multidata), 9)
+                serialized_multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
                     f.write(bytes([3]))  # version of format
-                    f.write(multidata)
+                    f.write(serialized_multidata)
 
             output_file_futures.append(pool.submit(write_multidata))
             if not check_accessibility_task.result():

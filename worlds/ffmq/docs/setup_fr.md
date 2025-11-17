@@ -123,10 +123,8 @@ Vous ne devez faire ces étapes qu'une fois. À noter que RetroArch 1.9.x ne fon
 1. Entrez dans le menu principal de RetroArch.
 2. Allez dans Settings --> User Interface. Activez l'option "Show Advanced Settings".
 3. Allez dans Settings --> Network. Activez l'option "Network Commands", qui se trouve sous "Request Device 16". 
-   Laissez le "Network Command Port" à sa valeur par defaut, qui devrait être 55355.
-
-
-![Capture d'écran du menu Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
+   Laissez le "Network Command Port" à sa valeur par defaut, qui devrait être 55355. \
+   ![Capture d'écran du menu Network Commands setting](../../generic/docs/retroarch-network-commands-fr.png)
 4. Allez dans le Menu Principal --> Online Updater --> Core Downloader. Trouvez et sélectionnez "Nintendo - SNES / SFC (bsnes-mercury
    Performance)".
 

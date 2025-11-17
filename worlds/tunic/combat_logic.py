@@ -1,9 +1,11 @@
-from typing import Dict, List, NamedTuple, Tuple, Optional
-from enum import IntEnum
 from collections import defaultdict
+from enum import IntEnum
+from typing import NamedTuple
+
 from BaseClasses import CollectionState
-from .rules import has_sword, has_melee
 from worlds.AutoWorld import LogicMixin
+
+from .logic_helpers import has_sword, has_melee
 
 
 # the vanilla stats you are expected to have to get through an area, based on where they are in vanilla
@@ -16,12 +18,12 @@ class AreaStats(NamedTuple):
     sp_level: int
     mp_level: int
     potion_count: int
-    equipment: List[str] = []
+    equipment: list[str] = []
     is_boss: bool = False
 
 
 # the vanilla upgrades/equipment you would have
-area_data: Dict[str, AreaStats] = {
+area_data: dict[str, AreaStats] = {
     # The upgrade page is right by the Well entrance. Upper Overworld by the chest in the top right might need something
     "Overworld": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Stick"]),
     "East Forest": AreaStats(1, 1, 1, 1, 1, 1, 0, ["Sword"]),
@@ -52,9 +54,9 @@ area_data: Dict[str, AreaStats] = {
 
 # these are used for caching which areas can currently be reached in state
 # Gauntlet does not have exclusively higher stat requirements, so it will be checked separately
-boss_areas: List[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
+boss_areas: list[str] = [name for name, data in area_data.items() if data.is_boss and name != "Gauntlet"]
 # Swamp does not have exclusively higher stat requirements, so it will be checked separately
-non_boss_areas: List[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
+non_boss_areas: list[str] = [name for name, data in area_data.items() if not data.is_boss and name != "Swamp"]
 
 
 class CombatState(IntEnum):
@@ -114,7 +116,7 @@ def has_combat_reqs(area_name: str, state: CollectionState, player: int) -> bool
     return met_combat_reqs
 
 
-def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: Optional[AreaStats] = None) -> bool:
+def check_combat_reqs(area_name: str, state: CollectionState, player: int, alt_data: AreaStats | None = None) -> bool:
     data = alt_data or area_data[area_name]
     extra_att_needed = 0
     extra_def_needed = 0
@@ -303,7 +305,7 @@ def has_required_stats(data: AreaStats, state: CollectionState, player: int) -> 
 
 
 # returns a tuple of your max attack level, the number of attack offerings
-def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_att_level(state: CollectionState, player: int) -> tuple[int, int]:
     att_offerings = state.count("ATT Offering", player)
     att_upgrades = state.count("Hero Relic - ATT", player)
     sword_level = state.count("Sword Upgrade", player)
@@ -315,44 +317,44 @@ def get_att_level(state: CollectionState, player: int) -> Tuple[int, int]:
 
 
 # returns a tuple of your max defense level, the number of defense offerings
-def get_def_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_def_level(state: CollectionState, player: int) -> tuple[int, int]:
     def_offerings = state.count("DEF Offering", player)
     # defense falls off, can just cap it at 8 for simplicity
     return (min(8, 1 + def_offerings
-                + state.count_from_list({"Hero Relic - DEF", "Secret Legend", "Phonomath"}, player))
+                + state.count_from_list(("Hero Relic - DEF", "Secret Legend", "Phonomath"), player))
             + (2 if state.has("Shield", player) else 0)
             + (2 if state.has("Hero's Laurels", player) else 0),
             def_offerings)
 
 
 # returns a tuple of your max potion level, the number of potion offerings
-def get_potion_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_potion_level(state: CollectionState, player: int) -> tuple[int, int]:
     potion_offerings = min(2, state.count("Potion Offering", player))
     # your third potion upgrade (from offerings) costs 1,000 money, reasonable to assume you won't do that
     return (1 + potion_offerings
-            + state.count_from_list({"Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"}, player),
+            + state.count_from_list(("Hero Relic - POTION", "Just Some Pals", "Spring Falls", "Back To Work"), player),
             potion_offerings)
 
 
 # returns a tuple of your max hp level, the number of hp offerings
-def get_hp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_hp_level(state: CollectionState, player: int) -> tuple[int, int]:
     hp_offerings = state.count("HP Offering", player)
     return 1 + hp_offerings + state.count("Hero Relic - HP", player), hp_offerings
 
 
 # returns a tuple of your max sp level, the number of sp offerings
-def get_sp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_sp_level(state: CollectionState, player: int) -> tuple[int, int]:
     sp_offerings = state.count("SP Offering", player)
     return (1 + sp_offerings
-            + state.count_from_list({"Hero Relic - SP", "Mr Mayor", "Power Up",
-                                     "Regal Weasel", "Forever Friend"}, player),
+            + state.count_from_list(("Hero Relic - SP", "Mr Mayor", "Power Up",
+                                     "Regal Weasel", "Forever Friend"), player),
             sp_offerings)
 
 
-def get_mp_level(state: CollectionState, player: int) -> Tuple[int, int]:
+def get_mp_level(state: CollectionState, player: int) -> tuple[int, int]:
     mp_offerings = state.count("MP Offering", player)
     return (1 + mp_offerings
-            + state.count_from_list({"Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"}, player),
+            + state.count_from_list(("Hero Relic - MP", "Sacred Geometry", "Vintage", "Dusty"), player),
             mp_offerings)
 
 
@@ -426,9 +428,9 @@ def calc_def_sp_cost(def_upgrades: int, sp_upgrades: int) -> int:
 
 
 class TunicState(LogicMixin):
-    tunic_need_to_reset_combat_from_collect: Dict[int, bool]
-    tunic_need_to_reset_combat_from_remove: Dict[int, bool]
-    tunic_area_combat_state: Dict[int, Dict[str, int]]
+    tunic_need_to_reset_combat_from_collect: dict[int, bool]
+    tunic_need_to_reset_combat_from_remove: dict[int, bool]
+    tunic_area_combat_state: dict[int, dict[str, int]]
 
     def init_mixin(self, _):
         # the per-player need to reset the combat state when collecting a combat item
