@@ -135,7 +135,7 @@ class Factorio(World):
         # Ensure at least 2 science pack locations for automation and logistics, and 1 more for rocket-silo
         # if it is not pre-spawned
         craftsanity_count = min(self.options.craftsanity.value, len(craftsanity_pool),
-                                location_count - 2 if self.options.silo == Silo.option_spawn else 3)
+                                location_count - (2 if self.options.silo == Silo.option_spawn else 3))
 
         location_count -= craftsanity_count
 
