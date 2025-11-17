@@ -168,6 +168,11 @@ class Visibility(IntEnum):
     progression_recipient = 3
     full = 4
 
+class Awards(IntEnum):
+    all_awards = 0
+    positive = 1
+    none = 2
+
 class Difficulty(IntEnum):
     very_easy = 0
     easy = 1
@@ -407,7 +412,8 @@ class DeathLink(Choice):
     """If you die, everybody dies, and vise versa!
     - This manifests itself in exploding rides. Somebody dying will cause a random ride to crash,
     and building rides badly will cause others to die. There's a 20 second timer between deathlink events.
-    Fix that coaster quickly!
+    Fix that coaster quickly! This option can be enabled/disabled in game as well by typing !!toggledeathlink
+    in the chat tab of the unlock shop.
     """
     display_name = "DeathLink"
     option_disabled = DeathLinkMode.disabled.value
@@ -434,6 +440,26 @@ class SelectedVisibility(Choice):
     option_progression_recipient = Visibility.progression_recipient.value
     option_full = Visibility.full.value
     default = Visibility.recipient.value
+
+class Awards(Choice):
+    """Choose what types (if any) of awards will have checks behind them. 
+    Negative awards will always reward a trap item, even if they're otherwise disabled!
+
+    All Awards will have a check behind every award in the game. 
+
+    Positive will only place a check behind awards with positive attributes.
+    
+    None will not place checks behind awards.
+    """
+    display_name = "Awards"
+    option_all = Awards.all_awards.value
+    option_positive = Awards.positive.value
+    option_none = Awards.none.value
+    default = Awards.positive.value
+
+class ExcludeSafestPark(OpenRCT2Toggle):
+    """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
+    display_name = "Exclude Safest Park Award"
 
 class SelectedDifficulty(Choice):
     """Choose a difficulty for the randomization. This will make rides have more difficult stat results (If that's enabled), as well as affect
@@ -847,7 +873,9 @@ openrct2_option_groups = [
         ShopMinimumTotalCustomers,
         ShopMaximumTotalCustomers,
         BalanceGuestCounts,
-        SelectedVisibility
+        SelectedVisibility,
+        Awards,
+        ExcludeSafestPark
     ]),
     OptionGroup("Item & Trap Options", [
         Filler,
@@ -880,6 +908,8 @@ class openRCT2Options(PerGameCommonOptions):
     shop_minimum_total_customers: ShopMinimumTotalCustomers
     shop_maximum_total_customers: ShopMaximumTotalCustomers
     balance_guest_counts: BalanceGuestCounts
+    awards: Awards
+    exclude_safest_park: ExcludeSafestPark
     ignore_ride_stat_changes: IgnoreRideStatChanges
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario

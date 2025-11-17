@@ -141,40 +141,47 @@ item_info = {
         "Land Discount",
         "Construction Rights Discount"
     ],
+    "useful_items":[
+        "scenery",
+        "Skip",
+        "Progressive Speed",
+        "$10,000",
+        "$5,000",
+        "$2,500",
+        "150 Guests",
+        "250 Guests"
+    ],
+    "useful_filler_items":[
+        "$10,000",
+        "$5,000",
+        "$2,500",
+        "150 Guests",
+        "250 Guests"
+    ],
     "filler_items": [
         "Rainstorm",
         "Thunderstorm",
         "Snowstorm",
         "Blizzard",
-        "$10,000",
-        "$5,000",
-        "$2,500",
         "$1,000",
         "$500",
         "50 Guests",
         "100 Guests",
-        "150 Guests",
-        "250 Guests",
         "Beauty Contest"
     ],
     "filler_common": [
         "$500",
         "$1,000",
-        "$2,500",
         "50 Guests"
     ],
     "filler_uncommon": [
-        "$5,000",
         "Rainstorm",
         "Snowstorm",
         "100 Guests",
-        "150 Guests"
     ],
     "filler_rare": [
         "Thunderstorm",
         "Blizzard",
-        "250 Guests",
-        "$10,000"
     ],
 	"trap_items": [
 		"Bathroom Trap",

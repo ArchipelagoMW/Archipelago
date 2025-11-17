@@ -72,6 +72,22 @@ def set_openRCT2_items(world):
         if rules[number] == unlockable:  # If it's enabled and can be disabled
             openRCT2_items.append(rule)  # Add an item to disable
 
+    # Adds some useful filler items. Ten is the absolute minimum to not break generation.
+    count = 0
+    while count < 10:
+        openRCT2_items.append(world.random.choice(item_info["useful_filler_items"]))
+        count += 1
+
+    # Add extra traps if there's not enough for the negative awards.
+    if world.options.awards == 0: # 0: all awards
+        #Add extra traps if there's fewer than 4.
+        if(sum(1 for item in openRCT2_items if item in item_info["trap_items"]) < 5):
+            openRCT2_items.append("Bathroom Trap")
+            openRCT2_items.append("Furry Convention Trap")
+            openRCT2_items.append("Furry Convention Trap")
+            openRCT2_items.append("Spam Trap")
+            openRCT2_items.append("Loan Shark Trap")
+
     filler = world.options.filler.value
 
     filler_count = len(openRCT2_items) * (filler * .01) - 1
@@ -84,7 +100,7 @@ def set_openRCT2_items(world):
         else:
             openRCT2_items.append(world.random.choice(item_info["filler_rare"]))
 
-    openRCT2_items.append("Beauty Contest")
+    openRCT2_items.append("Beauty Contest") #Every park has a beauty contest award. You are beautiful!
     
     # print(openRCT2_items)
 
