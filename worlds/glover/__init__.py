@@ -120,15 +120,16 @@ class GloverWorld(World):
         #You've gotten a ball by beating the level in the 4th gate
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.add_item("Returned Balls", self.player)
-        #Garib counting
-        if name.endswith("Garib") or name.endswith("Garibs"):
-            garibs_number : int = self.get_garib_group_size(name)
-            if garibs_number >= 0:
-                state.add_item("Total Garibs", self.player, garibs_number)
         #Progressive Events
         if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
             progressive_count = state.count(name, self.player)
             state.add_item(name + " " + str(progressive_count), self.player)
+        #Garib counting
+        if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
+            if name.endswith("Garib") or name.endswith("Garibs"):
+                garibs_number : int = self.get_garib_group_size(name)
+                if garibs_number >= 0:
+                    state.add_item("Total Garibs", self.player, garibs_number)
         return output
 
     def remove(self, state, item):
@@ -141,15 +142,16 @@ class GloverWorld(World):
         #You've gotten a ball by beating the level in the 4th gate
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.remove_item("Returned Balls", self.player)
-        #Garib counting
-        if name.endswith("Garib") or name.endswith("Garibs"):
-            garibs_number : int = self.get_garib_group_size(name)
-            if garibs_number >= 0:
-                state.remove_item("Total Garibs", self.player, garibs_number)
         #Progressive Events
         if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
             progressive_count = state.count(name, self.player)
             state.remove_item(name + " " + str(progressive_count), self.player)
+        #Garib counting
+        if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
+            if name.endswith("Garib") or name.endswith("Garibs"):
+                garibs_number : int = self.get_garib_group_size(name)
+                if garibs_number >= 0:
+                    state.remove_item("Total Garibs", self.player, garibs_number)
         return output
 
     def get_garib_group_size(self, garibName : str):
@@ -611,8 +613,17 @@ class GloverWorld(World):
         #Unless you've set it to level garibs, in which case it's so straight forward it's done in JsonReader
         if self.options.garib_logic == GaribLogic.option_level_garibs:
             return
+        #Filler Garibs
+        if not self.options.bonus_levels and self.options.difficulty_logic == 0:
+            for each_level in self.garib_level_order:
+                #Ignore bonus levels if it's disabled
+                if each_level[0].endswith("?"):
+                    continue
+                #At the next level
+                level_all_garibs : Location = self.multiworld.get_location(each_level[0] + ": All Garibs", player)
+                set_rule(level_all_garibs, lambda state: True)
         #Otherwise, start by the sorting method, since it has the most major effect on how garib rules act
-        if self.options.garib_sorting == GaribSorting.option_by_level:
+        elif self.options.garib_sorting == GaribSorting.option_by_level:
             #Garibs are sent to specific levels
             garib_level_suffixes = ["1", "2", "3", "?"]
             if not self.options.bonus_levels:
