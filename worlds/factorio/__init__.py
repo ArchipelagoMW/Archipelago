@@ -132,16 +132,24 @@ class Factorio(World):
         craftsanity_pool = [craft for craft in craftsanity_locations
                             if self.options.silo != Silo.option_spawn
                             or craft not in ["Craft rocket-silo", "Craft cargo-landing-pad"]]
-        craftsanity_count = min(self.options.craftsanity.value, len(craftsanity_pool), location_count - 10)
+        # Ensure at least 2 science pack locations for automation and logistics, and 1 more for rocket-silo
+        # if it is not pre-spawned
+        craftsanity_count = min(self.options.craftsanity.value, len(craftsanity_pool),
+                                location_count - 2 if self.options.silo == Silo.option_spawn else 3)
 
         location_count -= craftsanity_count
 
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
         try:
+            # Ensure there are two "AP-1-" locations for automation and logistics, and one max science pack location
+            # for rocket-silo if it is not pre-spawned
+            max_science_pack_number = len(self.options.max_science_pack.get_allowed_packs())
             science_location_names = None
-            while not science_location_names or len([location for location in science_location_names
-                                                     if location.startswith("AP-1-")]) < 2:
+            while (not science_location_names or
+                   len([location for location in science_location_names if location.startswith("AP-1-")]) < 2
+                    or (self.options.silo != Silo.option_spawn and len([location for location in science_location_names
+                            if location.startswith(f"AP-{max_science_pack_number}")]) < 1)):
                 science_location_names = random.sample(location_pool, location_count)
             craftsanity_location_names = random.sample(craftsanity_pool, craftsanity_count)
 

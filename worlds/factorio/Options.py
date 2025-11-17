@@ -62,7 +62,9 @@ class Goal(Choice):
 
 class CraftSanity(NamedRange):
     """Choose a number of researches to require crafting a specific item rather than with science packs.
-    Will be capped based on the total number of locations."""
+    May be capped based on the total number of locations.
+    There will always be at least 2 Science Pack research locations for automation and logistics, and 1 for rocket-silo
+    if the Rocket Silo option is not set to Spawn."""
     display_name = "CraftSanity"
     default = 0
     range_start = 0
