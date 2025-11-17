@@ -265,9 +265,9 @@ class CrystalProjectWorld(World):
                         if len(ap_region.locations) > 2:
                             initially_reachable_regions.append(ap_region)
                 self.starter_ap_region = self.random.choice(initially_reachable_regions).name
-                #Until we have a teleport location in every single apregion, for now we take specifically the first apregion in the display regions subregion list
+                #Until we have a teleport location in every single ap region, for now we take specifically the first ap region in the display regions subregion list
                 self.starter_ap_region = display_region_subregions_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
-            #logging.getLogger().info("Starting region is " + self.starter_ap_region)
+            logging.getLogger().info("Starting region is " + self.starter_ap_region)
             self.origin_region_name = self.starter_ap_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
@@ -546,10 +546,12 @@ class CrystalProjectWorld(World):
     def set_rules(self) -> None:
         logic = CrystalProjectLogic(self.player, self.options)
         if self.options.goal == self.options.goal.option_astley:
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
+            #For some reason we get generation failures that say the game is unbeatable if we check can_reach on The Old World but can_reach on The New World is fine and checking all the conditions separately is fine
+            #self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player) and logic.old_world_requirements(state) and (state.has(THE_OLD_WORLD_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled) and logic.is_area_in_level_range(state, 70)
             self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(CLAMSHELL, self.player, self.options.clamshell_goal_quantity.value) and state.can_reach(SEASIDE_CLIFFS_AP_REGION, player=self.player)
