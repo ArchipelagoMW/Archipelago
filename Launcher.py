@@ -75,12 +75,17 @@ def open_patch():
             launch([*exe, file], component.cli)
 
 
-def generate_yamls():
+def generate_yamls(*args):
     from Options import generate_yaml_templates
+
+    parser = argparse.ArgumentParser(description="Generate Template Options", usage="[-h] [--skip_open_folder]")
+    parser.add_argument("--skip_open_folder", action="store_true")
+    args = parser.parse_args(args)
 
     target = Utils.user_path("Players", "Templates")
     generate_yaml_templates(target, False)
-    open_folder(target)
+    if not args.skip_open_folder:
+        open_folder(target)
 
 
 def browse_files():

@@ -367,7 +367,10 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
                                 f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = cleaned_value
         else:
-            cleaned_weights[option_name] = new_weights[option]
+            # Options starting with + and - may modify values in-place, and new_weights may be shared by multiple slots
+            # using the same .yaml, so ensure that the new value is a copy.
+            cleaned_value = copy.deepcopy(new_weights[option])
+            cleaned_weights[option_name] = cleaned_value
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
