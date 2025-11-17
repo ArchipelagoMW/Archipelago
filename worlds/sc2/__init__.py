@@ -386,6 +386,11 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         return count
 
     def resolve_count(count: int, max_count: int, negative_value: int | None = None) -> int:
+        """
+        Handles `count` being out of range.
+        * If `count > max_count`, returns `max_count`.
+        * If `count < 0`, returns `negative_value` (returns `max_count` if `negative_value` is unspecified)
+        """
         if count < 0:
             if negative_value is None:
                 return max_count
@@ -419,9 +424,13 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
         locked_count = locked_items.get(item_name, 0)
         start_count = start_inventory.get(item_name, 0)
         key_count = key_items.get(item_name, 0)
-        # specifying a negative number in the yaml means exclude / lock all
+        # Specifying a negative number in the yaml means exclude / lock / start all.
+        # In the case of excluded/unexcluded, resolve negatives to max_count before subtracting them,
+        # and after subtraction resolve negatives to just 0 (when unexcluded > excluded).
         excluded_count = resolve_count(
-            resolve_exclude(excluded_count, max_count) - resolve_exclude(unexcluded_count, max_count), max_count, negative_value=0
+            resolve_exclude(excluded_count, max_count) - resolve_exclude(unexcluded_count, max_count),
+            max_count,
+            negative_value=0
         )
         locked_count = resolve_count(locked_count, max_count)
         start_count = resolve_count(start_count, max_count)
