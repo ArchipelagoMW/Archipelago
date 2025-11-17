@@ -56,6 +56,7 @@ class CrystalProjectWorld(World):
 
     mod_info = get_mod_info()
     modded_items = get_modded_items(mod_info)
+    modded_job_count: int = 0
 
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
@@ -63,6 +64,7 @@ class CrystalProjectWorld(World):
         item_name_to_id[modded_item.name] = modded_item.code
         if 'Job' in modded_item.name:
             item_name_groups.setdefault(JOB, set()).add(modded_item.name)
+            modded_job_count += 1
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
@@ -225,8 +227,12 @@ class CrystalProjectWorld(World):
 
         if self.options.job_rando.value == self.options.job_rando.option_none:
             jobs_earnable, self.jobs_not_to_exclude = set_jobs_at_default_locations(self, self.player_name)
+            if self.options.use_mods.value == self.options.use_mods.option_true:
+                jobs_earnable += self.modded_job_count
         else:
             jobs_earnable = len(self.item_name_groups[JOB]) - len(self.starting_jobs)
+            if self.options.use_mods.value == self.options.use_mods.option_false:
+                jobs_earnable -= self.modded_job_count
 
         if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.new_world_stone_job_quantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
@@ -549,9 +555,7 @@ class CrystalProjectWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
-            #For some reason we get generation failures that say the game is unbeatable if we check can_reach on The Old World but can_reach on The New World is fine and checking all the conditions separately is fine
-            #self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player) and logic.old_world_requirements(state) and (state.has(THE_OLD_WORLD_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled) and logic.is_area_in_level_range(state, 70)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(CLAMSHELL, self.player, self.options.clamshell_goal_quantity.value) and state.can_reach(SEASIDE_CLIFFS_AP_REGION, player=self.player)
