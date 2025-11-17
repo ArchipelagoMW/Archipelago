@@ -872,13 +872,25 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
     # This is for the region completion location
     if not excluded:
         if world.options.regionsanity.value != world.options.regionsanity.option_disabled and region_completion_location is not None:
+            locations_in_display_region: List[Location] = []
             for ap_region_name in display_region_subregions_dictionary[display_region_name]:
-                region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, lambda state, lambda_region_name = ap_region_name: state.can_reach(lambda_region_name, player=player))
                 for location in world.get_locations():
                     if location.parent_region.name == ap_region_name and location != region_completion_location:
-                        region_completion_location.access_rule = combine_callables(region_completion_location.access_rule, location.access_rule)
+                        locations_in_display_region.append(location)
+
+            region_completion_location.access_rule = lambda state: can_reach_all_locations(state, locations_in_display_region)
 
     return ap_regions
+
+def can_reach_all_locations(state: CollectionState, locations: List[Location]) -> bool:
+    result: bool = True
+
+    for location in locations:
+        if not location.can_reach(state):
+            result = False
+            break
+
+    return result
 
 def create_location(player: int, location_data: LocationData, region: Region) -> Location:
     location = CrystalProjectLocation(player, location_data.name, location_data.code, region)
@@ -931,3 +943,4 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      NEPTUNE_SHRINE_AP_REGION: lambda state: state.has(NEPTUNE_STONE, world.player),
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
                      THE_NEW_WORLD_AP_REGION: lambda state: logic.new_world_requirements(state)})
+    world.multiworld.register_indirect_condition(world.get_region(THE_DEPTHS_AP_REGION), world.get_entrance(MENU_AP_REGION + " -> " + THE_OLD_WORLD_AP_REGION))

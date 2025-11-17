@@ -82,7 +82,7 @@ def get_mod_info() -> List[ModInfoModel]:
     equipment_ids_in_use: List[int] = [591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610]
     item_ids_in_use: List[int] = [229, 230, 231, 232]
     job_ids_in_use: List[int] = []
-    entity_ids_in_use: List[int] = [5000, 5001, 5002, 5003]
+    entity_ids_in_use: List[int] = [5000, 5001, 5002, 5003, 5004]
     spark_ids_in_use: List[int] = []
     order_loaded = 1
 
