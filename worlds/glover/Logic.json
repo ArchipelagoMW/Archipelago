@@ -26517,7 +26517,7 @@
 						"mv0": 26,
 						"mv1": 27,
 						"mv2": 11,
-						"mv3": 25,
+						"mv3": 3,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
@@ -26526,14 +26526,7 @@
 						"mv0": 26,
 						"mv1": 27,
 						"mv2": 12,
-						"mv3": 25,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"mv0": 8,
-						"mv1": 13,
+						"mv3": 3,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
@@ -26546,10 +26539,12 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 12,
-						"mv1": 3,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
 						"regionIndex": 0,
-						"trickDifficulty": 0
+						"trickDifficulty": 1
 					}
 				],
 				"D": [
