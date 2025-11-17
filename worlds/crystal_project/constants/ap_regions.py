@@ -193,8 +193,10 @@ LOWER_NORTHERN_CAVE_AP_REGION = "Lower Northern Cave"
 #Northern Cave End
 #Land's End start
 LANDS_END_AP_REGION = "Land's End"
-LANDS_END_AP_REGION_TELEPORT_LOCATION = "115,189,-487"
+#On the Land's End side of the broken bridge from Tall, Tall Heights
+LANDS_END_AP_REGION_TELEPORT_LOCATION = "124,192,-488"
 LANDS_END_NORTHERN_PEAK_AP_REGION = "Land's End Northern Peak"
+OWL_TREE_AP_REGION = "Owl Tree"
 #Land's End end
 #Slip Glide Ride start
 SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION = "Slip Glide Ride Entrance"

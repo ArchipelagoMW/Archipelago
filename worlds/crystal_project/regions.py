@@ -327,7 +327,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SALMON_PASS_WEST_AP_REGION: lambda state: logic.has_swimming(state),
                      SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_swimming(state),
                      LAKE_DELENDE_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)})
-    fancy_add_exits(world, ATOP_FISH_HATCHERY_AP_REGION, [GREENSHIRE_REPRISE_AP_REGION],
+    fancy_add_exits(world, ATOP_FISH_HATCHERY_AP_REGION, [DELENDE_PLAINS_AP_REGION, GREENSHIRE_REPRISE_AP_REGION],
                     {GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.obscure_routes_on(state)})
     fancy_add_exits(world, DELENDE_HIGH_BRIDGES_AP_REGION, [DELENDE_PLAINS_AP_REGION, GRAN_AP_REGION, BELOW_GRAN_AP_REGION, DELENDE_MESA_OVER_SPOOKY_CAVE_AP_REGION, DELENDE_PEAK_AP_REGION, HEART_TARN_AP_REGION, YAMAGAWA_MA_AP_REGION, FENCERS_KEEP_CHEST_AP_REGION, THE_PALE_GROTTO_AP_REGION, SEASIDE_CLIFFS_AP_REGION, CLIFF_OVER_SEASIDE_CAMP_AP_REGION, PROVING_MEADOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, LAKE_DELENDE_AP_REGION],
                     {GRAN_AP_REGION: lambda state: logic.can_fight_gran(state),
@@ -681,18 +681,19 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, LOWER_NORTHERN_CAVE_AP_REGION, [ICE_CELL_AP_REGION, LOWER_ICE_LAKES_AP_REGION])
     #Northern Cave end
     #Land's End start
-    fancy_add_exits(world, LANDS_END_AP_REGION, [DELENDE_PLAINS_AP_REGION, HEART_TARN_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, ATOP_DAM_AP_REGION, LOWER_ICE_LAKES_AP_REGION, LANDS_END_COTTAGE_RIDGE_AP_REGION, LANDS_END_NORTHERN_PEAK_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, THE_OPEN_SEA_AP_REGION],
-                    #From Callisto Shrine area, you can drop down to Delende, South Salmon River or Atop Salmon River Dam with the quintar
-                    {DELENDE_PLAINS_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.obscure_routes_on(state),
+    fancy_add_exits(world, LANDS_END_AP_REGION, [LANDS_END_NORTHERN_PEAK_AP_REGION, OWL_TREE_AP_REGION, ATOP_FISH_HATCHERY_AP_REGION, HEART_TARN_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, ATOP_DAM_AP_REGION, LOWER_ICE_LAKES_AP_REGION, LANDS_END_COTTAGE_RIDGE_AP_REGION, THE_OPEN_SEA_AP_REGION],
+                    #From Callisto Shrine save point, you can drop down to Delende, or to South Salmon River or Atop Salmon River Dam with the quintar
+                    {LANDS_END_NORTHERN_PEAK_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
+                     OWL_TREE_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     ATOP_FISH_HATCHERY_AP_REGION: lambda state: logic.obscure_routes_on(state),
                      HEART_TARN_AP_REGION: lambda state: logic.has_glide(state),
                      SOUTH_SALMON_RIVER_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.obscure_routes_on(state),
                      ATOP_DAM_AP_REGION: lambda state: logic.has_horizontal_movement(state) and logic.obscure_routes_on(state),
-                     LANDS_END_NORTHERN_PEAK_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
-                     JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, LANDS_END_NORTHERN_PEAK_AP_REGION, [LANDS_END_AP_REGION, TALL_TALL_DIAMONDSMITH_AP_REGION, THE_OPEN_SEA_AP_REGION],
                     {TALL_TALL_DIAMONDSMITH_AP_REGION: lambda state: logic.has_glide(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, OWL_TREE_AP_REGION, [LANDS_END_AP_REGION])
     #Land's End end
     #Slip Glide Ride start
     fancy_add_exits(world, SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, [ICE_CELL_AP_REGION, SLIP_GLIDE_RIDE_AP_REGION],
@@ -915,7 +916,7 @@ def fancy_add_exits(self, region: str, exits: List[str],
 def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOptions) -> None:
     logic = CrystalProjectLogic(world.player, options)
 
-    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, UPPER_ICE_LAKES_AP_REGION, LANDS_END_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
+    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, MERCURY_SHRINE_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, POKO_POKO_DESERT_AP_REGION, GANYMEDE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, UPPER_ICE_LAKES_AP_REGION, OWL_TREE_AP_REGION, EUROPA_SHRINE_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, MODDED_ZONE_AP_REGION],
                     # If regionsanity is enabled it will set its own origin region, if it isn't we should connect menu to spawning meadows
                     {SPAWNING_MEADOWS_AP_REGION: lambda state: options.regionsanity.value == options.regionsanity.option_disabled,
                      CAPITAL_SEQUOIA_AP_REGION: lambda state: state.has(GAEA_STONE, world.player),
@@ -925,7 +926,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      GANYMEDE_SHRINE_AP_REGION: lambda state: state.has(GANYMEDE_STONE, world.player),
                      DIONE_ROOF_AP_REGION: lambda state: state.has(DIONE_STONE, world.player),
                      UPPER_ICE_LAKES_AP_REGION: lambda state: state.has(TRITON_STONE, world.player),
-                     LANDS_END_AP_REGION: lambda state: state.has(CALLISTO_STONE, world.player),
+                     OWL_TREE_AP_REGION: lambda state: state.has(CALLISTO_STONE, world.player),
                      EUROPA_SHRINE_AP_REGION: lambda state: state.has(EUROPA_STONE, world.player),
                      NEPTUNE_SHRINE_AP_REGION: lambda state: state.has(NEPTUNE_STONE, world.player),
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
