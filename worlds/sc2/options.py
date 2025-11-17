@@ -950,10 +950,10 @@ class Sc2ItemDict(OptionCounter, VerifyKeys, Mapping[str, int]):
     @classmethod
     def from_any(cls, data: list[str] | dict[str, int]) -> 'Sc2ItemDict':
         if isinstance(data, list):
-            # This is a little default that gets us backwards compatibility with lists.
-            # It doesn't play nice with trigger merging dicts and lists together, though,
-            # so best not to advertise it overmuch.
-            data = {item: -1 for item in data}
+            raise ValueError(
+                f"{cls.display_name}: Cannot convert from list. "
+                f"Use dict syntax (no dashes, 'value: number' synax)."
+            )
         if isinstance(data, dict):
             for key, value in data.items():
                 if not isinstance(value, int):
@@ -972,7 +972,7 @@ class Sc2ItemDict(OptionCounter, VerifyKeys, Mapping[str, int]):
                 )
             return cls(data)
         else:
-            raise NotImplementedError(f"{cls.display_name}: Cannot Convert from non-dictionary, got {type(data)}")
+            raise NotImplementedError(f"{cls.display_name}: Cannot convert from non-dictionary, got {type(data)}")
 
     def verify(self, world: Type['World'], player_name: str, plando_options: PlandoOptions) -> None:
         """Overridden version of function from Options.VerifyKeys for a better error message"""
