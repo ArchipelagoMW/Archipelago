@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import ItemClassification
-from Fill import FillError
+from Options import OptionError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_location, ShopType
@@ -223,7 +223,7 @@ items_reduction_table = (
 
 
 def generate_itempool(world):
-    player = world.player
+    player: int = world.player
     multiworld = world.multiworld
 
     if world.options.item_pool.current_key not in difficulties:
@@ -280,7 +280,6 @@ def generate_itempool(world):
     if multiworld.custom:
         pool, placed_items, precollected_items, clock_mode, treasure_hunt_required = (
             make_custom_item_pool(multiworld, player))
-        multiworld.rupoor_cost = min(multiworld.customitemarray[67], 9999)
     else:
         (pool, placed_items, precollected_items, clock_mode, treasure_hunt_required, treasure_hunt_total,
          additional_triforce_pieces) = get_pool_core(multiworld, player)
@@ -386,8 +385,8 @@ def generate_itempool(world):
 
     if world.options.retro_bow:
         shop_items = 0
-        shop_locations = [location for shop_locations in (shop.region.locations for shop in multiworld.shops if
-                          shop.type == ShopType.Shop and shop.region.player == player) for location in shop_locations if
+        shop_locations = [location for shop_locations in (shop.region.locations for shop in world.shops if
+                          shop.type == ShopType.Shop) for location in shop_locations if
                           location.shop_slot is not None]
         for location in shop_locations:
             if location.shop.inventory[location.shop_slot]["item"] == "Single Arrow":
@@ -411,15 +410,16 @@ def generate_itempool(world):
     pool_count = len(items)
     new_items = ["Triforce Piece" for _ in range(additional_triforce_pieces)]
     if world.options.shuffle_capacity_upgrades or world.options.bombless_start:
-        progressive = world.options.progressive
-        progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
+        progressive = world.options.progressive.want_progressives(world.random)
         if world.options.shuffle_capacity_upgrades == "on_combined":
             new_items.append("Bomb Upgrade (50)")
         elif world.options.shuffle_capacity_upgrades == "on":
             new_items += ["Bomb Upgrade (+5)"] * 6
             new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
-        if world.options.shuffle_capacity_upgrades != "on_combined" and world.options.bombless_start:
-            new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+            if world.options.bombless_start:
+                new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+        elif world.options.bombless_start:
+            new_items.append("Bomb Upgrade (+10)")
 
         if world.options.shuffle_capacity_upgrades and not world.options.retro_bow:
             if world.options.shuffle_capacity_upgrades == "on_combined":
@@ -467,6 +467,9 @@ def generate_itempool(world):
                         items_were_cut = items_were_cut or cut_item(items, *reduce_item)
                     elif len(reduce_item) == 4:
                         items_were_cut = items_were_cut or condense_items(items, *reduce_item)
+                        if reduce_item[0] == "Piece of Heart" and world.logical_heart_pieces:
+                            world.logical_heart_pieces -= reduce_item[2]
+                            world.logical_heart_containers += reduce_item[3]
                     elif len(reduce_item) == 1:  # Bottles
                         bottles = [item for item in items if item.name in item_name_groups["Bottles"]]
                         if len(bottles) > 4:
@@ -477,7 +480,7 @@ def generate_itempool(world):
                     if items_were_cut:
                         break
                 else:
-                    raise Exception(f"Failed to limit item pool size for player {player}")
+                    raise OptionError(f"Failed to limit item pool size for player {player}")
     if len(items) < pool_count:
         items += removed_filler[len(items) - pool_count:]
 
@@ -546,12 +549,14 @@ def set_up_take_anys(multiworld, world, player):
     connect_entrance(multiworld, entrance.name, old_man_take_any.name, player)
     entrance.target = 0x58
     old_man_take_any.shop = TakeAny(old_man_take_any, 0x0112, 0xE2, True, True, total_shop_slots)
-    multiworld.shops.append(old_man_take_any.shop)
+    world.shops.append(old_man_take_any.shop)
 
-    swords = [item for item in multiworld.itempool if item.player == player and item.type == 'Sword']
-    if swords:
-        sword = multiworld.random.choice(swords)
-        multiworld.itempool.remove(sword)
+    sword_indices = [
+        index for index, item in enumerate(multiworld.itempool) if item.player == player and item.type == 'Sword'
+    ]
+    if sword_indices:
+        sword_index = multiworld.random.choice(sword_indices)
+        sword = multiworld.itempool.pop(sword_index)
         multiworld.itempool.append(item_factory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
@@ -572,7 +577,7 @@ def set_up_take_anys(multiworld, world, player):
         connect_entrance(multiworld, entrance.name, take_any.name, player)
         entrance.target = target
         take_any.shop = TakeAny(take_any, room_id, 0xE3, True, True, total_shop_slots + num + 1)
-        multiworld.shops.append(take_any.shop)
+        world.shops.append(take_any.shop)
         take_any.shop.add_inventory(0, 'Blue Potion', 0, 0)
         take_any.shop.add_inventory(1, 'Boss Heart Container', 0, 0)
         location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)

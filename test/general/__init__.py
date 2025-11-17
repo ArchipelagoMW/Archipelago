@@ -1,9 +1,9 @@
 from argparse import Namespace
-from typing import List, Optional, Tuple, Type, Union
+from typing import Any, List, Optional, Tuple, Type
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from worlds import network_data_package
-from worlds.AutoWorld import World, call_all
+from worlds.AutoWorld import World, WebWorld, call_all
 
 gen_steps = (
     "generate_early",
@@ -17,7 +17,7 @@ gen_steps = (
 
 
 def setup_solo_multiworld(
-    world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
+        world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
 ) -> MultiWorld:
     """
     Creates a multiworld with a single player of `world_type`, sets default options, and calls provided gen steps.
@@ -31,8 +31,8 @@ def setup_solo_multiworld(
     return setup_multiworld(world_type, steps, seed)
 
 
-def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple[str, ...] = gen_steps,
-                     seed: Optional[int] = None) -> MultiWorld:
+def setup_multiworld(worlds: list[type[World]] | type[World], steps: tuple[str, ...] = gen_steps,
+                     seed: int | None = None, options: dict[str, Any] | list[dict[str, Any]] = None) -> MultiWorld:
     """
     Creates a multiworld with a player for each provided world type, allowing duplicates, setting default options, and
     calling the provided gen steps.
@@ -40,26 +40,37 @@ def setup_multiworld(worlds: Union[List[Type[World]], Type[World]], steps: Tuple
     :param worlds: Type/s of worlds to generate a multiworld for
     :param steps: Gen steps that should be called before returning. Default calls through pre_fill
     :param seed: The seed to be used when creating this multiworld
+    :param options: Options to set on each world. If just one dict of options is passed, it will be used for all worlds.
     :return: The generated multiworld
     """
     if not isinstance(worlds, list):
         worlds = [worlds]
+
+    if options is None:
+        options = [{}] * len(worlds)
+    elif not isinstance(options, list):
+        options = [options] * len(worlds)
+
     players = len(worlds)
     multiworld = MultiWorld(players)
     multiworld.game = {player: world_type.game for player, world_type in enumerate(worlds, 1)}
     multiworld.player_name = {player: f"Tester{player}" for player in multiworld.player_ids}
     multiworld.set_seed(seed)
-    multiworld.state = CollectionState(multiworld)
     args = Namespace()
-    for player, world_type in enumerate(worlds, 1):
+    for player, (world_type, option_overrides) in enumerate(zip(worlds, options), 1):
         for key, option in world_type.options_dataclass.type_hints.items():
             updated_options = getattr(args, key, {})
-            updated_options[player] = option.from_any(option.default)
+            updated_options[player] = option.from_any(option_overrides.get(key, option.default))
             setattr(args, key, updated_options)
     multiworld.set_options(args)
+    multiworld.state = CollectionState(multiworld)
     for step in steps:
         call_all(multiworld, step)
     return multiworld
+
+
+class TestWebWorld(WebWorld):
+    tutorials = []
 
 
 class TestWorld(World):
@@ -67,6 +78,7 @@ class TestWorld(World):
     item_name_to_id = {}
     location_name_to_id = {}
     hidden = True
+    web = TestWebWorld()
 
 
 # add our test world to the data package, so we can test it later

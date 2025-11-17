@@ -130,9 +130,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
         # @formatter:off
         self.registry.item_rules.update({
             "Energy Tonic": self.money.can_spend_at(Region.hospital, 1000),
-            WaterChest.fishing_chest: self.fishing.can_fish_chests(),
-            WaterChest.golden_fishing_chest: self.fishing.can_fish_chests() & self.skill.has_mastery(Skill.fishing),
-            WaterChest.treasure: self.fishing.can_fish_chests(),
+            WaterChest.fishing_chest: self.fishing.can_fish_chests,
+            WaterChest.golden_fishing_chest: self.fishing.can_fish_chests & self.skill.has_mastery(Skill.fishing),
+            WaterChest.treasure: self.fishing.can_fish_chests,
             Ring.hot_java_ring: self.region.can_reach(Region.volcano_floor_10),
             "Galaxy Soul": self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 40),
             "JotPK Big Buff": self.arcade.has_jotpk_power_level(7),
@@ -164,19 +164,20 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             AnimalProduct.large_milk: self.animal.has_happy_animal(Animal.cow),
             AnimalProduct.milk: self.animal.has_animal(Animal.cow),
             AnimalProduct.rabbit_foot: self.animal.has_happy_animal(Animal.rabbit),
-            AnimalProduct.roe: self.skill.can_fish() & self.building.has_building(Building.fish_pond),
+            AnimalProduct.roe: self.fishing.can_fish_anywhere() & self.building.has_building(Building.fish_pond),
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.building.has_building(Building.fish_pond),
             AnimalProduct.truffle: self.animal.has_animal(Animal.pig) & self.season.has_any_not_winter(),
-            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter), # Should also check void chicken if there was an alternative to obtain it without void egg
+            AnimalProduct.void_egg: self.has(AnimalProduct.void_egg_starter),  # Should also check void chicken if there was an alternative to obtain it without void egg
             AnimalProduct.wool: self.animal.has_animal(Animal.rabbit) | self.animal.has_animal(Animal.sheep),
             AnimalProduct.slime_egg_green: self.has(Machine.slime_egg_press) & self.has(Loot.slime),
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
             AnimalProduct.slime_egg_purple: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(9),
-            AnimalProduct.slime_egg_tiger: self.has(Fish.lionfish) & self.building.has_building(Building.fish_pond),
-            AnimalProduct.duck_egg_starter: self.logic.false_, # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
-            AnimalProduct.dinosaur_egg_starter: self.logic.false_, # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
+            AnimalProduct.slime_egg_tiger: self.can_fish_pond(Fish.lionfish, *(Forageable.ginger, Fruit.pineapple, Fruit.mango)) & self.time.has_lived_months(12) &
+                                            self.building.has_building(Building.slime_hutch) & self.monster.can_kill(Monster.tiger_slime),
+            AnimalProduct.duck_egg_starter: self.logic.false_,  # It could be purchased at the Feast of the Winter Star, but it's random every year, so not considering it yet...
+            AnimalProduct.dinosaur_egg_starter: self.logic.false_,  # Dinosaur eggs are also part of the museum rules, and I don't want to touch them yet.
             AnimalProduct.egg_starter: self.logic.false_,  # It could be purchased at the Desert Festival, but festival logic is quite a mess, so not considering it yet...
             AnimalProduct.golden_egg_starter: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
             AnimalProduct.void_egg_starter: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
@@ -198,7 +199,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             ArtisanGood.targeted_bait: self.artisan.has_targeted_bait(),
             ArtisanGood.stardrop_tea: self.has(WaterChest.golden_fishing_chest),
             ArtisanGood.truffle_oil: self.has(AnimalProduct.truffle) & self.has(Machine.oil_maker),
-            ArtisanGood.void_mayonnaise: (self.skill.can_fish(Region.witch_swamp)) | (self.artisan.can_mayonnaise(AnimalProduct.void_egg)),
+            ArtisanGood.void_mayonnaise: self.artisan.can_mayonnaise(AnimalProduct.void_egg),
             Beverage.pina_colada: self.money.can_spend_at(Region.island_resort, 600),
             Beverage.triple_shot_espresso: self.has("Hot Java Ring"),
             Consumable.butterfly_powder: self.money.can_spend_at(Region.sewer, 20000),
@@ -217,15 +218,15 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
             Fish.any: self.logic.or_(*(self.fishing.can_catch_fish(fish) for fish in content.fishes.values())),
-            Fish.crab: self.skill.can_crab_pot_at(Region.beach),
-            Fish.crayfish: self.skill.can_crab_pot_at(Region.town),
-            Fish.lobster: self.skill.can_crab_pot_at(Region.beach),
+            Fish.crab: self.fishing.can_crab_pot_at(Region.beach),
+            Fish.crayfish: self.fishing.can_crab_pot_at(Region.town),
+            Fish.lobster: self.fishing.can_crab_pot_at(Region.beach),
             Fish.mussel: self.tool.can_forage(Generic.any, Region.beach) or self.has(Fish.mussel_node),
             Fish.mussel_node: self.region.can_reach(Region.island_west),
             Fish.oyster: self.tool.can_forage(Generic.any, Region.beach),
-            Fish.periwinkle: self.skill.can_crab_pot_at(Region.town),
-            Fish.shrimp: self.skill.can_crab_pot_at(Region.beach),
-            Fish.snail: self.skill.can_crab_pot_at(Region.town),
+            Fish.periwinkle: self.fishing.can_crab_pot_at(Region.town),
+            Fish.shrimp: self.fishing.can_crab_pot_at(Region.beach),
+            Fish.snail: self.fishing.can_crab_pot_at(Region.town),
             Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Forageable.hay: self.building.has_building(Building.silo) & self.tool.has_tool(Tool.scythe), #
@@ -233,9 +234,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             Forageable.secret_note: self.quest.has_magnifying_glass() & (self.ability.can_chop_trees() | self.mine.can_mine_in_the_mines_floor_1_40()), #
             Fossil.bone_fragment: (self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe)) | self.monster.can_kill(Monster.skeleton),
             Fossil.fossilized_leg: self.region.can_reach(Region.dig_site) & self.tool.has_tool(Tool.pickaxe),
-            Fossil.fossilized_ribs: self.region.can_reach(Region.island_south) & self.tool.has_tool(Tool.hoe),
+            Fossil.fossilized_ribs: self.region.can_reach(Region.island_south) & self.tool.has_tool(Tool.hoe) & self.received("Open Professor Snail Cave"),
             Fossil.fossilized_skull: self.action.can_open_geode(Geode.golden_coconut),
-            Fossil.fossilized_spine: self.skill.can_fish(Region.dig_site),
+            Fossil.fossilized_spine: self.fishing.can_fish_at(Region.dig_site),
             Fossil.fossilized_tail: self.action.can_pan_at(Region.dig_site, ToolMaterial.copper),
             Fossil.mummified_bat: self.region.can_reach(Region.volcano_floor_10),
             Fossil.mummified_frog: self.region.can_reach(Region.island_east) & self.tool.has_tool(Tool.scythe),
@@ -288,20 +289,20 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             MetalBar.quartz: self.can_smelt(Mineral.quartz) | self.can_smelt("Fire Quartz") | (self.has(Machine.recycling_machine) & (self.has(Trash.broken_cd) | self.has(Trash.broken_glasses))),
             MetalBar.radioactive: self.can_smelt(Ore.radioactive),
             Ore.copper: self.mine.can_mine_in_the_mines_floor_1_40() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.copper),
-            Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.iron),
-            Ore.iridium: self.mine.can_mine_in_the_skull_cavern() | self.can_fish_pond(Fish.super_cucumber) | self.tool.has_tool(Tool.pan, ToolMaterial.gold),
-            Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.copper),
+            Ore.gold: self.mine.can_mine_in_the_mines_floor_81_120() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.gold),
+            Ore.iridium: self.count(2, *(self.mine.can_mine_in_the_skull_cavern(), self.can_fish_pond(Fish.super_cucumber), self.tool.has_tool(Tool.pan, ToolMaterial.iridium))),
+            Ore.iron: self.mine.can_mine_in_the_mines_floor_41_80() | self.mine.can_mine_in_the_skull_cavern() | self.tool.has_tool(Tool.pan, ToolMaterial.iron),
             Ore.radioactive: self.ability.can_mine_perfectly() & self.region.can_reach(Region.qi_walnut_room),
             RetainingSoil.basic: self.money.can_spend_at(Region.pierre_store, 100),
             RetainingSoil.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             SpeedGro.basic: self.money.can_spend_at(Region.pierre_store, 100),
             SpeedGro.deluxe: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
-            Trash.broken_cd: self.skill.can_crab_pot,
-            Trash.broken_glasses: self.skill.can_crab_pot,
-            Trash.driftwood: self.skill.can_crab_pot,
+            Trash.broken_cd: self.fishing.can_crab_pot_anywhere,
+            Trash.broken_glasses: self.fishing.can_crab_pot_anywhere,
+            Trash.driftwood: self.fishing.can_crab_pot_anywhere,
             Trash.joja_cola: self.money.can_spend_at(Region.saloon, 75),
-            Trash.soggy_newspaper: self.skill.can_crab_pot,
-            Trash.trash: self.skill.can_crab_pot,
+            Trash.soggy_newspaper: self.fishing.can_crab_pot_anywhere,
+            Trash.trash: self.fishing.can_crab_pot_anywhere,
             TreeSeed.acorn: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
             TreeSeed.mahogany: self.region.can_reach(Region.secret_woods) & self.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.skill.has_level(Skill.foraging, 1),
             TreeSeed.maple: self.skill.has_level(Skill.foraging, 1) & self.ability.can_chop_trees(),
@@ -314,8 +315,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             WaterItem.cave_jelly: self.fishing.can_fish_at(Region.mines_floor_100) & self.tool.has_fishing_rod(2),
             WaterItem.river_jelly: self.fishing.can_fish_at(Region.town) & self.tool.has_fishing_rod(2),
             WaterItem.sea_jelly: self.fishing.can_fish_at(Region.beach) & self.tool.has_fishing_rod(2),
-            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools),
-            WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
+            WaterItem.seaweed: self.fishing.can_fish_at(Region.tide_pools),
+            WaterItem.white_algae: self.fishing.can_fish_at(Region.mines_floor_20),
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
         # @formatter:on
@@ -381,5 +382,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
     def can_use_obelisk(self, obelisk: str) -> StardewRule:
         return self.region.can_reach(Region.farm) & self.received(obelisk)
 
-    def can_fish_pond(self, fish: str) -> StardewRule:
-        return self.building.has_building(Building.fish_pond) & self.has(fish)
+    def can_fish_pond(self, fish: str, *items: str) -> StardewRule:
+        rule = self.building.has_building(Building.fish_pond) & self.has(fish)
+        if items:
+            rule = rule & self.has_all(*items)
+        return rule

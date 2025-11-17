@@ -8,7 +8,11 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 ### My game has a restrictive start that leads to fill errors
 
-Hint to the Generator that an item needs to be in sphere one with local_early_items. Here, `1` represents the number of "Sword" items to attempt to place in sphere one.
+A "restrictive start" here means having a combination of very few sphere 1 locations and potentially requiring more
+than one item to get a player to sphere 2.
+
+One way to fix this is to hint to the Generator that an item needs to be in sphere one with local_early_items. 
+Here, `1` represents the number of "Sword" items the Generator will attempt to place in sphere one.
 ```py
 early_item_name = "Sword"
 self.multiworld.local_early_items[self.player][early_item_name] = 1
@@ -18,15 +22,19 @@ Some alternative ways to try to fix this problem are:
 * Add more locations to sphere one of your world, potentially only when there would be a restrictive start
 * Pre-place items yourself, such as during `create_items`
 * Put items into the player's starting inventory using `push_precollected`
-* Raise an exception, such as an `OptionError` during `generate_early`, to disallow options that would lead to a restrictive start
+* Raise an exception, such as an `OptionError` during `generate_early`, to disallow options that would lead to a
+  restrictive start
 
 ---
 
-### I have multiple settings that change the item/location pool counts and need to balance them out
+### I have multiple options that change the item/location pool counts and need to make sure I am not submitting more/fewer items than locations
 
-In an ideal situation your system for producing locations and items wouldn't leave any opportunity for them to be unbalanced. But in real, complex situations, that might be unfeasible.
+In an ideal situation your system for producing locations and items wouldn't leave any opportunity for them to be
+unbalanced. But in real, complex situations, that might be unfeasible.
 
-If that's the case, you can create extra filler based on the difference between your unfilled locations and your itempool by comparing [get_unfilled_locations](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#:~:text=get_unfilled_locations) to your list of items to submit
+If that's the case, you can create extra filler based on the difference between your unfilled locations and your
+itempool by comparing [get_unfilled_locations](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py#:~:text=get_unfilled_locations)
+to your list of items to submit
 
 Note: to use self.create_filler(), self.get_filler_item_name() should be defined to only return valid filler item names
 ```py
@@ -39,7 +47,8 @@ for _ in range(total_locations - len(item_pool)):
 self.multiworld.itempool += item_pool
 ```
 
-A faster alternative to the `for` loop would be to use a [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
+A faster alternative to the `for` loop would be to use a
+[list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions):
 ```py
 item_pool += [self.create_filler() for _ in range(total_locations - len(item_pool))]
 ```
@@ -48,24 +57,39 @@ item_pool += [self.create_filler() for _ in range(total_locations - len(item_poo
 
 ### I learned about indirect conditions in the world API document, but I want to know more. What are they and why are they necessary?
 
-The world API document mentions how to use `multiworld.register_indirect_condition` to register indirect conditions and **when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is quite complicated.
+The world API document mentions how to use `multiworld.register_indirect_condition` to register indirect conditions and
+**when** you should use them, but not *how* they work and *why* they are necessary. This is because the explanation is
+quite complicated.
 
-Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph. It starts from the origin region, checks entrances one by one, and adds newly reached regions and their entrances to the queue until there is nothing more to check.
+Region sweep (the algorithm that determines which regions are reachable) is a Breadth-First Search of the region graph.
+It starts from the origin region, checks entrances one by one, and adds newly reached regions and their entrances to
+the queue until there is nothing more to check.
 
-For performance reasons, AP only checks every entrance once. However, if an entrance's access_rule depends on region access, then the following may happen:
-1. The entrance is checked and determined to be nontraversable because the region in its access_rule hasn't been reached yet during the graph search.
+For performance reasons, AP only checks every entrance once. However, if an entrance's access_rule depends on region
+access, then the following may happen:
+1. The entrance is checked and determined to be nontraversable because the region in its access_rule hasn't been
+   reached yet during the graph search.
 2. Then, the region in its access_rule is determined to be reachable.
 
 This entrance *would* be in logic if it were rechecked, but it won't be rechecked this cycle.
-To account for this case, AP would have to recheck all entrances every time a new region is reached until no new regions are reached.
+To account for this case, AP would have to recheck all entrances every time a new region is reached until no new
+regions are reached.
 
-An indirect condition is how you can manually define that a specific entrance needs to be rechecked during region sweep if a specific region is reached during it.
-This keeps most of the performance upsides. Even in a game making heavy use of indirect conditions (ex: The Witness), using them is significantly faster than just "rechecking each entrance until nothing new is found".
-The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is because they call `region.can_reach` on their respective parent/source region.
+An indirect condition is how you can manually define that a specific entrance needs to be rechecked during region sweep
+if a specific region is reached during it.
+This keeps most of the performance upsides. Even in a game making heavy use of indirect conditions (ex: The Witness),
+using them is significantly faster than just "rechecking each entrance until nothing new is found".
+The reason entrance access rules using `location.can_reach` and `entrance.can_reach` are also affected is because they
+call `region.can_reach` on their respective parent/source region.
 
-We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition, and that some games have very complex access rules.
-As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682) being merged, it is possible for a world to opt out of indirect conditions entirely, instead using the system of checking each entrance whenever a region has been reached, although this does come with a performance cost.
-Opting out of using indirect conditions should only be used by games that *really* need it. For most games, it should be reasonable to know all entrance &rarr; region dependencies, making indirect conditions preferred because they are much faster.
+We recognize it can feel like a trap since it will not alert you when you are missing an indirect condition,
+and that some games have very complex access rules.
+As of [PR #3682 (Core: Region handling customization)](https://github.com/ArchipelagoMW/Archipelago/pull/3682)
+being merged, it is possible for a world to opt out of indirect conditions entirely, instead using the system of
+checking each entrance whenever a region has been reached, although this does come with a performance cost.
+Opting out of using indirect conditions should only be used by games that *really* need it. For most games, it should
+be reasonable to know all entrance &rarr; region dependencies, making indirect conditions preferred because they are
+much faster.
 
 ---
 
@@ -85,3 +109,34 @@ Common situations where this can happen include:
   Also, consider using the `options.as_dict("option_name", "option_two")` helper.
 * Using enums as Location/Item names in the datapackage. When building out `location_name_to_id` and `item_name_to_id`,
   make sure that you are not using your enum class for either the names or ids in these mappings.
+
+---
+
+### Some locations are technically possible to check with few or no items, but they'd be very tedious or frustrating. How do worlds deal with this?
+
+Sometimes the game can be modded to skip these locations or make them less tedious. But when this issue is due to a fundamental aspect of the game, then the general answer is "soft logic" (and its subtypes like "combat logic", "money logic", etc.). For example: you can logically require that a player have several helpful items before fighting the final boss, even if a skilled player technically needs no items to beat it. Randomizer logic should describe what's *fun* rather than what's technically possible.
+
+Concrete examples of soft logic include:
+- Defeating a boss might logically require health upgrades, damage upgrades, certain weapons, etc. that aren't strictly necessary.
+- Entering a high-level area might logically require access to enough other parts of the game that checking other locations should naturally get the player to the soft-required level.
+- Buying expensive shop items might logically require access to a place where you can quickly farm money, or logically require access to enough parts of the game that checking other locations should naturally generate enough money without grinding.
+
+Remember that all items referenced by logic (however hard or soft) must be `progression`. Since you typically don't want to turn a ton of `filler` items into `progression` just for this, it's common to e.g. write money logic using only the rare "$100" item, so the dozens of "$1" and "$10" items in your world can remain `filler`.
+
+---
+
+### What if my game has "missable" or "one-time-only" locations or region connections?
+
+Archipelago logic assumes that once a region or location becomes reachable, it stays reachable forever, no matter what 
+the player does in-game. Slightly more formally: Receiving an AP item must never cause a region connection or location 
+to "go out of logic" (become unreachable when it was previously reachable), and receiving AP items is the only kind of 
+state change that AP logic acknowledges. No other actions or events can change reachability.
+
+So when the game itself does not follow this assumption, the options are:
+- Modify the game to make that location/connection repeatable
+- If there are both missable and repeatable ways to check the location/traverse the connection, then write logic for 
+  only the repeatable ways
+- Don't generate the missable location/connection at all
+  - For connections, any logical regions will still need to be reachable through other, *repeatable* connections
+  - For locations, this may require game changes to remove the vanilla item if it affects logic
+- Decide that resetting the save file is part of the game's logic, and warn players about that

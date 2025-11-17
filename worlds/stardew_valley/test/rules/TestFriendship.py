@@ -1,5 +1,5 @@
+from ..bases import SVTestBase
 from ...options import SeasonRandomization, Friendsanity, FriendsanityHeartSize
-from ...test import SVTestBase
 
 
 class TestFriendsanityDatingRules(SVTestBase):
