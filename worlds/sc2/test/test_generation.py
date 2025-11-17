@@ -123,9 +123,9 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_excluding_groups_excludes_all_items_in_group(self):
         world_options = {
-            'excluded_items': [
-                item_groups.ItemGroupNames.BARRACKS_UNITS.lower(),
-            ]
+            'excluded_items': {
+                item_groups.ItemGroupNames.BARRACKS_UNITS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -481,12 +481,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'required_tactics': options.RequiredTactics.option_no_logic,
             'enable_morphling': options.EnableMorphling.option_true,
-            'excluded_items': [
-                item_groups.ItemGroupNames.ZERG_UNITS.lower()
-            ],
-            'unexcluded_items': [
-                item_groups.ItemGroupNames.ZERG_MORPHS.lower()
-            ]
+            'excluded_items': {
+                item_groups.ItemGroupNames.ZERG_UNITS.lower(): -1,
+            },
+            'unexcluded_items': {
+                item_groups.ItemGroupNames.ZERG_MORPHS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -504,12 +504,12 @@ class TestItemFiltering(Sc2SetupTestBase):
             },
             'required_tactics': options.RequiredTactics.option_no_logic,
             'enable_morphling': options.EnableMorphling.option_false,
-            'excluded_items': [
-                item_groups.ItemGroupNames.ZERG_UNITS.lower()
-            ],
-            'unexcluded_items': [
-                item_groups.ItemGroupNames.ZERG_MORPHS.lower()
-            ]
+            'excluded_items': {
+                item_groups.ItemGroupNames.ZERG_UNITS.lower(): -1,
+            },
+            'unexcluded_items': {
+                item_groups.ItemGroupNames.ZERG_MORPHS.lower(): -1,
+            },
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -538,14 +538,14 @@ class TestItemFiltering(Sc2SetupTestBase):
 
     def test_planetary_orbital_module_not_present_without_cc_spells(self) -> None:
         world_options = {
-            "excluded_items": [
-                item_names.COMMAND_CENTER_MULE,
-                item_names.COMMAND_CENTER_SCANNER_SWEEP,
-                item_names.COMMAND_CENTER_EXTRA_SUPPLIES
-            ],
-            "locked_items": [
-                item_names.PLANETARY_FORTRESS
-            ]
+            "excluded_items": {
+                item_names.COMMAND_CENTER_MULE: -1,
+                item_names.COMMAND_CENTER_SCANNER_SWEEP: -1,
+                item_names.COMMAND_CENTER_EXTRA_SUPPLIES: -1,
+            },
+            "locked_items": {
+                item_names.PLANETARY_FORTRESS: -1,
+            }
         }
 
         self.generate_world(world_options)
@@ -949,10 +949,10 @@ class TestItemFiltering(Sc2SetupTestBase):
                 }
             },
             'grant_story_levels': options.GrantStoryLevels.option_additive,
-            'excluded_items': [
-                item_names.KERRIGAN_LEAPING_STRIKE,
-                item_names.KERRIGAN_MEND,
-            ]
+            'excluded_items': {
+                item_names.KERRIGAN_LEAPING_STRIKE: -1,
+                item_names.KERRIGAN_MEND: -1,
+            }
         }
         self.generate_world(world_options)
         itempool = [item.name for item in self.multiworld.itempool]
@@ -1226,7 +1226,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
-            'locked_items': [locked_item],
+            'locked_items': {locked_item: -1},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
         }
@@ -1282,7 +1282,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             **self.ALL_CAMPAIGNS,
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
-            'excluded_items': [item_name for item_name in item_groups.terran_mercenaries],
+            'excluded_items': {item_name: -1 for item_name in item_groups.terran_mercenaries},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
             'selected_races': [SC2Race.TERRAN.get_title()],
         }
@@ -1298,7 +1298,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'mission_order': MissionOrder.option_grid,
             'maximum_campaign_size': MaximumCampaignSize.range_end,
             'exclude_overpowered_items': ExcludeOverpoweredItems.option_true,
-            'unexcluded_items': [item_names.SOA_TIME_STOP],
+            'unexcluded_items': {item_names.SOA_TIME_STOP: -1},
             'enable_race_swap': options.EnableRaceSwapVariants.option_shuffle_all,
         }
 
@@ -1340,7 +1340,7 @@ class TestItemFiltering(Sc2SetupTestBase):
             'enabled_campaigns': {
                 SC2Campaign.WOL.campaign_name
             },
-            'excluded_items': [item_names.MARINE, item_names.MEDIC],
+            'excluded_items': {item_names.MARINE: -1, item_names.MEDIC: -1},
             'shuffle_no_build': False,
             'required_tactics': RequiredTactics.option_standard
         }
