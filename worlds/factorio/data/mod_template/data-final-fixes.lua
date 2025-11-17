@@ -63,22 +63,6 @@ template_tech.upgrade = false
 template_tech.effects = {}
 template_tech.prerequisites = {}
 
-{%- if max_science_pack < 6 %}
-    technologies["space-science-pack"].effects = {}
-    {%- if max_science_pack == 0 %}
-        table.insert (technologies["automation"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 1 %}
-        table.insert (technologies["logistic-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 2 %}
-        table.insert (technologies["military-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 3 %}
-        table.insert (technologies["chemical-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 4 %}
-        table.insert (technologies["production-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 5 %}
-        table.insert (technologies["utility-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {% endif %}
-{% endif %}
 {%- if silo == 2 %}
     data.raw["recipe"]["rocket-silo"].enabled = true
 {% endif %}
