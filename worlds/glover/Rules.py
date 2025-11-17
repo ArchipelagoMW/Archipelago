@@ -120,16 +120,6 @@ switches_to_event_items = {
 def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
     valid_methods = []
     for each_method in all_methods:
-        #Is this method in difficulty for you?
-        match each_method.difficulty:
-            #Intended only
-            case 0:
-                if self.options.difficulty_logic != DifficultyLogic.option_intended:
-                    continue
-            #Easy tricks only
-            case 1:
-                if self.options.difficulty_logic == DifficultyLogic.option_hard_tricks:
-                    continue
         if len(each_method.required_items) == 0:
             continue
         valid_methods.append(each_method)
