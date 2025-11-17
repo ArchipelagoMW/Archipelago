@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
 import json
 import typing
 import builtins
@@ -35,7 +36,7 @@ if typing.TYPE_CHECKING:
 
 
 def tuplize_version(version: str) -> Version:
-    return Version(*(int(piece, 10) for piece in version.split(".")))
+    return Version(*(int(piece) for piece in version.split(".")))
 
 
 class Version(typing.NamedTuple):
@@ -47,7 +48,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.6.2"
+__version__ = "0.6.5"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -313,20 +314,18 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove when removing get_options
-
-
 def get_options() -> Settings:
-    # TODO: switch to Utils.deprecate after 0.4.4
-    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    deprecate("Utils.get_options() is deprecated. Use the settings API instead.")
     return get_settings()
 
 
-def persistent_store(category: str, key: str, value: typing.Any):
-    path = user_path("_persistent_storage.yaml")
+def persistent_store(category: str, key: str, value: typing.Any, force_store: bool = False):
     storage = persistent_load()
+    if not force_store and category in storage and key in storage[category] and storage[category][key] == value:
+        return  # no changes necessary
     category_dict = storage.setdefault(category, {})
     category_dict[key] = value
+    path = user_path("_persistent_storage.yaml")
     with open(path, "wt") as f:
         f.write(dump(storage, Dumper=Dumper))
 
@@ -413,13 +412,26 @@ def get_adjuster_settings(game_name: str) -> Namespace:
 
 @cache_argsless
 def get_unique_identifier():
-    uuid = persistent_load().get("client", {}).get("uuid", None)
+    common_path = cache_path("common.json")
+    try:
+        with open(common_path) as f:
+            common_file = json.load(f)
+            uuid = common_file.get("uuid", None)
+    except FileNotFoundError:
+        common_file = {}
+        uuid = None
+
     if uuid:
         return uuid
 
-    import uuid
-    uuid = uuid.getnode()
-    persistent_store("client", "uuid", uuid)
+    from uuid import uuid4
+    uuid = str(uuid4())
+    common_file["uuid"] = uuid
+
+    cache_folder = os.path.dirname(common_path)
+    os.makedirs(cache_folder, exist_ok=True)
+    with open(common_path, "w") as f:
+        json.dump(common_file, f, separators=(",", ":"))
     return uuid
 
 
@@ -442,6 +454,7 @@ class RestrictedUnpickler(pickle.Unpickler):
         if module == "builtins" and name in safe_builtins:
             return getattr(builtins, name)
         # used by OptionCounter
+        # necessary because the actual Options class instances are pickled when transfered to WebHost generation pool
         if module == "collections" and name == "Counter":
             return collections.Counter
         # used by MultiServer -> savegame/multidata
@@ -461,7 +474,7 @@ class RestrictedUnpickler(pickle.Unpickler):
                 mod = importlib.import_module(module)
             obj = getattr(mod, name)
             if issubclass(obj, (self.options_module.Option, self.options_module.PlandoConnection,
-                                self.options_module.PlandoText)):
+                                self.options_module.PlandoItem, self.options_module.PlandoText)):
                 return obj
         # Forbid everything else.
         raise pickle.UnpicklingError(f"global '{module}.{name}' is forbidden")
@@ -470,6 +483,18 @@ class RestrictedUnpickler(pickle.Unpickler):
 def restricted_loads(s: bytes) -> Any:
     """Helper function analogous to pickle.loads()."""
     return RestrictedUnpickler(io.BytesIO(s)).load()
+
+
+def restricted_dumps(obj: Any) -> bytes:
+    """Helper function analogous to pickle.dumps()."""
+    s = pickle.dumps(obj)
+    # Assert that the string can be successfully loaded by restricted_loads
+    try:
+        restricted_loads(s)
+    except pickle.UnpicklingError as e:
+        raise pickle.PicklingError(e) from e
+
+    return s
 
 
 class ByValue:
@@ -692,13 +717,22 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
 
 
 def get_input_text_from_response(text: str, command: str) -> typing.Optional[str]:
+    """
+    Parses the response text from `get_intended_text` to find the suggested input and autocomplete the command in
+    arguments with it.
+
+    :param text: The response text from `get_intended_text`.
+    :param command: The command to which the input text should be added. Must contain the prefix used by the command
+                    (`!` or `/`).
+    :return: The command with the suggested input text appended, or None if no suggestion was found.
+    """
     if "did you mean " in text:
         for question in ("Didn't find something that closely matches",
                          "Too many close matches"):
             if text.startswith(question):
                 name = get_text_between(text, "did you mean '",
                                         "'? (")
-                return f"!{command} {name}"
+                return f"{command} {name}"
     elif text.startswith("Missing: "):
         return text.replace("Missing: ", "!hint_location ")
     return None
@@ -717,6 +751,11 @@ def _mp_open_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     res.put(open_filename(*args))
 
 
+def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
+    if is_kivy_running():
+        raise RuntimeError("kivy should not be running in multiprocess")
+    res.put(save_filename(*args))
+    
 def _run_for_stdout(*args: str):
     env = os.environ
     if "LD_LIBRARY_PATH" in env:
@@ -765,6 +804,51 @@ def open_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         root.withdraw()
         return tkinter.filedialog.askopenfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
                                                   initialfile=suggest or None)
+
+
+def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typing.Iterable[str]]], suggest: str = "") \
+        -> typing.Optional[str]:
+    logging.info(f"Opening file save dialog for {title}.")
+
+    def run(*args: str):
+        return subprocess.run(args, capture_output=True, text=True).stdout.split("\n", 1)[0] or None
+
+    if is_linux:
+        # prefer native dialog
+        from shutil import which
+        kdialog = which("kdialog")
+        if kdialog:
+            k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
+            return run(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+        zenity = which("zenity")
+        if zenity:
+            z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
+            selection = (f"--filename={suggest}",) if suggest else ()
+            return run(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+
+    # fall back to tk
+    try:
+        import tkinter
+        import tkinter.filedialog
+    except Exception as e:
+        logging.error('Could not load tkinter, which is likely not installed. '
+                      f'This attempt was made because save_filename was used for "{title}".')
+        raise e
+    else:
+        if is_macos and is_kivy_running():
+            # on macOS, mixing kivy and tk does not work, so spawn a new process
+            # FIXME: performance of this is pretty bad, and we should (also) look into alternatives
+            from multiprocessing import Process, Queue
+            res: "Queue[typing.Optional[str]]" = Queue()
+            Process(target=_mp_save_filename, args=(res, title, filetypes, suggest)).start()
+            return res.get()
+        try:
+            root = tkinter.Tk()
+        except tkinter.TclError:
+            return None  # GUI not available. None is the same as a user clicking "cancel"
+        root.withdraw()
+        return tkinter.filedialog.asksaveasfilename(title=title, filetypes=((t[0], ' '.join(t[1])) for t in filetypes),
+                                                    initialfile=suggest or None)
 
 
 def _mp_open_directory(res: "multiprocessing.Queue[typing.Optional[str]]", *args: Any) -> None:
@@ -877,7 +961,7 @@ def async_start(co: Coroutine[None, None, typing.Any], name: Optional[str] = Non
     Use this to start a task when you don't keep a reference to it or immediately await it,
     to prevent early garbage collection. "fire-and-forget"
     """
-    # https://docs.python.org/3.10/library/asyncio-task.html#asyncio.create_task
+    # https://docs.python.org/3.11/library/asyncio-task.html#asyncio.create_task
     # Python docs:
     # ```
     # Important: Save a reference to the result of [asyncio.create_task],
@@ -914,15 +998,15 @@ class DeprecateDict(dict):
 
 
 def _extend_freeze_support() -> None:
-    """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
-    # upstream issue: https://github.com/python/cpython/issues/76327
+    """Extend multiprocessing.freeze_support() to also work on Non-Windows and without setting spawn method first."""
+    # original upstream issue: https://github.com/python/cpython/issues/76327
     # code based on https://github.com/pyinstaller/pyinstaller/blob/develop/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py#L26
     import multiprocessing
     import multiprocessing.spawn
 
     def _freeze_support() -> None:
         """Minimal freeze_support. Only apply this if frozen."""
-        from subprocess import _args_from_interpreter_flags
+        from subprocess import _args_from_interpreter_flags  # noqa
 
         # Prevent `spawn` from trying to read `__main__` in from the main script
         multiprocessing.process.ORIGINAL_DIR = None
@@ -930,8 +1014,7 @@ def _extend_freeze_support() -> None:
         # Handle the first process that MP will create
         if (
             len(sys.argv) >= 2 and sys.argv[-2] == '-c' and sys.argv[-1].startswith((
-                'from multiprocessing.semaphore_tracker import main',  # Py<3.8
-                'from multiprocessing.resource_tracker import main',  # Py>=3.8
+                'from multiprocessing.resource_tracker import main',
                 'from multiprocessing.forkserver import main'
             )) and set(sys.argv[1:-2]) == set(_args_from_interpreter_flags())
         ):
@@ -950,15 +1033,21 @@ def _extend_freeze_support() -> None:
             multiprocessing.spawn.spawn_main(**kwargs)
             sys.exit()
 
-    if not is_windows and is_frozen():
-        multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support
+    def _noop() -> None:
+        pass
+
+    multiprocessing.freeze_support = multiprocessing.spawn.freeze_support = _freeze_support if is_frozen() else _noop
 
 
 def freeze_support() -> None:
-    """This behaves like multiprocessing.freeze_support but also works on Non-Windows."""
+    """This now only calls multiprocessing.freeze_support since we are patching freeze_support on module load."""
     import multiprocessing
-    _extend_freeze_support()
+
+    deprecate("Use multiprocessing.freeze_support() instead")
     multiprocessing.freeze_support()
+
+
+_extend_freeze_support()
 
 
 def visualize_regions(root_region: Region, file_name: str, *,
@@ -1096,3 +1185,40 @@ def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]
     if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
+
+
+class DaemonThreadPoolExecutor(concurrent.futures.ThreadPoolExecutor):
+    """
+    ThreadPoolExecutor that uses daemonic threads that do not keep the program alive.
+    NOTE: use this with caution because killed threads will not properly clean up.
+    """
+
+    def _adjust_thread_count(self):
+        # see upstream ThreadPoolExecutor for details
+        import threading
+        import weakref
+        from concurrent.futures.thread import _worker
+
+        if self._idle_semaphore.acquire(timeout=0):
+            return
+
+        def weakref_cb(_, q=self._work_queue):
+            q.put(None)
+
+        num_threads = len(self._threads)
+        if num_threads < self._max_workers:
+            thread_name = f"{self._thread_name_prefix or self}_{num_threads}"
+            t = threading.Thread(
+                name=thread_name,
+                target=_worker,
+                args=(
+                    weakref.ref(self, weakref_cb),
+                    self._work_queue,
+                    self._initializer,
+                    self._initargs,
+                ),
+                daemon=True,
+            )
+            t.start()
+            self._threads.add(t)
+            # NOTE: don't add to _threads_queues so we don't block on shutdown

@@ -87,7 +87,7 @@ Pour les listes, chaque *item* doit être sur sa propre ligne et doit être pré
 ```yaml
 excluded_items:
   - Battlecruiser
-  - Drop-Pods (Kerrigan Tier 7)
+  - Drop-Pods (Kerrigan Ability)
 ```
 
 Une liste vide est représentée par une paire de crochets: `[]`. 
@@ -203,7 +203,7 @@ PATH_TO_ARCHIPELAGO=
 ARCHIPELAGO="$(ls ${PATH_TO_ARCHIPELAGO:-$(dirname $0)}/Archipelago_*.AppImage | sort -r | head -1)"
 
 # Lance le client de Archipelago
-$ARCHIPELAGO Starcraft2Client
+$ARCHIPELAGO "Starcraft 2 Client"
 ```
 
 Pour une installation via Lutris, vous pouvez exécuter `lutris -l` pour obtenir l'identifiant numérique de votre 

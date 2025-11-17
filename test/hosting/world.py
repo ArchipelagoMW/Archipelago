@@ -11,7 +11,7 @@ _new_worlds: dict[str, str] = {}
 
 def copy(src: str, dst: str) -> None:
     from Utils import get_file_safe_name
-    from worlds import AutoWorldRegister
+    from worlds.AutoWorld import AutoWorldRegister
 
     assert dst not in _new_worlds, "World already created"
     if '"' in dst or "\\" in dst:  # easier to reject than to escape
@@ -30,7 +30,7 @@ def copy(src: str, dst: str) -> None:
     _new_worlds[dst] = str(dst_folder)
     with open(dst_folder / "__init__.py", "r", encoding="utf-8-sig") as f:
         contents = f.read()
-    contents = re.sub(r'game\s*=\s*[\'"]' + re.escape(src) + r'[\'"]', f'game = "{dst}"', contents)
+    contents = re.sub(r'game\s*(:\s*[a-zA-Z\[\]]+)?\s*=\s*[\'"]' + re.escape(src) + r'[\'"]', f'game = "{dst}"', contents)
     with open(dst_folder / "__init__.py", "w", encoding="utf-8") as f:
         f.write(contents)
 
