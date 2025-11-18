@@ -35,6 +35,7 @@ from .mission_tables import SC2Campaign, SC2Mission, SC2Race, MissionFlag
 from .regions import create_mission_order
 from .mission_order import SC2MissionOrder
 from worlds.LauncherComponents import components, Component, launch as launch_component
+from .mission_order.presets import sc2_options_presets
 
 logger = logging.getLogger("Starcraft 2")
 VICTORY_MODULO = 100
@@ -75,6 +76,7 @@ class Starcraft2WebWorld(WebWorld):
 
     tutorials = [setup_en, setup_fr, custom_mission_orders_en]
     game_info_languages = ["en", "fr"]
+    options_presets = sc2_options_presets
     option_groups = option_groups
 
 
@@ -146,7 +148,6 @@ class SC2World(World):
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
         flag_unreleased_items(item_list)
-        flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
         flag_mission_order_required_items(self, item_list)
@@ -392,6 +393,17 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
             auto_excludes[item_name] = 1
+    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
+        for item_name, item_data in item_tables.item_table.items():
+            if item_name in item_groups.terran_original_progressive_upgrades:
+                auto_excludes[item_name] = max(item_data.quantity - 1, auto_excludes.get(item_name, 0))
+            elif item_name in item_groups.vanilla_items:
+                continue
+            elif item_name in item_groups.nova_equipment:
+                continue
+            else:
+                auto_excludes[item_name] = 0
+
 
     result: List[FilterItem] = []
     for item_name, item_data in item_tables.item_table.items():
@@ -468,7 +480,8 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
 
     for item in item_list:
         # Catch-all for all of a faction's items
-        if not terran_missions and item.data.race == SC2Race.TERRAN:
+        # Unit upgrades required for no-builds will get the FilterExcluded lifted when flagging AllowedOrphan
+        if not terran_build_missions and item.data.race == SC2Race.TERRAN:
             if item.name not in item_groups.nova_equipment:
                 item.flags |= ItemFilterFlags.FilterExcluded
                 continue
@@ -483,10 +496,6 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             continue
 
         # Faction units
-        if (not terran_build_missions
-            and item.data.type in (item_tables.TerranItemType.Unit, item_tables.TerranItemType.Building, item_tables.TerranItemType.Mercenary)
-        ):
-            item.flags |= ItemFilterFlags.FilterExcluded
         if (not zerg_build_missions
             and item.data.type in (item_tables.ZergItemType.Unit, item_tables.ZergItemType.Mercenary, item_tables.ZergItemType.Evolution_Pit)
         ):
@@ -661,6 +670,7 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
                     item_names.MEDIC_STABILIZER_MEDPACKS, item_names.MARINE_LASER_TARGETING_SYSTEM,
             ):
                 item.flags |= ItemFilterFlags.AllowedOrphan
+                item.flags &= ~ItemFilterFlags.FilterExcluded
     # These rules only trigger on Standard tactics
     if SC2Mission.BELLY_OF_THE_BEAST in missions and world.options.required_tactics == RequiredTactics.option_standard:
         for item in item_list:
@@ -670,6 +680,7 @@ def flag_allowed_orphan_items(world: SC2World, item_list: List[FilterItem]) -> N
                     item_names.FIREBAT_NANO_PROJECTORS, item_names.FIREBAT_JUGGERNAUT_PLATING, item_names.FIREBAT_PROGRESSIVE_STIMPACK
             ):
                 item.flags |= ItemFilterFlags.AllowedOrphan
+                item.flags &= ~ItemFilterFlags.FilterExcluded
     if SC2Mission.EVIL_AWOKEN in missions and world.options.required_tactics == RequiredTactics.option_standard:
         for item in item_list:
             if item.name in (item_names.STALKER_PHASE_REACTOR, item_names.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES, item_names.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION):
@@ -833,26 +844,6 @@ def flag_unreleased_items(item_list: List[FilterItem]) -> None:
         if (item.name in unreleased_items
                 and not (ItemFilterFlags.Locked|ItemFilterFlags.StartInventory) & item.flags):
             item.flags |= ItemFilterFlags.Removed
-
-
-def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Excludes items based on item set options (`only_vanilla_items`)"""
-    vanilla_nonprogressive_count = {
-        item_name: 0 for item_name in item_groups.terran_original_progressive_upgrades
-    }
-    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
-        vanilla_items = item_groups.vanilla_items + item_groups.nova_equipment
-        for item in item_list:
-            if ItemFilterFlags.UserExcluded in item.flags:
-                continue
-            if item.name not in vanilla_items:
-                item.flags |= ItemFilterFlags.UserExcluded
-            if item.name in item_groups.terran_original_progressive_upgrades:
-                if vanilla_nonprogressive_count[item.name]:
-                    item.flags |= ItemFilterFlags.UserExcluded
-                vanilla_nonprogressive_count[item.name] += 1
-
-    excluded_count: Dict[str, int] = dict()
 
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
