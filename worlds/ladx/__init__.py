@@ -495,7 +495,7 @@ class LinksAwakeningWorld(World):
                             loc.ladxr_item.item = 'PIECE_OF_POWER'
                         else:
                             loc.ladxr_item.item = 'GUARDIAN_ACORN'
-                        loc.ladxr_item.custom_item_name = loc.item.name
+                        loc.ladxr_item.setCustomItemName(loc.item.name)
 
                     if loc.item:
                         loc.ladxr_item.item_owner = loc.item.player
@@ -541,7 +541,9 @@ class LinksAwakeningWorld(World):
         return self.random.choices(self.filler_choices, self.filler_weights)[0]
 
     def fill_slot_data(self):
-        slot_data = { "death_link": self.options.death_link.value }
+        slot_data = {
+            "world_version": self.world_version.as_simple_string(),
+			"death_link": self.options.death_link.value,        }
 
         if not self.multiworld.is_race:
             # all of these option are NOT used by the LADX- or Text-Client.

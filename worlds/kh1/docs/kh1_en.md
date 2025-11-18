@@ -1,6 +1,6 @@
 # Kingdom Hearts Archipelago Randomizer Setup Guide
 
-<h2 style="text-transform:none";>Required software</h2>
+## Required software
 
 - KINGDOM HEARTS -HD 1.5+2.5 ReMIX- from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
@@ -10,9 +10,9 @@
 
 - The latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) for the ArchipelagoKH1Client.exe
 
-<h2 style="text-transform:none";>Setting up the required software</h2>
+## Setting up the required software
 
-<h3 style="text-transform:none";>OpenKH</h3>
+### OpenKH
 
 - Extract the OpenKH files to a directory of your choosing.
 - When prompted for game edition, choose PC Release, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`.
@@ -21,11 +21,11 @@
 - Extract the data for KH1.
 - Click `Finish`
 
-<h3 style="text-transform:none";>Kingdom Hearts 1FM Randomizer Software</h3>
+### Kingdom Hearts 1FM Randomizer Software
 
 - Extract the Kingdom Hearts 1FM Randomizer Software files in a directory of your choosing.
 
-<h2 style="text-transform:none";>Obtaining and using the seed zip</h2>
+## Obtaining and using the seed zip
 
 - When you generate a game you will see a download link for a KH1 .zip seed on the room page.
 - After downloading this zip, open `mod_generator.exe` in your Kingdom Hearts 1FM Randomizer Software folder.
@@ -38,7 +38,7 @@
 - Ensure this mod is checked, then, if you want to play right away, click `Mod Loader` at the top.
 - Click `Build and Run`.  Your modded game should now open.
 
-<h2 style="text-transform:none";>Connecting to your multiworld via the KH1 Client</h2>
+## Connecting to your multiworld via the KH1 Client
 
 - Once your game is being hosted, open `ArchipelagoLauncher.exe`.
 - Find `KH1 Client` and open it.
@@ -48,52 +48,68 @@
 - After typing your slot name, press enter.
 - If all is well, you are now connected.
 
-<h2 style="text-transform:none";>FAQ</h2>
+## FAQ
 
-<h3 style="text-transform:none";>The client did not confirm connection to the game, is that normal?</h3>
+### The client did not confirm connection to the game, is that normal?
 
 Yes, the game and client communicate via a game communication path set up in your in your `%AppData%` folder, and therefore don't need to establish a socket connection.
 
-<h3 style="text-transform:none";>I am not sending or receiving items.</h3>
+### I am not sending or receiving items.
 
 Check out this [troubleshooting guide](https://docs.google.com/document/d/1oAXxJWrNeqSL-tkB_01bLR0eT0urxz2FBo4URpq3VbM/edit?usp=sharing)
 
-<h3 style="text-transform:none";>Why aren't the evidence boxes spawning in Wonderland?</h3>
+### Why aren't the evidence boxes spawning in Wonderland?
 
 You'll need to find `Footprints` in your multiworld.
 
-<h3 style="text-transform:none";>Why won't Phil let me start the Prelims?</h3>
+### Why won't Phil let me start the Prelims?
 
 You'll need to find `Entry Pass` in the multiworld.
 
-<h3 style="text-transform:none";>Why aren't the slides spawning in Deep Jungle?</h3>
+### Why aren't the slides spawning in Deep Jungle?
 
 You'll need to find `Slides` in the multiworld.
 
-<h3 style="text-transform:none";>Why can't I make progress in Atlantica?</h3>
+### Why can't I make progress in Atlantica?
 
 You'll need to find `Crystal Trident` in the multiworld.
 
-<h3 style="text-transform:none";>Why won't the doctor let me progress in Halloween Town?</h3>
+### Why won't the doctor let me progress in Halloween Town?
 
 You'll need to find either `Forget-Me-Not` or `Jack-in-the-Box` in the multiworld.
 
-<h3 style="text-transform:none";>Why is there a book missing in the Hollow Bastion library?</h3>
+### Why is there a book missing in the Hollow Bastion library?
 
 You'll need to find `Theon Vol. 6` in the multiworld.
 
-<h3 style="text-transform:none";>How do I unlock End of the World?</h3>
+### How do I unlock End of the World?
 
 Depending on your settings, your options are either finding a specified amount of `Lucky Emblems` or finding the item `End of the World`.
 
-<h3 style="text-transform:none";>How do I enter Destiny Islands?</h3>
+### How do I enter Destiny Islands?
 
 After obtaining the item `Destiny Islands`, you can land there as an additional option in Traverse Town.
 
-<h3 style="text-transform:none";>How do I progress to Destiny Islands Day 2 and 3?</h3>
+### How do I progress to Destiny Islands Day 2 and 3?
 
 In order to access Day 2 and 3, you need to collect an amount of `Raft Materials` specified in your settings.  When you start Day 3, you'll be immediately warped to Homecoming.
 
-<h3 style="text-transform:none";>Why can't I use the summon I obtained?</h3>
+### Why can't I use the summon I obtained?
 
 You need at least one magic spell before you can use summons.
+
+## Troubleshooting
+
+### Why am I not sending or receiving any items despite being connected to the server?
+
+Make sure you are using the KH1 Client and not the Text Client. You will need to open the client manually via the Archipelago Launcher.
+
+### Why don't I have any worlds on the world map?
+
+If you have any of these symptoms: you find that the title screen does not have the Archipelago logo, that you had to do the entirety of Dive to the Heart, that you do not warp to the world map after choosing your Dream Weapons, or that when you get to the world map there are no worlds there;<br><br>
+
+This is likely due to the mod not being applied properly. First, reinstall both Panacea and Lua Backend via the Setup Wizard under Settings. Second, make sure the seed mod is enabled [x]. Finally, ensure the game builds with no errors after selecting Build and Run under Mod Loader.
+
+### Why did the game send checks that I had not collected?
+
+The client caches your inventory and does not clear the cache when switching slots. The game also does something similar, even if backed out to the title screen. Therefore, it's highly encouraged, whenever switching slots or connecting to a different server, to always fully close both the game and the client first.

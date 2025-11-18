@@ -1018,6 +1018,8 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
     supports_weighting = False
     display_name = "Plando Texts"
 
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
     def __init__(self, value: typing.Iterable[PlandoText]) -> None:
         self.value = list(deepcopy(value))
         super().__init__()
@@ -1143,6 +1145,8 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
     entrances: typing.ClassVar[typing.AbstractSet[str]]
     exits: typing.ClassVar[typing.AbstractSet[str]]
+
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
     duplicate_exits: bool = False
     """Whether or not exits should be allowed to be duplicate."""
@@ -1435,6 +1439,7 @@ class DeathLink(Toggle):
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
     rich_text_doc = True
     default = []
     schema = Schema([
@@ -1726,11 +1731,16 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     def dictify_range(option: Range):
         data = {option.default: 50}
-        for sub_option in ["random", "random-low", "random-high"]:
+        for sub_option in ["random", "random-low", "random-high",
+                           f"random-range-{option.range_start}-{option.range_end}"]:
             if sub_option != option.default:
                 data[sub_option] = 0
-
-        notes = {}
+        notes = {
+            "random-low": "random value weighted towards lower values",
+            "random-high": "random value weighted towards higher values",
+            f"random-range-{option.range_start}-{option.range_end}": f"random value between "
+                                                                     f"{option.range_start} and {option.range_end}"
+        }
         for name, number in getattr(option, "special_range_names", {}).items():
             notes[name] = f"equivalent to {number}"
             if number in data:
