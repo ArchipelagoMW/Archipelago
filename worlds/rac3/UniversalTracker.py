@@ -1,6 +1,6 @@
 from typing import Any, TYPE_CHECKING
 
-from constants.data.Rac3LocationData import LOCATIONS
+from constants.data.Rac3LocationData import UT_MAPPING
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import RAC3REGION
@@ -41,14 +41,10 @@ def map_page_index(data: Any) -> int:
         return RAC3_REGION_DATA_TABLE[RAC3REGION.GALAXY].ID
 
 
-def tracker_data() -> dict[str, int]:
-    return {loc["Name"]: loc["Id"] for loc in LOCATIONS}
-
-
 tracker_world = {
     "map_page_maps": "maps/maps.json",
     "map_page_locations": "locations/locations.json",
     "map_page_setting_key": r'rac3_current_planet_{player}_{team}',
     "map_page_index": map_page_index,
-    "poptracker_name_mapping": tracker_data()
+    "poptracker_name_mapping": UT_MAPPING
 }
