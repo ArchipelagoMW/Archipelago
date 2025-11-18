@@ -12,7 +12,7 @@ from .constants.region_passes import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
-    display_region_name_to_pass_dict, home_point_item_index_offset
+    display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary, home_point_item_index_offset
 from .home_points import get_home_points
 from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
     get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
@@ -106,6 +106,7 @@ class CrystalProjectWorld(World):
         super().__init__(multiworld, player)
         self.starter_ap_region: str = ""
         self.starting_jobs: List[str] = []
+        self.jobs_not_to_exclude: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs: int = 0
         self.starting_progressive_levels: int = 1
@@ -239,7 +240,7 @@ class CrystalProjectWorld(World):
         init_areas(self, locations, self.options)
 
         if self.options.job_rando.value == self.options.job_rando.option_none:
-            jobs_earnable = set_jobs_at_default_locations(self)
+            jobs_earnable, self.jobs_not_to_exclude = set_jobs_at_default_locations(self, self.player_name)
         else:
             jobs_earnable = len(self.item_name_groups[JOB]) - len(self.starting_jobs)
 
@@ -454,29 +455,21 @@ class CrystalProjectWorld(World):
             excluded_items.add(SKELETON_KEY)
 
         if self.options.job_rando.value == self.options.job_rando.option_none:
-            excluded_items.add(FENCER_JOB)
-            excluded_items.add(SHAMAN_JOB)
-            excluded_items.add(SCHOLAR_JOB)
-            excluded_items.add(AEGIS_JOB)
-            excluded_items.add(HUNTER_JOB)
-            excluded_items.add(CHEMIST_JOB)
-            excluded_items.add(REAPER_JOB)
-            excluded_items.add(NINJA_JOB)
-            excluded_items.add(NOMAD_JOB)
-            excluded_items.add(DERVISH_JOB)
-            excluded_items.add(BEATSMITH_JOB)
-            excluded_items.add(SAMURAI_JOB)
-            excluded_items.add(ASSASSIN_JOB)
-            excluded_items.add(VALKYRIE_JOB)
             # Summoner job needs to be available if kill bosses mode is on.
             #   If job rando is off and regions are beginner or advanced, then the summoner crystal would be missing.  Do not exclude in this context.
-            if not (self.options.included_regions.value == self.options.included_regions.option_beginner or
-                    self.options.included_regions.value == self.options.included_regions.option_advanced and
-                    self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true):
-                excluded_items.add(SUMMONER_JOB)
-            excluded_items.add(BEASTMASTER_JOB)
-            excluded_items.add(WEAVER_JOB)
-            excluded_items.add(MIMIC_JOB)
+            if (SUMMONER_JOB not in self.jobs_not_to_exclude and
+                    ((self.options.included_regions.value == self.options.included_regions.option_beginner or
+                    self.options.included_regions.value == self.options.included_regions.option_advanced) and
+                    self.options.kill_bosses_mode.value == self.options.kill_bosses_mode.option_true)):
+                self.jobs_not_to_exclude.append(SUMMONER_JOB)
+
+            job_crystal_dictionary: Dict[str, str] = job_crystal_beginner_dictionary.copy()
+            job_crystal_dictionary.update(job_crystal_advanced_dictionary)
+            job_crystal_dictionary.update(job_crystal_expert_dictionary)
+
+            for job_name in job_crystal_dictionary.keys():
+                if job_name not in self.jobs_not_to_exclude:
+                    excluded_items.add(job_name)
 
         #regionsanity items
         if self.options.regionsanity.value == self.options.regionsanity.option_disabled:
