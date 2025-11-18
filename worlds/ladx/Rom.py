@@ -59,6 +59,7 @@ class LADXProcedurePatch(worlds.Files.APProcedurePatch):
 def write_patch_data(world: "LinksAwakeningWorld", patch: LADXProcedurePatch):
     item_list = pickle.dumps([item for item in world.ladxr_logic.iteminfo_list if not isinstance(item, KeyLocation)])
     data_dict = {
+        "generated_world_version": world.world_version.as_simple_string(),
         "out_base": world.multiworld.get_out_file_name_base(patch.player),
         "is_race": world.multiworld.is_race,
         "seed": world.multiworld.seed,

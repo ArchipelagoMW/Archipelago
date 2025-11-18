@@ -6,6 +6,8 @@ import random
 import pickle
 import Utils
 import settings
+import orjson
+import pkgutil
 from collections import defaultdict
 from typing import Dict
 
@@ -65,8 +67,27 @@ from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
 from .. import Options
 
+class VersionError(Exception):
+    pass
+
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(base_rom: bytes, args, patch_data: Dict):
+    apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "../archipelago.json").decode("utf-8"))
+    patcher_version = Utils.tuplize_version(apworld_manifest["world_version"])
+    generated_version = Utils.tuplize_version(patch_data.get("generated_world_version", "2.0.0"))
+    if generated_version.major != patcher_version.major or generated_version.minor != patcher_version.minor:
+        Utils.messagebox(
+            "Error",
+            "The apworld version that this patch was generated on is incompatible with your installed world.\n\n"
+            f"Generated on {generated_version.as_simple_string()}\n"
+            f"Installed version {patcher_version.as_simple_string()}",
+            True
+        )
+        raise VersionError(
+            f"The installed world ({patcher_version.as_simple_string()}) is incompatible with the world this patch "
+            f"was generated on ({generated_version.as_simple_string()})"
+        )
+
     random.seed(patch_data["seed"] + patch_data["player"])
     multi_key = binascii.unhexlify(patch_data["multi_key"].encode())
     item_list = pickle.loads(binascii.unhexlify(patch_data["item_list"].encode()))
