@@ -1,6 +1,7 @@
 from time import time
 from typing import TYPE_CHECKING
 
+from client.ClientMessage import ClientMessage
 from CommonClient import logger
 from NetUtils import ClientStatus
 
@@ -81,14 +82,7 @@ async def handle_planet_changed(ctx: 'Context') -> None:
         if ctx.current_planet == "Tyhrranosis":
             ctx.game_interface.tyhrranosis_fix()
 
-        await ctx.send_msgs([{"cmd": 'Set',
-                              "key": f'rac3_current_planet_{ctx.slot}_{ctx.team}',
-                              "default": "Starship Phoenix",
-                              "want_reply": False,
-                              "operations": [{
-                                  "operation": 'replace',
-                                  "value": ctx.current_planet}]
-                              }])
+        await ctx.send_msgs([ClientMessage.set(ctx.slot, ctx.team, ctx.current_planet)])
 
 
 async def handle_received_items(ctx: 'Context') -> None:
@@ -122,7 +116,7 @@ async def handle_checked_locations(ctx: 'Context') -> None:
             new_checks.append(ap_code)
 
     if new_checks:
-        await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": new_checks}])
+        await ctx.send_msgs([ClientMessage.location_checks(new_checks)])
         ctx.locations_checked.update(new_checks)
     # else:
     #     logger.info("Not found new location")
@@ -152,4 +146,4 @@ async def handle_check_goal(ctx: 'Context') -> None:
 
     victory_code = ctx.game_interface.get_victory_code()
     if victory_code in ctx.checked_locations:
-        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+        await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])

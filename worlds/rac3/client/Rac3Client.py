@@ -131,13 +131,9 @@ class Rac3Context(CommonContext):
                 self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
                 async_start(self.update_death_link(
                     bool(self.slot_data[RAC3OPTION.DEATHLINK])))
-                # async_start(self.send_msgs([{
-                #     "cmd": "LocationScouts",
-                #     "locations": [
-                #         Locations.location_table[location].ap_code
-                #         for location in Locations.location_groups["Purchase"]
-                #     ]
-                # }]))
+
+            # async_start(self.send_msgs([ClientMessage.location_scouts(
+            #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
 
 
 def update_connection_status(ctx: Rac3Context, status: bool):
