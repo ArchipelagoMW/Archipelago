@@ -253,6 +253,14 @@ class TestOptions(unittest.TestCase):
             Has("A") & Has("B") | Has("C") & Has("D"),
             Or(And(Has("A"), Has("B")), And(Has("C"), Has("D"))),
         ),
+        (
+            Has("A") | Or(Has("B"), options=[OptionFilter(ToggleOption, 1)]),
+            Or(Has("A"), Or(Has("B"), options=[OptionFilter(ToggleOption, 1)])),
+        ),
+        (
+            Has("A") & And(Has("B"), options=[OptionFilter(ToggleOption, 1)]),
+            And(Has("A"), And(Has("B"), options=[OptionFilter(ToggleOption, 1)])),
+        ),
     )
 )
 class TestComposition(unittest.TestCase):

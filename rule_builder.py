@@ -3,9 +3,9 @@ import importlib
 import operator
 from collections import defaultdict
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, Never, Self, cast
 
-from typing_extensions import Never, Self, TypeVar, dataclass_transform, override
+from typing_extensions import TypeVar, dataclass_transform, override
 
 from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
@@ -541,26 +541,24 @@ class Rule(Generic[TWorld]):
 
     def __and__(self, other: "Rule[Any]") -> "Rule[TWorld]":
         """Combines two rules into an And rule"""
-        if isinstance(self, And):
-            if isinstance(other, And):
-                if self.options == other.options:
+        if self.options == other.options:
+            if isinstance(self, And):
+                if isinstance(other, And):
                     return And(*self.children, *other.children, options=self.options)
-            else:
                 return And(*self.children, other, options=self.options)
-        elif isinstance(other, And):
-            return And(self, *other.children, options=other.options)
+            if isinstance(other, And):
+                return And(self, *other.children, options=other.options)
         return And(self, other)
 
     def __or__(self, other: "Rule[Any]") -> "Rule[TWorld]":
         """Combines two rules into an Or rule"""
-        if isinstance(self, Or):
-            if isinstance(other, Or):
-                if self.options == other.options:
+        if self.options == other.options:
+            if isinstance(self, Or):
+                if isinstance(other, Or):
                     return Or(*self.children, *other.children, options=self.options)
-            else:
                 return Or(*self.children, other, options=self.options)
-        elif isinstance(other, Or):
-            return Or(self, *other.children, options=other.options)
+            if isinstance(other, Or):
+                return Or(self, *other.children, options=self.options)
         return Or(self, other)
 
     def __bool__(self) -> Never:
