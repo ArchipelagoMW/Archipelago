@@ -52,7 +52,6 @@ class CrystalProjectWorld(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = get_location_name_to_id()
 
-
     item_name_groups = get_item_names_per_category()
     location_name_groups = get_location_names_per_category()
     base_game_jobs: set[str] = item_name_groups[JOB].copy()
@@ -560,8 +559,9 @@ class CrystalProjectWorld(World):
 
         if self.options.home_point_hustle:
             for home_point in self.home_points:
-                item = self.create_item(home_point.name)
-                pool.append(item)
+                if ap_region_to_display_region_dictionary[home_point.ap_region] in self.included_regions:
+                    item = self.create_item(home_point.name)
+                    pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
