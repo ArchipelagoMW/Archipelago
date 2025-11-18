@@ -65,6 +65,16 @@ class LinksAwakeningSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Display message inside of Bizhawk"""
 
+    class OptionOverrides(str):
+        """
+        Provided options will be used as overrides when patching.
+        Pass the options as you would in an options yaml.
+        Always available option overrides: gfxmod, link_palette, music, music_change_condition, palette
+        Non-race option overrides: ap_title_screen, boots_controls, nag_messages, text_shuffle, trendy_game, warps
+        Example:
+        option_overrides: { palette: { normal: 50, inverted: 50}, boots_controls: bracelet }
+        """
+
     class GfxModFile(settings.FilePath):
         """
         Gfxmod file, get it from upstream: https://github.com/daid/LADXR/tree/master/gfx
