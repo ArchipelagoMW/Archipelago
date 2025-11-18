@@ -192,11 +192,11 @@ rac3_locations = {
     "Tyhrranosis: Skill Point: Be a Sharpshooter": LocData(50090005, RAC3REGION.TYHRRANOSIS),
     "Tyhrranosis: Trophy: North East Pillar": LocData(50090006, RAC3REGION.TYHRRANOSIS),  # Al Trophy
     # Missions
-    "Tyhrranosis: Operation ISLAND STRIKE: Assault on Kavu Island": LocData(50290000, RAC3REGION.TYHRRANOSIS_MISSION),
+    "Tyhrranosis: Operation ISLAND STRIKE: Assault on Kavu Island": LocData(50290000, RAC3REGION.TYHRRANOSIS_RANGERS),
     "Tyhrranosis: Operation ISLAND STRIKE: Dogfight over Kavu Island": LocData(50290001,
-                                                                               RAC3REGION.TYHRRANOSIS_MISSION),
-    "Tyhrranosis: Operation ISLAND STRIKE: Operation Thunderbolt": LocData(50290002, RAC3REGION.TYHRRANOSIS_MISSION),
-    "Tyhrranosis: Operation ISLAND STRIKE: The Final Battle": LocData(50290003, RAC3REGION.TYHRRANOSIS_MISSION),
+                                                                               RAC3REGION.TYHRRANOSIS_RANGERS),
+    "Tyhrranosis: Operation ISLAND STRIKE: Operation Thunderbolt": LocData(50290002, RAC3REGION.TYHRRANOSIS_RANGERS),
+    "Tyhrranosis: Operation ISLAND STRIKE: The Final Battle": LocData(50290003, RAC3REGION.TYHRRANOSIS_RANGERS),
 
     # ----- Planet Daxx -----#
     "Daxx: Infiltrate Weapons Facility": LocData(50050000, RAC3REGION.DAXX),
@@ -250,16 +250,16 @@ rac3_locations = {
     "Metropolis: Skill Point: 2002 was a good year in the city": LocData(50160001, RAC3REGION.METROPOLIS),
     "Metropolis: Metal-Noids": LocData(50160002, RAC3REGION.METROPOLIS),
     "Metropolis: T-Bolt: Before Grav-wall": LocData(50160003, RAC3REGION.METROPOLIS),
-    "Metropolis: Defeat Klunk": LocData(50160004, RAC3REGION.METROPOLIS_MISSION),  # Infobot: Crash Site
+    "Metropolis: Defeat Klunk": LocData(50160004, RAC3REGION.METROPOLIS_RANGERS),  # Infobot: Crash Site
     "Metropolis: Trophy: 2nd Building Window": LocData(50160005, RAC3REGION.METROPOLIS),  # Skrunch Trophy
     # Missions
-    "Metropolis: T-Bolt: Tall Tower (Hovership)": LocData(50260000, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Operation URBAN STORM: Countdown": LocData(50260001, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Operation URBAN STORM: Urban Combat": LocData(50260002, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Operation URBAN STORM: Tower Attack": LocData(50260003, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Operation URBAN STORM: Air Superiority": LocData(50260004, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Operation URBAN STORM: Turret Command": LocData(50260005, RAC3REGION.METROPOLIS_MISSION),
-    "Metropolis: Received Map-O-Matic": LocData(50260006, RAC3REGION.METROPOLIS_MISSION),
+    "Metropolis: T-Bolt: Tall Tower (Hovership)": LocData(50260000, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Operation URBAN STORM: Countdown": LocData(50260001, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Operation URBAN STORM: Urban Combat": LocData(50260002, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Operation URBAN STORM: Tower Attack": LocData(50260003, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Operation URBAN STORM: Air Superiority": LocData(50260004, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Operation URBAN STORM: Turret Command": LocData(50260005, RAC3REGION.METROPOLIS_RANGERS),
+    "Metropolis: Received Map-O-Matic": LocData(50260006, RAC3REGION.METROPOLIS_RANGERS),
 
     # ----- Planet Crash Site -----#
     "Crash Site: T-Bolt: Turn Around": LocData(50170000, RAC3REGION.CRASH_SITE),
@@ -627,7 +627,7 @@ location_groups: dict[str, set[str]] = {
     RAC3REGION.AQUATOS: set(loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.AQUATOS),
     RAC3REGION.TYHRRANOSIS: set(loc for loc in location_table.keys() if
                                 location_table[loc].region == RAC3REGION.TYHRRANOSIS
-                                or location_table[loc].region == RAC3REGION.TYHRRANOSIS_MISSION),
+                                or location_table[loc].region == RAC3REGION.TYHRRANOSIS_RANGERS),
     RAC3REGION.DAXX: set(loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.DAXX),
     RAC3REGION.OBANI_GEMINI: set(
         loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.OBANI_GEMINI),
@@ -641,7 +641,7 @@ location_groups: dict[str, set[str]] = {
         loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.ZELDRIN_STARPORT),
     RAC3REGION.METROPOLIS: set(loc for loc in location_table.keys() if
                                location_table[loc].region == RAC3REGION.METROPOLIS
-                               or location_table[loc].region == RAC3REGION.METROPOLIS_MISSION),
+                               or location_table[loc].region == RAC3REGION.METROPOLIS_RANGERS),
     RAC3REGION.CRASH_SITE: set(
         loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.CRASH_SITE),
     RAC3REGION.ARIDIA: set(loc for loc in location_table.keys() if location_table[loc].region == RAC3REGION.ARIDIA),

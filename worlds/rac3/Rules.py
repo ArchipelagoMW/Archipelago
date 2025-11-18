@@ -429,12 +429,12 @@ def set_rules(world: "RaC3World"):
                           and state.can_reach(RAC3REGION.MARCADIA, player=world.player)
                           and state.can_reach(RAC3REGION.ANNIHILATION_NATION_2, player=world.player)
                           and state.can_reach(RAC3REGION.AQUATOS_SEWERS, player=world.player)
-                          and state.can_reach(RAC3REGION.TYHRRANOSIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.TYHRRANOSIS_RANGERS, player=world.player)
                           and state.can_reach(RAC3REGION.DAXX, player=world.player)
                           and state.can_reach(RAC3REGION.OBANI_GEMINI, player=world.player)
                           and state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player)
                           and state.can_reach(RAC3REGION.ZELDRIN_STARPORT, player=world.player)
-                          and state.can_reach(RAC3REGION.METROPOLIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.METROPOLIS_RANGERS, player=world.player)
                           and state.can_reach(RAC3REGION.CRASH_SITE, player=world.player)
                           and state.can_reach(RAC3REGION.ARIDIA, player=world.player)
                           and state.can_reach(RAC3REGION.QWARKS_HIDEOUT, player=world.player)
@@ -443,8 +443,8 @@ def set_rules(world: "RaC3World"):
 
         "Phoenix: Long Term Trophy: Friend of the Rangers":
             lambda state: state.can_reach(RAC3REGION.MARCADIA, player=world.player)
-                          and state.can_reach(RAC3REGION.TYHRRANOSIS_MISSION, player=world.player)
-                          and state.can_reach(RAC3REGION.METROPOLIS_MISSION, player=world.player)
+                          and state.can_reach(RAC3REGION.TYHRRANOSIS_RANGERS, player=world.player)
+                          and state.can_reach(RAC3REGION.METROPOLIS_RANGERS, player=world.player)
                           and state.can_reach(RAC3REGION.ARIDIA, player=world.player)
                           and state.can_reach(RAC3REGION.BLACKWATER_CITY, player=world.player),
 

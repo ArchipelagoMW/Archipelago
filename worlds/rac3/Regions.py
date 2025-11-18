@@ -83,7 +83,7 @@ def create_regions(world: "RaC3World"):
     aquatos_sewers = create_region(world, RAC3REGION.AQUATOS_SEWERS)
     aquatos.connect(aquatos_sewers, rule=lambda state: state.can_reach(RAC3REGION.AQUATOS, player=world.player)),
 
-    tyhrranosis_second_half = create_region(world, RAC3REGION.TYHRRANOSIS_MISSION)
+    tyhrranosis_second_half = create_region(world, RAC3REGION.TYHRRANOSIS_RANGERS)
     tyhrranosis.connect(tyhrranosis_second_half,
                         rule=lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)),
 
@@ -95,7 +95,7 @@ def create_regions(world: "RaC3World"):
                             rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
 
     # You can get Metal-Noids in metropolis with no other requirements
-    metropolis_second_half = create_region(world, RAC3REGION.METROPOLIS_MISSION)
+    metropolis_second_half = create_region(world, RAC3REGION.METROPOLIS_RANGERS)
     metropolis_first_half.connect(metropolis_second_half,
                                   rule=lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player)
                                                      and state.has(RAC3ITEM.REFRACTOR, world.player)),
