@@ -486,7 +486,9 @@ def distribute_early_items(multiworld: MultiWorld,
 
 
 def distribute_items_restrictive(multiworld: MultiWorld,
-                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap") -> None:
+                                 panic_method: typing.Literal["swap", "raise", "start_inventory"] = "swap",
+                                 allow_partial_priority_fill: bool = True,
+                                 allow_partial_excluded_fill: bool = False) -> None:
     assert all(item.location is None for item in multiworld.itempool), (
         "At the start of distribute_items_restrictive, "
         "there are items in the multiworld itempool that are already placed on locations:\n"
@@ -557,8 +559,7 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             priority_retry_state = sweep_from_pool(multiworld.state, deprioritized_progression)
             fill_restrictive(multiworld, priority_retry_state, prioritylocations, regular_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry", one_item_per_player=False,
-                             allow_partial=bool(deprioritized_progression))
+                             name="Priority Retry", one_item_per_player=False, allow_partial=True)
 
         if prioritylocations and deprioritized_progression:
             # There are no more regular progression items that can be placed on any priority locations.
@@ -575,7 +576,20 @@ def distribute_items_restrictive(multiworld: MultiWorld,
             priority_retry_3_state = sweep_from_pool(multiworld.state, regular_progression)
             fill_restrictive(multiworld, priority_retry_3_state, prioritylocations, deprioritized_progression,
                              single_player_placement=single_player, swap=False, on_place=mark_for_locking,
-                             name="Priority Retry 3", one_item_per_player=False)
+                             name="Priority Retry 3", one_item_per_player=False, allow_partial=True)
+
+        if prioritylocations:
+            message = f"{len(prioritylocations)} priority location(s) could not be filled, "
+            if progitempool:
+                message += f"despite there being {len(progitempool)} progression items left in the pool."
+            else:
+                message += "because there are no more progression items left to place on them."
+
+            if not allow_partial_priority_fill:
+                raise FillError(message)
+
+            logging.error(message)
+
 
         # restore original order of progitempool
         progitempool[:] = [item for item in progitempool if not item.location]
@@ -625,11 +639,18 @@ def distribute_items_restrictive(multiworld: MultiWorld,
                    move_unplaceable_to_start_inventory=panic_method=="start_inventory")
 
     if excludedlocations:
-        raise FillError(
-            f"Not enough filler items for excluded locations. "
-            f"There are {len(excludedlocations)} more excluded locations than excludable items.",
-            multiworld=multiworld,
+        message = (
+            "Not enough filler items for excluded locations. "
+            f"There are {len(excludedlocations)} more excluded locations than excludable items."
         )
+
+        if not allow_partial_excluded_fill:
+            raise FillError(message, multiworld=multiworld)
+        logging.error(message)
+
+        # If there are still filler items left, but they couldn't go on the excluded locations for item rule reasons,
+        # we'll want to ensure this doesn't just "double fail", so we put excluded locations first.
+        defaultlocations = excludedlocations + defaultlocations
 
     restitempool = filleritempool + usefulitempool
 
