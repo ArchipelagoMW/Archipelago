@@ -41,6 +41,7 @@ def get_location_name_to_id() -> dict[str, int]:
 
 def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)
+
     location_table: List[LocationData] = [
         #Zones (Beginner)
         #Spawning Meadows
@@ -150,8 +151,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - North from save point", 144 + treasure_index_offset), #(307, 124, -345) Poisonkiss chest
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Entrance river hop", 229 + treasure_index_offset), #Tonic chest
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - On promontory", 2979 + treasure_index_offset), #Tincture Pouch chest
-        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Island 1", 3622 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Underpass Scrap chest; somehow this is actually in the pale grotto and not the underpass
-        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Island 2", 3077 + treasure_index_offset, lambda state: logic.has_swimming(state)), #Z-Potion Pouch chest
+        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Island 1", 3622 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #Underpass Scrap chest; somehow this is actually in the pale grotto and not the underpass
+        LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Island 2", 3077 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #Z-Potion Pouch chest
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Tucked behind path to temple", 267 + treasure_index_offset), #Tincture chest
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - Jumping puzzle", 226 + treasure_index_offset), #Storm Helm chest
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + " Chest - South of temple", 136 + treasure_index_offset), #Money chest
@@ -275,10 +276,10 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gaea Shrine 3", 381 + treasure_index_offset), #Gaea Shard chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gaea Shrine 4", 548 + treasure_index_offset), #Gaea Shard chest
         #Next check can be acquired with either Owl, Ibek, Quintar, or Gaea Stone; vanilla expects Gaea Stone so that's the logic were using
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Clerics Lounge", 1391 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has(GAEA_STONE, player)), #Craftwork Bow chest
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Cleric's Lounge", 1391 + treasure_index_offset, lambda state: state.has(GAEA_STONE, player) or (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Craftwork Bow chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Instrducktor classroom", 1387 + treasure_index_offset), #Craftwork Axe chest
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Master Warlocks chambers atop Weapons R Us", 2732 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Watering Can chest
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Master Wizards Library atop Weapons R Us", 168 + treasure_index_offset), #Craftwork Pages chest
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Master Warlock's chambers atop Weapons R Us", 2732 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Watering Can chest
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Master Wizard's Library atop Weapons R Us", 168 + treasure_index_offset), #Craftwork Pages chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Fenced off in Armor Merchant alley", 2653 + treasure_index_offset), #Craftwork Helm chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Beneath grand staircase", 1393 + treasure_index_offset), #Craftwork Rapier chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Tucked into maze entrance hedge", 389 + treasure_index_offset), #Fang Pendant chest
@@ -287,9 +288,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Accompanied by blue flower pair in maze", 390 + treasure_index_offset), #Craftwork Crown chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Below maze-cheating Lost Penguin", 388 + treasure_index_offset), #Gardeners Key chest
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Above maze fountain", 387 + treasure_index_offset), #Givers Ring chest
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardeners Shed 1", 2652 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Craftwork Mail chest
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardeners Shed 2", 2663 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardeners Shed 3", 2664 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardener's Shed 1", 2652 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Craftwork Mail chest
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardener's Shed 2", 2663 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " Chest - Gardener's Shed 3", 2664 + treasure_index_offset, lambda state: logic.has_key(state, GARDENERS_KEY)), #Tuber Seed
 
         #NPCs 
         #Todo NPCs Job Masters: Master Beatsmith ID 3560 (361, 170, -268); gives you Beatsmith Seal in exchange for job mastery
@@ -304,7 +305,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Impress the Luxury Equipment Shop Bouncer with 6 jobs collected", 51162 + npc_index_offset, lambda state: logic.has_jobs(state, 6)), #(419, 171, -289) Blocker-No-Longer, Fixed Missable, and Multichecks
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Impress the Luxury Equipment Shop Bouncer further with 11 jobs collected", 1162 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(419, 171, -289)
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Plunder the Luxury storage and skip town to meet a very slow thief", 1529 + npc_index_offset, lambda state: logic.has_key(state, LUXURY_KEY) and state.has(PROGRESSIVE_LUXURY_PASS, player)), #(417, 171, -299) Fixed Missable
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Courtyard Chloe", 1661 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Fly Lure (399, 155, -219) Fixed Missable
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Courtyard Chloe", 1661 + npc_index_offset, lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Fly Lure (399, 155, -219) Fixed Missable
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Glinting Courtyard Key", 2486 + npc_index_offset), #Courtyard Key sparkle that appears if you miss Courtyard Reid in Salmon River (424, 150, -222) Fixed Missable
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Sparkling in the fountain", 2584 + npc_index_offset), #Plug Lure
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin on a tent", 605 + npc_index_offset),
@@ -319,8 +320,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Bring 6 Lost Penguins to Penguin Keeper", 50532 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 6)),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Bring 9 Lost Penguins to Penguin Keeper", 50533 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 9)),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Bring all 12 Lost Penguins to Penguin Keeper", 531 + npc_index_offset, lambda state: state.has(LOST_PENGUIN, player, 12)),
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin trampling Clerics flowers", 564 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state) or state.has(GAEA_STONE, player)),
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has(DIGESTED_HEAD, player, 3)), #name is ca69011a in Crystal Edit whyy lmao
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin trampling Cleric's flowers", 564 + npc_index_offset, lambda state: state.has(GAEA_STONE, player) or (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),
+        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Sadist Sam gives you pain, you give Sadist Sam head(s)", 536 + npc_index_offset, lambda state: state.has(DIGESTED_HEAD, player, 3)), #name is ca69011a in Crystal Edit why lmao
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin wandering Magic Store rooftop garden", 573 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin atop sewer exit rooftop", 567 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Lost Penguin cheating at Garden Maze", 421 + npc_index_offset),
@@ -468,7 +469,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 1", 2660 + npc_index_offset), #Ingot
         LocationData(PIPELINE_NORTH_AP_REGION, CAPITAL_PIPELINE_DISPLAY_NAME + " NPC - Silver in corrupted tunnel 2", 1295 + npc_index_offset), #Ore
         # Pipeline Jidamba Connector
-        LocationData(PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Diamond down Pipeline elevator into Jidamba", 2897 + npc_index_offset),  # Dust
+        LocationData(PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " NPC - Ride the Pipeline elevator for Jidamba diamond heist", 2897 + npc_index_offset),  # Dust
 
         #Cobblestone Crag
         #Treasure chests
@@ -509,10 +510,10 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Greenshire Reprise
         #Treasure chests
-        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Jump off bridge 4", 483 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Ambush Knife chest
+        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Jump off bridge 4", 483 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Ambush Knife chest
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Atop the waterfalls", 490 + treasure_index_offset), #Ether chest
-        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Jump off bridge 3", 482 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Looters Ring chest
-        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Tall taunter", 373 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #Shell Amulet chest
+        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Jump off bridge 3", 482 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)), #Looters Ring chest
+        LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Tall taunter", 373 + treasure_index_offset), #Shell Amulet chest
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - In the valley of trees", 487 + treasure_index_offset), #Tincture Pouch chest
         LocationData(GREENSHIRE_REPRISE_AP_REGION, GREENSHIRE_REPRISE_DISPLAY_NAME + " Chest - Tip of peninsula south of 2nd bridge", 491 + treasure_index_offset), #Tonic Pouch chest
 
@@ -611,7 +612,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Ferry Ticket Agent forgot what Ferry Passes are but she found something in her desk", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(-166,93,56) Fixed Missable
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has(WEST_LOOKOUT_TOKEN, player) and state.has(CENTRAL_LOOKOUT_TOKEN, player) and state.has(NORTH_LOOKOUT_TOKEN, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - The One and Only Room 1 Key", 385 + npc_index_offset),
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset, lambda state: state.has(POKO_POKO_DESERT_PASS, player) or logic.options.regionsanity.value != options.regionsanity.option_extreme), #Ferry Pass, if regionsanity extreme is enabled, you'll need the pass for the desert
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset, lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or logic.options.regionsanity.value != options.regionsanity.option_extreme) and logic.is_area_in_level_range(state, POKO_POKO_ENEMY_LEVEL)), #Ferry Pass, if regionsanity extreme is enabled, you'll need the pass for the desert
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has(SPECIAL_ROTTEN_SALMON, player) and state.has(SPECIAL_FRESH_SALMON, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has(SPECIAL_SHOUDU_STEW, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Spilled booty Silver", 2905 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
@@ -1359,7 +1360,6 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(THE_NEW_WORLD_AP_REGION, THE_NEW_WORLD_DISPLAY_NAME + " Chest - Desolate peninsula past bounce shrooms", 2931 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_glide(state)), #(-11, 12, -577) Mages Pike chest
         LocationData(THE_NEW_WORLD_AP_REGION, THE_NEW_WORLD_DISPLAY_NAME + " Chest - Tiny shrooms keep shed", 1938 + treasure_index_offset), #(-85, 8, 142) The New World map chest
     ]
-
     return location_table
 
 
@@ -1372,7 +1372,7 @@ def get_crystal_locations(player: int, options: CrystalProjectOptions | None) ->
         LocationData(YAMAGAWA_MA_AP_REGION, YAMAGAWA_MA_DISPLAY_NAME + SCHOLAR_JOB_CRYSTAL_LOCATION, 166 + crystal_index_offset),
         LocationData(SKUMPARADISE_AP_REGION, SKUMPARADISE_DISPLAY_NAME + AEGIS_JOB_CRYSTAL_LOCATION, 68 + crystal_index_offset),
         # Zones (Advanced)
-        LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(BEATSMITH_DISCO_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset),
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
