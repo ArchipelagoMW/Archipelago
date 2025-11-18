@@ -8,15 +8,16 @@ from typing import Dict, Optional
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
                                          non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, vidcomic_data,
                                          weapon_upgrade_data)
-from constants.data.Rac3LocationData import LOCATIONS
+from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
+from constants.locations.Rac3General import RAC3LOCATION
+from constants.Rac3CheckType import CHECKTYPE
 from constants.Rac3Deaths import DEATH_FROM_ACTION
 from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
 from constants.Rac3Status import RAC3STATUS
-from Locations import location_table
 from pcsx2_interface.pine import Pine
 
 
@@ -111,21 +112,21 @@ class UnlockData:
         self.unlock_delay = unlock_delay
 
 
-CHECK_TYPE = {
-    "bit": 0,
-    "int": 1,
-    "uint": 2,
-    "byte": 3,
-    "short": 4,
-    "falseBit": 5,
-    "long": 6,
-    "nibble": 7,
-}
-COMPARE_TYPE = {
-    "Match": 0,
-    "GreaterThan": 1,
-    "LessThan": 2,
-}
+def compare(value, check) -> bool:
+    match check.TYPE & CHECKTYPE.SIGN:
+        case CHECKTYPE.EQ:
+            return value == check.VALUE
+        case CHECKTYPE.NEQ:
+            return value != check.VALUE
+        case CHECKTYPE.GT:
+            return value > check.VALUE
+        case CHECKTYPE.LT:
+            return value < check.VALUE
+        case CHECKTYPE.GE:
+            return value >= check.VALUE
+        case CHECKTYPE.LE:
+            return value <= check.VALUE
+    return False
 
 
 class Rac3Interface(GameInterface):
@@ -168,8 +169,8 @@ class Rac3Interface(GameInterface):
 
     @staticmethod
     def get_victory_code():
-        victory_name = "Command Center: Biobliterator Defeated!"  # This must can be changed by option
-        return location_table[victory_name].ap_code
+        return RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR].AP_CODE
+        # let this be changed by an option
 
     def check_main_menu(self):
         if self._read32(RAC3STATUS.MAIN_MENU):
@@ -249,72 +250,22 @@ class Rac3Interface(GameInterface):
                 self._write8(equipable_data[name].AMMO_ADDRESS, equipable_data[name].AMMO)
             self.update_equip(name)
 
-    def is_location_checked(self, ap_code):
-        # Find the location
-        target_location = next((loc for loc in LOCATIONS if loc["Id"] == ap_code), None)  # TODO: Locations
-        if not target_location:
-            return False  # not found
-        # Todo: replace strings with constants
-        # --- NEW: if this location has multiple checks ---
-        if "Checks" in target_location:
-            for check in target_location["Checks"]:
-                addr = self.address_convert(check["Address"])
-
-                if check["CheckType"] in (CHECK_TYPE["bit"], CHECK_TYPE["falseBit"]):
-                    _value = self._read8(addr)
-                    _value = (_value >> check.get("AddressBit", 0)) & 0x01
-                elif check["CheckType"] == CHECK_TYPE["byte"]:
-                    _value = self._read8(addr)
-                elif check["CheckType"] == CHECK_TYPE["short"]:
-                    _value = self._read16(addr)
-                else:
-                    _value = self._read32(addr)
-
-                if check["CheckType"] == CHECK_TYPE["bit"]:
-                    _compare_value = 0x01
-                elif check["CheckType"] == CHECK_TYPE["falseBit"]:
-                    _compare_value = 0x00
-                else:
-                    _compare_value = check.get("CheckValue", "0")
-
-                _compare_type = check.get("CompareType", COMPARE_TYPE["Match"])
-
-                if _compare_type == COMPARE_TYPE["Match"] and not (_value == _compare_value):
-                    return False
-                if _compare_type == COMPARE_TYPE["GreaterThan"] and not (_value > _compare_value):
-                    return False
-                if _compare_type == COMPARE_TYPE["LessThan"] and not (_value < _compare_value):
-                    return False
-            return True  # <-- RETURN HERE so fallback doesn't run
-
-        # --- OLD: single-check format (only for locations WITHOUT "Checks") ---
-        addr = self.address_convert(target_location["Address"])
-        if target_location["CheckType"] in (CHECK_TYPE["bit"], CHECK_TYPE["falseBit"]):
-            _value = self._read8(addr)
-            _value = (_value >> target_location.get("AddressBit", 0)) & 0x01
-        elif target_location["CheckType"] == CHECK_TYPE["byte"]:
-            _value = self._read8(addr)
-        elif target_location["CheckType"] == CHECK_TYPE["short"]:
-            _value = self._read16(addr)
-        else:
-            _value = self._read32(addr)
-
-        if target_location["CheckType"] == CHECK_TYPE["bit"]:
-            _compare_value = 0x01
-        elif target_location["CheckType"] == CHECK_TYPE["falseBit"]:
-            _compare_value = 0x00
-        else:
-            _compare_value = target_location.get("CheckValue", "0")
-
-        _compare_type = target_location.get("CompareType", COMPARE_TYPE["Match"])
-
-        if _compare_type == COMPARE_TYPE["Match"]:
-            return _value == _compare_value
-        if _compare_type == COMPARE_TYPE["GreaterThan"]:
-            return _value > _compare_value
-        if _compare_type == COMPARE_TYPE["LessThan"]:
-            return _value < _compare_value
-        return False
+    def is_location_checked(self, ap_code) -> bool:
+        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
+        if not loc_data:
+            return False
+        check_all: bool = True
+        for check in loc_data.CHECK_ADDRESS:
+            match check.TYPE & CHECKTYPE.SIZE:
+                case CHECKTYPE.BIT:
+                    check_all &= (self._read8(check.ADDRESS) >> check.VALUE) & 0x01
+                case CHECKTYPE.BYTE:
+                    check_all &= compare(self._read8(check.ADDRESS), check)
+                case CHECKTYPE.SHORT:
+                    check_all &= compare(self._read16(check.ADDRESS), check)
+                case CHECKTYPE.INT:
+                    check_all &= compare(self._read32(check.ADDRESS), check)
+        return check_all
 
     ###################################
     # Game dedicated functions        #
@@ -352,7 +303,7 @@ class Rac3Interface(GameInterface):
             pass
         return _addr
 
-    # TO-DO: fixing this syntax KEKW
+    # TODO: fixing this syntax KEKW
 
     # initialization
     def remove_all_items(self):
