@@ -64,7 +64,7 @@ def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
     data = item_table[name]
     itemlist: List[Item] = []
 
-    for i in range(count):
+    for _ in range(count):
         itemlist += [GameItem(name, item_type, data.AP_CODE, world.player)]
 
     return itemlist

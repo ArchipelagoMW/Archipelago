@@ -1,5 +1,6 @@
 class RAC3TAG:
     SKILLPOINT = "SkillPoint"
+    HARD_SKILLPOINT = "Hard SkillPoint"
     T_BOLT = "T-Bolt"
     SEWER = "Sewer"
     VIDCOMIC = "VidComic"

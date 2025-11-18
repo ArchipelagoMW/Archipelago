@@ -22,8 +22,6 @@ except ImportError:
     print("ERROR: Universal Tracker is not loaded")
 
 # Game title dedicated
-from worlds.rac3 import Locations
-# from .data.Constants import EPISODES
 from Rac3Interface import Rac3Interface
 from Rac3Callbacks import init, update
 

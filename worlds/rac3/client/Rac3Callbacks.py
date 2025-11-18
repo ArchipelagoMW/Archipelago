@@ -112,7 +112,7 @@ async def handle_checked_locations(ctx: 'Context') -> None:
     for ap_code in ctx.server_locations:
         if ap_code in ctx.checked_locations:
             continue
-        if ctx.game_interface.is_location_checked(ap_code) is True:
+        if ctx.game_interface.is_location_checked(ap_code):
             new_checks.append(ap_code)
 
     if new_checks:
