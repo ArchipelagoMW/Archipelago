@@ -33,6 +33,10 @@ description: {{ yaml_dump("Default %s Template" % game) }}
 game: {{ yaml_dump(game) }}
 requires:
   version: {{ __version__ }} # Version of Archipelago required for this yaml to work as expected.
+  {%- if world_version != "0.0.0" %}
+  game:
+    {{ yaml_dump(game) }}: {{ world_version }} # Version of the world required for this yaml to work as expected.
+  {%- endif %}
 
 {%- macro range_option(option) %}
     # You can define additional values between the minimum and maximum values.
