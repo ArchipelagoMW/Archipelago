@@ -1062,9 +1062,10 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Tucked up high against River Cats Ego", 1692 + treasure_index_offset), #Blue Cape chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - In spikes and storm", 1358 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #Defender chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Fancy some spikes cliff diving?", 1693 + treasure_index_offset), #Rune Ward chest
-        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - By the lovely owl tree", 1561 + treasure_index_offset), #Callisto Stone chest
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - Inside the shrine", 3017 + treasure_index_offset), #Ether chest
-        LocationData(LANDS_END_AP_REGION, "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset, lambda state: logic.has_glide(state)), #(191, 177, -214) 9th Scrap on main Overpass map
+        LocationData(LANDS_END_AP_REGION, "Overpass Chest - Lonely mountain ledge below owl shrine", 3678 + treasure_index_offset), #(191, 177, -214) 9th Scrap on main Overpass map
+        #Owl Tree
+        LocationData(OWL_TREE_AP_REGION, LANDS_END_DISPLAY_NAME + " Chest - By the lovely owl tree", 1561 + treasure_index_offset),  # Callisto Stone chest
 
         #NPCs
         #Land's End Northern Peak
@@ -1073,7 +1074,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Pillar Gold by River Cats Ego", 2850 + npc_index_offset), #Ore
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Gold in spikes and storm", 2851 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
         LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Gold behind the shrine", 2852 + npc_index_offset), #Ingot
-        LocationData(LANDS_END_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Owl Drum", 1176 + npc_index_offset),
+        #Owl Tree
+        LocationData(OWL_TREE_AP_REGION, LANDS_END_DISPLAY_NAME + " NPC - Owl Drum", 1176 + npc_index_offset),
 
         #Slip Glide Ride
         #Treasure chests

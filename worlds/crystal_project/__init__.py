@@ -60,6 +60,7 @@ class CrystalProjectWorld(World):
     mod_info = get_mod_info()
     modded_items = get_modded_items(mod_info)
     home_points = get_home_points(-1, options)
+    modded_job_count: int = 0
 
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
@@ -67,6 +68,7 @@ class CrystalProjectWorld(World):
         item_name_to_id[modded_item.name] = modded_item.code
         if 'Job' in modded_item.name:
             item_name_groups.setdefault(JOB, set()).add(modded_item.name)
+            modded_job_count += 1
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
 
@@ -241,8 +243,12 @@ class CrystalProjectWorld(World):
 
         if self.options.job_rando.value == self.options.job_rando.option_none:
             jobs_earnable, self.jobs_not_to_exclude = set_jobs_at_default_locations(self, self.player_name)
+            if self.options.use_mods.value == self.options.use_mods.option_true:
+                jobs_earnable += self.modded_job_count
         else:
             jobs_earnable = len(self.item_name_groups[JOB]) - len(self.starting_jobs)
+            if self.options.use_mods.value == self.options.use_mods.option_false:
+                jobs_earnable -= self.modded_job_count
 
         if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.new_world_stone_job_quantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
@@ -281,9 +287,9 @@ class CrystalProjectWorld(World):
                         if len(ap_region.locations) > 2:
                             initially_reachable_regions.append(ap_region)
                 self.starter_ap_region = self.random.choice(initially_reachable_regions).name
-                #Until we have a teleport location in every single apregion, for now we take specifically the first apregion in the display regions subregion list
+                #Until we have a teleport location in every single ap region, for now we take specifically the first ap region in the display regions subregion list
                 self.starter_ap_region = display_region_subregions_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
-            #logging.getLogger().info("Starting region is " + self.starter_ap_region)
+            logging.getLogger().info("Starting region is " + self.starter_ap_region)
             self.origin_region_name = self.starter_ap_region
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
@@ -508,10 +514,10 @@ class CrystalProjectWorld(World):
                         (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and
                         name == THE_NEW_WORLD_PASS):
                     amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
-                # Same goes for old world pass
+                # Same goes for old world pass, the depths pass, the deep sea pass, and the open sea pass (so you can get to Gabriel)
                 elif (self.options.regionsanity.value != self.options.regionsanity.option_disabled and
                         self.options.goal.value == self.options.goal.option_true_astley and
-                        name == THE_OLD_WORLD_PASS):
+                        (name == THE_OLD_WORLD_PASS or name == THE_DEPTHS_PASS or name == THE_DEEP_SEA_PASS or name == THE_OPEN_SEA_PASS)):
                     amount = int(data.beginnerAmount or 0) + int(data.advancedAmount or 0) + int(data.expertAmount or 0) + int(data.endGameAmount or 0)
                 # adds Astley goal required item if it doesn't already exist (aka the map!)
                 if self.options.goal.value == self.options.goal.option_astley and name == THE_NEW_WORLD_MAP:
@@ -571,18 +577,14 @@ class CrystalProjectWorld(World):
 
     def set_rules(self) -> None:
         logic = CrystalProjectLogic(self.player, self.options)
-        win_condition_item: str
         if self.options.goal == self.options.goal.option_astley:
-            win_condition_item = NEW_WORLD_STONE # todo should this still be here if we auto-hand you the stone?
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
-            win_condition_item = OLD_WORLD_STONE
-            self.multiworld.completion_condition[self.player] = lambda state: logic.has_jobs(state, self.options.new_world_stone_job_quantity.value) and logic.old_world_requirements(state)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
-            win_condition_item = CLAMSHELL
-            self.multiworld.completion_condition[self.player] = lambda state: state.has(win_condition_item, self.player, self.options.clamshell_goal_quantity.value)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has(CLAMSHELL, self.player, self.options.clamshell_goal_quantity.value) and state.can_reach(SEASIDE_CLIFFS_AP_REGION, player=self.player)
 
     def get_job_id_list(self) -> List[int]:
         job_ids: List[int] = []
