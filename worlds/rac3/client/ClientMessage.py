@@ -9,7 +9,7 @@ class ClientMessage:
     default: str = None
     want_reply: bool = None
     operations: list[dict[str, str]] = None
-    status: ClientStatus[int] = None
+    status: ClientStatus = None
     locations: list[int] = None
 
     def __init__(self,
@@ -18,7 +18,7 @@ class ClientMessage:
                  default: Optional[str] = None,
                  want_reply: Optional[bool] = False,
                  operations: Optional[list[dict[str, str]]] = None,
-                 status: Optional[ClientStatus[int]] = None,
+                 status: Optional[ClientStatus] = None,
                  locations: Optional[list[int]] = None):
         self.cmd = cmd
         self.key = key
@@ -31,7 +31,10 @@ class ClientMessage:
     def output(self) -> dict:
         output = {}
         for attr in dir(self):
-            output.update({attr: getattr(self, attr)})
+            print(attr)
+            if attr == '__dict__':
+                output.update(getattr(self, attr))
+                print("Added to Output")
         return output
 
     @staticmethod
@@ -52,7 +55,7 @@ class ClientMessage:
         return ClientMessage(cmd, locations=locations).output()
 
     @staticmethod
-    def status_update(status: ClientStatus[int]) -> dict:
+    def status_update(status: ClientStatus) -> dict:
         cmd = 'StatusUpdate'
         return ClientMessage(cmd, status=status).output()
 

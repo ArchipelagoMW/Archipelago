@@ -79,11 +79,14 @@ class RAC3ITEMDATA:
                          tags: Optional[list] = None):
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
-        all_tags = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON, RAC3ITEMTAG.EQUIPABLE]
+        all_tags = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON]
+        if idx != 0x16:
+            all_tags.append(RAC3ITEMTAG.EQUIPABLE)
         if tags is not None:
             all_tags.extend(tags)
-        return RAC3ITEMDATA(idx, address, address_2, power, ammo, level=1, level_address=idx + RAC3STATUS.LEVEL_TABLE,
-                            ap_classification=ap_classification, tags=all_tags)
+        return RAC3ITEMDATA(idx, address, address_2, power, ammo, 0, level=1,
+                            level_address=idx + RAC3STATUS.LEVEL_TABLE, ap_classification=ap_classification,
+                            tags=all_tags)
 
     @staticmethod
     def construct_weapon_level(idx: int,
@@ -135,9 +138,13 @@ class RAC3ITEMDATA:
                             tags=[RAC3ITEMTAG.ARMOR])
 
     @staticmethod
-    def construct_vidcomic(idx: int):
+    def construct_vidcomic(idx: int, tag: list[str] = None):
         address: int = idx - 0xFB + RAC3STATUS.VIDCOMIC
-        return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=[RAC3ITEMTAG.VIDCOMIC])
+        if tag:
+            tags = [RAC3ITEMTAG.VIDCOMIC, RAC3ITEMTAG.PROGRESSIVE]
+        else:
+            tags = [RAC3ITEMTAG.VIDCOMIC]
+        return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=tags)
 
     @staticmethod
     def construct_other(idx: int,
@@ -350,36 +357,36 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.WRENCH_V7: RAC3ITEMDATA.construct_unused(0xC9),
     RAC3ITEM.WRENCH_V8: RAC3ITEMDATA.construct_unused(0xCA),
     # Progressive
-    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xCB, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_N60_STORM: RAC3ITEMDATA.construct_weapon_prog(0xCC, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_PLASMA_COIL: RAC3ITEMDATA.construct_rac2_prog(0xCB, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_LAVA_GUN: RAC3ITEMDATA.construct_rac2_prog(0xCC, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_BOUNCER: RAC3ITEMDATA.construct_rac2_prog(0xCD, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_MINI_TURRET: RAC3ITEMDATA.construct_rac2_prog(0xCE, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_SHIELD_CHARGER: RAC3ITEMDATA.construct_rac2_prog(0xCF, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_SHOCK_BLASTER: RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_N60_STORM: RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
     RAC3ITEM.PROGRESSIVE_INFECTOR:
-        RAC3ITEMDATA.construct_weapon_prog(0xCD, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_ANNIHILATOR:
-        RAC3ITEMDATA.construct_weapon_prog(0xCE, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA:
-        RAC3ITEMDATA.construct_weapon_prog(0xCF, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_DISC_BLADE:
-        RAC3ITEMDATA.construct_weapon_prog(0xD0, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_AGENTS_OF_DOOM: RAC3ITEMDATA.construct_weapon_prog(0xD1, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_RIFT_INDUCER:
         RAC3ITEMDATA.construct_weapon_prog(0xD2, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_HOLO_SHIELD: RAC3ITEMDATA.construct_weapon_prog(0xD3, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_FLUX_RIFLE:
+    RAC3ITEM.PROGRESSIVE_ANNIHILATOR:
+        RAC3ITEMDATA.construct_weapon_prog(0xD3, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA:
         RAC3ITEMDATA.construct_weapon_prog(0xD4, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_NITRO_LAUNCHER: RAC3ITEMDATA.construct_weapon_prog(0xD5, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_PLASMA_WHIP:
-        RAC3ITEMDATA.construct_weapon_prog(0xD6, ItemClassification.progression_skip_balancing),
-    RAC3ITEM.PROGRESSIVE_SUCK_CANNON:
+    RAC3ITEM.PROGRESSIVE_DISC_BLADE:
+        RAC3ITEMDATA.construct_weapon_prog(0xD5, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.PROGRESSIVE_AGENTS_OF_DOOM: RAC3ITEMDATA.construct_weapon_prog(0xD6, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_RIFT_INDUCER:
         RAC3ITEMDATA.construct_weapon_prog(0xD7, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.PROGRESSIVE_HOLO_SHIELD: RAC3ITEMDATA.construct_weapon_prog(0xD8, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_FLUX_RIFLE:
+        RAC3ITEMDATA.construct_weapon_prog(0xD9, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.PROGRESSIVE_NITRO_LAUNCHER: RAC3ITEMDATA.construct_weapon_prog(0xDA, ItemClassification.useful),
+    RAC3ITEM.PROGRESSIVE_PLASMA_WHIP:
+        RAC3ITEMDATA.construct_weapon_prog(0xDB, ItemClassification.progression_skip_balancing),
+    RAC3ITEM.PROGRESSIVE_SUCK_CANNON:
+        RAC3ITEMDATA.construct_weapon_prog(0xDC, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_QWACK_O_RAY:
-        RAC3ITEMDATA.construct_weapon_prog(0xD8, ItemClassification.progression_skip_balancing),
+        RAC3ITEMDATA.construct_weapon_prog(0xDD, ItemClassification.progression_skip_balancing),
     RAC3ITEM.PROGRESSIVE_RY3N0:
-        RAC3ITEMDATA.construct_weapon_prog(0xD9, ItemClassification.progression_skip_balancing, [RAC3ITEMTAG.NGPLUS]),
-    RAC3ITEM.PROGRESSIVE_PLASMA_COIL: RAC3ITEMDATA.construct_rac2_prog(0xDA, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_LAVA_GUN: RAC3ITEMDATA.construct_rac2_prog(0xDB, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_BOUNCER: RAC3ITEMDATA.construct_rac2_prog(0xDD, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_MINI_TURRET: RAC3ITEMDATA.construct_rac2_prog(0xDF, ItemClassification.useful),
-    RAC3ITEM.PROGRESSIVE_SHIELD_CHARGER: RAC3ITEMDATA.construct_rac2_prog(0xE0, ItemClassification.useful),
+        RAC3ITEMDATA.construct_weapon_prog(0xDE, ItemClassification.progression_skip_balancing, [RAC3ITEMTAG.NGPLUS]),
     # Infobots
     RAC3ITEM.VELDIN: RAC3ITEMDATA.construct_infobot(0xE1, ItemClassification.progression),
     RAC3ITEM.FLORANA: RAC3ITEMDATA.construct_infobot(0xE2, ItemClassification.progression),
@@ -408,7 +415,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.AEGIS: RAC3ITEMDATA.construct_armor(0xF8, ItemClassification.progression, 20),
     RAC3ITEM.INFERNOX: RAC3ITEMDATA.construct_armor(0xF9, ItemClassification.progression, 24),
     # VidComics
-    RAC3ITEM.PROGRESSIVE_VIDCOMIC: RAC3ITEMDATA.construct_vidcomic(0xFA),
+    RAC3ITEM.PROGRESSIVE_VIDCOMIC: RAC3ITEMDATA.construct_vidcomic(0xFA, [RAC3ITEMTAG.PROGRESSIVE]),
     RAC3ITEM.VIDCOMIC1: RAC3ITEMDATA.construct_vidcomic(0xFB),
     RAC3ITEM.VIDCOMIC2: RAC3ITEMDATA.construct_vidcomic(0xFC),
     RAC3ITEM.VIDCOMIC3: RAC3ITEMDATA.construct_vidcomic(0xFD),

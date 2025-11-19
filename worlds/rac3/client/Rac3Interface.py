@@ -6,7 +6,8 @@ from struct import unpack
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
-                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, vidcomic_data,
+                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
+                                         vidcomic_data,
                                          weapon_upgrade_data)
 from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
@@ -16,7 +17,7 @@ from constants.Rac3CheckType import CHECKTYPE
 from constants.Rac3Deaths import DEATH_FROM_ACTION
 from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from constants.Rac3Region import PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
 from constants.Rac3Status import RAC3STATUS
 from pcsx2_interface.pine import Pine
 
@@ -173,7 +174,7 @@ class Rac3Interface(GameInterface):
         # let this be changed by an option
 
     def check_main_menu(self):
-        if self._read32(RAC3STATUS.MAIN_MENU):
+        if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF:
             return True
         return False
 
@@ -197,15 +198,11 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
     def item_received(self, item_code):
-        # self.logger.info(f'{item_code}')
-        name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code])
-
+        name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
+        self.logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in planet_data.keys():
-            for slot in SHIP_SLOTS:
-                table = RAC3_REGION_DATA_TABLE[slot]
-                self.logger.debug(f'{slot}: ID: {table.ID}, Address: {table.SLOT_ADDRESS}')
-                if not self._read8(table.SLOT_ADDRESS):
-                    self.UnlockItem[name].status = table.ID
+            self.UnlockItem[RAC3REGION.SLOT_0].status += 1
+            self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
         else:
             self.UnlockItem[name].status += 1
 
@@ -277,6 +274,7 @@ class Rac3Interface(GameInterface):
     def init_variables(self):
         # Unlock state variables/ArmorUpgrade variable
         self.UnlockItem = {name: UnlockData() for name in ITEM_FROM_AP_CODE.values()}
+        self.UnlockItem.update({RAC3REGION.SLOT_0: UnlockData()})
         self.logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
 
         # Proc options
@@ -360,7 +358,7 @@ class Rac3Interface(GameInterface):
 
         replace_equip: int = 0
         equip_data = self._read8(RAC3STATUS.EQUIPPED)
-        if equip_data and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
+        if equip_data > 1 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
             last_0 = self._read8(RAC3STATUS.LAST_USED_0)
             if last_0 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_0)).status:
                 replace_equip = last_0
@@ -392,11 +390,11 @@ class Rac3Interface(GameInterface):
     def planet_cycler(self):
         # self.logger.debug('---------PlanetCycler Start---------')
         for name in planet_data.keys():
-            planet = planet_data[PLANET_FROM_INFOBOT[name]]
-            addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
+            planet = planet_data[name]
             if self.UnlockItem[name].status:
+                addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
                 # Don't allow planets that can softlock
-                if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0) and
+                if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status) and
                     (name != RAC3ITEM.HOLOSTAR_STUDIOS or
                      (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
                     if self.UnlockItem[name].unlock_delay:
@@ -441,7 +439,7 @@ class Rac3Interface(GameInterface):
             _slots.append(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS)
         for addr in _slots:
             idx = self._read8(self.address_convert(addr))
-            if idx:
+            if idx > 1:
                 name = ITEM_NAME_FROM_ID[idx]
                 if not self.UnlockItem[name].status:
                     # Not unlocked, but set
@@ -454,11 +452,11 @@ class Rac3Interface(GameInterface):
             target_level = self.UnlockItem[weapon_name].status
             self.logger.debug(f'weapon: {weapon_name}, target: {target_level}')
             if target_level:
-                target_id = UPGRADE_DICT[weapon_name][target_level]
+                target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                 target_name = ITEM_NAME_FROM_ID[target_id]
-                target_xp = weapon_upgrade_data[target_name].XP_THRESHOLD
+                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
                 self.logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
-                self._write8(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
 
     def weapon_level_up(self, weapon_name):
         """Level up a weapon from xp reward"""

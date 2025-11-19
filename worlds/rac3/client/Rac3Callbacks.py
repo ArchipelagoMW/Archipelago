@@ -29,6 +29,9 @@ async def update(ctx: 'Context', ap_connected: bool) -> None:
         menu = ctx.main_menu
         ctx.main_menu = ctx.game_interface.check_main_menu()
 
+        if ctx.main_menu:
+            logger.info("Currently on Main Menu, please load a file...")
+
         if menu is True and ctx.main_menu is False:
             logger.info("Starting game...")
             ctx.game_interface.reset_file()

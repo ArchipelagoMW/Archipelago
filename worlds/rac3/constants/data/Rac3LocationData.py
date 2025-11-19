@@ -2124,8 +2124,8 @@ class RAC3LOCATIONDATA:
         tags: set[str] = set(LOCATION_NAME_TO_TAG[location_name])
         if planet_id:
             section_id = LOCATION_NAME_TO_SECTION[location_name]
-            UT_MAPPING[f"0/{planet_id}/{loc_id}"] = loc_id + 51000000
-            UT_MAPPING[f"{planet_id}/{section_id}/{loc_id}"] = loc_id + 51000000
+            UT_MAPPING[f"{planet_id}/{loc_id}"] = loc_id + 51000000
+            UT_MAPPING[f"{section_id}/{loc_id}"] = loc_id + 51000000
             tags.union({planet_name})
         else:
             match planet_name:
