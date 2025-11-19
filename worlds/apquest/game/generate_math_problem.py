@@ -41,7 +41,7 @@ def generate_math_problem(random_object: random.Random = _random) -> MathProblem
     problem_type: MathProblemType = random_object.choice(list(MathProblemType))
     number_choice_constraints = MATH_PROBLEM_CONSTRAINTS[problem_type]
 
-    while True:
+    for _ in range(10000):
         num_1 = random.randint(number_choice_constraints.num_1_min, number_choice_constraints.num_1_max)
         num_2 = random.randint(number_choice_constraints.num_2_min, number_choice_constraints.num_2_max)
 
@@ -57,6 +57,7 @@ def generate_math_problem(random_object: random.Random = _random) -> MathProblem
         if number_choice_constraints.commutative:
             if random.randint(0, 1):
                 num_1, num_2 = num_2, num_1
-        break
 
-    return MathProblem(problem_type, num_1, num_2, result_int)
+        return MathProblem(problem_type, num_1, num_2, result_int)
+
+    return MathProblem(MathProblemType.PLUS, 1, 1, 2)
