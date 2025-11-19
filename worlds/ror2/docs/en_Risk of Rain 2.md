@@ -88,7 +88,7 @@ Explore Mode items are:
 * `Commencement`
 * `All the Hidden Realms`
 
-DLC Survivors of the void (SOTV) items
+DLC Survivors of the Void (SOTV) items
 * `Siphoned Forest`
 * `Aphelian Sanctuary`
 * `Sulfur Pools`
