@@ -122,6 +122,7 @@ This randomizer would not be possible without the help from:
 - Ouro: (tracker support)
 - tal (matzahTalSoup): (dungeon secrets guide)
 - Tubamann: (additional programming)
+- ChinchyPandora7: (Spanish Translation of Guides)
 
 The Archipelago logo © 2022 by Krista Corkos and Christopher Wilson, licensed under
 [CC BY-NC 4.0](http://creativecommons.org/licenses/by-nc/4.0/).
