@@ -51,6 +51,7 @@ CAPITAL_SEQUOIA_AP_REGION = "Capital Sequoia"
 CAPITAL_SEQUOIA_AP_REGION_TELEPORT_LOCATION = "409,169,-286"
 MOAT_SHALLOWS_AP_REGION = "Capital Moat Shallows"
 CAPITAL_MOAT_AP_REGION = "Capital Moat"
+BEATSMITH_DISCO_AP_REGION = "Beatsmith Disco"
 #Capital Sequoia end
 #Jojo Sewers start
 JOJO_SEWERS_AP_REGION = "Jojo Sewers Main (lol)"

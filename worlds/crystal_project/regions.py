@@ -116,7 +116,7 @@ display_region_levels_dictionary: Dict[str, Tuple[int, int]] = {
     SALMON_PASS_DISPLAY_NAME: (0, 0),
     SALMON_RIVER_DISPLAY_NAME: (26, 29),
     SHOUDU_WATERFRONT_DISPLAY_NAME: (0, 0),
-    POKO_POKO_DESERT_DISPLAY_NAME: (30, 32),
+    POKO_POKO_DESERT_DISPLAY_NAME: (POKO_POKO_ENEMY_LEVEL, 32),
     SARA_SARA_BAZAAR_DISPLAY_NAME: (0, 0),
     SARA_SARA_BEACH_EAST_DISPLAY_NAME: (30, 30),
     SARA_SARA_BEACH_WEST_DISPLAY_NAME: (38, 40),
@@ -402,10 +402,11 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #Proving Meadows end
     fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, CAPITAL_SEQUOIA_AP_REGION])
     #Capital Sequoia start
-    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [MOAT_SHALLOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION, JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, RAMPART_ATOP_PORTCULLIS_AP_REGION, CASTLE_SEQUOIA_AP_REGION],
+    fancy_add_exits(world, CAPITAL_SEQUOIA_AP_REGION, [MOAT_SHALLOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, BEATSMITH_DISCO_AP_REGION, PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION, JOJO_SEWERS_AP_REGION, BOOMER_SOCIETY_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, COBBLESTONE_CRAG_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, RAMPART_ATOP_PORTCULLIS_AP_REGION, CASTLE_SEQUOIA_AP_REGION],
                     # Obscure Routes: it is possible to jump from Rolling Quintar Fields onto the Capital Sequoia walls from the southeast and manage to bypass the guard and thus the job requirement
                     {MOAT_SHALLOWS_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
                      CAPITAL_MOAT_AP_REGION: lambda state: (logic.has_jobs(state, 5) or state.has(GAEA_STONE, player) or (logic.obscure_routes_on(state) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)) and logic.has_swimming(state),
+                     BEATSMITH_DISCO_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_key(state, COURTYARD_KEY) or logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_jobs(state, 5) or state.has(GAEA_STONE, player) or (logic.obscure_routes_on(state) and logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME)) or logic.has_horizontal_movement(state) or logic.has_vertical_movement(state),
@@ -422,6 +423,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      COBBLESTONE_CRAG_AP_REGION: lambda state: logic.has_swimming(state),
                      GREENSHIRE_REPRISE_AP_REGION: lambda state: logic.has_swimming(state),
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),})
+    fancy_add_exits(world, BEATSMITH_DISCO_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION])
     #Capital Sequoia end
     #Jojo Sewers section start
     fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, MOAT_SHALLOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
@@ -439,8 +441,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     #Swimming connection to Jojo Sewers Main (lol) bypasses the Secret Password region
                     {JOJO_SEWERS_AP_REGION: lambda state: logic.has_swimming(state)})
     #Jojo Sewers section end
-    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, BOOMER_OVERLOOK_AP_REGION],
-                    {BOOMER_OVERLOOK_AP_REGION: lambda state: logic.has_horizontal_movement(state)})
+    fancy_add_exits(world, BOOMER_SOCIETY_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, BEATSMITH_DISCO_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, GREENSHIRE_REPRISE_AP_REGION, BOOMER_OVERLOOK_AP_REGION],
+                    {BEATSMITH_DISCO_AP_REGION: lambda state: logic.has_glide(state) and logic.obscure_routes_on(state),
+                     BOOMER_OVERLOOK_AP_REGION: lambda state: logic.has_horizontal_movement(state)})
     fancy_add_exits(world, ROLLING_QUINTAR_FIELDS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, QUINTAR_NEST_AP_REGION, QUINTAR_SANCTUM_AP_REGION, QUINTAR_RESERVE_AP_REGION],
                     {QUINTAR_SANCTUM_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
@@ -717,8 +720,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #Castle Ramparts start
     fancy_add_exits(world, RAMPART_ATOP_PORTCULLIS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, LONE_CHEST_RAMPART_AP_REGION],
                     {LONE_CHEST_RAMPART_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, LONE_CHEST_RAMPART_AP_REGION, [RAMPART_ATOP_PORTCULLIS_AP_REGION, BOOMER_OVERLOOK_AP_REGION])
-    fancy_add_exits(world, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, [BOOMER_OVERLOOK_AP_REGION, PEAK_RAMPARTS_AP_REGION],
+    fancy_add_exits(world, LONE_CHEST_RAMPART_AP_REGION, [RAMPART_ATOP_PORTCULLIS_AP_REGION, BOOMER_OVERLOOK_AP_REGION, BEATSMITH_DISCO_AP_REGION],
+                    {BEATSMITH_DISCO_AP_REGION: lambda state: logic.has_glide(state) and logic.obscure_routes_on(state)})
+    fancy_add_exits(world, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, [LONE_CHEST_RAMPART_AP_REGION, BOOMER_OVERLOOK_AP_REGION, PEAK_RAMPARTS_AP_REGION],
                     {PEAK_RAMPARTS_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)})
     fancy_add_exits(world, PEAK_RAMPARTS_AP_REGION, [RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION],
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state)})
