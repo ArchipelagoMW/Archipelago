@@ -254,7 +254,9 @@ class Goal(Choice, LADXROption):
     Ocarina are not needed.
 
     **Open:** The Egg will start pre-opened.
-	**Specific:** The Wind Fish's Egg will open with specific instruments, check the sign at the egg to see which.    """
+    
+    **Specific:** The Wind Fish's Egg will open with specific instruments, check the sign at the egg to see which.
+    """
     display_name = "Goal"
     rich_text_doc = True
     ladxr_name = "goal"
