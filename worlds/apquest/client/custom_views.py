@@ -16,9 +16,6 @@ from CommonClient import logger
 
 from ..game.inputs import Input
 
-if TYPE_CHECKING:
-    pass
-
 
 INPUT_MAP = {
     "up": Input.UP,
