@@ -21,8 +21,10 @@ from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LADXRLogic
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
-from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
-                        create_regions_from_ladxr, get_locations_to_id,
+from .Locations import (LinksAwakeningLocation,
+                        LinksAwakeningRegion,
+                        create_regions_from_ladxr,
+                        links_awakening_location_name_to_id,
                         links_awakening_location_name_groups)
 from .Options import DungeonItemShuffle, ShuffleInstruments, LinksAwakeningOptions, ladx_option_groups
 from .Rom import LADXProcedurePatch, write_patch_data
@@ -124,7 +126,7 @@ class LinksAwakeningWorld(World):
 
     item_name_to_data = links_awakening_items_by_name
 
-    location_name_to_id = get_locations_to_id()
+    location_name_to_id = links_awakening_location_name_to_id
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
@@ -540,7 +542,8 @@ class LinksAwakeningWorld(World):
 
     def fill_slot_data(self):
         slot_data = {
-            "world_version": self.world_version.as_simple_string()
+            "world_version": self.world_version.as_simple_string(),
+			"death_link": self.options.death_link.value,
         }
 
         if not self.multiworld.is_race:
