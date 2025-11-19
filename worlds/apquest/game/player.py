@@ -8,9 +8,6 @@ from .graphics import Graphic
 from .inputs import Direction
 from .items import Item
 
-if TYPE_CHECKING:
-    pass
-
 
 class Player:
     current_x: int
