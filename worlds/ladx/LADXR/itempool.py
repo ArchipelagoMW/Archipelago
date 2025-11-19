@@ -109,6 +109,12 @@ class ItemPool:
             default_item_pool = logic.world.map.get_item_pool()
         for item, count in default_item_pool.items():
             self.add(item, count)
+        goal = logic.world_setup.goal
+        if isinstance(goal, str) and goal.startswith('='):
+            instruments_to_remove = [i for i in range(1, 9) if str(i) not in goal]
+            for i in instruments_to_remove:
+                self.remove(f"INSTRUMENT{i}")
+                self.add(RUPEES_20)
         if settings.boomerang != 'default' and settings.overworld != "random":
             self.add(BOOMERANG)
         if settings.owlstatues == 'both':

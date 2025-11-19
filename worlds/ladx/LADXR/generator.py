@@ -259,6 +259,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         patches.bingo.setBingoGoal(rom, patch_data["world_setup"]["bingo_goals"], patch_data["world_setup"]["goal"])
     elif patch_data["world_setup"]["goal"] == "seashells":
         patches.goal.setSeashellGoal(rom, 20)
+    elif isinstance(patch_data["world_setup"]["goal"], str) and patch_data["world_setup"]["goal"].startswith("="):
+        patches.goal.setSpecificInstruments(rom, [int(c) for c in patch_data["world_setup"]["goal"][1:]])
     else:
         patches.goal.setRequiredInstrumentCount(rom, patch_data["world_setup"]["goal"])
 
