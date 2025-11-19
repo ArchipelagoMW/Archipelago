@@ -148,7 +148,6 @@ class SC2World(World):
         flag_start_inventory(self, item_list)
         flag_unused_upgrade_types(self, item_list)
         flag_unreleased_items(item_list)
-        flag_user_excluded_item_sets(self, item_list)
         flag_war_council_items(self, item_list)
         flag_and_add_resource_locations(self, item_list)
         flag_mission_order_required_items(self, item_list)
@@ -394,6 +393,17 @@ def create_and_flag_explicit_item_locks_and_excludes(world: SC2World) -> List[Fi
     if world.options.exclude_overpowered_items.value == ExcludeOverpoweredItems.option_true:
         for item_name in item_groups.overpowered_items:
             auto_excludes[item_name] = 1
+    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
+        for item_name, item_data in item_tables.item_table.items():
+            if item_name in item_groups.terran_original_progressive_upgrades:
+                auto_excludes[item_name] = max(item_data.quantity - 1, auto_excludes.get(item_name, 0))
+            elif item_name in item_groups.vanilla_items:
+                continue
+            elif item_name in item_groups.nova_equipment:
+                continue
+            else:
+                auto_excludes[item_name] = 0
+
 
     result: List[FilterItem] = []
     for item_name, item_data in item_tables.item_table.items():
@@ -834,26 +844,6 @@ def flag_unreleased_items(item_list: List[FilterItem]) -> None:
         if (item.name in unreleased_items
                 and not (ItemFilterFlags.Locked|ItemFilterFlags.StartInventory) & item.flags):
             item.flags |= ItemFilterFlags.Removed
-
-
-def flag_user_excluded_item_sets(world: SC2World, item_list: List[FilterItem]) -> None:
-    """Excludes items based on item set options (`only_vanilla_items`)"""
-    vanilla_nonprogressive_count = {
-        item_name: 0 for item_name in item_groups.terran_original_progressive_upgrades
-    }
-    if world.options.vanilla_items_only.value == VanillaItemsOnly.option_true:
-        vanilla_items = item_groups.vanilla_items + item_groups.nova_equipment
-        for item in item_list:
-            if ItemFilterFlags.UserExcluded in item.flags:
-                continue
-            if item.name not in vanilla_items:
-                item.flags |= ItemFilterFlags.UserExcluded
-            if item.name in item_groups.terran_original_progressive_upgrades:
-                if vanilla_nonprogressive_count[item.name]:
-                    item.flags |= ItemFilterFlags.UserExcluded
-                vanilla_nonprogressive_count[item.name] += 1
-
-    excluded_count: Dict[str, int] = dict()
 
 
 def flag_war_council_items(world: SC2World, item_list: List[FilterItem]) -> None:
