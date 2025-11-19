@@ -363,18 +363,23 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Deep in eastern Quintar cave", 745 + treasure_index_offset), #Hunting Bow chest
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - At the end of the road", 825 + treasure_index_offset), #Money chest
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Hidden beneath end of the road", 2674 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - West of and above sneaky chest", 338 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Money chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Tincture Pouch chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Spore Blocker chest
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Overpass Chest - Climb the mountain west of Quintar Sanctum entrance", 3532 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state)), #1st Overpass Scrap chest on main Overpass map
+        #Rolling Treetop Highway
+        LocationData(ROLLING_TREETOP_HIGHWAY_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - West of and above sneaky chest", 338 + treasure_index_offset), #Money chest
+        #Quintar Sanctum Entrance
+        LocationData(SANCTUM_ENTRANCE_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Pinnacle by short and tall box friends", 471 + treasure_index_offset), #Tincture Pouch chest
+        LocationData(SANCTUM_ENTRANCE_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " Chest - Treetop west of Quintar Sanctum", 365 + treasure_index_offset), #Spore Blocker chest
+        #Hunter's Tower
+        LocationData(HUNTERS_TOWER_AP_REGION, "Overpass Chest - Climb the mountain west of Quintar Sanctum entrance", 3532 + treasure_index_offset), #1st Overpass Scrap chest on main Overpass map
 
         #NPCs
-        #Todo NPCs CheckOrNot: two Quintar Eggs
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Quintar Stable Owner by Capital Sequoias eastern gate", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass, Fixed Missable
+        #NPCs CheckOrNot: two Quintar Eggs (decided against)
+        #Hunter Master is in Hunter's Tower region, but you need quintar to climb the tower
+        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Quintar Stable Owner by Capital Sequoia's eastern gate", 375 + npc_index_offset, lambda state: logic.has_jobs(state, 7)), #Quintar Pass, Fixed Missable
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver beneath overhang in eastern Quintar cave crevasse", 2678 + npc_index_offset), #Dust
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Quintar Enthusiast (always pet Buttermint)", 464 + npc_index_offset), #Fixed Missable
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver in Quintar cave beneath the end of the road", 454 + npc_index_offset), #Ingot
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_horizontal_movement(state)), #Ore
+        #Rolling Treetop Highway
+        LocationData(ROLLING_TREETOP_HIGHWAY_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Silver behind Quintar Nest befriending a stack of boxes", 323 + npc_index_offset), #Ore
 
         #Quintar Nest
         #Treasure chests
@@ -404,7 +409,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Chest - In front of the shrine", 2910 + treasure_index_offset), #Quintar Sanctum map chest
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Chest - West at ground level", 2983 + treasure_index_offset), #Tincture Pouch chest
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + " Chest - North at ground level", 593 + treasure_index_offset), #Tonic Pouch chest
-        LocationData(QUINTAR_SANCTUM_AP_REGION, "Overpass Chest - Lonely chest above Quintar Sanctum", 3533 + treasure_index_offset), #2nd Overpass Scrap chest on main map
+        #Sanctum Exit Clifftop
+        LocationData(SANCTUM_EXIT_CLIFFTOP_AP_REGION, "Overpass Chest - Lonely chest above Quintar Sanctum", 3533 + treasure_index_offset), #2nd Overpass Scrap chest on main map
 
         #NPCs
         #Todo NPCs CheckOrNot: Quintar Egg here (on Quintar Sanctum Mushroom map)

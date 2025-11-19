@@ -47,7 +47,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Quintar Enthusiast's House", 440),
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Rent-A-Quintar", 462),
-        LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "Quintar Sanctum", 917, lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_vertical_movement(state)),
+        LocationData(SANCTUM_ENTRANCE_AP_REGION, "Quintar Sanctum", 917),
 
         LocationData(QUINTAR_SANCTUM_AP_REGION, "Quintar Nameko", 968),
 
