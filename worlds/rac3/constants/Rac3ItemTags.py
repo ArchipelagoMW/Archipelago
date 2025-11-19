@@ -9,6 +9,7 @@ class RAC3ITEMTAG:
     NON_PROG_WEAPON = "Non-Progressive Weapon"
     PROG_WEAPON = "Progressive Weapon"
     PROGRESSIVE = "Progressive"
+    TRAP = "Trap"
     UNUSED = "Unused"
     VIDCOMIC = "VidComic"
     WEAPON = "Weapon"

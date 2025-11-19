@@ -131,6 +131,8 @@ class RaC3World(World):
             RAC3OPTION.SHIP_WINGS: self.options.ship_wings.value,
             RAC3OPTION.SHIP_SKIN: self.options.ship_skin.value,
             RAC3OPTION.SKIN: self.options.skin.value,
+            RAC3OPTION.ENABLE_TRAPS: self.options.traps_enabled.value,
+            RAC3OPTION.TRAP_WEIGHT: self.options.trap_weight.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self)
         }
 

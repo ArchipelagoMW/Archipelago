@@ -81,15 +81,15 @@ def get_filler_item_selection(world: "RaC3World"):
         RAC3ITEM.WEAPON_XP: 0,
         RAC3ITEM.PLAYER_XP: 5,
         RAC3ITEM.BOLTS: 10,
-        RAC3ITEM.INFERNO_MODE: 1,
+        # RAC3ITEM.INFERNO_MODE: 1,
         RAC3ITEM.JACKPOT: 10,
     }
     if not world.options.enable_progressive_weapons.value:
         weapon_exp: dict[str, int] = {RAC3ITEM.WEAPON_XP: 5}
         frequencies.update(weapon_exp)
-    # if world.options.traps_enabled:
-    #     traps = trap_items.copy()
-    #     frequencies.update(traps)
+    if world.options.traps_enabled.value:
+        traps = world.options.trap_weight.value
+        frequencies.update(traps)
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 

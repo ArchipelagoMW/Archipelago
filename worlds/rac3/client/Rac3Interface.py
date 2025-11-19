@@ -1,3 +1,4 @@
+import time
 from dataclasses import dataclass
 from enum import IntEnum
 from logging import Logger
@@ -7,8 +8,7 @@ from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
                                          non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
-                                         vidcomic_data,
-                                         weapon_upgrade_data)
+                                         trap_to_status, vidcomic_data, weapon_upgrade_data)
 from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
@@ -142,6 +142,7 @@ class Rac3Interface(GameInterface):
     ship = 0
     ship_skin = 0
     skin = 0
+    trap_timers: dict[str, int] = {}
 
     # Called at once when client started
     def init(self):
@@ -159,6 +160,7 @@ class Rac3Interface(GameInterface):
         self.weapon_cycler()
         self.vidcomic_cycler()
         self.armor_cycler()
+        self.trap_cycler()
         self.verify_quick_select_and_last_used()
         # Proc Options
         self._write8(RAC3STATUS.MULTIPLIER, self.boltAndXPMultiplierValue)
@@ -241,6 +243,21 @@ class Rac3Interface(GameInterface):
                 if valid_weapons:
                     weapon_num = randint(0, len(valid_weapons) - 1)
                     self.weapon_level_up(valid_weapons[weapon_num])
+            case RAC3ITEM.OHKO_TRAP:
+                self._write8(RAC3STATUS.HEALTH, 1)
+            case RAC3ITEM.NO_AMMO_TRAP:
+                for weapon_name in non_prog_weapon_data.keys():
+                    if self.UnlockItem[weapon_name].status:
+                        self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
+            case RAC3ITEM.LOCK_TRAP:
+                already_locked = self._read8(RAC3STATUS.WEAPON_LOCK)
+
+                # skip if already locked like in weapon challenges or weapon cycle challenges
+                if already_locked == 0:
+                    if self.trap_timers.get(name, False):
+                        self.trap_timers[name] += 10
+                    else:
+                        self.trap_timers[name] = int(time.time()) + 10
 
         if name in equipable_data.keys():
             if equipable_data[name].AMMO:
@@ -313,6 +330,7 @@ class Rac3Interface(GameInterface):
         # self.UnlockItem[RAC3ITEM.FLORANA].status = 1
         # self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status = 1
         # self.UnlockItem[RAC3ITEM.MUSEUM].status = 1
+        self.trap_timers.clear()
 
         self.weapon_cycler()
         self.gadget_cycler()
@@ -321,6 +339,7 @@ class Rac3Interface(GameInterface):
         self.armor_cycler()
         self.verify_quick_select_and_last_used()
         self.weapon_exp_cycler()
+        self.trap_cycler()
 
     def undo_collections(self):
         pass
@@ -491,6 +510,26 @@ class Rac3Interface(GameInterface):
 
     def tracker_update(self):
         pass
+
+    def trap_cycler(self):
+        for name in self.trap_timers.keys():
+            if time.time() < self.trap_timers[name]:
+                self._write8(trap_to_status[name], 1)
+            else:
+                self.trap_timers.pop(name)
+
+                # Special case for lock trap
+                # Clear when timer ends directly rather than from the trap cleanup loop below
+                match name:
+                    case RAC3ITEM.LOCK_TRAP:
+                        # Todo: Check for arena mission
+                        self._write8(RAC3STATUS.WEAPON_LOCK, 0)
+
+        # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
+        # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
+        # for trap_name, status_address in trap_to_status.items():
+        #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
+        #         self._write8(status_address, 0)
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):
