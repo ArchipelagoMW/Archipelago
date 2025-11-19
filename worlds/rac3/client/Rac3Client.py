@@ -4,6 +4,8 @@ from multiprocessing import freeze_support
 from traceback import format_exc
 from typing import Optional
 
+from client.Rac3Callbacks import init, update
+from client.Rac3Interface import Rac3Interface
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import RAC3REGION
@@ -22,10 +24,6 @@ except ImportError:
     print("ERROR: Universal Tracker is not loaded")
 
 # Game title dedicated
-from worlds.rac3 import Locations
-# from .data.Constants import EPISODES
-from Rac3Interface import Rac3Interface
-from Rac3Callbacks import init, update
 
 CLIENT_INIT_LOG = f"{RAC3OPTION.GAME_TITLE}_Client"
 CLIENT_VERSION = "0.1.0"
@@ -131,13 +129,9 @@ class Rac3Context(CommonContext):
                 self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
                 async_start(self.update_death_link(
                     bool(self.slot_data[RAC3OPTION.DEATHLINK])))
-                # async_start(self.send_msgs([{
-                #     "cmd": "LocationScouts",
-                #     "locations": [
-                #         Locations.location_table[location].ap_code
-                #         for location in Locations.location_groups["Purchase"]
-                #     ]
-                # }]))
+
+            # async_start(self.send_msgs([ClientMessage.location_scouts(
+            #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
 
 
 def update_connection_status(ctx: Rac3Context, status: bool):

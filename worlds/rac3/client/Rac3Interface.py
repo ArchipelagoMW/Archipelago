@@ -7,17 +7,18 @@ from struct import unpack
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
-                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, trap_to_status,
-                                         vidcomic_data, weapon_upgrade_data)
-from constants.data.Rac3LocationData import LOCATIONS
+                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
+                                         trap_to_status, vidcomic_data, weapon_upgrade_data)
+from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
+from constants.locations.Rac3General import RAC3LOCATION
+from constants.Rac3CheckType import CHECKTYPE
 from constants.Rac3Deaths import DEATH_FROM_ACTION
 from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from constants.Rac3Region import PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
 from constants.Rac3Status import RAC3STATUS
-from Locations import location_table
 from pcsx2_interface.pine import Pine
 
 
@@ -112,21 +113,21 @@ class UnlockData:
         self.unlock_delay = unlock_delay
 
 
-CHECK_TYPE = {
-    "bit": 0,
-    "int": 1,
-    "uint": 2,
-    "byte": 3,
-    "short": 4,
-    "falseBit": 5,
-    "long": 6,
-    "nibble": 7,
-}
-COMPARE_TYPE = {
-    "Match": 0,
-    "GreaterThan": 1,
-    "LessThan": 2,
-}
+def compare(value, check) -> bool:
+    match check.TYPE & CHECKTYPE.SIGN:
+        case CHECKTYPE.EQ:
+            return value == check.VALUE
+        case CHECKTYPE.NEQ:
+            return value != check.VALUE
+        case CHECKTYPE.GT:
+            return value > check.VALUE
+        case CHECKTYPE.LT:
+            return value < check.VALUE
+        case CHECKTYPE.GE:
+            return value >= check.VALUE
+        case CHECKTYPE.LE:
+            return value <= check.VALUE
+    return False
 
 
 class Rac3Interface(GameInterface):
@@ -171,11 +172,11 @@ class Rac3Interface(GameInterface):
 
     @staticmethod
     def get_victory_code():
-        victory_name = "Command Center: Biobliterator Defeated!"  # This must can be changed by option
-        return location_table[victory_name].ap_code
+        return RAC3_LOCATION_DATA_TABLE[RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR].AP_CODE
+        # let this be changed by an option
 
     def check_main_menu(self):
-        if self._read32(RAC3STATUS.MAIN_MENU):
+        if self._read32(RAC3STATUS.MAIN_MENU) == 0xFFFFFFFF:
             return True
         return False
 
@@ -199,15 +200,11 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
     def item_received(self, item_code):
-        # self.logger.info(f'{item_code}')
-        name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code])
-
+        name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
+        self.logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in planet_data.keys():
-            for slot in SHIP_SLOTS:
-                table = RAC3_REGION_DATA_TABLE[slot]
-                self.logger.debug(f'{slot}: ID: {table.ID}, Address: {table.SLOT_ADDRESS}')
-                if not self._read8(table.SLOT_ADDRESS):
-                    self.UnlockItem[name].status = table.ID
+            self.UnlockItem[RAC3REGION.SLOT_0].status += 1
+            self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
         else:
             self.UnlockItem[name].status += 1
 
@@ -267,72 +264,22 @@ class Rac3Interface(GameInterface):
                 self._write8(equipable_data[name].AMMO_ADDRESS, equipable_data[name].AMMO)
             self.update_equip(name)
 
-    def is_location_checked(self, ap_code):
-        # Find the location
-        target_location = next((loc for loc in LOCATIONS if loc["Id"] == ap_code), None)  # TODO: Locations
-        if not target_location:
-            return False  # not found
-        # Todo: replace strings with constants
-        # --- NEW: if this location has multiple checks ---
-        if "Checks" in target_location:
-            for check in target_location["Checks"]:
-                addr = self.address_convert(check["Address"])
-
-                if check["CheckType"] in (CHECK_TYPE["bit"], CHECK_TYPE["falseBit"]):
-                    _value = self._read8(addr)
-                    _value = (_value >> check.get("AddressBit", 0)) & 0x01
-                elif check["CheckType"] == CHECK_TYPE["byte"]:
-                    _value = self._read8(addr)
-                elif check["CheckType"] == CHECK_TYPE["short"]:
-                    _value = self._read16(addr)
-                else:
-                    _value = self._read32(addr)
-
-                if check["CheckType"] == CHECK_TYPE["bit"]:
-                    _compare_value = 0x01
-                elif check["CheckType"] == CHECK_TYPE["falseBit"]:
-                    _compare_value = 0x00
-                else:
-                    _compare_value = check.get("CheckValue", "0")
-
-                _compare_type = check.get("CompareType", COMPARE_TYPE["Match"])
-
-                if _compare_type == COMPARE_TYPE["Match"] and not (_value == _compare_value):
-                    return False
-                if _compare_type == COMPARE_TYPE["GreaterThan"] and not (_value > _compare_value):
-                    return False
-                if _compare_type == COMPARE_TYPE["LessThan"] and not (_value < _compare_value):
-                    return False
-            return True  # <-- RETURN HERE so fallback doesn't run
-
-        # --- OLD: single-check format (only for locations WITHOUT "Checks") ---
-        addr = self.address_convert(target_location["Address"])
-        if target_location["CheckType"] in (CHECK_TYPE["bit"], CHECK_TYPE["falseBit"]):
-            _value = self._read8(addr)
-            _value = (_value >> target_location.get("AddressBit", 0)) & 0x01
-        elif target_location["CheckType"] == CHECK_TYPE["byte"]:
-            _value = self._read8(addr)
-        elif target_location["CheckType"] == CHECK_TYPE["short"]:
-            _value = self._read16(addr)
-        else:
-            _value = self._read32(addr)
-
-        if target_location["CheckType"] == CHECK_TYPE["bit"]:
-            _compare_value = 0x01
-        elif target_location["CheckType"] == CHECK_TYPE["falseBit"]:
-            _compare_value = 0x00
-        else:
-            _compare_value = target_location.get("CheckValue", "0")
-
-        _compare_type = target_location.get("CompareType", COMPARE_TYPE["Match"])
-
-        if _compare_type == COMPARE_TYPE["Match"]:
-            return _value == _compare_value
-        if _compare_type == COMPARE_TYPE["GreaterThan"]:
-            return _value > _compare_value
-        if _compare_type == COMPARE_TYPE["LessThan"]:
-            return _value < _compare_value
-        return False
+    def is_location_checked(self, ap_code) -> bool:
+        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
+        if not loc_data:
+            return False
+        check_all: bool = True
+        for check in loc_data.CHECK_ADDRESS:
+            match check.TYPE & CHECKTYPE.SIZE:
+                case CHECKTYPE.BIT:
+                    check_all &= (self._read8(check.ADDRESS) >> check.VALUE) & 0x01
+                case CHECKTYPE.BYTE:
+                    check_all &= compare(self._read8(check.ADDRESS), check)
+                case CHECKTYPE.SHORT:
+                    check_all &= compare(self._read16(check.ADDRESS), check)
+                case CHECKTYPE.INT:
+                    check_all &= compare(self._read32(check.ADDRESS), check)
+        return check_all
 
     ###################################
     # Game dedicated functions        #
@@ -344,6 +291,7 @@ class Rac3Interface(GameInterface):
     def init_variables(self):
         # Unlock state variables/ArmorUpgrade variable
         self.UnlockItem = {name: UnlockData() for name in ITEM_FROM_AP_CODE.values()}
+        self.UnlockItem.update({RAC3REGION.SLOT_0: UnlockData()})
         self.logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
 
         # Proc options
@@ -370,7 +318,7 @@ class Rac3Interface(GameInterface):
             pass
         return _addr
 
-    # TO-DO: fixing this syntax KEKW
+    # TODO: fixing this syntax KEKW
 
     # initialization
     def remove_all_items(self):
@@ -429,7 +377,7 @@ class Rac3Interface(GameInterface):
 
         replace_equip: int = 0
         equip_data = self._read8(RAC3STATUS.EQUIPPED)
-        if equip_data and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
+        if equip_data > 1 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
             last_0 = self._read8(RAC3STATUS.LAST_USED_0)
             if last_0 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_0)).status:
                 replace_equip = last_0
@@ -461,11 +409,11 @@ class Rac3Interface(GameInterface):
     def planet_cycler(self):
         # self.logger.debug('---------PlanetCycler Start---------')
         for name in planet_data.keys():
-            planet = planet_data[PLANET_FROM_INFOBOT[name]]
-            addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
+            planet = planet_data[name]
             if self.UnlockItem[name].status:
+                addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
                 # Don't allow planets that can softlock
-                if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0) and
+                if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status) and
                     (name != RAC3ITEM.HOLOSTAR_STUDIOS or
                      (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
                     if self.UnlockItem[name].unlock_delay:
@@ -510,7 +458,7 @@ class Rac3Interface(GameInterface):
             _slots.append(RAC3_STATUS_DATA_TABLE[slot].SLOT_ADDRESS)
         for addr in _slots:
             idx = self._read8(self.address_convert(addr))
-            if idx:
+            if idx > 1:
                 name = ITEM_NAME_FROM_ID[idx]
                 if not self.UnlockItem[name].status:
                     # Not unlocked, but set
@@ -523,11 +471,11 @@ class Rac3Interface(GameInterface):
             target_level = self.UnlockItem[weapon_name].status
             self.logger.debug(f'weapon: {weapon_name}, target: {target_level}')
             if target_level:
-                target_id = UPGRADE_DICT[weapon_name][target_level]
+                target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                 target_name = ITEM_NAME_FROM_ID[target_id]
-                target_xp = weapon_upgrade_data[target_name].XP_THRESHOLD
+                target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
                 self.logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
-                self._write8(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
 
     def weapon_level_up(self, weapon_name):
         """Level up a weapon from xp reward"""

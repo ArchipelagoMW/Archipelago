@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from constants.locations.Rac3Skillpoints import SIMPLE_SKILL_POINTS
+from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from constants.locations.Rac3Nanotech import RAC3NANOTECH
+from constants.locations.Rac3Tags import RAC3TAG
 from constants.Rac3Items import RAC3ITEM
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import RAC3REGION
-from Locations import location_table
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -16,13 +17,48 @@ class GameLocation(Location):
 
 
 # Making an array with every 5 nanotech
-every_5_nanotech = [f"Nanotech Milestone: {x}" for x in range(15, 101, 5)]
+every_5_nanotech = [
+    RAC3NANOTECH.LEVEL_15,
+    RAC3NANOTECH.LEVEL_20,
+    RAC3NANOTECH.LEVEL_25,
+    RAC3NANOTECH.LEVEL_30,
+    RAC3NANOTECH.LEVEL_35,
+    RAC3NANOTECH.LEVEL_40,
+    RAC3NANOTECH.LEVEL_45,
+    RAC3NANOTECH.LEVEL_50,
+    RAC3NANOTECH.LEVEL_55,
+    RAC3NANOTECH.LEVEL_60,
+    RAC3NANOTECH.LEVEL_65,
+    RAC3NANOTECH.LEVEL_70,
+    RAC3NANOTECH.LEVEL_75,
+    RAC3NANOTECH.LEVEL_80,
+    RAC3NANOTECH.LEVEL_85,
+    RAC3NANOTECH.LEVEL_90,
+    RAC3NANOTECH.LEVEL_95,
+    RAC3NANOTECH.LEVEL_100
+]
 
 # Making an array with every 10 nanotech
-every_10_nanotech = [f"Nanotech Milestone: {x}" for x in range(20, 101, 10)]
+every_10_nanotech = [
+    RAC3NANOTECH.LEVEL_20,
+    RAC3NANOTECH.LEVEL_30,
+    RAC3NANOTECH.LEVEL_40,
+    RAC3NANOTECH.LEVEL_50,
+    RAC3NANOTECH.LEVEL_60,
+    RAC3NANOTECH.LEVEL_70,
+    RAC3NANOTECH.LEVEL_80,
+    RAC3NANOTECH.LEVEL_90,
+    RAC3NANOTECH.LEVEL_100
+]
 
 # Making an array with every 20 nanotech
-every_20_nanotech = [f"Nanotech Milestone: {x}" for x in range(20, 101, 20)]
+every_20_nanotech = [
+    RAC3NANOTECH.LEVEL_20,
+    RAC3NANOTECH.LEVEL_40,
+    RAC3NANOTECH.LEVEL_60,
+    RAC3NANOTECH.LEVEL_80,
+    RAC3NANOTECH.LEVEL_100
+]
 
 
 def create_regions(world: "RaC3World"):
@@ -75,18 +111,6 @@ def create_regions(world: "RaC3World"):
 
     # ----- Split planet connections for gadget reasons -----#
 
-    # Annihilation mission is shown after Daxx Region2
-    annihilation_nation_second_half = create_region(world, RAC3REGION.ANNIHILATION_NATION_2)
-    annihilation_nation.connect(annihilation_nation_second_half,
-                                rule=lambda state: state.can_reach_location("Daxx: Gunship", player=world.player)),
-
-    aquatos_sewers = create_region(world, RAC3REGION.AQUATOS_SEWERS)
-    aquatos.connect(aquatos_sewers, rule=lambda state: state.can_reach(RAC3REGION.AQUATOS, player=world.player)),
-
-    tyhrranosis_second_half = create_region(world, RAC3REGION.TYHRRANOSIS_MISSION)
-    tyhrranosis.connect(tyhrranosis_second_half,
-                        rule=lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)),
-
     # This cutscene requires beating Holostar and Blackwater in any order:
     skidd_cutscene = create_region(world, RAC3REGION.SKIDD_CUTSCENE)
     holostar_studios.connect(skidd_cutscene,
@@ -94,15 +118,9 @@ def create_regions(world: "RaC3World"):
     blackwater_city.connect(skidd_cutscene,
                             rule=lambda state: state.can_reach(RAC3REGION.HOLOSTAR_STUDIOS, player=world.player))
 
-    # You can get Metal-Noids in metropolis with no other requirements
-    metropolis_second_half = create_region(world, RAC3REGION.METROPOLIS_MISSION)
-    metropolis_first_half.connect(metropolis_second_half,
-                                  rule=lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player)
-                                                     and state.has(RAC3ITEM.REFRACTOR, world.player)),
-
     # ----- Dummy regions for weapon upgrade organization -----#
 
-    nanotech_levels = create_region(world, "Nanotech Levels")
+    nanotech_levels = create_region(world, RAC3REGION.NANOTECH)
     menu.connect(nanotech_levels)
 
     shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
@@ -165,22 +183,16 @@ def create_regions(world: "RaC3World"):
     plasma_coil_upgrades = create_region(world, f"{RAC3ITEM.PLASMA_COIL} Upgrades")
     menu.connect(plasma_coil_upgrades, rule=lambda state: state.has(RAC3ITEM.PLASMA_COIL, world.player))
 
-    # ----- Long Term Trophy Dummy Regions ----- #
-    if world.options.trophies.value == 2:
-        long_term_trophy = create_region(world, RAC3REGION.LONG_TROPHIES)
-        menu.connect(long_term_trophy,
-                     rule=lambda state: state.can_reach(RAC3REGION.STARSHIP_PHOENIX, player=world.player))
-
 
 def create_region(world: "RaC3World", name: str) -> Region:
     reg = Region(name, world.player, world.multiworld)
     options = world.options
-    for (key, data) in location_table.items():
-        if should_skip_location(key, options):  # Skip locations based on options
+    for key, data in RAC3_LOCATION_DATA_TABLE.items():
+        if should_skip_location(data, options):  # Skip locations based on options
             continue
 
-        if data.region == name:
-            location = GameLocation(world.player, key, data.ap_code, reg)
+        if data.REGION == name:
+            location = GameLocation(world.player, key, data.AP_CODE, reg)
             reg.locations.append(location)
 
     world.multiworld.regions.append(reg)
@@ -194,57 +206,38 @@ def create_region_and_connect(world: "RaC3World",
     return reg
 
 
-def should_skip_location(key: str, options) -> bool:
+def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
     """Return False if the location should be skipped based on options."""
-
-    # Skip trophy locations if trophies are disabled
-    if "Trophy" in key and options.trophies.value == 0:
-        return True
-
-        # Skip long term trophies if not set to every trophy
-    if "Long Term" in key and options.trophies.value < 2:
-        return True
-
-        # Skip skill point locations if not set to every skill point
-    if "Skill Point" in key and options.skill_points.value == 0:
-        return True
-
-        # Skip skill points not in the simple list
-    if "Skill Point" in key and options.skill_points.value == 1:
-        for simple_skill in SIMPLE_SKILL_POINTS:
-            if simple_skill.lower() in key.lower():
-                return False
-        return True
-
-        # Skip titanium bolt locations if titanium bolt option is disabled
-    if "T-Bolt" in key and options.titanium_bolts.value == 0:
-        return True
-
-        # Skip nanotech milestone locations if nanotech milestones option is disabled
-    if "Nanotech Milestone" in key and options.nanotech_milestones.value == 0:
-        return True
-
-        # Skips nanotech milestones that are not in every 5
-    if "Nanotech Milestone" in key and options.nanotech_milestones.value == 1:
-        for every_5 in every_5_nanotech:
-            if every_5.lower() in key.lower():
-                return False
-        return True
-
-        # Skips nanotech milestones that are not in every 10
-    if "Nanotech Milestone" in key and options.nanotech_milestones.value == 2:
-        for every_10 in every_10_nanotech:
-            if every_10.lower() in key.lower():
-                return False
-        return True
-
-        # Skips nanotech milestones that are not in every 20
-    if "Nanotech Milestone" in key and options.nanotech_milestones.value == 3:
-        for every_20 in every_20_nanotech:
-            if every_20.lower() in key.lower():
-                return False
-        return True
-
-    # Add more conditions here if needed in the future
-
+    for tag in data.TAGS:
+        match tag:
+            case RAC3TAG.UNSTABLE:  # Skip all unstable locations
+                return True
+            case RAC3TAG.TROPHY:
+                if not options.trophies.value:  # Skip trophy locations if trophies are disabled
+                    return True
+            case RAC3TAG.LONG_TROPHY:
+                if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
+                    return True
+            case RAC3TAG.SKILLPOINT:
+                if not options.skill_points.value:  # Skip skill point locations if not set to every skill point
+                    return True
+            case RAC3TAG.HARD_SKILLPOINT:
+                if options.skill_points.value == 1:  # Skip skill points not in the simple list
+                    return True
+            case RAC3TAG.T_BOLT:
+                if options.titanium_bolts.value == 0:
+                    return True  # Skip titanium bolt locations if titanium bolt option is disabled
+            case RAC3TAG.NANOTECH:
+                if options.nanotech_milestones.value == 0:
+                    return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
+                elif options.nanotech_milestones.value == 1 and LOCATION_FROM_AP_CODE[
+                    data.AP_CODE] not in every_5_nanotech:
+                    return True  # Skips nanotech milestones that are not in every 5
+                elif options.nanotech_milestones.value == 2 and LOCATION_FROM_AP_CODE[
+                    data.AP_CODE] not in every_10_nanotech:
+                    return True  # Skips nanotech milestones that are not in every 10
+                elif options.nanotech_milestones.value == 3 and LOCATION_FROM_AP_CODE[
+                    data.AP_CODE] not in every_20_nanotech:
+                    return True  # Skips nanotech milestones that are not in every 20
+            # Add more conditions here if needed in the future
     return False

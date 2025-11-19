@@ -31,7 +31,7 @@ class RAC3TBOLT:
     ZELDRIN_STARPORT_2 = "Zeldrin Starport: T-Bolt: Atop the Twin Shooters"
     METROPOLIS_SWING = "Metropolis: T-Bolt: Across the Gap"
     METROPOLIS_BEHIND = "Metropolis: T-Bolt: Before Grav-wall"
-    METROPOLIS_MISSION = "Metropolis: T-Bolt: Tall Tower (Hovership)"
+    METROPOLIS_RANGERS = "Metropolis: T-Bolt: Tall Tower (Hovership)"
     CRASH_SITE = "Crash Site: T-Bolt: Turn Around"
     ARIDIA_BRIDGE = "Aridia: T-Bolt: Under the Bridge (Assassination)"
     ARIDIA_BASE = "Aridia: T-Bolt: Behind the Base (X12 Endgame)"
