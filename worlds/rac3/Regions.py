@@ -242,5 +242,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
             case RAC3TAG.RANGERS:
                 if options.rangers.value == 0:
                     return True # Skips ranger missions locations if rangers option is disabled
+            case RAC3TAG.ARENA:
+                if options.arena.value == 0:
+                    return True  # Skips arena challenges locations if arena option is disabled
             # Add more conditions here if needed in the future
     return False

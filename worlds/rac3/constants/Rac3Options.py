@@ -21,3 +21,4 @@ class RAC3OPTION:
     ENABLE_TRAPS = "enable_traps"
     TRAP_WEIGHT = "trap_weight"
     RANGERS = "rangers"
+    ARENA = "arena"
