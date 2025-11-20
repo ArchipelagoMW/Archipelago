@@ -216,3 +216,6 @@ config.each do |room_name, room_data|
 end
 
 File.write(outputpath, old_generated.to_yaml)
+
+puts "Next item ID: #{next_item_id}"
+puts "Next location ID: #{next_location_id}"
