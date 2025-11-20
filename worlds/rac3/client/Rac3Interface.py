@@ -85,7 +85,6 @@ class GameInterface:
             game_id = self.pcsx2_interface.get_game_id()
             # The first read of the address will be null if the client is faster than the emulator
             self.current_game = None
-            self.logger.info(f'Game ID: {game_id}')
             if game_id == RAC3STATUS.GAME_ID:
                 self.current_game = game_id
             if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
