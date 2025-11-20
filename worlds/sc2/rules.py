@@ -19,26 +19,13 @@ from .options import (
     get_enabled_races,
 )
 from .item.item_tables import (
-    tvx_defense_ratings,
-    tvz_defense_ratings,
-    tvx_air_defense_ratings,
     kerrigan_levels,
     get_full_item_list,
-    zvx_air_defense_ratings,
-    zvx_defense_ratings,
-    pvx_defense_ratings,
-    pvz_defense_ratings,
     no_logic_basic_units,
     advanced_basic_units,
     basic_units,
     upgrade_bundle_inverted_lookup,
     WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
-    soa_ultimate_ratings,
-    soa_energy_ratings,
-    terran_passive_ratings,
-    soa_passive_ratings,
-    zerg_passive_ratings,
-    protoss_passive_ratings,
 )
 from .mission_tables import SC2Race, SC2Campaign
 from .item import item_groups, item_names
@@ -415,37 +402,43 @@ class SC2Logic:
     def terran_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
         """
         Ability to handle defensive missions
-        :param state:
         :param zerg_enemy: Whether the enemy is zerg
         :param air_enemy: Whether the enemy attacks with air
         :return:
         """
         defense_score = sum((tvx_defense_ratings[item] for item in tvx_defense_ratings if state.has(item, self.player)))
         # Manned Bunker
-        if state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player) and state.has(
-            item_names.BUNKER, self.player
+        if (state.has_any((item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER), self.player)
+            and state.has(item_names.BUNKER, self.player)
         ):
             defense_score += 3
         elif zerg_enemy and state.has(item_names.FIREBAT, self.player) and state.has(item_names.BUNKER, self.player):
             defense_score += 2
         # Siege Tank upgrades
-        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_MAELSTROM_ROUNDS}, self.player):
+        if state.has_all((item_names.SIEGE_TANK, item_names.SIEGE_TANK_MAELSTROM_ROUNDS), self.player):
             defense_score += 2
-        if state.has_all({item_names.SIEGE_TANK, item_names.SIEGE_TANK_GRADUATING_RANGE}, self.player):
+        if state.has_all((item_names.SIEGE_TANK, item_names.SIEGE_TANK_GRADUATING_RANGE), self.player):
             defense_score += 1
         # Widow Mine upgrade
-        if state.has_all({item_names.WIDOW_MINE, item_names.WIDOW_MINE_CONCEALMENT}, self.player):
+        if state.has_all((item_names.WIDOW_MINE, item_names.WIDOW_MINE_CONCEALMENT), self.player):
             defense_score += 1
         # Viking with splash
-        if state.has_all({item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS}, self.player):
+        if state.has_all((item_names.VIKING, item_names.VIKING_SHREDDER_ROUNDS), self.player):
             defense_score += 2
 
         # General enemy-based rules
         if zerg_enemy:
-            defense_score += sum((tvz_defense_ratings[item] for item in tvz_defense_ratings if state.has(item, self.player)))
+            defense_score += sum((
+                tvz_defense_ratings[item]
+                for item in tvz_defense_ratings
+                if state.has(item, self.player)
+            ))
         if air_enemy:
             # Capped at 2
-            defense_score += min(sum((tvx_air_defense_ratings[item] for item in tvx_air_defense_ratings if state.has(item, self.player))), 2)
+            defense_score += min2(
+                sum((tvx_air_defense_ratings[item] for item in tvx_air_defense_ratings if state.has(item, self.player))),
+                2
+            )
         if air_enemy and zerg_enemy and state.has(item_names.VALKYRIE, self.player):
             # Valkyries shred mass Mutas, the most common air enemy that's massed in these cases
             defense_score += 2
@@ -461,8 +454,12 @@ class SC2Logic:
         # Infantry with Healing
         infantry_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_WEAPON, state)
         infantry_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_INFANTRY_ARMOR, state)
-        infantry = state.has_any({item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER}, self.player)
-        if infantry_weapons >= upgrade_level + 1 and infantry_armor >= upgrade_level and infantry and self.terran_bio_heal(state):
+        infantry = state.has_any((item_names.MARINE, item_names.DOMINION_TROOPER, item_names.MARAUDER), self.player)
+        if (infantry_weapons >= upgrade_level + 1
+            and infantry_armor >= upgrade_level
+            and infantry
+            and self.terran_bio_heal(state)
+        ):
             return True
         # Mass Air-To-Ground
         ship_weapons = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_WEAPON, state)
@@ -472,8 +469,9 @@ class SC2Logic:
                 state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
                 or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
                 or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
-                or state.has_all({item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES}, self.player)
-                and ship_weapons >= 2
+                or (state.has_all({item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES}, self.player)
+                    and ship_weapons >= 2
+                )
             )
             if air and self.terran_mineral_dump(state):
                 return True
@@ -3616,3 +3614,124 @@ def get_basic_units(logic_level: int, race: SC2Race) -> Set[str]:
         return advanced_basic_units[race]
     else:
         return basic_units[race]
+
+
+# Defense rating table
+# Commented defense ratings are handled in the defense_rating function
+tvx_defense_ratings = {
+    item_names.SIEGE_TANK: 5,
+    # "Graduating Range": 1,
+    item_names.PLANETARY_FORTRESS: 3,
+    # Bunker w/ Marine/Marauder: 3,
+    item_names.PERDITION_TURRET: 2,
+    item_names.DEVASTATOR_TURRET: 2,
+    item_names.VULTURE: 1,
+    item_names.BANSHEE: 1,
+    item_names.BATTLECRUISER: 1,
+    item_names.LIBERATOR: 4,
+    item_names.WIDOW_MINE: 1,
+    # "Concealment (Widow Mine)": 1
+}
+tvz_defense_ratings = {
+    item_names.PERDITION_TURRET: 2,
+    # Bunker w/ Firebat: 2,
+    item_names.LIBERATOR: -2,
+    item_names.HIVE_MIND_EMULATOR: 3,
+    item_names.PSI_DISRUPTER: 3,
+}
+tvx_air_defense_ratings = {
+    item_names.MISSILE_TURRET: 2,
+}
+zvx_defense_ratings = {
+    # Note that this doesn't include Kerrigan because this is just for race swaps, which doesn't involve her (for now)
+    item_names.SPINE_CRAWLER: 3,
+    # w/ Twin Drones: 1
+    item_names.SWARM_QUEEN: 1,
+    item_names.SWARM_HOST: 1,
+    # impaler: 3
+    #  "Hardened Tentacle Spines (Impaler)": 2
+    # lurker: 1
+    #  "Seismic Spines (Lurker)": 2
+    #  "Adapted Spines (Lurker)": 1
+    # brood lord : 2
+    # corpser roach: 1
+    # creep tumors (swarm queen or overseer): 1
+    # w/ malignant creep: 1
+    # tanks with ammo: 5
+    item_names.INFESTED_BUNKER: 3,
+    item_names.BILE_LAUNCHER: 2,
+}
+# zvz_defense_ratings = {
+    # corpser roach: 1
+    # primal igniter: 2
+    # lurker: 1
+    # w/ adapted spines: -1
+    # impaler: -1
+# }
+zvx_air_defense_ratings = {
+    item_names.SPORE_CRAWLER: 2,
+    # w/ Twin Drones: 1
+    item_names.INFESTED_MISSILE_TURRET: 2,
+}
+pvx_defense_ratings = {
+    item_names.PHOTON_CANNON: 2,
+    item_names.KHAYDARIN_MONOLITH: 3,
+    item_names.SHIELD_BATTERY: 1,
+    item_names.NEXUS_OVERCHARGE: 2,
+    item_names.SKYLORD: 1,
+    item_names.MATRIX_OVERLOAD: 1,
+    item_names.COLOSSUS: 1,
+    item_names.VANGUARD: 1,
+    item_names.REAVER: 1,
+}
+pvz_defense_ratings = {
+    item_names.KHAYDARIN_MONOLITH: -2,
+    item_names.COLOSSUS: 1,
+}
+
+terran_passive_ratings = {
+    item_names.AUTOMATED_REFINERY: 4,
+    item_names.COMMAND_CENTER_MULE: 4,
+    item_names.ORBITAL_DEPOTS: 2,
+    item_names.COMMAND_CENTER_COMMAND_CENTER_REACTOR: 2,
+    item_names.COMMAND_CENTER_EXTRA_SUPPLIES: 2,
+    item_names.MICRO_FILTERING: 2,
+    item_names.TECH_REACTOR: 2
+}
+
+zerg_passive_ratings = {
+    item_names.TWIN_DRONES: 7,
+    item_names.AUTOMATED_EXTRACTORS: 4,
+    item_names.VESPENE_EFFICIENCY: 3,
+    item_names.OVERLORD_IMPROVED_OVERLORDS: 4,
+    item_names.MALIGNANT_CREEP: 2
+}
+
+protoss_passive_ratings = {
+    item_names.QUATRO: 4,
+    item_names.ORBITAL_ASSIMILATORS: 4,
+    item_names.AMPLIFIED_ASSIMILATORS: 3,
+    item_names.PROBE_WARPIN: 2,
+    item_names.ELDER_PROBES: 2,
+    item_names.MATRIX_OVERLOAD: 2
+}
+
+soa_energy_ratings = {
+    item_names.SOA_SOLAR_LANCE: 8,
+    item_names.SOA_DEPLOY_FENIX: 7,
+    item_names.SOA_TEMPORAL_FIELD: 6,
+    item_names.SOA_PROGRESSIVE_PROXY_PYLON: 5,  # Requires Lvl 2 (Warp in Reinforcements)
+    item_names.SOA_SHIELD_OVERCHARGE: 5,
+    item_names.SOA_ORBITAL_STRIKE: 4
+}
+
+soa_passive_ratings = {
+    item_names.GUARDIAN_SHELL: 4,
+    item_names.OVERWATCH: 2
+}
+
+soa_ultimate_ratings = {
+    item_names.SOA_TIME_STOP: 4,
+    item_names.SOA_PURIFIER_BEAM: 3,
+    item_names.SOA_SOLAR_BOMBARDMENT: 3
+}
