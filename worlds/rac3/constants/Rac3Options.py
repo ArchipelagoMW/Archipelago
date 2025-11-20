@@ -20,3 +20,4 @@ class RAC3OPTION:
     DEATHLINK = "death_link"
     ENABLE_TRAPS = "enable_traps"
     TRAP_WEIGHT = "trap_weight"
+    RANGERS = "rangers"
