@@ -4,30 +4,36 @@
 
 [Here](../player-options)
 
+## How do I connect?
+
+Once in game, go to the extras menu and find 
+
+
 ## What does randomization do to this game?
 
-Currently it randomizes all of the physical items placed in the world and some of the quest rewards.
+It randomizes all the physical items placed in the world, the quest rewards. Badges and Monster dolls can also be added via options.
 
-Adding in badges, monster dolls, other quests, other game modes, etc is planned
-
+The badges are split into the achievement used to unlock them and the cheat reward. Use Tab to switch between achievement and cheat tabs on the badge screen.
 
 ## What is the goal of LOONYLAND when randomized?
 
 Beating the evilizer!!
 That means getting to the top of castle vampy with the 8 vampire statues, so you can open the portal to the roof.
 
+There is also an optional win condition of achieving X badge achievements.
+
 ## Which items can be in another player's world?
 
-All inventory items, plus the 100 gem reward for saving zombiton
+All inventory items, plus the 100 gem reward for saving zombiton.
+Badge effects if those are turned on.
 
 ## What is considered a location check in Loonyland?
 
 Picking up an item found in a game map, as well as completing the following quests: 
 Tree Trimming, Scaredy Cat, Sticky Shoes, Mushroom Hunt, Zombie Stomp, Smashing Pumpkins, Silver Bullet, Hairy Larry, Ghostbusting, The Rescue, The Collection
+Picking up a monster doll drop.
+Completing the achievement tied to a badge.
 
-## Why isn't my item where the spoiler says it should be?
-
-Uh oh
 
 ## What does another world's item look like in Loonyland?
 
