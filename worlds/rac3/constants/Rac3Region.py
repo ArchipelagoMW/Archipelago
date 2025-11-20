@@ -1,4 +1,4 @@
-from constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.Rac3Items import RAC3ITEM
 
 
 class RAC3REGION:

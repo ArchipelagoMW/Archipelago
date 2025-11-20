@@ -1,4 +1,4 @@
-from constants.data.Rac3PositionData import RAC3POSITIONDATA
+from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
 
 class RAC3CHECKPOINT:
     FLORANA_SHIP = RAC3POSITIONDATA(478.94168, 597.269287, 315.347198)

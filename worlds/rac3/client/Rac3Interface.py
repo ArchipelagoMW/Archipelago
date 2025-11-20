@@ -6,21 +6,21 @@ from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
-from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
+from worlds.rac3.constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
                                          non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
                                          trap_to_status, vidcomic_data, weapon_upgrade_data)
-from constants.data.Rac3PositionData import RAC3POSITIONDATA
-from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
-from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
-from constants.locations.Rac3General import RAC3LOCATION
-from constants.Rac3CheckType import CHECKTYPE
-from constants.Rac3Deaths import DEATH_FROM_ACTION
-from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
-from constants.Rac3Status import RAC3STATUS
-from pcsx2_interface.pine import Pine
+from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
+from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
+from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
+from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
+from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
+from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.pcsx2_interface.pine import Pine
 
 
 class Dummy(IntEnum):
@@ -85,6 +85,7 @@ class GameInterface:
             game_id = self.pcsx2_interface.get_game_id()
             # The first read of the address will be null if the client is faster than the emulator
             self.current_game = None
+            self.logger.info(f'Game ID: {game_id}')
             if game_id == RAC3STATUS.GAME_ID:
                 self.current_game = game_id
             if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
@@ -92,8 +93,8 @@ class GameInterface:
                 self.game_id_error = game_id
         except RuntimeError:
             pass
-        except ConnectionError:
-            pass
+        except ConnectionError as e:
+            self.logger.warning(f'Connection to PCSX2 Emulator lost: {e}')
 
     def disconnect_from_game(self):
         self.pcsx2_interface.disconnect()
@@ -543,9 +544,11 @@ class Rac3Interface(GameInterface):
     def teleport_to_ship(self, planet):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
         if planet_checkpoint and self.allowed_to_teleport(planet):
+            self.logger.info(f'Teleporting to ship at planet: {planet}')
             self.teleport_to_coords(planet_checkpoint)
         else:
             # Force respawn instead if teleport not allowed
+            self.logger.info(f'Teleport not allowed at planet: {planet}, forcing respawn instead')
             self.force_respawn()
     
     def teleport_to_coords(self, coords: RAC3POSITIONDATA):

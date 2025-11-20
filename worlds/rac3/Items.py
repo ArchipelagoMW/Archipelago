@@ -2,10 +2,10 @@ from logging import DEBUG, getLogger
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from constants.data.Rac3ItemData import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT, non_prog_weapon_data,
+from worlds.rac3.constants.data.Rac3ItemData import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT, non_prog_weapon_data,
                                          prog_weapon_data, progressive_data)
-from constants.Rac3Items import RAC3ITEM
-from constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World

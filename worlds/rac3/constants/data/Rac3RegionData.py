@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from constants.Rac3Region import RAC3REGION
-from constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.Rac3Status import RAC3STATUS
 from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
-from constants.Rac3Checkpoint import RAC3CHECKPOINT
+from worlds.rac3.constants.Rac3Checkpoint import RAC3CHECKPOINT
 
 
 @dataclass

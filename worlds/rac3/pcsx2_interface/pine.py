@@ -161,7 +161,7 @@ class Pine:
 
     def write_float(self, address: int, value: float) -> None:
         request = Pine._create_request(Pine.IPCCommand.WRITE32, address, 9 + Pine.DataSize.INT32)
-        request + struct.pack("<f", value)
+        request += struct.pack("<f", value)
         self._send_request(request)
 
     def write_bytes(self, address: int, data: bytes) -> None:

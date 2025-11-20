@@ -1,24 +1,24 @@
 from dataclasses import dataclass
 from typing import Any, List
 
-from constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from Options import OptionGroup, StartInventoryPool
-from options.Deathlink import Deathlink
-from options.Exclude import RAC3ExcludeLocations
-from options.ExtraArmor import ExtraArmorUpgrade
-from options.Multiplier import BoltAndXPMultiplier
-from options.Nanotech import NanotechMilestones
-from options.ProgWeapons import EnableProgressiveWeapons
-from options.RatchetSkins import RatchetSkin
-from options.ShipNose import ShipNose
-from options.ShipSkin import ShipSkin
-from options.ShipWings import ShipWings
-from options.Skillpoints import SkillPoints
-from options.StartingWeapons import StartingWeapons
-from options.TitaniumBolts import TitaniumBolts
-from options.Traps import EnableTraps
-from options.TrapWeight import TrapWeight
-from options.Trophies import Trophies
+from worlds.rac3.options.Deathlink import Deathlink
+from worlds.rac3.options.Exclude import RAC3ExcludeLocations
+from worlds.rac3.options.ExtraArmor import ExtraArmorUpgrade
+from worlds.rac3.options.Multiplier import BoltAndXPMultiplier
+from worlds.rac3.options.Nanotech import NanotechMilestones
+from worlds.rac3.options.ProgWeapons import EnableProgressiveWeapons
+from worlds.rac3.options.RatchetSkins import RatchetSkin
+from worlds.rac3.options.ShipNose import ShipNose
+from worlds.rac3.options.ShipSkin import ShipSkin
+from worlds.rac3.options.ShipWings import ShipWings
+from worlds.rac3.options.Skillpoints import SkillPoints
+from worlds.rac3.options.StartingWeapons import StartingWeapons
+from worlds.rac3.options.TitaniumBolts import TitaniumBolts
+from worlds.rac3.options.Traps import EnableTraps
+from worlds.rac3.options.TrapWeight import TrapWeight
+from worlds.rac3.options.Trophies import Trophies
 from worlds.AutoWorld import PerGameCommonOptions
 
 

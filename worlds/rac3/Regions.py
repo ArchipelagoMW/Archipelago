@@ -1,12 +1,12 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
-from constants.locations.Rac3Nanotech import RAC3NANOTECH
-from constants.locations.Rac3Tags import RAC3TAG
-from constants.Rac3Items import RAC3ITEM
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
+from worlds.rac3.constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
