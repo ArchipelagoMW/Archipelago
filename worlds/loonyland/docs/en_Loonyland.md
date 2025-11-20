@@ -6,7 +6,7 @@
 
 ## How do I connect?
 
-Once in game, go to the extras menu and find 
+Once in game, go to the extras menu and find AP Rando. Put in the IP, slot, and password and click connect!
 
 
 ## What does randomization do to this game?
