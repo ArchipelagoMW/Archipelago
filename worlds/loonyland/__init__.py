@@ -81,12 +81,15 @@ class LoonylandWorld(World):
         ):
             raise OptionError("Cannot have badges set to none with wincon as Badges")
 
-    def create_junk(self) -> LoonylandItem:
-        return LoonylandItem("Max Life and Gems", ItemClassification.filler, loonyland_base_id + 3000, self.player)
+
+    def get_filler_item_name(self) -> str:
+        """Called when the item pool needs to be filled with additional items to match location count."""
+        return "Max Life and Gems"
+
 
     def create_item(self, name: str) -> LoonylandItem:
         if name == "Max Life and Gems":
-            return self.create_junk()
+            return LoonylandItem("Max Life and Gems", ItemClassification.filler, loonyland_base_id + 3000, self.player)
         return LoonylandItem(
             name, loony_item_table[name].modified_classification(self.options), loony_item_table[name].id, self.player
         )
@@ -100,7 +103,7 @@ class LoonylandWorld(World):
                     item_pool.append(new_item)
 
         junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
-        item_pool += [self.create_junk() for _ in range(junk_len)]
+        item_pool += [self.create_filler() for _ in range(junk_len)]
 
         self.multiworld.itempool += item_pool
 
