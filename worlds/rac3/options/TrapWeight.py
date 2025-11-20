@@ -1,4 +1,4 @@
-from constants.data.Rac3ItemData import trap_data
+from worlds.rac3.constants.data.Rac3ItemData import trap_data
 from Options import ItemDict
 from worlds.rac3 import RAC3OPTION
 

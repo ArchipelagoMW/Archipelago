@@ -1,4 +1,4 @@
-from constants.locations.Rac3Tags import RAC3TAG
+from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
 from Options import ExcludeLocations
 
 

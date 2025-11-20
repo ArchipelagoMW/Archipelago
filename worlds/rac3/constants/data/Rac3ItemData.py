@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from typing import Optional
 
 from BaseClasses import ItemClassification
-from constants.Rac3Items import RAC3ITEM, UPGRADE_DICT
-from constants.Rac3ItemTags import RAC3ITEMTAG
-from constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.Rac3Items import RAC3ITEM, UPGRADE_DICT
+from worlds.rac3.constants.Rac3ItemTags import RAC3ITEMTAG
+from worlds.rac3.constants.Rac3Status import RAC3STATUS
 
 
 @dataclass

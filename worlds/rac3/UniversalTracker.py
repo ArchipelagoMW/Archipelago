@@ -1,9 +1,9 @@
 from typing import Any, TYPE_CHECKING
 
-from constants.data.Rac3LocationData import UT_MAPPING
-from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.Rac3LocationData import UT_MAPPING
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World

@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
-from constants.data.Rac3AddressData import RAC3ADDRESSDATA
-from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from constants.locations.Rac3General import RAC3LOCATION
-from constants.locations.Rac3Nanotech import RAC3NANOTECH
-from constants.locations.Rac3Sewers import RAC3SEWER
-from constants.locations.Rac3Skillpoints import RAC3SKILLPOINT
-from constants.locations.Rac3Tags import RAC3TAG
-from constants.locations.Rac3TBolts import RAC3TBOLT
-from constants.locations.Rac3Trophies import RAC3TROPHY
-from constants.locations.Rac3Vendors import RAC3VENDOR
-from constants.Rac3CheckType import CHECKTYPE
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.Rac3AddressData import RAC3ADDRESSDATA
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
+from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.Rac3Sewers import RAC3SEWER
+from worlds.rac3.constants.locations.Rac3Skillpoints import RAC3SKILLPOINT
+from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
+from worlds.rac3.constants.locations.Rac3TBolts import RAC3TBOLT
+from worlds.rac3.constants.locations.Rac3Trophies import RAC3TROPHY
+from worlds.rac3.constants.locations.Rac3Vendors import RAC3VENDOR
+from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 
 LOCATION_NAME_TO_ID: dict[str, int] = {
     RAC3LOCATION.VELDIN_FIRST_RANGER: 0,
