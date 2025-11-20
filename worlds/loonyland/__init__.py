@@ -165,9 +165,9 @@ class LoonylandWorld(World):
         torch_loc.place_locked_item(self.create_item("Torch"))
 
         # location rules
-        set_rules(self.multiworld, self)
+        set_rules(self)
         # entrance rules
-        set_entrance_rules(self.multiworld, self)
+        set_entrance_rules(self)
 
     def fill_slot_data(self):
         return {
