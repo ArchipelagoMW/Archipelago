@@ -19,6 +19,7 @@ explorer_mode_options = {
     "auto_spend_lp":                 True,
     "auto_equip_passives":           True,
     "item_info_mode":                ItemInfoMode.option_obscured,
+    "disable_sparks":                True,
 }
 
 crystal_project_options_presets: Dict[str, Dict[str, Any]] = {
