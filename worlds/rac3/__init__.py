@@ -135,6 +135,7 @@ class RaC3World(World):
             RAC3OPTION.TRAP_WEIGHT: self.options.trap_weight.value,
             RAC3OPTION.RANGERS: self.options.rangers.value,
             RAC3OPTION.ARENA: self.options.arena.value,
+            RAC3OPTION.VIDCOMICS: self.options.vidcomics.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self)
         }
 

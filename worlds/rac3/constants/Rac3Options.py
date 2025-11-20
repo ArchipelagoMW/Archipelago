@@ -22,3 +22,4 @@ class RAC3OPTION:
     TRAP_WEIGHT = "trap_weight"
     RANGERS = "rangers"
     ARENA = "arena"
+    VIDCOMICS = "vidcomics"

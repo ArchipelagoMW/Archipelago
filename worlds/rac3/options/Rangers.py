@@ -11,4 +11,4 @@ class Rangers(Choice):
     display_name = RAC3OPTION.RANGERS
     option_disabled = 0
     option_enabled = 1
-    default = 0
+    default = 1

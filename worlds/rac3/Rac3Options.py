@@ -22,6 +22,7 @@ from options.Trophies import Trophies
 from worlds.AutoWorld import PerGameCommonOptions
 from options.Rangers import Rangers
 from options.Arena import Arena
+from options.VidComics import VidComics
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -54,11 +55,12 @@ class RaC3Options(PerGameCommonOptions):
     trap_weight: TrapWeight
     rangers: Rangers
     arena: Arena
+    vidcomics: VidComics
 
 
 rac3_option_groups: dict[str, List[Any]] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight, Rangers, Arena],
+                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight, Rangers, Arena, VidComics],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -83,4 +85,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.TRAP_WEIGHT,
     RAC3OPTION.RANGERS,
     RAC3OPTION.ARENA,
+    RAC3OPTION.VIDCOMICS,
 ]
