@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import IntEnum
 from logging import Logger
 from random import randint
-from struct import unpack
+from struct import unpack, pack
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
@@ -66,6 +66,9 @@ class GameInterface:
 
     def _write_bytes(self, address: int, value: bytes):
         self.pcsx2_interface.write_bytes(address, value)
+    
+    def _write_float(self, address: int, value: float):
+        self.pcsx2_interface.write_float(address, value)
 
     def connect_to_game(self):
         """
@@ -535,6 +538,16 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
+
+    def teleport_to_ship(self, planet):
+        planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
+        playing_as_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
+        current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+        aboard_leviathan = planet == RAC3REGION.ZELDRIN_STARPORT and current_Z < 110.0
+        if planet_checkpoint and not playing_as_clank and not aboard_leviathan:
+            self._write_float(RAC3STATUS.RATCHET_X, planet_checkpoint.X)
+            self._write_float(RAC3STATUS.RATCHET_Y, planet_checkpoint.Y)
+            self._write_float(RAC3STATUS.RATCHET_Z, planet_checkpoint.Z)
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):

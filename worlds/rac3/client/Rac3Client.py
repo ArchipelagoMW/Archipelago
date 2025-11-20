@@ -9,6 +9,7 @@ from client.Rac3Interface import Rac3Interface
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from constants.Rac3Options import RAC3OPTION
 from constants.Rac3Region import RAC3REGION
+
 from Utils import Any, async_start, Dict, init_logging
 
 # Load Universal Tracker modules with aliases
@@ -67,6 +68,11 @@ class CommandProcessor(ClientCommandProcessor):
                     self.output(f"Death Link = {self.ctx.slot_data[RAC3OPTION.DEATHLINK]}")
             else:
                 self.output(f"Death Link not found in slot_data. You are probably not connected")
+    
+    def _cmd_teleport_ship(self):
+        """Teleport to the ship of the specified region."""
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
 
 
 class Rac3Context(CommonContext):
