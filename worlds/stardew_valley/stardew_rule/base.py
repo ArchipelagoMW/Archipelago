@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
 from threading import Lock
-from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
+from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional, cast
 
 from BaseClasses import CollectionState
 from .literal import true_, false_, LiteralStardewRule
@@ -318,6 +318,7 @@ class Or(AggregatingStardewRule):
             return Or(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is Or:
+            other = cast(Or, other)
             return Or(_combinable_rules=self.merge(self.combinable_rules, other.combinable_rules),
                       _simplification_state=self.simplification_state.merge(other.simplification_state))
 
@@ -344,6 +345,7 @@ class And(AggregatingStardewRule):
             return And(_combinable_rules=other.add_into(self.combinable_rules, self.combine), _simplification_state=self.simplification_state)
 
         if type(other) is And:
+            other = cast(And, other)
             return And(_combinable_rules=self.merge(self.combinable_rules, other.combinable_rules),
                        _simplification_state=self.simplification_state.merge(other.simplification_state))
 

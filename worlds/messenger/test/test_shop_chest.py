@@ -1,4 +1,4 @@
-from BaseClasses import ItemClassification, CollectionState
+from BaseClasses import CollectionState, ItemClassification
 from . import MessengerTestBase
 
 
@@ -10,8 +10,9 @@ class AllSealsRequired(MessengerTestBase):
     def test_chest_access(self) -> None:
         """Defaults to a total of 45 power seals in the pool and required."""
         with self.subTest("Access Dependency"):
-            self.assertEqual(len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]),
-                             self.world.options.total_seals)
+            self.assertEqual(
+                len([seal for seal in self.multiworld.itempool if seal.name == "Power Seal"]),
+                self.world.options.total_seals)
             locations = ["Rescue Phantom"]
             items = [["Power Seal"]]
             self.assertAccessDependency(locations, items)
@@ -93,3 +94,22 @@ class MaxSealsWithShards(MessengerTestBase):
                           if seal.classification == ItemClassification.progression_skip_balancing]
         self.assertEqual(len(total_seals), 85)
         self.assertEqual(len(required_seals), 85)
+
+
+class NoSealsRequired(MessengerTestBase):
+    options = {
+        "goal": "power_seal_hunt",
+        "total_seals": 1,
+        "percent_seals_required": 10,  # percentage
+    }
+
+    def test_seals_amount(self) -> None:
+        """Should be 1 seal and it should be progression."""
+        self.assertEqual(self.world.options.total_seals, 1)
+        self.assertEqual(self.world.total_seals, 1)
+        self.assertEqual(self.world.required_seals, 1)
+        total_seals = [item for item in self.multiworld.itempool if item.name == "Power Seal"]
+        required_seals = [item for item in self.multiworld.itempool if
+                          item.advancement and item.name == "Power Seal"]
+        self.assertEqual(len(total_seals), 1)
+        self.assertEqual(len(required_seals), 1)

@@ -31,6 +31,13 @@ class WitnessItem(Item):
     Item from the game The Witness
     """
     game: str = "The Witness"
+    eggs: int = 0
+
+    @classmethod
+    def make_egg_event(cls, item_name: str, player: int):
+        ret = cls(item_name, ItemClassification.progression, None, player)
+        ret.eggs = int(item_name[1:].split(" ", 1)[0])
+        return ret
 
 
 class WitnessPlayerItems:
@@ -58,13 +65,16 @@ class WitnessPlayerItems:
             or name in player_logic.PROGRESSION_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        # Downgrade door items
+        # Downgrade door items and make lasers local if local lasers is on
         for item_name, item_data in self.item_data.items():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
             if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
+
+            if item_data.definition.category == ItemCategory.LASER and self._world.options.shuffle_lasers == "local":
+                item_data.local_only = True
 
         # Build the mandatory item list.
         self._mandatory_items: Dict[str, int] = {}
@@ -204,20 +214,17 @@ class WitnessPlayerItems:
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._multiworld.plando_items[self._player_id]:
-            if plando_setting.get("from_pool", True):
-                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
-                    if isinstance(plando_setting[item_setting_key], str):
-                        output -= {plando_setting[item_setting_key]}
-                    elif isinstance(plando_setting[item_setting_key], dict):
-                        output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
-                    else:
-                        # Assume this is some other kind of iterable.
-                        for inner_item in plando_setting[item_setting_key]:
-                            if isinstance(inner_item, str):
-                                output -= {inner_item}
-                            elif isinstance(inner_item, dict):
-                                output -= {item for item, weight in inner_item.items() if weight}
+        for plando_setting in self._world.options.plando_items:
+            if plando_setting.from_pool:
+                if isinstance(plando_setting.items, dict):
+                    output -= {item for item, weight in plando_setting.items.items() if weight}
+                else:
+                    # Assume this is some other kind of iterable.
+                    for inner_item in plando_setting.items:
+                        if isinstance(inner_item, str):
+                            output -= {inner_item}
+                        elif isinstance(inner_item, dict):
+                            output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
         return sorted(output)

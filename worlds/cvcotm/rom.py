@@ -22,11 +22,9 @@ if TYPE_CHECKING:
 
 CVCOTM_CT_US_HASH = "50a1089600603a94e15ecf287f8d5a1f"  # Original GBA cartridge ROM
 CVCOTM_AC_US_HASH = "87a1bd6577b6702f97a60fc55772ad74"  # Castlevania Advance Collection ROM
-CVCOTM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console ROM
+# CVCOTM_VC_US_HASH = "2cc38305f62b337281663bad8c901cf9"  # Wii U Virtual Console ROM
 
-# NOTE: The Wii U VC version is untested as of when this comment was written. I am only including its hash in case it
-# does work. If someone who has it can confirm it does indeed work, this comment should be removed. If it doesn't, the
-# hash should be removed in addition. See the Game Page for more information about supported versions.
+# The Wii U VC version is not currently supported. See the Game Page for more info.
 
 ARCHIPELAGO_IDENTIFIER_START = 0x7FFF00
 ARCHIPELAGO_IDENTIFIER = "ARCHIPELAG03"
@@ -337,8 +335,8 @@ class CVCotMPatchExtensions(APPatchExtension):
             rom_data.write_bytes(0x679A60, patches.kickless_roc_height_shortener)
 
         # Give the player their Start Inventory upon entering their name on a new file.
-        rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x68, 0x08])
-        rom_data.write_bytes(0x680000, patches.start_inventory_giver)
+        rom_data.write_bytes(0x7F70, [0x00, 0x48, 0x87, 0x46, 0x00, 0x00, 0x69, 0x08])
+        rom_data.write_bytes(0x690000, patches.start_inventory_giver)
 
         # Prevent Max Ups from exceeding 255.
         rom_data.write_bytes(0x5E170, [0x00, 0x4A, 0x97, 0x46, 0x00, 0x00, 0x6A, 0x08])
@@ -518,7 +516,8 @@ class CVCotMPatchExtensions(APPatchExtension):
 
 
 class CVCotMProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
+    # hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]
+    hash = [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]
     patch_file_ending: str = ".apcvcotm"
     result_file_ending: str = ".gba"
 
@@ -585,7 +584,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]:
+        # if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH, CVCOTM_VC_US_HASH]:
+        if basemd5.hexdigest() not in [CVCOTM_CT_US_HASH, CVCOTM_AC_US_HASH]:
             raise Exception("Supplied Base ROM does not match known MD5s for Castlevania: Circle of the Moon USA."
                             "Get the correct game and version, then dump it.")
         setattr(get_base_rom_bytes, "base_rom_bytes", base_rom_bytes)

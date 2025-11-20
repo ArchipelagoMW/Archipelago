@@ -1,6 +1,6 @@
+from ..bases import SVTestBase
 from ...locations import LocationTags, location_table
 from ...options import BuildingProgression, Shipsanity
-from ...test import SVTestBase
 
 
 class TestShipsanityNone(SVTestBase):
@@ -69,14 +69,15 @@ class TestShipsanityEverything(SVTestBase):
     def test_all_shipsanity_locations_require_shipping_bin(self):
         bin_name = "Shipping Bin"
         self.collect_all_except(bin_name)
-        shipsanity_locations = [location for location in self.get_real_locations() if
-                                LocationTags.SHIPSANITY in location_table[location.name].tags]
+        shipsanity_locations = [location
+                                for location in self.get_real_locations()
+                                if LocationTags.SHIPSANITY in location_table[location.name].tags]
         bin_item = self.create_item(bin_name)
+
         for location in shipsanity_locations:
             with self.subTest(location.name):
-                self.remove(bin_item)
-                self.assertFalse(self.world.logic.region.can_reach_location(location.name)(self.multiworld.state))
-                self.multiworld.state.collect(bin_item)
-                shipsanity_rule = self.world.logic.region.can_reach_location(location.name)
-                self.assert_rule_true(shipsanity_rule, self.multiworld.state)
+                self.assert_cannot_reach_location(location.name)
+
+                self.collect(bin_item)
+                self.assert_can_reach_location(location.name)
                 self.remove(bin_item)
