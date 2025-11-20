@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 
 @dataclass
-class RAC3CHECKPOINTDATA:
+class RAC3POSITIONDATA:
 
     X : float = 0.0
     Y : float = 0.0

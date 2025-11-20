@@ -3,12 +3,13 @@ from dataclasses import dataclass
 from enum import IntEnum
 from logging import Logger
 from random import randint
-from struct import unpack, pack
+from struct import unpack
 from typing import Dict, Optional
 
 from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
                                          non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
                                          trap_to_status, vidcomic_data, weapon_upgrade_data)
+from constants.data.Rac3PositionData import RAC3POSITIONDATA
 from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
@@ -541,13 +542,61 @@ class Rac3Interface(GameInterface):
 
     def teleport_to_ship(self, planet):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
+        if planet_checkpoint and self.allowed_to_teleport(planet):
+            self.teleport_to_coords(planet_checkpoint)
+        else:
+            # Force respawn instead if teleport not allowed
+            self.force_respawn()
+    
+    def teleport_to_coords(self, coords: RAC3POSITIONDATA):
+        self._write_float(RAC3STATUS.RATCHET_X, coords.X)
+        self._write_float(RAC3STATUS.RATCHET_Y, coords.Y)
+        self._write_float(RAC3STATUS.RATCHET_Z, coords.Z)
+
+    def allowed_to_teleport(self, planet):
         playing_as_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-        aboard_leviathan = planet == RAC3REGION.ZELDRIN_STARPORT and current_Z < 110.0
-        if planet_checkpoint and not playing_as_clank and not aboard_leviathan:
-            self._write_float(RAC3STATUS.RATCHET_X, planet_checkpoint.X)
-            self._write_float(RAC3STATUS.RATCHET_Y, planet_checkpoint.Y)
-            self._write_float(RAC3STATUS.RATCHET_Z, planet_checkpoint.Z)
+        if playing_as_clank:
+            return False
+        match planet:
+            case RAC3REGION.FLORANA:
+                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+                in_path_of_death = current_Z < 150
+                return not in_path_of_death
+            case RAC3REGION.STARSHIP_PHOENIX:
+                current_X = self._read_float(RAC3STATUS.RATCHET_X)
+                in_vr = current_X > 210
+                return not in_vr
+            case RAC3REGION.MARCADIA:
+                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+                current_Y = self._read_float(RAC3STATUS.RATCHET_Y)
+                at_palace = current_Y > 800
+                in_ldf = current_Z > 250.0
+                return not (at_palace or in_ldf)
+            case RAC3REGION.TYHRRANOSIS:
+                # TODO: use location data table once this becomes a check
+                intro_mission_done = self._read8(0x001426F8) == 1
+
+                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+                fighting_momma_tyhrranoid = current_Z > 300.0
+                return intro_mission_done and not fighting_momma_tyhrranoid
+            case RAC3REGION.OBANI_GEMINI:
+                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+                # Gemini is between 700-800
+                # Pollux is about 200-300
+                on_pollux = current_Z < 500.0
+                return not on_pollux
+            case RAC3REGION.OBANI_DRACO:
+                current_X = self._read_float(RAC3STATUS.RATCHET_X)
+                fighting_courtney = current_X > 600
+                return not fighting_courtney
+            case RAC3REGION.ZELDRIN_STARPORT:
+                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
+                aboard_leviathan = current_Z < 110.0
+                return not aboard_leviathan
+        return True
+    
+    def force_respawn(self):
+        self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):

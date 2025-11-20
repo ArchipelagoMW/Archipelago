@@ -3,7 +3,7 @@ from typing import Optional
 
 from constants.Rac3Region import RAC3REGION
 from constants.Rac3Status import RAC3STATUS
-from constants.data.Rac3CheckpointData import RAC3CHECKPOINTDATA
+from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
 from constants.Rac3Checkpoint import RAC3CHECKPOINT
 
 
@@ -11,15 +11,15 @@ from constants.Rac3Checkpoint import RAC3CHECKPOINT
 class RAC3REGIONDATA:
     ID: int = None
     SLOT_ADDRESS: Optional[int] = None
-    CHECKPOINT: Optional[RAC3CHECKPOINTDATA] = None
+    CHECKPOINT: Optional[RAC3POSITIONDATA] = None
 
     def __init__(self,
                  idx: Optional[int] = None,
                  slot: Optional[int] = None,
-                 checkpoint: Optional[RAC3CHECKPOINTDATA] = None):
+                 checkpoint: Optional[RAC3POSITIONDATA] = None):
         self.ID: Optional[int] = idx
         self.SLOT_ADDRESS: Optional[int] = slot
-        self.CHECKPOINT: Optional[RAC3CHECKPOINTDATA] = checkpoint
+        self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
 
     @staticmethod
     def construct_slot(slot: int):

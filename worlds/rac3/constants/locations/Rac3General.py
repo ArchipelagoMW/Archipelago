@@ -105,6 +105,7 @@ class RAC3LOCATION:
     NATION_MAZE_OF_BLAZE = "Annihilation Nation 2: Maze of Blaze"
     NATION_CREMATION_STATION = "Annihilation Nation 2: Cremation Station"
     NATION_THE_ANNIHILATOR = "Annihilation Nation 2: The Annihilator (Gauntlet)"
+    TYHRRANOSIS_INTRO = "Tyhrranosis: Rendezvous on Tyhrranosis"
     TYHRRANOSIS_BOSS = "Tyhrranosis: Destroy the Momma Tyhrranoid"
     TYHRRANOSIS_RANGERS_1 = "Tyhrranosis: Operation ISLAND STRIKE 1: Assault on Kavu Island"
     TYHRRANOSIS_RANGERS_2 = "Tyhrranosis: Operation ISLAND STRIKE 2: Dogfight over Kavu Island"
