@@ -169,18 +169,18 @@ class LoonylandWorld(World):
         set_entrance_rules(self)
 
     def fill_slot_data(self):
-        return {
-            "WinCondition": self.options.win_condition.value,
-            "BadgesRequired": self.options.badges_required.value,
-            "Difficulty": self.options.difficulty.value,
-            "LongChecks": self.options.long_checks.value,
-            "MultipleSaves": self.options.multisave.value,
-            "Remix": self.options.remix.value,
-            "OverpoweredCheats": self.options.overpowered_cheats.value,
-            "Badges": self.options.badges.value,
-            "Dolls": self.options.dolls.value,
-            "DeathLink": self.options.death_link.value,
-        }
+        return self.options.as_dict(
+            "win_condition",
+            "badges_required",
+            "difficulty",
+            "long_checks",
+            "multisave",
+            "remix",
+            "overpowered_cheats",
+            "badges",
+            "dolls",
+            "death_link"
+        )
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         value = super().collect(state, item)
