@@ -239,5 +239,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
                 elif options.nanotech_milestones.value == 3 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
+            case RAC3TAG.RANGERS:
+                if options.rangers.value == 0:
+                    return True # Skips ranger missions locations if rangers option is disabled
             # Add more conditions here if needed in the future
     return False
