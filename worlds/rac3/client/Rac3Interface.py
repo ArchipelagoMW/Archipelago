@@ -548,7 +548,15 @@ class Rac3Interface(GameInterface):
         if is_paused and pressed_square:
             planet_id = self._read8(RAC3STATUS.PLANET)
             planet = PLANET_NAME_FROM_ID[planet_id]
+            self.unpause_game()
             self.teleport_to_ship(planet)
+    
+    def unpause_game(self):
+        is_paused = self._read8(RAC3STATUS.PAUSE)
+        if is_paused:
+            current_input = self._read16(RAC3STATUS.INPUT)
+            new_input = current_input & ~RAC3INPUT.START
+            self._write16(RAC3STATUS.INPUT, new_input)
 
     def teleport_to_ship(self, planet):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
