@@ -99,9 +99,7 @@ class LoonylandWorld(World):
                     new_item = self.create_item(name)
                     item_pool.append(new_item)
 
-        junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool) - 1
-        if self.options.win_condition == WinCondition.option_evilizer:
-            junk_len = junk_len - 1
+        junk_len = len(self.multiworld.get_unfilled_locations(self.player)) - len(item_pool)
         item_pool += [self.create_junk() for _ in range(junk_len)]
 
         self.multiworld.itempool += item_pool
@@ -142,7 +140,6 @@ class LoonylandWorld(World):
                 f'for amount required ("{self.options.badges_required}")'
             )
 
-    def set_rules(self):
         # Completion condition.
         final_loc = None
         if self.options.win_condition == WinCondition.option_evilizer:
@@ -163,6 +160,8 @@ class LoonylandWorld(World):
         # force torch at curse the darkness
         torch_loc = self.get_location("Q: Curse The Darkness")
         torch_loc.place_locked_item(self.create_item("Torch"))
+
+    def set_rules(self):
 
         # location rules
         set_rules(self)
