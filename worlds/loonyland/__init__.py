@@ -1,4 +1,4 @@
-from BaseClasses import ItemClassification, Region, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Region, Tutorial
 
 from Options import OptionError
 from worlds.AutoWorld import WebWorld, World
@@ -81,11 +81,9 @@ class LoonylandWorld(World):
         ):
             raise OptionError("Cannot have badges set to none with wincon as Badges")
 
-
     def get_filler_item_name(self) -> str:
         """Called when the item pool needs to be filled with additional items to match location count."""
         return "Max Life and Gems"
-
 
     def create_item(self, name: str) -> LoonylandItem:
         if name == "Max Life and Gems":
@@ -165,7 +163,6 @@ class LoonylandWorld(World):
         torch_loc.place_locked_item(self.create_item("Torch"))
 
     def set_rules(self):
-
         # location rules
         set_rules(self)
         # entrance rules
@@ -184,3 +181,24 @@ class LoonylandWorld(World):
             "Dolls": self.options.dolls.value,
             "DeathLink": self.options.death_link.value,
         }
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        value = super().collect(state, item)
+        if item.name in self.item_name_groups["power"]:
+            state.prog_items[self.player]["total_power"] += 1
+        if item.name in self.item_name_groups["power_big"]:
+            state.prog_items[self.player]["total_power"] += 5
+        if item.name in self.item_name_groups["power_max"]:
+            state.prog_items[self.player]["total_power"] += 50
+        return value
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        value = super().remove(state, item)
+
+        if item.name in self.item_name_groups["power"]:
+            state.prog_items[self.player]["total_power"] -= 1
+        if item.name in self.item_name_groups["power_big"]:
+            state.prog_items[self.player]["total_power"] -= 5
+        if item.name in self.item_name_groups["power_max"]:
+            state.prog_items[self.player]["total_power"] -= 50
+        return value

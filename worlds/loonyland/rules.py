@@ -110,8 +110,4 @@ def can_do_collection(state: CollectionState, player: int) -> bool:
 
 
 def power_level(state: CollectionState, player: int, level_goal: int) -> bool:
-    level: int = 0
-    level += state.count_group("power", player)
-    level += state.count_group("power_big", player) * 5
-    level += state.count_group("power_max", player) * 50
-    return level > level_goal
+    return state.count("total_power", player) > level_goal
