@@ -1346,7 +1346,6 @@ class SC2Logic:
                     item_names.MISTWING,
                     item_names.CALADRIUS,
                     item_names.OPPRESSOR,
-                    item_names.PULSAR,
                     item_names.DRAGOON,
                 },
                 self.player,
