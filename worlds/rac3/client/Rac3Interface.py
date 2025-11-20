@@ -16,6 +16,7 @@ from worlds.rac3.constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
 from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
 from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
+from worlds.rac3.constants.Rac3Input import RAC3INPUT
 from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from worlds.rac3.constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
@@ -165,6 +166,7 @@ class Rac3Interface(GameInterface):
         self.vidcomic_cycler()
         self.armor_cycler()
         self.trap_cycler()
+        self.input_cycler()
         self.verify_quick_select_and_last_used()
         # Proc Options
         self._write8(RAC3STATUS.MULTIPLIER, self.boltAndXPMultiplierValue)
@@ -539,6 +541,12 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
+
+    def input_cycler(self):
+        is_paused = self._read8(RAC3STATUS.PAUSE)
+        pressed_square = self._read16(RAC3STATUS.INPUT) & RAC3INPUT.SQUARE
+        if is_paused and pressed_square:
+            self.teleport_to_ship(self.current_planet)
 
     def teleport_to_ship(self, planet):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
