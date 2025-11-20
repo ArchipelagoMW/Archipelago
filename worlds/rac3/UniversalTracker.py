@@ -33,6 +33,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.arena.value = world.passthrough[RAC3OPTION.ARENA]
             world.options.vidcomics.value = world.passthrough[RAC3OPTION.VIDCOMICS]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
+            world.options.vrchallenges.value = world.passthrough[RAC3OPTION.VRCHALLENGES]
         else:
             world.using_ut = False
     else:

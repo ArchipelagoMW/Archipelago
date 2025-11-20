@@ -23,3 +23,4 @@ class RAC3OPTION:
     RANGERS = "rangers"
     ARENA = "arena"
     VIDCOMICS = "vidcomics"
+    VRCHALLENGES = "vr_challenges"
