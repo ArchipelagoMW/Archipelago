@@ -1825,6 +1825,7 @@ class SC2Logic:
                     item_names.DESTROYER,
                     item_names.TEMPEST,
                     item_names.VOID_RAY,
+                    item_names.SCOUT,
                 ), self.player)
                 or (
                     (
@@ -1838,7 +1839,7 @@ class SC2Logic:
                     )
                     and (
                         # handle brood lords and virophages
-                        state.has_any((item_names.SCOUT, item_names.MISTWING, item_names.CALADRIUS), self.player)
+                        state.has_any((item_names.MISTWING, item_names.CALADRIUS), self.player)
                     )
                 )
             )
