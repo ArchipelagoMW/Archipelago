@@ -3,6 +3,7 @@ from worlds.rac3 import RAC3OPTION
 
 
 class SkillPoints(Choice):
+    # Todo: Update skill points
     """
     Determines which skill points are locations in the world.
     None: No skill points are locations.

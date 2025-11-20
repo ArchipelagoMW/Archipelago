@@ -17,7 +17,7 @@ from constants.Rac3CheckType import CHECKTYPE
 from constants.Rac3Deaths import DEATH_FROM_ACTION
 from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
 from constants.Rac3Status import RAC3STATUS
 from pcsx2_interface.pine import Pine
 
@@ -258,10 +258,10 @@ class Rac3Interface(GameInterface):
                         self.trap_timers[name] += 10
                     else:
                         self.trap_timers[name] = int(time.time()) + 10
-
-        if name in equipable_data.keys():
-            if equipable_data[name].AMMO:
-                self._write8(equipable_data[name].AMMO_ADDRESS, equipable_data[name].AMMO)
+        if name in non_prog_weapon_data.keys():
+            if non_prog_weapon_data[name].AMMO:
+                self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
+        if name in equipable_data.keys() and self.UnlockItem[name].status == 1:
             self.update_equip(name)
 
     def is_location_checked(self, ap_code) -> bool:
@@ -409,17 +409,22 @@ class Rac3Interface(GameInterface):
     def planet_cycler(self):
         # self.logger.debug('---------PlanetCycler Start---------')
         for name in planet_data.keys():
-            planet = planet_data[name]
+            planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
             if self.UnlockItem[name].status:
-                addr = 4 * (self.UnlockItem[name].status - 1) + RAC3STATUS.PLANET_SLOT_ADDRESS
+                addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
                 # Don't allow planets that can softlock
                 if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status) and
                     (name != RAC3ITEM.HOLOSTAR_STUDIOS or
                      (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
                     if self.UnlockItem[name].unlock_delay:
+                        # self.logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
                         self._write8(addr, planet.ID)
                     else:
                         self.UnlockItem[name].unlock_delay += 1
+        for number, slot in enumerate(SHIP_SLOTS):
+            if number > self.UnlockItem[RAC3REGION.SLOT_0].status:
+                # self.logger.debug(f'Remove planet at {slot}')
+                self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
         # self.logger.debug('---------PlanetCycler End---------')
 
     def vidcomic_cycler(self):

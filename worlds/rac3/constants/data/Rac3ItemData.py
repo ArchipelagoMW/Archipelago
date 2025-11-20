@@ -489,13 +489,13 @@ item_table: dict[str, RAC3ITEMDATA] = {
     **gadget_data,
     **planet_data,
     **filler_data,
+    **trap_data,
 }
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
 trap_to_status: dict[str, int] = {
     RAC3ITEM.LOCK_TRAP: RAC3STATUS.WEAPON_LOCK,
 }
 
-# Todo: Add Item Groups (see location_groups)
 item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.ARMOR: set(armor_data.keys()),
     RAC3ITEMTAG.EQUIPABLE: set(equipable_data.keys()),

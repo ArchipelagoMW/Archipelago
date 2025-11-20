@@ -25,7 +25,7 @@ def create_itempool(world: "RaC3World") -> List[Item]:
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table[name].AP_CLASSIFICATION
-        if item_type == ItemClassification.filler:
+        if item_type == ItemClassification.filler or item_type == ItemClassification.trap:
             continue
         item_amount: int = item_counts.get(name)
 
