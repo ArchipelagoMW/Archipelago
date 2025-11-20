@@ -60,7 +60,7 @@ class LLLocation(NamedTuple):
             return False
         return True
 
-    def in_logic(self, options: LoonylandOptions) -> bool:
+    def should_generate(self, options: LoonylandOptions) -> bool:
         if (self.category == LLLocCat.BADGE and (options.badges == Badges.option_vanilla)) or (
             self.category == LLLocCat.DOLL and (options.dolls == MonsterDolls.option_vanilla)
         ):

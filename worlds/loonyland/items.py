@@ -55,7 +55,7 @@ class LLItem(NamedTuple):
             return False
         return True
 
-    def in_logic(self, options: LoonylandOptions) -> bool:
+    def should_generate(self, options: LoonylandOptions) -> bool:
         if self.category == LLItemCat.CHEAT and options.badges == Badges.option_none:
             return False
         if self.category == LLItemCat.DOLL and options.dolls == MonsterDolls.option_none:
