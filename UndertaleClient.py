@@ -45,7 +45,7 @@ class UndertaleCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, UndertaleContext):
             os.makedirs(name=Utils.user_path("Undertale"), exist_ok=True)
             tempInstall = steaminstall
-            if not os.path.isfile(os.path.join(tempInstall, "data.win")):
+            if tempInstall and not os.path.isfile(os.path.join(tempInstall, "data.win")):
                 tempInstall = None
             if tempInstall is None:
                 tempInstall = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Undertale"
