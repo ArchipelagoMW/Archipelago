@@ -2947,7 +2947,7 @@ class SC2Logic:
                     )
                 )
                 or (
-                    self.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere
+                    self.spear_of_adun_presence in (SpearOfAdunPresence.option_everywhere, SpearOfAdunPresence.option_any_race_lotv)
                     and state.has(item_names.SOA_TIME_STOP, self.player)
                     or self.advanced_tactics
                     and (state.has_any((item_names.SOA_SHIELD_OVERCHARGE, item_names.SOA_SOLAR_BOMBARDMENT), self.player))
@@ -2964,10 +2964,18 @@ class SC2Logic:
             and self.zerg_big_monsters(state)
             and (
                 (
-                    (self.morph_brood_lord(state) or self.morph_guardian(state))
-                    and (
-                        (self.morph_devourer(state) and state.has(item_names.MUTALISK, self.player))
-                        or state.has_all((item_names.INFESTED_LIBERATOR, item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL), self.player)
+                    (
+                        (self.morph_brood_lord(state) or self.morph_guardian(state))
+                        and (
+                                self.morph_devourer(state) and state.has(item_names.MUTALISK, self.player)
+                                or state.has_all(
+                                (
+                                    item_names.INFESTED_LIBERATOR,
+                                    item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL
+                                ),
+                                self.player
+                            )
+                        )
                     )
                     or (
                         state.has_all(
@@ -2983,10 +2991,14 @@ class SC2Logic:
                     )
                 )
                 or (
-                    self.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere
-                    and state.has(item_names.SOA_TIME_STOP, self.player)
-                    or self.advanced_tactics
-                    and (state.has_any((item_names.SOA_SHIELD_OVERCHARGE, item_names.SOA_SOLAR_BOMBARDMENT), self.player))
+                    self.spear_of_adun_presence in (SpearOfAdunPresence.option_everywhere, SpearOfAdunPresence.option_any_race_lotv)
+                    and (
+                            state.has(item_names.SOA_TIME_STOP, self.player)
+                            or (self.advanced_tactics
+                                and (state.has_any((item_names.SOA_SHIELD_OVERCHARGE, item_names.SOA_SOLAR_BOMBARDMENT),
+                                                   self.player))
+                                )
+                    )
                 )
             )
         )
