@@ -1,7 +1,9 @@
 from argparse import Namespace
+import random
 from typing import Any, List, Optional, Tuple, Type
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
+from Generate import get_seed_name
 from worlds import network_data_package
 from worlds.AutoWorld import World, WebWorld, call_all
 
@@ -56,6 +58,8 @@ def setup_multiworld(worlds: list[type[World]] | type[World], steps: tuple[str, 
     multiworld.game = {player: world_type.game for player, world_type in enumerate(worlds, 1)}
     multiworld.player_name = {player: f"Tester{player}" for player in multiworld.player_ids}
     multiworld.set_seed(seed)
+    random.seed(multiworld.seed)
+    multiworld.seed_name = get_seed_name(random)  # only called to get the same RNG progression as Generate.py
     args = Namespace()
     for player, (world_type, option_overrides) in enumerate(zip(worlds, options), 1):
         for key, option in world_type.options_dataclass.type_hints.items():
