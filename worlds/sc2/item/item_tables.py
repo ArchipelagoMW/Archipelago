@@ -2293,12 +2293,6 @@ spear_of_adun_calldowns = {
     item_names.SOA_SOLAR_BOMBARDMENT
 }
 
-spear_of_adun_castable_passives = {
-    item_names.RECONSTRUCTION_BEAM,
-    item_names.OVERWATCH,
-    item_names.GUARDIAN_SHELL,
-}
-
 nova_equipment = {
     *[item_name for item_name, item_data in get_full_item_list().items()
       if item_data.type == TerranItemType.Nova_Gear],

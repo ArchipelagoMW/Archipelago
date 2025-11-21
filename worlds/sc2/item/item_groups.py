@@ -167,6 +167,7 @@ class ItemGroupNames:
     LOTV_UNITS = "LotV Units"
     LOTV_ITEMS = "LotV Items"
     LOTV_GLOBAL_UPGRADES = "LotV Global Upgrades"
+    SOA_PASSIVES = "SOA Passive Abilities"
     SOA_ITEMS = "SOA"
     PROTOSS_GLOBAL_UPGRADES = "Protoss Global Upgrades"
     PROTOSS_BUILDINGS = "Protoss Buildings"
@@ -777,11 +778,21 @@ item_name_groups[ItemGroupNames.PURIFIER_UNITS] = [
     item_names.MIRAGE, item_names.DAWNBRINGER, item_names.TRIREME, item_names.TEMPEST,
     item_names.CALADRIUS,
 ]
-item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = [
+item_name_groups[ItemGroupNames.SOA_PASSIVES] = spear_of_adun_passives = [
+    item_names.RECONSTRUCTION_BEAM,
+    item_names.OVERWATCH,
+    item_names.GUARDIAN_SHELL,
+]
+spear_of_adun_actives = [
     *[item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ProtossItemType.Spear_Of_Adun],
     item_names.SOA_PROGRESSIVE_PROXY_PYLON,
 ]
-lotv_soa_items = [item_name for item_name in soa_items if item_name != item_names.SOA_PYLON_OVERCHARGE]
+item_name_groups[ItemGroupNames.SOA_ITEMS] = soa_items = spear_of_adun_actives + spear_of_adun_passives
+lotv_soa_items = [
+    item_name
+    for item_name in soa_items
+    if item_name not in (item_names.SOA_PYLON_OVERCHARGE, item_names.OVERWATCH)
+]
 item_name_groups[ItemGroupNames.PROTOSS_GLOBAL_UPGRADES] = [
     item_name for item_name, item_data in item_tables.item_table.items() if item_data.type == item_tables.ProtossItemType.Solarite_Core
 ]
