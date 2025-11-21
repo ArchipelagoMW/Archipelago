@@ -211,11 +211,11 @@ jobs:
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
 
-      - name: Add manifest to .apworld
+      - name: Add manifest to .apworld and set CLIENT_VERSION
         shell: bash
         run: |
           set -e
-          echo "🧾 Updating archipelago.json manifest..."
+          echo "🧾 Updating archipelago.json manifest & set CLIENT_VERSION"
 
           version="${{ steps.semver.outputs.version }}"
           version="${version#v}"
@@ -266,6 +266,14 @@ jobs:
           # Remove nested archipelago.json but keep the root one
           find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
           echo "🗑️ Removed extra archipelago.json"
+
+          # Update CLIENT_VERSION in Rac3Client.py
+          client_file="tmp_unzip/rac3/Rac3Client.py"
+          old_version=$(grep '^CLIENT_VERSION = ' "$client_file" | cut -d'"' -f2 || echo "<none>")
+          echo "🔧 Updating CLIENT_VERSION in $client_file from $old_version to $version"
+          sed -i -E "s/^(CLIENT_VERSION = ).*/\1\"$version\"/" "$client_file"
+          # Remove backup if any (from sed -i on some platforms)
+          rm -f "${client_file}.bak"
 
           # Rezip the .apworld
           cd tmp_unzip
