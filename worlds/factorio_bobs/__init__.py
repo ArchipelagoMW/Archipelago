@@ -291,7 +291,7 @@ class FactorioBobs(World):
                                             range(getattr(self.options,
                                                           f"{trap_name.lower().replace(' ', '_')}_traps")))
 
-        cost_sorted_locations = sorted(self.science_locations, key=lambda location: location.name)
+        cost_sorted_locations = sorted(self.science_locations, key=lambda location: (location.complexity, location.rel_cost))
         special_index = {"automation": 0,
                          "electronics": 1,
                          "rocket-silo": -1}
