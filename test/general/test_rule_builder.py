@@ -263,7 +263,7 @@ class TestOptions(unittest.TestCase):
             And(Has("A"), And(Has("B"), options=[OptionFilter(ToggleOption, 1)])),
         ),
         (
-            (Has("A") | Has("B")) ^ [OptionFilter(ToggleOption, 1)],
+            (Has("A") | Has("B")) << [OptionFilter(ToggleOption, 1)],
             Filter(Or(Has("A"), Has("B")), options=[OptionFilter(ToggleOption, 1)]),
         ),
     )

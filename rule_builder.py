@@ -561,7 +561,7 @@ class Rule(Generic[TWorld]):
                 return Or(self, *other.children, options=self.options)
         return Or(self, other)
 
-    def __xor__(self, other: Iterable[OptionFilter[Any]]) -> "Rule[TWorld]":
+    def __lshift__(self, other: Iterable[OptionFilter[Any]]) -> "Rule[TWorld]":
         """Convenience operator to filter an existing rule with an option filter"""
         return Filter(self, options=other)
 
