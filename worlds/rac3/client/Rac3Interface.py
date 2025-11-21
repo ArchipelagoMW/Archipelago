@@ -560,12 +560,12 @@ class Rac3Interface(GameInterface):
 
     def teleport_to_ship(self, planet):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
-        if planet_checkpoint and self.allowed_to_teleport(planet):
-            self.logger.info(f'Teleporting to ship at planet: {planet}')
+        if planet_checkpoint and self.should_coordinate_inject(planet):
+            # For special cases with checkpoints that change, we manually change coordinates to the checkpoint at the ship
+            self.logger.info(f'Special case detected on planet: {planet}. Forcing manual teleport to ship')
             self.teleport_to_coords(planet_checkpoint)
         else:
-            # Force respawn instead if teleport not allowed
-            self.logger.info(f'Teleport not allowed at planet: {planet}, forcing respawn instead')
+            self.logger.info(f'Teleporting to ship at: {planet}')
             self.force_respawn()
     
     def teleport_to_coords(self, coords: RAC3POSITIONDATA):
@@ -573,46 +573,33 @@ class Rac3Interface(GameInterface):
         self._write_float(RAC3STATUS.RATCHET_Y, coords.Y)
         self._write_float(RAC3STATUS.RATCHET_Z, coords.Z)
 
-    def allowed_to_teleport(self, planet):
-        playing_as_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        if playing_as_clank:
+    def should_coordinate_inject(self, planet):
+        is_clank = self._read8(RAC3STATUS.PLAYER_CHARACTER) == 1
+        if is_clank:
             return False
         match planet:
-            case RAC3REGION.FLORANA:
-                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-                in_path_of_death = current_Z < 150
-                return not in_path_of_death
-            case RAC3REGION.STARSHIP_PHOENIX:
-                current_X = self._read_float(RAC3STATUS.RATCHET_X)
-                in_vr = current_X > 210
-                return not in_vr
             case RAC3REGION.MARCADIA:
                 current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
                 current_Y = self._read_float(RAC3STATUS.RATCHET_Y)
                 at_palace = current_Y > 800
                 in_ldf = current_Z > 250.0
                 return not (at_palace or in_ldf)
+            case RAC3REGION.STARSHIP_PHOENIX:
+                return False
+            case RAC3REGION.ANNIHILATION_NATION:
+                return False
             case RAC3REGION.TYHRRANOSIS:
-                # TODO: use location data table once this becomes a check
-                intro_mission_done = self._read8(0x001426F8) == 1
-
-                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-                fighting_momma_tyhrranoid = current_Z > 300.0
-                return intro_mission_done and not fighting_momma_tyhrranoid
-            case RAC3REGION.OBANI_GEMINI:
-                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-                # Gemini is between 700-800
-                # Pollux is about 200-300
-                on_pollux = current_Z < 500.0
-                return not on_pollux
+                return False
+            case RAC3REGION.HOLOSTAR_STUDIOS:
+                return False
             case RAC3REGION.OBANI_DRACO:
                 current_X = self._read_float(RAC3STATUS.RATCHET_X)
                 fighting_courtney = current_X > 600
                 return not fighting_courtney
             case RAC3REGION.ZELDRIN_STARPORT:
-                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-                aboard_leviathan = current_Z < 110.0
-                return not aboard_leviathan
+                return False
+            case RAC3REGION.PHOENIX_ASSAULT:
+                return False
         return True
     
     def force_respawn(self):
