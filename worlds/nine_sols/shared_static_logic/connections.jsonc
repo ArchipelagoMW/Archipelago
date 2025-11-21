@@ -944,10 +944,11 @@
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // to reach the hallway above the "sniper room"
         { "item": "Mystic Nymph: Scout Mode" } // to open the "shortcut" door to GPS
     ] },
-    { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Upper Elevator", "requires": [
-        { "item": "Air Dash" },
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } ] }
-    ] },
+    { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Upper Elevator", "requires": [ { "anyOf": [
+        // using the rope on the far side of the miniboss arena, you can reach the top of the arena itemless,
+        // after which you only need to do the last two TCK target jumps
+        { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" }
+    ] } ] },
     { "from": "FPA - Right Fire Zone & Wuqiang Arena", "to": "FPA - Lower Right Exit", "requires": [] }, // fall
     { "from": "FPA - Lower Right Exit", "to": "FPA - Right Fire Zone & Wuqiang Arena", "requires": [
         { "item": "Ledge Grab" }
