@@ -574,7 +574,7 @@ class Rac3Interface(GameInterface):
         self._write_float(RAC3STATUS.RATCHET_Z, coords.Z)
 
     def should_coordinate_inject(self, planet):
-        is_clank = self._read8(RAC3STATUS.PLAYER_CHARACTER) == 1
+        is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
         if is_clank:
             return False
         match planet:
