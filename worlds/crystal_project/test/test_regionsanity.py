@@ -82,7 +82,7 @@ class TestRegionsanityOn(CrystalProjectTestBase):
         self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR_AP_REGION))
         self.collect_mounts()
         self.collect_all_progressive_levels()
-        self.collect_by_name([POKO_POKO_DESERT_PASS, ANCIENT_RESERVOIR_PASS, SARA_SARA_BAZAAR_PASS, SARA_SARA_BEACH_EAST_PASS])
+        self.collect_by_name([POKO_POKO_DESERT_PASS, ANCIENT_RESERVOIR_PASS, SARA_SARA_BAZAAR_PASS, SARA_SARA_BEACH_PASS])
         self.assertFalse(self.can_reach_region(ANCIENT_RESERVOIR_AP_REGION))
         self.assertTrue(self.can_reach_region(IBEK_CAVE_AP_REGION))
         self.assert_locations(unreachable_locations=[f"{ANCIENT_RESERVOIR_DISPLAY_NAME} Region Completion"])

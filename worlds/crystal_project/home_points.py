@@ -68,8 +68,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "Poko Poko West Gate", 3783),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, "Poko Poko East Gate", 3784),
 
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, "Ibek's Cave", 2005, lambda state: logic.has_vertical_movement(state)),
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, "Beach Bird's Nest", 2709, lambda state: logic.has_vertical_movement(state)),
+        LocationData(IBEK_CAVE_MOUTH_AP_REGION, "Ibek's Cave", 2005),
+        LocationData(BEACH_BIRDS_NEST_AP_REGION, "Beach Bird's Nest", 2709),
 
         LocationData(BEAURIOR_VOLCANO_AP_REGION, "Beaurior Rock", 1792),
         #TODO: put volcano peak in separate ap region instead of included in Beaurior Rock (also items nearby, not just homepoint stone)

@@ -17,7 +17,7 @@ def get_unused_locations() -> List[LocationData]:
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Master Warrior", 3566 + npc_index_offset),
         LocationData(CAPITAL_SEQUOIA_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + " NPC - Master Wizard", 3569 + npc_index_offset),
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME + " NPC - Master Hunter", 3558 + npc_index_offset),
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Master Dervish", 3575 + npc_index_offset),
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Master Dervish", 3575 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Aegis", 3610 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Beastmaster", 3608 + npc_index_offset),
         LocationData(SUMMONERS_TOWER_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " NPC - Master Ninja", 3550 + npc_index_offset),

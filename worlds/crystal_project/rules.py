@@ -161,6 +161,7 @@ class CrystalProjectLogic:
             return False
 
     def can_earn_money(self, state: CollectionState, shop_ap_region: str) -> bool:
+        #Note: this rule is also used for the Sara Sara Bazaar innkeeper bc he charges money
         if shop_ap_region == MERCURY_SHRINE_AP_REGION:
             return True
 
