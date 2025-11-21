@@ -554,7 +554,7 @@ class Rac3Interface(GameInterface):
     def unpause_game(self):
         is_paused = self._read8(RAC3STATUS.PAUSE)
         if is_paused:
-            end_time = time.time() + 0.016  # 16ms
+            end_time = time.time() + 0.016  # 16ms - about one frame
             while time.time() < end_time:
                 current_input = self._read16(RAC3STATUS.INPUT)
                 new_input = current_input & ~RAC3INPUT.START
