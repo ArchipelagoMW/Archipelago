@@ -561,6 +561,10 @@ class Rule(Generic[TWorld]):
                 return Or(self, *other.children, options=self.options)
         return Or(self, other)
 
+    def __xor__(self, other: Iterable[OptionFilter[Any]]) -> "Rule[TWorld]":
+        """Convenience operator to filter an existing rule with an option filter"""
+        return Filter(self, options=other)
+
     def __bool__(self) -> Never:
         """Safeguard to prevent devs from mistakenly doing `rule1 and rule2` and getting the wrong result"""
         raise TypeError("Use & or | to combine rules, or use `is not None` for boolean tests")
@@ -706,7 +710,7 @@ class False_(Rule[TWorld], game="Archipelago"):  # noqa: N801
 
 @dataclasses.dataclass(init=False)
 class NestedRule(Rule[TWorld], game="Archipelago"):
-    """A rule that takes an iterable of other rules as an argument and does logic based on them"""
+    """A base rule class that takes an iterable of other rules as an argument and does logic based on them"""
 
     children: tuple[Rule[TWorld], ...]
     """The child rules this rule's logic is based on"""
@@ -863,8 +867,8 @@ class Or(NestedRule[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass()
-class Wrapper(Rule[TWorld], game="Archipelago"):
-    """A rule that wraps another rule to provide extra logic or data"""
+class WrapperRule(Rule[TWorld], game="Archipelago"):
+    """A base rule class that wraps another rule to provide extra logic or data"""
 
     child: Rule[TWorld]
     """The child rule being wrapped"""
@@ -950,6 +954,15 @@ class Wrapper(Rule[TWorld], game="Archipelago"):
         @override
         def __str__(self) -> str:
             return f"{self.rule_name}[{self.child}]"
+
+
+@dataclasses.dataclass()
+class Filter(WrapperRule[TWorld], game="Archipelago"):
+    """A convenience rule to wrap an existing rule with an options filter"""
+
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        return world.resolve_rule(self.child)
 
 
 @dataclasses.dataclass()
