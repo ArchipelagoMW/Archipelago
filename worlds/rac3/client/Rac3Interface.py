@@ -562,10 +562,10 @@ class Rac3Interface(GameInterface):
         planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
         if planet_checkpoint and self.should_coordinate_inject(planet):
             # For special cases with checkpoints that change, we manually change coordinates to the checkpoint at the ship
-            self.logger.info(f'Special case detected on planet: {planet}. Forcing manual teleport to ship')
+            self.logger.info(f'Teleporting to ship on: {planet}')
             self.teleport_to_coords(planet_checkpoint)
         else:
-            self.logger.info(f'Teleporting to ship at: {planet}')
+            self.logger.info(f'Respawning at ship on: {planet}')
             self.force_respawn()
     
     def teleport_to_coords(self, coords: RAC3POSITIONDATA):
