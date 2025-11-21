@@ -13,7 +13,7 @@ from rule_builder import (
     CanReachLocation,
     CanReachRegion,
     False_,
-    Filter,
+    Filtered,
     Has,
     HasAll,
     HasAllCounts,
@@ -264,7 +264,7 @@ class TestOptions(unittest.TestCase):
         ),
         (
             (Has("A") | Has("B")) << [OptionFilter(ToggleOption, 1)],
-            Filter(Or(Has("A"), Has("B")), options=[OptionFilter(ToggleOption, 1)]),
+            Filtered(Or(Has("A"), Has("B")), options=[OptionFilter(ToggleOption, 1)]),
         ),
     )
 )

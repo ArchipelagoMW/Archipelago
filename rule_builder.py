@@ -563,7 +563,7 @@ class Rule(Generic[TWorld]):
 
     def __lshift__(self, other: Iterable[OptionFilter[Any]]) -> "Rule[TWorld]":
         """Convenience operator to filter an existing rule with an option filter"""
-        return Filter(self, options=other)
+        return Filtered(self, options=other)
 
     def __bool__(self) -> Never:
         """Safeguard to prevent devs from mistakenly doing `rule1 and rule2` and getting the wrong result"""
@@ -957,7 +957,7 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
 
 
 @dataclasses.dataclass()
-class Filter(WrapperRule[TWorld], game="Archipelago"):
+class Filtered(WrapperRule[TWorld], game="Archipelago"):
     """A convenience rule to wrap an existing rule with an options filter"""
 
     @override
