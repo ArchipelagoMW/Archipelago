@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from typing import Any, List
 
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from Options import OptionGroup, StartInventoryPool
+from worlds.AutoWorld import PerGameCommonOptions
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from worlds.rac3.options.Deathlink import Deathlink
 from worlds.rac3.options.Exclude import RAC3ExcludeLocations
 from worlds.rac3.options.ExtraArmor import ExtraArmorUpgrade
@@ -19,7 +20,6 @@ from worlds.rac3.options.TitaniumBolts import TitaniumBolts
 from worlds.rac3.options.Traps import EnableTraps
 from worlds.rac3.options.TrapWeight import TrapWeight
 from worlds.rac3.options.Trophies import Trophies
-from worlds.AutoWorld import PerGameCommonOptions
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -53,7 +53,8 @@ class RaC3Options(PerGameCommonOptions):
 
 rac3_option_groups: dict[str, List[Any]] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight],
+                     ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
+                     TrapWeight],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }

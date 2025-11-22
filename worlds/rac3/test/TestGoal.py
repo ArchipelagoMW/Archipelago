@@ -1,6 +1,6 @@
-from constants.locations.Rac3General import RAC3LOCATION
-from constants.Rac3Items import RAC3ITEM
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
+from worlds.rac3.constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 from worlds.rac3.test import RAC3TestBase
 
 

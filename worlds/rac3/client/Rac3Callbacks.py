@@ -1,9 +1,9 @@
 from time import time
 from typing import TYPE_CHECKING
 
-from worlds.rac3.client.ClientMessage import ClientMessage
 from CommonClient import logger
 from NetUtils import ClientStatus
+from worlds.rac3.client.ClientMessage import ClientMessage
 
 ##################################################
 # Only change point: Change filename/Class name  #

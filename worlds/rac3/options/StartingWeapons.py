@@ -1,6 +1,6 @@
-from worlds.rac3.constants.data.Rac3ItemData import default_starting_weapons
 from Options import ItemDict
 from worlds.rac3 import RAC3OPTION
+from worlds.rac3.constants.data.Rac3ItemData import default_starting_weapons
 
 
 class StartingWeapons(ItemDict):

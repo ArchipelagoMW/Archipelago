@@ -1,7 +1,8 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.Rac3LocationData import (LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE,
+                                                         RAC3LOCATIONDATA)
 from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
 from worlds.rac3.constants.Rac3Items import RAC3ITEM

@@ -1,4 +1,4 @@
-from constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from test.bases import WorldTestBase
 
 
