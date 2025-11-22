@@ -69,6 +69,12 @@ def remove_from_list(container, value):
 
 
 def pop_from_container(container, value):
+    if isinstance(container, list) and isinstance(value, int) and len(container) <= value:
+        return container
+
+    if isinstance(container, dict) and value not in container:
+        return container
+
     try:
         container.pop(value)
     except ValueError:
