@@ -1,19 +1,7 @@
 # Archipelago General Client
-## Archipelago Connection Handshake
-These steps should be followed in order to establish a gameplay connection with an Archipelago session.
-
-1. Client establishes WebSocket connection to Archipelago server.
-2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
-3. Client may send a [GetDataPackage](#GetDataPackage) packet.
-4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.)
-5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
-6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
-7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
-8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
-
-In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
-
-There are also a number of community-supported libraries available that implement this network protocol to make integrating with Archipelago easier.
+There are a number of community-supported libraries available that implement the Archipelago network protocol to make integrating with Archipelago easier.
+This document is intended for people who are creating a new library, 
+contributing code to an existing library, or handling all the networking directly in a client (not recommended).
 
 | Language/Runtime              | Project                                                                                            | Remarks                                                                         |
 |-------------------------------|----------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------|
@@ -29,6 +17,20 @@ There are also a number of community-supported libraries available that implemen
 | Lua                           | [lua-apclientpp](https://github.com/black-sliver/lua-apclientpp)                                   |                                                                                 |
 | Game Maker + Studio 1.x       | [gm-apclientpp](https://github.com/black-sliver/gm-apclientpp)                                     | For GM7, GM8 and GMS1.x, maybe older                                            |
 | GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
+
+## Archipelago Connection Handshake
+These steps should be followed in order to establish a gameplay connection with an Archipelago session.
+
+1. Client establishes WebSocket connection to Archipelago server.
+2. Server accepts connection and responds with a [RoomInfo](#RoomInfo) packet.
+3. Client should check if the data packages are in the shared data package cache, if not they should send a [GetDataPackage](#GetDataPackage) packet containing the list of missing data packages.
+4. Server sends a [DataPackage](#DataPackage) packet in return. (If the client sent GetDataPackage.) The returned data packages should be saved to the shared data package cache.
+5. Client sends [Connect](#Connect) packet in order to authenticate with the server.
+6. Server validates the client's packet and responds with [Connected](#Connected) or [ConnectionRefused](#ConnectionRefused).
+7. Server may send [ReceivedItems](#ReceivedItems) to the client, in the case that the client is missing items that are queued up for it.
+8. Server sends [PrintJSON](#PrintJSON) to all players to notify them of the new client connection.
+
+In the case that the client does not authenticate properly and receives a [ConnectionRefused](#ConnectionRefused) then the server will maintain the connection and allow for follow-up [Connect](#Connect) packet.
 
 ## Synchronizing Items
 After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may have already processed in a previous play session.  
@@ -409,6 +411,8 @@ Basic chat command which sends text to the server to be distributed to other cli
 
 ### GetDataPackage
 Requests the data package from the server. Does not require client authentication.
+Should be called if the needed data packages are not present in the shared cache.
+See [Data Package Shared Cache](#Data-Package-Shared-Cache) for details.
 
 #### Arguments
 | Name  | Type | Notes                                                                                                                           |
@@ -716,10 +720,6 @@ server most easily and not maintain their own mappings. Some contents include:
    - Name to ID mappings for items and locations.
    - A checksum of each game's data package for clients to tell if a cached package is invalid.
 
-We encourage clients to cache the data package they receive on disk, or otherwise not tied to a session. You will know 
-when your cache is outdated if the [RoomInfo](#RoomInfo) packet or the datapackage itself denote a different checksum
-than any locally cached ones.
-
 **Important Notes about IDs and Names**: 
 
 * IDs ≤ 0 are reserved for "Archipelago" and should not be used by other world implementations.
@@ -765,6 +765,43 @@ GameData is a **dict** but contains these keys and values. It's broken out into 
 | item_name_to_id     | dict[str, int] | Mapping of all item names to their respective ID.                                                                             |
 | location_name_to_id | dict[str, int] | Mapping of all location names to their respective ID.                                                                         |
 | checksum            | str            | A checksum hash of this game's data.                                                                                          |
+
+
+### Data Package Shared Cache
+The shared cache location is `user_cache_dir/datapackage`. `user_cache_dir` varies by platform. The
+platformdirs library is used in python to pick the correct location https://github.com/tox-dev/platformdirs.
+Similar libraries exist for other languages.
+
+Python example:
+```
+import platformdirs
+game_name = "Subnautica"
+cache_path = platformdirs.user_cache_dir("Archipelago", False)
+datapackage_path = os.path.join(cache_path, datapackage, game_name)
+```
+If your alternative library doesn't automatically include `/Archipelago/Cache/` you may need to
+assemble more of the path yourself.
+```
+DataPackageCacheFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), 
+                Path.Combine("Archipelago", Path.Combine("Cache", "datapackage")));
+```
+
+Each game has its own subfolder inside the previously mentioned datapackage folder i.e.
+`user_cache_dir/datapackage/A Hat in Time`.
+
+When reading from or writing to the data package shared cache, make sure your file paths are safe, meaning they do not have
+characters that are forbidden in file names `<>:"/\|?*`.
+
+Before requesting a new data package, a client should check if that package is already in the shared cache.
+The name of the file will be `<checksum>.json`, for example `294cc7fc5ff1aa2a9669106ab8bf0a37e5d74f0d.json`.
+The client should use the checksums included in the [RoomInfo](#RoomInfo) packet to find the correct cached data package.
+
+Whenever a client finds the desired data package in the cache, it should update the last modified time of the file. This
+is because CommonClient contains code that removes sufficiently old data packages.
+
+Should the client not find a data package in the shared cache, they should instead download it using a [GetDataPackage](#GetDataPackage) packet.
+Clients should cache the data packages they receive on disk to prevent re-downloading it on every connect.
+
 
 ### Tags
 Tags are represented as a list of strings, the common client tags follow:
