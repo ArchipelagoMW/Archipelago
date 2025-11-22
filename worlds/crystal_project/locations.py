@@ -696,11 +696,13 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Ibek Cave
         #Treasure chests
-        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
+        #Tall Rock in the Possessor's Den
+        LocationData(TALL_POSSESSOR_ROCK_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Chest - Celebrate your new hops", 2517 + treasure_index_offset),  # Fenix Juice Pouch chest
 
         #NPCs
         LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
-        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        #Trek Spiraling Up Out of Ibek's Cave
+        LocationData(IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in the goat digs", 2696 + npc_index_offset),  # Dust
 
         #Salmon Bay
         #Treasure chests

@@ -564,7 +564,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      BAZAAR_COAST_AP_REGION: lambda state: logic.has_swimming(state),
                      BEAURIOR_VOLCANO_AP_REGION: lambda state: logic.has_vertical_movement(state) or logic.has_glide(state),
                      CONTINENTAL_TRAM_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, IBEK_CAVE_MOUTH_AP_REGION, [BELOW_IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION, BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, IBEK_CAVE_AP_REGION])
+    fancy_add_exits(world, IBEK_CAVE_MOUTH_AP_REGION, [BELOW_IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION, BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, IBEK_CAVE_AP_REGION, IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION])
     fancy_add_exits(world, BELOW_IBEK_CAVE_MOUTH_AP_REGION, [IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION, BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION],
                     {IBEK_CAVE_MOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      BELOW_IBEK_CAVE_WEST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)})
@@ -603,8 +603,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, ANCIENT_RESERVOIR_AP_REGION, [POKO_POKO_DESERT_AP_REGION, IBEK_CAVE_AP_REGION, BELOW_GRAN_AP_REGION],
                     {POKO_POKO_DESERT_AP_REGION: lambda state: logic.has_key(state, PYRAMID_KEY),
                      BELOW_GRAN_AP_REGION: lambda state: logic.has_swimming(state)})
-    fancy_add_exits(world, IBEK_CAVE_AP_REGION, [SARA_SARA_BEACH_EAST_AP_REGION],
-                    {SARA_SARA_BEACH_EAST_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, IBEK_CAVE_AP_REGION, [TALL_POSSESSOR_ROCK_AP_REGION, IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION],
+                    {TALL_POSSESSOR_ROCK_AP_REGION: lambda state: logic.has_vertical_movement(state),
+                     IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION: lambda state: logic.has_vertical_movement(state)})
+    fancy_add_exits(world, TALL_POSSESSOR_ROCK_AP_REGION, [IBEK_CAVE_AP_REGION])
+    fancy_add_exits(world, IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION, [IBEK_CAVE_AP_REGION, TALL_POSSESSOR_ROCK_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION],
+                    {TALL_POSSESSOR_ROCK_AP_REGION: lambda state: logic.has_glide(state),
+                     IBEK_CAVE_MOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     #Ancient Reservoir end
     #Salmon Bay start
     fancy_add_exits(world, SALMON_BAY_AP_REGION, [THE_OPEN_SEA_AP_REGION, SALMON_RIVER_MOUTH_AP_REGION],
