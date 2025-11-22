@@ -6,6 +6,7 @@
 
 - Factorio: [Factorio Official Website](https://factorio.com)
     - Needed by Players and Hosts
+    - Players will need to download an additional copy of Factorio for Archipelago to use. If you already own the game, you can download another copy for free by logging into the website. 
 
 ##### Server Hosts
 
@@ -38,9 +39,12 @@ Validator page: [Yaml Validation Page](/check)
 Connecting to someone else's game is the simplest way to play Factorio with Archipelago. It allows multiple people to
 play in a single world, all contributing to the completion of the seed.
 
-1. Acquire the Archipelago mod for this seed. It should be named `AP_*.zip`, where `*` is the seed number.
+**Note:** If you are the only one in the Archipelago multiworld who is playing Factorio, you are
+hosting your own Factorio game, not joining someone else's game.
+
+1. Acquire the Archipelago mod for this seed. Once you create the multiworld on the Archipelago website, there will be a link next to your name in the "Download Link" column for your Archipelago room. It will be called `AP-<seed>-<playernumber>-<playername>_<archipelago_version>.zip`.
 2. Copy the mod file into your Factorio `mods` folder, which by default is located at:  
-   `C:\Users\<YourUserName>\AppData\Roaming\Factorio\mods`
+   `C:\Users\<YourUserName>\AppData\Roaming\Factorio\mods`. If you're on Linux, it's located at `~/.factorio/mods`. 
 3. Get the server address from the person hosting the game you are joining.
 4. Launch Factorio
 5. Click on "Multiplayer" in the main menu
@@ -75,7 +79,7 @@ This guide uses the following terms to refer to the software:
 
 To play Factorio with Archipelago, a dedicated server setup is required. This dedicated Factorio Server must be
 installed separately from your main Factorio Client installation. The recommended way to install two instances of
-Factorio on your computer is to download the Factorio installer file directly from
+Factorio on your computer is to download the standalone Factorio file directly from
 factorio.com: [Factorio Official Website Download Page](https://factorio.com/download).
 
 #### If you purchased Factorio on Steam, GOG, etc.
@@ -102,7 +106,7 @@ have logged in, you may close the game.
 
 If you did not place the Factorio standalone in your Archipelago installation, you must modify your `host.yaml` file 
 inside your Archipelago installation directory so that it points to your standalone Factorio executable. Here is an 
-example of the appropriate setup, note the double `\\` are required:
+example of the appropriate setup, note the double `\\` are required if you are on Windows:
 
 ```yaml
 factorio_options:
@@ -115,20 +119,21 @@ This allows you to host your own Factorio game.
 
 1. Obtain the Factorio mod for this Archipelago seed. It should be named `AP_*.zip`, where `*` is the seed number.
 2. Install the mod into your Factorio Server by copying the zip file into the `mods` folder.
-3. Install the mod into your Factorio Client by copying the zip file into the `mods` folder, which is likely located
-   at `C:\Users\YourName\AppData\Roaming\Factorio\mods`.
-4. Obtain the Archipelago Server address from the website's host room, or from the server host.
-5. Run your Archipelago Client, which is named `ArchipelagoFactorioClient.exe`. This was installed along with
+3. Disable Space Age on your server by editing `mods-list.json` in the server's `mods` folder, going to the Space Age section, and changing `enabled: true` to `enabled: false`.
+4. Install the mod into your Factorio Client by copying the zip file into the `mods` folder, which is likely located
+   at `C:\Users\YourName\AppData\Roaming\Factorio\mods`. If you're on Linux, it will be located at `~/.factorio/mods`.
+5. Obtain the Archipelago Server address from the website's host room, or from the server host.
+6. Run your Archipelago Client, which is named `ArchipelagoFactorioClient.exe`. This was installed along with
    Archipelago if you chose to include it during the installation process.
-6. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
+7. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
 
 ![Factorio Client for Archipelago Connection Command](connect-to-ap-server.png)
 
-7. Launch your Factorio Client
-8. Click on "Multiplayer" in the main menu
-9. Click on "Connect to address"
-10. Enter `localhost` into the server address box
-11. Click "Connect"
+8. Launch your Factorio Client
+9. Click on "Multiplayer" in the main menu
+10. Click on "Connect to address"
+11. Enter `localhost` into the server address box
+12. Click "Connect"
 
 For additional client features, issue the `/help` command in the Archipelago Client. Once connected to the AP server,
 you can also issue the `!help` command to learn about additional commands like `!hint`.
@@ -138,9 +143,10 @@ For more information about the commands you can use, see the [Commands Guide](/t
 ## Allowing Other People to Join Your Game
 
 1. Ensure your Archipelago Client is running.
-2. Ensure port `34197` is forwarded to the computer running the Archipelago Client.
-3. Obtain your IP address by visiting whatismyip.com: [WhatIsMyIP Website](https://whatismyip.com/).
-4. Provide your IP address to anyone you want to join your game, and have them follow the steps for
+2. Ensure port `34197` is open on your computer's firewall.
+3. Ensure port `34197` is forwarded to the computer running the Archipelago Client. 
+4. Obtain your IP address by visiting whatismyip.com: [WhatIsMyIP Website](https://whatismyip.com/).
+5. Provide your IP address to anyone you want to join your game, and have them follow the steps for
    "Connecting to Someone Else's Factorio Game" above.
 
 ## Enabling Peaceful Mode
@@ -210,8 +216,9 @@ contents of this file may help you troubleshoot an issue on your own and is vita
 in Archipelago.
 
 ## Additional Resources
-
+- Alternate Tutorial by [Skid-Inc Gaming: [16x9] Archipelago, Ep00: Setup](www.youtube.com/watch?v=_h5sXyuB9jA)
 - Alternate Tutorial by
   Umenen: [Factorio (Steam) Archipelago Setup Guide for Windows](https://docs.google.com/document/d/1yZPAaXB-QcetD8FJsmsFrenAHO5V6Y2ctMAyIoT9jS4)
 - Factorio Speedrun Guide: [Factorio Speedrun Guide by Nefrums](https://www.youtube.com/watch?v=ExLrmK1c7tA)
 - Factorio Wiki: [Factorio Official Wiki](https://wiki.factorio.com/)
+- [Archipelago Factorio Cheat Sheet](https://docs.google.com/spreadsheets/d/1317PZU957IVWCG9jUUklyHAl82BhrKIriynSZJ0AGNg/edit?gid=0#gid=0)
