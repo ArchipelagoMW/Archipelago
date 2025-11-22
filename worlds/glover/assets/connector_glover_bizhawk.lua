@@ -12266,7 +12266,7 @@ function wayroom_tip_check()
 					if ap_id == 0x000 then
 						check_table["1972"] = true
 					else
-						check_table[ap_id] = true
+						check_table[tostring(ap_id)] = true
 					end
 				end
 			else
