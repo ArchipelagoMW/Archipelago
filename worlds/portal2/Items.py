@@ -1,10 +1,10 @@
 from BaseClasses import Item, ItemClassification
-import typing
+from typing import NamedTuple, Optional
 
 
-class Portal2ItemData(typing.NamedTuple):
+class Portal2ItemData(NamedTuple):
     in_game_name: str
-    variant: typing.Optional[str]
+    variant: Optional[str]
     classification: ItemClassification
 
 class Portal2Item(Item):
