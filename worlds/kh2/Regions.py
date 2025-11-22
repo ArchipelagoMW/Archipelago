@@ -211,6 +211,8 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.TownMythrilGem,
         LocationName.CaveMouthBrightShard,
         LocationName.CaveMouthMythrilShard,
+    ],
+    RegionName.PrMinute:          [
         LocationName.IsladeMuertaMap,
         LocationName.BoatFight,
         LocationName.InterceptorBarrels,
@@ -221,7 +223,6 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.MoonlightNookPowerStone,
         LocationName.DonaldBoatFight,
         LocationName.GoofyInterceptorBarrels,
-
     ],
     RegionName.Barbosa:            [
         LocationName.Barbossa,
@@ -503,6 +504,8 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.AnsemsStudySleepingLion,
         LocationName.AnsemsStudySkillRecipe,
         LocationName.AnsemsStudyUkuleleCharm,
+    ],
+    RegionName.Hb2Corridors:       [
         LocationName.RestorationSiteMoonRecipe,
         LocationName.RestorationSiteAPBoost,
     ],
@@ -540,7 +543,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.SephirothFenrir,
         LocationName.SephiEventLocation
     ],
-    RegionName.CoR:                [ #todo: make logic for getting these checks.
+    RegionName.CoR:                [
         LocationName.CoRDepthsAPBoost,
         LocationName.CoRDepthsPowerCrystal,
         LocationName.CoRDepthsFrostCrystal,
@@ -1059,7 +1062,8 @@ def connect_regions(self):
         RegionName.Ha3:                (RegionName.Ha4,),
         RegionName.Ha4:                (RegionName.Ha5,),
         RegionName.Ha5:                (RegionName.Ha6,),
-        RegionName.Pr:                 (RegionName.Barbosa,),
+        RegionName.Pr:                 (RegionName.PrMinute,),
+        RegionName.PrMinute:           (RegionName.Barbosa,),
         RegionName.Barbosa:            (RegionName.Pr2,),
         RegionName.Pr2:                (RegionName.GrimReaper1,),
         RegionName.GrimReaper1:        (RegionName.GrimReaper2,),
@@ -1087,7 +1091,8 @@ def connect_regions(self):
         RegionName.Ht2:                (RegionName.Experiment,),
         RegionName.Experiment:         (RegionName.DataVexen,),
         RegionName.Hb:                 (RegionName.Hb2,),
-        RegionName.Hb2:                (RegionName.CoR, RegionName.HBDemyx),
+        RegionName.Hb2:                (RegionName.Hb2Corridors,),
+        RegionName.Hb2Corridors:       (RegionName.CoR, RegionName.HBDemyx),
         RegionName.HBDemyx:            (RegionName.ThousandHeartless,),
         RegionName.ThousandHeartless:  (RegionName.Mushroom13, RegionName.DataDemyx, RegionName.Sephi),
         RegionName.CoR:                (RegionName.CorFirstFight,),
