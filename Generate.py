@@ -347,7 +347,9 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
             elif isinstance(new_value, list):
                 cleaned_value.extend(new_value)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) + Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.update(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
@@ -361,7 +363,9 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
                 for element in new_value:
                     cleaned_value.remove(element)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) - Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.subtract(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply remove to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
