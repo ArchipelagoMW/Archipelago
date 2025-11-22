@@ -6,7 +6,7 @@ class ItemData:
     def __init__(self, item_id, classification, groups):
         self.groups = groups
         self.classification = classification
-        self.id = None if item_id is None else item_id + 172000000
+        self.id = None if item_id is None else item_id
 
 
 item_table = {

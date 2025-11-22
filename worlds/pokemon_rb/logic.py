@@ -97,7 +97,7 @@ def rock_tunnel(state, world, player):
     return can_flash(state, world, player) or not world.options.dark_rock_tunnel_logic
 
 
-def route(state, world, player):
+def route3(state, world, player):
     if world.options.route_3_condition == "defeat_brock":
         return state.has("Defeat Brock", player)
     elif world.options.route_3_condition == "defeat_any_gym":
