@@ -1,7 +1,6 @@
 import json
 import os
 import platform
-import struct
 import subprocess
 import copy
 import threading
@@ -91,7 +90,6 @@ class Rom(BigStream):
             raise RuntimeError('ROM file %s is not a valid OoT 1.0 US ROM.' % file)
         elif len(self.buffer) == 0x2000000:
             # If Input ROM is compressed, then Decompress it
-
             sub_dir = data_path("Decompress")
 
             if platform.system() == 'Windows':
@@ -111,9 +109,6 @@ class Rom(BigStream):
                 raise RuntimeError(f'Decompressor does not exist! Please place it at {subcall[0]}.')
             subprocess.call(subcall, **subprocess_args())
             self.read_rom(decomp_file)
-        else:
-            # ROM file is a valid and already uncompressed
-            pass
 
     def write_byte(self, address, value):
         super().write_byte(address, value)
@@ -146,11 +141,11 @@ class Rom(BigStream):
         self.write_bytes(0x10, crc)
 
     def read_rom(self, file):
-        # "Reads rom into bytearray"
+        """Reads rom into bytearray"""
         try:
             with open(file, 'rb') as stream:
                 self.buffer = bytearray(stream.read())
-        except FileNotFoundError as ex:
+        except FileNotFoundError:
             raise FileNotFoundError('Invalid path to Base ROM: "' + file + '"')
 
     # dmadata/file management helper functions
@@ -188,13 +183,13 @@ class Rom(BigStream):
 
         dma_data.sort(key=lambda v: v[0])
 
-        for i in range(0, len(dma_data) - 1):
+        for i in range(len(dma_data) - 1):
             this_start, this_end, this_size = dma_data[i]
             next_start, next_end, next_size = dma_data[i + 1]
 
             if this_end > next_start:
                 overlapping_records.append(
-                    '0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)' % \
+                    '0x%08X - 0x%08X (Size: 0x%04X)\n0x%08X - 0x%08X (Size: 0x%04X)' %
                     (this_start, this_end, this_size, next_start, next_end, next_size)
                 )
 
@@ -202,9 +197,11 @@ class Rom(BigStream):
             raise Exception("Overlapping DMA Data Records!\n%s" % \
                             '\n-------------------------------------\n'.join(overlapping_records))
 
-    # update dmadata record with start vrom address "key"
-    # if key is not found, then attempt to add a new dmadata entry
     def update_dmadata_record(self, key, start, end, from_file=None):
+        """
+        Update dmadata record with start vrom address "key"
+        if key is not found, then attempt to add a new dmadata entry
+        """
         cur, dma_data_end = self.get_dma_table_range()
         dma_index = 0
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
@@ -217,11 +214,11 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
         if cur >= (dma_data_end - 0x10):
-            raise Exception('dmadata update failed: key {0:x} not found in dmadata and dma table is full.'.format(key))
+            raise Exception(f'dmadata update failed: key {key:x} not found in dmadata and dma table is full.')
         else:
             self.write_int32s(cur, [start, end, start, 0])
-            if from_file == None:
-                if key == None:
+            if from_file is None:
+                if key is None:
                     from_file = -1
                 else:
                     from_file = key
@@ -240,19 +237,19 @@ class Rom(BigStream):
             cur += 0x10
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
 
-    # This will scan for any changes that have been made to the DMA table
-    # This assumes any changes here are new files, so this should only be called
-    # after patching in the new files, but before vanilla files are repointed
     def scan_dmadata_update(self):
+        """
+        This will scan for any changes that have been made to the DMA table
+        This assumes any changes here are new files, so this should only be called
+        after patching in the new files, but before vanilla files are repointed
+        """
         cur = DMADATA_START
-        dma_data_end = None
         dma_index = 0
         dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
         old_dma_start, old_dma_end, old_dma_size = self.original._get_dmadata_record(cur)
 
         while True:
-            if (dma_start == 0 and dma_end == 0) and \
-                    (old_dma_start == 0 and old_dma_end == 0):
+            if (dma_start == 0 and dma_end == 0) and (old_dma_start == 0 and old_dma_end == 0):
                 break
 
             # If the entries do not match, the flag the changed entry
@@ -264,8 +261,8 @@ class Rom(BigStream):
             dma_start, dma_end, dma_size = self._get_dmadata_record(cur)
             old_dma_start, old_dma_end, old_dma_size = self.original._get_dmadata_record(cur)
 
-    # gets the last used byte of rom defined in the DMA table
     def free_space(self):
+        """Gets the last used byte of rom defined in the DMA table"""
         cur = DMADATA_START
         max_end = 0
 

@@ -4,8 +4,6 @@ import logging
 from . import Music as music
 from . import Sounds as sfx
 from . import IconManip as icon
-from .JSONDump import dump_obj, CollapseList, CollapseDict, AlignedDict, SortedDict
-import json
 
 logger = logging.getLogger('')
 
@@ -24,7 +22,7 @@ def format_cosmetic_option_result(option_result):
 
 
 def patch_targeting(rom, ootworld, symbols):
-    # Set default targeting option to Hold
+    """Set default targeting option to Hold"""
     if ootworld.default_targeting == 'hold':
         rom.write_byte(0xB71E6D, 0x01)
     else:
@@ -32,7 +30,7 @@ def patch_targeting(rom, ootworld, symbols):
 
 
 def patch_dpad(rom, ootworld, symbols):
-    # Display D-Pad HUD
+    """Display D-Pad HUD"""
     if ootworld.display_dpad:
         rom.write_byte(symbols['CFG_DISPLAY_DPAD'], 0x01)
     else:
@@ -40,7 +38,7 @@ def patch_dpad(rom, ootworld, symbols):
 
 
 def patch_dpad_info(rom, ootworld, symbols):
-    # Display D-Pad HUD in pause menu for either dungeon info or equips
+    """Display D-Pad HUD in pause menu for either dungeon info or equips"""
     if ootworld.dpad_dungeon_menu:
         rom.write_byte(symbols['CFG_DPAD_DUNGEON_INFO_ENABLE'], 0x01)
     else:
@@ -48,7 +46,6 @@ def patch_dpad_info(rom, ootworld, symbols):
 
 
 def patch_music(rom, ootworld, symbols):
-    # patch music
     if ootworld.background_music != 'normal' or ootworld.fanfares != 'normal':
         music.restore_music(rom)
         log, errors = music.randomize_music(rom, ootworld, {})
@@ -92,7 +89,6 @@ def patch_tunic_icon(rom, tunic, color):
 
 
 def patch_tunic_colors(rom, ootworld, symbols):
-    # patch tunic colors
     tunics = [
         ('Kokiri Tunic', 'kokiri_color', 0x00B6DA38),
         ('Goron Tunic',  'goron_color',  0x00B6DA3B),
@@ -118,7 +114,7 @@ def patch_tunic_colors(rom, ootworld, symbols):
             tunic_option = 'Custom'
         # "Weird" weirdshots will crash if the Kokiri Tunic Green value is > 0x99. Brickwall it.
         if ootworld.logic_rules != 'glitchless' and tunic == 'Kokiri Tunic':
-            color[1] = min(color[1],0x98)
+            color[1] = min(color[1], 0x98)
         rom.write_bytes(address, color)
 
         # patch the tunic icon
@@ -129,7 +125,6 @@ def patch_tunic_colors(rom, ootworld, symbols):
 
 
 def patch_navi_colors(rom, ootworld, symbols):
-    # patch navi colors
     navi = [
         # colors for Navi
         ('Navi Idle',            'navi_color_default',
@@ -151,8 +146,8 @@ def patch_navi_colors(rom, ootworld, symbols):
     rainbow_error = None
 
     for navi_action, navi_setting, navi_addresses, rainbow_inner_symbol, rainbow_outer_symbol in navi:
-        navi_option_inner = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_inner'])
-        navi_option_outer = format_cosmetic_option_result(ootworld.__dict__[navi_setting+'_outer'])
+        navi_option_inner = format_cosmetic_option_result(ootworld.__dict__[navi_setting + '_inner'])
+        navi_option_outer = format_cosmetic_option_result(ootworld.__dict__[navi_setting + '_outer'])
 
         # choose a random choice for the whole group
         if navi_option_inner == 'Random Choice':
@@ -165,7 +160,7 @@ def patch_navi_colors(rom, ootworld, symbols):
 
         colors = []
         option_dict = {}
-        for address_index, address in enumerate(navi_addresses):
+        for address in navi_addresses:
             address_colors = {}
             colors.append(address_colors)
             for index, (navi_part, option, rainbow_symbol) in enumerate([
@@ -208,7 +203,6 @@ def patch_navi_colors(rom, ootworld, symbols):
             color = address_colors['inner'] + [0xFF] + address_colors['outer'] + [0xFF]
             rom.write_bytes(address, color)
 
-
     if rainbow_error:
         logger.error(rainbow_error)
 
@@ -228,8 +222,8 @@ def patch_sword_trails(rom, ootworld, symbols):
     rainbow_error = None
 
     for trail_name, trail_setting, trail_addresses, rainbow_inner_symbol, rainbow_outer_symbol in sword_trails:
-        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
-        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -242,14 +236,14 @@ def patch_sword_trails(rom, ootworld, symbols):
 
         colors = []
         option_dict = {}
-        for address_index, (address, inner_transparency, inner_white_transparency, outer_transparency, outer_white_transparency) in enumerate(trail_addresses):
+        for address, inner_transparency, inner_white_transparency, outer_transparency, outer_white_transparency in trail_addresses:
             address_colors = {}
             colors.append(address_colors)
             transparency_dict = {}
-            for index, (trail_part, option, rainbow_symbol, white_transparency, transparency) in enumerate([
+            for trail_part, option, rainbow_symbol, white_transparency, transparency in [
                 ('inner', option_inner, rainbow_inner_symbol, inner_white_transparency, inner_transparency),
                 ('outer', option_outer, rainbow_outer_symbol, outer_white_transparency, outer_transparency),
-            ]):
+            ]:
                 color = None
 
                 # set rainbow option
@@ -321,8 +315,8 @@ def patch_boomerang_trails(rom, ootworld, symbols):
 def patch_trails(rom, ootworld, trails):
     for trail_name, trail_setting, trail_color_list, trail_color_dict, trail_symbols in trails:
         color_inner_symbol, color_outer_symbol, rainbow_inner_symbol, rainbow_outer_symbol = trail_symbols
-        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_inner'])
-        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting+'_outer'])
+        option_inner = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_inner'])
+        option_outer = format_cosmetic_option_result(ootworld.__dict__[trail_setting + '_outer'])
 
         # handle random choice
         if option_inner == 'Random Choice':
@@ -336,10 +330,10 @@ def patch_trails(rom, ootworld, trails):
         option_dict = {}
         colors = {}
 
-        for index, (trail_part, option, rainbow_symbol, color_symbol) in enumerate([
+        for trail_part, option, rainbow_symbol, color_symbol in [
             ('inner', option_inner, rainbow_inner_symbol, color_inner_symbol),
             ('outer', option_outer, rainbow_outer_symbol, color_outer_symbol),
-        ]):
+        ]:
             color = None
 
             # set rainbow option
@@ -377,18 +371,14 @@ def patch_trails(rom, ootworld, trails):
             rom.write_bytes(color_symbol, color)
 
 
-
 def patch_gauntlet_colors(rom, ootworld, symbols):
-    # patch gauntlet colors
     gauntlets = [
-        ('Silver Gauntlets', 'silver_gauntlets_color', 0x00B6DA44,
-            ([0x173B4CC], [0x173B4D4, 0x173B50C, 0x173B514])), # GI Model DList colors
-        ('Gold Gauntlets', 'golden_gauntlets_color',  0x00B6DA47,
-            ([0x173B4EC], [0x173B4F4, 0x173B52C, 0x173B534])), # GI Model DList colors
+        ('silver_gauntlets_color', 0x00B6DA44, ([0x173B4CC], [0x173B4D4, 0x173B50C, 0x173B514])), # GI Model DList colors
+        ('golden_gauntlets_color',  0x00B6DA47, ([0x173B4EC], [0x173B4F4, 0x173B52C, 0x173B534])), # GI Model DList colors
     ]
     gauntlet_color_list = get_gauntlet_colors()
 
-    for gauntlet, gauntlet_setting, address, model_addresses in gauntlets:
+    for gauntlet_setting, address, model_addresses in gauntlets:
         gauntlet_option = format_cosmetic_option_result(ootworld.__dict__[gauntlet_setting])
 
         # handle random
@@ -411,15 +401,14 @@ def patch_gauntlet_colors(rom, ootworld, symbols):
             patch_model_colors(rom, None, model_addresses)
 
 def patch_shield_frame_colors(rom, ootworld, symbols):
-    # patch shield frame colors
     shield_frames = [
-        ('Mirror Shield Frame', 'mirror_shield_frame_color',
+        ('mirror_shield_frame_color',
             [0xFA7274, 0xFA776C, 0xFAA27C, 0xFAC564, 0xFAC984, 0xFAEDD4],
             ([0x1616FCC], [0x1616FD4])),
     ]
     shield_frame_color_list = get_shield_frame_colors()
 
-    for shield_frame, shield_frame_setting, addresses, model_addresses in shield_frames:
+    for shield_frame_setting, addresses, model_addresses in shield_frames:
         shield_frame_option = format_cosmetic_option_result(ootworld.__dict__[shield_frame_setting])
 
         # handle random
@@ -444,16 +433,15 @@ def patch_shield_frame_colors(rom, ootworld, symbols):
 
 
 def patch_heart_colors(rom, ootworld, symbols):
-    # patch heart colors
     hearts = [
-        ('Heart Color', 'heart_color', symbols['CFG_HEART_COLOR'], 0xBB0994,
+        ('heart_color', symbols['CFG_HEART_COLOR'], 0xBB0994,
             ([0x14DA474, 0x14DA594, 0x14B701C, 0x14B70DC],
              [0x14B70FC, 0x14DA494, 0x14DA5B4, 0x14B700C, 0x14B702C, 0x14B703C, 0x14B704C, 0x14B705C,
               0x14B706C, 0x14B707C, 0x14B708C, 0x14B709C, 0x14B70AC, 0x14B70BC, 0x14B70CC])), # GI Model DList colors
     ]
     heart_color_list = get_heart_colors()
 
-    for heart, heart_setting, symbol, file_select_address, model_addresses in hearts:
+    for heart_setting, symbol, file_select_address, model_addresses in hearts:
         heart_option = format_cosmetic_option_result(ootworld.__dict__[heart_setting])
 
         # handle random
@@ -484,14 +472,13 @@ def patch_heart_colors(rom, ootworld, symbols):
             icon.patch_overworld_icon(rom, None, 0xF43D80)
 
 def patch_magic_colors(rom, ootworld, symbols):
-    # patch magic colors
     magic = [
-        ('Magic Meter Color', 'magic_color', symbols["CFG_MAGIC_COLOR"],
+        ('magic_color', symbols["CFG_MAGIC_COLOR"],
             ([0x154C654, 0x154CFB4], [0x154C65C, 0x154CFBC])), # GI Model DList colors
     ]
     magic_color_list = get_magic_colors()
 
-    for magic_color, magic_setting, symbol, model_addresses in magic:
+    for magic_setting, symbol, model_addresses in magic:
         magic_option = format_cosmetic_option_result(ootworld.__dict__[magic_setting])
 
         if magic_option == 'Random Choice':
@@ -516,7 +503,7 @@ def patch_magic_colors(rom, ootworld, symbols):
 
 def patch_button_colors(rom, ootworld, symbols):
     buttons = [
-        ('A Button Color', 'a_button_color', a_button_colors,
+        ('a_button_color', a_button_colors,
             [('A Button Color', symbols['CFG_A_BUTTON_COLOR'],
                 None),
              ('Text Cursor Color', symbols['CFG_TEXT_CURSOR_COLOR'],
@@ -532,11 +519,11 @@ def patch_button_colors(rom, ootworld, symbols):
              ('A Note Color', symbols['CFG_A_NOTE_COLOR'], # For Textbox Song Display
                 [(0xBB299A, 0xBB299B, 0xBB299E), (0xBB2C8E, 0xBB2C8F, 0xBB2C92), (0xBB2F8A, 0xBB2F8B, 0xBB2F96)]), # Pause Menu Song Display
             ]),
-        ('B Button Color', 'b_button_color', b_button_colors,
+        ('b_button_color', b_button_colors,
             [('B Button Color', symbols['CFG_B_BUTTON_COLOR'],
                 None),
             ]),
-        ('C Button Color', 'c_button_color', c_button_colors,
+        ('c_button_color', c_button_colors,
             [('C Button Color', symbols['CFG_C_BUTTON_COLOR'],
                 None),
              ('Pause Menu C Cursor Color', None,
@@ -546,13 +533,13 @@ def patch_button_colors(rom, ootworld, symbols):
              ('C Note Color', symbols['CFG_C_NOTE_COLOR'], # For Textbox Song Display
                 [(0xBB2996, 0xBB2997, 0xBB29A2), (0xBB2C8A, 0xBB2C8B, 0xBB2C96), (0xBB2F86, 0xBB2F87, 0xBB2F9A)]), # Pause Menu Song Display
             ]),
-        ('Start Button Color', 'start_button_color', start_button_colors,
+        ('start_button_color', start_button_colors,
             [('Start Button Color', None,
                 [(0xAE9EC6, 0xAE9EC7, 0xAE9EDA)]),
             ]),
     ]
 
-    for button, button_setting, button_colors, patches in buttons:
+    for button_setting, button_colors, patches in buttons:
         button_option = format_cosmetic_option_result(ootworld.__dict__[button_setting])
         color_set = None
         colors = {}
@@ -606,8 +593,6 @@ def patch_sfx(rom, ootworld, symbols):
           ('sfx_hover_boots',    sfx.SoundHooks.BOOTS_HOVER),
     ]
     sound_dict = sfx.get_patch_dict()
-    sounds_keyword_label = {sound.value.keyword: sound.value.label for sound in sfx.Sounds}
-    sounds_label_keyword = {sound.value.label: sound.value.keyword for sound in sfx.Sounds}
 
     for setting, hook in sfx_config:
         selection = ootworld.__dict__[setting].replace('_', '-')
@@ -623,10 +608,9 @@ def patch_sfx(rom, ootworld, symbols):
                 selection = ootworld.random.choice(sfx.get_hook_pool(hook, "TRUE")).value.keyword
             elif selection == 'completely-random':
                 selection = ootworld.random.choice(sfx.standard).value.keyword
-            sound_id  = sound_dict[selection]
+            sound_id = sound_dict[selection]
             for loc in hook.value.locations:
                 rom.write_int16(loc, sound_id)
-
 
 
 def patch_instrument(rom, ootworld, symbols):
@@ -684,7 +668,7 @@ patch_sets[0x1F04FA62] = {
 
 # 3.14.11
 patch_sets[0x1F05D3F9] = {
-    "patches": patch_sets[0x1F04FA62]["patches"] + [],
+    "patches": patch_sets[0x1F04FA62]["patches"],
     "symbols": {**patch_sets[0x1F04FA62]["symbols"]},
 }
 

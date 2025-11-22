@@ -21,7 +21,7 @@ from .Items import OOTItem
 #       ZF      Zora's Fountain
 #       ZR      Zora's River
 
-class Hint(object):
+class Hint:
     name = ""
     text = ""
     type = []
@@ -33,7 +33,7 @@ class Hint(object):
         if isinstance(text, str):
             self.text = text
         else:
-            if choice == None:
+            if choice is None:
                 self.text = rand.choice(text)
             else:
                 self.text = text[choice]
@@ -43,7 +43,7 @@ def getHint(item, rand, clearer_hint=False):
     if item in hintTable:
         textOptions, clearText, hintType = hintTable[item]
         if clearer_hint:
-            if clearText == None:
+            if clearText is None:
                 return Hint(item, textOptions, hintType, rand, 0)
             return Hint(item, clearText, hintType, rand)
         else:
@@ -57,7 +57,6 @@ def getHint(item, rand, clearer_hint=False):
 def getHintGroup(group, world):
     ret = []
     for name in hintTable:
-
         hint = getHint(name, world.random, world.clearer_hints)
 
         if hint.name in world.always_hints and group == 'always':
@@ -1254,7 +1253,7 @@ hintTable = {
     # - They aren't inappropriate.
     # - They aren't absurdly long copy pastas.
     # - They aren't quotes or references that are simply not funny when out-of-context.
-    # To elaborate on this last point: junk hints need to be able to be understood 
+    # To elaborate on this last point: junk hints need to be able to be understood
     # by everyone, and not just those who get the obscure references.
     # Zelda references are considered fair game.
 
@@ -1295,7 +1294,7 @@ hintTable = {
     # '1047':                                                     ("They say that the final item you're looking for can be found somewhere in Hyrule.", None, 'junk'),
     '1048':                                                     ("${12 68 7a}Mweep${07 04 51}", None, 'junk'), # Mweep
     '1049':                                                     ("They say that Barinade fears Deku Nuts.", None, 'junk'),
-    '1050':                                                     ("They say that Flare Dancers do not fear Goron-crafted blades.", None, 'junk'), 
+    '1050':                                                     ("They say that Flare Dancers do not fear Goron-crafted blades.", None, 'junk'),
     '1051':                                                     ("They say that Morpha is easily trapped in a corner.", None, 'junk'),
     '1052':                                                     ("They say that Bongo Bongo really hates the cold.", None, 'junk'),
     '1053':                                                     ("They say that crouch stabs mimic the effects of your last attack.", None, 'junk'),
@@ -1554,7 +1553,7 @@ multiTable = {
     'DMC Child Upper Checks':                                   ['DMC GS Crate', 'DMC Deku Scrub'],
     'Haunted Wasteland Checks':                                 ['Wasteland Chest', 'Wasteland GS'],
 
-    'Deku Tree MQ Basement GS':                                 ['Deku Tree MQ GS Basement Graves Room','Deku Tree MQ GS Basement Back Room'],
+    'Deku Tree MQ Basement GS':                                 ['Deku Tree MQ GS Basement Graves Room', 'Deku Tree MQ GS Basement Back Room'],
     'Dodongos Cavern Upper Business Scrubs':                    ['Dodongos Cavern Deku Scrub Near Bomb Bag Left', 'Dodongos Cavern Deku Scrub Near Bomb Bag Right'],
     'Dodongos Cavern MQ Larvae Room':                           ['Dodongos Cavern MQ Larvae Room Chest', 'Dodongos Cavern MQ GS Larvae Room'],
     'Fire Temple Lower Loop':                                   ['Fire Temple Flare Dancer Chest', 'Fire Temple Boss Key Chest'],
@@ -1671,8 +1670,11 @@ goalTable = {
 }
 
 
-# This specifies which hints will never appear due to either having known or known useless contents or due to the locations not existing.
 def hintExclusions(world, clear_cache=False):
+    """
+    Specifies which hints will never appear due to either having known
+    or known useless contents or due to the locations not existing.
+    """
     if not clear_cache and world.hint_exclusions is not None:
         return world.hint_exclusions
 
@@ -1688,7 +1690,7 @@ def hintExclusions(world, clear_cache=False):
     location_hints = []
     for name in hintTable:
         hint = getHint(name, world.random, world.clearer_hints)
-        if any(item in hint.type for item in 
+        if any(item in hint.type for item in
                 ['always',
                  'dual_always',
                  'sometimes',
@@ -1704,6 +1706,7 @@ def hintExclusions(world, clear_cache=False):
             world.hint_exclusions.append(hint.name)
 
     return world.hint_exclusions
+
 
 def nameIsLocation(name, hint_type, world):
     if isinstance(hint_type, (list, tuple)):

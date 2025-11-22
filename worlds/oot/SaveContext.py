@@ -1,4 +1,3 @@
-from itertools import chain
 from enum import IntEnum
 from .ItemPool import IGNORE_LOCATION
 
@@ -33,14 +32,14 @@ class FlagType(IntEnum):
     VISITED_ROOM = 0x05
     VISITED_FLOOR = 0x06
 
-class Address():
+class Address:
     prev_address = None
 
     def __init__(self, address=None, size=4, mask=0xFFFFFFFF, max=None, choices=None, value=None):
         if address is None:
             self.address = Address.prev_address
         else:
-            self.address = address           
+            self.address = address
         self.value = value
         self.size = size
         self.choices = choices
@@ -58,12 +57,10 @@ class Address():
         else:
             self.max = max
 
-
     def get_value(self, default=0):
         if self.value is None:
             return default
         return self.value
-
 
     def get_value_raw(self):
         if self.value is None:
@@ -73,7 +70,7 @@ class Address():
         if self.choices is not None:
             value = self.choices[value]
         if not isinstance(value, int):
-            raise ValueError("Invalid value type '%s'" % str(value))
+            raise ValueError(f"Invalid value type '{value}'")
 
         if isinstance(value, bool):
             value = 1 if value else 0
@@ -82,7 +79,6 @@ class Address():
 
         value = (value << self.bit_offset) & self.mask
         return value
-
 
     def set_value_raw(self, value):
         if value is None:
@@ -95,7 +91,7 @@ class Address():
         value = (value & self.mask) >> self.bit_offset
         if value > self.max:
             value = self.max
-        
+
         if self.choices is not None:
             for choice_name, choice_value in self.choices.items():
                 if choice_value == value:
@@ -103,7 +99,6 @@ class Address():
                     break
 
         self.value = value
-
 
     def get_writes(self, save_context):
         if self.value is None:
@@ -113,7 +108,7 @@ class Address():
         if value is None:
             return
 
-        values = zip(Address.to_bytes(value, self.size), 
+        values = zip(Address.to_bytes(value, self.size),
                      Address.to_bytes(self.mask, self.size))
 
         for i, (byte, mask) in enumerate(values):
@@ -124,7 +119,6 @@ class Address():
             else:
                 save_context.write_bits(self.address + i, byte, mask=mask)
 
-
     def to_bytes(value, size):
         ret = []
         for _ in range(size):
@@ -133,12 +127,11 @@ class Address():
         return ret
 
 
-class SaveContext():
+class SaveContext:
     def __init__(self):
         self.save_bits = {}
         self.save_bytes = {}
         self.addresses = self.get_save_context_addresses()
-
 
     # will set the bits of value to the offset in the save (or'ing them with what is already there)
     def write_bits(self, address, value, mask=None, predicate=None):
@@ -161,7 +154,6 @@ class SaveContext():
         else:
             self.save_bits[address] = value
 
-
     # will overwrite the byte at offset with the given value
     def write_byte(self, address, value, predicate=None):
         if predicate and not predicate(value):
@@ -172,12 +164,10 @@ class SaveContext():
 
         self.save_bytes[address] = value
 
-
     # will overwrite the byte at offset with the given value
     def write_bytes(self, address, bytes, predicate=None):
         for i, value in enumerate(bytes):
             self.write_byte(address + i, value, predicate)
-
 
     def write_save_entry(self, address):
         if isinstance(address, dict):
@@ -219,11 +209,10 @@ class SaveContext():
             else:
                 self.addresses['ammo'][ammo].max = ammo_max
 
-
     # will overwrite the byte at offset with the given value
     def write_save_table(self, rom):
         self.set_ammo_max()
-        for name, address in self.addresses.items():
+        for address in self.addresses.values():
             self.write_save_entry(address)
 
         save_table = []
@@ -232,13 +221,12 @@ class SaveContext():
                 save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x00, value]
         for address, value in self.save_bytes.items():
             save_table += [(address & 0xFF00) >> 8, address & 0xFF, 0x01, value]
-        save_table += [0x00,0x00,0x00,0x00]
+        save_table += [0x00] * 4
 
         table_len = len(save_table)
         if table_len > 0x400:
             raise Exception("The Initial Save Table has exceeded its maximum capacity: 0x%03X/0x400" % table_len)
         rom.write_bytes(rom.sym('INITIAL_SAVE_DATA'), save_table)
-
 
     def give_bottle(self, item, count):
         for bottle_id in range(4):
@@ -252,7 +240,6 @@ class SaveContext():
             if count == 0:
                 return
 
-
     def give_health(self, health):
         health += self.addresses['health_capacity'].get_value(0x30) / 0x10
         health += self.addresses['quest']['heart_pieces'].get_value() / 4
@@ -260,7 +247,6 @@ class SaveContext():
         self.addresses['health_capacity'].value       = int(health) * 0x10
         self.addresses['health'].value                = int(health) * 0x10
         self.addresses['quest']['heart_pieces'].value = int((health % 1) * 4) * 0x10
-
 
     def give_item(self, world, item, count=1):
         if item.endswith(')'):
@@ -337,7 +323,7 @@ class SaveContext():
                         raise ValueError('Unknown key %s in %s of SaveContext' % (sub_address, prev_sub_address))
 
                     if isinstance(address_value, list):
-                        sub_address =  int(sub_address)
+                        sub_address = int(sub_address)
 
                     address_value = address_value[sub_address]
                     prev_sub_address = sub_address
@@ -351,18 +337,14 @@ class SaveContext():
         else:
             raise ValueError("Cannot give unknown starting item %s" % item)
 
-
     def give_bombchu_item(self, world):
         self.give_item(world, "Bombchus", 0)
-
 
     def equip_default_items(self, age):
         self.equip_items(age, 'equips_' + age)
 
-
     def equip_current_items(self, age):
         self.equip_items(age, 'equips')
-
 
     def equip_items(self, age, equip_type):
         if age not in ['child', 'adult']:
@@ -382,7 +364,7 @@ class SaveContext():
                 if not c_buttons:
                     break
 
-        for equip_item, equip_addresses in self.addresses[age]['equips'].items():
+        for equip_item in self.addresses[age]['equips']:
             for item in SaveContext.equipable_items[age][equip_item]:
                 if self.addresses['equip_items'][item].get_value():
                     item_value = self.addresses['equip_items'][item].get_value_raw()
@@ -392,7 +374,6 @@ class SaveContext():
                     if equip_item == 'sword':
                         self.addresses[equip_type]['button_items']['b'].value = item
                     break
-
 
     def get_save_context_addresses(self):
         return {
@@ -439,7 +420,7 @@ class SaveContext():
                     'sword'              : Address(0x0048, size=2, mask=0x000F),
                     'shield'             : Address(0x0048, size=2, mask=0x00F0),
                     'tunic'              : Address(0x0048, size=2, mask=0x0F00),
-                    'boots'              : Address(0x0048, size=2, mask=0xF000),                
+                    'boots'              : Address(0x0048, size=2, mask=0xF000),
                 },
             },
             'equips_adult' : {
@@ -458,7 +439,7 @@ class SaveContext():
                     'sword'              : Address(0x0052, size=2, mask=0x000F),
                     'shield'             : Address(0x0052, size=2, mask=0x00F0),
                     'tunic'              : Address(0x0052, size=2, mask=0x0F00),
-                    'boots'              : Address(0x0052, size=2, mask=0xF000),                
+                    'boots'              : Address(0x0052, size=2, mask=0xF000),
                 },
             },
             'unk_06'                     : Address(size=0x12),
@@ -480,7 +461,7 @@ class SaveContext():
                     'sword'              : Address(0x0070, size=2, mask=0x000F, max=3),
                     'shield'             : Address(0x0070, size=2, mask=0x00F0, max=3),
                     'tunic'              : Address(0x0070, size=2, mask=0x0F00, max=3),
-                    'boots'              : Address(0x0070, size=2, mask=0xF000, max=3),                
+                    'boots'              : Address(0x0070, size=2, mask=0xF000, max=3),
                 },
             },
             'unk_07'                     : Address(size=2),
@@ -713,7 +694,6 @@ class SaveContext():
             'pending_freezes'            : Address(0xD4 + 0x1C * 0x49 + 0x10, size=4), # Unused word in scene x49
         }
 
-
     item_id_map = {
         'none'                : 0xFF,
         'stick'               : 0x00,
@@ -838,7 +818,6 @@ class SaveContext():
         'small_key'           : 0x67,
     }
 
-
     slot_id_map = {
         'stick'               : 0x00,
         'nut'                 : 0x01,
@@ -866,7 +845,6 @@ class SaveContext():
         'child_trade'         : 0x17,
     }
 
-
     bottle_types = {
         "Bottle"                   : 'bottle',
         "Bottle with Red Potion"   : 'red_potion',
@@ -880,14 +858,13 @@ class SaveContext():
         "Bottle with Bugs"         : 'bug',
         "Bottle with Big Poe"      : 'big_poe',
         "Bottle with Milk (Half)"  : 'half_milk',
-        "Bottle with Poe"          : 'poe',    
+        "Bottle with Poe"          : 'poe',
     }
-
 
     save_writes_table = {
         "Deku Stick Capacity": {
             'item_slot.stick'            : 'stick',
-            'upgrades.stick_upgrade'     : [2,3],
+            'upgrades.stick_upgrade'     : [2, 3],
         },
         "Deku Stick": {
             'item_slot.stick'            : 'stick',
@@ -901,7 +878,7 @@ class SaveContext():
         },
         "Deku Nut Capacity": {
             'item_slot.nut'              : 'nut',
-            'upgrades.nut_upgrade'       : [2,3],
+            'upgrades.nut_upgrade'       : [2, 3],
         },
         "Deku Nuts": {
             'item_slot.nut'              : 'nut',
@@ -1130,7 +1107,6 @@ class SaveContext():
             'total_keys.gc': 3,
         },
     }
-
 
     equipable_items = {
         'equips_adult' : {
