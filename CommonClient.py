@@ -572,6 +572,10 @@ class CommonContext:
         return print_json_packet.get("type", "") == "ItemSend" \
             and not self.slot_concerns_self(print_json_packet["receiving"]) \
             and not self.slot_concerns_self(print_json_packet["item"].player)
+    
+    def is_connection_change(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out connection changes."""
+        return print_json_packet.get("type", "") in ["Join","Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
