@@ -24,6 +24,13 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
+_RANDOM_OPTS = [
+        "random", "random-low", "random-middle", "random-high", 
+        "random-range-low-<min>-<max>", "random-range-middle-<min>-<max>",
+        "random-range-high-<min>-<max>", "random-range-<min>-<max>",
+]
+    
+    
 def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     """
     Integer triangular distribution for `lower` inclusive to `end` inclusive.
@@ -34,7 +41,7 @@ def triangular(lower: int, end: int, tri: float = 0.5) -> int:
     # random.triangular is actually [a, b] and not [a, b), so there is a very small chance of getting exactly b even
     # when a != b, so ensure the result is never more than `end`.
     return min(end, math.floor(random.triangular(0.0, 1.0, tri) * (end - lower + 1) + lower))
-
+  
 
 def random_weighted_range(text: str, range_start: int, range_end: int):
     if text == "random-low":
@@ -46,10 +53,8 @@ def random_weighted_range(text: str, range_start: int, range_end: int):
     elif text == "random":
         return random.randint(range_start, range_end)
     else:
-        raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
-                        f"Acceptable values are: random, random-high, random-middle, random-low, "
-                        f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
-                        f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                            f"Acceptable values are: {', '.join(_RANDOM_OPTS)}.")
 
         
 def roll_percentage(percentage: int | float) -> bool:
@@ -741,9 +746,26 @@ class Range(NumericOption):
             # these are the conditions where "true" and "false" make sense
             if text == "true":
                 return cls.from_any(cls.default)
-            else:  # "false"
-                return cls(0)
-        return cls(int(text))
+            # "false"
+            return cls(0)
+
+        try:
+            num = int(text)
+        except ValueError:
+            # text is not a number
+            # Handle conditionally acceptable values here rather than in the f-string
+            default = ""
+            truefalse = ""
+            if hasattr(cls, "default"):
+                default = ", default"
+                if cls.range_start == 0 and cls.default != 0:
+                    truefalse = ", \"true\", \"false\""
+            raise Exception(f"Invalid range value {text!r}. Acceptable values are: "
+                            f"<int>{default}, high, low{truefalse}, "
+                            f"{', '.join(cls._RANDOM_OPTS)}.")
+
+        return cls(num)
+
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -1053,6 +1075,8 @@ class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
     supports_weighting = False
     display_name = "Plando Texts"
 
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
+
     def __init__(self, value: typing.Iterable[PlandoText]) -> None:
         self.value = list(deepcopy(value))
         super().__init__()
@@ -1178,6 +1202,8 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
     entrances: typing.ClassVar[typing.AbstractSet[str]]
     exits: typing.ClassVar[typing.AbstractSet[str]]
+
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
 
     duplicate_exits: bool = False
     """Whether or not exits should be allowed to be duplicate."""
@@ -1470,6 +1496,7 @@ class DeathLink(Toggle):
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
+    visibility = Visibility.template | Visibility.complex_ui | Visibility.spoiler
     rich_text_doc = True
     default = []
     schema = Schema([
@@ -1761,11 +1788,16 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     def dictify_range(option: Range):
         data = {option.default: 50}
-        for sub_option in ["random", "random-low", "random-high"]:
+        for sub_option in ["random", "random-low", "random-high",
+                           f"random-range-{option.range_start}-{option.range_end}"]:
             if sub_option != option.default:
                 data[sub_option] = 0
-
-        notes = {}
+        notes = {
+            "random-low": "random value weighted towards lower values",
+            "random-high": "random value weighted towards higher values",
+            f"random-range-{option.range_start}-{option.range_end}": f"random value between "
+                                                                     f"{option.range_start} and {option.range_end}"
+        }
         for name, number in getattr(option, "special_range_names", {}).items():
             notes[name] = f"equivalent to {number}"
             if number in data:
