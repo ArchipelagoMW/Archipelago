@@ -4,6 +4,7 @@ from BaseClasses import Location, Region
 from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.Rac3Sewers import RAC3SEWER
+from worlds.rac3.constants.locations.Rac3Skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
 from worlds.rac3.constants.Rac3Items import RAC3ITEM
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
@@ -81,7 +82,8 @@ every_5_sewer_crystals = [
     RAC3SEWER.TRADE_85,
     RAC3SEWER.TRADE_90,
     RAC3SEWER.TRADE_95,
-    RAC3SEWER.TRADE_99
+    RAC3SEWER.TRADE_99,
+    RAC3SKILLPOINT.SEWER_MOTHERLOAD
 ]
 
 every_10_sewer_crystals = [
@@ -94,7 +96,8 @@ every_10_sewer_crystals = [
     RAC3SEWER.TRADE_70,
     RAC3SEWER.TRADE_80,
     RAC3SEWER.TRADE_90,
-    RAC3SEWER.TRADE_99
+    RAC3SEWER.TRADE_99,
+    RAC3SKILLPOINT.SEWER_MOTHERLOAD
 ]
 
 every_20_sewer_crystals = [
@@ -102,7 +105,8 @@ every_20_sewer_crystals = [
     RAC3SEWER.TRADE_40,
     RAC3SEWER.TRADE_60,
     RAC3SEWER.TRADE_80,
-    RAC3SEWER.TRADE_99
+    RAC3SEWER.TRADE_99,
+    RAC3SKILLPOINT.SEWER_MOTHERLOAD
 ]
 
 
@@ -299,7 +303,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
                     return True # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
                 if options.sewer_crystals.value == 0:
-                    return True # Skip sewer crystal locations if nanotech milestones option is disabled
+                    return True # Skip sewer crystal locations if sewer crystals option is disabled
                 elif options.sewer_crystals.value == 1 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_20_sewer_crystals:
                     return True # Skip sewer crystal locations that are not in every 20

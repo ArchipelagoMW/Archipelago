@@ -10,6 +10,7 @@ class SewerCrystals(Choice):
     Every 10: Makes every 10 sewer crystals locations starting from 10 sewer crystals collected.
     Every 5: Makes every 5 sewer crystals locations starting from 5 sewer crystals collected.
     All: All sewer crystals are locations.
+    If set to anything other than none, this will also add the Hit the motherload skillpoint into the world.
     """
     display_name = RAC3OPTION.SEWER_CRYSTALS
     option_none = 0
