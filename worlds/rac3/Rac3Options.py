@@ -24,6 +24,7 @@ from worlds.rac3.options.Rangers import Rangers
 from worlds.rac3.options.Arena import Arena
 from worlds.rac3.options.VidComics import VidComics
 from worlds.rac3.options.VRChallenges import VRChallenges
+from worlds.rac3.options.SewerCrystals import SewerCrystals
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -57,12 +58,13 @@ class RaC3Options(PerGameCommonOptions):
     rangers: Rangers
     arena: Arena
     vidcomics: VidComics
-    vrchallenges: VRChallenges
+    vr_challenges: VRChallenges
+    sewer_crystals: SewerCrystals
 
 
 rac3_option_groups: dict[str, List[Any]] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight, Rangers, Arena, VidComics, VRChallenges],
+                        ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps, TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -88,5 +90,6 @@ slot_data_options: list[str] = [
     RAC3OPTION.RANGERS,
     RAC3OPTION.ARENA,
     RAC3OPTION.VIDCOMICS,
-    RAC3OPTION.VRCHALLENGES,
+    RAC3OPTION.VR_CHALLENGES,
+    RAC3OPTION.SEWER_CRYSTALS,
 ]

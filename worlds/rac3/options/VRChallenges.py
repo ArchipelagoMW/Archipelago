@@ -9,7 +9,7 @@ class VRChallenges(Choice):
     Any Skill Points or Titanium Bolts are added if their respective setting is enabled.
     This option also includes the VR Training Challenge before Daxx and all of it's checks
     """
-    display_name = RAC3OPTION.VRCHALLENGES
+    display_name = RAC3OPTION.VR_CHALLENGES
     option_disabled = 0
     option_enabled = 1
     default = 1

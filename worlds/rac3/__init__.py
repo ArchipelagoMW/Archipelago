@@ -136,7 +136,8 @@ class RaC3World(World):
             RAC3OPTION.RANGERS: self.options.rangers.value,
             RAC3OPTION.ARENA: self.options.arena.value,
             RAC3OPTION.VIDCOMICS: self.options.vidcomics.value,
-            RAC3OPTION.VRCHALLENGES: self.options.vrchallenges.value,
+            RAC3OPTION.VR_CHALLENGES: self.options.vr_challenges.value,
+            RAC3OPTION.SEWER_CRYSTALS: self.options.sewer_crystals.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self)
         }
 

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Location, Region
 from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.Rac3Sewers import RAC3SEWER
 from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
 from worlds.rac3.constants.Rac3Items import RAC3ITEM
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
@@ -59,6 +60,51 @@ every_20_nanotech = [
     RAC3NANOTECH.LEVEL_80,
     RAC3NANOTECH.LEVEL_100
 ]
+
+every_5_sewer_crystals = [
+    RAC3SEWER.TRADE_5,
+    RAC3SEWER.TRADE_10,
+    RAC3SEWER.TRADE_15,
+    RAC3SEWER.TRADE_20,
+    RAC3SEWER.TRADE_25,
+    RAC3SEWER.TRADE_30,
+    RAC3SEWER.TRADE_35,
+    RAC3SEWER.TRADE_40,
+    RAC3SEWER.TRADE_45,
+    RAC3SEWER.TRADE_50,
+    RAC3SEWER.TRADE_55,
+    RAC3SEWER.TRADE_60,
+    RAC3SEWER.TRADE_65,
+    RAC3SEWER.TRADE_70,
+    RAC3SEWER.TRADE_75,
+    RAC3SEWER.TRADE_80,
+    RAC3SEWER.TRADE_85,
+    RAC3SEWER.TRADE_90,
+    RAC3SEWER.TRADE_95,
+    RAC3SEWER.TRADE_99
+]
+
+every_10_sewer_crystals = [
+    RAC3SEWER.TRADE_10,
+    RAC3SEWER.TRADE_20,
+    RAC3SEWER.TRADE_30,
+    RAC3SEWER.TRADE_40,
+    RAC3SEWER.TRADE_50,
+    RAC3SEWER.TRADE_60,
+    RAC3SEWER.TRADE_70,
+    RAC3SEWER.TRADE_80,
+    RAC3SEWER.TRADE_90,
+    RAC3SEWER.TRADE_99
+]
+
+every_20_sewer_crystals = [
+    RAC3SEWER.TRADE_20,
+    RAC3SEWER.TRADE_40,
+    RAC3SEWER.TRADE_60,
+    RAC3SEWER.TRADE_80,
+    RAC3SEWER.TRADE_99
+]
+
 
 
 def create_regions(world: "RaC3World"):
@@ -230,13 +276,13 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
             case RAC3TAG.NANOTECH:
                 if options.nanotech_milestones.value == 0:
                     return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                elif options.nanotech_milestones.value == 1 and LOCATION_FROM_AP_CODE[
+                elif options.nanotech_milestones.value == 3 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
                 elif options.nanotech_milestones.value == 2 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_10_nanotech:
                     return True  # Skips nanotech milestones that are not in every 10
-                elif options.nanotech_milestones.value == 3 and LOCATION_FROM_AP_CODE[
+                elif options.nanotech_milestones.value == 1 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
             case RAC3TAG.RANGERS:
@@ -251,5 +297,17 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
             case RAC3TAG.VR:
                 if options.vrchallenges.value == 0:
                     return True # Skips vr challenges locations if vr_challenges option is disabled
+            case RAC3TAG.SEWER:
+                if options.sewer.value == 0:
+                    return True # Skip sewer crystal locations if nanotech milestones option is disabled
+                elif options.sewer.value == 1 and LOCATION_FROM_AP_CODE[
+                    data.AP_CODE] not in every_20_sewer_crystals:
+                    return True # Skip sewer crystal locations that are not in every 20
+                elif options.sewer.value == 2 and LOCATION_FROM_AP_CODE[
+                    data.AP_CODE] not in every_10_sewer_crystals:
+                    return True # Skip sewer crystal locations that are not in every 10
+                elif options.sewer.value == 3 and LOCATION_FROM_AP_CODE[
+                data.AP_CODE] not in every_5_sewer_crystals:
+                    return True # Skip sewer crystal locations that are not in every 5
             # Add more conditions here if needed in the future
     return False
