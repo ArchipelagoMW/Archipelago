@@ -572,6 +572,10 @@ class CommonContext:
         return print_json_packet.get("type", "") == "ItemSend" \
             and not self.slot_concerns_self(print_json_packet["receiving"]) \
             and not self.slot_concerns_self(print_json_packet["item"].player)
+    
+    def is_connection_change(self, print_json_packet: dict) -> bool:
+        """Helper function for filtering out connection changes."""
+        return print_json_packet.get("type", "") in ["Join","Part"]
 
     def on_print(self, args: dict):
         logger.info(args["text"])
@@ -856,9 +860,9 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
 
     server_url = urllib.parse.urlparse(address)
     if server_url.username:
-        ctx.username = server_url.username
+        ctx.username = urllib.parse.unquote(server_url.username)
     if server_url.password:
-        ctx.password = server_url.password
+        ctx.password = urllib.parse.unquote(server_url.password)
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""

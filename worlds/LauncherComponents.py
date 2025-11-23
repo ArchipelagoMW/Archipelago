@@ -5,7 +5,7 @@ import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running
+from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path
 
 
 class Type(Enum):
@@ -204,6 +204,18 @@ def install_apworld(apworld_path: str = "") -> None:
         Utils.messagebox("Install complete.", f"Installed APWorld from {source}.")
 
 
+def export_datapackage() -> None:
+    import json
+
+    from worlds import network_data_package
+
+    path = user_path("datapackage_export.json")
+    with open(path, "w") as f:
+        json.dump(network_data_package, f, indent=4)
+
+    open_file(path)
+
+
 components: List[Component] = [
     # Launcher
     Component('Launcher', 'Launcher', component_type=Type.HIDDEN),
@@ -213,6 +225,8 @@ components: List[Component] = [
               description="Host a generated multiworld on your computer."),
     Component('Generate', 'Generate', cli=True,
               description="Generate a multiworld with the YAMLs in the players folder."),
+    Component("Options Creator", "OptionsCreator", "ArchipelagoOptionsCreator", component_type=Type.TOOL,
+              description="Visual creator for Archipelago option files."),
     Component("Install APWorld", func=install_apworld, file_identifier=SuffixIdentifier(".apworld"),
               description="Install an APWorld to play games not included with Archipelago by default."),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient,
@@ -230,8 +244,10 @@ components: List[Component] = [
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
 
-    #MegaMan Battle Network 3
-    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
+    # MegaMan Battle Network 3
+    Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
+
+    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL),
 ]
 
 
@@ -271,7 +287,8 @@ if not is_frozen():
             file_name = os.path.split(os.path.dirname(worldtype.__file__))[1]
             world_directory = os.path.join("worlds", file_name)
             if os.path.isfile(os.path.join(world_directory, "archipelago.json")):
-                manifest = json.load(open(os.path.join(world_directory, "archipelago.json")))
+                with open(os.path.join(world_directory, "archipelago.json"), mode="r", encoding="utf-8") as manifest_file:
+                    manifest = json.load(manifest_file)
 
                 assert "game" in manifest, (
                     f"World directory {world_directory} has an archipelago.json manifest file, but it"
