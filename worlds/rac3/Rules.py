@@ -503,7 +503,7 @@ def set_rules(world: "RaC3World"):
     # ----- Nanotech -----#
 
     match world.options.nanotech_milestones.value:
-        case 1:  # 5 nanotech level is a check
+        case 3:  # 5 nanotech level is a check
             for level, name in enumerate(every_5_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))
@@ -511,7 +511,7 @@ def set_rules(world: "RaC3World"):
             for level, name in enumerate(every_10_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))
-        case 3:  # 20 nanotech level is a check
+        case 1:  # 20 nanotech level is a check
             for level, name in enumerate(every_20_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))

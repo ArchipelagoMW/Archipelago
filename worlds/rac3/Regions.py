@@ -298,15 +298,15 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
                 if options.vr_challenges.value == 0:
                     return True # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
-                if options.sewer.value == 0:
+                if options.sewer_crystals.value == 0:
                     return True # Skip sewer crystal locations if nanotech milestones option is disabled
-                elif options.sewer.value == 1 and LOCATION_FROM_AP_CODE[
+                elif options.sewer_crystals.value == 1 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_20_sewer_crystals:
                     return True # Skip sewer crystal locations that are not in every 20
-                elif options.sewer.value == 2 and LOCATION_FROM_AP_CODE[
+                elif options.sewer_crystals.value == 2 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_10_sewer_crystals:
                     return True # Skip sewer crystal locations that are not in every 10
-                elif options.sewer.value == 3 and LOCATION_FROM_AP_CODE[
+                elif options.sewer_crystals.value == 3 and LOCATION_FROM_AP_CODE[
                 data.AP_CODE] not in every_5_sewer_crystals:
                     return True # Skip sewer crystal locations that are not in every 5
             # Add more conditions here if needed in the future
