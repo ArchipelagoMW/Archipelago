@@ -295,7 +295,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
                 if options.vidcomics.value == 0:
                     return True # Skips vidcomic locations if vidcomics option is disabled
             case RAC3TAG.VR:
-                if options.vrchallenges.value == 0:
+                if options.vr_challenges.value == 0:
                     return True # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
                 if options.sewer.value == 0:
