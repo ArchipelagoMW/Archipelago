@@ -252,14 +252,16 @@ jobs:
           # Update only root archipelago.json
           jq --arg world_version "$version" \
              --argjson authors "$authors_json" \
-             --arg min_ap "0.6.3" \
+             --arg min_ap "0.5.0" \
              --arg max_ap "$ap_version" \
              '.world_version = $world_version
               | .authors = $authors
-              | .minimum_ap_version = $min_ap
-              | .maximum_ap_version = $max_ap' \
+              | .minimum_ap_version = $min_ap' \
              tmp_unzip/archipelago.json > tmp_unzip/archipelago.json.tmp
 
+          # Maximum AP not set. If needed can use the below to set to current used AP version
+          # | .maximum_ap_version = $max_ap
+          
           # Replace the old file with the updated one
           mv tmp_unzip/archipelago.json.tmp tmp_unzip/archipelago.json
 
