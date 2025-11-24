@@ -12,9 +12,10 @@ from .constants.region_passes import *
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
-    display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary
+    display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary, home_point_item_index_offset
+from .home_points import get_home_points
 from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
-    get_location_name_to_id, get_crystal_locations
+    get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
 from .presets import crystal_project_options_presets
 from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
@@ -23,7 +24,7 @@ from .mod_helper import ModLocationData, get_modded_items, get_modded_locations,
     get_modded_shopsanity_locations, get_modded_bosses, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info, get_removed_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, Tutorial, MultiWorld, CollectionState
+from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
 
 class CrystalProjectWeb(WebWorld):
     theme = "jungle"
@@ -50,12 +51,14 @@ class CrystalProjectWorld(World):
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = get_location_name_to_id()
+
     item_name_groups = get_item_names_per_category()
     location_name_groups = get_location_names_per_category()
     base_game_jobs: set[str] = item_name_groups[JOB].copy()
 
     mod_info = get_mod_info()
     modded_items = get_modded_items(mod_info)
+    home_points = get_home_points(-1, options)
     modded_job_count: int = 0
 
     for modded_item in modded_items:
@@ -67,6 +70,11 @@ class CrystalProjectWorld(World):
             modded_job_count += 1
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
+
+    for home_point in home_points:
+        item_name_to_id[home_point.name] = (home_point.code + home_point_item_index_offset)
+        item_name_groups.setdefault(HOME_POINT, set()).add(home_point.name)
+        location_name_to_id[home_point.name] = (home_point.code + home_point_location_index_offset)
 
     modded_locations = get_modded_locations(mod_info)
 
@@ -210,6 +218,13 @@ class CrystalProjectWorld(World):
                     if location.name == removed_location.name:
                         locations.remove(location)
 
+        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
+            home_points = get_home_points(self.player, self.options)
+
+            for home_point in home_points:
+                home_point_location = LocationData(home_point.ap_region, home_point.name, (home_point.code + home_point_location_index_offset), home_point.rule)
+                locations.append(home_point_location)
+
         #Regionsanity completion locations need to be added after all other locations so they can be removed if the region is empty (e.g. Neptune Shrine w/o Shopsanity)
         if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
             region_completions = get_region_completion_locations(self.player, self.options)
@@ -285,8 +300,13 @@ class CrystalProjectWorld(World):
             data = item_table[name]
             return Item(name, data.classification, data.code, self.player)
         else:
-            matches = [item for (index, item) in enumerate(self.modded_items) if item.name == name]
-            return Item(matches[0].name, matches[0].classification, matches[0].code, self.player)
+            matches_mod = [item for (index, item) in enumerate(self.modded_items) if item.name == name]
+            matches_home_point = [item for (index, item) in enumerate(self.home_points) if item.name == name]
+
+            if len(matches_mod) > 0:
+                return Item(matches_mod[0].name, matches_mod[0].classification, matches_mod[0].code, self.player)
+            else:
+                return Item(matches_home_point[0].name, ItemClassification.progression, (matches_home_point[0].code + home_point_item_index_offset), self.player)
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())
@@ -537,6 +557,12 @@ class CrystalProjectWorld(World):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
+        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
+            for home_point in self.home_points:
+                if ap_region_to_display_region_dictionary[home_point.ap_region] in self.included_regions:
+                    item = self.create_item(home_point.name)
+                    pool.append(item)
+
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
@@ -647,4 +673,5 @@ class CrystalProjectWorld(World):
             "starterRegion": self.starter_ap_region, # stored for UT re-gen
             "prefillMap": bool(self.options.fill_full_map.value),
             "disableSparks": bool(self.options.disable_sparks.value),
+            "homePointHustle": self.options.home_point_hustle.value,
         }

@@ -25,6 +25,7 @@ crystal_index_offset = 100000
 boss_index_offset = 1000000
 shop_index_offset = 10000000
 regionsanity_index_offset = 100000000
+home_point_location_index_offset = 1000000000
 
 def get_location_name_to_id() -> dict[str, int]:
     location_name_to_id = {location.name: location.code for location in get_treasure_and_npc_locations(-1, None)}
