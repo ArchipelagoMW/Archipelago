@@ -174,11 +174,17 @@ class Regionsanity(Choice):
     option_extreme = 2
     default = 0
 
-class HomePointHustle(Toggle):
+class HomePointHustle(Choice):
     """
     When enabled, interacting with a home point will be a check. Teleporting to each individual home point will be an item in the pool
+    When Mixed mode is enabled you will be able to teleport to any homepoint that you have received the check for, or have interacted with
+    When Hustle Only is enabled you will only be able to teleport to a homepoint you have received the check for.
     """
     display_name = "Home Point Hustle"
+    option_disabled = 0
+    option_mixed = 1
+    option_hustle_only = 2
+    default = 0
 
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):

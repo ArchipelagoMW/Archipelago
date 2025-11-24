@@ -218,7 +218,7 @@ class CrystalProjectWorld(World):
                     if location.name == removed_location.name:
                         locations.remove(location)
 
-        if self.options.home_point_hustle.value == self.options.home_point_hustle.option_true:
+        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
             home_points = get_home_points(self.player, self.options)
 
             for home_point in home_points:
@@ -557,7 +557,7 @@ class CrystalProjectWorld(World):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
 
-        if self.options.home_point_hustle:
+        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
             for home_point in self.home_points:
                 if ap_region_to_display_region_dictionary[home_point.ap_region] in self.included_regions:
                     item = self.create_item(home_point.name)
@@ -673,5 +673,5 @@ class CrystalProjectWorld(World):
             "starterRegion": self.starter_ap_region, # stored for UT re-gen
             "prefillMap": bool(self.options.fill_full_map.value),
             "disableSparks": bool(self.options.disable_sparks.value),
-            "homePointHustle": bool(self.options.home_point_hustle.value),
+            "homePointHustle": self.options.home_point_hustle.value,
         }
