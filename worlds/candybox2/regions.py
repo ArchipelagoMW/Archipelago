@@ -132,7 +132,7 @@ def entrance_participates_in_er(world: "CandyBox2World", entrance: Entrance):
     if not world.options.randomise_tower.value and entrance.name == CandyBox2Room.TOWER.value:
         return False
 
-    if not world.options.randomise_tower.value and entrance.name == CandyBox2Room.QUEST_THE_X_POTION.value:
+    if not world.options.randomise_x_potion.value and entrance.name == CandyBox2Room.QUEST_THE_X_POTION.value:
         return False
 
     return True
