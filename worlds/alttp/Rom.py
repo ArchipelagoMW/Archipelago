@@ -515,7 +515,8 @@ def _populate_sprite_table():
                     logging.debug(f"Spritefile {file} could not be loaded as a valid sprite.")
 
             with concurrent.futures.ThreadPoolExecutor() as pool:
-                sprite_paths = [user_path('data', 'sprites', 'alttpr'), user_path('data', 'sprites', 'custom')]
+                sprite_paths = [user_path("data", "sprites", "alttp", "remote"),
+                                user_path("data", "sprites", "alttp", "custom")]
                 for dir in [dir for dir in sprite_paths if os.path.isdir(dir)]:
                     for file in os.listdir(dir):
                         pool.submit(load_sprite_from_file, os.path.join(dir, file))
@@ -1196,8 +1197,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         0x51, 0x06, 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade
         0x53, 0x06, 0x54, 0xFF,  # 6 +5 arrow upgrades -> +10 arrow upgrade
         0x58, 0x01, 0x36 if local_world.options.retro_bow else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
-        0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff,  # boss heart -> green 20
-        0x17, difficulty.heart_piece_limit, 0x47, 0xff,  # piece of heart -> green 20
+        0x3E, local_world.logical_heart_containers, 0x47, 0xff,  # boss heart -> green 20
+        0x17, local_world.logical_heart_pieces, 0x47, 0xff,  # piece of heart -> green 20
         0xFF, 0xFF, 0xFF, 0xFF,  # end of table sentinel
     ])
 
