@@ -666,7 +666,10 @@ def set_rules(world: "PokeparkWorld") -> None:
         "Beach Zone Main Area - Wingull Power Competition -- Friendship",
         lambda state: can_play_catch(state, player, options)
     )
-
+    set_rule_if_exists(
+        "Beach Zone Middle Isle - Piplup Power Competition -- Friendship",
+        lambda state: can_battle(state, player, options)
+    )
     set_rule_if_exists(
         "Beach Zone Main Area - Corphish Power Competition -- Friendship",
         lambda state: can_battle(state, player, options) and
