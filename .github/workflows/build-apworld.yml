@@ -6,6 +6,15 @@ on:
       - main
       - staging
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "Is this a pre-release?"
+        type: boolean
+        required: true
+        default: false
+      custom_version:
+        description: "Optional exact version (leave blank to auto-generate)"
+        required: false
   repository_dispatch:
     types: [trigger-build-apworld]
 
@@ -26,11 +35,25 @@ jobs:
         id: branch
         shell: bash
         run: |
-          branch="${{ github.event.client_payload.branch }}"
-          if [ -z "$branch" ]; then
+          # 1. workflow_dispatch: use the branch the user selected in the UI
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # github.ref always contains refs/heads/<branch>
             branch="${GITHUB_REF#refs/heads/}"
+            echo "branch=$branch" >> $GITHUB_OUTPUT
+            echo "🏗️ Manual trigger — using branch: $branch"
+            exit 0
           fi
-          echo "🏗️ Building branch: $branch"
+
+          # 2. repository_dispatch override
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "branch=${{ github.event.client_payload.branch }}" >> $GITHUB_OUTPUT
+            echo "🏗️ External trigger — using payload branch: ${{ github.event.client_payload.branch }}"
+            exit 0
+          fi
+
+          # 3. push event default
+          branch="${GITHUB_REF#refs/heads/}"
+          echo "🏗️ Push event — using branch: $branch"
           echo "branch=$branch" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
@@ -170,46 +193,63 @@ jobs:
 
           echo "🔢 Determining next semantic version for branch: $branch"
 
-          # Get the latest tag, depending on branch type
-          if [[ "$branch" == "main" ]]; then
-              latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre$' | head -n 1 || true)
-          else
-              latest_tag=$(git tag --sort=-v:refname | grep -- '-pre$' | head -n 1 || true)
-          
-              # fallback: if no -pre tags exist yet
-              if [[ -z "$latest_tag" ]]; then
-                  latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre$' | head -n 1 || true)
-              fi
-          fi
-
-          if [[ -z "$latest_tag" ]]; then
-            echo "⚠️ No previous tags found. Starting from v0.0.0"
-            latest_tag="v0.0.0"
-          fi
-
+          # Get latest tag (any tag, pre or stable)
+          latest_tag=$(git tag --sort=-v:refname | head -n 1 || true)
+          [[ -z "$latest_tag" ]] && latest_tag="v0.0.0"
           echo "Latest tag: $latest_tag"
 
           # Strip leading "v" if present
           tag_stripped="${latest_tag#v}"
           # Split version safely (defaults if missing)
           IFS='.' read -r major minor patch <<< "$tag_stripped"
-          major=${major:-0}
-          minor=${minor:-0}
-          patch=${patch:-0}
+          major=${major:-0}; minor=${minor:-0}; patch=${patch:-0}
 
-          # Bump version based on branch type
-          if [[ "$branch" == "main" ]]; then
-            minor=$((minor + 1))
-            patch=0
-            version="${major}.${minor}.${patch}"
+          # Manual inputs
+          manual="${{ github.event_name == 'workflow_dispatch' }}"
+          manual_pre="${{ github.event.inputs.prerelease || false }}"
+          custom_version="${{ github.event.inputs.custom_version }}"
+
+          # Custom version overrides everything
+          if [[ "$manual" == "true" && -n "$custom_version" ]]; then
+              custom_version="$(echo -n "$custom_version" | xargs)"
+              echo "📝 Custom version provided: $custom_version"
+
+              if [[ "$custom_version" == *"-pre" ]]; then
+                  is_pre="true"
+              else
+                  is_pre="false"
+              fi
+
+              echo "version=$custom_version" >> $GITHUB_OUTPUT
+              echo "is_pre=$is_pre" >> $GITHUB_OUTPUT
+              echo "branch=$branch" >> $GITHUB_OUTPUT
+              exit 0
+          fi
+
+          # Determine prerelease
+          if [[ "$manual" == "true" ]]; then
+              is_pre="$manual_pre"
           else
-            patch=$((patch + 1))
-            version="${major}.${minor}.${patch}-pre"
+              # Auto pre-release for non-main branches by default
+              is_pre="$([[ "$branch" != "main" ]] && echo "true" || echo "false")"
+          fi
+
+          # Auto bump version
+          if [[ "$is_pre" == "true" ]]; then
+              # Pre-release: increment patch from latest tag
+              patch=$((patch + 1))
+              version="${major}.${minor}.${patch}-pre"
+          else
+              # Stable: increment minor, reset patch
+              minor=$((minor + 1))
+              patch=0
+              version="${major}.${minor}.${patch}"
           fi
 
           echo "✅ Next version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
+          echo "is_pre=$is_pre" >> $GITHUB_OUTPUT
 
       - name: Add manifest to .apworld and set CLIENT_VERSION
         shell: bash
@@ -226,7 +266,7 @@ jobs:
           authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
 
           # Add custom authors. Example: ("NewContributor" "AnotherDev")
-          custom_authors=("1theory")
+          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "1theory")
           for a in "${custom_authors[@]}"; do
             if ! echo "$authors" | grep -Fxq "$a"; then
               authors="${authors}"$'\n'"${a}"
@@ -292,11 +332,11 @@ jobs:
         with:
           files: |
             rac3.apworld
-            RaC3.yaml
+            rac3.yaml
           tag_name: v${{ steps.semver.outputs.version }}
           name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
           body: "Generating release notes..."
-          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+          prerelease: ${{ steps.semver.outputs.is_pre == 'true' }}
           target_commitish: ${{ needs.build.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -364,7 +404,7 @@ jobs:
           </details>
       
           **Full changelog and compare**: ${changelog}
-
+      
           ### Notes
           This release was automatically generated from the **${branch}** branch.  
           Latest (main) releases are recommended, as pre-releases (staging) may contain experimental or in-progress changes.
