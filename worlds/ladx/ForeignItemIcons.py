@@ -725,6 +725,10 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
         "Megalixir": MEDICINE,
     },
 
+    "Majora's Mask Recompiled": {
+        **PHRASE_GROUPS["Zelda"],
+    },
+
     "Mario & Luigi Superstar Saga": {
         # Key Items
         "Peach's Extra Dress": RED_TUNIC,
@@ -791,7 +795,7 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
 
     "Ocarina of Time": {
         **PHRASE_GROUPS["Zelda"],
-        "COJIRO": ROOSTER,
+        "Cojiro": ROOSTER,
         "Goron Tunic": RED_TUNIC,
         "Zora Tunic": BLUE_TUNIC,
         "Wallet": MAGIC_POWDER,
@@ -810,6 +814,21 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
 
     "Pokemon Red and Blue": {
         **PHRASE_GROUPS["Pokemon"],
+    },
+
+    "Ship of Harkinian": {
+        **PHRASE_GROUPS["Zelda"],
+        "Cojiro": ROOSTER,
+        "Goron Tunic": RED_TUNIC,
+        "Zora Tunic": BLUE_TUNIC,
+        "Wallet": MAGIC_POWDER,
+        "Medallion": PIECE_OF_POWER,
+        "Kokiri Emerald": RUPEES_500,
+        "Goron Ruby": RUPEES_500,
+        "Zora Sapphire": RUPEES_500,
+        "Dins Fire": MAGIC_ROD, # Fire shield
+        "Nayrus Love": MAGIC_ROD, # Protective barrier
+        "Farores Wind": MAGIC_ROD, # Create/use warp point in dungeons
     },
 
     "SMZ3": {
@@ -868,6 +887,10 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
         "RARE PEACH STONE": HEART_PIECE,
     },
 
+    "The Minish Cap": {
+        **PHRASE_GROUPS["Zelda"],
+    },
+
     "The Witness": {
         "BONK": BOMB,
         "BUNKER LASER": INSTRUMENT4,
@@ -921,4 +944,9 @@ GAME_SPECIFIC_PHRASES: dict[str, dict[str, str]] = {
     "VVVVVV": {
         "Trinket": PIECE_OF_POWER,
     },
+
+    "Zelda II: The Adventure of Link": {
+        **PHRASE_GROUPS["Zelda"],
+        "Thrust": SWORD,
+    }
 }
