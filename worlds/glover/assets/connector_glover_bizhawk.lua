@@ -172,8 +172,8 @@ local ROM_ITEM_TABLE = {
     "AP_STICKY_POTION",
     "AP_FROG_POTION",
     "AP_BOOMERANG_POTION",
-    "AP_HELICOPTER_POTION",
 	"AP_BEACHBALL_POTION",
+    "AP_HELICOPTER_POTION",
     "AP_DEATH_POTION",
     "AP_ATLANTIS_L1_GATE",
     "AP_ATLANTIS_L2_RAISE_WATER",
@@ -12266,7 +12266,7 @@ function wayroom_tip_check()
 					if ap_id == 0x000 then
 						check_table["1972"] = true
 					else
-						check_table[ap_id] = true
+						check_table[tostring(ap_id)] = true
 					end
 				end
 			else

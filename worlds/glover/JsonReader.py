@@ -93,9 +93,17 @@ class LocationData(NamedTuple):
 def remove_higher_difficulty_methods(self : GloverWorld, check_methods : list[AccessMethod]) -> list[AccessMethod]:
     out_methods : list[AccessMethod] = []
     #Find something of the correct difficulty based on logic methods
+    difficulty_cutoff : int = 3
+    match self.options.difficulty_logic:
+        case DifficultyLogic.option_intended:
+            difficulty_cutoff = 0
+        case DifficultyLogic.option_easy_tricks:
+            difficulty_cutoff = 1
+        case DifficultyLogic.option_hard_tricks:
+            difficulty_cutoff = 2
     for each_method in check_methods:
         #Difficulty Logic
-        if each_method.difficulty <= self.options.difficulty_logic.value:
+        if each_method.difficulty <= difficulty_cutoff:
             out_methods.append(each_method)
     return out_methods
 
@@ -107,9 +115,6 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
         methods.append(create_access_method(check_method, level_name))
-    #Remove methods from a higher difficulty
-    for each_method in methods:
-        each_method.difficulty
     #Only create if there's a method for it
     methods = remove_higher_difficulty_methods(self, methods)
     if len(methods) == 0:
@@ -291,9 +296,9 @@ def create_access_method(info : dict, level_name : str) -> AccessMethod:
     required_moves : list = []
     for each_key, each_result in info.items():
         if each_key.startswith("mv"):
-            required_moves.append(move_lookup[info[each_key]])
+            required_moves.append(move_lookup[each_result])
         if each_key.startswith("ck"):
-            required_moves.append(level_name + " " + info[each_key])
+            required_moves.append(level_name + " " + each_result)
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
     if "Not Bowling" in required_moves and "Not Crystal" in required_moves:
         required_moves.remove("Not Bowling")

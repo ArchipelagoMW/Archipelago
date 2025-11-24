@@ -3924,6 +3924,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "2 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				},
@@ -3959,6 +3960,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "3 Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				},
@@ -3994,6 +3996,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Bonus Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				},
@@ -4022,6 +4025,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"ck0": "Boss Gate",
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				},
@@ -7519,12 +7523,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 0,
 					"TYPE": 11
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 20,
-					"regionIndex": 0,
-					"trickDifficulty": 0
 				}
 			],
 			"Dennis Platform Garibs": [
@@ -7618,12 +7616,6 @@
 					"NEEDS_BALL": false,
 					"REGION": 3,
 					"TYPE": 11
-				},
-				{
-					"ballRequirement": false,
-					"mv0": 20,
-					"regionIndex": 3,
-					"trickDifficulty": 0
 				}
 			],
 			"Fenced Wind-Ups": [
@@ -22720,11 +22712,20 @@
 					"TYPE": 10
 				},
 				{
+					"ballRequirement": true,
+					"mv0": 20,
+					"mv1": 3,
+					"mv2": 17,
+					"regionIndex": 14,
+					"trickDifficulty": 2
+				},
+				{
 					"ballRequirement": false,
 					"mv0": 20,
 					"mv1": 3,
+					"mv2": 9,
 					"regionIndex": 14,
-					"trickDifficulty": 0
+					"trickDifficulty": 2
 				}
 			],
 			"Large Plank Garibs": [
@@ -26513,7 +26514,7 @@
 						"mv0": 26,
 						"mv1": 27,
 						"mv2": 11,
-						"mv3": 25,
+						"mv3": 3,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
@@ -26522,14 +26523,7 @@
 						"mv0": 26,
 						"mv1": 27,
 						"mv2": 12,
-						"mv3": 25,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"mv0": 8,
-						"mv1": 13,
+						"mv3": 3,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
@@ -26542,10 +26536,12 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 12,
-						"mv1": 3,
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"mv3": 27,
 						"regionIndex": 0,
-						"trickDifficulty": 0
+						"trickDifficulty": 1
 					}
 				],
 				"D": [
@@ -30281,14 +30277,14 @@
 						"ballRequirement": true,
 						"mv0": 8,
 						"mv1": 13,
-						"regionIndex": 16,
+						"regionIndex": 17,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
 						"mv0": 8,
 						"mv1": 32,
-						"regionIndex": 16,
+						"regionIndex": 17,
 						"trickDifficulty": 0
 					}
 				],
@@ -30737,7 +30733,7 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"0x263"
+						"0x259"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 16,
@@ -30755,6 +30751,7 @@
 					},
 					{
 						"ballRequirement": true,
+						"ck0": "Sign",
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					}
@@ -30769,6 +30766,7 @@
 					},
 					{
 						"ballRequirement": false,
+						"ck0": "Sign",
 						"mv0": 25,
 						"regionIndex": 7,
 						"trickDifficulty": 0
@@ -31172,7 +31170,7 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"0x259"
+						"0x263"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
@@ -32188,6 +32186,7 @@
 				},
 				{
 					"ballRequirement": false,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				}
