@@ -21,7 +21,6 @@ import random
 import concurrent.futures
 import time
 import uuid
-import argparse
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -82,7 +81,7 @@ nest_asyncio.apply(loop)
 MAX_BONUS: int = 28
 
 # GitHub repo where the Map/mod data is hosted for /download_data command
-DATA_REPO_OWNER = "Ziktofel"
+DATA_REPO_OWNER = "archipelago-sc2"
 DATA_REPO_NAME = "Archipelago-SC2-data"
 DATA_API_VERSION = "API4"
 
