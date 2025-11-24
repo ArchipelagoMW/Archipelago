@@ -7,7 +7,7 @@ from typing import Any
 from worlds.AutoWorld import World
 
 # Imports our files. We use capitals for the paths.
-from . import Items, Locations, Options, Regions, Rules, WebWorld
+from . import Items, Locations, Options, Regions, Rules
 
 class SDWorld(World):
     """
@@ -16,14 +16,15 @@ class SDWorld(World):
     game = "Silver Daze"
 
     #Webworld will be important eventually so we might as well add that now.
-    web = WebWorld.SilverDazeWebWorld()
+    #web = WebWorld.SilverDazeWebWorld()
 
     options_dataclass = Options.SilverDazeOptions
     options: Options.SilverDazeOptions
 
     #Sawyer: We used to define these here but we'll do it in Regions and Items instead.
     location_name_to_id = Locations.LOCATION_NAME_TO_ID
-    item_name_to_id = Items.ITEM_NAME_TO_ID
+    #item_name_to_id = Items.ITEM_NAME_TO_ID
+    item_name_to_id = Items.item_table
 
     #Sawyer: You start in Geo's Room, after all.
     origin_region_name = "Geo_Room"

@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+import typing
 
 from BaseClasses import Item, ItemClassification
 
+
+
 if TYPE_CHECKING:
-    from .world import SDWorld
+    from .World import SDWorld
+
 #Sawyer: This time I said screwit and went with the old system we already had, hopefully it works.
 #Sawyer: The APQuest version looked mean and scary but we can do it if we must.
 
@@ -13,7 +17,7 @@ class SDItem(Item):
     game: str = "Silver Daze"
 
 
-class ItemData(NamedTuple):
+class ItemData(typing.NamedTuple):
     code: int
     classification: ItemClassification = ItemClassification.filler
     category: str = 'Card'

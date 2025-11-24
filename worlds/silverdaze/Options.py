@@ -7,11 +7,10 @@ class starting_party_member(Choice):
     This selects which party member you are given at the very beginning of the game.
     """
     display_name = "Starting Party Member"
-    option_random = 10
     option_pinn = 0
     option_geo = 1
     option_kani = 2
-    default = option_random
+    default = option_pinn
 #
 #  class IncludeShops(Toggle):
 #     """
