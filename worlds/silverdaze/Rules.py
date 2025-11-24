@@ -1,146 +1,114 @@
-from typing import Dict, NamedTuple, Optional, Set
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from typing import TYPE_CHECKING
-from .Locations import location_table
 from worlds.generic.Rules import add_rule, set_rule
-from worlds.generic.Rules import add_rule, forbid_item
-
-from . import Items
 
 if TYPE_CHECKING:
-    from . import SDWorld
+    from .world import SDWorld
 
 
+def set_all_rules(world: SDWorld) -> None:
+
+    set_all_entrance_rules(world)
+    set_all_location_rules(world)
+    set_completion_condition(world)
 
 
+#Sawyer: The following are special rule shorthands for easy checking.
+lookup_key_from_color = {
+    "red": "Red Key",
+    "orange": "Orange Key",
+    "yellow": "Yellow Key",
+    "green": "Green Key",
+    "blue": "Blue Key",
+    "purple": "Purple Key",
+    "black": "Black Key"
+    }
+
+def get_key_from_color(color: str) -> str:
+    # Nat: This could be made to just color.lower().capitalize() then append " Key"
+    # and return, but we wanna prevent user errors in this house.
+    color = color.lower()
+    assert (color in lookup_key_from_color.keys()), f"Input '{color}' is not a valid key color."
+    return lookup_key_from_color[color]
+
+def sd_party_size_meets(state: CollectionState, size: int) -> bool:
+    # party_members is all items that are party members
+    # keys is just the strings, which are item names
+    return state.has_from_list_unique(Items.party_members.keys(), player, size)
+
+def sd_has_key(state: CollectionState, color: str) -> bool:
+    return state.has(get_key_from_color(color))
+
+def sd_can_fight_miniboss(state: CollectionState) -> bool:
+    return sd_party_size_meets(state, 2)
+
+def sd_can_fight_warden(state: CollectionState) -> bool:
+    return sd_party_size_meets(state, 3)
+
+def sd_can_fight_chaos_warden(state: CollectionState) -> bool:
+    return sd_party_size_meets(state, 5)
+
+#End of shorthands
 
 
-
-
-
-
-def set_rules(world: "SDWorld") -> None:
+#Sawyer: Entrance time!
+def set_all_entrance_rules(world: SDWorld) -> None:
     player = world.player
     multiworld = world.multiworld
+    #Sawyer: Below is a var to make it so we don't have to type CollectionState every time we wanna check a function.
+    mystate = CollectionState
 
-    # Custom rules
-
-    def sd_party_size_meets(state: CollectionState, size: int) -> bool:
-        # party_members is all items that are party members
-        # keys is just the strings, which are item names
-        return state.has_from_list_unique(Items.party_members.keys(), player, size)
-
-    def sd_has_key(state: CollectionState, color:str) -> bool:
-        return state.has(Items.get_key_from_color(color))
-    
-    def sd_can_fight_demo_boss(state: CollectionState) -> bool:
-        return sd_party_size_meets(state, 2)
-    
-    # Nat: What does this do?
-    def chaos(state: CollectionState) -> bool:
-        return sd_party_size_meets(state, 4)
-
-    #Sawyer: In the full game, add checks for all Wardens, glitches,etc.
-
-    # Shorthands
-    
-    def get_entrance(entrance: str):
-        return multiworld.get_entrance(entrance, player)
-
-    def get_location(location: str):
-        return multiworld.get_location(location, player)
-    # def get_location(location: str):
-    #     if location in location_table:
-    #         location = location_table[location]
-    #     return multiworld.get_location(location, player)
-
-    # Rules!
-
-    #You can't leave Geo's without a party member.
-    set_rule(
-        get_entrance("Leave_Geo_Room"),
-        lambda state: sd_party_size_meets(state,1)
-    )
-    
-    #Demo entrances!
-    
-    set_rule(
-        get_entrance("Red_Demo_Entrance"),
-        lambda state: sd_has_key(state, "yellow")
-    )
-
-    set_rule(
-        get_entrance("Red2_Demo_Entrance"),
-        lambda state: sd_has_key(state, "yellow") and sd_can_fight_demo_boss(state)
-    )
-
-    set_rule(
-        get_entrance("Demo_End"),
-        lambda state: sd_party_size_meets(state, 3)
-    )
-
-    #Sawyer: Location Rules
-    
-    #Yellow Key
-    set_rule(get_location("Hub2Chest1"),
-        lambda state: sd_has_key(state, "yellow")
-    )
+    begin_new_game = world.get_entrance("Begin_New_Game")
+    leave_geo_room = world.get_entrance("Leave_Geo_Room")
+    door_to_hub_2 = world.get_entrance("Door_To_Hub_2")
+    red_main_entrance = world.get_entrance("Red_Main_Entrance")
+    red_kingoose_boss_door = world.get_entrance("Red_Kingoose_Boss_Door")
 
 
-    #Red Key
-    set_rule(get_location("Red1Chest"),
-        lambda state: sd_has_key(state, "red")
-    )
-    set_rule(get_location("RedChasm2Chest1"),
-        lambda state: sd_has_key(state, "red")
-    )
-    set_rule(get_location("Red3_BackdoorChest"),
-        lambda state: sd_has_key(state, "red")
-    )
-    set_rule(get_location("Hub2Chest2"),
-        lambda state: sd_has_key(state, "red")
-    )
 
 
-    #Boss
-    set_rule(get_location("Nyx"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Nyx1"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Nyx2"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Nyx3"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("QuoDefender1"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("QuoDefender2"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("QuoDefender3"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Kingoose1"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Kingoose2"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
-    set_rule(get_location("Kingoose3"),
-        lambda state: sd_can_fight_demo_boss(state)
-    )
+    set_rule(door_to_hub_2, sd_has_key(mystate,'yellow'))
+    set_rule(red_main_entrance, sd_has_key(mystate,'yellow'))
+    set_rule(red_kingoose_boss_door, sd_has_key(mystate,'yellow') and sd_can_fight_miniboss(mystate))
 
-    #Chaos Warden
+    if world.options.minibosses:
+        fight_red1_miniboss = world.get_entrance("Fight_Red1_Miniboss")
+        fight_red2_miniboss = world.get_entrance("Fight_Red2_Miniboss")
 
-    # Completion
-def set_completion_rules(world: "SDWorld"):
+        set_rule(fight_red1_miniboss, sd_can_fight_miniboss(mystate))
+        set_rule(fight_red2_miniboss, sd_can_fight_miniboss(mystate))
+
+
+    if world.options.wardens:
+        fight_red_warden = world.get_entrance("Fight_Red_Warden")
+
+        set_rule(fight_red_warden, sd_can_fight_warden(mystate))
+
+#Sawyer: These are the location rules! Hoo boy there are many haha
+def set_all_location_rules(world: SDWorld) -> None:
     player = world.player
     multiworld = world.multiworld
-    multiworld.completion_condition[player] = lambda state: state.can_reach("Demo_End", "Region", player)
-    #Final game
-    #multiworld.completion_condition[player] = lambda state: state.can_reach("Entropy", "Region", player)
+    mystate = CollectionState
+
+    #Sawyer: Don't forget to define the locations we're adding rules to here.
+    hub2chest2 = world.get_location("Hub2Chest2")
+    red1chest = world.get_location("Red1Chest")
+    redchasm2chest1 = world.get_location("RedChasm2Chest1")
+    red3backdoorchest = world.get_location("Red3BackdoorChest")
+
+    add_rule(hub2chest2, sd_has_key(mystate,'red'))
+    add_rule(red1chest, sd_has_key(mystate,'red'))
+    add_rule(redchasm2chest1, sd_has_key(mystate,'red'))
+    add_rule(red3backdoorchest, sd_has_key(mystate,'red'))
+
+#Sawyer: Time for the wincon! For now it'll just be three party members but once the demo works it should be Entropy
+def set_completion_condition(world: APQuestWorld) -> None:
+    player = world.player
+    multiworld = world.multiworld
+    mystate = CollectionState
+
+    world.multiworld.completion_condition[world.player] = sd_party_size_meets(mystate, 3)
+
