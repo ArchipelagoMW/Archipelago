@@ -1756,7 +1756,7 @@ def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION + " Shop - Attendant 3", 30631 + shop_index_offset),
 
         #Sara Sara Bazaar
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Old Nans Stew Subsidiary", 10957 + shop_index_offset),
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Old Nan's Stew Subsidiary", 10957 + shop_index_offset),
 
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Accessory Merchant 1", 11386 + shop_index_offset),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Accessory Merchant 2", 21386 + shop_index_offset),
