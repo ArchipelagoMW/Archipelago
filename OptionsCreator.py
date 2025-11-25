@@ -571,8 +571,12 @@ class OptionsCreator(ThemedApp):
                 groups[group].append((name, option))
 
             for group, options in groups.items():
+                options = [(name, option) for name, option in options
+                           if name and option is not Removed and
+                           option.visibility & Visibility.simple_ui]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
+                    # Can also have a option group of options that should not render on simple ui
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
@@ -594,8 +598,7 @@ class OptionsCreator(ThemedApp):
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
                 for name, option in options:
-                    if name and option is not Removed and option.visibility & Visibility.simple_ui:
-                        group_content.add_widget(self.create_option(option, name, cls))
+                    group_content.add_widget(self.create_option(option, name, cls))
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"
@@ -659,6 +662,7 @@ class OptionsCreator(ThemedApp):
         # from kivy.modules.console import create_console
         # from kivy.core.window import Window
         # create_console(Window, self.container)
+        create_console(Window, self.container)
 
         return self.container
 
