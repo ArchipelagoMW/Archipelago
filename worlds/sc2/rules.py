@@ -1969,9 +1969,11 @@ class SC2Logic:
             or (
                 state.has(item_names.ZERGLING, self.player)
                 and (
-                    state.has_any(
-                        (item_names.ZERGLING_SHREDDING_CLAWS, item_names.ZERGLING_SHREDDING_CLAWS, item_names.ZERGLING_RAPTOR_STRAIN), self.player
-                    )
+                    state.has_any((
+                        item_names.ZERGLING_SHREDDING_CLAWS,
+                        item_names.ZERGLING_ADRENAL_OVERLOAD,
+                        item_names.ZERGLING_RAPTOR_STRAIN,
+                    ), self.player)
                 )
                 and (self.advanced_tactics or state.has_any((item_names.ZERGLING_METABOLIC_BOOST, item_names.ZERGLING_RAPTOR_STRAIN), self.player))
             )
