@@ -1,4 +1,5 @@
 #If making a new AP Region, remember to add it to display_regions
+#Also consider whether it needs to be added to the list of ap_regions_that_cant_earn_money in rules.py
 #Make sure the teleport location constant variable name matches the AP Region it's in + _TELEPORT_LOCATION perfectly
 #Beginner
 MENU_AP_REGION = "Menu"

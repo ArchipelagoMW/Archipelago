@@ -160,8 +160,8 @@ class CrystalProjectLogic:
         else:
             return False
 
-    apRegionsThatCantEarnMoney: list[str] = [MENU_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION,
-                                             BELOW_IBEK_CAVE_WEST_AP_REGION, MODDED_ZONE_AP_REGION]
+    ap_regions_that_cant_earn_money: list[str] = [MENU_AP_REGION, SARA_SARA_BEACH_EAST_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_MOUTH_AP_REGION, BELOW_IBEK_CAVE_EAST_AP_REGION,
+                                                  BELOW_IBEK_CAVE_WEST_AP_REGION, MODDED_ZONE_AP_REGION]
 
     def can_earn_money(self, state: CollectionState, shop_ap_region: str) -> bool:
         #Note: this rule is also used for the Sara Sara Bazaar innkeeper bc he charges money
@@ -180,7 +180,7 @@ class CrystalProjectLogic:
             region_checked += 1
             #checking if the player has access to money-earning zones that are higher than 6 regions below the shop's region, to make sure they're not expected to grind Spawning Meadows enemies
             #to buy something in Neptune Shrine
-            if region_checked > (shop_region_index - 6) and ap_region.can_reach(state) and ap_region.name not in self.apRegionsThatCantEarnMoney:
+            if region_checked > (shop_region_index - 6) and ap_region.can_reach(state) and ap_region.name not in self.ap_regions_that_cant_earn_money:
                 enemy_level = display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0]
                 if (enemy_level > 0 or (ap_region.name == CAPITAL_SEQUOIA_AP_REGION and self.is_area_in_level_range(state, CAPITAL_SEQUOIA_ENEMY_LEVEL)) or
                         (ap_region.name == QUINTAR_RESERVE_AP_REGION and self.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL))):
