@@ -49,4 +49,6 @@ item_table: dict[str, Portal2ItemData] = {
     "Space Core": Portal2ItemData("npc_personality_core", None, ItemClassification.progression),
     "Fact Core": Portal2ItemData("npc_personality_core", None, ItemClassification.progression),
 
+    # Junk
+    "Moon Dust": Portal2ItemData("", None, ItemClassification.filler),
 }
