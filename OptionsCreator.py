@@ -336,6 +336,11 @@ class OptionsCreator(ThemedApp):
             box.range.slider.dropdown.open()
 
         box = VisualNamedRange(option=option, name=name, range_widget=self.create_range(option, name))
+        if option.default in option.special_range_names:
+            # value can get mismatched in this case
+            box.range.slider.value = min(max(option.special_range_names[option.default], option.range_start),
+                                               option.range_end)
+            box.range.tag.text = str(int(box.range.slider.value))
         box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
         items = [
             {
