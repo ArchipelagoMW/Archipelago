@@ -57,10 +57,8 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 5: Turret Factory Completion": Portal2LocationData("sp_a2_bts3", LocationType.MAP_COMPLETION),
     "Chapter 5: Turret Sabotage Completion": Portal2LocationData("sp_a2_bts4", LocationType.MAP_COMPLETION),
     "Chapter 5: Neurotoxin Sabotage Completion": Portal2LocationData("sp_a2_bts5", LocationType.MAP_COMPLETION),
-    "Chapter 5: Tube Ride Completion": Portal2LocationData("sp_a2_bts6", LocationType.CUTSCENE_COMPLETION),
     "Chapter 5: Core Completion": Portal2LocationData("sp_a2_core", LocationType.MAP_COMPLETION),
     # Chapter 6
-    "Chapter 6: Unknown Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
     "Chapter 6: Underground Completion": Portal2LocationData("sp_a3_01", LocationType.MAP_COMPLETION),
     "Chapter 6: Cave Johnson Completion": Portal2LocationData("sp_a3_03", LocationType.MAP_COMPLETION),
     "Chapter 6: Repulsion Intro Completion": Portal2LocationData("sp_a3_jump_intro", LocationType.MAP_COMPLETION),
@@ -92,6 +90,11 @@ map_complete_table: dict[str, Portal2LocationData] = {
 }
 
 # Optional Checks
+
+cutscene_completion_table: dict[str, Portal2LocationData] = {
+    "Chapter 5: Tube Ride Completion": Portal2LocationData("sp_a2_bts6", LocationType.CUTSCENE_COMPLETION),
+    "Chapter 6: Unknown Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
+}
 
 story_achievements_table: dict[str, Portal2LocationData] = {
     "Achievement: Wake Up Call": Portal2LocationData("sp_a1_intro1", LocationType.STORY_ACHIEVEMENT),
