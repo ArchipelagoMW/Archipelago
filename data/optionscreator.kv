@@ -23,7 +23,7 @@
     text: text
     MDButtonText:
         id: text
-        text: this.option.get_option_name(this.option.default if this.option.default != "random" else list(this.option.options.values())[0])
+        text: this.option.get_option_name(this.option.default if not isinstance(this.option.default, str) else list(this.option.options.values())[0])
         theme_text_color: "Primary"
 
 <VisualNamedRange>:

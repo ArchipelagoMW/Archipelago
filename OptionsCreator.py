@@ -365,7 +365,7 @@ class OptionsCreator(ThemedApp):
             # for some reason this fixes an issue causing some to not open
             dropdown.open()
 
-        default_random = option.default == "random"
+        default_string = isinstance(option.default, str)
         main_button = VisualChoice(option=option, name=name)
         main_button.bind(on_release=open_dropdown)
 
@@ -377,7 +377,7 @@ class OptionsCreator(ThemedApp):
             for choice in option.name_lookup
         ]
         dropdown = MDDropdownMenu(caller=main_button, items=items)
-        self.options[name] = option.name_lookup[option.default] if not default_random else option.default
+        self.options[name] = option.name_lookup[option.default] if not default_string else option.default
         return main_button
 
     def create_text_choice(self, option: typing.Type[TextChoice], name: str):
