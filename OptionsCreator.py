@@ -1,3 +1,9 @@
+if __name__ == "__main__":
+    import ModuleUpdate
+
+    ModuleUpdate.update()
+
+
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, MDLabel,
                   ToggleButton, MarkupDropdown, ResizableTextField)
 from kivy.uix.behaviors.button import ButtonBehavior
