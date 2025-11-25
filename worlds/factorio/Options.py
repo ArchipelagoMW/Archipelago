@@ -345,6 +345,7 @@ class FactorioWorldGen(OptionDict):
         "seed": None,
         "starting_area": 1,
         "peaceful_mode": False,
+        "no_enemies_mode": False,
         "cliff_settings": {
             "name": "cliff",
             "cliff_elevation_0": 10,
@@ -394,6 +395,7 @@ class FactorioWorldGen(OptionDict):
             Optional("height"): And(int, lambda n: n >= 0),
             Optional("starting_area"): FloatRange(0.166, 6),
             Optional("peaceful_mode"): LuaBool,
+            Optional("no_enemies_mode"): LuaBool,
             Optional("cliff_settings"): {
                 "name": str, "cliff_elevation_0": FloatRange(0, 99),
                 "cliff_elevation_interval": FloatRange(0.066, 241),  # 40/frequency
