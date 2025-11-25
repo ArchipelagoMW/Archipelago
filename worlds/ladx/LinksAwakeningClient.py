@@ -136,7 +136,7 @@ class RAGameboy():
         return response
 
     async def async_recv(self, timeout=1.0):
-        response = await asyncio.wait_for(asyncio.get_event_loop().sock_recv(self.socket, 4096), timeout)
+        response = await asyncio.wait_for(asyncio.get_running_loop().sock_recv(self.socket, 4096), timeout)
         return response
 
     async def check_safe_gameplay(self, throw=True):
