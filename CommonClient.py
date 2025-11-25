@@ -323,7 +323,7 @@ class CommonContext:
     hint_cost: int | None
     """Current Hint Cost per Hint from the server"""
     hint_points: int | None
-    """Current avaliable Hint Points from the server"""
+    """Current available Hint Points from the server"""
     player_names: dict[int, str]
     """Current lookup of slot number to player display name from server (includes aliases)"""
 
