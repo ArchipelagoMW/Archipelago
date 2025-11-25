@@ -455,7 +455,7 @@ def set_moderate_rules(world: "HatInTimeWorld"):
             if "Pink Paw Station Thug" in key and is_location_valid(world, key):
                 set_rule(world.multiworld.get_location(key, world.player), lambda state: True)
 
-        # Moderate: clear Rush Hour without Hookshot
+        # Moderate: clear Rush Hour without Hookshot or Dweller Mask
         set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
                  lambda state: state.has("Metro Ticket - Pink", world.player)
                  and state.has("Metro Ticket - Yellow", world.player)
@@ -481,9 +481,8 @@ def set_hard_rules(world: "HatInTimeWorld"):
     set_rule(world.multiworld.get_location("Subcon Forest - Dweller Platforming Tree B", world.player),
              lambda state: has_paintings(state, world, 3))
 
-    # Cherry bridge over boss arena gap (painting still expected)
-    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: has_paintings(state, world, 1, False) or state.has("YCHE Access", world.player))
+    # Cherry bridge over boss arena gap
+    set_rule(world.get_entrance("SF Behind Boss Firewall -> SF Boss Arena"), lambda state: True)
 
     set_rule(world.multiworld.get_location("Subcon Forest - Noose Treehouse", world.player),
              lambda state: has_paintings(state, world, 2, True))
@@ -566,27 +565,61 @@ def set_expert_rules(world: "HatInTimeWorld"):
              lambda state: True)
 
     # Expert: Cherry Hovering
-    subcon_area = world.multiworld.get_region("Subcon Forest Area", world.player)
-    yche = world.multiworld.get_region("Your Contract has Expired", world.player)
-    entrance = yche.connect(subcon_area, "Subcon Forest Entrance YCHE")
+    # Skipping the boss firewall is possible with a Cherry Hover.
+    set_rule(world.get_entrance("SF Area -> SF Behind Boss Firewall"),
+             lambda state: has_paintings(state, world, 1, True))
+    # The boss arena gap can be crossed in reverse with a Cherry Hover.
+    subcon_boss_arena = world.get_region("Subcon Forest Boss Arena")
+    subcon_behind_boss_firewall = world.get_region("Subcon Forest Behind Boss Firewall")
+    subcon_boss_arena.connect(subcon_behind_boss_firewall, "SF Boss Arena -> SF Behind Boss Firewall")
 
-    if world.options.NoPaintingSkips:
-        add_rule(entrance, lambda state: has_paintings(state, world, 1))
+    subcon_area = world.get_region("Subcon Forest Area")
+
+    # The boss firewall can be skipped in reverse with a Cherry Hover, but it is not possible to remove the boss
+    # firewall from reverse because the paintings to burn to remove the firewall are on the other side of the firewall.
+    # Therefore, a painting skip is required. The paintings could be burned by already having access to
+    # "Subcon Forest Area" through another entrance, but making a new connection to "Subcon Forest Area" in that case
+    # would be pointless.
+    if not world.options.NoPaintingSkips:
+        # The import cannot be done at the module-level because it would cause a circular import.
+        from .Regions import get_region_shuffled_to
+
+        subcon_behind_boss_firewall.connect(subcon_area, "SF Behind Boss Firewall -> SF Area")
+
+        # Because the Your Contract has Expired entrance can now reach "Subcon Forest Area", it needs to be connected to
+        # each of the Subcon Forest Time Rift entrances, like the other Subcon Forest Acts.
+        yche = world.get_region("Your Contract has Expired")
+
+        def connect_to_shuffled_act_at(original_act_name):
+            region_name = get_region_shuffled_to(world, original_act_name)
+            return yche.connect(world.get_region(region_name), f"{original_act_name} Portal - Entrance YCHE")
+
+        # Rules copied from `Rules.set_rift_rules()` with painting logic removed because painting skips must be
+        # available.
+        entrance = connect_to_shuffled_act_at("Time Rift - Pipe")
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 2"))
+        reg_act_connection(world, world.get_entrance("Subcon Forest - Act 2").connected_region, entrance)
+
+        entrance = connect_to_shuffled_act_at("Time Rift - Village")
+        add_rule(entrance, lambda state: can_clear_required_act(state, world, "Subcon Forest - Act 4"))
+        reg_act_connection(world, world.get_entrance("Subcon Forest - Act 4").connected_region, entrance)
+
+        entrance = connect_to_shuffled_act_at("Time Rift - Sleepy Subcon")
+        add_rule(entrance, lambda state: has_relic_combo(state, world, "UFO"))
 
     set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
              lambda state: can_use_hookshot(state, world) and can_hit(state, world)
              and has_paintings(state, world, 1, True))
 
     # Set painting rules only. Skipping paintings is determined in has_paintings
-    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: has_paintings(state, world, 1, True))
     set_rule(world.multiworld.get_location("Subcon Forest - Magnet Badge Bush", world.player),
              lambda state: has_paintings(state, world, 3, True))
 
     # You can cherry hover to Snatcher's post-fight cutscene, which completes the level without having to fight him
-    subcon_area.connect(yche, "Snatcher Hover")
-    set_rule(world.multiworld.get_location("Act Completion (Your Contract has Expired)", world.player),
-             lambda state: True)
+    yche_post_fight = world.get_region("Your Contract has Expired - Post Fight")
+    subcon_area.connect(yche_post_fight, "Snatcher Hover")
+    # Cherry Hover from YCHE also works, so there are no requirements for the Act Completion.
+    set_rule(world.get_location("Act Completion (Your Contract has Expired)"), lambda state: True)
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
@@ -681,12 +714,18 @@ def set_subcon_rules(world: "HatInTimeWorld"):
              lambda state: can_use_hat(state, world, HatType.BREWING) or state.has("Umbrella", world.player)
              or can_use_hat(state, world, HatType.DWELLER))
 
-    # You can't skip over the boss arena wall without cherry hover, so these two need to be set this way
-    set_rule(world.multiworld.get_location("Subcon Forest - Boss Arena Chest", world.player),
-             lambda state: state.has("TOD Access", world.player) and can_use_hookshot(state, world)
-             and has_paintings(state, world, 1, False) or state.has("YCHE Access", world.player))
+    # You can't skip over the boss arena wall without cherry hover.
+    set_rule(world.get_entrance("SF Area -> SF Behind Boss Firewall"),
+             lambda state: has_paintings(state, world, 1, False))
 
-    # The painting wall can't be skipped without cherry hover, which is Expert
+    # The hookpoints to cross the boss arena gap are only present in Toilet of Doom.
+    set_rule(world.get_entrance("SF Behind Boss Firewall -> SF Boss Arena"),
+             lambda state: state.has("TOD Access", world.player)
+             and can_use_hookshot(state, world))
+
+    # The Act Completion is in the Toilet of Doom region, so the same rules as passing the boss firewall and crossing
+    # the boss arena gap are required. "TOD Access" is implied from the region so does not need to be included in the
+    # rule.
     set_rule(world.multiworld.get_location("Act Completion (Toilet of Doom)", world.player),
              lambda state: can_use_hookshot(state, world) and can_hit(state, world)
              and has_paintings(state, world, 1, False))

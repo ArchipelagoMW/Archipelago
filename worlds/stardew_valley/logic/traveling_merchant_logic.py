@@ -12,7 +12,7 @@ class TravelingMerchantLogicMixin(BaseLogicMixin):
         self.traveling_merchant = TravelingMerchantLogic(*args, **kwargs)
 
 
-class TravelingMerchantLogic(BaseLogic[Union[TravelingMerchantLogicMixin, ReceivedLogicMixin]]):
+class TravelingMerchantLogic(BaseLogic):
 
     def has_days(self, number_days: int = 1):
         if number_days <= 0:

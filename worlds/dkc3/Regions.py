@@ -802,8 +802,10 @@ def connect_regions(world: World, level_list):
     for i in range(0, len(kremwood_forest_levels) - 1):
         connect(world, world.player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[i])
 
-    connect(world, world.player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[-1],
-            lambda state: (state.can_reach(LocationName.riverside_race_flag, "Location", world.player)))
+    connection = connect(world, world.player, names, LocationName.kremwood_forest_region, kremwood_forest_levels[-1],
+                         lambda state: (state.can_reach(LocationName.riverside_race_flag, "Location", world.player)))
+    world.multiworld.register_indirect_condition(world.get_location(LocationName.riverside_race_flag).parent_region,
+                                                 connection)
 
     # Cotton-Top Cove Connections
     cotton_top_cove_levels = [
@@ -837,8 +839,11 @@ def connect_regions(world: World, level_list):
         connect(world, world.player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
                 lambda state: (state.has(ItemName.bowling_ball, world.player, 1)))
     else:
-        connect(world, world.player, names, LocationName.mekanos_region, LocationName.sky_high_secret_region,
-                lambda state: (state.can_reach(LocationName.bleaks_house, "Location", world.player)))
+        connection = connect(world, world.player, names, LocationName.mekanos_region,
+                             LocationName.sky_high_secret_region,
+                             lambda state: (state.can_reach(LocationName.bleaks_house, "Location", world.player)))
+        world.multiworld.register_indirect_condition(world.get_location(LocationName.bleaks_house).parent_region,
+                                                     connection)
 
     # K3 Connections
     k3_levels = [
@@ -946,3 +951,4 @@ def connect(world: World, player: int, used_names: typing.Dict[str, int], source
 
     source_region.exits.append(connection)
     connection.connect(target_region)
+    return connection

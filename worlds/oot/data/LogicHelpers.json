@@ -66,6 +66,7 @@
     "can_break_heated_crate": "deadly_bonks != 'ohko' or (Fairy and (can_use(Goron_Tunic) or damage_multiplier != 'ohko')) or can_use(Nayrus_Love) or can_blast_or_smash",
     "can_break_lower_beehive": "can_use(Boomerang) or can_use(Hookshot) or Bombs or (logic_beehives_bombchus and has_bombchus)",
     "can_break_upper_beehive": "can_use(Boomerang) or can_use(Hookshot) or (logic_beehives_bombchus and has_bombchus)",
+    "can_break_upper_beehive_child": "can_use(Boomerang) or (logic_beehives_bombchus and has_bombchus and is_child)",
     # can_use and helpers
     # The parser reduces this to smallest form based on item category.
     # Note that can_use(item) is False for any item not covered here.

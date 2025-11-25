@@ -8,17 +8,20 @@ from schema import Schema, Optional, And, Or, SchemaError
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool, PerGameCommonOptions, OptionGroup
 
+
 # schema helpers
 class FloatRange:
     def __init__(self, low, high):
         self._low = low
         self._high = high
 
-    def validate(self, value):
+    def validate(self, value) -> float:
         if not isinstance(value, (float, int)):
             raise SchemaError(f"should be instance of float or int, but was {value!r}")
         if not self._low <= value <= self._high:
             raise SchemaError(f"{value} is not between {self._low} and {self._high}")
+        return float(value)
+
 
 LuaBool = Or(bool, And(int, lambda n: n in (0, 1)))
 
@@ -318,7 +321,7 @@ class InventorySpillTrapCount(TrapCount):
 
 class FactorioWorldGen(OptionDict):
     """World Generation settings. Overview of options at https://wiki.factorio.com/Map_generator,
-    with in-depth documentation at https://lua-api.factorio.com/latest/Concepts.html#MapGenSettings"""
+    with in-depth documentation at https://lua-api.factorio.com/latest/concepts/MapGenSettings.html"""
     display_name = "World Generation"
     # FIXME: do we want default be a rando-optimized default or in-game DS?
     value: dict[str, dict[str, typing.Any]]
@@ -342,6 +345,7 @@ class FactorioWorldGen(OptionDict):
         "seed": None,
         "starting_area": 1,
         "peaceful_mode": False,
+        "no_enemies_mode": False,
         "cliff_settings": {
             "name": "cliff",
             "cliff_elevation_0": 10,
@@ -391,6 +395,7 @@ class FactorioWorldGen(OptionDict):
             Optional("height"): And(int, lambda n: n >= 0),
             Optional("starting_area"): FloatRange(0.166, 6),
             Optional("peaceful_mode"): LuaBool,
+            Optional("no_enemies_mode"): LuaBool,
             Optional("cliff_settings"): {
                 "name": str, "cliff_elevation_0": FloatRange(0, 99),
                 "cliff_elevation_interval": FloatRange(0.066, 241),  # 40/frequency

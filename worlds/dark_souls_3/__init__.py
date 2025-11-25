@@ -25,19 +25,10 @@ class DarkSouls3Web(WebWorld):
         "English",
         "setup_en.md",
         "setup/en",
-        ["Marech"]
+        ["Natalie", "Marech"]
     )
 
-    setup_fr = Tutorial(
-        setup_en.tutorial_name,
-        setup_en.description,
-        "Français",
-        "setup_fr.md",
-        "setup/fr",
-        ["Marech"]
-    )
-
-    tutorials = [setup_en, setup_fr]
+    tutorials = [setup_en]
     option_groups = option_groups
     item_descriptions = item_descriptions
     rich_text_options_doc = True
@@ -83,6 +74,13 @@ class DarkSouls3World(World):
     local_itempool: List[DarkSouls3Item] = []
     """The pool of all items within this particular world. This is a subset of
     `self.multiworld.itempool`."""
+
+    missable_dupe_prog_locs: Set[str] = {"PC: Storm Ruler - Siegward",
+                                         "US: Pyromancy Flame - Cornyx",
+                                         "US: Tower Key - kill Irina"}
+    """Locations whose vanilla item is a missable duplicate of a non-missable progression item.
+    If vanilla, these locations shouldn't be expected progression, so they aren't created and don't get rules.
+    """
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
@@ -267,10 +265,11 @@ class DarkSouls3World(World):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Don't allow missable duplicates of progression items to be expected progression.
-                if location.name in {"PC: Storm Ruler - Siegward",
-                                     "US: Pyromancy Flame - Cornyx",
-                                     "US: Tower Key - kill Irina"}:
-                    continue
+                if location.name in self.missable_dupe_prog_locs: continue
+
+                # Don't create DLC and NGP locations if those are disabled
+                if location.dlc and not self.options.enable_dlc: continue
+                if location.ngp and not self.options.enable_ngp: continue
 
                 # Replace non-randomized items with events that give the default item
                 event_item = (
@@ -282,9 +281,7 @@ class DarkSouls3World(World):
                     self.player,
                     location,
                     parent = new_region,
-                    event = True,
                 )
-                event_item.code = None
                 new_location.place_locked_item(event_item)
                 if location.name in excluded:
                     excluded.remove(location.name)
@@ -716,7 +713,7 @@ class DarkSouls3World(World):
         if self._is_location_available("US: Young White Branch - by white tree #2"):
             self._add_item_rule(
                 "US: Young White Branch - by white tree #2",
-                lambda item: item.player == self.player and not item.data.unique
+                lambda item: item.player != self.player or not item.data.unique
             )
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
@@ -1297,8 +1294,9 @@ class DarkSouls3World(World):
             data = location_dictionary[location]
             if data.dlc and not self.options.enable_dlc: continue
             if data.ngp and not self.options.enable_ngp: continue
+            # Don't add rules to missable duplicates of progression items
+            if location in self.missable_dupe_prog_locs and not self._is_location_available(location): continue
 
-            if not self._is_location_available(location): continue
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)

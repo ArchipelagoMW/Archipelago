@@ -1,7 +1,7 @@
 import typing
 import os
 import json
-from .Items import item_table, action_item_table, cannon_item_table, SM64Item
+from .Items import item_data_table, action_item_data_table, cannon_item_data_table, item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options_groups, SM64Options
 from .Rules import set_rules
@@ -65,9 +65,10 @@ class SM64World(World):
             max_stars -= 15
         self.move_rando_bitvec = 0
         if self.options.enable_move_rando:
+            double_jump_bitvec_offset = action_item_data_table['Double Jump'].code
             for action in self.options.move_rando_actions.value:
                 max_stars -= 1
-                self.move_rando_bitvec |= (1 << (action_item_table[action] - action_item_table['Double Jump']))
+                self.move_rando_bitvec |= (1 << (action_item_data_table[action].code - double_jump_bitvec_offset))
         if self.options.exclamation_boxes:
             max_stars += 29
         self.number_of_stars = min(self.options.amount_of_stars, max_stars)
@@ -100,14 +101,8 @@ class SM64World(World):
                     'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
-        item_id = item_table[name]
-        if name == "1Up Mushroom":
-            classification = ItemClassification.filler
-        elif name == "Power Star":
-            classification = ItemClassification.progression_skip_balancing
-        else:
-            classification = ItemClassification.progression
-        item = SM64Item(name, classification, item_id, self.player)
+        data = item_data_table[name]
+        item = SM64Item(name, data.classification, data.code, self.player)
 
         return item
 
@@ -131,11 +126,12 @@ class SM64World(World):
         self.multiworld.itempool += [self.create_item(cap_name) for cap_name in ["Wing Cap", "Metal Cap", "Vanish Cap"]]
         # Cannons
         if (self.options.buddy_checks):
-            self.multiworld.itempool += [self.create_item(name) for name, id in cannon_item_table.items()]
+            self.multiworld.itempool += [self.create_item(cannon_name) for cannon_name in cannon_item_data_table.keys()]
         # Moves
+        double_jump_bitvec_offset = action_item_data_table['Double Jump'].code
         self.multiworld.itempool += [self.create_item(action)
-                                     for action, itemid in action_item_table.items()
-                                     if self.move_rando_bitvec & (1 << itemid - action_item_table['Double Jump'])]
+                                     for action, itemdata in action_item_data_table.items()
+                                     if self.move_rando_bitvec & (1 << itemdata.code - double_jump_bitvec_offset)]
 
     def generate_basic(self):
         if not (self.options.buddy_checks):
