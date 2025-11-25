@@ -2,7 +2,7 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from math import sqrt
 from random import choice, random
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from kivy.core.window import Keyboard, Window
 from kivy.graphics import Color, Triangle
