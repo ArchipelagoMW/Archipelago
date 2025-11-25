@@ -6,11 +6,12 @@ from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
-from worlds.rac3.constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
-                                         non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
-                                         trap_to_status, vidcomic_data, weapon_upgrade_data)
-from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
-from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
+                                                     ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data,
+                                                     PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, trap_to_status,
+                                                     vidcomic_data, weapon_upgrade_data)
+from worlds.rac3.constants.data.Rac3LocationData import (LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE,
+                                                         RAC3LOCATIONDATA)
 from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
@@ -19,7 +20,8 @@ from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
 from worlds.rac3.constants.Rac3Input import RAC3INPUT
 from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from worlds.rac3.constants.Rac3Region import (PLANET_CHECKPOINT, PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION,
+                                              SHIP_SLOTS)
 from worlds.rac3.constants.Rac3Status import RAC3STATUS
 from worlds.rac3.pcsx2_interface.pine import Pine
 
@@ -68,7 +70,7 @@ class GameInterface:
 
     def _write_bytes(self, address: int, value: bytes):
         self.pcsx2_interface.write_bytes(address, value)
-    
+
     def _write_float(self, address: int, value: float):
         self.pcsx2_interface.write_float(address, value)
 
@@ -545,67 +547,52 @@ class Rac3Interface(GameInterface):
         #         self._write8(status_address, 0)
 
     def input_cycler(self):
-        is_paused = self._read8(RAC3STATUS.PAUSE)
-        pressed_square = not self._read16(RAC3STATUS.INPUT) & RAC3INPUT.SQUARE
+        planet_id = self._read8(RAC3STATUS.PLANET)
+        planet = PLANET_NAME_FROM_ID[planet_id]
+        is_paused = self._read8(RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS)
+        pressed_square = self._read16(RAC3STATUS.READ_INPUT) & RAC3INPUT.SQUARE
         if is_paused and pressed_square:
-            planet_id = self._read8(RAC3STATUS.PLANET)
-            planet = PLANET_NAME_FROM_ID[planet_id]
-            self.unpause_game()
+            self.unpause_game(planet)
             self.teleport_to_ship(planet)
-    
-    def unpause_game(self):
-        is_paused = self._read8(RAC3STATUS.PAUSE)
+
+    def unpause_game(self, planet):
+        is_paused = self._read8(RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS)
         if is_paused:
-            end_time = time.time() + 0.016  # 16ms - about one frame
-            while time.time() < end_time:
-                current_input = self._read16(RAC3STATUS.INPUT)
-                new_input = current_input & ~RAC3INPUT.START
-                self._write16(RAC3STATUS.INPUT, new_input)
+            self.write_input(RAC3INPUT.START)
+
+    def write_input(self, button: RAC3INPUT):
+        left_shifted = (button & 0x00FF) << 8
+        right_shifted = button >> 8
+        bitmasked = RAC3INPUT.MASK ^ (left_shifted | right_shifted)
+        self._write16(RAC3STATUS.WRITE_INPUT_1, bitmasked)
+        self._write16(RAC3STATUS.WRITE_INPUT_2, bitmasked)
 
     def teleport_to_ship(self, planet):
-        planet_checkpoint = RAC3_REGION_DATA_TABLE[planet].CHECKPOINT
-        if planet_checkpoint and self.should_coordinate_inject(planet):
-            # For special cases with checkpoints that change, we manually change coordinates to the checkpoint at the ship
+        if planet in PLANET_CHECKPOINT.keys() and self.should_coordinate_inject(planet):
+            # For special cases with checkpoints that change, we manually change coordinates to the checkpoint at the
+            # ship
             self.logger.info(f'Teleporting to ship on: {planet}')
-            self.teleport_to_coords(planet_checkpoint)
+            self.teleport_to_coords()
         else:
             self.logger.info(f'Respawning at ship on: {planet}')
             self.force_respawn()
-    
-    def teleport_to_coords(self, coords: RAC3POSITIONDATA):
-        self._write_float(RAC3STATUS.RATCHET_X, coords.X)
-        self._write_float(RAC3STATUS.RATCHET_Y, coords.Y)
-        self._write_float(RAC3STATUS.RATCHET_Z, coords.Z)
+
+    def teleport_to_coords(self):
+        # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
+        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     def should_coordinate_inject(self, planet):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
         if is_clank:
             return False
         match planet:
+            # Todo: add more special cases
             case RAC3REGION.MARCADIA:
-                current_z = self._read_float(RAC3STATUS.RATCHET_Z)
-                current_y = self._read_float(RAC3STATUS.RATCHET_Y)
-                at_palace = current_y > 800
-                in_ldf = current_z > 250.0
-                return not (at_palace or in_ldf)
-            case RAC3REGION.STARSHIP_PHOENIX:
-                return False
-            case RAC3REGION.ANNIHILATION_NATION:
-                return False
-            case RAC3REGION.TYHRRANOSIS:
-                return False
-            case RAC3REGION.HOLOSTAR_STUDIOS:
-                return False
+                return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.OBANI_DRACO:
-                current_x = self._read_float(RAC3STATUS.RATCHET_X)
-                fighting_courtney = current_x > 600
-                return not fighting_courtney
-            case RAC3REGION.ZELDRIN_STARPORT:
-                return False
-            case RAC3REGION.PHOENIX_ASSAULT:
-                return False
+                return self._read_float(RAC3STATUS.RATCHET_X) < 600  # Courtney Fight
         return True
-    
+
     def force_respawn(self):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
@@ -618,7 +605,9 @@ class Rac3Interface(GameInterface):
             return False, f"Ratchet {death}"
 
     def kill_player(self) -> bool:
-        if not self._read8(RAC3STATUS.PAUSE):
+        planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
+        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
+        if not self._read8(pause_address):
             self._write8(RAC3STATUS.HEALTH, 0)
             return True
         else:
