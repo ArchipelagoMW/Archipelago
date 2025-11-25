@@ -3054,13 +3054,20 @@ class SC2Logic:
                     )
                 )
                 or (
-                    self.spear_of_adun_presence in (SpearOfAdunPresence.option_everywhere, SpearOfAdunPresence.option_any_race_lotv)
+                    (
+                        self.spear_of_adun_presence == SpearOfAdunPresence.option_everywhere
+                        or self.spear_of_adun_presence == SpearOfAdunPresence.option_any_race_lotv
+                    )
                     and (
-                            state.has(item_names.SOA_TIME_STOP, self.player)
-                            or (self.advanced_tactics
-                                and (state.has_any((item_names.SOA_SHIELD_OVERCHARGE, item_names.SOA_SOLAR_BOMBARDMENT),
-                                                   self.player))
-                                )
+                        state.has(item_names.SOA_TIME_STOP, self.player)
+                        or (self.advanced_tactics
+                            and (
+                                state.has_any((
+                                    item_names.SOA_SHIELD_OVERCHARGE,
+                                    item_names.SOA_SOLAR_BOMBARDMENT
+                                ), self.player)
+                            )
+                        )
                     )
                 )
             )
