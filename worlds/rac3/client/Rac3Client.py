@@ -67,8 +67,8 @@ class CommandProcessor(ClientCommandProcessor):
                     self.output(f"Death Link = {self.ctx.slot_data[RAC3OPTION.DEATHLINK]}")
             else:
                 self.output(f"Death Link not found in slot_data. You are probably not connected")
-    
-    def _cmd_ship(self):
+
+    def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead."""
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)

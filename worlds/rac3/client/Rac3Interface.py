@@ -93,8 +93,8 @@ class GameInterface:
                 self.game_id_error = game_id
         except RuntimeError:
             pass
-        except ConnectionError as e:
-            self.logger.warning(f'Connection to PCSX2 Emulator lost: {e}')
+        except ConnectionError as error:
+            self.logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
 
     def disconnect_from_game(self):
         self.pcsx2_interface.disconnect()
@@ -255,6 +255,7 @@ class Rac3Interface(GameInterface):
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
                         self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
+                self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
                 already_locked = self._read8(RAC3STATUS.WEAPON_LOCK)
 
@@ -523,7 +524,8 @@ class Rac3Interface(GameInterface):
         pass
 
     def trap_cycler(self):
-        for name in self.trap_timers.keys():
+        traps = list(self.trap_timers.keys())
+        for name in traps:
             if time.time() < self.trap_timers[name]:
                 self._write8(trap_to_status[name], 1)
             else:
@@ -581,10 +583,10 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             case RAC3REGION.MARCADIA:
-                current_Z = self._read_float(RAC3STATUS.RATCHET_Z)
-                current_Y = self._read_float(RAC3STATUS.RATCHET_Y)
-                at_palace = current_Y > 800
-                in_ldf = current_Z > 250.0
+                current_z = self._read_float(RAC3STATUS.RATCHET_Z)
+                current_y = self._read_float(RAC3STATUS.RATCHET_Y)
+                at_palace = current_y > 800
+                in_ldf = current_z > 250.0
                 return not (at_palace or in_ldf)
             case RAC3REGION.STARSHIP_PHOENIX:
                 return False
@@ -595,8 +597,8 @@ class Rac3Interface(GameInterface):
             case RAC3REGION.HOLOSTAR_STUDIOS:
                 return False
             case RAC3REGION.OBANI_DRACO:
-                current_X = self._read_float(RAC3STATUS.RATCHET_X)
-                fighting_courtney = current_X > 600
+                current_x = self._read_float(RAC3STATUS.RATCHET_X)
+                fighting_courtney = current_x > 600
                 return not fighting_courtney
             case RAC3REGION.ZELDRIN_STARPORT:
                 return False

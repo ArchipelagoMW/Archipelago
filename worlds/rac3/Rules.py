@@ -139,9 +139,13 @@ def set_rules(world: "RaC3World"):
         # RAC3LOCATION.PHOENIX_VR_WRENCH
         # RAC3TBOLT.PHOENIX_VR_NERVES
         # RAC3LOCATION.PHOENIX_VR_NERVES
-        RAC3LOCATION.PHOENIX_HACKER: lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player),
-        RAC3LOCATION.PHOENIX_HYPERSHOT: lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player),
         RAC3TBOLT.PHOENIX_VR_TRAINING:
+            lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)
+                          and state.has_all([RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], player=world.player),
+        RAC3LOCATION.PHOENIX_HACKER:
+            lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)
+                          and state.has_all([RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], player=world.player),
+        RAC3LOCATION.PHOENIX_HYPERSHOT:
             lambda state: state.can_reach(RAC3REGION.TYHRRANOSIS, player=world.player)
                           and state.has_all([RAC3ITEM.HACKER, RAC3ITEM.HYPERSHOT], player=world.player),
         RAC3LOCATION.PHOENIX_VR_TRAINING:
