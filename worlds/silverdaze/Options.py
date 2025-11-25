@@ -62,3 +62,5 @@ class wardens(Toggle):
 @dataclass
 class SilverDazeOptions(PerGameCommonOptions):
          starting_party_member: starting_party_member
+         minibosses: minibosses
+         wardens: wardens

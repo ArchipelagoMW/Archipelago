@@ -5,7 +5,7 @@ import typing
 
 from BaseClasses import Item, ItemClassification
 
-
+from worlds.AutoWorld import World, WebWorld
 
 if TYPE_CHECKING:
     from .World import SDWorld
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 #Sawyer: The APQuest version looked mean and scary but we can do it if we must.
 
 class SDItem(Item):
-    game: str = "Silver Daze"
+    game = "Silver Daze"
 
 
 class ItemData(typing.NamedTuple):
@@ -82,7 +82,7 @@ consumables = {
 #Sawyer: This should give us some random fillers. Let's look into adding traps later.
 def get_random_filler_item_name(world: SDWorld) -> str:
     fillers = ["Evade Token", "Sneak Token"]
-    randomResult = world.random.randomint(0, len(fillers))
+    randomResult = world.random.randint(0, len(fillers) - 1)
     return fillers[randomResult]
 
 
@@ -101,25 +101,32 @@ item_table = {
     #  "Sneak Token":          ItemData(2006,       ItemClassification.filler, "Filler",   1),
 }
 
+# def create_item_with_correct_classification(world: SDWorld, name: str) -> SDItem:
+#     item_data = item_table[name]
+#     return SDItem(name, item_data.classification, item_data.code, self.player)
+
 
 def create_item(self, name: str) -> Item:
     item_data = item_table[name]
     item = SDItem(name, item_data.classification, item_data.code, self.player)
     return item
 
-def create_items(world: SDWorld):
+def create_all_items(world: SDWorld):
     itempool = []
 
-    for name, max_quantity in item_table:
-        itempool += [name] * max_quantity
+    for name in item_table:
+    #for name, max_quantity in item_table:
+    #    itempool += world.create_item(name)
+    #    itempool += [name] * max_quantity
+        itempool += [name]
 
     # Starting Party Member given at game start
     starter_member = "Pinn"
-    if (Options.StartingPartyMember == "option_geo"):
+    if (world.options.starting_party_member == "option_geo"):
         starter_member = "Geo"
-    if (Options.StartingPartyMember == "option_kani"):
+    if (world.options.starting_party_member == "option_kani"):
         starter_member = "Kani"
-    if (Options.StartingPartyMember == "option_random"):
+    if (world.options.starting_party_member == "option_random"):
 
         # TODO:
         # Sawyer: Make sure this has all party members in the final game.
@@ -132,14 +139,23 @@ def create_items(world: SDWorld):
             starter_member = "Kani"
 
     itempool.remove(starter_member)
-    world.multiworld.push_precollected(world.create_item(starter_member))
+
+
 
     # other steps here maybe
 
     # Create Items
-    itempool = [item for item in map(lambda name: world.create_item(name), itempool)]
-    # Fill remaining items with randomly generated junk
-    while len(itempool) < len(world.multiworld.get_unfilled_locations(world.player)):
-        itempool.append(world.get_random_filler_item_name())
+    # itempool = [item for item in map(lambda name: world.create_item(name), itempool)]
+    # # Fill remaining items with randomly generated junk
+    # while len(itempool) < len(world.multiworld.get_unfilled_locations(world.player)):
+    #     itempool.append(world.get_random_filler_item_name())
+
+    number_of_items = len(itempool)
+    number_of_unfilled_locations = len(world.multiworld.get_unfilled_locations(world.player))
+    needed_number_of_filler_items = number_of_unfilled_locations - number_of_items
+    itempool += [world.create_filler() for _ in range(needed_number_of_filler_items)]
 
     world.multiworld.itempool += itempool
+
+#Sawyer: Add starter party member at the end.
+    world.multiworld.push_precollected(world.create_item(starter_member))

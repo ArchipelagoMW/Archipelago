@@ -15,7 +15,7 @@ def create_and_connect_regions(world: SDWorld) -> None:
  # Sawyer: Okay, we had some regions defined in our last attempts.
 def create_all_regions(world: SDWorld) -> None:
     #Sawyer: Probably not using New Game but it's the menu region so we should keep it here to be safe.
-    new_game = Region("New_Game", world.player, world.multiworld)
+    #new_game = Region("New_Game", world.player, world.multiworld)
 
     geo_room = Region("Geo_Room", world.player, world.multiworld)
     cotton = Region("Cotton", world.player, world.multiworld)
@@ -46,7 +46,7 @@ def create_all_regions(world: SDWorld) -> None:
 
 #Sawyer: Next part has me nervous. This is entrances, right?
 def connect_regions(world: SDWorld) -> None:
-    new_game = world.get_region("New_Game")
+    #new_game = world.get_region("New_Game")
 
     geo_room = world.get_region("Geo_Room")
     cotton = world.get_region("Cotton")
@@ -56,7 +56,7 @@ def connect_regions(world: SDWorld) -> None:
     red2 = world.get_region("Red2")
 
     #Sawyer: Siiiiigh Here goes!
-    new_game.connect(geo_room, "Begin_New_Game")
+    #new_game.connect(geo_room, "Begin_New_Game")
     geo_room.connect(cotton, "Leave_Geo_Room")
     cotton.connect(greyhub2, "Door_To_Hub_2")
     greyhub2.connect(red1, 'Red_Main_Entrance')

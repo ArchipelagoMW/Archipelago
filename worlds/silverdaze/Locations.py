@@ -79,7 +79,7 @@ def create_all_locations(world: SDWorld) -> None:
 
 def create_regular_locations(world: SDWorld) -> None:
     #Sawyer: First up, getting regions! I kinda wanna make this a function...
-    new_game = world.get_region("New_Game")
+    #new_game = world.get_region("New_Game")
 
     geo_room = world.get_region("Geo_Room")
     cotton = world.get_region("Cotton")
@@ -97,33 +97,37 @@ def create_regular_locations(world: SDWorld) -> None:
     #Sawyer: Now we add stuff to regions!
 
     #Sawyer: This is intentionally empty for easy copying!
-    new_game_locations = get_location_names_with_ids(
-        [
+    #new_game_locations = get_location_names_with_ids(
+    #    [
 
-        ]
-    )
+    #    ]
+    #)
 
     geo_room_locations = get_location_names_with_ids(
         [
             "Ultima","PinnJoin","PinnMP3","StarterHealToken1","StarterHealToken3",
         ]
     )
+    geo_room.add_locations(geo_room_locations, SDLocation)
 
     cotton_locations = get_location_names_with_ids(
         [
             "GeoJoin","GeoJoin","GeoMP3","GeoWeapon1","Cotton2Chest1","Cotton3Chest1","YellowKey",
         ]
     )
+    cotton.add_locations(cotton_locations, SDLocation)
     greyhub2_locations = get_location_names_with_ids(
         [
             "Hub2Chest1",
         ]
     )
+    greyhub2.add_locations(greyhub2_locations,SDLocation)
     red1_locations = get_location_names_with_ids(
         [
             "Red1Chest","Red3Chest","Red3BackdoorChest",
         ]
     )
+    red1.add_locations(red1_locations,SDLocation)
     red2_locations = get_location_names_with_ids(
         [
             "Red4Chest1","Red4Chest2","Red4Chest3","RedTower2Chest","RedTower3Chest","Nyx","Kani","KaniMP3",
@@ -131,26 +135,35 @@ def create_regular_locations(world: SDWorld) -> None:
             "RedChasmReunionChest","Hub2Chest2",
         ]
     )
-    red1_minibosses = get_location_names_with_ids(
-        [
-            "QuoDefender1","QuoDefender2","QuoDefender3",
-        ]
-    )
-    red2_minibosses = get_location_names_with_ids(
-        [
-            "Kingoose1","Kingoose2","Kingoose3",
-        ]
-    )
-    red_wardens = get_location_names_with_ids(
-        [
-            "Nyx","Nyx1","Nyx2","Nyx3",
-        ]
-    )
+    red2.add_locations(red2_locations,SDLocation)
+
+    if world.options.minibosses:
+        red1_minibosses_locations = get_location_names_with_ids(
+            [
+                "QuoDefender1","QuoDefender2","QuoDefender3",
+         ]
+        )
+        red1_minibosses.add_locations(red1_minibosses_locations,SDLocation)
+        red2_minibosses_locations = get_location_names_with_ids(
+            [
+                "Kingoose1","Kingoose2","Kingoose3",
+            ]
+        )
+        red2_minibosses.add_locations(red2_minibosses_locations,SDLocation)
+
+
+    if world.options.wardens:
+        red_wardens_locations = get_location_names_with_ids(
+            [
+                "Nyx","Nyx1","Nyx2","Nyx3",
+            ]
+        )
+        red_wardens.add_locations(red_wardens_locations,SDLocation)
 
 #Sawyer: Okay, the game literally has zero events because we turned all of those into items. Soooo... don't sweat it?
 #Sawyer: I put the regions here just so my IDE wouldn't scream at me for leaving this empty.
 def create_events(world: SDWorld) -> None:
-    new_game = world.get_region("New_Game")
+    #new_game = world.get_region("New_Game")
 
     geo_room = world.get_region("Geo_Room")
     cotton = world.get_region("Cotton")

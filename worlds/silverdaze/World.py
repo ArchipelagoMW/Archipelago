@@ -31,18 +31,18 @@ class SDWorld(World):
 
     #Sawyer: These are important rules, check APQuest for an explanation.
     def create_regions(self) -> None:
-        regions.create_and_connect_regions(self)
-        locations.create_all_locations(self)
+        Regions.create_and_connect_regions(self)
+        Locations.create_all_locations(self)
 
     def set_rules(self) -> None:
-        rules.set_all_rules(self)
+        Rules.set_all_rules(self)
 
     def create_items(self) -> None:
-        items.create_all_items(self)
+        Items.create_all_items(self)
 
     #Sawyer: Time to make items, of course!
     def create_item(self, name: str) -> Items.SDItem:
-        return Items.create_item_with_correct_classification(self, name)
+        return Items.create_item(self, name)
 
     #Sawyer: We should make sure we have filler items too.
     #Sawyer: ATM these will just be Heal Tokens but honestly most Tokens work, maybe even some weak cards.
