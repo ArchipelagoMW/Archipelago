@@ -269,7 +269,7 @@ placed on them.
 
 ### PriorityLocations
 Marks locations given here as `LocationProgressType.Priority` forcing progression items on them if any are available in
-the pool. Progression items without a deprioritized flag will be used first when filling priority_locations.  Progression items with
+the pool. Progression items without a deprioritized flag will be used first when filling priority_locations. Progression items with
 a deprioritized flag will be used next.
 
 ### ItemLinks
