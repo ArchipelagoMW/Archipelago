@@ -23,7 +23,7 @@ from BaseClasses import seeddigits, get_seed, PlandoOptions
 from Utils import parse_yamls, version_tuple, __version__, tuplize_version
 
 
-def mystery_argparse():
+def mystery_argparse(argv: list[str] | None = None):
     from settings import get_settings
     settings = get_settings()
     defaults = settings.generator
@@ -57,7 +57,7 @@ def mystery_argparse():
     parser.add_argument("--spoiler_only", action="store_true",
                         help="Skips generation assertion and multidata, outputting only a spoiler log. "
                              "Intended for debugging and testing purposes.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.skip_output and args.spoiler_only:
         parser.error("Cannot mix --skip_output and --spoiler_only")
@@ -189,6 +189,11 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                            elif key == "triggers":
+                                if "triggers" not in yaml[category_name]:
+                                    yaml[category_name][key] = []
+                                for trigger in option:
+                                    yaml[category_name][key].append(trigger)
                             else:
                                 yaml[category_name][key] = option
 
@@ -362,7 +367,10 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
                                 f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = cleaned_value
         else:
-            cleaned_weights[option_name] = new_weights[option]
+            # Options starting with + and - may modify values in-place, and new_weights may be shared by multiple slots
+            # using the same .yaml, so ensure that the new value is a copy.
+            cleaned_value = copy.deepcopy(new_weights[option])
+            cleaned_weights[option_name] = cleaned_value
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
@@ -384,6 +392,8 @@ def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 
@@ -486,7 +496,22 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
             if required_plando_options:
                 raise Exception(f"Settings reports required plando module {str(required_plando_options)}, "
                                 f"which is not enabled.")
-
+        games = requirements.get("game", {})
+        for game, version in games.items():
+            if game not in AutoWorldRegister.world_types:
+                continue
+            if not version:
+                raise Exception(f"Invalid version for game {game}: {version}.")
+            if isinstance(version, str):
+                version = {"min": version}
+            if "min" in version and tuplize_version(version["min"]) > AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is at least {version['min']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
+            if "max" in version and tuplize_version(version["max"]) < AutoWorldRegister.world_types[game].world_version:
+                raise Exception(f"Settings reports required version of world \"{game}\" is no later than {version['max']}, "
+                                f"however world is of version "
+                                f"{AutoWorldRegister.world_types[game].world_version.as_simple_string()}.")
     ret = argparse.Namespace()
     for option_key in Options.PerGameCommonOptions.type_hints:
         if option_key in weights and option_key not in Options.CommonOptions.type_hints:
