@@ -4,7 +4,7 @@ Cette page est un guide simplifié de la [page du Mod Randomiseur Multiworld de 
 ## Exigences et Logiciels Nécessaires
 * Un ordinateur utilisant Windows (le Mod n'est pas utilisable sous Linux ou Mac)
 * [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases)
-* Une copie légale du jeu original Choo-Choo Charles (peut être trouvé sur [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/)
+* Une copie légale du jeu original Choo-Choo Charles (peut être trouvé sur [Steam](https://store.steampowered.com/app/1766740/ChooChoo_Charles/))
 
 ## Installation du Mod pour jouer
 ### Téléchargement du Mod
@@ -27,7 +27,7 @@ La [page d'Options Joueur](/games/Choo-Choo%20Charles/player-options) permet de 
 Avant de jouer, il est fortement recommandé de consulter la section **[Problèmes Connus](setup_fr#probl%C3%A8mes-connus)**.
 * La console du jeu doit être ouverte pour taper des commandes Archipelago, appuyer sur la touche "F10" ou "`" (ou "~") en querty (touche "²" en azerty)
 * Taper ``/connect <IP> <NomDuJoueur>`` avec \<IP\> et \<NomDuJoueur\> trouvés sur la page web d'hébergement Archipelago sous la forme ``archipelago.gg:XXXXX`` et ``CCCharles``
-* La déconnexion est automatique à la fermeture du jeu mais peut être faite manuellement avec ``/disconnect``
+* La déconnexion est automatique à la fermeture du jeu, mais peut être faite manuellement avec ``/disconnect``
 
 ## Héberger une partie MultiWorld ou un Seul Joueur
 Voir la section [Téléchargement du Mod](setup_fr#téléchargement-du-mod) pour récupérer le fichier **cccharles.apworld**.
@@ -39,7 +39,7 @@ Suivre ces étapes pour héberger une session multijoueur à distance ou locale 
 2. Placer le **CCCharles.yaml** dans **Archipelago/Players/** avec le YAML de chaque joueur à héberger
 3. Exécuter le lanceur Archipelago et cliquer sur "Generate" pour configurer une partie avec les YAML dans **Archipelago/output/**
 4. Pour une session multijoueur, aller à la [page Archipelago HOST GAME](https://archipelago.gg/uploads)
-5. Cliquer sur "Upload File" et selectionner le **AP_\<seed\>.zip** généré dans **Archipelago/output/**
+5. Cliquer sur "Upload File" et sélectionner le **AP_\<seed\>.zip** généré dans **Archipelago/output/**
 6. Envoyer la page de la partie générée à chaque joueur
 
 Pour une session locale à un seul joueur, cliquer sur "Host" dans le lanceur Archipelago en utilisant **AP_\<seed\>.zip** généré dans **Archipelago/output/**
