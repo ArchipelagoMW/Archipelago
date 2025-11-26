@@ -1,4 +1,4 @@
-from BaseClasses import Region
+from BaseClasses import MultiWorld, Region
 from .Options import Portal2Options
 from .Items import Portal2Item, item_table
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table
@@ -11,20 +11,16 @@ class Portal2World(World):
     options: Portal2Options  # typing hints for option results
     topology_present = True  # show path to required location checks in spoiler
 
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
-    base_id = 98275000
-    # instead of dynamic numbering, IDs could be part of data
+    BASE_ID = 98275000
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for
-                       id, name in enumerate(item_table.keys(), base_id)}
+    item_name_to_id = {}
+    location_name_to_id = {}
     
-    # add other locations from options when set up
-    location_name_to_id = {name: id for
-                           id, name in enumerate(map_complete_table.keys(), base_id)}
+    for key, value in item_table.items():
+        item_name_to_id[key] = value.id_offset + BASE_ID
+
+    for key, value in map_complete_table.items():
+        location_name_to_id[key] = value.id_offset + BASE_ID
     
     def create_item(self, name: str):
         return Portal2Item(name, item_table[name].classification, self.item_name_to_id[name], self.player)
@@ -52,5 +48,5 @@ class Portal2World(World):
     
     def generate_early(self):
         if self.options.cutscenesanity:
-            self.location_name_to_id.update({name: id for
-                                            id, name in enumerate(cutscene_completion_table.keys(), self.base_id + len(self.location_name_to_id))})
+            self.location_name_to_id.update({key: value.id_offset + self.BASE_ID for
+                                            key, value in cutscene_completion_table.items()})

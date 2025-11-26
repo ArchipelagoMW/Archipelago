@@ -4,6 +4,8 @@ import socket
 import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
+from worlds.portal2.Items import item_table
+from worlds.portal2.Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
 import Utils
 
 if __name__ == "__main__":
@@ -22,20 +24,29 @@ class Portal2CommandProcessor(ClientCommandProcessor):
     def _cmd_command(self, *command):
         self.ctx.command_queue.append(' '.join(command) + "\n")
 
+    # Debug commands
+    def _cmd_mapid(self, map_code):
+        self.output(self.ctx.map_code_to_location_id(map_code))
+
 class Portal2Context(CommonContext):
     command_processor = Portal2CommandProcessor
     game_command_sender_task: typing.Optional["asyncio.Task[None]"] = None
     game_message_listener_task: typing.Optional["asyncio.Task[None]"] = None
+    game = "Portal 2"
+    items_handling = 0b111  # receive all items for /received
 
     HOST = "localhost"
     PORT = 3000
 
     entity_list = []
-
     command_queue = []
+    game_message_queue = []
 
     sender_active : bool = False
     listener_active : bool = False
+
+    item_name_to_id: dict[str, int] = None
+    location_name_to_id: dict[str, int] = None
 
     def create_level_begin_command(self, entities_list):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
@@ -48,72 +59,134 @@ class Portal2Context(CommonContext):
     async def p2_message_listener(self):
         '''Listener for the messages sent from portal 2 to the client'''
         try:
-            self.listener_active = True
-            reader, writer = await asyncio.open_connection(self.HOST, self.PORT)
-            try:
-                while True:
-                    data = await reader.read(4096)
-                    if not data:
-                        # connection closed by server; break to reconnect
-                        break
-                    data_string = data.decode(errors="ignore").split('\r')[0].strip('\'"')
-                    if data_string.startswith("map_name:"):
-                        logger.info(f"Map Joined {data_string.split(':', 1)[1]}")
-                        logger.info("Deleting Entities: " + str(self.entity_list))
-                        # append the whole command string, not extend into characters
-                        self.command_queue.append(self.create_level_begin_command(self.entity_list))
-
-                    elif data_string.startswith("map_complete:"):
-                        done_map = data_string.split(':', 1)[1]
-                        logger.info("Check made: " + done_map)
-                        self.command_queue.append(self.send_player_to_main_menu_command())
-            finally:
+            while True:
                 try:
-                    writer.close()
-                    await writer.wait_closed()
-                except Exception:
-                    pass
+                    reader, writer = await asyncio.open_connection(self.HOST, self.PORT)
+                except ConnectionRefusedError:
+                    self.listener_active = False
+                    await asyncio.sleep(self.current_reconnect_delay)
+                    continue
+                
+                self.listener_active = True
+                try:
+                    while True:
+                        data = await reader.read(4096)
+                        if not data:
+                            # connection closed by server; break to reconnect
+                            break
+                        
+                        # Add messages to the queue for consumption
+                        data_list = data.decode(errors="ignore").replace("\'", "").split('\r\n')
+                        self.game_message_queue += data_list
 
+                except asyncio.CancelledError:
+                    logger.info("Game listener closed from cancellation")
+                    raise
+                except Exception as e:
+                    logger.error(f"An error occurred in listener loop: {e}")
+                finally:
+                    try:
+                        writer.close()
+                        await writer.wait_closed()
+                    except Exception:
+                        pass
+                    self.listener_active = False
+                    await asyncio.sleep(self.current_reconnect_delay)
         except asyncio.CancelledError:
             logger.info("Game listener closed from cancellation")
             raise
-        except ConnectionRefusedError:
-            logger.error("Connection failed. Make sure the mod is open and the -netconport launch option is set")
-            self.listener_active = False
-            await asyncio.sleep(self.current_reconnect_delay)
-        except Exception as e:
-            logger.error(f"An error occurred: {e}")
-            self.listener_active = False
-            await asyncio.sleep(self.current_reconnect_delay)
-            
 
     async def p2_command_sender(self):
-        '''Command sender for the consol commands sent to portal 2 from the client'''
+        '''Command sender for the console commands sent to portal 2 from the client'''
         try:
-            if self.command_queue:
-                c = self.command_queue.pop(0)
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    s.connect((self.HOST, self.PORT))
-                    s.sendall(c.encode())
-            
-            self.sender_active = True
+            while True:
+                try:
+                    reader, writer = await asyncio.open_connection(self.HOST, self.PORT)
+                except ConnectionRefusedError:
+                    self.sender_active = False
+                    await asyncio.sleep(self.current_reconnect_delay)
+                    continue
+
+                self.sender_active = True
+                try:
+                    # Keep the connection open and send queued commands without blocking the loop
+                    while True:
+                        # handle commands
+                        if self.command_queue:
+                            c = self.command_queue.pop(0)
+                            writer.write(c.encode())
+                            await writer.drain()
+
+                        # Handle messages
+                        elif self.game_message_queue:
+                            message = self.game_message_queue.pop(0)
+                            await self.handle_message(message)
+
+                        else:
+                            # yield control briefly so other tasks (listener, etc.) run smoothly
+                            await asyncio.sleep(0.1)
+                except asyncio.CancelledError:
+                    logger.info("Game sender closed from cancellation")
+                    raise
+                except Exception as e:
+                    logger.error(f"An error occurred in sender loop: {e}")
+                finally:
+                    try:
+                        writer.close()
+                        await writer.wait_closed()
+                    except Exception:
+                        pass
+                    self.sender_active = False
+                    await asyncio.sleep(self.current_reconnect_delay)
         except asyncio.CancelledError:
             logger.info("Game sender closed from cancellation")
             raise
-        except ConnectionRefusedError:
-            logger.error("Connection failed. Make sure the mod is open and the -netconport launch option is set")
-            self.sender_active = False
-        except Exception as e:
-            logger.error(f"An error occurred: {e}")
-            self.sender_active = False
-        finally:
-            await asyncio.sleep(self.current_reconnect_delay)
-            # Restart the loop
-            self.game_command_sender_task = asyncio.create_task(self.p2_command_sender(), name="sender loop")
+
+    async def handle_message(self, message: str):
+        if message.startswith("map_name:"):
+            logger.info(f"Map Joined {message.split(':', 1)[1]}")
+            logger.info("Deleting Entities: " + str(self.entity_list))
+            # append the whole command string, not extend into characters
+            self.command_queue.append(self.create_level_begin_command(self.entity_list))
+
+        elif message.startswith("map_complete:"):
+            done_map = message.split(':', 1)[1]
+            logger.info("Check made: " + done_map)
+            await self.check_locations([self.map_code_to_location_id(done_map)])
+            self.command_queue.append(self.send_player_to_main_menu_command())
 
     def check_game_connection(self):
         logger.info("Sender active: "  + str(self.sender_active) + " Listener active: " + str(self.listener_active))
         return self.sender_active and self.listener_active
+    
+    def update_game(self, game_package, game):
+        super().update_game(game_package, game)
+        self.item_name_to_id = game_package["item_name_to_id"]
+        self.location_name_to_id = game_package["location_name_to_id"]
+    
+    # Used for nothing?
+    def location_id_to_map_code(self, location_id: str) -> str:
+        '''Converts a location ID to a map code (if that id relates to a map location)'''
+        # Convert id to name
+        location_name = self.location_names.lookup_in_game(location_id)
+        # Get info for location name
+        if location_name in location_names_to_map_codes:
+            return location_names_to_map_codes[location_name]
+        
+        return None
+    
+    def map_code_to_location_id(self, map_code: str):
+        '''Convert in game map name to location id for location checks'''
+        if not map_code in map_codes_to_location_names:
+            return None
+        
+        location_name = map_codes_to_location_names[map_code]
+        if not self.location_name_to_id:
+            raise Exception("location_name_to_id dict has not been created yet")
+        return self.location_name_to_id[location_name]
+    
+    def handle_item(item_id: int):
+        pass
     
     async def shutdown(self):
         self.server_address = ""
@@ -137,6 +210,12 @@ class Portal2Context(CommonContext):
             await self.ui_task
         if self.input_task:
             self.input_task.cancel()
+
+    async def server_auth(self, password_requested: bool = False) -> None:
+        if password_requested and not self.password:
+            await super().server_auth(password_requested)
+        await self.get_username()
+        await self.send_connect(game=self.game)
 
 if __name__ == '__main__':
     async def main():
