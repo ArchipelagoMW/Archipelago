@@ -881,8 +881,13 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION])
     fancy_add_exits(world, THE_DEPTHS_AP_REGION, [THE_DEEP_SEA_AP_REGION])
     fancy_add_exits(world, CASTLE_SEQUOIA_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION])
+    #The New World start
+    fancy_add_exits(world, THE_NEW_WORLD_AP_REGION, [DISCIPLINE_HOLLOW_AP_REGION],
+                    {DISCIPLINE_HOLLOW_AP_REGION: lambda state: logic.has_key(state, SKELETON_KEY, 1) or state.has(PROOF_OF_MERIT, player)})
+    fancy_add_exits(world, DISCIPLINE_HOLLOW_AP_REGION, [THE_NEW_WORLD_AP_REGION],
+                    {THE_NEW_WORLD_AP_REGION: lambda state: logic.has_key(state, SKELETON_KEY, 1) or state.has(PROOF_OF_MERIT, player)})
+    #The New World end
     # regions without connections don't get parsed by Jsonifier
-    fancy_add_exits(world, THE_NEW_WORLD_AP_REGION, [MENU_AP_REGION])
     fancy_add_exits(world, THE_OLD_WORLD_AP_REGION, [MENU_AP_REGION])
     fancy_add_exits(world, MODDED_ZONE_AP_REGION, [MENU_AP_REGION])
 

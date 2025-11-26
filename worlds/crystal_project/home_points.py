@@ -129,7 +129,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(THE_NEW_WORLD_AP_REGION, "HomePoint - Astley's Shrine", 3776),
         LocationData(THE_NEW_WORLD_AP_REGION, "HomePoint - Astley's Keep", 3777),
-        LocationData(THE_NEW_WORLD_AP_REGION, "HomePoint - Discipline Hollow", 3797),
+        LocationData(DISCIPLINE_HOLLOW_AP_REGION, "HomePoint - Discipline Hollow", 3797),
 
         LocationData(CONTINENTAL_TRAM_AP_REGION, "HomePoint - Platform A", 3780),
 
