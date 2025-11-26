@@ -2,7 +2,7 @@ from collections import namedtuple
 import logging
 
 from BaseClasses import ItemClassification
-from Fill import FillError
+from Options import OptionError
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_location, ShopType
@@ -410,15 +410,16 @@ def generate_itempool(world):
     pool_count = len(items)
     new_items = ["Triforce Piece" for _ in range(additional_triforce_pieces)]
     if world.options.shuffle_capacity_upgrades or world.options.bombless_start:
-        progressive = world.options.progressive
-        progressive = multiworld.random.choice([True, False]) if progressive == 'grouped_random' else progressive == 'on'
+        progressive = world.options.progressive.want_progressives(world.random)
         if world.options.shuffle_capacity_upgrades == "on_combined":
             new_items.append("Bomb Upgrade (50)")
         elif world.options.shuffle_capacity_upgrades == "on":
             new_items += ["Bomb Upgrade (+5)"] * 6
             new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
-        if world.options.shuffle_capacity_upgrades != "on_combined" and world.options.bombless_start:
-            new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+            if world.options.bombless_start:
+                new_items.append("Bomb Upgrade (+5)" if progressive else "Bomb Upgrade (+10)")
+        elif world.options.bombless_start:
+            new_items.append("Bomb Upgrade (+10)")
 
         if world.options.shuffle_capacity_upgrades and not world.options.retro_bow:
             if world.options.shuffle_capacity_upgrades == "on_combined":
@@ -466,6 +467,9 @@ def generate_itempool(world):
                         items_were_cut = items_were_cut or cut_item(items, *reduce_item)
                     elif len(reduce_item) == 4:
                         items_were_cut = items_were_cut or condense_items(items, *reduce_item)
+                        if reduce_item[0] == "Piece of Heart" and world.logical_heart_pieces:
+                            world.logical_heart_pieces -= reduce_item[2]
+                            world.logical_heart_containers += reduce_item[3]
                     elif len(reduce_item) == 1:  # Bottles
                         bottles = [item for item in items if item.name in item_name_groups["Bottles"]]
                         if len(bottles) > 4:
@@ -476,7 +480,7 @@ def generate_itempool(world):
                     if items_were_cut:
                         break
                 else:
-                    raise Exception(f"Failed to limit item pool size for player {player}")
+                    raise OptionError(f"Failed to limit item pool size for player {player}")
     if len(items) < pool_count:
         items += removed_filler[len(items) - pool_count:]
 

@@ -28,7 +28,7 @@ COPY requirements.txt WebHostLib/requirements.txt
 
 RUN pip install --no-cache-dir -r \
     WebHostLib/requirements.txt \
-    "setuptools<81"
+    "setuptools>=75,<81"
 
 COPY _speedups.pyx .
 COPY intset.h .
