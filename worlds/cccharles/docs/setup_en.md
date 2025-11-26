@@ -27,7 +27,7 @@ The [Player Options page](/games/Choo-Choo%20Charles/player-options) allows to c
 Before playing, it is highly recommended to check out the **[Known Issues](setup_en#known-issues)** section
 * The game console must be opened to type Archipelago commands, press "F10" key or "`" (or "~") key in querty ("²" key in azerty)
 * Type ``/connect <IP> <PlayerName>`` with \<IP\> and \<PlayerName\> found on the hosting Archipelago web page in the form ``archipelago.gg:XXXXX`` and ``CCCharles``
-* Disconnection is automatic at game closure but can be manually done with ``/disconnect``
+* Disconnection is automatic at game closure, but can be manually done with ``/disconnect``
 
 ## Hosting a MultiWorld or Single-Player Game
 See the [Mod Download](setup_en#mod-download) section to get the **cccharles.apworld** file.
