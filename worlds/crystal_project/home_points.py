@@ -103,8 +103,8 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(UPPER_ICE_LAKES_AP_REGION, "HomePoint - Triton Shrine", 3018),
         LocationData(TALL_TALL_SAVE_POINT_AP_REGION, "HomePoint - Tall, Tall Heights", 3047),
 
-        LocationData(PEAK_RAMPARTS_AP_REGION, "HomePoint - East Ramparts", 1375, lambda state: logic.has_glide(state)),
-        LocationData(PEAK_RAMPARTS_AP_REGION, "HomePoint - West Ramparts", 1376, lambda state: logic.has_glide(state)),
+        LocationData(PEAK_RAMPARTS_AP_REGION, "HomePoint - East Ramparts", 1375),
+        LocationData(PEAK_RAMPARTS_AP_REGION, "HomePoint - West Ramparts", 1376),
 
         LocationData(SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, "HomePoint - Slip Glide Ride Entrance", 1550),
 
