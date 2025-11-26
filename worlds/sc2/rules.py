@@ -396,6 +396,7 @@ class SC2Logic:
     def terran_defense_rating(self, state: CollectionState, zerg_enemy: bool, air_enemy: bool = True) -> int:
         """
         Ability to handle defensive missions
+        :param state:
         :param zerg_enemy: Whether the enemy is zerg
         :param air_enemy: Whether the enemy attacks with air
         :return:
@@ -430,8 +431,8 @@ class SC2Logic:
         if air_enemy:
             # Capped at 2
             defense_score += min2(
+                2,
                 sum((tvx_air_defense_ratings[item] for item in tvx_air_defense_ratings if state.has(item, self.player))),
-                2
             )
         if air_enemy and zerg_enemy and state.has(item_names.VALKYRIE, self.player):
             # Valkyries shred mass Mutas, the most common air enemy that's massed in these cases
@@ -460,10 +461,10 @@ class SC2Logic:
         ship_armor = self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_TERRAN_SHIP_ARMOR, state)
         if ship_weapons >= upgrade_level and ship_armor >= upgrade_level:
             air = (
-                state.has_any({item_names.BANSHEE, item_names.BATTLECRUISER}, self.player)
-                or state.has_all({item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY}, self.player)
-                or state.has_all({item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)
-                or (state.has_all({item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES}, self.player)
+                state.has_any((item_names.BANSHEE, item_names.BATTLECRUISER), self.player)
+                or state.has_all((item_names.LIBERATOR, item_names.LIBERATOR_RAID_ARTILLERY), self.player)
+                or state.has_all((item_names.WRAITH, item_names.WRAITH_ADVANCED_LASER_TECHNOLOGY), self.player)
+                or (state.has_all((item_names.VALKYRIE, item_names.VALKYRIE_FLECHETTE_MISSILES), self.player)
                     and ship_weapons >= 2
                 )
             )
@@ -1804,9 +1805,12 @@ class SC2Logic:
             and (
                 self.protoss_competent_comp(state)
                 or state.has_any((item_names.TEMPEST, item_names.SKYLORD, item_names.DESTROYER), self.player)
-                or state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
-                or (state.has(item_names.CARRIER, self.player)
-                    and self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state) >= 2
+                or (
+                    self.weapon_armor_upgrade_count(item_names.PROGRESSIVE_PROTOSS_AIR_WEAPON, state) >= 2
+                    and (
+                        state.has_all((item_names.SKIRMISHER, item_names.SKIRMISHER_PEER_CONTEMPT), self.player)
+                        or (state.has(item_names.CARRIER, self.player))
+                    )
                 )
             )
         )
@@ -1839,7 +1843,7 @@ class SC2Logic:
                     )
                     and (
                         # handle brood lords and virophages
-                        state.has_any((item_names.MISTWING, item_names.CALADRIUS), self.player)
+                        state.has(item_names.MISTWING, self.player)
                     )
                 )
             )
@@ -1966,17 +1970,9 @@ class SC2Logic:
             )
             or state.has_all({item_names.MUTALISK, item_names.MUTALISK_SUNDERING_GLAIVE}, self.player)
             or state.has_all((item_names.HYDRALISK, item_names.HYDRALISK_MUSCULAR_AUGMENTS), self.player)
-            or (
-                state.has(item_names.ZERGLING, self.player)
-                and (
-                    state.has_any((
-                        item_names.ZERGLING_SHREDDING_CLAWS,
-                        item_names.ZERGLING_ADRENAL_OVERLOAD,
-                        item_names.ZERGLING_RAPTOR_STRAIN,
-                    ), self.player)
-                )
-                and (self.advanced_tactics or state.has_any((item_names.ZERGLING_METABOLIC_BOOST, item_names.ZERGLING_RAPTOR_STRAIN), self.player))
-            )
+            # Note: Zerglings were tested by Snarky, and it was found they'd need >= 3 upgrades to be viable,
+            # so they are not included in this logic.
+            # Raptor + 2 of (Shredding, Adrenal, +2 attack upgrade)
             or self.zerg_infested_tank_with_ammo(state)
             or (self.advanced_tactics and (self.morph_tyrannozor(state)))
         )
@@ -2108,11 +2104,11 @@ class SC2Logic:
             return True
         usable_muta = (
             state.has_all((item_names.MUTALISK, item_names.MUTALISK_RAPID_REGENERATION), self.player)
-            and state.has_any((item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE), self.player)
-            and (
-                state.has(item_names.MUTALISK_SUNDERING_GLAIVE, self.player)
-                or state.has_all((item_names.MUTALISK_SEVERING_GLAIVE, item_names.MUTALISK_VICIOUS_GLAIVE), self.player)
-            )
+            and state.count_from_list_unique((
+                item_names.MUTALISK_SEVERING_GLAIVE,
+                item_names.MUTALISK_SUNDERING_GLAIVE,
+                item_names.MUTALISK_VICIOUS_GLAIVE,
+            ), self.player) >= 2
         )
         return (
             # Heal
