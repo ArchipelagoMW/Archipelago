@@ -478,7 +478,7 @@ def extend_shipsanity_locations(randomized_locations: List[LocationData], option
     if shipsanity == Shipsanity.option_full_shipment or shipsanity == Shipsanity.option_full_shipment_with_fish:
         shipsanity_locations = shipsanity_locations.union({location for location in locations_by_tag[LocationTags.SHIPSANITY_FULL_SHIPMENT]})
 
-    filtered_shipsanity_locations = filter_disabled_locations(options, content, list(shipsanity_locations))
+    filtered_shipsanity_locations = filter_disabled_locations(options, content, sorted(list(shipsanity_locations), key=lambda x: x.name))
     randomized_locations.extend(filtered_shipsanity_locations)
 
 
