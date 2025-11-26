@@ -70,7 +70,7 @@ class TestForbiddenDoors(WitnessMultiworldTestBase):
 
             self.assertIn(
                 0x021D7,
-                slot_data["item_id_to_door_hexes"][WitnessWorld.item_name_to_id["Caves Panels"]],
+                slot_data["item_id_to_door_ids"][WitnessWorld.item_name_to_id["Caves Panels"]],
                 "Caves Panels should still contain Caves Mountain Shortcut Panel as a door they unlock.",
             )
 
