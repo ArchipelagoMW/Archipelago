@@ -662,7 +662,6 @@ class OptionsCreator(ThemedApp):
         # from kivy.modules.console import create_console
         # from kivy.core.window import Window
         # create_console(Window, self.container)
-        create_console(Window, self.container)
 
         return self.container
 
