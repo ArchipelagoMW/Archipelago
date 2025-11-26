@@ -38,7 +38,8 @@ def generate_filler_choice_pool(options: StardewValleyOptions, content: StardewC
 
 def get_all_filler_items(options: StardewValleyOptions) -> list[ItemData]:
     all_filler_items = []
-    for allowed_filler_type in options.allowed_filler_items:
+    allowed_filler_types = sorted(list(options.allowed_filler_items.value))
+    for allowed_filler_type in allowed_filler_types:
         allowed_filler_group = AllowedFillerTypesMap[allowed_filler_type]
         all_filler_items.extend([pack for pack in items_by_group[allowed_filler_group]])
     all_filler_items.extend(items_by_group[Group.TRASH])
