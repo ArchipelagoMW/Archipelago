@@ -265,8 +265,8 @@ dr_seuss_bundle = FixedPriceDeepBundleTemplate(CCRoom.crafts_room, MemeBundleNam
 pollution_items = [trash, broken_cd, broken_glasses, joja_cola, soggy_newspaper, battery_pack]
 pollution_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.pollution, pollution_items, 4, 4)
 
-all_fish_item_namess = set([item.item_name for item in [*spring_fish_items, *summer_fish_items, *fall_fish_items, *winter_fish_items]])
-all_fish_items = [BundleItem(item).as_amount(1).as_quality(FishQuality.basic) for item in all_fish_item_namess]
+all_fish_item_names = sorted(list(set([item.item_name for item in [*spring_fish_items, *summer_fish_items, *fall_fish_items, *winter_fish_items]])))
+all_fish_items = [BundleItem(item).as_amount(1).as_quality(FishQuality.basic) for item in all_fish_item_names]
 catch_and_release_items = [*all_fish_items]
 catch_and_release_bundle = BundleTemplate(CCRoom.fish_tank, MemeBundleName.catch_and_release, catch_and_release_items, 4, 4)
 
