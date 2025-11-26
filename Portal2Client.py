@@ -187,6 +187,17 @@ class Portal2Context(CommonContext):
     
     def handle_item(item_id: int):
         pass
+
+    def make_gui(self):
+        from kvui import GameManager
+
+        class Portal2TextManager(GameManager):
+            base_title = "Portal 2 Text Client"
+            def __init__(self, ctx):
+                super().__init__(ctx)
+                self.icon = r"worlds/portal2/data/Portalpelago.png"
+
+        return Portal2TextManager
     
     async def shutdown(self):
         self.server_address = ""
