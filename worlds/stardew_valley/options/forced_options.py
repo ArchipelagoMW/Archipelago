@@ -121,10 +121,13 @@ def force_hatsanity_when_goal_is_mad_hatter(world_options: options.StardewValley
 
 def force_eatsanity_when_goal_is_ultimate_foodie(world_options: options.StardewValleyOptions, player: int, player_name: str) -> None:
     goal_is_foodie = world_options.goal == options.Goal.option_ultimate_foodie
-    eatsanity_is_disabled = world_options.eatsanity == options.Eatsanity.preset_none
+    eatsanity_options_that_dont_add_locations = [EatsanityOptionName.lock_effects, EatsanityOptionName.poisonous]
+    eatsanity_options_that_add_locations = options.Eatsanity.preset_all.difference(eatsanity_options_that_dont_add_locations)
+    eatsanity_relevant_values = world_options.eatsanity.value.difference(eatsanity_options_that_dont_add_locations)
+    eatsanity_is_disabled = len(eatsanity_relevant_values) <= 0
 
     if goal_is_foodie and eatsanity_is_disabled:
-        world_options.eatsanity.value = options.Eatsanity.preset_all
+        world_options.eatsanity.value = world_options.eatsanity.value.union(eatsanity_options_that_add_locations)
         goal_name = world_options.goal.current_option_name
         logger.warning(f"Goal '{goal_name}' requires Eatsanity. "
                        f"Eatsanity option forced to 'All' for player {player} ({player_name})")

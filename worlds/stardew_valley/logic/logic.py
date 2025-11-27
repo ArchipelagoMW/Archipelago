@@ -400,7 +400,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, Travelin
             rule = self.registry.item_rules[item_event.item]
 
             if isinstance(rule, Or) and bool(reaches := [r for r in rule.current_rules if isinstance(r, Reach) and r.resolution_hint == "Region"]):
-                logger.info("Sharding rule for %s in multiple logic events, placed in %s.", item_event.item, [r.spot for r in reaches])
+                logger.debug("Sharding rule for %s in multiple logic events, placed in %s.", item_event.item, [r.spot for r in reaches])
 
                 for i, reach in enumerate(reaches):
                     location_name = f"{item_event.name} sharded_{i}"
