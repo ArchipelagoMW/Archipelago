@@ -5,6 +5,7 @@ import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
 from worlds.portal2.Items import item_table
+from worlds.portal2.ItemHandling import handle_item
 from worlds.portal2.Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
 import Utils
 
@@ -38,7 +39,8 @@ class Portal2Context(CommonContext):
     HOST = "localhost"
     PORT = 3000
 
-    entity_list = []
+    item_list = []
+    item_remove_commands = []
     command_queue = []
     game_message_queue = []
 
@@ -48,9 +50,9 @@ class Portal2Context(CommonContext):
     item_name_to_id: dict[str, int] = None
     location_name_to_id: dict[str, int] = None
 
-    def create_level_begin_command(self, entities_list):
+    def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
-        return f"script ::e <- {str(entities_list).replace('\'', '\"')};script DeleteEntities(e);script CreateCompleteLevelAlertHook()\n"
+        return f'script {';'.join(self.item_remove_commands)};script CreateCompleteLevelAlertHook();script Entities.FindByName(null, "@exit_teleport").Destroy()\n'
 
     def send_player_to_main_menu_command(self):
         '''Sends the player back to the main menu (called on map completion)'''
@@ -145,9 +147,8 @@ class Portal2Context(CommonContext):
     async def handle_message(self, message: str):
         if message.startswith("map_name:"):
             logger.info(f"Map Joined {message.split(':', 1)[1]}")
-            logger.info("Deleting Entities: " + str(self.entity_list))
             # append the whole command string, not extend into characters
-            self.command_queue.append(self.create_level_begin_command(self.entity_list))
+            self.command_queue.append(self.create_level_begin_command())
 
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
@@ -184,9 +185,28 @@ class Portal2Context(CommonContext):
         if not self.location_name_to_id:
             raise Exception("location_name_to_id dict has not been created yet")
         return self.location_name_to_id[location_name]
-    
-    def handle_item(item_id: int):
-        pass
+
+    def on_package(self, cmd, args):
+        # Add item names to list
+        if cmd == "Retrieved":
+            if f"_read_item_name_groups_{self.game}" in args["keys"]:
+                self.item_list = args["keys"][f"_read_item_name_groups_{self.game}"]["Everything"]
+                self.update_item_remove_commands()
+
+        if cmd == "ReceivedItems":
+            # Update item list to only include items not collected
+            items_received_temp = [self.item_names.lookup_in_game(i.item) for i in self.items_received if i.player == self.slot]
+            self.item_list = list(set(self.item_list) - set(items_received_temp))
+            self.update_item_remove_commands()
+
+    def update_item_remove_commands(self):
+        temp_commands = []
+        for item_name in self.item_list:
+            item_command = handle_item(item_name)
+            if item_command:
+                temp_commands.append(item_command)
+
+        self.item_remove_commands = temp_commands
 
     def make_gui(self):
         from kvui import GameManager
