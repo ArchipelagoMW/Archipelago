@@ -99,10 +99,10 @@ class EarthBoundWorld(World):
         self.progressive_filler_bracelets: int = 0
         self.progressive_filler_other: int = 0
         self.world_version: str = world_version
-        self.armor_list: Dict[str, EBArmor]
-        self.weapon_list: Dict[str, EBWeapon]
-        self.boss_slots: Dict[str, SlotInfo]
-        self.boss_info: Dict[str, BossData]
+        self.armor_list = Dict[str, EBArmor]
+        self.weapon_list = Dict[str, EBWeapon]
+        self.boss_slots = Dict[str, SlotInfo]
+        self.boss_info = Dict[str, BossData]
         self.starting_character: str | None = None
         self.locals = []
         self.rom_name = None
