@@ -52,10 +52,14 @@ class EBWeb(WebWorld):
         ["Pink Switch"]
     )
 
+
     tutorials = [setup_en]
 
     option_groups = eb_option_groups
     # option_presets = eb_option_presets
+
+class EBItem(Item):
+    game: str = "EarthBound"
 
 
 class EarthBoundWorld(World):
@@ -473,9 +477,9 @@ class EarthBoundWorld(World):
                 if area not in spoiler_excluded_areas:
                     spoiler_handle.write(f" {area}: Level {self.area_levels[area]}\n")
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> EBItem:
         data = item_table[name]
-        return Item(name, data.classification, data.code, self.player)
+        return EBItem(name, data.classification, data.code, self.player)
 
     def get_filler_item_name(self) -> str:  # Todo: make this suck less
         weights = {"rare": self.options.rare_filler_weight.value, "uncommon": self.options.uncommon_filler_weight.value, "common": self.options.common_filler_weight.value,

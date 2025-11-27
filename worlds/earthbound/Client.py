@@ -219,10 +219,10 @@ class EarthBoundClient(SNIClient):
                         "keys": [f"GiftBox;{ctx.team};{ctx.slot}"]
                     }])
 
-        await ctx.send_msgs([{
-                    "cmd": "SetNotify",
-                    "keys": [f"GiftBox;{ctx.team};{ctx.slot}", f"GiftBoxes;{ctx.team}"]
-                }])
+            await ctx.send_msgs([{
+                        "cmd": "SetNotify",
+                        "keys": [f"GiftBox;{ctx.team};{ctx.slot}", f"GiftBoxes;{ctx.team}"]
+                    }])
 
         inbox = ctx.stored_data.get(f"GiftBox;{ctx.team};{ctx.slot}")
         motherbox = ctx.stored_data.get(f"GiftBoxes;{ctx.team}")
