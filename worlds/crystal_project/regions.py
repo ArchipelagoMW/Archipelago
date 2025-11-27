@@ -878,8 +878,10 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #only adding an exit here to make the jsonifier stop crying
     fancy_add_exits(world, LABYRINTH_CORE_AP_REGION,[MENU_AP_REGION])
     #Ancient Labyrinth section end
-    fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION])
-    fancy_add_exits(world, THE_DEPTHS_AP_REGION, [THE_DEEP_SEA_AP_REGION])
+    fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION],
+                    {THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
+    fancy_add_exits(world, THE_DEPTHS_AP_REGION, [THE_DEEP_SEA_AP_REGION],
+                    {THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     fancy_add_exits(world, CASTLE_SEQUOIA_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION])
     #The New World start
     fancy_add_exits(world, THE_NEW_WORLD_AP_REGION, [DISCIPLINE_HOLLOW_AP_REGION],

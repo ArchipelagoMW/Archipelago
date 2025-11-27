@@ -1314,22 +1314,24 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " NPC - B1 Thats right, Diamond goes in the bluish-white square hole", 2882 + npc_index_offset), #(-200, 98, -334) F3 Ingot
 
         #The Sequoia
+        #Baseline access rules either assume you entered from The Deep Sea with Golden Quintar or that you entered via the Top of the Sequoia home point and have no mounts
+        #The checks on the western branches need swimming or gliding from the home point; the boss and post-boss checks need gliding from the home point
         #Treasure chests
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky hollow", 2934 + treasure_index_offset), #(-286, 90, -539) Stealth Cape chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Balanced on bark", 2437 + treasure_index_offset), #(-250, 174, -512) Battle Band chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors then follow water channel outside", 2935 + treasure_index_offset), #(-296, 182, -533) Sange chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky hollow", 2934 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(-286, 90, -539) Stealth Cape chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky eastern exit", 2884 + treasure_index_offset), #(-223, 118, -541) Zether Pouch chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Go out on a limb", 2887 + treasure_index_offset), #(-244, 168, -498) Z-Potion Pouch chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Balanced on bark", 2437 + treasure_index_offset), #(-250, 174, -512) Battle Band chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors by water channel", 2933 + treasure_index_offset), #(-282, 182, -528) Aphotic Edge chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Post-boss victory pedestal", 2451 + treasure_index_offset), #(-272, 241, -544) The Hand of Midas chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors then follow water channel outside", 2935 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #(-296, 182, -533) Sange chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Post-boss victory pedestal", 2451 + treasure_index_offset, lambda state: logic.has_glide(state)), #(-272, 241, -544) The Hand of Midas chest
         
         #NPCs
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Low-hanging Diamond fruit", 2885 + npc_index_offset), #(-223, 160, -530) Dust
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Waterfall climb sneaky eastern exit Diamond", 2883 + npc_index_offset), #(-237, 117, -563) Ore
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Diamond glittering on a bough", 2886 + npc_index_offset), #(-311, 160, -540) Ore
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 1", 2889 + npc_index_offset), #(-269, 240, -545) Dust
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 2", 2890 + npc_index_offset), #(-268, 240, -547) Ingot
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 3", 2888 + npc_index_offset), #(-275, 240, -546) Ore
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Diamond glittering on a bough", 2886 + npc_index_offset, lambda state: logic.has_glide(state) or logic.has_swimming(state)), #(-311, 160, -540) Ore
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Not so low-hanging Diamond fruit", 2885 + npc_index_offset), #(-223, 160, -530) Dust
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 1", 2889 + npc_index_offset, lambda state: logic.has_glide(state)), #(-269, 240, -545) Dust
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 2", 2890 + npc_index_offset, lambda state: logic.has_glide(state)), #(-268, 240, -547) Ingot
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 3", 2888 + npc_index_offset, lambda state: logic.has_glide(state)), #(-275, 240, -546) Ore
 
         #The Depths
         #Treasure chests
@@ -1464,7 +1466,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, RAMPART_DEMON_FIGHT_LEVEL)), #Monster ID: 222
         LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CONSCRIPT_FIGHT_LEVEL)), #Monster ID: 242
         LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ANUBIS_FIGHT_LEVEL)), #Monster ID: 117
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, SPIRIT_CAGE_FIGHT_LEVEL)), #Monster ID: 192
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, SPIRIT_CAGE_FIGHT_LEVEL)), #Monster ID: 192
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, DEVOURER_FIGHT_LEVEL)), #Monster ID: 171
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, OLD_ONE_FIGHT_LEVEL)), #Monster ID: 170
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENFORCER_FIGHT_LEVEL)), #Monster ID: 172
