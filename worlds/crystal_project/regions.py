@@ -875,8 +875,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION: lambda state: state.has(ANCIENT_TABLET_B, player) or logic.obscure_routes_on(state)})
     fancy_add_exits(world, LABYRINTH_WEIRD_REBAR_HALLWAY_AP_REGION, [LABYRINTH_CORE_AP_REGION],
                     {LABYRINTH_CORE_AP_REGION: lambda state: state.has(ANCIENT_TABLET_C, player) or logic.obscure_routes_on(state)})
-    #only adding an exit here to make the jsonifier stop crying
-    fancy_add_exits(world, LABYRINTH_CORE_AP_REGION,[MENU_AP_REGION])
+    #There's a one-way exit to the desert that requires you to have the pass for the dialogue window to pop up
+    fancy_add_exits(world, LABYRINTH_CORE_AP_REGION,[TOWER_OF_ZOT_AP_REGION],
+                    {TOWER_OF_ZOT_AP_REGION: lambda state: state.has(ANCIENT_LABYRINTH_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled})
     #Ancient Labyrinth section end
     fancy_add_exits(world, THE_SEQUOIA_AP_REGION, [THE_DEEP_SEA_AP_REGION],
                     {THE_DEEP_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
