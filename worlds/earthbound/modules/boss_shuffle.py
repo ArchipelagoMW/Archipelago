@@ -1,4 +1,5 @@
 from typing import NamedTuple, TYPE_CHECKING
+from logging import warning
 import struct
 if TYPE_CHECKING:
     from .. import EarthBoundWorld
@@ -256,7 +257,7 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         boss_plando = []
         shuffle_result = world.options.boss_shuffle.value
 
-    if shuffle_result == "true":
+    if shuffle_result == "true" or shuffle_result == 1:
         world.random.shuffle(world.boss_list)
 
         if not world.options.decouple_diamond_dog:
@@ -268,12 +269,6 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
             world.boss_list.remove("Giygas")
             world.boss_list.insert(29, "Giygas")
 
-    if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
-        original_boss = world.boss_list[27]
-        transformation_replacement = world.random.randint(0, 24)
-        world.boss_list[27] = world.boss_list[transformation_replacement]
-        world.boss_list[transformation_replacement] = original_boss
-
     if world.options.safe_final_boss:
         while world.boss_list[25] in hard_final_bosses:
             i = world.random.randrange(len(world.boss_list))
@@ -283,7 +278,9 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
                 continue
             world.boss_list[25], world.boss_list[i] = world.boss_list[i], world.boss_list[25]
 
-    #print(f"Old: {world.boss_list}")
+    did_plando_diam_dog = False
+    diamond_dog_plando_slot = None
+
     for item in boss_plando:
         boss_block = item.split("-")
         boss = boss_block[0].title()
@@ -294,13 +291,27 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
         if slot in boss_typo_key:
             slot = boss_typo_key[boss]
 
-        world.boss_list.remove(boss)
-        world.boss_list.insert(world.boss_slot_order.index(slot), boss)
+        if slot == "Diamond Dog":
+            did_plando_diam_dog = True
+            diamond_dog_plando_slot = boss
 
+        old_index = world.boss_list.index(boss)
+        new_index = world.boss_list.index(slot)
 
-    print(f"New {world.boss_list}")
+        world.boss_list[old_index] = slot
+        world.boss_list[new_index] = boss
 
-    
+    if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
+        if did_plando_diam_dog:
+            warning(f"""Unable to plando {diamond_dog_plando_slot} for {world.multiworld.get_player_name(world.player)}'s EarthBound world.
+This boss cannot be placed onto Diamond Dog's slot if Carbon Dog is on Heavily Armed Pokey's slot.
+This message is likely the result of randomization and can be safely ignored.""")  # Why is this spacing the only way to get the message to render legibly
+        original_boss = world.boss_list[27]
+        transformation_replacement = world.random.randint(0, 24)
+        while world.boss_list[transformation_replacement] in banned_transformations:
+            transformation_replacement = world.random.randint(0, 24)
+        world.boss_list[27] = world.boss_list[transformation_replacement]
+        world.boss_list[transformation_replacement] = original_boss
 
 def write_bosses(world: "EarthBoundWorld", rom: "LocalRom") -> None:
     rom.write_bytes(0x15E527, bytearray([0x00, 0x00]))  # Blank out Pokey's end battle action
