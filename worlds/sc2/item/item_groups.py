@@ -934,7 +934,6 @@ item_name_groups[ItemGroupNames.PROTOSS_LADDER_UNITS] = [
     item_names.HIGH_TEMPLAR,
     item_names.DARK_TEMPLAR,
     item_names.DARK_TEMPLAR_ARCHON_MERGE,
-    # No shuttle
     item_names.OBSERVER,
     item_names.WARP_PRISM,
     item_names.IMMORTAL,
