@@ -192,10 +192,12 @@ class EarthBoundClient(SNIClient):
         if outgoing_energy is None: #None Catcher
             return
 
-        await ctx.send_msgs([{
-            "cmd": "Get",
-            "keys": [f"GiftBoxes;{ctx.team}"]
-        }])
+
+        if f"GiftBoxes;{ctx.team}" not in ctx.stored_data:
+            await ctx.send_msgs([{
+                "cmd": "SetNotify",
+                "keys": [f"GiftBoxes;{ctx.team}"]
+            }])
 
         # GIFTING DATA
         if f"GiftBox;{ctx.team};{ctx.slot}" not in ctx.stored_data:
@@ -376,21 +378,25 @@ class EarthBoundClient(SNIClient):
                     if prog_shops:
                         await ctx.send_msgs([{"cmd": "CreateHints", "locations": prog_shops, "player": ctx.slot}])
 
-        await ctx.send_msgs([{
-                    "cmd": "Set",
-                    "key": f"{ctx.team}_{ctx.slot}_melody_status",
-                    "default": None,
-                    "want_reply": True,
-                    "operations": [{"operation": "replace", "value": int.from_bytes(melody_table, "little")}]
-                }])
+        melody_data = f"{ctx.team}_{ctx.slot}_melody_status"
+        earth_power_data = f"{ctx.team}_{ctx.slot}_earthpower"
+        current_melodies = int.from_bytes(melody_table, "little")
+        earth_power_state = int.from_bytes(earth_power_absorbed, "little")
 
-        await ctx.send_msgs([{
-                    "cmd": "Set",
-                    "key": f"{ctx.team}_{ctx.slot}_earthpower",
-                    "default": None,
-                    "want_reply": True,
-                    "operations": [{"operation": "replace", "value": int.from_bytes(earth_power_absorbed, "little")}]
-                }])
+        if melody_data not in ctx.stored_data or (ctx.stored_data[melody_data] != current_melodies) or (ctx.stored_data[earth_power_data] != earth_power_state):
+            await ctx.send_msgs([{
+                        "cmd": "Set",
+                        "key": melody_data,
+                        "default": None,
+                        "want_reply": True,
+                        "operations": [{"operation": "replace", "value": int.from_bytes(melody_table, "little")}]},
+                        {
+                        "cmd": "Set",
+                        "key": earth_power_data,
+                        "default": None,
+                        "want_reply": True,
+                        "operations": [{"operation": "replace", "value": int.from_bytes(earth_power_absorbed, "little")}]
+                    }])
 
         # death link handling goes here
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
