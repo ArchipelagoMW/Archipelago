@@ -20,7 +20,7 @@ from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
 from worlds.rac3.constants.Rac3Input import RAC3INPUT
 from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import (PLANET_CHECKPOINT, PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION,
+from worlds.rac3.constants.Rac3Region import (PLANET_CHECKPOINT, PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RESPAWN_COORDS_OFFSET, RAC3REGION,
                                               SHIP_SLOTS)
 from worlds.rac3.constants.Rac3Status import RAC3STATUS
 from worlds.rac3.pcsx2_interface.pine import Pine
@@ -579,6 +579,10 @@ class Rac3Interface(GameInterface):
 
     def teleport_to_coords(self, planet):
         # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
+        
+        # We dont need to overwrite the respawn coords for every planet, only the ones that have multiple checkpoints
+        if planet in RESPAWN_COORDS_OFFSET.keys():
+            self._write_bytes(RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     def should_coordinate_inject(self, planet):
@@ -589,6 +593,8 @@ class Rac3Interface(GameInterface):
             # Todo: add more special cases
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
+            case RAC3REGION.HOLOSTAR_STUDIOS:
+                return self._read8(RAC3STATUS.NO_CLANK) == 0  # 0: Clank, 1: No Clank
             case RAC3REGION.OBANI_DRACO:
                 return self._read_float(RAC3STATUS.RATCHET_X) < 600  # Courtney Fight
         return True
