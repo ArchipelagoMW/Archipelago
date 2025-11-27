@@ -52,7 +52,7 @@ class Portal2Context(CommonContext):
 
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
-        return f'script {';'.join(self.item_remove_commands)};script CreateCompleteLevelAlertHook();script Entities.FindByName(null, "@exit_teleport").Destroy()\n'
+        return f'{';'.join(self.item_remove_commands)};script CreateCompleteLevelAlertHook();script Entities.FindByName(null, "@exit_teleport").Destroy()\n'
 
     def send_player_to_main_menu_command(self):
         '''Sends the player back to the main menu (called on map completion)'''
@@ -147,7 +147,7 @@ class Portal2Context(CommonContext):
     async def handle_message(self, message: str):
         if message.startswith("map_name:"):
             logger.info(f"Map Joined {message.split(':', 1)[1]}")
-            # append the whole command string, not extend into characters
+            # append the whole command string
             self.command_queue.append(self.create_level_begin_command())
 
         elif message.startswith("map_complete:"):
