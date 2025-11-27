@@ -100,17 +100,93 @@ jobs:
           echo "✅ Relevant changes detected — proceed with build/release."
           echo "should_build=true" >> $GITHUB_OUTPUT
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         if: steps.changes.outputs.should_build == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          architecture: 'x64'
 
       - name: Install Python dependencies
         if: steps.changes.outputs.should_build == 'true'
         run: |
           python -m pip install --upgrade pip setuptools wheel factorio-rcon-py nest-asyncio pyinstaller pillow requests zstandard pyevermizer dolphin-memory-engine Pymem --disable-pip-version-check || true  # ignore failures for other worlds
           pip install -r requirements.txt
+          pip install maseya-z3pr>=1.0.0rc1 xxtea>=3.0.0 
+          # pip install zilliandomizer==0.9.1
+
+      - name: 🧪 Run Archipelago generation and create YAML
+        if: steps.changes.outputs.should_build == 'true'
+        shell: pwsh
+        env:
+          AP_NO_UPDATE: "1"
+          SKIP_REQUIREMENTS_UPDATE: "1"
+        run: |
+          $ErrorActionPreference = "Stop"
+          $rootDir = "${{ github.workspace }}"
+          Set-Location $rootDir
+
+          Write-Host "🧪 Generating template options..."
+          python Launcher.py "Generate Template Options" || true
+
+          Write-Host "📂 Checking Players/Templates folder..."
+          Get-ChildItem -Recurse Players/Templates | Write-Host
+
+          # Ensure Players folder exists
+          if (-Not (Test-Path Players)) { New-Item -ItemType Directory -Path Players }
+
+          # Copy the RaC3 template YAML
+          $yamlSource = Join-Path $rootDir 'Players/Templates/Ratchet & Clank 3.yaml'
+          $yamlDest   = Join-Path $rootDir 'Players/Ratchet & Clank 3.yaml'
+          $yamlRoot   = Join-Path $rootDir 'rac3.yaml'
+          if (-Not (Test-Path $yamlSource)) { Write-Error "Template YAML not found: $yamlSource" }
+          Copy-Item -LiteralPath $yamlSource -Destination $yamlDest -Force
+
+          # Read YAML
+          $yamlContent = Get-Content -LiteralPath $yamlDest -Raw
+
+          # Detect existing version
+          if ($yamlContent -match 'version:\s*(\d+)\.(\d+)\.(\d+)') {
+              $major = [int]$matches[1]
+              $minor = [int]$matches[2]
+              $patch = [int]$matches[3]
+              Write-Host "Found template version: $major.$minor.$patch"
+
+              if ($patch -gt 0) {
+                  $patch -= 1
+              } elseif ($minor -gt 0) {
+                  $minor -= 1
+                  $patch = 0
+              } else {
+                  Write-Warning "Version is already at 0.0.0 — cannot decrement"
+              }
+
+              $newVersion = "$major.$minor.$patch"
+              Write-Host "Lowered version for build: $newVersion"
+
+              # Replace version in YAML
+              $yamlContent = $yamlContent -replace 'version:\s*\d+\.\d+\.\d+', "version: $newVersion"
+          } else {
+              Write-Warning "No version line found in YAML — skipping version edit"
+          }
+
+          # Write YAML back
+          Set-Content -LiteralPath $yamlDest -Value $yamlContent -Force
+          Copy-Item -LiteralPath $yamlDest -Destination $yamlRoot -Force
+          Write-Host "✅ YAML edited successfully."
+
+          # Optional: test seed generation
+          Write-Host "🧪 Testing seed generation..."
+          python Generate.py || true
+
+          Write-Host "✅ Test step completed."
+
+      - name: Upload template artifact
+        if: steps.changes.outputs.should_build == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rac3.yaml
+          path: ./rac3.yaml
 
       - name: Build .apworld for rac3
         if: steps.changes.outputs.should_build == 'true'
@@ -173,6 +249,12 @@ jobs:
         with:
           ref: ${{ needs.build.outputs.branch }}
           fetch-depth: 0
+
+      - name: Download template artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rac3.yaml
+          path: .
 
       - name: Download built artifact
         uses: actions/download-artifact@v4
