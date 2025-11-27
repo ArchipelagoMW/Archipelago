@@ -16,7 +16,7 @@ if TYPE_CHECKING:
     from . import MM2World
 
 MM2LCHASH = "37f2c36ce7592f1e16b3434b3985c497"
-PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
+PROTEUSHASH = "b69fff40212b80c94f19e786d1efbf61"
 MM2NESHASH = "0527a0ee512f69e08b8db6dc97964632"
 MM2VCHASH = "0c78dfe8e90fb8f3eed022ff01126ad3"
 
@@ -404,7 +404,7 @@ def get_base_rom_path(file_name: str = "") -> str:
     return file_name
 
 
-PRG_OFFSET = 0x8ED70
+PRG_OFFSET = 0x8F170
 PRG_SIZE = 0x40000
 
 

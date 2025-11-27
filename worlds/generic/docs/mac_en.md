@@ -19,8 +19,11 @@ It is generally recommended that you use a virtual environment to run python bas
 2. Run the command `python3 -m venv venv` to create a virtual environment. Running this command will create a new directory at the specified path, so make sure that path is clear for a new directory to be created.
 3. Run the command `source venv/bin/activate` to activate the virtual environment.
 4. If you want to exit the virtual environment, run the command `deactivate`.
+## Building the App
+1. Run the command `python3 setup.py bdist_mac` to build an App Bundle.  This step may take a while.
+2. Back in Finder, go to the new `build` subdirectory, and copy the Archipelago app you just made to your Applications directory.
 ## Steps to Run the Clients 
-1. Run the command `python3 Launcher.py`.
+1. Launch the Archipelago Launcher
 2. If your game doesn't have a patch file, just click the desired client in the right side column.
 3. If your game does have a patch file, click the 'Open Patch' button and navigate to your patch file (the filename extension will look something like apsm, aplttp, apsmz3, etc.).
 4. If the patching process needs a rom, but cannot find it, it will ask you to navigate to your legally obtained rom.
