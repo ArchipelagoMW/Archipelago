@@ -198,22 +198,27 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
         return [sys.executable, local_path(f"{component.script_name}.py")] if component.script_name else None
 
 
-def launch(exe, in_terminal=False):
+def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
+    """Runs the given command/args in `exe` in a new process.
+    
+    If `in_terminal` is True, it will attepmt to run in a terminal window,
+    and the return value will indicate whether one was found."""
     if in_terminal:
         if is_windows:
             # intentionally using a window title with a space so it gets quoted and treated as a title
             subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
-            return
+            return True
         elif is_linux:
-            terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
+            terminal = which("x-terminal-emulator") or which("gnome-terminal") or which("xterm") or which("konsole")
             if terminal:
-                subprocess.Popen([terminal, '-e', shlex.join(exe)])
-                return
+                subprocess.Popen([terminal, "-e", shlex.join(exe)])
+                return True
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.app']
+            terminal = [which("open"), "-W", "-a", "Terminal.app"]
             subprocess.Popen([*terminal, *exe])
-            return
+            return True
     subprocess.Popen(exe)
+    return False
 
 
 def create_shortcut(button: Any, component: Component) -> None:
@@ -397,12 +402,15 @@ def run_gui(launch_components: list[Component], args: Any) -> None:
 
         @staticmethod
         def component_action(button):
-            MDSnackbar(MDSnackbarText(text="Opening in a new window..."), y=dp(24), pos_hint={"center_x": 0.5},
-                       size_hint_x=0.5).open()
+            open_text = "Opening in a new window..."
             if button.component.func:
                 button.component.func()
             else:
-                launch(get_exe(button.component), button.component.cli)
+                if not launch(get_exe(button.component), button.component.cli) and button.component.cli:
+                    open_text = "Running in the background..."
+
+            MDSnackbar(MDSnackbarText(text=open_text), y=dp(24), pos_hint={"center_x": 0.5},
+                       size_hint_x=0.5).open()
 
         def _on_drop_file(self, window: Window, filename: bytes, x: int, y: int) -> None:
             """ When a patch file is dropped into the window, run the associated component. """
