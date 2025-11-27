@@ -337,7 +337,7 @@ class EarthBoundClient(SNIClient):
             outbox_full_byte = outbox_full_byte[0] & ~0x08
             await snes_write(ctx, [(WRAM_START + 0xB622, bytes([outbox_full_byte]))])
 
-        if game_clear[0] & 0x01 == 0x01:  # Goal should ignore the item queue and textbox check
+        if (game_clear[0] & 0x01 == 0x01) and not ctx.finished_game:  # Goal should ignore the item queue and textbox check
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
         
