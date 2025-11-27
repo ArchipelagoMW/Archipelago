@@ -8,7 +8,6 @@ if TYPE_CHECKING:
 
 class EBLocation(Location):
     game: str = "EarthBound"
-    region: str
 
 
 def init_areas(world: "EarthBoundWorld", locations: list[LocationData]) -> None:
@@ -230,7 +229,6 @@ def connect_area_exits(world: "EarthBoundWorld"):
 
 def create_location(player: int, location_data: LocationData, region: Region) -> Location:
     location = EBLocation(player, location_data.name, location_data.code, region)
-    location.region = location_data.region
 
     return location
 
