@@ -195,7 +195,7 @@ renon_item_dialogue = {
     0x06: "Fresh off a Behemoth!\n"
           "Those cows are weird.",
     0x07: "Preserved with special\n"
-          "wall-based methods.",
+          " wall-based methods.",
     0x08: "Don't tell Geneva\n"
           "about this...",
     0x09: "If this existed in 1094,\n"
@@ -214,7 +214,7 @@ renon_item_dialogue = {
           "\"Banshee Boomerang.\"",
     0x10: "No weapon triangle\n"
           "advantages with this.",
-    0x12: "It looks sus? Trust me, "
+    0x12: "It looks sus? Trust me,\n"
           "my wares are genuine.",
     0x15: "This non-volatile kind\n"
           "is safe to handle.",
@@ -263,7 +263,7 @@ renon_item_dialogue = {
     "common": "Every last little bit\n"
               "helps, right?",
     "trap": "I'll teach this fool\n"
-            "a lesson for a price!",
+            " a lesson for a price!",
     "dlc coin": "1 coin out of... wha!?\n"
                 "You imp, why I oughta!"
 }
