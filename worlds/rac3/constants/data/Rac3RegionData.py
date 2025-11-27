@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import Optional
 
 from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
-from worlds.rac3.constants.Rac3Region import PLANET_CHECKPOINT, PLANET_NAME_FROM_ID, PLANET_MENU_OFFSET, RAC3REGION
+from worlds.rac3.constants.Rac3Region import PLANET_CHECKPOINT, PLANET_NAME_FROM_ID, PLANET_MENU_OFFSET, RESPAWN_COORDS_OFFSET, RAC3REGION
 from worlds.rac3.constants.Rac3Status import RAC3STATUS
 
 
@@ -12,16 +12,19 @@ class RAC3REGIONDATA:
     SLOT_ADDRESS: Optional[int] = None
     CHECKPOINT: Optional[RAC3POSITIONDATA] = None
     PAUSE_ADDRESS: Optional[int] = None
+    RESPAWN_COORDS_ADDRESS: Optional[int] = None
 
     def __init__(self,
                  idx: Optional[int] = None,
                  slot: Optional[int] = None,
                  checkpoint: Optional[RAC3POSITIONDATA] = None,
-                 pause_address: Optional[int] = None):
+                 pause_address: Optional[int] = None,
+                 respawn_coords_address: Optional[int] = None):
         self.ID: Optional[int] = idx
         self.SLOT_ADDRESS: Optional[int] = slot
         self.CHECKPOINT: Optional[RAC3POSITIONDATA] = checkpoint
         self.PAUSE_ADDRESS: Optional[int] = pause_address
+        self.RESPAWN_COORDS_ADDRESS: Optional[int] = respawn_coords_address
 
     @staticmethod
     def construct_slot(slot: int):
@@ -34,7 +37,10 @@ class RAC3REGIONDATA:
         name = PLANET_NAME_FROM_ID[idx]
         planet_address = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
         checkpoint = PLANET_CHECKPOINT.get(name, None)
-        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=planet_address)
+        respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
+        if respawn_coords_address is not None: # Not all planets should have respawn coords changed
+            respawn_coords_address += RAC3STATUS.RESPAWN_BASE
+        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=planet_address, respawn_coords_address=respawn_coords_address)
 
 
 RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {

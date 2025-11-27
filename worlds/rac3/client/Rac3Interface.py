@@ -572,12 +572,12 @@ class Rac3Interface(GameInterface):
             # For special cases with checkpoints that change, we manually change coordinates to the checkpoint at the
             # ship
             self.logger.info(f'Teleporting to ship on: {planet}')
-            self.teleport_to_coords()
+            self.teleport_to_coords(planet)
         else:
             self.logger.info(f'Respawning at ship on: {planet}')
             self.force_respawn()
 
-    def teleport_to_coords(self):
+    def teleport_to_coords(self, planet):
         # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
