@@ -209,6 +209,13 @@ class TWWContext(CommonContext):
             # Request the connected slot's dictionary (used as a set) of visited stages.
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
+        elif cmd == "ReceivedItems":
+            # Loop through all received items and check for the index of the first progressive magic meter.
+            magic_meter_id = ITEM_TABLE["Progressive Magic Meter"].code
+            for idx, item in enumerate(self.items_received):
+                if item.item == magic_meter_id:
+                    self.received_magic_idx = idx
+                    break
         elif cmd == "Retrieved":
             requested_keys_dict = args["keys"]
             # Read the connected slot's dictionary (used as a set) of visited stages.
