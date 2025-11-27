@@ -520,6 +520,7 @@ async def check_locations(ctx: TWWContext) -> None:
     curr_stage_id = dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR)
 
     # Loop through all locations to see if each has been checked.
+    new_locations = []
     for location, data in LOCATION_TABLE.items():
         checked = False
         if data.type == TWWLocationType.CHART:
@@ -542,12 +543,14 @@ async def check_locations(ctx: TWWContext) -> None:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.finished_game = True
             else:
-                ctx.locations_checked.add(TWWLocation.get_apid(data.code))
+                location_id = TWWLocation.get_apid(data.code)
+                if location_id not in ctx.locations_checked:
+                    new_locations.append(location_id)
+                    ctx.locations_checked.add(location_id)
 
     # Send the list of newly-checked locations to the server.
-    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    if locations_checked:
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    if new_locations:
+        await ctx.check_locations(new_locations)
 
 
 async def check_current_stage_changed(ctx: TWWContext) -> None:
