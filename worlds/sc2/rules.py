@@ -1986,12 +1986,12 @@ class SC2Logic:
                 item_names.ANNIHILATOR,
                 item_names.IMMORTAL,
                 item_names.STALKER,
-                item_names.ADEPT,
+                item_names.ADEPT,  # Tested by Snarky, "An easy 1-item solve"
                 item_names.WRATHWALKER,
                 item_names.VOID_RAY,
                 item_names.DESTROYER,
             ), self.player)
-            or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
+            or state.has_all((item_names.SLAYER, item_names.SLAYER_PHASE_BLINK), self.player)
             or state.has_all((item_names.REAVER, item_names.REAVER_KHALAI_REPLICATORS), self.player)
             or state.has_all((item_names.VANGUARD, item_names.VANGUARD_FUSION_MORTARS), self.player)
             or (
