@@ -66,7 +66,7 @@ loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "c483b3cf2b5e2fb9ef062eb575363c18"
+patch_md5: str = "171e0227f28c3716f6bf2d8719256dee"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -272,22 +272,83 @@ class GloverCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            self.ctx.deathlink_client_override = True
-            self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
+            self.ctx.link_table["DEATH"].override_toggle()
             async_start(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
 
     def _cmd_taglink(self):
         """Toggle taglink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            self.ctx.taglink_client_override = True
-            self.ctx.taglink_enabled = not self.ctx.taglink_enabled
+            self.ctx.link_table["TAG"].override_toggle()
             async_start(self.ctx.update_tag_link(self.ctx.taglink_enabled), name="Update Taglink")
 
-    # def _cmd_tag(self):
-    #     """Toggle a tag for Taglink."""
-    #     if isinstance(self.ctx, GloverContext):
-    #         async_start(self.ctx.send_tag_link(), name="Send Taglink")
+class Link():
+    """Base class for usage with AP links. Should not appear on its own."""
+    def __init__(self, tag : str):
+        self.tag = tag
+        self.enabled = False
+        self.overriden = False
+    
+    def override_toggle(self):
+        """Toggles the state of the link via client."""
+        self.overriden = True
+        self.enabled = not self.enabled
+    
+    def halt(self):
+        """Stops processing of any link information."""
+        print("Link should not be used by itself!")
+    
+    def send_pending(self):
+        """Output any info that is pending."""
+        print("Link should not be used by itself!")
+        return {}
 
+class LinkInfo():
+    """The info used in links."""
+    def __init__(self, data : dict):
+        self.data = data
+        self.halt()
+    
+    def halt(self):
+        """Sets pending and local to false."""
+        self.pending = False
+        self.local = False
+    
+    def send_pending(self):
+        if self.pending:
+            self.pending = False
+            self.local = True
+            return True
+        return False
+
+class BounceLink(Link):
+    """An AP Link that has one piece of bounced info to send/recieve."""
+    def __init__(self, name : str, tag : str):
+        super.__init__(name, tag)
+        self.info : LinkInfo = LinkInfo({})
+    
+    def halt(self):
+        self.info.halt()
+    
+    def send_pending(self):
+        return {self.name : self.info.send_pending()}
+
+class MultiLink(Link):
+    """An AP Link that has multiple pieces of info to send/recieve."""
+    def __init__(self, name : str, tag : str, entries : dict[str, dict]):
+        super.__init__(name, tag)
+        self.entries : dict[str, LinkInfo] = {}
+        for each_entry, entry_info in entries.items():
+            self.entries[each_entry] = LinkInfo(entry_info)
+    
+    def halt(self):
+        for each_entry in self.entries:
+            self.entries[each_entry].halt()
+    
+    def send_pending(self):
+        output : dict[str, bool] = {}
+        for each_entry, entry_info in self.entries.items():
+            output[each_entry] = entry_info.send_pending()
+        return output
 
 class GloverContext(CommonContext):
     command_processor = GloverCommandProcessor
@@ -317,15 +378,11 @@ class GloverContext(CommonContext):
 
         self.current_world = 0
         self.current_hub = 0
-        self.deathlink_enabled = False
-        self.deathlink_pending = False
-        self.deathlink_sent_this_death = False
-        self.deathlink_client_override = False
-
-        self.taglink_enabled = False
-        self.pending_tag_link = False
-        self.taglink_sent_this_tag = False
-        self.taglink_client_override = False
+        self.link_table : dict[str, Link] = {
+            "DEATH" : BounceLink("DeathLink"),
+            "TAG" : BounceLink("TagLink"),
+            "TRAP" : MultiLink("TRAP")
+        }
         self.version_warning = False
         self.messages = {}
         self.slot_data = {}
@@ -509,39 +566,24 @@ class GloverContext(CommonContext):
                 self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player}, None)
 
 def get_payload(ctx: GloverContext):
-    if ctx.deathlink_enabled and ctx.deathlink_pending:
-        trigger_death = True
-        ctx.deathlink_sent_this_death = True
-        ctx.deathlink_pending = False
-    else:
-        trigger_death = False
-
-    if ctx.taglink_enabled and ctx.pending_tag_link:
-        trigger_tag = True
-        ctx.taglink_sent_this_tag = True
-        ctx.pending_tag_link = False
-    else:
-        trigger_tag = False
-
-
-    # if(len(ctx.items_received) > 0) and ctx.sync_ready == True:
-    #   print("Receiving Item")
-
+    #Get all triggered links
+    triggered_links = {}
+    for each_link in ctx.link_table:
+        triggered_links.update(ctx.link_table[each_link].send_pending())
+    
     if ctx.sync_ready == True:
         ctx.startup = True
         payload = json.dumps({
                 "items": [get_item_value(item.item) for item in ctx.items_received],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
-                "triggerDeath": trigger_death,
-                "triggerTag": trigger_tag,
+                "triggeredLinks": triggered_links,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     else:
         payload = json.dumps({
                 "items": [],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
-                "triggerDeath": trigger_death,
-                "triggerTag": trigger_tag,
+                "triggeredLinks": triggered_links,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     if len(ctx.messages) > 0:
@@ -569,18 +611,14 @@ def get_slot_payload(ctx: GloverContext):
 
 
 async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
-
     # Refuse to do anything if ROM is detected as changed
     if ctx.auth and payload["playerName"] != ctx.auth:
         logger.warning("ROM change detected. Disconnecting and reconnecting...")
-        ctx.deathlink_enabled = False
-        ctx.deathlink_client_override = False
-        ctx.deathlink_pending = False
-        ctx.deathlink_sent_this_death = False
-        ctx.taglink_enabled = False
-        ctx.taglink_client_override = False
-        ctx.pending_tag_link = False
-        ctx.taglink_sent_this_tag = False
+        # Stop all link data from processing
+        for each_entry in ctx.link_table:
+            ctx.link_table[each_entry].enabled = False
+            ctx.link_table[each_entry].overriden = False
+            ctx.link_table[each_entry].halt()
 
         ctx.finished_game = False
         ctx.location_table = {}
@@ -588,15 +626,32 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         await ctx.send_connect()
         return
 
-    # Turn on deathlink if it is on, and if the client hasn't overriden it
-    if payload["deathlinkActive"] and ctx.deathlink_enabled and not ctx.deathlink_client_override:
-        await ctx.update_death_link(True)
-        ctx.deathlink_enabled = True
+    #Figure out what links are on
+    for link_name, link_state in payload["activeLinks"].items():
+        if ctx.link_table[link_name].enabled and link_state and not ctx.link_table[link_name].overriden:
+            await ctx.update_death_link(True)
+            ctx.link_table[link_name].enabled = True
 
-    # Turn on taglink if it is on, and if the client hasn't overriden it
-    if payload["taglinkActive"] and ctx.taglink_enabled and not ctx.taglink_client_override:
-        await ctx.update_tag_link(True)
-        ctx.taglink_enabled = True
+    ## Deathlink handling
+    #if ctx.deathlink_enabled:
+    #    if payload["isDead"]: #Glover died
+    #        ctx.deathlink_pending = False
+    #        if not ctx.deathlink_sent_this_death:
+    #            ctx.deathlink_sent_this_death = True
+    #
+    #            await ctx.send_death()
+    #    else: # Glover is somehow still alive
+    #        ctx.deathlink_sent_this_death = False
+    #
+    #if ctx.taglink_enabled:
+    #    if payload["isTag"]: #Glover tagged
+    #        ctx.pending_tag_link = False
+    #        if not ctx.taglink_sent_this_tag:
+    #            ctx.taglink_sent_this_tag = True
+    #
+    #            await ctx.send_tag_link()
+    #    else:
+    #        ctx.taglink_sent_this_tag = False
 
     # Locations handling
     demo = payload["DEMO"]
@@ -815,27 +870,6 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         # ctx.items_handling = 0b101
         # await ctx.send_connect()
         ctx.sync_ready = True
-
-    # Deathlink handling
-    if ctx.deathlink_enabled:
-        if payload["isDead"]: #Glover died
-            ctx.deathlink_pending = False
-            if not ctx.deathlink_sent_this_death:
-                ctx.deathlink_sent_this_death = True
-
-                await ctx.send_death()
-        else: # Glover is somehow still alive
-            ctx.deathlink_sent_this_death = False
-
-    if ctx.taglink_enabled:
-        if payload["isTag"]: #Glover tagged
-            ctx.pending_tag_link = False
-            if not ctx.taglink_sent_this_tag:
-                ctx.taglink_sent_this_tag = True
-
-                await ctx.send_tag_link()
-        else:
-            ctx.taglink_sent_this_tag = False
 
 async def n64_sync_task(ctx: GloverContext):
     logger.info("Starting n64 connector. Use /n64 for status information.")

@@ -39,14 +39,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -75,14 +75,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -111,7 +111,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -140,14 +140,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -3938,14 +3938,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -3974,14 +3974,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -4010,7 +4010,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -4039,14 +4039,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -9229,14 +9229,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -9265,14 +9265,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -9301,7 +9301,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -9330,14 +9330,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -15142,14 +15142,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -15178,14 +15178,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -15214,7 +15214,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -15243,14 +15243,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -21495,14 +21495,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -21531,14 +21531,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -21567,7 +21567,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -21596,14 +21596,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -26943,14 +26943,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "1 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -26979,14 +26979,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "2 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -27015,7 +27015,7 @@
 				{
 					"ballRequirement": false,
 					"ck0": "Boss Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
@@ -27044,14 +27044,14 @@
 				{
 					"ballRequirement": false,
 					"ck0": "3 Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				},
 				{
 					"ballRequirement": false,
 					"ck0": "Bonus Star",
-					"mv0": 2,
+					"mv0": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 1
 				}
