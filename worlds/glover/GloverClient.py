@@ -66,7 +66,7 @@ loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "171e0227f28c3716f6bf2d8719256dee"
+patch_md5: str = "e479b7883fe883b378c51bf328dd355b"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -322,8 +322,8 @@ class LinkInfo():
 
 class BounceLink(Link):
     """An AP Link that has one piece of bounced info to send/recieve."""
-    def __init__(self, name : str, tag : str):
-        super.__init__(name, tag)
+    def __init__(self, tag : str):
+        super.__init__(tag)
         self.info : LinkInfo = LinkInfo({})
     
     def halt(self):
@@ -334,8 +334,8 @@ class BounceLink(Link):
 
 class MultiLink(Link):
     """An AP Link that has multiple pieces of info to send/recieve."""
-    def __init__(self, name : str, tag : str, entries : dict[str, dict]):
-        super.__init__(name, tag)
+    def __init__(self, tag : str, entries : dict[str, dict]):
+        super.__init__(tag)
         self.entries : dict[str, LinkInfo] = {}
         for each_entry, entry_info in entries.items():
             self.entries[each_entry] = LinkInfo(entry_info)
@@ -381,7 +381,7 @@ class GloverContext(CommonContext):
         self.link_table : dict[str, Link] = {
             "DEATH" : BounceLink("DeathLink"),
             "TAG" : BounceLink("TagLink"),
-            "TRAP" : MultiLink("TRAP")
+            "TRAP" : MultiLink("TrapLink", {})
         }
         self.version_warning = False
         self.messages = {}

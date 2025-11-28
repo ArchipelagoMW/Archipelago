@@ -272,6 +272,8 @@ local ROM_ITEM_TABLE = {
     "AP_CAMERA_TRAP",
     "AP_CURSE_BALL",
     "AP_CBALL_TRAP",
+	"AP_GLOVER_DEATH",
+	"AP_GLOVER_TAG",
     "AP_MAX_ITEM",
 };
 
@@ -11672,10 +11674,10 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
-	base_pointer = 0x400000,
+base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
-    ap_world = 0x7A8,
+    ap_world = 0x7AC,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
@@ -11712,11 +11714,11 @@ GLOVERHACK = {
     ap_world_offset = 0x614,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
-    wayroom_locations = 0xCA28,
+    wayroom_locations = 0xCA2C,
       wayroom_id = 0x4,
       wayroom_collected = 0x6,
     wayroom_size = 0x8,
-    chicken_collected = 0xCA58,
+    chicken_collected = 0xCA5C,
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
@@ -11725,13 +11727,11 @@ GLOVERHACK = {
       taglink = 0x4,
     hub_map = 0x8,
     world_map = 0x9,
-    pc_deathlink = 0x726,
     n64_deathlink = 0x729,
-    pc_taglink = 0x727,
     n64_taglink = 0x72A,
-    ROM_MAJOR_VERSION = 0x7A4,
-    ROM_MINOR_VERSION = 0x7A5,
-    ROM_PATCH_VERSION = 0x7A6
+    ROM_MAJOR_VERSION = 0x7A6,
+    ROM_MINOR_VERSION = 0x7A7,
+    ROM_PATCH_VERSION = 0x7A8
 }
 
 function GLOVERHACK:new(t)
@@ -12516,17 +12516,17 @@ function received_misc(itemId)
 end
 
 function received_traps(itemId)
-	--if itemId == 6500368 then
-    --    GVR:setItem(ITEM_TABLE["Frog Trap"], TOTAL_LIVES)
-    --elseif itemId == 6500369 then
-    --    GVR:setItem(ITEM_TABLE["Cursed Ball Trap"], TOTAL_LIVES)
-    --elseif itemId == 6500370 then
-    --    GVR:setItem(ITEM_TABLE["Instant Crystal Trap"], TOTAL_LIVES)
-    --elseif itemId == 6500371 then
-    --    GVR:setItem(ITEM_TABLE["Camera Rotate Trap"], TOTAL_LIVES)
-    --elseif itemId == 6500372 then
-    --    GVR:setItem(ITEM_TABLE["Tip Trap"], TOTAL_LIVES)
-    --end
+	if itemId == 6500368 then
+		link_triggered("FROG")
+    elseif itemId == 6500369 then
+		link_triggered("CURSE_BALL")
+    elseif itemId == 6500370 then
+		link_triggered("CRYSTAL")
+    elseif itemId == 6500371 then
+		link_triggered("CAMERA")
+    -- elseif itemId == 6500372 then
+    --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], TOTAL_LIVES)
+    end
 end
 
 function received_events(itemId)
@@ -12842,6 +12842,8 @@ function SendToClient()
 	do
 		activeLinks[link_name] = link_info['ENABLED']
 	end
+	triggered_deathlink()
+	triggered_taglink()
     retTable["scriptVersion"] = SCRIPT_VERSION;
     retTable["playerName"] = PLAYER;
     retTable["activeLinks"] = activeLinks;
@@ -12884,6 +12886,27 @@ function SendToClient()
     end
 end
 
+function triggered_deathlink()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
+    local deathAddress = GLOVERHACK.n64_deathlink + hackPointerIndex;
+	local deathResult = mainmemory.readbyte(deathAddress)
+	if deathResult == 1
+	then
+		LINKS_TABLE['DEATH']['LOCAL'] = LINKS_TABLE['DEATH']['LOCAL'] + 1
+		mainmemory.writebyte(deathAddress, 0)
+	end
+end
+
+function triggered_taglink()
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
+    local tagAddress = GLOVERHACK.n64_taglink + hackPointerIndex;
+	local triggerTag = LINKS_TABLE['TAG']['LOCAL'] < mainmemory.readbyte(tagAddress)
+	if triggerTag
+	then
+		LINKS_TABLE['TAG']['LOCAL'] = LINKS_TABLE['TAG']['LOCAL'] + 1
+	end
+end
+
 -- Get any triggered links from the multiworld
 function incoming_links(triggered_links)
 	for each_link, link_triggered in pairs(triggered_links)
@@ -12893,6 +12916,7 @@ function incoming_links(triggered_links)
 			if LINKS_TABLE[each_link] ~= nil
 			then
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
+				send_linked_item(each_link)
 			else
 				for each_table, table_info in pairs(LINKS_TABLE)
 				do
@@ -12901,11 +12925,41 @@ function incoming_links(triggered_links)
 						if table_info['ENTRIES'][each_link] ~= nil
 						then
 							LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] = LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] + 1
+							send_linked_item(each_link)
 						end
 					end
 				end
 			end
 		end
+	end
+end
+
+-- Sends an itemized version of the link to the Glover Rom
+function send_linked_item(linkName)
+	if linkName == "DEATH"
+	then
+		LINKS_TABLE["DEATH"]['LOCAL'] = LINKS_TABLE["DEATH"]['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_GLOVER_DEATH"], LINKS_TABLE["DEATH"]['LOCAL'])
+	elseif linkName == "TAG"
+	then
+		LINKS_TABLE['TAG']['LOCAL'] = LINKS_TABLE['TAG']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_GLOVER_TAG"], LINKS_TABLE['TAG']['LOCAL'])
+	elseif linkName == "FROG"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['AP_FROG_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_FROG_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_FROG_TRAP'])
+	elseif linkName == "CAMERA"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['AP_CAMERA_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CAMERA_TRAP'])
+	elseif linkName == "CURSE_BALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['AP_CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CURSE_BALL"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CURSE_BALL'])
+	elseif linkName == "CRYSTAL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['AP_CBALL_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CBALL_TRAP'])
 	end
 end
 
