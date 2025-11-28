@@ -297,7 +297,7 @@ class Link():
         """Stops processing of any link information."""
         print("Link should not be used by itself!")
     
-    def send_pending(self):
+    def recieve_pending(self):
         """Output any info that is pending."""
         print("Link should not be used by itself!")
         return {}
@@ -308,12 +308,18 @@ class LinkInfo():
         self.data = data
         self.halt()
     
+    def set_timestamp(self):
+        """Sets the timestamp of when the last info related to this got sent"""
+        self.last_timestamp = time.time()
+
     def halt(self):
         """Sets pending and local to false."""
+        self.set_timestamp()
         self.pending = False
         self.local = False
     
-    def send_pending(self):
+    def recieve_pending(self):
+        self.set_timestamp()
         if self.pending:
             self.pending = False
             self.local = True
@@ -323,19 +329,20 @@ class LinkInfo():
 class BounceLink(Link):
     """An AP Link that has one piece of bounced info to send/recieve."""
     def __init__(self, tag : str):
-        super.__init__(tag)
+        super().__init__(tag)
         self.info : LinkInfo = LinkInfo({})
     
     def halt(self):
         self.info.halt()
     
-    def send_pending(self):
-        return {self.name : self.info.send_pending()}
+    def recieve_pending(self):
+        return {self.name : self.info.recieve_pending()}
+        """Causes the thing."""
 
 class MultiLink(Link):
     """An AP Link that has multiple pieces of info to send/recieve."""
     def __init__(self, tag : str, entries : dict[str, dict]):
-        super.__init__(tag)
+        super().__init__(tag)
         self.entries : dict[str, LinkInfo] = {}
         for each_entry, entry_info in entries.items():
             self.entries[each_entry] = LinkInfo(entry_info)
@@ -344,11 +351,12 @@ class MultiLink(Link):
         for each_entry in self.entries:
             self.entries[each_entry].halt()
     
-    def send_pending(self):
+    def recieve_pending(self):
         output : dict[str, bool] = {}
         for each_entry, entry_info in self.entries.items():
-            output[each_entry] = entry_info.send_pending()
+            output[each_entry] = entry_info.recieve_pending()
         return output
+
 
 class GloverContext(CommonContext):
     command_processor = GloverCommandProcessor
@@ -569,7 +577,7 @@ def get_payload(ctx: GloverContext):
     #Get all triggered links
     triggered_links = {}
     for each_link in ctx.link_table:
-        triggered_links.update(ctx.link_table[each_link].send_pending())
+        triggered_links.update(ctx.link_table[each_link].recieve_pending())
     
     if ctx.sync_ready == True:
         ctx.startup = True
@@ -610,6 +618,7 @@ def get_slot_payload(ctx: GloverContext):
     return payload
 
 
+
 async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     # Refuse to do anything if ROM is detected as changed
     if ctx.auth and payload["playerName"] != ctx.auth:
@@ -631,6 +640,24 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.link_table[link_name].enabled and link_state and not ctx.link_table[link_name].overriden:
             await ctx.update_death_link(True)
             ctx.link_table[link_name].enabled = True
+    
+    #Sending Links
+    for link_name, link_state in payload["triggeredLinks"].items():
+        if link_name in ctx.link_table:
+            if ctx.link_table[link_name].enabled and link_state:
+                match link_name:
+                    case "DEATH":
+                        await ctx.send_death()
+                    case "TAG":
+                        await ctx.send_tag_link()
+        else:
+            for each_type, link_info in ctx.link_table.items():
+                if link_info.enabled and isinstance(link_info, MultiLink):
+                    if link_name in link_info.entries:
+                        match each_type:
+                            case "TRAP":
+                                await ctx.send_traplink(link_name)
+
 
     ## Deathlink handling
     #if ctx.deathlink_enabled:
