@@ -104,13 +104,40 @@ local TOTAL_PROGRESSIVE_LEVEL_EVENTS = {
 	['AP_FORTRESS_L2_PROGRESSIVE_GATE'] = 0
 }
 
---------------- DEATH LINK ----------------------
-local DEATH_LINK_TRIGGERED = false;
-local DEATH_LINK = true
-
---------------- TAG LINK ------------------------
-local TAG_LINK_TRIGGERED = false
-local TAG_LINK = true
+--------------- LINKS ----------------------
+local LINKS_TABLE = {
+	['DEATH'] = {
+		['ENABLED'] = false,
+		['LOCAL'] = 0,
+		['AP'] = 0
+	},
+	['TAG'] = {
+		['ENABLED'] = false,
+		['LOCAL'] = 0,
+		['AP'] = 0
+	},
+	['TRAP'] = {
+		['ENABLED'] = false,
+		['ENTRIES'] = {
+			['FROG'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['CAMERA'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['CURSE_BALL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['CRYSTAL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			}
+		}
+	}
+}
 
 local checked_map = { -- [ap_id] = location_id; -- Stores locations you've already checked
 	["NA"] = "NA"
@@ -12802,78 +12829,23 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
-	if block['triggerDeath'] ~= nil
+	if block['triggeredLinks'] ~= nil
 	then
-    	if block['triggerDeath'] == true and DEATH_LINK == true
-    	then
-    	    local death = GVR:getPCDeath()
-    	    GVR:setPCDeath(death + 1)
-    	end
-	end
-    if block['triggerTag'] ~= nil
-	then
-		if block['triggerTag'] == true and TAG_LINK == true
-    	then
-    	    local tag = GVR:getPCTag()
-    	    GVR:setPCTag(tag + 1)
-    	end
+		incoming_links(block['triggeredLinks'])
 	end
 end
 
 function SendToClient()
     local retTable = {}
-    local detect_death = false
-    local detect_tag = false
-	local deathAp = GVR:getPCDeath()
-	local death64 = GVR:getNLocalDeath()
-	-- Send the deathlink only when you're the cause
-    if death64 > deathAp
-    then
-		if DEATH_LINK == true
-		then
-			if DEATH_LINK_TRIGGERED == false
-			then
-				detect_death = true
-            	GVR:setPCDeath(deathAp + 1)
-            	DEATH_LINK_TRIGGERED = true
-			end
-		else
-			DEATH_LINK_TRIGGERED = false
-            local died = GVR:getPCDeath()
-            GVR:setPCDeath(died + 1)
-		end
-    else
-        DEATH_LINK_TRIGGERED = false
-    end
-
-	
-    if GVR:getPCTag() ~= GVR:getNLocalTag()
-    then
-		if TAG_LINK == true
-		then
-			if TAG_LINK_TRIGGERED == false
-			then
-        		detect_tag = true
-        		local tag = GVR:getPCTag()
-        		GVR:setPCTag(tag + 1)
-        		TAG_LINK_TRIGGERED = true
-			else
-        		TAG_LINK_TRIGGERED = false
-			end
-		else
-        	local tag = GVR:getPCTag()
-        	GVR:setPCTag(tag + 1)
-        	TAG_LINK_TRIGGERED = false
-		end
-	else
-        TAG_LINK_TRIGGERED = false
-    end
+	local activeLinks = {}
+	for link_name, link_info in pairs(LINKS_TABLE)
+	do
+		activeLinks[link_name] = link_info['ENABLED']
+	end
     retTable["scriptVersion"] = SCRIPT_VERSION;
     retTable["playerName"] = PLAYER;
-    retTable["deathlinkActive"] = DEATH_LINK;
-    retTable["taglinkActive"] = TAG_LINK;
-    retTable["isDead"] = detect_death;
-    retTable["isTag"] = detect_tag;
+    retTable["activeLinks"] = activeLinks;
+    retTable["triggeredLinks"] = outbound_links();
     retTable["garibs"] = garib_check()
     retTable["garib_groups"] =  garib_group_contruction()
     retTable["life"] = life_check()
@@ -12910,6 +12882,64 @@ function SendToClient()
         PRINT_GOAL = true;
         CUR_STATE = STATE_OK
     end
+end
+
+-- Get any triggered links from the multiworld
+function incoming_links(triggered_links)
+	for each_link, link_triggered in pairs(triggered_links)
+	do
+		if link_triggered
+		then
+			if LINKS_TABLE[each_link] ~= nil
+			then
+				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
+			else
+				for each_table, table_info in pairs(LINKS_TABLE)
+				do
+					if table_info['ENTRIES'] ~= nil
+					then
+						if table_info['ENTRIES'][each_link] ~= nil
+						then
+							LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] = LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] + 1
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+-- Send the client any triggered links
+function outbound_links()
+	local output = {}
+	for link_type, link_info in pairs(LINKS_TABLE)
+	do
+		if link_info['ENABLED']
+		then
+			if link_info['ENTRIES'] ~= nil
+			then
+				-- Links with subentries
+				for link_subentry, subentry_info in pairs(link_info['ENTRIES'])
+				do
+					local send_link = subentry_info['LOCAL'] - subentry_info['AP'] > 0
+					output[link_subentry] = send_link
+					if send_link
+					then
+						LINKS_TABLE[link_type]['ENTRIES'][link_subentry]['AP'] = LINKS_TABLE[link_type]['ENTRIES'][link_subentry]['AP'] + 1
+					end
+				end
+			else
+				-- Single counter links
+				local send_link = link_info['LOCAL'] - link_info['AP'] > 0
+				output[link_type] = send_link
+				if send_link
+				then
+					LINKS_TABLE[link_type]['AP'] = LINKS_TABLE[link_type]['AP'] + 1
+				end
+			end
+		end
+	end
+	return output
 end
 
 function receive()
