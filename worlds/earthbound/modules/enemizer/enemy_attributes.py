@@ -574,8 +574,8 @@ excluded_enemies = [
     "Mini Barf",
     "Captain Strong",
     "Giygas (6)",
-    "Clumsy Robot (3)" 
-
+    "Clumsy Robot (3)",
+    "Giygas"
 ]
 
 robots = [
