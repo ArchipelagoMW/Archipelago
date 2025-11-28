@@ -1982,13 +1982,18 @@ class SC2Logic:
         Ability to deal with trains (moving target with a lot of HP)
         """
         return (
-            state.has_any(
-                (item_names.ANNIHILATOR, item_names.IMMORTAL, item_names.STALKER, item_names.WRATHWALKER, item_names.VOID_RAY, item_names.DESTROYER),
-                self.player,
-            )
+            state.has_any((
+                item_names.ANNIHILATOR,
+                item_names.IMMORTAL,
+                item_names.STALKER,
+                item_names.ADEPT,
+                item_names.WRATHWALKER,
+                item_names.VOID_RAY,
+                item_names.DESTROYER,
+            ), self.player)
             or state.has_all({item_names.SLAYER, item_names.SLAYER_PHASE_BLINK}, self.player)
             or state.has_all((item_names.REAVER, item_names.REAVER_KHALAI_REPLICATORS), self.player)
-            or state.has_all({item_names.VANGUARD, item_names.VANGUARD_FUSION_MORTARS}, self.player)
+            or state.has_all((item_names.VANGUARD, item_names.VANGUARD_FUSION_MORTARS), self.player)
             or (
                 state.has(item_names.INSTIGATOR, self.player)
                 and state.has_any((item_names.INSTIGATOR_BLINK_OVERDRIVE, item_names.INSTIGATOR_MODERNIZED_SERVOS), self.player)
@@ -1999,8 +2004,7 @@ class SC2Logic:
                 self.advanced_tactics
                 and (
                     state.has(item_names.TEMPEST, self.player)
-                    or state.has_all((item_names.ADEPT, item_names.ADEPT_RESONATING_GLAIVES), self.player)
-                    or state.has_all({item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON}, self.player)
+                    or state.has_all((item_names.VANGUARD, item_names.VANGUARD_RAPIDFIRE_CANNON), self.player)
                     or state.has_all((item_names.OPPRESSOR, item_names.SCOUT_GRAVITIC_THRUSTERS, item_names.OPPRESSOR_VULCAN_BLASTER), self.player)
                     or state.has_all((item_names.ASCENDANT, item_names.ASCENDANT_POWER_OVERWHELMING, item_names.SUPPLICANT), self.player)
                     or state.has_all(
