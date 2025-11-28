@@ -102,13 +102,13 @@ class SatisfactoryWorld(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         change = super().collect(state, item)
         if change and item.name in self.game_logic.indirect_recipes:
-            state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]] = 1
+            state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]] += 1
         return change
 
     def remove(self, state: CollectionState, item: Item) -> bool:
         change = super().remove(state, item)
         if change and item.name in self.game_logic.indirect_recipes:
-            del state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]]
+            state.prog_items[self.player][self.game_logic.indirect_recipes[item.name]] -= 1
         return change
 
     def fill_slot_data(self) -> dict[str, object]:
