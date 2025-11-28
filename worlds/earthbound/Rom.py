@@ -152,7 +152,7 @@ def patch_rom(world: "EarthBoundWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x01FE8B, bytearray(starting_area_coordinates[world.start_location][2:4]))  # Respawn position
 
     if world.options.skip_epilogue:
-        rom.write_bytes(0x2EA42F, struct.pack("I", 0xEEA432))
+        rom.write_bytes(0x09C4D4, struct.pack("I", 0xEEA437))
 
     if world.starting_character == "Poo":
         rom.write_bytes(starting_levels[world.starting_character], bytearray([0x06]))
