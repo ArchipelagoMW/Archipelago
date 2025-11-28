@@ -677,4 +677,10 @@ SONG_DATA: Dict[str, SongData] = {
     "City Lights": SongData(2900801, "90-3", "MEDIUM5 Echoes", True, 4, 6, 9),
     "Polaris Wandering Night": SongData(2900802, "90-4", "MEDIUM5 Echoes", True, 5, 8, 10),
     "Chasing the Moonlight": SongData(2900803, "90-5", "MEDIUM5 Echoes", True, 4, 6, 8),
+    "WILDCARD": SongData(2900804, "91-0", "48 Hours After Discharge", True, 3, 6, 9),
+    "It was all just a dream!": SongData(2900805, "91-1", "48 Hours After Discharge", True, 5, 7, 9),
+    "Science": SongData(2900806, "91-2", "48 Hours After Discharge", False, 4, 7, 9),
+    "Hit Maker": SongData(2900807, "91-3", "48 Hours After Discharge", False, 4, 6, 9),
+    "THX 4 playing": SongData(2900808, "91-4", "48 Hours After Discharge", True, 3, 5, 8),
+    "Theory of Existence": SongData(2900809, "91-5", "48 Hours After Discharge", True, 4, 6, 9),
 }
