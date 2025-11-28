@@ -11,7 +11,7 @@
 Zuerst brauchst du einen Raum, mit dem du dich verbinden kannst.
 Dafür musst du oder jemand den du kennst ein Spiel generieren.  
 Dieser Schritt wird hier nicht erklärt, aber du kannst den
-[Archipelago Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup_en#generating-a-game) lesen.
+[Archipelago Setup Guide](/tutorial/Archipelago/setup_en#generating-a-game) lesen.
 
 Du musst außerdem [Archipelago](github.com/ArchipelagoMW/Archipelago/releases/latest) installiert haben
 und die [APQuest apworld](https://github.com/NewSoupVi/Archipelago/releases) darin installieren.

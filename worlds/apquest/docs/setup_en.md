@@ -10,7 +10,7 @@
 
 First, you need a room to connect to. For this, you or someone you know has to generate a game.  
 This will not be explained here,
-but you can check the [Archipelago Setup Guide](https://archipelago.gg/tutorial/Archipelago/setup_en#generating-a-game).
+but you can check the [Archipelago Setup Guide](/tutorial/Archipelago/setup_en#generating-a-game).
 
 You also need to have [Archipelago](github.com/ArchipelagoMW/Archipelago/releases/latest) installed
 and the [The APQuest apworld](https://github.com/NewSoupVi/Archipelago/releases) installed into Archipelago.
