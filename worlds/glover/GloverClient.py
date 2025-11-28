@@ -66,7 +66,7 @@ loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "8488c4e9aaff84f150d3243d0fb329ee"
+patch_md5: str = "e479b7883fe883b378c51bf328dd355b"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -272,91 +272,17 @@ class GloverCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            self.ctx.link_table["DEATH"].override_toggle()
-            async_start(self.ctx.update_death_link(self.ctx.deathlink_enabled), name="Update Deathlink")
+            async_start(self.ctx.link_table["DEATH"].override_toggle(), name="Update Deathlink")
 
     def _cmd_taglink(self):
         """Toggle taglink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            self.ctx.link_table["TAG"].override_toggle()
-            async_start(self.ctx.update_tag_link(self.ctx.taglink_enabled), name="Update Taglink")
+            async_start(self.ctx.link_table["TAG"].override_toggle(), name="Update Taglink")
 
-class Link():
-    """Base class for usage with AP links. Should not appear on its own."""
-    def __init__(self, tag : str):
-        self.tag = tag
-        self.enabled = False
-        self.overriden = False
-    
-    def override_toggle(self):
-        """Toggles the state of the link via client."""
-        self.overriden = True
-        self.enabled = not self.enabled
-    
-    def halt(self):
-        """Stops processing of any link information."""
-        print("Link should not be used by itself!")
-    
-    def recieve_pending(self):
-        """Output any info that is pending."""
-        print("Link should not be used by itself!")
-        return {}
-
-class LinkInfo():
-    """The info used in links."""
-    def __init__(self, data : dict):
-        self.data = data
-        self.halt()
-    
-    def set_timestamp(self):
-        """Sets the timestamp of when the last info related to this got sent"""
-        self.last_timestamp = time.time()
-
-    def halt(self):
-        """Sets pending and local to false."""
-        self.set_timestamp()
-        self.pending = False
-        self.local = False
-    
-    def recieve_pending(self):
-        self.set_timestamp()
-        if self.pending:
-            self.pending = False
-            self.local = True
-            return True
-        return False
-
-class BounceLink(Link):
-    """An AP Link that has one piece of bounced info to send/recieve."""
-    def __init__(self, tag : str):
-        super().__init__(tag)
-        self.info : LinkInfo = LinkInfo({})
-    
-    def halt(self):
-        self.info.halt()
-    
-    def recieve_pending(self):
-        return {self.name : self.info.recieve_pending()}
-        """Causes the thing."""
-
-class MultiLink(Link):
-    """An AP Link that has multiple pieces of info to send/recieve."""
-    def __init__(self, tag : str, entries : dict[str, dict]):
-        super().__init__(tag)
-        self.entries : dict[str, LinkInfo] = {}
-        for each_entry, entry_info in entries.items():
-            self.entries[each_entry] = LinkInfo(entry_info)
-    
-    def halt(self):
-        for each_entry in self.entries:
-            self.entries[each_entry].halt()
-    
-    def recieve_pending(self):
-        output : dict[str, bool] = {}
-        for each_entry, entry_info in self.entries.items():
-            output[each_entry] = entry_info.recieve_pending()
-        return output
-
+    def _cmd_trapglink(self):
+        """Toggle traplink from client. Overrides default setting."""
+        if isinstance(self.ctx, GloverContext):
+            async_start(self.ctx.link_table["TRAP"].override_toggle(), name="Update Traplink")
 
 class GloverContext(CommonContext):
     command_processor = GloverCommandProcessor
@@ -387,9 +313,14 @@ class GloverContext(CommonContext):
         self.current_world = 0
         self.current_hub = 0
         self.link_table : dict[str, Link] = {
-            "DEATH" : BounceLink("DeathLink"),
-            "TAG" : BounceLink("TagLink"),
-            "TRAP" : MultiLink("TrapLink", {})
+            "DEATH" : BounceLink("DEATH", "DeathLink"),
+            "TAG" : BounceLink("TAG", "TagLink"),
+            "TRAP" : MultiLink("TRAP", "TrapLink", {
+                "FROG" : {},
+                "CRYSTAL" : {},
+                "CAMERA" : {},
+                "CURSE_BALL" : {},
+                })
         }
         self.version_warning = False
         self.messages = {}
@@ -416,8 +347,9 @@ class GloverContext(CommonContext):
             self.messages.update({msg_id:msg})
 
     def on_deathlink(self, data: dict):
-        self.deathlink_pending = True
-        self.last_death_link = max(data["time"], self.last_death_link)
+        self.link_table["DEATH"].info.pending = True
+        self.link_table["DEATH"].info.set_timestamp()
+        self.link_table["DEATH"].info.last_timestamp = max(data["time"], self.link_table["DEATH"].info.last_timestamp)
         text = data.get("cause", "")
         if text:
             logger.info(f"DeathLink: {text}")
@@ -435,16 +367,6 @@ class GloverContext(CommonContext):
                 }
             }])
 
-    async def update_tag_link(self, tag_link: bool):
-        """Helper function to set tag Link connection tag on/off and update the connection if already connected."""
-        old_tags = self.tags.copy()
-        if tag_link:
-            self.tags.add("TagLink")
-        else:
-            self.tags -= {"TagLink"}
-        if old_tags != self.tags and self.server and not self.server.socket.closed:
-            await self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}])
-
     async def send_tag_link(self):
         """Send a tag link message."""
         if "TagLink" not in self.tags or self.slot is None:
@@ -456,6 +378,18 @@ class GloverContext(CommonContext):
                 "time": time.time(),
                 "source": self.instance_id,
                 "tag": True}}])
+
+    async def send_traplink(self, link_name):
+        """Send a trap link message."""
+        if "TrapLink" not in self.tags or self.slot is None:
+            return
+        if not hasattr(self, "instance_id"):
+            self.instance_id = time.time()
+        await self.send_msgs([{"cmd": "Bounce", "tags": ["TrapLink"],
+             "data": {
+                "time": time.time(),
+                "source": self.instance_id,
+                "trap_name": link_name}}])
 
     def run_gui(self):
         from kvui import GameManager, Window, UILog
@@ -500,8 +434,8 @@ class GloverContext(CommonContext):
                 # self.event_invalid_game()
                 raise Exception("Your Glover AP does not match with the generated world.\n" +
                                 "Your version: "+version+" | Generated version: "+self.slot_data["version"])
-            self.deathlink_enabled = bool(self.slot_data["death_link"])
-            self.taglink_enabled = bool(self.slot_data["tag_link"])
+            self.link_table["DEATH"].enabled = bool(self.slot_data["death_link"])
+            self.link_table["TAG"].enabled  = bool(self.slot_data["tag_link"])
             self.n64_sync_task = asyncio.create_task(n64_sync_task(self), name="N64 Sync")
         elif cmd == "ReceivedItems":
             self.tracker.refresh_items()
@@ -526,9 +460,14 @@ class GloverContext(CommonContext):
                 self.instance_id = time.time()
             if "TagLink" in self.tags and source_name != self.instance_id and "TagLink" in args.get("tags", []):
                 if not hasattr(self, "pending_tag_link"):
-                    self.pending_tag_link = False
+                    self.link_table["TAG"].info.pending = False
                 else:
-                    self.pending_tag_link = True
+                    self.link_table["TAG"].info.pending = True
+            if "TrapLink" in self.tags and source_name != self.instance_id and "TrapLink" in args.get("tags", []):
+                if not hasattr(self, "pending_trap_link"):
+                    self.link_table["TRAP"].info.pending = False
+                else:
+                    self.link_table["TRAP"].info.pending = True
 
     def on_print_json(self, args: dict):
         if self.ui:
@@ -573,6 +512,90 @@ class GloverContext(CommonContext):
                 # self._set_message(msg, None)
                 self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player}, None)
 
+class Link():
+    """Base class for usage with AP links. Should not appear on its own."""
+    def __init__(self, name: str, tag : str):
+        self.name = name
+        self.tag = tag
+        self.enabled = False
+        self.overriden = False
+    
+    async def override_toggle(self, ctx : GloverContext):
+        """Toggles the state of the link via client."""
+        self.overriden = True
+        self.enabled = not self.enabled
+        old_tags = ctx.tags.copy()
+        if self.enabled:
+            self.tags.add(self.tag)
+        else:
+            self.tags -= {self.tag}
+        if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
+            await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+    
+    def halt(self):
+        """Stops processing of any link information."""
+        print("Link should not be used by itself!")
+    
+    def recieve_pending(self):
+        """Output any info that is pending."""
+        print("Link should not be used by itself!")
+        return {}
+
+class LinkInfo():
+    """The info used in links."""
+    def __init__(self, data : dict):
+        self.data = data
+        self.halt()
+    
+    def set_timestamp(self):
+        """Sets the timestamp of when the last info related to this got sent"""
+        self.last_timestamp = time.time()
+
+    def halt(self):
+        """Sets pending and local to false."""
+        self.set_timestamp()
+        self.pending = False
+        self.local = False
+    
+    def recieve_pending(self):
+        self.set_timestamp()
+        if self.pending:
+            self.pending = False
+            self.local = True
+            return True
+        return False
+
+class BounceLink(Link):
+    """An AP Link that has one piece of bounced info to send/recieve."""
+    def __init__(self, name: str, tag : str):
+        super().__init__(name, tag)
+        self.info : LinkInfo = LinkInfo({})
+    
+    def halt(self):
+        self.info.halt()
+    
+    def recieve_pending(self):
+        return {self.name : self.info.recieve_pending()}
+        """Causes the thing."""
+
+class MultiLink(Link):
+    """An AP Link that has multiple pieces of info to send/recieve."""
+    def __init__(self, name: str, tag : str, entries : dict[str, dict]):
+        super().__init__(name, tag)
+        self.entries : dict[str, LinkInfo] = {}
+        for each_entry, entry_info in entries.items():
+            self.entries[each_entry] = LinkInfo(entry_info)
+    
+    def halt(self):
+        for each_entry in self.entries:
+            self.entries[each_entry].halt()
+    
+    def recieve_pending(self):
+        output : dict[str, bool] = {}
+        for each_entry, entry_info in self.entries.items():
+            output[each_entry] = entry_info.recieve_pending()
+        return output
+
 def get_payload(ctx: GloverContext):
     #Get all triggered links
     triggered_links = {}
@@ -584,14 +607,14 @@ def get_payload(ctx: GloverContext):
         payload = json.dumps({
                 "items": [get_item_value(item.item) for item in ctx.items_received],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
-                "triggeredLinks": triggered_links,
+                "triggered_links": triggered_links,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     else:
         payload = json.dumps({
                 "items": [],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
-                "triggeredLinks": triggered_links,
+                "triggered_links": triggered_links,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     if len(ctx.messages) > 0:
@@ -603,8 +626,8 @@ def get_slot_payload(ctx: GloverContext):
     payload = json.dumps({
             "slot_player": ctx.slot_data["player_name"],
             "slot_seed": ctx.slot_data["seed"],
-            "slot_deathlink": ctx.deathlink_enabled,
-            "slot_taglink": ctx.taglink_enabled,
+            "slot_deathlink": ctx.link_table["DEATH"].enabled,
+            "slot_taglink": ctx.link_table["TAG"].enabled,
             "slot_version": version,
             "slot_garib_logic": ctx.slot_data["garib_logic"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
@@ -635,14 +658,24 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         await ctx.send_connect()
         return
 
+    active_links = payload["active_links"]
+
+    if isinstance(active_links, list):
+        active_links = {}
+    
     #Figure out what links are on
-    for link_name, link_state in payload["activeLinks"].items():
+    for link_name, link_state in active_links.items():
         if ctx.link_table[link_name].enabled and link_state and not ctx.link_table[link_name].overriden:
             await ctx.update_death_link(True)
             ctx.link_table[link_name].enabled = True
     
+    triggered_links = payload["triggered_links"]
+
+    if isinstance(triggered_links, list):
+        triggered_links = {}
+    
     #Sending Links
-    for link_name, link_state in payload["triggeredLinks"].items():
+    for link_name, link_state in triggered_links.items():
         if link_name in ctx.link_table:
             if ctx.link_table[link_name].enabled and link_state:
                 match link_name:
@@ -657,28 +690,6 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                         match each_type:
                             case "TRAP":
                                 await ctx.send_traplink(link_name)
-
-
-    ## Deathlink handling
-    #if ctx.deathlink_enabled:
-    #    if payload["isDead"]: #Glover died
-    #        ctx.deathlink_pending = False
-    #        if not ctx.deathlink_sent_this_death:
-    #            ctx.deathlink_sent_this_death = True
-    #
-    #            await ctx.send_death()
-    #    else: # Glover is somehow still alive
-    #        ctx.deathlink_sent_this_death = False
-    #
-    #if ctx.taglink_enabled:
-    #    if payload["isTag"]: #Glover tagged
-    #        ctx.pending_tag_link = False
-    #        if not ctx.taglink_sent_this_tag:
-    #            ctx.taglink_sent_this_tag = True
-    #
-    #            await ctx.send_tag_link()
-    #    else:
-    #        ctx.taglink_sent_this_tag = False
 
     # Locations handling
     demo = payload["DEMO"]

@@ -12517,13 +12517,13 @@ end
 
 function received_traps(itemId)
 	if itemId == 6500368 then
-		link_triggered("FROG")
+		send_linked_item("FROG")
     elseif itemId == 6500369 then
-		link_triggered("CURSE_BALL")
+		send_linked_item("CURSE_BALL")
     elseif itemId == 6500370 then
-		link_triggered("CRYSTAL")
+		send_linked_item("CRYSTAL")
     elseif itemId == 6500371 then
-		link_triggered("CAMERA")
+		send_linked_item("CAMERA")
     -- elseif itemId == 6500372 then
     --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], TOTAL_LIVES)
     end
@@ -12829,25 +12829,25 @@ function process_block(block)
     then
         processAGIItem(block['items'])
     end
-	if block['triggeredLinks'] ~= nil
+	if block['triggered_links'] ~= nil
 	then
-		incoming_links(block['triggeredLinks'])
+		incoming_links(block['triggered_links'])
 	end
 end
 
 function SendToClient()
     local retTable = {}
-	local activeLinks = {}
+	local active_links = {}
 	for link_name, link_info in pairs(LINKS_TABLE)
 	do
-		activeLinks[link_name] = link_info['ENABLED']
+		active_links[link_name] = link_info['ENABLED']
 	end
 	triggered_deathlink()
 	triggered_taglink()
     retTable["scriptVersion"] = SCRIPT_VERSION;
     retTable["playerName"] = PLAYER;
-    retTable["activeLinks"] = activeLinks;
-    retTable["triggeredLinks"] = outbound_links();
+    retTable["active_links"] = active_links;
+    retTable["triggered_links"] = outbound_links()
     retTable["garibs"] = garib_check()
     retTable["garib_groups"] =  garib_group_contruction()
     retTable["life"] = life_check()
