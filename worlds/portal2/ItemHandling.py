@@ -37,4 +37,8 @@ def handle_item(item_name: str) -> str:
     if DISABLE_PICKUP in item_tags:
         return f'script DisableEntityPickup("{ent_name}")'
     
+    if ItemTag.ALTER in item_tags:
+        if item_name == "Fizzler":
+            return f'script CreateMurderFizzlers()'
+    
     
