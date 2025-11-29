@@ -73,14 +73,24 @@ def create_all_items(world: NoitaWorld) -> None:
 
     # if there's not enough shop-allowed items in the pool, we can encounter gen issues
     # 39 is the number of shop-valid items we need to guarantee
-    if len(itempool) < 39:
+    # this only really occurs in single player, and is mostly here to pass the unit tests
+    if len(itempool) < 39 and world.multiworld.players == 1:
         itempool += create_random_items(world, shop_only_filler_weights, 39 - len(itempool))
-        # this is so that it passes tests and gens if you have minimal locations and only one player
-        if world.multiworld.players == 1:
-            for location in world.multiworld.get_unfilled_locations(player):
-                if "Shop Item" in location.name:
+        itempool += create_random_items(world, filler_weights, locations_to_fill - len(itempool))
+        for location in world.multiworld.get_unfilled_locations(player):
+            if "Shop Item" in location.name:
+                for item in itempool:
+                    if (item not in items_hidden_from_shops
+                            and itempool.count(item) > world.options.start_inventory_from_pool.get(item, 0)):
+                        location.item = create_item(player, item)
+                        itempool.remove(item)
+                        break
+                else:
+                    # this shouldn't ever get hit unless the user is doing something dumb like sip for every item
+                    # but if it does get hit, just place the item, it's too minor of a bug to care
                     location.item = create_item(player, itempool.pop())
-            locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
+
+        locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
 
     itempool += create_random_items(world, filler_weights, locations_to_fill - len(itempool))
     world.multiworld.itempool += [create_item(player, name) for name in itempool]
@@ -151,6 +161,9 @@ filler_weights: dict[str, int] = {
     "Broken Wand":      10,
 }
 
+items_hidden_from_shops: set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+                                     "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
+                                     "Powder Pouch"}
 
 filler_items: list[str] = list(filter(lambda item: item_table[item].classification == ItemClassification.filler,
                                       item_table.keys()))
