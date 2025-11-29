@@ -1,16 +1,19 @@
-from typing import Dict, NamedTuple, Set, Optional, List
+from typing import NamedTuple
+
+from .bells import bell_location_table
+from .breakables import breakable_location_table
+from .constants import base_id
+from .fuses import fuse_location_table
 from .grass import grass_location_table
 
 
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
-    location_group: Optional[str] = None
+    location_group: str | None = None
 
 
-location_base_id = 509342400
-
-location_table: Dict[str, TunicLocationData] = {
+location_table: dict[str, TunicLocationData] = {
     "Beneath the Well - [Powered Secret Room] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Back"),
     "Beneath the Well - [Entryway] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
     "Beneath the Well - [Third Room] Beneath Platform Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
@@ -206,7 +209,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Fountain Cross Door - Page Pickup": TunicLocationData("Overworld Holy Cross", "Fountain Cross Room", location_group="Holy Cross"),
     "Secret Gathering Place - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Secret Gathering Place", location_group="Holy Cross"),
     "Top of the Mountain - Page At The Peak": TunicLocationData("Overworld Holy Cross", "Top of the Mountain", location_group="Holy Cross"),
-    "Monastery - Monastery Chest": TunicLocationData("Monastery", "Monastery Back"),
+    "Monastery - Monastery Chest": TunicLocationData("Monastery Back", "Monastery Back"),
     "Quarry - [Back Entrance] Bushes Holy Cross": TunicLocationData("Quarry Back", "Quarry Back", location_group="Holy Cross"),
     "Quarry - [Back Entrance] Chest": TunicLocationData("Quarry Back", "Quarry Back"),
     "Quarry - [Central] Near Shortcut Ladder": TunicLocationData("Quarry Back", "Quarry Back"),
@@ -220,12 +223,12 @@ location_table: Dict[str, TunicLocationData] = {
     "Quarry - [Central] Obscured Below Entry Walkway": TunicLocationData("Quarry Back", "Quarry Back"),
     "Quarry - [Central] Top Floor Overhang": TunicLocationData("Quarry", "Quarry"),
     "Quarry - [East] Near Bridge": TunicLocationData("Quarry", "Quarry"),
-    "Quarry - [Central] Above Ladder": TunicLocationData("Quarry", "Quarry Monastery Entry"),
+    "Quarry - [Central] Above Ladder": TunicLocationData("Monastery", "Quarry Monastery Entry"),
     "Quarry - [Central] Obscured Behind Staircase": TunicLocationData("Quarry", "Quarry"),
-    "Quarry - [Central] Above Ladder Dash Chest": TunicLocationData("Quarry", "Quarry Monastery Entry"),
+    "Quarry - [Central] Above Ladder Dash Chest": TunicLocationData("Monastery", "Quarry Monastery Entry"),
     "Quarry - [West] Upper Area Bombable Wall": TunicLocationData("Quarry Back", "Quarry Back"),
     "Quarry - [East] Bombable Wall": TunicLocationData("Quarry", "Quarry"),
-    "Hero's Grave - Ash Relic": TunicLocationData("Monastery", "Hero Relic - Quarry"),
+    "Hero's Grave - Ash Relic": TunicLocationData("Monastery Back", "Hero Relic - Quarry"),
     "Quarry - [West] Shooting Range Secret Path": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Quarry - [West] Near Shooting Range": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Quarry - [West] Below Shooting Range": TunicLocationData("Lower Quarry", "Lower Quarry"),
@@ -242,7 +245,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Rooted Ziggurat Lower - Near Corpses": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Spider Ambush": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Entry"),
     "Rooted Ziggurat Lower - Left Of Checkpoint Before Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
-    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
+    "Rooted Ziggurat Lower - After Guarded Fuse": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Miniboss Platform"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
     "Rooted Ziggurat Lower - After 2nd Double Turret Chest": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Mid Checkpoint"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets 2": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
@@ -306,7 +309,7 @@ location_table: Dict[str, TunicLocationData] = {
     "West Garden - [Central Lowlands] Chest Near Shortcut Bridge": TunicLocationData("West Garden", "West Garden after Terry"),
     "West Garden - [West Highlands] Upper Left Walkway": TunicLocationData("West Garden", "West Garden South Checkpoint"),
     "West Garden - [Central Lowlands] Chest Beneath Save Point": TunicLocationData("West Garden", "West Garden South Checkpoint"),
-    "West Garden - [Central Highlands] Behind Guard Captain": TunicLocationData("West Garden", "West Garden before Boss"),
+    "West Garden - [Central Highlands] Behind Guard Captain": TunicLocationData("West Garden", "West Garden South Checkpoint"),
     "West Garden - [Central Highlands] After Garden Knight": TunicLocationData("Overworld", "West Garden after Boss", location_group="Bosses"),
     "West Garden - [South Highlands] Secret Chest Beneath Fuse": TunicLocationData("West Garden", "West Garden South Checkpoint"),
     "West Garden - [East Lowlands] Page Behind Ice Dagger House": TunicLocationData("West Garden", "West Garden Portal Item"),
@@ -315,35 +318,21 @@ location_table: Dict[str, TunicLocationData] = {
     "Hero's Grave - Effigy Relic": TunicLocationData("West Garden", "Hero Relic - West Garden"),
 }
 
-hexagon_locations: Dict[str, str] = {
+hexagon_locations: dict[str, str] = {
     "Red Questagon": "Fortress Arena - Siege Engine/Vault Key Pickup",
     "Green Questagon": "Librarian - Hexagon Green",
     "Blue Questagon": "Rooted Ziggurat Lower - Hexagon Blue",
 }
 
-sphere_one: List[str] = [
-    "Overworld - [Central] Chest Across From Well",
-    "Overworld - [Northwest] Chest Near Quarry Gate",
-    "Overworld - [Northwest] Shadowy Corner Chest",
-    "Overworld - [Southwest] Chest Guarded By Turret",
-    "Overworld - [Southwest] South Chest Near Guard",
-    "Overworld - [Southwest] Obscured in Tunnel to Beach",
-    "Overworld - [Northwest] Chest Near Turret",
-    "Overworld - [Northwest] Page By Well",
-    "Overworld - [West] Chest Behind Moss Wall",
-    "Overworld - [Southwest] Key Pickup",
-    "Overworld - [West] Key Pickup",
-    "Overworld - [West] Obscured Behind Windmill",
-    "Overworld - [West] Obscured Near Well",
-    "Overworld - [West] Page On Teleporter"
-]
-
-standard_location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
+standard_location_name_to_id: dict[str, int] = {name: base_id + index for index, name in enumerate(location_table)}
 
 all_locations = location_table.copy()
 all_locations.update(grass_location_table)
+all_locations.update(breakable_location_table)
+all_locations.update(fuse_location_table)
+all_locations.update(bell_location_table)
 
-location_name_groups: Dict[str, Set[str]] = {}
+location_name_groups: dict[str, set[str]] = {}
 for loc_name, loc_data in location_table.items():
     loc_group_name = loc_name.split(" - ", 1)[0]
     location_name_groups.setdefault(loc_group_name, set()).add(loc_name)

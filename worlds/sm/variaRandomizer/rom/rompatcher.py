@@ -49,7 +49,7 @@ class RomPatcher:
         'DoorsColors': ['beam_doors_plms.ips', 'beam_doors_gfx.ips', 'red_doors.ips']
     }
 
-    def __init__(self, settings=None, romFileName=None, magic=None, player=0):
+    def __init__(self, settings=None, romFileName=None, magic=None, player=0, *, random):
         self.log = log.get('RomPatcher')
         self.settings = settings
         #self.romFileName = romFileName
@@ -76,6 +76,7 @@ class RomPatcher:
             0x93ea: self.forceRoomCRE
         }
         self.player = player
+        self.random = random
 
     def patchRom(self):
         self.applyIPSPatches()
@@ -496,9 +497,9 @@ class RomPatcher:
         self.ipsPatches = []
 
     def writeSeed(self, seed):
-        random.seed(seed)
-        seedInfo = random.randint(0, 0xFFFF)
-        seedInfo2 = random.randint(0, 0xFFFF)
+        r = random.Random(seed)
+        seedInfo = r.randint(0, 0xFFFF)
+        seedInfo2 = r.randint(0, 0xFFFF)
         self.romFile.writeWord(seedInfo, snes_to_pc(0xdfff00))
         self.romFile.writeWord(seedInfo2)
 
@@ -1066,7 +1067,7 @@ class RomPatcher:
 
     def writeObjectives(self, itemLocs, tourian):
         objectives = Objectives.objDict[self.player]
-        objectives.writeGoals(self.romFile)
+        objectives.writeGoals(self.romFile, self.random)
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs

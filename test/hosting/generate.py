@@ -34,7 +34,7 @@ def _generate_local_inner(games: Iterable[str],
                         f.write(json.dumps({
                             "name": f"Player{n}",
                             "game": game,
-                            game: {"hard_mode": "true"},
+                            game: {},
                             "description": f"generate_local slot {n} ('Player{n}'): {game}",
                         }))
 
