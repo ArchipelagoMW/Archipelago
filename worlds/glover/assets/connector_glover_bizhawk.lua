@@ -12892,7 +12892,6 @@ function triggered_deathlink()
 	local deathResult = mainmemory.readbyte(deathAddress)
 	if deathResult == 1
 	then
-		print("Local Death!")
 		LINKS_TABLE['DEATH']['LOCAL'] = LINKS_TABLE['DEATH']['LOCAL'] + 1
 		mainmemory.writebyte(deathAddress, 0)
 	end
@@ -12904,7 +12903,6 @@ function triggered_taglink()
 	local triggerTag = LINKS_TABLE['TAG']['LOCAL'] < mainmemory.readbyte(tagAddress)
 	if triggerTag
 	then
-		print("Local Tag!")
 		LINKS_TABLE['TAG']['LOCAL'] = LINKS_TABLE['TAG']['LOCAL'] + 1
 	end
 end
@@ -13075,7 +13073,20 @@ function process_slot(block)
     then
         SEED = block['slot_seed']
     end
-    if block['slot_garib_logic'] ~= nil
+    if block['slot_deathlink'] ~= nil and block['slot_deathlink'] ~= ""
+	then
+		LINKS_TABLE['DEATH']['ENABLED'] = block['slot_deathlink']
+	end
+    if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= ""
+	then
+		LINKS_TABLE['TAG']['ENABLED'] =block['slot_taglink']
+	end
+    if block['slot_traplink'] ~= nil and block['slot_traplink'] ~= ""
+	then
+		LINKS_TABLE['TRAP']['ENABLED'] =block['slot_traplink']
+	end
+	
+	if block['slot_garib_logic'] ~= nil
     then
         GVR:setGaribLogic(block['slot_garib_logic'])
         if block['slot_garib_logic'] == 1

@@ -435,7 +435,7 @@ class GloverContext(CommonContext):
                 raise Exception("Your Glover AP does not match with the generated world.\n" +
                                 "Your version: "+version+" | Generated version: "+self.slot_data["version"])
             self.link_table["DEATH"].enabled = bool(self.slot_data["death_link"])
-            self.link_table["TAG"].enabled  = bool(self.slot_data["tag_link"])
+            self.link_table["TAG"].enabled = bool(self.slot_data["tag_link"])
             self.n64_sync_task = asyncio.create_task(n64_sync_task(self), name="N64 Sync")
         elif cmd == "ReceivedItems":
             self.tracker.refresh_items()
@@ -523,14 +523,7 @@ class Link():
     async def override_toggle(self, ctx : GloverContext):
         """Toggles the state of the link via client."""
         self.overriden = True
-        self.enabled = not self.enabled
-        old_tags = ctx.tags.copy()
-        if self.enabled:
-            self.tags.add(self.tag)
-        else:
-            self.tags -= {self.tag}
-        if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
-            await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
+        await self.update(not self.enabled)
     
     def halt(self):
         """Stops processing of any link information."""
@@ -540,6 +533,17 @@ class Link():
         """Output any info that is pending."""
         print("Link should not be used by itself!")
         return {}
+
+    async def update(self, nEnabled : bool, ctx : GloverContext):
+        """Set if the type of link is enabled or not"""
+        self.enabled = nEnabled
+        old_tags = ctx.tags.copy()
+        if self.enabled:
+            ctx.tags.add(self.tag)
+        else:
+            ctx.tags -= {self.tag}
+        if old_tags != ctx.tags and ctx.server and not ctx.server.socket.closed:
+            await ctx.send_msgs([{"cmd": "ConnectUpdate", "tags": ctx.tags}])
 
 class LinkInfo():
     """The info used in links."""
@@ -600,7 +604,7 @@ def get_payload(ctx: GloverContext):
     #Get all triggered links
     triggered_links = {}
     for each_link in ctx.link_table:
-        triggered_links.update(ctx.link_table[each_link].recieve_pending())
+        triggered_links.update(ctx.link_table[each_link].recieve_pending(), ctx)
     
     if ctx.sync_ready == True:
         ctx.startup = True
@@ -628,6 +632,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_seed": ctx.slot_data["seed"],
             "slot_deathlink": ctx.link_table["DEATH"].enabled,
             "slot_taglink": ctx.link_table["TAG"].enabled,
+            "slot_traplink": ctx.link_table["TRAP"].enabled,
             "slot_version": version,
             "slot_garib_logic": ctx.slot_data["garib_logic"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
@@ -667,7 +672,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     for link_name, link_state in active_links.items():
         if ctx.link_table[link_name].enabled and link_state and not ctx.link_table[link_name].overriden:
             await ctx.update_death_link(True)
-            ctx.link_table[link_name].enabled = True
+            ctx.link_table[link_name].update(True)
     
     triggered_links = payload["triggered_links"]
 
