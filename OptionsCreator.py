@@ -572,8 +572,7 @@ class OptionsCreator(ThemedApp):
 
             for group, options in groups.items():
                 options = [(name, option) for name, option in options
-                           if name and option is not Removed and
-                           option.visibility & Visibility.simple_ui]
+                           if name and option.visibility & Visibility.simple_ui]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
                     # Can also have a option group of options that should not render on simple ui
