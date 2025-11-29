@@ -420,7 +420,7 @@ class World(metaclass=AutoWorldRegister):
         This happens before progression balancing, so the items may not be in their final locations yet.
         """
 
-    def late_adjustments(self) -> None:
+    def finalize_multiworld(self) -> None:
         """Optional Method that is called after fill and progression balancing.
         This is the last stage of generation where worlds may change logically relevant data,
         such as item placements and connections. To not break assumptions,
