@@ -348,8 +348,11 @@ progressive_rows["progressive-bob-vehicle-roboport-equipment"] = ("bob-vehicle-r
                                                                   "bob-vehicle-roboport-equipment-4",
                                                                   "bob-vehicle-roboport-modular-equipment-4")
 del progressive_rows["progressive-bob-robots"]
-progressive_rows["progressive-robots"] = ("construction-robotics", "logistic-robotics",
-                                          "bob-robots-1", "bob-robots-2", "bob-robots-3", "bob-robots-4")
+del progressive_rows["progressive-bob-robotics"]
+progressive_rows["progressive-robots"] = ("robotics", "construction-robotics", "logistic-robotics",
+                                          "bob-robotics-2", "bob-robots-1",
+                                          "bob-robotics-3", "bob-robots-2",
+                                          "bob-robotics-4", "bob-robots-3", "bob-robots-4")
 progressive_rows["progressive-lab"] = ("bob-burner-lab", "bob-lab", "bob-advanced-research")
 
 sorted_rows = sorted(progressive_rows)
