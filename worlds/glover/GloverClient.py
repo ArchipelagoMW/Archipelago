@@ -459,15 +459,9 @@ class GloverContext(CommonContext):
             if not hasattr(self, "instance_id"):
                 self.instance_id = time.time()
             if "TagLink" in self.tags and source_name != self.instance_id and "TagLink" in args.get("tags", []):
-                if not hasattr(self, "pending_tag_link"):
-                    self.link_table["TAG"].info.pending = False
-                else:
-                    self.link_table["TAG"].info.pending = True
+                self.link_table["TAG"].info.pending = True
             if "TrapLink" in self.tags and source_name != self.instance_id and "TrapLink" in args.get("tags", []):
-                if not hasattr(self, "pending_trap_link"):
-                    self.link_table["TRAP"].info.pending = False
-                else:
-                    self.link_table["TRAP"].info.pending = True
+                self.link_table["TRAP"].info.pending = True
 
     def on_print_json(self, args: dict):
         if self.ui:

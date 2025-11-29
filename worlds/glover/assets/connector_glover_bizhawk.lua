@@ -12518,12 +12518,18 @@ end
 function received_traps(itemId)
 	if itemId == 6500368 then
 		send_linked_item("FROG")
+		print("Should've sent Frog")
     elseif itemId == 6500369 then
 		send_linked_item("CURSE_BALL")
+		print("Should've sent Curse Ball")
     elseif itemId == 6500370 then
 		send_linked_item("CRYSTAL")
+		print("Should've sent Crystal")
     elseif itemId == 6500371 then
 		send_linked_item("CAMERA")
+		print("Should've sent Camera")
+	else
+		print("Taglink Unimplimented")
     -- elseif itemId == 6500372 then
     --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], TOTAL_LIVES)
     end
@@ -12791,6 +12797,7 @@ function processAGIItem(item_list)
                 received_misc(memlocation)
             elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
             then
+				print("In Range")
                 received_traps(memlocation)
             elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
             then
@@ -12947,20 +12954,26 @@ function send_linked_item(linkName)
 		GVR:setItem(ITEM_TABLE["AP_GLOVER_TAG"], LINKS_TABLE['TAG']['LOCAL'])
 	elseif linkName == "FROG"
 	then
-		LINKS_TABLE['TRAP']['ENTRIES']['AP_FROG_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_FROG_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_FROG_TRAP'])
+		LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_FROG_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'])
+		print("Frog sets gone up by 1")
 	elseif linkName == "CAMERA"
 	then
-		LINKS_TABLE['TRAP']['ENTRIES']['AP_CAMERA_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CAMERA_TRAP'])
+		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'])
+		print("Camera gone up by 1")
 	elseif linkName == "CURSE_BALL"
 	then
-		LINKS_TABLE['TRAP']['ENTRIES']['AP_CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_CURSE_BALL"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CURSE_BALL'])
+		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CURSE_BALL"], LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'])
+		print("Curse gone up by 1")
 	elseif linkName == "CRYSTAL"
 	then
-		LINKS_TABLE['TRAP']['ENTRIES']['AP_CBALL_TRAP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['AP_CBALL_TRAP'])
+		LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'])
+		print("Crystal gone up by 1")
+	else
+		print("Unknown Linked Item: "..linkName)
 	end
 end
 
