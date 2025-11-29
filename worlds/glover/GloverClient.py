@@ -604,7 +604,7 @@ def get_payload(ctx: GloverContext):
     #Get all triggered links
     triggered_links = {}
     for each_link in ctx.link_table:
-        triggered_links.update(ctx.link_table[each_link].recieve_pending(), ctx)
+        triggered_links.update(ctx.link_table[each_link].recieve_pending())
     
     if ctx.sync_ready == True:
         ctx.startup = True
@@ -671,8 +671,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     #Figure out what links are on
     for link_name, link_state in active_links.items():
         if ctx.link_table[link_name].enabled and link_state and not ctx.link_table[link_name].overriden:
-            await ctx.update_death_link(True)
-            ctx.link_table[link_name].update(True)
+            await ctx.link_table[link_name].update(True, ctx)
     
     triggered_links = payload["triggered_links"]
 
