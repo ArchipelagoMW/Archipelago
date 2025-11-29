@@ -349,9 +349,13 @@ class EarthBoundWorld(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str) -> None:
-        multiworld.eb_spheres = list(multiworld.get_spheres())
-        for world in multiworld.get_game_worlds("EarthBound"):
-            world.get_all_spheres.set()
+        try:
+            multiworld.earthbound_locations_by_sphere = list(multiworld.get_spheres())
+        except Exception:
+            raise
+        finally:
+            for world in multiworld.get_game_worlds("EarthBound"):
+                world.get_all_spheres.set()
 
     def generate_output(self, output_directory: str) -> None:
         self.has_generated_output = True  # Make sure data defined in generate output doesn't get added to spoiler only mode

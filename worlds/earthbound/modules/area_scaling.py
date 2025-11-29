@@ -462,7 +462,7 @@ def calculate_scaling(world: "EarthBoundWorld") -> None:
         if item.name == "Franklin Badge":
             badge_scaled = True
 
-    for num, sphere in enumerate(world.multiworld.eb_spheres):
+    for num, sphere in enumerate(world.multiworld.earthbound_locations_by_sphere):
         if num + 1 not in inventory:
             inventory[num + 1] = []
 
