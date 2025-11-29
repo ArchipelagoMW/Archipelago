@@ -383,7 +383,7 @@
     { "from": "PRC - Light Bridge", "to": "RP - Root Node", "requires": [
         { "region": "PRC - Backup Control Room" } // AND hacking to restore power
     ] },
-    // TODO: what happens if we spawn in RP and then try to exit left?
+    { "from": "RP - Root Node", "to": "PRC - Light Bridge", "requires": [] }, // walking out of RP just works, even without the light bridge
 
     // Power Reservoir (West)
     { "from": "PRW - Root Node", "to": "PRW - Guarded Chest", "requires": [ { "anyOf": [
