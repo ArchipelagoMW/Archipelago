@@ -12915,8 +12915,8 @@ function incoming_links(triggered_links)
 		then
 			if LINKS_TABLE[each_link] ~= nil
 			then
-				print("Inbound "..link_type)
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
+				print("Inbound "..each_link..", AP: "..tostring(LINKS_TABLE[each_link]['AP'])..", LOCAL: "..tostring(LINKS_TABLE[each_link]['LOCAL']))
 				send_linked_item(each_link)
 			else
 				for each_table, table_info in pairs(LINKS_TABLE)
@@ -12989,7 +12989,7 @@ function outbound_links()
 				output[link_type] = send_link
 				if send_link
 				then
-					print("Outbound "..link_type)
+					print("Outbound "..link_type..", AP: "..tostring(LINKS_TABLE[link_type]['AP'])..", LOCAL: "..tostring(LINKS_TABLE[link_type]['LOCAL']))
 					LINKS_TABLE[link_type]['AP'] = LINKS_TABLE[link_type]['AP'] + 1
 				end
 			end
