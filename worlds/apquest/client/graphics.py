@@ -2,9 +2,8 @@ import pkgutil
 from collections.abc import Buffer
 from enum import Enum
 from io import BytesIO
-from typing import Literal, NamedTuple, cast
+from typing import Literal, NamedTuple, Protocol, cast
 
-from bokeh.protocol import Protocol
 from kivy.uix.image import CoreImage
 
 from CommonClient import logger

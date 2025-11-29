@@ -40,6 +40,7 @@ from .options import (
     SpearOfAdunPassivesPresentInNoBuild, EnableVoidTrade, VoidTradeAgeLimit, void_trade_age_limits_ms, VoidTradeWorkers,
     DifficultyDamageModifier, MissionOrderScouting, GenericUpgradeResearchSpeedup, MercenaryHighlanders, WarCouncilNerfs,
     is_mission_in_soa_presence,
+    upgrade_included_names,
 )
 from .mission_order.slot_data import CampaignSlotData, LayoutSlotData, MissionSlotData, MissionOrderObjectSlotData
 from .mission_order.entry_rules import SubRuleRuleData, CountMissionsRuleData, MissionEntryRules
@@ -71,9 +72,11 @@ from .mission_tables import (
 )
 
 import colorama
-from .options import Option, upgrade_included_names
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
+
+if typing.TYPE_CHECKING:
+    from Options import Option
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()

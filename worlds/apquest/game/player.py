@@ -1,6 +1,5 @@
 from collections import Counter
 from collections.abc import Callable
-from typing import TYPE_CHECKING
 
 from .events import Event, LocationClearedEvent, VictoryEvent
 from .gameboard import Gameboard
