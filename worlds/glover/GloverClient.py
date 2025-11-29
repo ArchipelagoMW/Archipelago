@@ -272,17 +272,17 @@ class GloverCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggle deathlink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            async_start(self.ctx.link_table["DEATH"].override_toggle(), name="Update Deathlink")
+            async_start(self.ctx.link_table["DEATH"].override_toggle(self.ctx), name="Update Deathlink")
 
     def _cmd_taglink(self):
         """Toggle taglink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            async_start(self.ctx.link_table["TAG"].override_toggle(), name="Update Taglink")
+            async_start(self.ctx.link_table["TAG"].override_toggle(self.ctx), name="Update Taglink")
 
     def _cmd_trapglink(self):
         """Toggle traplink from client. Overrides default setting."""
         if isinstance(self.ctx, GloverContext):
-            async_start(self.ctx.link_table["TRAP"].override_toggle(), name="Update Traplink")
+            async_start(self.ctx.link_table["TRAP"].override_toggle(self.ctx), name="Update Traplink")
 
 class GloverContext(CommonContext):
     command_processor = GloverCommandProcessor

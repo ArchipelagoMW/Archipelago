@@ -12892,6 +12892,7 @@ function triggered_deathlink()
 	local deathResult = mainmemory.readbyte(deathAddress)
 	if deathResult == 1
 	then
+		print("Local Death!")
 		LINKS_TABLE['DEATH']['LOCAL'] = LINKS_TABLE['DEATH']['LOCAL'] + 1
 		mainmemory.writebyte(deathAddress, 0)
 	end
@@ -12903,6 +12904,7 @@ function triggered_taglink()
 	local triggerTag = LINKS_TABLE['TAG']['LOCAL'] < mainmemory.readbyte(tagAddress)
 	if triggerTag
 	then
+		print("Local Tag!")
 		LINKS_TABLE['TAG']['LOCAL'] = LINKS_TABLE['TAG']['LOCAL'] + 1
 	end
 end
@@ -12915,6 +12917,7 @@ function incoming_links(triggered_links)
 		then
 			if LINKS_TABLE[each_link] ~= nil
 			then
+				print("Inbound "..link_type)
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
 				send_linked_item(each_link)
 			else
@@ -12988,6 +12991,7 @@ function outbound_links()
 				output[link_type] = send_link
 				if send_link
 				then
+					print("Outbound "..link_type)
 					LINKS_TABLE[link_type]['AP'] = LINKS_TABLE[link_type]['AP'] + 1
 				end
 			end
