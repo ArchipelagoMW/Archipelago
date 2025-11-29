@@ -308,7 +308,7 @@ class TestRPSpawn(NineSolsTestBase):
     }
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 7)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 8)
 
 
 class TestRPSpawnAllShuffle(NineSolsTestBase):
@@ -321,7 +321,7 @@ class TestRPSpawnAllShuffle(NineSolsTestBase):
     run_default_tests = False
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 7)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 8)
 
 
 class TestAFDSpawn(NineSolsTestBase):
