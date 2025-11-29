@@ -82,6 +82,7 @@ Currently, the following games are supported:
 * Paint
 * Celeste (Open World)
 * Choo-Choo Charles
+* APQuest
 * Candy Box 2
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
