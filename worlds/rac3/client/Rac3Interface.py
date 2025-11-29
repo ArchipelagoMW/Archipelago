@@ -568,19 +568,12 @@ class Rac3Interface(GameInterface):
         self._write16(RAC3STATUS.WRITE_INPUT_2, bitmasked)
 
     def teleport_to_ship(self, planet):
-        if self.should_overwrite_respawn(planet):
-            
-            # We dont need to overwrite the respawn coords for every planet, only the ones that have multiple checkpoints
-            if planet in RESPAWN_COORDS_OFFSET.keys():
-                self._write_bytes(
-                    RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
+        if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
+            self._write_bytes(
+                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
         
         self.logger.info(f'Teleporting to ship on: {planet}')
         self.force_respawn()
-
-    def teleport_to_coords(self):
-        # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
-        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     def should_overwrite_respawn(self, planet):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
@@ -588,18 +581,20 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             # Todo: add more special cases
-            case RAC3REGION.FLORANA:
-                return self._read_float(RAC3STATUS.RATCHET_X) < 170 and \
-                self._read_float(RAC3STATUS.RATCHET_Y) > 205 and \
-                self._read_float(RAC3STATUS.RATCHET_Z) > 100  # Qwark Fight
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
-            case RAC3REGION.OBANI_DRACO:
-                return self._read_float(RAC3STATUS.RATCHET_X) < 600  # Courtney Fight
+            case RAC3REGION.TYHRRANOSIS:
+                return False # Entrance coordinates in the first section that gets unloaded after leaving
+            case RAC3REGION.ZELDRIN_STARPORT:
+                return False # Zeldrin has only one respawn point that is right next to the ship and we dont want anything to happen while aboard the leviathan
         return True
 
     def force_respawn(self):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
+    
+    def teleport_to_coords(self):
+        # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
+        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     # Todo: Deathlink
     def alive(self) -> (bool, str):
