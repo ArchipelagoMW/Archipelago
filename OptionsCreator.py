@@ -575,7 +575,7 @@ class OptionsCreator(ThemedApp):
                            if name and option.visibility & Visibility.simple_ui]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
-                    # Can also have a option group of options that should not render on simple ui
+                    # Can also have an option group of options that should not render on simple ui
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
