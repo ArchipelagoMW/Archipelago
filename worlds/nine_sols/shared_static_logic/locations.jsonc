@@ -727,7 +727,7 @@
     },
     {
         "address": 1808, "name": "Factory (U): Below Walkway to Left Exit",
-        "region": "FU - After Laser", "requires": [ { "anyOf": [
+        "region": "FU - Box After Laser", "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
         ] } ] // on logic_level: easy, T-dash
     },

@@ -616,12 +616,17 @@
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
     ] }, // again, no enemies in RN&LE for a T-dash to help
     { "from": "FU - Crystal Passage", "to": "FU - Root Node & Lower Elevator", "requires": [] }, // single jump is enough to clear the spikes
-    { "from": "FU - Root Node & Lower Elevator", "to": "FU - After Laser", "requires": [ { "item": "Air Dash" } ] },
-    { "from": "FU - After Laser", "to": "FU - Root Node & Lower Elevator", "requires": [ { "item": "Air Dash" } ] },
-    { "from": "FU - After Laser", "to": "FU - Left Exit", "requires": [
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }
+    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Box After Laser", "requires": [
+        { "item": "Air Dash" }, // to get past the laser
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // to get on top of the box
     ] },
-    { "from": "FU - Left Exit", "to": "FU - After Laser", "requires": [
+    { "from": "FU - Box After Laser", "to": "FU - Root Node & Lower Elevator", "requires": [
+        { "item": "Air Dash" } // in this direction, only the laser is a problem
+    ] },
+    { "from": "FU - Box After Laser", "to": "FU - Left Exit", "requires": [
+        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] } // more boxes
+    ] },
+    { "from": "FU - Left Exit", "to": "FU - Box After Laser", "requires": [
         { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" }, { "item": "Air Dash" } ] }
     ] }, // on logic_level: easy, 2 T-dashes (this is okay because both ledges have an enemy you can parry)
     { "from": "FU - Left Exit", "to": "FU - Behind Moving Boxes", "requires": [
