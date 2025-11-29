@@ -87,4 +87,4 @@ Please follow the above steps in
 
 ### Using undo turn ignores the income boost or causes bugs
 Undoing a turn is bugged in Wargroove 2 and not supported in the randomizer.
-There is no way to change how many times the undo action can be used.
+To remove undoing a turn, go to the campaign overview screen &rarr; Hit escape on the keyboard &rarr; Click adjust difficulty &rarr; Adjust the settings.
