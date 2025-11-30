@@ -28,14 +28,18 @@ regionsanity_index_offset = 100000000
 home_point_location_index_offset = 1000000000
 
 def get_location_name_to_id() -> dict[str, int]:
+    from .home_points import get_home_points
+    
     location_name_to_id = {location.name: location.code for location in get_treasure_and_npc_locations(-1, None)}
     crystal_name_to_id = {crystal.name: crystal.code for crystal in get_crystal_locations(-1, None)}
     boss_name_to_id = {boss.name: boss.code for boss in get_boss_locations(-1, None)}
     shop_name_to_id = {shop.name: shop.code for shop in get_shop_locations(-1, None)}
+    homepoint_name_to_id = {homepoint.name: homepoint.code + home_point_location_index_offset for homepoint in get_home_points(-1, None)}
     region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completion_locations(-1, None)}
     location_name_to_id.update(crystal_name_to_id)
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
+    location_name_to_id.update(homepoint_name_to_id)
     location_name_to_id.update(region_completion_name_to_id)
 
     return location_name_to_id
@@ -1993,6 +1997,8 @@ def get_region_completion_locations(player: int, options: CrystalProjectOptions)
 def get_location_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
+    from .home_points import get_home_points
+
     for location in get_crystal_locations(-1, None):
         categories.setdefault("Crystals", set()).add(location.name)
 
@@ -2001,6 +2007,9 @@ def get_location_names_per_category() -> Dict[str, Set[str]]:
 
     for location in get_boss_locations(-1, None):
         categories.setdefault("Bosses", set()).add(location.name)
+
+    for location in get_home_points(-1, None):
+        categories.setdefault("Homepoints", set()).add(location.name)
 
     for location in get_region_completion_locations(-1, None):
         categories.setdefault("Region Completions", set()).add(location.name)
