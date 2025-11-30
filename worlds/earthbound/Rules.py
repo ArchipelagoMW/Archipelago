@@ -125,7 +125,4 @@ def set_location_rules(world: "EarthBoundWorld") -> None:
         set_rule(world.multiworld.get_location("Dalaam Restaurant - Slot 2", player), lambda state: state.has("ATM Access", player))
         set_rule(world.multiworld.get_location("Dalaam Restaurant - Slot 3", player), lambda state: state.has("ATM Access", player))
         set_rule(world.multiworld.get_location("Dalaam Restaurant - Slot 4", player), lambda state: state.has("ATM Access", player))
-
-    if world.dungeon_connections["Sea of Eden"] == "Monotoli Building":
-        # This is locked by Ness, so don't place Ness here. Why isn't this done automatically by logic? This only matters if we Pre_fill the characters onto char slots
-        forbid_items_for_player(world.multiworld.get_location("Monotoli Building - Monotoli Character", player), {"Ness"}, player)
+        
