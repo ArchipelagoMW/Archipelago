@@ -549,16 +549,20 @@ class Rac3Interface(GameInterface):
     def input_cycler(self):
         planet_id = self._read8(RAC3STATUS.PLANET)
         planet = PLANET_NAME_FROM_ID[planet_id]
-        is_paused = self._read8(RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS)
-        pressed_square = self._read16(RAC3STATUS.READ_INPUT) & RAC3INPUT.SQUARE
-        if is_paused and pressed_square:
-            self.unpause_game(planet)
-            self.teleport_to_ship(planet)
+        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
+        if pause_address is not None: # Vid comics do not have a pause address
+            is_paused = self._read8(pause_address)
+            pressed_square = self._read16(RAC3STATUS.READ_INPUT) & RAC3INPUT.SQUARE
+            if is_paused and pressed_square:
+                self.unpause_game(planet)
+                self.teleport_to_ship(planet)
 
     def unpause_game(self, planet):
-        is_paused = self._read8(RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS)
-        if is_paused:
-            self.write_input(RAC3INPUT.START)
+        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
+        if pause_address is not None: # Vid comics do not have a pause address
+            is_paused = self._read8(pause_address)
+            if is_paused:
+                self.write_input(RAC3INPUT.START)
 
     def write_input(self, button: RAC3INPUT):
         left_shifted = (button & 0x00FF) << 8
