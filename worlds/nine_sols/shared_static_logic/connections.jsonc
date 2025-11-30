@@ -135,7 +135,7 @@
         { "item": "Cloud Leap" },
         [
             { "item": "Grapple" },
-            [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" } ]
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Tai-Chi Kick" } ] }
         ]
     ] } ] }, // bow hover and T-dash work, but no arrow/qi source
     { "from": "AFD - Under Lower Left Exit", "to": "AFD - Lower Level", "requires": [ { "anyOf": [
