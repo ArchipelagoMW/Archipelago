@@ -45,7 +45,7 @@ This will create some visual artifacts however, it should not affect gameplay.
 - The patched rom is located in your Archipelago root folder by default
     - The exact path is also printed on the Banjo-Tooie Client
     - You can also click "Browse Files" in the Launcher which will take you to this folder
-- <b>one time only</b> run <b>/autostart</b> in the Banjo-Tooie Client and select Emuhawk.exe. This will automatically open Bizhawk, the patched Banjo-Tooie ROM and the required Lua script to connect.
+- **one time only** run `/autostart` in the Banjo-Tooie Client and select Emuhawk.exe. This will automatically open Bizhawk, the patched Banjo-Tooie ROM and the required Lua script to connect.
 - Connect the Archipelago Client with the server.
     - To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection).
 - If you rather not use <b>/autostart</b>:
