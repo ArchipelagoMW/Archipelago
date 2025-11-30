@@ -263,7 +263,9 @@ class TestLevelComparedToEnemiesDecrease(CrystalProjectTestBase):
         # Default starting level expectation: 6; 1 Progressive Level in starting inventory; Progressive Level Size 6
 
         # The Depths: 63
-        self.collect_progressive_levels(8)
+        # 63 - 5 = 58 adjusted for level compared to enemies
+        # 58 / 6 = 10 progressive levels to reach the depths
+        self.collect_progressive_levels(8) # should have 9 progressive levels now
         self.assertFalse(self.can_reach_region(THE_DEPTHS_AP_REGION))
-        self.collect_progressive_levels(1)
+        self.collect_progressive_levels(1) # should have 10 progressive levels now
         self.assertTrue(self.can_reach_region(THE_DEPTHS_AP_REGION))

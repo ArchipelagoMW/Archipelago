@@ -102,17 +102,18 @@ class CrystalProjectLogic:
         else:
             return state.has(OLD_WORLD_STONE, self.player)
 
-    def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
+    def get_progressive_level_count(self, min_level: int) -> int:
         min_level = min_level + self.options.level_compared_to_enemies.value
 
         if min_level > self.options.max_level.value:
             min_level = self.options.max_level.value
 
-        # Players start with 1 Progressive Level
         count = ((min_level - 1) // self.options.progressive_level_size.value) + 1
+        return count
 
+    def is_area_in_level_range(self, state: CollectionState, min_level: int) -> bool:
         if not self.options.level_gating.value == self.options.level_gating.option_none:
-            return state.has(PROGRESSIVE_LEVEL, self.player, count)
+            return state.has(PROGRESSIVE_LEVEL, self.player, self.get_progressive_level_count(min_level))
 
         return True
 

@@ -6,6 +6,7 @@ from .constants.keys import *
 from .locations import LocationData
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
+
 #Remember if you update the AP Region a Home Point is in or its name, go change it in the Menu connections function in the region.py file
 def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
     logic = CrystalProjectLogic(player, options)

@@ -77,7 +77,7 @@ def get_mod_info() -> List[ModInfoModel]:
         return data
 
     only_files = [f for f in listdir(file_directory) if
-                  isfile(join(file_directory, f))]
+                  f.endswith(".json") and isfile(join(file_directory, f))]
 
     equipment_ids_in_use: List[int] = [591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610]
     item_ids_in_use: List[int] = [229, 230, 231, 232]
