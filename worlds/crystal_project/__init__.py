@@ -17,7 +17,8 @@ from .home_points import get_home_points
 from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
     get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
 from .presets import crystal_project_options_presets
-from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary
+from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary, \
+    display_region_levels_dictionary
 from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
@@ -142,7 +143,7 @@ class CrystalProjectWorld(World):
                     # self.modded_locations = slot_data["moddedLocationsForUT"]
                     # self.modded_shops = slot_data["moddedShopsForUT"]
                     self.starter_ap_region = slot_data["starterRegion"]
-        
+
         if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
             self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
 
@@ -161,18 +162,6 @@ class CrystalProjectWorld(World):
         if self.options.start_with_maps.value == self.options.start_with_maps.option_true:
             for map_name in self.item_name_groups[MAP]:
                 self.multiworld.push_precollected(self.create_item(map_name))
-
-        if not self.options.level_gating.value == self.options.level_gating.option_none:
-            #3 is Spawning Meadows' level
-            starting_level_so_you_can_do_anything = 3 + self.options.level_compared_to_enemies.value
-            if starting_level_so_you_can_do_anything < 3:
-                starting_level_so_you_can_do_anything = 3
-            elif starting_level_so_you_can_do_anything > self.options.max_level.value:
-                starting_level_so_you_can_do_anything = self.options.max_level.value
-            # Players start with at least 1 Progressive Level, but we add more if their Level Compared to Enemies setting is positive
-            self.starting_progressive_levels = ((starting_level_so_you_can_do_anything - 1) // self.options.progressive_level_size.value) + 1
-            for _ in range(self.starting_progressive_levels):
-                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_regions(self) -> None:
         init_ap_region_to_display_region_dictionary()
@@ -254,8 +243,10 @@ class CrystalProjectWorld(World):
             logging.getLogger().info(message.format(self.options.new_world_stone_job_quantity.value, jobs_earnable, self.player_name))
             self.options.new_world_stone_job_quantity.value = jobs_earnable
 
+        if self.options.regionsanity.value == self.options.regionsanity.option_disabled:
+            self.starter_ap_region = SPAWNING_MEADOWS_AP_REGION
         # pick one display region to give a starting pass to and then save that later
-        if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
+        else:
             starting_passes_list: List[str] = []
             #checking the start inventory for region passes and using the first one to set the starter region, if any
             for item_name in self.options.start_inventory.keys():
@@ -273,27 +264,32 @@ class CrystalProjectWorld(World):
 
             # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
             if self.starter_ap_region == "":
-                initially_reachable_regions = []
-                # Generate a collection state that is a copy of the current state but also has all the passes so we can
-                # check what regions we can access without just getting told none because we have no passes
-                all_passes_state: CollectionState = CollectionState(self.multiworld)
-                self.origin_region_name = SPAWNING_MEADOWS_AP_REGION
-                for region_pass in self.item_name_groups[PASS]:
-                    all_passes_state.collect(self.create_item(region_pass), prevent_sweep=True)
+                valid_starting_regions = []
                 for ap_region in self.get_regions():
-                    #This checks what AP Regions are accessible to the player
-                    if ap_region.can_reach(all_passes_state) and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION:
-                        if len(ap_region.locations) > 2:
-                            initially_reachable_regions.append(ap_region)
-                self.starter_ap_region = self.random.choice(initially_reachable_regions).name
+                    #apregions are only valid if they are the first apregion inside the display region (for now)
+                    if len(ap_region.locations) > 2 and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION\
+                            and display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] == ap_region.name:
+                        valid_starting_regions.append(ap_region)
+                self.starter_ap_region = self.random.choice(valid_starting_regions).name
                 #Until we have a teleport location in every single ap region, for now we take specifically the first ap region in the display regions subregion list
                 self.starter_ap_region = display_region_subregions_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
-            logging.getLogger().info("Starting region is " + self.starter_ap_region)
-            self.origin_region_name = self.starter_ap_region
+
             #only push if player doesn't already have the pass from their starting inventory
             if len(starting_passes_list) == 0:
                 #Converts the AP Region that was picked as the starting region to the Display Region containing that AP Region
                 self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]]))
+
+        self.origin_region_name = self.starter_ap_region
+        #logging.getLogger().info("Starting region is " + self.starter_ap_region)
+
+        # now that we know your starter region, we know how many progressive levels you need to start with
+        if not self.options.level_gating.value == self.options.level_gating.option_none:
+            logic = CrystalProjectLogic(self.player, self.options)
+            self.starting_progressive_levels = logic.get_progressive_level_count(display_region_levels_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0])
+            if self.starting_progressive_levels < 1:
+                self.starting_progressive_levels = 1
+            for _ in range(self.starting_progressive_levels):
+                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
 
     def create_item(self, name: str) -> Item:
         if name in item_table:
@@ -545,9 +541,11 @@ class CrystalProjectWorld(World):
                 pool.append(item)
 
         if not self.options.level_gating.value == self.options.level_gating.option_none:
-            #guarantee space for 2 clamshells, one on the following line and one because you start with 1 progressive level already
-            max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - 1
-            #players start with one or more, depending on their Level Compared to Enemies setting
+            #guarantee space for 2 clamshells
+            min_clamshells = 2
+            #any starting progressive levels you have increase the number of max progressive levels you could have
+            max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - min_clamshells + self.starting_progressive_levels
+            #players start with one or more
             for _ in range (self.get_total_progressive_levels(max_progressive_levels) - self.starting_progressive_levels):
                 item = self.set_classifications(PROGRESSIVE_LEVEL)
                 pool.append(item)
@@ -576,7 +574,6 @@ class CrystalProjectWorld(World):
         return item
 
     def set_rules(self) -> None:
-        logic = CrystalProjectLogic(self.player, self.options)
         if self.options.goal == self.options.goal.option_astley:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
