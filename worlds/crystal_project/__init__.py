@@ -474,6 +474,10 @@ class CrystalProjectWorld(World):
         else:
             excluded_items.add(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]])
 
+        if self.options.home_point_hustle.value == self.options.home_point_hustle.option_disabled:
+            for home_point in self.item_name_groups[HOME_POINT]:
+                excluded_items.add(home_point)
+
         return excluded_items
 
     def get_item_pool(self, excluded_items: Set[str]) -> List[Item]:
