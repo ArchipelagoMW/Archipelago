@@ -95,7 +95,6 @@ class JadeCostPlando(OptionDict):
     default = {}
 
 
-# not yet exposed to players
 class LogicDifficulty(Choice):
     """
     `vanilla` is exactly what it sounds like: You will only be expected to do what the vanilla game required.
@@ -205,7 +204,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     jade_cost_min: JadeCostMin
     jade_cost_max: JadeCostMax
     jade_cost_plando: JadeCostPlando
-    # logic_difficulty: LogicDifficulty
+    logic_difficulty: LogicDifficulty
     first_root_node: FirstRootNode
     shuffle_grapple: ShuffleGrapple
     shuffle_wall_climb: ShuffleWallClimb
