@@ -585,6 +585,8 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             # Todo: add more special cases
+            case RAC3REGION.FLORANA:
+                return self._read_float(RAC3STATUS.RATCHET_Z) > 300  # Dont overwrite if in the Path of Death due to geometry unloading
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:

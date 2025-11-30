@@ -10,6 +10,7 @@ from worlds.rac3.client.Rac3Callbacks import init, update
 from worlds.rac3.client.Rac3Interface import Rac3Interface
 from worlds.rac3.constants.Rac3Options import RAC3OPTION
 from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -71,7 +72,12 @@ class CommandProcessor(ClientCommandProcessor):
     def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead."""
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
+            pause_address = RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS
+            if pause_address is not None:
+                self.ctx.game_interface.unpause_game(self.ctx.current_planet)
+                self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
+            else:
+                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}.')
 
 
 class Rac3Context(CommonContext):
