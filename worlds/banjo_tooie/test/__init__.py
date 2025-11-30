@@ -4,4 +4,4 @@ from .. import BanjoTooieWorld
 
 class BanjoTooieTestBase(WorldTestBase):
     game = "Banjo-Tooie"
-    world = BanjoTooieWorld
+    world: BanjoTooieWorld
