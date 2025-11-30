@@ -9,11 +9,11 @@ from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
+from .home_points import get_home_points
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
-    display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary, home_point_item_index_offset
-from .home_points import get_home_points
+    display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary, home_point_item_index_offset, ItemData
 from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
     get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
 from .presets import crystal_project_options_presets
@@ -50,6 +50,11 @@ class CrystalProjectWorld(World):
     options: CrystalProjectOptions
     topology_present = True  # show path to required location checks in spoiler
 
+    # Add the homepoints to the item_table so they don't require any special code after this
+    home_points = get_home_points(-1, options)
+    for home_point in home_points:
+        item_table[home_point.name] = ItemData(HOME_POINT, home_point.code + home_point_item_index_offset, ItemClassification.progression)
+
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = get_location_name_to_id()
 
@@ -59,7 +64,6 @@ class CrystalProjectWorld(World):
 
     mod_info = get_mod_info()
     modded_items = get_modded_items(mod_info)
-    home_points = get_home_points(-1, options)
     modded_job_count: int = 0
 
     for modded_item in modded_items:
@@ -71,11 +75,6 @@ class CrystalProjectWorld(World):
             modded_job_count += 1
         else:
             item_name_groups.setdefault(MOD, set()).add(modded_item.name)
-
-    for home_point in home_points:
-        item_name_to_id[home_point.name] = (home_point.code + home_point_item_index_offset)
-        item_name_groups.setdefault(HOME_POINT, set()).add(home_point.name)
-        location_name_to_id[home_point.name] = (home_point.code + home_point_location_index_offset)
 
     modded_locations = get_modded_locations(mod_info)
 
@@ -297,12 +296,8 @@ class CrystalProjectWorld(World):
             return Item(name, data.classification, data.code, self.player)
         else:
             matches_mod = [item for (index, item) in enumerate(self.modded_items) if item.name == name]
-            matches_home_point = [item for (index, item) in enumerate(self.home_points) if item.name == name]
 
-            if len(matches_mod) > 0:
-                return Item(matches_mod[0].name, matches_mod[0].classification, matches_mod[0].code, self.player)
-            else:
-                return Item(matches_home_point[0].name, ItemClassification.progression, (matches_home_point[0].code + home_point_item_index_offset), self.player)
+            return Item(matches_mod[0].name, matches_mod[0].classification, matches_mod[0].code, self.player)
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())
