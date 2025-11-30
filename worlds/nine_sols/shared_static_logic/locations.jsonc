@@ -252,28 +252,28 @@
     },
 
     // Trick Events
-//    {
-//        "category": "easy_tricks", "address": null, "name": "Trick - Bow Hover",
-//        "region": "Menu", "requires": [ { "anyOf": [
-//            { "item": "Arrow: Cloud Piercer" },
-//            { "item": "Arrow: Thunder Buster" },
-//            { "item": "Arrow: Shadow Hunter" }
-//        ] } ]
-//    },
-//    {
-//        "category": "easy_tricks", "address": null, "name": "Trick - Break CS Barrier With Bow",
-//        "region": "Menu", "requires": [
-//            { "item": "Arrow: Cloud Piercer" },
-//            { "item": "Dark Steel" }, // just 1 to afford Cloud Piercer S
-//            { "item": "Event - Kuafu in FSP" } // so you can actually buy S from him
-//        ]
-//    },
-//    {
-//        "category": "easy_tricks", "address": null, "name": "Trick - Break One-Way Barrier With Bow",
-//        "region": "Menu", "requires": [
-//            { "item": "Arrow: Thunder Buster" }
-//        ]
-//    },
+    {
+        "category": "medium_logic", "address": null, "name": "Trick - Bow Hover",
+        "region": "FSP - Root Node", "requires": [ { "anyOf": [
+            { "item": "Arrow: Cloud Piercer" },
+            { "item": "Arrow: Thunder Buster" },
+            { "item": "Arrow: Shadow Hunter" }
+        ] } ]
+    },
+    {
+        "category": "medium_logic", "address": null, "name": "Trick - Break CS Barrier With Bow",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Arrow: Cloud Piercer" },
+            { "item": "Dark Steel" }, // just 1 to afford Cloud Piercer S
+            { "item": "Event - Kuafu in FSP" } // so you can actually buy S from him
+        ]
+    },
+    {
+        "category": "medium_logic", "address": null, "name": "Trick - Break One-Way Barrier With Bow",
+        "region": "FSP - Root Node", "requires": [
+            { "item": "Arrow: Thunder Buster" }
+        ]
+    },
 
     // Cortex Center
     {

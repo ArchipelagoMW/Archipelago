@@ -1,4 +1,4 @@
-from .options import NineSolsGameOptions
+from .options import NineSolsGameOptions, LogicDifficulty
 
 
 def should_generate(category: str | None, options: NineSolsGameOptions) -> bool:
@@ -8,5 +8,6 @@ def should_generate(category: str | None, options: NineSolsGameOptions) -> bool:
         return all(should_generate(c, options) for c in category.split('&'))
     elif '|' in category:
         return any(should_generate(c, options) for c in category.split('|'))
-    # no concrete categories have been implemented yet, but I'm sure we'll want some in the future
+    elif category == "medium_logic":
+        return options.logic_difficulty >= LogicDifficulty.option_medium
     raise ValueError(f'Invalid category: {category}')
