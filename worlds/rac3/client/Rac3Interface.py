@@ -118,6 +118,8 @@ class UnlockData:
                  unlock_delay: int = 0):
         self.status = status
         self.unlock_delay = unlock_delay
+    def __repr__(self):
+        return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
 
 
 def compare(value, check) -> bool:
