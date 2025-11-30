@@ -2,9 +2,8 @@ import typing
 from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
-from Utils import Version, version_tuple
 from .item_data import items_data, jade_items
-from .options import FirstRootNode
+from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -18,20 +17,19 @@ class NineSolsItem(Item):
 class NineSolsItemData(NamedTuple):
     name: str = None
     code: int | None = None
-    type: ItemClassification = ItemClassification.filler
+    type: str = None
     category: str | None = None
 
 
-item_types_map = {
+item_types_default_map = {
     "progression": ItemClassification.progression,
     "useful": ItemClassification.useful,
     "filler": ItemClassification.filler,
     "trap": ItemClassification.trap,
     "progression_skip_balancing": ItemClassification.progression_skip_balancing,
     # most of our skip_balancing/deprioritized use cases are just "low value" progression where both flags make sense
-    "weak_progression": ItemClassification.progression_skip_balancing
-    if version_tuple < Version(0, 6, 3)
-    else ItemClassification.progression_deprioritized_skip_balancing,
+    "weak_progression": ItemClassification.progression_deprioritized_skip_balancing,
+    "progression_if_medium_logic": ItemClassification.useful,
 }
 
 item_data_table: dict[str, NineSolsItemData] = {}
@@ -39,7 +37,7 @@ for items_data_entry in items_data:
     item_data_table[items_data_entry["name"]] = NineSolsItemData(
         name=items_data_entry["name"],
         code=(items_data_entry["code"] if "code" in items_data_entry else None),
-        type=item_types_map[items_data_entry["type"]],
+        type=items_data_entry["type"],
         category=(items_data_entry["category"] if "category" in items_data_entry else None),
     )
 
@@ -69,8 +67,21 @@ item_name_groups = {
 }
 
 
-def create_item(player: int, name: str) -> NineSolsItem:
-    return NineSolsItem(name, item_data_table[name].type, item_data_table[name].code, player)
+def get_item_classification(name: str, options: NineSolsGameOptions = None) -> ItemClassification:
+    item_type = item_data_table[name].type
+    classification = item_types_default_map[item_type]
+
+    if options is not None:
+        if item_type == "progression_if_medium_logic":
+            classification = ItemClassification.useful
+            if options.logic_difficulty >= LogicDifficulty.option_medium:
+                classification = ItemClassification.progression
+
+    return classification
+
+
+def create_item(player: int, name: str, options: NineSolsGameOptions = None) -> NineSolsItem:
+    return NineSolsItem(name, get_item_classification(name, options), item_data_table[name].code, player)
 
 
 # All progression and useful item types have a hardcoded number of instances regardless of options.
@@ -107,35 +118,36 @@ def create_items(world: "NineSolsWorld") -> None:
     prog_and_useful_items: list[NineSolsItem] = []
     unique_filler: list[NineSolsItem] = []
     for name, item in items_to_create.items():
+        classification = get_item_classification(name, options)
         if item.code is None:
             # here we rely on our event items and event locations having identical names
-            multiworld.get_location(name, player).place_locked_item(create_item(player, name))
+            multiworld.get_location(name, player).place_locked_item(create_item(player, name, options))
         elif name.startswith("Seal of ") and not options.shuffle_sol_seals:
             continue  # we'll place these as a group later
         elif name == "Grapple":
             if options.shuffle_grapple:
-                prog_and_useful_items.append(create_item(player, name))
+                prog_and_useful_items.append(create_item(player, name, options))
             else:
-                multiworld.push_precollected(create_item(player, name))
+                multiworld.push_precollected(create_item(player, name, options))
         elif name == "Wall Climb":
             if options.shuffle_wall_climb:
-                prog_and_useful_items.append(create_item(player, name))
+                prog_and_useful_items.append(create_item(player, name, options))
             else:
-                multiworld.push_precollected(create_item(player, name))
+                multiworld.push_precollected(create_item(player, name, options))
         elif name == "Ledge Grab":
             if options.shuffle_ledge_grab:
-                prog_and_useful_items.append(create_item(player, name))
+                prog_and_useful_items.append(create_item(player, name, options))
             else:
-                multiworld.push_precollected(create_item(player, name))
-        elif item.type == ItemClassification.filler:
+                multiworld.push_precollected(create_item(player, name, options))
+        elif classification == ItemClassification.filler:
             if name not in repeatable_filler_weights:
-                unique_filler.append(create_item(player, name))
-        elif item.type != ItemClassification.trap:
+                unique_filler.append(create_item(player, name, options))
+        elif classification != ItemClassification.trap:
             instances = 1
             if name in repeated_prog_useful_items:
                 instances = repeated_prog_useful_items[name]
             for _ in range(0, instances):
-                prog_and_useful_items.append(create_item(player, name))
+                prog_and_useful_items.append(create_item(player, name, options))
 
     if not options.shuffle_sol_seals:
         for (location, item) in [

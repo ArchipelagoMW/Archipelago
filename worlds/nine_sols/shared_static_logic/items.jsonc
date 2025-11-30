@@ -16,13 +16,13 @@
     { "code": 15, "name": "Cloud Leap", "type": "progression_skip_balancing" }, // CL tends to show up too early and blow the game wide open
     { "code": 16, "name": "Super Mutant Buster", "type": "progression" },
 
-    { "code": 21, "name": "Arrow: Cloud Piercer", "type": "useful" },
-    { "code": 22, "name": "Arrow: Thunder Buster", "type": "useful" },
-    { "code": 23, "name": "Arrow: Shadow Hunter", "type": "useful" },
+    { "code": 21, "name": "Arrow: Cloud Piercer", "type": "progression_if_medium_logic" },
+    { "code": 22, "name": "Arrow: Thunder Buster", "type": "progression_if_medium_logic" },
+    { "code": 23, "name": "Arrow: Shadow Hunter", "type": "progression_if_medium_logic" },
 
     // "Material"s
     { "code": 31, "name": "Herb Catalyst", "type": "useful" },
-    { "code": 32, "name": "Dark Steel", "type": "useful" },
+    { "code": 32, "name": "Dark Steel", "type": "progression_if_medium_logic" },
 
     // "Equipment"
     { "code": 41, "name": "Pipe Vial", "type": "useful" },
