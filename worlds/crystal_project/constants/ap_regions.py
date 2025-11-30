@@ -162,8 +162,11 @@ SHOUDU_PROVINCE_AP_REGION = "Shoudu Province"
 SHOUDU_PROVINCE_AP_REGION_TELEPORT_LOCATION = "756,101,-166"
 THE_UNDERCITY_AP_REGION = "The Undercity"
 THE_UNDERCITY_AP_REGION_TELEPORT_LOCATION = "732,97,-197"
+#Ganymede Shrine start
 GANYMEDE_SHRINE_AP_REGION = "Ganymede Shrine"
 GANYMEDE_SHRINE_AP_REGION_TELEPORT_LOCATION = "689,158,-240"
+GANYMEDE_STEEPLE_AP_REGION = "Ganymede Steeple"
+#Ganymede Shrine end
 BEAURIOR_VOLCANO_AP_REGION = "Beaurior Volcano"
 BEAURIOR_VOLCANO_AP_REGION_TELEPORT_LOCATION = "96,100,119"
 BEAURIOR_ROCK_AP_REGION = "Beaurior Rock"
@@ -176,7 +179,12 @@ ATOP_DAM_AP_REGION = "Atop Salmon River Dam"
 #Quintar Reserve start
 QUINTAR_RESERVE_AP_REGION = "Quintar Reserve"
 QUINTAR_RESERVE_AP_REGION_TELEPORT_LOCATION = "683,204,-437"
+SHRINE_BALCONY_SHADED_NOOK_AP_REGION = "Nook Shaded By the Dione Shrine Balcony"
 RESERVE_TREETOPS_AP_REGION = "Quintar Reserve Treetops"
+RESERVE_NARROW_SE_LEDGE_AP_REGION = "Quintar Reserve Narrow SE Ledge"
+RESERVE_HIGH_OCEAN_OVERLOOK_AP_REGION = "Quintar Reserve High Ocean Overlook"
+MAUSOLEUM_GIFT_SHOP_AP_REGION = "Quintar Mausoleum Gift Shop"
+RESERVE_BLUFFS_AP_REGION = "Quintar Reserve Bluffs"
 #Quintar Reserve end
 #Dione Shrine start
 DIONE_SHRINE_AP_REGION = "Dione Shrine"
@@ -184,8 +192,10 @@ DIONE_ROOF_AP_REGION = "Dione Shrine Roof"
 DIONE_ROOF_AP_REGION_TELEPORT_LOCATION = "680,221,-447"
 #Dione Shrine end
 QUINTAR_MAUSOLEUM_AP_REGION = "Quintar Mausoleum"
-QUINTAR_MAUSOLEUM_AP_REGION_TELEPORT_LOCATION = "700,181,-327"
+#At the locked door on the Caves level so you can reach at least 2 chests from the start
+QUINTAR_MAUSOLEUM_AP_REGION_TELEPORT_LOCATION = "688,129,-436"
 EASTERN_CHASM_AP_REGION = "Eastern Chasm"
+#Northwest bush just a hop up from where you land from the Chalice of Tar
 EASTERN_CHASM_AP_REGION_TELEPORT_LOCATION = "721,239,-466"
 #Tall, Tall Heights start
 BOOMER_OVERLOOK_AP_REGION = "Boomer Overlook"
@@ -243,10 +253,17 @@ PEAK_RAMPARTS_AP_REGION = "Peak Ramparts"
 #West Ramparts save point
 PEAK_RAMPARTS_AP_REGION_TELEPORT_LOCATION = "360,234,-392"
 #Castle Ramparts end
-THE_CHALICE_OF_TAR_AP_REGION = "The Chalice of Tar"
-THE_CHALICE_OF_TAR_AP_REGION_TELEPORT_LOCATION = "572,221,-426"
-FLYERS_CRAG_AP_REGION = "Flyer's Crag"
-FLYERS_CRAG_AP_REGION_TELEPORT_LOCATION = "657,217,-170"
+#The Chalice of Tar start
+CHALICE_RIM_AP_REGION = "The Chalice of Tar Rim"
+#On pinnacle above chest
+CHALICE_RIM_AP_REGION_TELEPORT_LOCATION = "612,253,-444"
+CHALICE_ASCENT_AP_REGION = "The Chalice of Tar Ascent"
+#The Chalice of Tar end
+#Flyer's Crag start
+FLYERS_CRAG_UPPER_AP_REGION = "Upper Flyer's Crag"
+FLYERS_CRAG_UPPER_AP_REGION_TELEPORT_LOCATION = "657,217,-170"
+FLYERS_CRAG_LOWER_AP_REGION = "Lower Flyer's Crag"
+#Flyer's Crag end
 JIDAMBA_FOREST_FLOOR_AP_REGION = "Jidamba Forest Floor"
 JIDAMBA_DIAMONDSMITH_AP_REGION = "Jidamba Diamondsmith"
 JIDAMBA_SOUTHWEST_BEACH_AP_REGION = "Jidamba Southwest Beach"

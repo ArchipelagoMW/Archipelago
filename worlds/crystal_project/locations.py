@@ -494,9 +494,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Okimoto N.S.
         #Treasure chests
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Moth love lamp", 364 + treasure_index_offset), #Butterfly chest
-        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Dont bump your head", 2661 + treasure_index_offset), #Ether Pouch chest
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Don't bump your head", 2661 + treasure_index_offset), #Ether Pouch chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Parkour to the west", 337 + treasure_index_offset), #Float Shoes chest
-        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Just kinda in there, its not special", 356 + treasure_index_offset), #Potion chest
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Just kinda in there, it's not special", 356 + treasure_index_offset), #Potion chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - East of save point", 344 + treasure_index_offset), #Tanto chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - On yashiki balcony", 690 + treasure_index_offset), #Money chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Down hidden stairs in library", 686 + treasure_index_offset), #Art of War chest
@@ -504,7 +504,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Lurking behind bookcase", 434 + treasure_index_offset), #Potion Pouch chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Past hidden staircase", 694 + treasure_index_offset), #Tachi chest
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " Chest - Dance above the koi pond", 1103 + treasure_index_offset), #Training Gi chest
-        LocationData(OKIMOTO_NS_AP_REGION, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state) or logic.has_swimming(state)), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
+        LocationData(OKIMOTO_NS_AP_REGION, "Overpass Chest - Mountain lake north of the yashiki", 3534 + treasure_index_offset), #(605, 228, -270) 3rd Overpass Scrap in Overpass main map
 
         #NPCs
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Silver on the way up", 359 + npc_index_offset), #Dust
@@ -512,7 +512,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Eastern Silver atop pond box", 689 + npc_index_offset), #Ingot
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Silver behind room that shall not be named", 691 + npc_index_offset), #Ingot
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Silver atop yashiki", 2659 + npc_index_offset), #Ore
-        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Lets get down to business western Silver", 429 + npc_index_offset), #Ore
+        LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + " NPC - Let's get down to business western Silver", 429 + npc_index_offset), #Ore
         LocationData(OKIMOTO_NS_AP_REGION, "Overpass NPC - Swim up koi pond waterfall into cherry tree", 1583 + npc_index_offset, lambda state: logic.has_swimming(state)), #Springs Oath (632, 243, -261) Overpass main map
 
         #Greenshire Reprise
@@ -905,7 +905,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Ganymede Shrine
         #Treasure chests
-        LocationData(GANYMEDE_SHRINE_AP_REGION, GANYMEDE_SHRINE_DISPLAY_NAME + " Chest - drop down from the top", 1594 + treasure_index_offset, lambda state: state.has(GANYMEDE_STONE, player)),
+        LocationData(GANYMEDE_STEEPLE_AP_REGION, GANYMEDE_SHRINE_DISPLAY_NAME + " Chest - Drop down from the top", 1594 + treasure_index_offset),
 
         #Beaurior Volcano
         #Treasure chests
@@ -950,30 +950,37 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Quintar Reserve
         #Treasure chests
-        LocationData(QUINTAR_RESERVE_AP_REGION, "Overpass Chest - Climbing the boughs up from the elevator", 3536 + treasure_index_offset), #5th Scrap on Overpass main map
+        #Reserve main
         LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Chest - Race start hut", 1591 + treasure_index_offset), #Quintar Grass chest
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Chest - Hollowed-out wall of Mausoleum", 1320 + treasure_index_offset, lambda state: logic.has_glide(state)), #Undead Ring chest
+        #Mausoleum Gift Shop
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Chest - Hollowed-out wall of Mausoleum", 1320 + treasure_index_offset, lambda state: logic.has_glide(state)), #Undead Ring chest
+        #Reserve Bluffs
+        LocationData(RESERVE_BLUFFS_AP_REGION, "Overpass Chest - Climbing the boughs up from the elevator", 3536 + treasure_index_offset),  # 5th Scrap on Overpass main map
 
         #NPCs
         #Reserve main
-        #Todo NPCs CheckOrNot: 3 Quintar Eggs here
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden Quintar nest down in the ravine SE of Dione Shrine", 2255 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 1
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in sneaky Quintar nest in eastern wall of the canyon north of the Mausoleum", 2256 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state) and logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 2
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in super sneaky Quintar nest in canyon north of the Mausoleum", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 3
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding east of shrine", 2259 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 4
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Long jog along the east mountain to shedding", 2260 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 5
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the east ocean", 2261 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 6
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Treetop shedding north of Mausoleum", 2263 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 8
+        #NPCs CheckOrNot: 3 Quintar Eggs here (decided against)
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in hidden hole in grassy ravine S of Dione balcony", 2255 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)), #Shedding 1
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the race start point", 2265 + npc_index_offset),  # Shedding 10
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding north of Mausoleum", 2266 + npc_index_offset),  # Shedding 11
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Walk south from shedding north of Mausoleum into hidden hole", 2257 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)),  # Shedding 3
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Treetop shedding north of Mausoleum", 2263 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Shedding 8
+        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump in hidden hole directly east of treetop Shedding", 2256 + npc_index_offset, lambda state: logic.is_area_in_level_range(state, QUINTAR_RESERVE_ENEMY_LEVEL)),  # Shedding 2
+        #Nook Shaded By the Dione Shrine Balcony
+        LocationData(SHRINE_BALCONY_SHADED_NOOK_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding in the Dione balcony shade", 2259 + npc_index_offset),  # Shedding 4
+        #Quintar Reserve Treetops
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)),  # Dust
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Pillar-hop to the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)),  # Ore
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Long jog along the east mountain ridge to Shedding", 2260 + npc_index_offset),  # Shedding 5
+        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Glide from east mountain ridge onto Mausoleum for Shedding", 2262 + npc_index_offset, lambda state: logic.has_glide(state)),  # Shedding 7
+        #Quintar Reserve Narrow SE Ledge
+        LocationData(RESERVE_NARROW_SE_LEDGE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Gold on narrow SE ledge", 2837 + npc_index_offset),  # Ore
+        #Quintar Reserve High Ocean Overlook
+        LocationData(RESERVE_HIGH_OCEAN_OVERLOOK_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the ocean", 2261 + npc_index_offset),  # Shedding 6
+        #Quintar Reserve Bluffs
+        LocationData(RESERVE_BLUFFS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding just north of Quintar cosplayer", 2267 + npc_index_offset),  # Shedding 12
+        LocationData(RESERVE_BLUFFS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Eastern Quintar overlooking the sea", 427 + npc_index_offset, lambda state: state.has(BABEL_QUINTAR, player)), #The Sequoia map (789, 191, -338); Fixed Missable
         #shedding 9 is in the Dione Shrine because why not I guess
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding overlooking the race start point", 2265 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 10
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding north of Mausoleum", 2266 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Shedding 11
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding just north of Quintar cosplayer", 2267 + npc_index_offset), #Shedding 12
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Gold on east side of map", 2837 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Climb the center mountain for Gold", 2839 + npc_index_offset, lambda state: logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)), #Ore
-        #Reserve Treetops
-        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Shedding atop the Mausoleum", 2262 + npc_index_offset, lambda state: logic.has_glide(state)), #Shedding 7
-        LocationData(RESERVE_TREETOPS_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " NPC - Jump across the treetops for Gold", 2840 + npc_index_offset, lambda state: logic.has_horizontal_movement(state)), #Dust
 
         #Dione Shrine
         #Treasure chests
@@ -983,20 +990,20 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - 2nd floor balcony", 1146 + treasure_index_offset), #Dione Shard chest
         #Shrine Roof
         LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Chest - Roof", 2154 + treasure_index_offset),  # Dione Shard chest
-        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Glide SW from top of shrine 1", 3535 + treasure_index_offset, lambda state: logic.has_glide(state)), #4th Scrap on main Overpass map
-        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Glide SW from top of shrine 2", 2749 + treasure_index_offset, lambda state: logic.has_glide(state)), #Life Jewel Overpass main map
+        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Glide from Dione roof or hop from mountain jaunt chest", 3535 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #4th Scrap on main Overpass map
+        LocationData(DIONE_ROOF_AP_REGION, "Overpass Chest - Mountain jaunt from Dione roof", 2749 + treasure_index_offset), #Life Jewel Overpass main map
 
         #NPCs
         #Shrine Roof
         LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Shedding on roof", 2264 + npc_index_offset), #Shedding 9
-        LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Glide SW from top of shrine to Gold", 2838 + npc_index_offset, lambda state: logic.has_glide(state)), #Ingot on Overpass main map
+        LocationData(DIONE_ROOF_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " NPC - Glide from Dione roof or hop from mountain jaunt chest to Gold", 2838 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ingot on Overpass main map
 
         #Quintar Mausoleum
         #Treasure chests
         LocationData(QUINTAR_MAUSOLEUM_AP_REGION, QUINTAR_MAUSOLEUM_DISPLAY_NAME + " Chest - Past the switches race", 2153 + treasure_index_offset, lambda state: logic.has_fast(state)), #(688, 114, -464) Babel Quintar chest
         LocationData(QUINTAR_MAUSOLEUM_AP_REGION, QUINTAR_MAUSOLEUM_DISPLAY_NAME + " Chest - Rocky room", 3401 + treasure_index_offset), #(664, 129, -425) Quintar Mausoleum map chest
         LocationData(QUINTAR_MAUSOLEUM_AP_REGION, QUINTAR_MAUSOLEUM_DISPLAY_NAME + " Chest - Glowing grass room", 3768 + treasure_index_offset), #(709, 129, -442) Wind Thresher chest
-        LocationData(QUINTAR_MAUSOLEUM_AP_REGION, "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset), #(614, 146, -410) 6th Scrap chest on main Underpass map
+        LocationData(QUINTAR_MAUSOLEUM_AP_REGION, "Underpass Chest - Up the waterfall inside Quintar Mausoleum", 3674 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(614, 146, -410) 6th Scrap chest on main Underpass map
 
         #Eastern Chasm
         #Treasure chests
@@ -1144,23 +1151,26 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #The Chalice of Tar
         #Treasure chests
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - At the tippy-top", 3544 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)), #The Chalice of Tar map chest
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - Dont let your feathers touch the tar", 2587 + treasure_index_offset), #Vermillion Book chest
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - Post tar tunnel", 2806 + treasure_index_offset), #Windsong chest
+        #Chalice Rim
+        LocationData(CHALICE_RIM_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - At the tippy-top", 3544 + treasure_index_offset), #The Chalice of Tar map chest
+        #Chalice Ascent
+        LocationData(CHALICE_ASCENT_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - Don't let your feathers touch the tar", 2587 + treasure_index_offset, lambda state: logic.has_glide(state)), #Vermillion Book chest
+        LocationData(CHALICE_ASCENT_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Chest - Post tar tunnel", 2806 + treasure_index_offset), #Windsong chest
 
         #NPCs
+        #Chalice Ascent
         #Todo NPCs Job Masters: The Chalice of Tar has Master Mimic ID 3606 (526, 234, -438); gives you Mimic Seal in exchange for job mastery
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Gold sparkling above the Overpass on the way up", 2841 + npc_index_offset), #Ore
+        LocationData(CHALICE_ASCENT_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " NPC - Gold sparkling above the Overpass on the way up", 2841 + npc_index_offset), #Ore
 
-        #Flyers Crag
+        #Flyer's Crag
         #Treasure chests
-        LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Chest - You cant miss it", 3656 + treasure_index_offset), #(658, 216, -170) Flyers Crag map chest
+        LocationData(FLYERS_CRAG_UPPER_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Chest - You can't miss it", 3656 + treasure_index_offset), #(658, 216, -170) Flyers Crag map chest
         
         #NPCs
-        LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " NPC - Gold twinsies the 1st south of Ganymede Shrine", 2820 + npc_index_offset), #(695, 137, -159) Dust
-        LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " NPC - Gold twinsies the 2nd south of Ganymede Shrine", 2819 + npc_index_offset), #(686, 132, -162) Ingot
+        LocationData(FLYERS_CRAG_LOWER_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " NPC - Gold twinsies the 1st south of Ganymede Shrine", 2820 + npc_index_offset), #(695, 137, -159) Dust
+        LocationData(FLYERS_CRAG_LOWER_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " NPC - Gold twinsies the 2nd south of Ganymede Shrine", 2819 + npc_index_offset), #(686, 132, -162) Ingot
 
-        #Flyers Lookout
+        #Flyer's Lookout
         #Treasure chests
         #There are no checks here unless an Overpass Scrap shows up
 
@@ -1412,7 +1422,7 @@ def get_crystal_locations(player: int, options: CrystalProjectOptions | None) ->
         LocationData(SLIP_GLIDE_RIDE_AP_REGION, SLIP_GLIDE_RIDE_DISPLAY_NAME + SUMMONER_JOB_CRYSTAL_LOCATION, 1714 + crystal_index_offset, lambda state: logic.has_key(state, RED_DOOR_KEY, 3)),
         # (404, 243, -386)
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + BEASTMASTER_JOB_CRYSTAL_LOCATION, 1370 + crystal_index_offset, lambda state: logic.has_glide(state)),
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_vertical_movement(state)),
+        LocationData(CHALICE_RIM_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + MIMIC_JOB_CRYSTAL_LOCATION, 3701 + crystal_index_offset, lambda state: logic.has_glide(state)),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + WEAVER_JOB_CRYSTAL_LOCATION, 2403 + crystal_index_offset),
     ]
 
@@ -1856,11 +1866,12 @@ def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(GANYMEDE_SHRINE_AP_REGION, GANYMEDE_SHRINE_DISPLAY_NAME + " Shop - Attendant 3", 31574 + shop_index_offset),
 
         #Quintar Reserve
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 1", 10470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 2", 20470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 3", 30470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 4", 40470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
-        LocationData(QUINTAR_RESERVE_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 5", 50470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        #Quintar Mausoleum Gift Shop
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 1", 10470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 2", 20470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 3", 30470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 4", 40470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
+        LocationData(MAUSOLEUM_GIFT_SHOP_AP_REGION, QUINTAR_RESERVE_DISPLAY_NAME + " Shop - Babel to this Quintar 5", 50470 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
 
         #Dione Shrine
         LocationData(DIONE_SHRINE_AP_REGION, DIONE_SHRINE_DISPLAY_NAME + " Shop - Quintar Attendant 1", 12253 + shop_index_offset, lambda state: state.has(BABEL_QUINTAR, player)),
@@ -1973,8 +1984,8 @@ def get_region_completion_locations(player: int, options: CrystalProjectOptions)
         LocationData(SEQUOIA_ATHENAEUM_AP_REGION, SEQUOIA_ATHENAEUM_DISPLAY_NAME + " Region Completion", 6047 + regionsanity_index_offset, regionsanity=True),
         LocationData(NORTHERN_STRETCH_RACE_START_AP_REGION, NORTHERN_STRETCH_DISPLAY_NAME + " Region Completion", 6048 + regionsanity_index_offset, regionsanity=True),
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Region Completion", 6049 + regionsanity_index_offset, regionsanity=True),
-        LocationData(THE_CHALICE_OF_TAR_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Region Completion", 6050 + regionsanity_index_offset, regionsanity=True),
-        LocationData(FLYERS_CRAG_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Region Completion", 6051 + regionsanity_index_offset, regionsanity=True),
+        LocationData(CHALICE_RIM_AP_REGION, THE_CHALICE_OF_TAR_DISPLAY_NAME + " Region Completion", 6050 + regionsanity_index_offset, regionsanity=True),
+        LocationData(FLYERS_CRAG_UPPER_AP_REGION, FLYERS_CRAG_DISPLAY_NAME + " Region Completion", 6051 + regionsanity_index_offset, regionsanity=True),
         LocationData(EUROPA_SHRINE_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Region Completion", 6052 + regionsanity_index_offset, regionsanity=True),
         LocationData(JIDAMBA_EACLANEYA_AP_REGION, JIDAMBA_EACLANEYA_DISPLAY_NAME + " Region Completion", 6053 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Region Completion", 6054 + regionsanity_index_offset, regionsanity=True),
