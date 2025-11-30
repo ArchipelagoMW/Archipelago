@@ -1121,5 +1121,6 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      NEPTUNE_SHRINE_AP_REGION: lambda state: (state.has(NEPTUNE_STONE, player) or state.has("HomePoint - Neptune Shrine", player)),
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
                      THE_NEW_WORLD_AP_REGION: lambda state: (logic.new_world_requirements(state) or state.has("HomePoint - Astley's Shrine", player) or state.has("HomePoint - Astley's Keep", player)),
-                     DISCIPLINE_HOLLOW_AP_REGION: lambda state: state.has("HomePoint - Discipline Hollow", player)}),
+                     DISCIPLINE_HOLLOW_AP_REGION: lambda state: state.has("HomePoint - Discipline Hollow", player),
+                     }),
     world.multiworld.register_indirect_condition(world.get_region(THE_DEPTHS_AP_REGION), world.get_entrance(MENU_AP_REGION + " -> " + THE_OLD_WORLD_AP_REGION))
