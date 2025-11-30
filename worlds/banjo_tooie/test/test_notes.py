@@ -23,7 +23,6 @@ class TestRandomizedNotes(BanjoTooieTestBase):
 
         progresssion = sum(1 for item in notes_in_pool if item.advancement)
         useful = sum(1 for item in notes_in_pool if item.useful)
-        filler = sum(1 for item in notes_in_pool if item.filler)
 
         assert progresssion == progression_notes_default
         assert useful == 14  # (144 - progression_notes_default) / 2
