@@ -99,8 +99,8 @@ class LogicDifficulty(Choice):
     """
     `vanilla` is exactly what it sounds like: You will only be expected to do what the vanilla game required.
 
-    `easy` adds tricks that are no harder to execute than what the vanilla game requires, once you've been told these
-    tricks exist. Specifically:
+    `medium` adds tricks that are easy to execute, once you're aware of them, but may require more effort to notice,
+    set up and/or retry after failure. Specifically:
     - "Pseudo Air Dashes" using either a talisman ("T-dash") or Charged Strike ("CS-dash")
     - Using a Cloud Piercer S (or X) arrow to break Charged Strike barriers without Charged Strike
     - Using a Thunder Buster arrow (any level) to break one-way barriers from the "wrong" side
@@ -126,7 +126,7 @@ class LogicDifficulty(Choice):
     """
     display_name = "Logic Difficulty"
     option_vanilla = 0
-    option_easy = 1
+    option_medium = 1
     option_ledge_storage = 2
     default = 0
 
