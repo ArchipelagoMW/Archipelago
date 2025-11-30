@@ -294,11 +294,16 @@
     },
     {
         "address": 605, "name": "Cortex Center: Crystal Caves Central Chamber",
-        "region": "CC - Caves Middle Left", "requires": [
+        "region": "CC - Caves Middle Left",
+        "requires": [
             { "item": "Charged Strike" }, // to break in
             { "item": "Mystic Nymph: Scout Mode" } // to unlock ropes, since we can't assume
                                                    // the single-use floor will be used optimally
-        ] // on logic_level: easy, Cloud Piercer S/X instead
+        ],
+        "medium_requires": [
+            { "item": "Trick - Break CS Barrier With Bow" }
+            // T-dash replaces the need to unlock ropes
+        ]
     },
     {
         "address": 606, "name": "Cortex Center: Near Left Exit",
@@ -424,14 +429,18 @@
     },
     {
         "address": 1004, "name": "PR (West): Hack Statue",
-        "region": "PRW - Power Lines", "requires": [
+        "region": "PRW - Power Lines",
+        "requires": [
             { "anyOf": [
                 { "item": "Unbounded Counter" }, // to destroy the turret
                 { "region": "PRW - Above Power Lines" }, // to move a box in between the turret and the hacking point
                 [ { "item": "Cloud Leap" }, { "item": "Wall Climb" } ] // to jump directly up to that box
-                // on logic_level: easy, thunder buster to skip the whole turret hack door
             ] },
             { "item": "Tai-Chi Kick" } // required for the statue itself, and the easiest way to cross the red floor
+        ],
+        "medium_requires": [
+            { "item": "Trick - Break One-Way Barrier With Bow" }, // skip the whole turret hack and platforming
+            { "item": "Tai-Chi Kick" } // still required for the statue itself
         ]
     },
     {
@@ -729,7 +738,8 @@
         "address": 1808, "name": "Factory (U): Below Walkway to Left Exit",
         "region": "FU - Box After Laser", "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // on logic_level: easy, T-dash
+        ] } ],
+        "medium_requires": [] // T-dash
     },
     {
         "address": 1809, "name": "Factory (U): Behind Moving Boxes",
@@ -756,14 +766,16 @@
                 ] }
             ],
             [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
-        ] } ] // AND hacking
+        ] } ], // AND hacking
+        "medium_requires": [
+            { "item": "Cloud Leap" } // using T-dash for the first big jump off the crates
+        ]
         // the key constraints here are:
         // - the final jump past the last horizontal red piston requires CL OR LG
         // - the jump up to the horizontal piston's ledge *can* be done with a precise and inconsistent CL,
         // but I'd rather have the logic for it be CL AND (WC OR AD OR LG)
         // - all crates on the left crate track are either fragile or lack a safe top, so a WC-less route must
-        // get from the crusher stop to the ledge in one jump, which requires CL AND AD
-        // on logic_level: easy, T-dash can turn that CL AND AD jump into just CL, but you still need WC OR LG for the rest
+        // get from the crusher stop to the ledge in one jump, which requires CL AND AD, or CL AND T-dash
     },
     {
         "address": 1904, "name": "OW: Enemy Gauntlet Room",
@@ -803,10 +815,16 @@
     },
     {
         "address": 2002, "name": "IW: Shielded Walking Chest",
-        "region": "IW - Above Frogs", "requires": [ { "item": "Charged Strike" } ]
-        // or beating Tieyan to break shield tower, but since Tieyan also requires CS, this is simpler
-        // on logic_level: easy, Cloud Piercer S/X
-        // on logic_level: ledge_storage, CL + LS getup gets you to the shield tower without Tieyan
+        "region": "IW - Above Frogs",
+        "requires": [ { "item": "Charged Strike" } ],
+        "medium_requires": [
+            // simply firing two arrows is enough to kill the chest, so the shield recharging is a non-issue
+            { "item": "Trick - Break CS Barrier With Bow" }
+        ],
+        "ls_requires": [
+            // CL + LS vault gets you to the shield tower without fighting Tieyan
+            { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
+        ]
     },
     {
         "address": 2003, "name": "IW: Defeat Celestial Enforcer: Tieyan",
@@ -815,10 +833,13 @@
             // riding the boxes up is itemless
             // ground dashing through the laser is itemless; this time I think the ledge is wide enough to be in logic
             { "item": "Charged Strike" } // for once, the actual fight has combat logic
+        ],
+        // "Trick - Break CS Barrier With Bow" arguably applies, but it's out of logic because the shield recharges
+        // and we don't want to implement "can kill the miniboss fast enough" logic
+        "ls_requires": [
+            // CL + LS vault gets you to the shield tower, so you can fight an unshielded Tieyan
+            { "item": "Ledge Grab" }, { "item": "Cloud Leap" }
         ]
-        // on logic_level: easy, Cloud Piercer S/X in theory, but logic should stay CS since the shield comes back
-        // on logic_level: ledge_storage, CL + LS getup gets you to the shield tower and into Tieyan arena without
-        // hack point; not sure if it matters since both regions need WC and only WC even on LS logic
     },
     {
         "address": 2004, "name": "IW: Nymph Puzzle Room",
@@ -943,9 +964,13 @@
     },
     {
         "address": 2404, "name": "Prison: Near Root Node",
-        "region": "P - Up To Root Node", "requires": [ { "anyOf": [
+        "region": "P - Up To Root Node",
+        "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // on logic_level: easy, bow hover // no one around for T-dash LS setup
+        ] } ],
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" }
+        ] // no one around for T-dash LS setup
     },
     {
         "address": 2405, "name": "Prison: Examine Scroll in Upper Left Cell",
@@ -979,9 +1004,13 @@
     },
     {
         "address": 2503, "name": "Factory (MR): Above Left Elevator",
-        "region": "FMR - Left Elevator", "requires": [ { "anyOf": [
+        "region": "FMR - Left Elevator",
+        "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // on logic_level: easy, bow hover // no parryable enemies or ledges
+        ] } ],
+        "medium_requires": [
+            { "item": "Trick - Bow Hover" }
+        ] // no parryable enemies or ledges
     },
     {
         "address": 2504, "name": "Factory (MR): Walking Chest Above Green Pillar",
@@ -997,13 +1026,18 @@
     },
     {
         "address": 2507, "name": "Factory (MR): Tianhuo Flower Above Right Elevator",
-        "region": "FMR - Moving Platforms", "requires": [
+        "region": "FMR - Moving Platforms",
+        "requires": [ // the intended upper route through the shielded enemies arena
             { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] }, // to reach upper ledge
             { "item": "Mystic Nymph: Scout Mode" } // unlock arena door
-        ] // the upper route through the shielded enemies arena
-        // on logic_level: easy, bow hover OR (T-dash AND AD AND CL AND LG)
-        // the NMG speedrun does T-dash AD AND CS AND bow knockback, but I can't get this to work without LG at the end
-        // on logic_level: ledge_storage, parry hover with any setup
+        ],
+        "medium_requires": [ { "anyOf": [ // the lower route, crossing the huge gap from WC ledge to flower ledge
+            { "item": "Trick - Bow Hover" },
+            [ { "item": "Air Dash" }, { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // and T-dash
+        ] } ], // the NMG run does T-dash AD AND CS AND bow knockback, but I can't get this to work without LG at the end
+        "ls_requires": [ // also lower route
+            { "item": "Ledge Grab" } // parry hover with any setup
+        ]
     },
 
     // Factory (Production Area)
@@ -1196,8 +1230,8 @@
     },
     {
         "address": 3018, "name": "GoS (Entry): Near Upper Right Exit",
-        "region": "GoSY - Upper Right Exit", "requires": [ { "item": "Charged Strike" } ]
-        // on logic_level: easy, Cloud Piercer S/X
+        "region": "GoSY - Upper Right Exit", "requires": [ { "item": "Charged Strike" } ],
+        "medium_requires": [ { "item": "Trick - Break CS Barrier With Bow" } ]
     },
 
     // Grotto of Scriptures (East)
@@ -1269,7 +1303,11 @@
         "address": 3201, "name": "GoS (West): Above Elevator",
         "region": "GoSW - Lower Right Exits", "requires": [
             { "item": "Cloud Leap" } // from the upper portal
-        ] // on logic_level: ledge_storage, AD AND LG lets you AD to the last wood platform and LS getup to the rope
+        ],
+        "medium_requires": [
+            { "item": "Ledge Grab" } // T-dash setup from the ledge before the 3 wood platforms, falling down to portal
+            // then T-dash from 2nd to 3rd wooden platform, and LS vault to the ropes
+        ]
     },
     {
         "address": 3202, "name": "GoS (West): Platforms In Top Middle Room",
@@ -1280,10 +1318,12 @@
     },
     {
         "address": 3203, "name": "GoS (West): Below Western Cliffs",
-        "region": "GoSW - Spike Ball Release", "requires": [ { "anyOf": [
+        "region": "GoSW - Spike Ball Release",
+        // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
+        "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ] // DOES require spike ball chase, so if you spawned at GoSW node you may need to trigger it
-        // on logic_level: easy, T-dash
+        ] } ],
+        "medium_requires": [] // T-dash
     },
     {
         "address": 3204, "name": "GoS (West): Below Luyan's Tomb",
@@ -1366,8 +1406,9 @@
     // Empyrean Dist. (Passages)
     {
         "address": 3501, "name": "ED (Passages): Above Transporter",
-        "region": "EDP - Above Right Transporter", "requires": [
-            { "item": "Grapple" }, // on logic_level: ledge_storage, any setup into bow hover and LS vault skips the zipline
+        "region": "EDP - Above Right Transporter",
+        "requires": [
+            { "item": "Grapple" },
             { "item": "Tai-Chi Kick" },
             { "anyOf": [
                 { "item": "Cloud Leap" }, // land on top of the right TCK wall, then jump to chest
@@ -1375,21 +1416,57 @@
                     { "item": "Ledge Grab" }, // for the box ledge under the zipline
                     { "item": "Wall Climb" }, // to climb the right TCK wall as intended
                     { "item": "Air Dash" } // to actually reach the chest platform without CL
-                    // on logic_level: easy, you can bring a T-dash up here to replace the AD
+                ]
+            ] }
+        ],
+        "medium_requires": [
+            { "item": "Grapple" },
+            { "item": "Tai-Chi Kick" },
+            // only the non-CL route is affected by medium logic, so no anyOf here
+            { "item": "Ledge Grab" },
+            { "item": "Wall Climb" }
+            // and the difference is you can bring a T-dash up here to replace the Air Dash
+        ],
+        "ls_requires": [
+            // skip the Grapple/zipline using
+            { "item": "Trick - Bow Hover" },
+            { "item": "Ledge Grab" }, // LS vault out of the bow hover
+            // we can't get another LS up here, so the rest is similar to vanilla
+            { "item": "Tai-Chi Kick" },
+            { "anyOf": [
+                { "item": "Cloud Leap" },
+                [
+                    // already required LG above
+                    { "item": "Wall Climb" },
+                    { "item": "Air Dash" } // no T-dash substitute since we already spent it on LS setup
                 ]
             ] }
         ]
     },
     {
         "address": 3502, "name": "ED (Passages): Hack 2 Statues",
-        "region": "EDP - Around Root Node", "requires": [
+        "region": "EDP - Around Root Node",
+        "requires": [
             // 1st statue requires jumping from slider to slider left of Root Node
-            { "item": "Cloud Leap" }, // on logic_level: easy, CS-dash AND T-dash AND AD AND LG can replace CL here
+            { "item": "Grapple" }, // take ziplines up to pink pool as usual
+            { "item": "Cloud Leap" }, // up to the highest zipline
             { "item": "Charged Strike" }, // and the statue itself has a shield
             // 2nd statue needed its own region because of multiple entrances
             { "region": "EDP - Between Root Node & Tianshou Arena" },
             { "item": "Unbounded Counter" } // and the statue itself has a hammer
+        ],
+        "medium_requires": [
+            { "item": "Grapple" },
+            // instead of Cloud Leaping to the highest zipline, you can take the 2nd highest zipline to the right and:
+            { "item": "Air Dash" }, // and CS-dash and T-dash (qi from pink pool axe guy or sniper near root node)
+            { "item": "Ledge Grab" }, // and finally grab the ledge the statue is on
+            { "item": "Charged Strike" }, // for the CS-dash above and the shielded statue
+            // 2nd statue is unchanged
+            { "region": "EDP - Between Root Node & Tianshou Arena" },
+            { "item": "Unbounded Counter" }
         ]
+        // LS parry hover also works, but it turns out you need AD OR CL to reach the ledge by the pink pool anyway
+        // (TCK would discard the LS), so LS logic ends up adding nothing new to vanilla + medium logic here
     },
     {
         "address": 3503, "name": "ED (Passages): Alcove Right of Root Node 1st Chest",
@@ -1401,7 +1478,7 @@
     },
     {
         "address": 3505, "name": "ED (Passages): Slider Right Of Root Node",
-        "region": "EDP - Slider Right Of Root Node", "requires": []
+        "region": "EDP - Above Pink Waterfall Right Of Root Node", "requires": []
     },
     {
         "address": 3506, "name": "ED (Passages): Above Pink Pool Left Of Root Node",
@@ -1409,12 +1486,18 @@
     },
     {
         "address": 3507, "name": "ED (Passages): Far Left Rooms",
-        "region": "EDP - Left Pink Pool", "requires": [
+        "region": "EDP - Left Pink Pool",
+        "requires": [
             { "item": "Tai-Chi Kick" }, // platforms above pool
             // T-dash OR AD OR CL OR CS to reach left platform, but AD is hard required anyway because:
             { "item": "Wall Climb" }, { "item": "Air Dash" } // to climb and exit pink waterfall room
-            // on logic_level: ledge_storage, CL AND LS wall slide replaces WC (using AD setup on TCK platforms)
             // the last jump is (AD OR DJ OR T-dash) so that's already covered by AD, then just fall down
+        ],
+        "ls_requires": [
+            { "item": "Tai-Chi Kick" }, // platforms above pool as before
+            { "item": "Air Dash" }, // still hard required by waterfall room, and still solves most of the other platforming
+            { "item": "Ledge Grab" }, // do an AD setup using the TCK platforms
+            { "item": "Cloud Leap" } // then CL and wall slide up the right side of waterfall room to replace WC
         ]
     },
     {
@@ -1551,8 +1634,18 @@
     },
     {
         "address": 3708, "name": "ED (Sanctum): Above Lower Left Garden",
-        "region": "EDS - Elevator", "requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ]
-        // on logic_level: ledge_storage: wall slide into AD AND T-dash AND WC (AND G for setup ledge)
+        "region": "EDS - Elevator",
+        "requires": [
+            { "item": "Cloud Leap" },
+            { "item": "Ledge Grab" }
+        ],
+        "ls_requires": [
+            { "item": "Grapple" }, // the nearest non-CL ledge is next to a grapple point,
+            // so we logically require Grapple just to make retries less painful
+            { "item": "Ledge Grab" }, // T-dash setup LS, wall slide up the big left wall
+            { "item": "Air Dash" }, // jump off the wall, then Air Dash and T-dash to finally reach the ledge
+            { "item": "Wall Climb" } // without CL, we need to use the green wall for the last part
+        ]
     },
 
     // Nobility Hall
