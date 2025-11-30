@@ -6,7 +6,6 @@ from .test_logic import EasyTricksLogic, EasyTricksLogicNoBKShuffle, GlitchesLog
 from .test_fillers_and_traps import ONLY_BIG_O_PANTS_FILLER
 from ..Locations import all_location_table
 from . import BanjoTooieTestBase
-from math import floor, ceil
 
 
 class TestRandomizedNotes(BanjoTooieTestBase):
