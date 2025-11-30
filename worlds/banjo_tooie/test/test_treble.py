@@ -45,7 +45,7 @@ class TreblesDisabled(BanjoTooieTestBase):
                 treble_amt = btitem.qty
                 break
 
-        for name, id in self.world.location_name_to_id.items():
+        for name in self.world.location_name_to_id:
             if name.find(itemName.TREBLE) != -1:
                 try:
                     location_item = self.multiworld.get_location(name, self.player).item.name
