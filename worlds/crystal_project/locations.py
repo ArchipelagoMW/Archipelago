@@ -25,6 +25,7 @@ crystal_index_offset = 100000
 boss_index_offset = 1000000
 shop_index_offset = 10000000
 regionsanity_index_offset = 100000000
+home_point_location_index_offset = 1000000000
 
 def get_location_name_to_id() -> dict[str, int]:
     location_name_to_id = {location.name: location.code for location in get_treasure_and_npc_locations(-1, None)}
@@ -628,40 +629,52 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Spilled booty Silvererererer", 2901 + npc_index_offset, lambda state: logic.has_swimming(state)), #Ore
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Spilled booty Silverererererer", 2902 + npc_index_offset, lambda state: logic.has_swimming(state)), #Ore
 
+        #Sara Sara Beach
+        #Treasure chests
         #Sara Sara Beach East
-        # Treasure chests
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " Chest - Glittering in the sun at Ibek Cave exit 1", 1083 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tincture Pouch chest
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " Chest - Glittering in the sun at Ibek Cave exit 2", 1085 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Tonic Pouch chest
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " Chest - How dare you stand where he stood?", 1084 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Money chest
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - How dare you stand where he stood?", 1084 + treasure_index_offset),  # Money chest
+        #Below Ibek's Cave Mouth West
+        LocationData(BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Just a hop over from the Bazaar", 1085 + treasure_index_offset),  # Tonic Pouch chest; #3 "glittering in the sun" check from west to east
+        #Below Ibek's Cave Mouth East
+        LocationData(BELOW_IBEK_CAVE_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Glittering in the sun east of Ibek's Cave", 1083 + treasure_index_offset),  # Tincture Pouch chest; #8 "glittering in the sun" check from west to east
 
         # NPCs
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 1", 2683 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 2", 2684 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 3", 2686 + npc_index_offset),  # Dust
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 4", 2688 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Silver
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 5", 2689 + npc_index_offset),  # Ore
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver glittering in the sun at Ibek Cave exit 6", 2690 + npc_index_offset),  # Ore
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Jaunt along cliff past Dr Cool Aids perch to Silver", 2685 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ingot
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver on the beach rocks at eastern edge", 2687 + npc_index_offset),  # Ingot
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " NPC - Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Ore
+        #Sara Sara Beach East
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - East beach's westernmost easy ledge silver", 2689 + npc_index_offset),  # Ore; #1 "glittering in the sun" check from west to east
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver within easy east beach reach", 2686 + npc_index_offset),  # Dust; #5 "glittering in the sun" check from west to east
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Second silver within easy east beach reach", 2690 + npc_index_offset),  # Ore; #7 "glittering in the sun" check from west to east
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Jaunt along cliff past Dr Cool Aids' perch to Silver", 2685 + npc_index_offset),  # Ingot
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver on the eastern rocks", 2687 + npc_index_offset),  # Ingot
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver beheld by Dr Cool Aids", 2691 + npc_index_offset, lambda state: logic.has_horizontal_movement(state) or logic.has_vertical_movement(state)),  # Ore
+        #Below Ibek's Cave Mouth West
+        LocationData(BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Just a hop over from the Bazaar for silver", 2683 + npc_index_offset),  # Dust; #2 "glittering in the sun" check from west to east
+        LocationData(BELOW_IBEK_CAVE_WEST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Just two hops from the Bazaar for silver", 2688 + npc_index_offset),  # Silver; #4 "glittering in the sun" check from west to east
+        #Directly Below Ibek's Cave Mouth
+        LocationData(BELOW_IBEK_CAVE_MOUTH_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver glittering in the sun below Ibek's Cave mouth", 2684 + npc_index_offset),  # Dust; #6 "glittering in the sun" check from west to east
 
         #Sara Sara Beach West
         #Treasure chests
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - South of Beach Birds Nest", 154 + treasure_index_offset), #Ether chest
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Across the palms above the dust", 1509 + treasure_index_offset), #Potion chest
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Beach cave", 2718 + treasure_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Blank Pages chest
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Chest - Tightrope walk below Beach Birds Nest", 1546 + treasure_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_horizontal_movement(state)), #Potion chest; possible with rental if masochists play our game/Good At Jumping option
+        #Desert Quintar Beach Episode
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Silver-crossed palm chest", 1509 + treasure_index_offset), #Potion chest
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Let your rental quintar frolic on the beach", 154 + treasure_index_offset), #Ether chest
+        #Sara Sara Beach West Over-Sea Alcove
+        LocationData(BEACH_WEST_OVER_SEA_ALCOVE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Rental quintar beach trek or brave the angry birds and drop down", 1546 + treasure_index_offset), #Potion chest
+        # Ruins Crumbling On the Shore
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Chest - Beach cave", 2718 + treasure_index_offset),  # Blank Pages chest
 
         #NPCs
-        #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Cross my palms with Silver", 2693 + npc_index_offset), #Dust
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver past angry birds", 2697 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_glide(state)), #Dust
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver south of Beach Birds Nest", 2694 + npc_index_offset), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Lonely Islet Silver", 2878 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ingot
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver chilling in beach cave", 2698 + npc_index_offset, lambda state: (logic.has_vertical_movement(state) and logic.has_horizontal_movement(state)) or logic.has_swimming(state)), #Ore
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " NPC - Silver further along beach", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)), #Ore
+        #Todo NPCs Job Masters: Master Dervish ID 3575 (-255, 103, -237); gives you Dervish Seal in exchange for job mastery (requires ibek from Ruins Crumbling on the Shore or glide down from Tower of Zot)
+        #Desert Quintar Beach Episode
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Southern silver along the cliffside", 2692 + npc_index_offset), #Ore
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Cross my palm with silver", 2693 + npc_index_offset), #Dust
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver too far up for rental quintar pup", 2877 + npc_index_offset, lambda state: logic.has_vertical_movement(state) or logic.has_glide(state)),  # Ore
+        LocationData(RENTAL_QUINTAR_BEACH_EP_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver south of Beach Bird's Nest", 2694 + npc_index_offset),  # Ingot
+        #Valley of the Angry Beach Birds
+        LocationData(VALLEY_ANGRY_BEACH_BIRDS_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver past angry birds", 2697 + npc_index_offset), #Dust
+        #Ruins Crumbling On the Shore
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver at the foot of the Tower of Zot", 2699 + npc_index_offset), #Ingot
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Lonely islet silver", 2878 + npc_index_offset), #Ingot
+        LocationData(RUINS_CRUMBLING_ON_SHORE_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " NPC - Silver chilling in beach cave", 2698 + npc_index_offset), #Ore
 
         #Ancient Reservoir
         #Treasure chests
@@ -684,11 +697,13 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #Ibek Cave
         #Treasure chests
-        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Chest - Celebrate your new hops", 2517 + treasure_index_offset, lambda state: logic.has_vertical_movement(state)),  # Fenix Juice Pouch chest
+        #Tall Rock in the Possessor's Den
+        LocationData(TALL_POSSESSOR_ROCK_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Chest - Celebrate your new hops", 2517 + treasure_index_offset),  # Fenix Juice Pouch chest
 
         #NPCs
         LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Goat victory Ibek Bell", 1676 + npc_index_offset),  # Z30_PostBossEvent;
-        LocationData(IBEK_CAVE_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in the goat digs", 2696 + npc_index_offset, lambda state: logic.has_vertical_movement(state)),  # Dust
+        #Trek Spiraling Up Out of Ibek's Cave
+        LocationData(IBEK_CAVE_SPIRALING_TREK_OUT_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " NPC - Silver in the goat digs", 2696 + npc_index_offset),  # Dust
 
         #Salmon Bay
         #Treasure chests
@@ -1124,8 +1139,8 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #NPCs
         #Peak Ramparts
-        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Western Gold above spikes", 2843 + npc_index_offset, lambda state: logic.has_glide(state)), #(354, 231, -429) Ingot
-        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Eastern Gold above spikes", 2842 + npc_index_offset, lambda state: logic.has_glide(state)), #(458, 231, -436) Ore
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Western Gold above spikes", 2843 + npc_index_offset), #(354, 231, -429) Ingot
+        LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " NPC - Eastern Gold above spikes", 2842 + npc_index_offset), #(458, 231, -436) Ore
 
         #The Chalice of Tar
         #Treasure chests
@@ -1215,6 +1230,10 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #The Deep Sea
         #Treasure chests
+        #Sara Sara Sandbar
+        LocationData(SARA_SARA_SAND_BAR_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - West Sara Sara Sand Bar sunken ship treasure", 3664 + treasure_index_offset),  # (-364, 53, -183) Deep Sea Scrap chest; from The Deep Sea (Sand Bar)
+        LocationData(SARA_SARA_SAND_BAR_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - South Sara Sara Sand Bar surrounded by seaweed", 3665 + treasure_index_offset),  # (-226, 49, 164) Deep Sea Scrap chest; from The Deep Sea (Sand Bar)
+        #The Deep Sea
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Descend into undersea vent where the flesh eaters live 1", 3451 + treasure_index_offset), #(878, 39, -536) Deep Sea Scrap chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Touching Jidamba", 3658 + treasure_index_offset), #Deep Sea Scrap chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Ruins just south of Jidamba 1", 3659 + treasure_index_offset), #Deep Sea Scrap chest
@@ -1224,11 +1243,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Crumbling shrine 1", 3663 + treasure_index_offset), #(842, 53, -359) Deep Sea Scrap chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Beside an undersea microruin NW of Tall Tall Heights", 3666 + treasure_index_offset), #(-23, 39, -557) Deep Sea Scrap chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Underwater cove south of volcano", 3667 + treasure_index_offset), #(94, 59, 133) Deep Sea Scrap chest
-        #next 2 scraps from The Deep Sea (Sand Bar)
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Sunken shipwreck off west coast of Sara Sara Beach", 3664 + treasure_index_offset), #(-364, 53, -183) Deep Sea Scrap chest
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Undersea valley S of Sara Sara Beach", 3665 + treasure_index_offset), #(-226, 49, 164) Deep Sea Scrap chest
-        #next scrap from The Deep Sea (Shrooms)
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Cavern below N coast of Tall Tall Heights", 3668 + treasure_index_offset), #(254, 53, -547) Deep Sea Scrap chest
+        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Cavern below N coast of Tall Tall Heights", 3668 + treasure_index_offset), #(254, 53, -547) Deep Sea Scrap chest; from The Deep Sea (Shrooms)
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Descend into undersea vent where the flesh eaters live 2", 2767 + treasure_index_offset), #(872, 39, -517) Forgotten Key chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Crumbling shrine 2", 2290 + treasure_index_offset), #(838, 52, -357) Oven Mitt chest
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Ruins just south of Jidamba 2", 2937 + treasure_index_offset), #Paladin Wand chest
@@ -1239,6 +1254,11 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " Chest - Quizard challenge below N coast of Tall Tall Heights", 595 + treasure_index_offset), #(270, 29, -591) Treasure Finder chest
 
         #NPCs
+        #Sara Sara Sandbar
+        LocationData(SARA_SARA_SAND_BAR_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Gold in the hold of West Sara Sara Sand Bar sunken ship", 2855 + npc_index_offset),  # (-367, 53, -182) Dust
+        LocationData(SARA_SARA_SAND_BAR_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Larboard Gold of West Sara Sara Sand Bar sunken ship", 2856 + npc_index_offset),  # (-370, 53, -173) Ore
+        LocationData(SARA_SARA_SAND_BAR_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Aft Gold of West Sara Sara Sand Bar sunken ship", 2857 + npc_index_offset),  # (-356, 55, -167) Ingot
+        #The Deep Sea
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Locked *wink* sunken house 2 off Jidamba Diamond", 2519 + npc_index_offset), #(639, 54, 182) Dust
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Locked *wink* sunken house 2 off Jidamba Gold", 2518 + npc_index_offset), #(648, 54, 180)  Dust
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Burrow to burrow crab", 3409 + npc_index_offset), #(20, 53, 251) Crab 1
@@ -1258,9 +1278,6 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Crab scuttling SE of volcano", 3439 + npc_index_offset), #(207, 53, 152) Crab 15
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Undersea Crab People Crab Retirement Home south of Salmon Race start", 3424 + npc_index_offset, lambda state: state.has(UNDERSEA_CRAB, player, 15)), #(256, 63, 113)
         LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Fastest squid in the West", 3450 + npc_index_offset), #(-314, 64, -624) (swims in a fixed path; slightly slower than golden Quintar but faster than royal salmon) Z35_SpeedOcto
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 1", 2855 + npc_index_offset), #(-367, 53, -182) Dust
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 2", 2857 + npc_index_offset), #(-356, 55, -167) Ingot
-        LocationData(THE_DEEP_SEA_AP_REGION, THE_DEEP_SEA_DISPLAY_NAME + " NPC - Sunken shipwreck Gold off west coast of Sara Sara Beach 3", 2856 + npc_index_offset), #(-370, 53, -173) Ore
 
         #Jade Cavern
         #Treasure chests
@@ -1297,22 +1314,24 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(ANCIENT_LABYRINTH_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " NPC - B1 Thats right, Diamond goes in the bluish-white square hole", 2882 + npc_index_offset), #(-200, 98, -334) F3 Ingot
 
         #The Sequoia
+        #Baseline access rules either assume you entered from The Deep Sea with Golden Quintar or that you entered via the Top of the Sequoia home point and have no mounts
+        #The checks on the western branches need swimming or gliding from the home point; the boss and post-boss checks need gliding from the home point
         #Treasure chests
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky hollow", 2934 + treasure_index_offset), #(-286, 90, -539) Stealth Cape chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Balanced on bark", 2437 + treasure_index_offset), #(-250, 174, -512) Battle Band chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors then follow water channel outside", 2935 + treasure_index_offset), #(-296, 182, -533) Sange chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky hollow", 2934 + treasure_index_offset, lambda state: logic.has_swimming(state)), #(-286, 90, -539) Stealth Cape chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Waterfall climb sneaky eastern exit", 2884 + treasure_index_offset), #(-223, 118, -541) Zether Pouch chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Go out on a limb", 2887 + treasure_index_offset), #(-244, 168, -498) Z-Potion Pouch chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Balanced on bark", 2437 + treasure_index_offset), #(-250, 174, -512) Battle Band chest
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors by water channel", 2933 + treasure_index_offset), #(-282, 182, -528) Aphotic Edge chest
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Post-boss victory pedestal", 2451 + treasure_index_offset), #(-272, 241, -544) The Hand of Midas chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Back indoors then follow water channel outside", 2935 + treasure_index_offset, lambda state: logic.has_swimming(state) or logic.has_glide(state)), #(-296, 182, -533) Sange chest
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Chest - Post-boss victory pedestal", 2451 + treasure_index_offset, lambda state: logic.has_glide(state)), #(-272, 241, -544) The Hand of Midas chest
         
         #NPCs
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Low-hanging Diamond fruit", 2885 + npc_index_offset), #(-223, 160, -530) Dust
         LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Waterfall climb sneaky eastern exit Diamond", 2883 + npc_index_offset), #(-237, 117, -563) Ore
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Diamond glittering on a bough", 2886 + npc_index_offset), #(-311, 160, -540) Ore
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 1", 2889 + npc_index_offset), #(-269, 240, -545) Dust
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 2", 2890 + npc_index_offset), #(-268, 240, -547) Ingot
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 3", 2888 + npc_index_offset), #(-275, 240, -546) Ore
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Diamond glittering on a bough", 2886 + npc_index_offset, lambda state: logic.has_glide(state) or logic.has_swimming(state)), #(-311, 160, -540) Ore
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Not so low-hanging Diamond fruit", 2885 + npc_index_offset), #(-223, 160, -530) Dust
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 1", 2889 + npc_index_offset, lambda state: logic.has_glide(state)), #(-269, 240, -545) Dust
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 2", 2890 + npc_index_offset, lambda state: logic.has_glide(state)), #(-268, 240, -547) Ingot
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " NPC - Post-boss victory Diamond 3", 2888 + npc_index_offset, lambda state: logic.has_glide(state)), #(-275, 240, -546) Ore
 
         #The Depths
         #Treasure chests
@@ -1447,7 +1466,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(PEAK_RAMPARTS_AP_REGION, CASTLE_RAMPARTS_DISPLAY_NAME + " Boss - Rampart Demon", 1373 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, RAMPART_DEMON_FIGHT_LEVEL)), #Monster ID: 222
         LocationData(CONTINENTAL_TRAM_AP_REGION, CONTINENTAL_TRAM_DISPLAY_NAME + " Boss - Conscript", 1621 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, CONSCRIPT_FIGHT_LEVEL)), #Monster ID: 242
         LocationData(LABYRINTH_CORE_AP_REGION, ANCIENT_LABYRINTH_DISPLAY_NAME + " Boss - Anubis", 2473 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ANUBIS_FIGHT_LEVEL)), #Monster ID: 117
-        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, SPIRIT_CAGE_FIGHT_LEVEL)), #Monster ID: 192
+        LocationData(THE_SEQUOIA_AP_REGION, THE_SEQUOIA_DISPLAY_NAME + " Boss - Spirit Cage", 2453 + boss_index_offset, lambda state: logic.has_glide(state) and logic.is_area_in_level_range(state, SPIRIT_CAGE_FIGHT_LEVEL)), #Monster ID: 192
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Devourer", 1265 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, DEVOURER_FIGHT_LEVEL)), #Monster ID: 171
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Old One", 206 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, OLD_ONE_FIGHT_LEVEL)), #Monster ID: 170
         LocationData(THE_DEPTHS_AP_REGION, THE_DEPTHS_DISPLAY_NAME + " Boss - The Enforcer", 1128 + boss_index_offset, lambda state: logic.is_area_in_level_range(state, ENFORCER_FIGHT_LEVEL)), #Monster ID: 172
@@ -1739,7 +1758,7 @@ def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> Li
         LocationData(POSEIDON_SHRINE_PROPER_AP_REGION, POSEIDON_SHRINE_PROPER_AP_REGION + " Shop - Attendant 3", 30631 + shop_index_offset),
 
         #Sara Sara Bazaar
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Old Nans Stew Subsidiary", 10957 + shop_index_offset),
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Old Nan's Stew Subsidiary", 10957 + shop_index_offset),
 
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Accessory Merchant 1", 11386 + shop_index_offset),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Shop - Accessory Merchant 2", 21386 + shop_index_offset),
@@ -1932,8 +1951,7 @@ def get_region_completion_locations(player: int, options: CrystalProjectOptions)
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " Region Completion", 6023 + regionsanity_index_offset, regionsanity=True),
         LocationData(POKO_POKO_DESERT_AP_REGION, POKO_POKO_DESERT_DISPLAY_NAME + " Region Completion", 6024 + regionsanity_index_offset, regionsanity=True),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " Region Completion", 6025 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_EAST_DISPLAY_NAME + " Region Completion", 6026 + regionsanity_index_offset, regionsanity=True),
-        LocationData(SARA_SARA_BEACH_WEST_AP_REGION, SARA_SARA_BEACH_WEST_DISPLAY_NAME + " Region Completion", 6027 + regionsanity_index_offset, regionsanity=True),
+        LocationData(SARA_SARA_BEACH_EAST_AP_REGION, SARA_SARA_BEACH_DISPLAY_NAME + " Region Completion", 6026 + regionsanity_index_offset, regionsanity=True),
         LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + " Region Completion", 6028 + regionsanity_index_offset, regionsanity=True),
         LocationData(SALMON_BAY_AP_REGION, SALMON_BAY_DISPLAY_NAME + " Region Completion", 6030 + regionsanity_index_offset, regionsanity=True),
         LocationData(THE_OPEN_SEA_AP_REGION, THE_OPEN_SEA_DISPLAY_NAME + " Region Completion", 6031 + regionsanity_index_offset, regionsanity=True),

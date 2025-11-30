@@ -174,6 +174,19 @@ class Regionsanity(Choice):
     option_extreme = 2
     default = 0
 
+class HomePointHustle(Choice):
+    """
+    When enabled, every Home Point will give you a check the first time you interact with it, and Home Point teleport items will be added to the pool.
+    
+    Mixed: You can teleport to any Home Point that you have interacted with or have the teleport item for.
+    Hustle Only: You can ONLY teleport to a Home Point after getting its matching teleport item.
+    """
+    display_name = "Home Point Hustle"
+    option_disabled = 0
+    option_mixed = 1
+    option_hustle_only = 2
+    default = 0
+
 #"""Progression Options"""
 class ProgressiveMountMode(DefaultOnToggle):
     """
@@ -437,6 +450,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
+    home_point_hustle: HomePointHustle
     included_regions: IncludedRegions
     progressive_mount_mode: ProgressiveMountMode
     level_gating: LevelGating
@@ -462,7 +476,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity, HomePointHustle],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
