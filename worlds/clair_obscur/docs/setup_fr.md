@@ -19,7 +19,6 @@
 2. Créez un fichier yaml pour configurer le randomizer and mettez le dans le dossier `players` d'Archipelago. Vous pouvez générer un modèle du fichier yaml via l'exécutable d'Archipelago.
 3. Générez la partie.
 4. Hébergez la partie. Soit localement ou avec le site d'Archipelago.
-5. Download the right file in the release tab of the mod client. (Steam or gamepass version).
 5. Téléchargez la bonne version du mod (Steam ou Gamepass) 
 6. Extrayez le à la racine du jeu (directement dans `Expedition 33`). Pour être sûr qu'il est bien extrait au bon endroit, vous devez retrouver 3 fichiers appelés ClairObscurRandomizer.qqch dans `\Sandfall\Content\Paks\LogicMods` et le dossier ue4ss dans `\Sandfall\Binaries\[WinGDK or Win64]`
 7. Profitez !
