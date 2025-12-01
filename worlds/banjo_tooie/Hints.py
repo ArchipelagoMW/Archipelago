@@ -35,6 +35,7 @@ class Hint:
         self.world = world
         self.location = location
 
+    @staticmethod
     def fill_item_requirement_cache(world: "BanjoTooieWorld", hints: List["Hint"]) -> None:
         # Phase 1: We determine in what sphere each hinted location is.
         remaining_hinted_progression_locations = set([
