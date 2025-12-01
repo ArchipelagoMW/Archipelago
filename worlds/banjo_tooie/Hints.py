@@ -106,6 +106,7 @@ class Hint:
 
                 Hint.item_requirement_cache[hinted_location] = item_required
 
+    @staticmethod
     def is_last_cryptic_hint_world(world: "BanjoTooieWorld"):
         tooie_worlds: List[BanjoTooieWorld] = [
             tooie_world
