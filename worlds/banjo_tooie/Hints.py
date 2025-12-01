@@ -543,7 +543,7 @@ def get_move_locations(world: "BanjoTooieWorld") -> List[Location]:
 
 
 def get_location_by_name(world: "BanjoTooieWorld", name: str) -> Location | None:
-    potential_match = list(filter(lambda location: location.name == name, get_player_hintable_locations(world)))
+    potential_match = [location for location in get_player_hintable_locations(world) if location.name == name]
     if potential_match:
         return potential_match[0]
     return None
