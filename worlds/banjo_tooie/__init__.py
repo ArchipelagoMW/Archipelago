@@ -34,7 +34,6 @@ components.append(Component("Banjo-Tooie Client", func=run_client, component_typ
 
 
 class BanjoTooieSettings(settings.Group):
-
     class RomPath(settings.OptionalUserFilePath):
         """File path of the Banjo-Tooie (USA) ROM."""
 
