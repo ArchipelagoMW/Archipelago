@@ -1011,7 +1011,7 @@ class BanjoTooieWorld(World):
 
         # Elements that are randomised outside the yaml and affects gameplay
         custom_bt_data: Dict[str, Any] = {
-            "player_name": self.multiworld.player_name[self.player],
+            "player_name": self.player_name,
             "seed": self.random.randint(12212, 9090763),
             "world_order": self.world_order,
             "world_requirements": self.world_requirements,
