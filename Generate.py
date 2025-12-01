@@ -119,9 +119,9 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-
-    player_id = 1
-    player_files = {}
+    player_id: int = 1
+    player_files: dict[int, str] = {}
+    player_errors: list[str] = []
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
@@ -137,7 +137,11 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                 weights_cache[fname] = tuple(weights_for_file)
                         
             except Exception as e:
-                raise ValueError(f"File {fname} is invalid. Please fix your yaml.") from e
+                logging.exception(f"Exception reading weights in file {fname}")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                )
 
     # sort dict for consistent results across platforms:
     weights_cache = {key: value for key, value in sorted(weights_cache.items(), key=lambda k: k[0].casefold())}
@@ -152,6 +156,10 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     args.multi = max(player_id - 1, args.multi)
 
     if args.multi == 0:
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise ValueError(
             "No individual player files found and number of players is 0. "
             "Provide individual player files or specify the number of players via host.yaml or --multi."
@@ -161,6 +169,10 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                  f"{seed_name} Seed {seed} with plando: {args.plando}")
 
     if not weights_cache:
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
         raise Exception(f"No weights found. "
                         f"Provide a general weights file ({args.weights_file_path}) or individual player files. "
                         f"A mix is also permitted.")
@@ -170,10 +182,6 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     args.sprite = dict.fromkeys(range(1, args.multi+1), None)
     args.sprite_pool = dict.fromkeys(range(1, args.multi+1), None)
     args.name = {}
-
-    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = \
-        {fname: (tuple(roll_settings(yaml, args.plando) for yaml in yamls) if args.sameoptions else None)
-         for fname, yamls in weights_cache.items()}
 
     if meta_weights:
         for category_name, category_dict in meta_weights.items():
@@ -197,7 +205,24 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                             else:
                                 yaml[category_name][key] = option
 
-    player_path_cache = {}
+    settings_cache: dict[str, tuple[argparse.Namespace, ...]] = {fname: None for fname in weights_cache}
+    if args.sameoptions:
+        for fname, yamls in weights_cache.items():
+            try:
+                settings_cache[fname] = tuple(roll_settings(yaml, args.plando) for yaml in yamls)
+            except Exception as e:
+                logging.exception(f"Exception reading settings in file {fname}")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {fname} is invalid. Please fix your yaml.\n{Utils.get_all_causes(e)}"
+                )
+        # Exit early here to avoid throwing the same errors again later
+        if player_errors:
+            errors = "\n\n".join(player_errors)
+            raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                             f"See logs for full tracebacks.\n\n{errors}")
+
+    player_path_cache: dict[int, str] = {}
     for player in range(1, args.multi + 1):
         player_path_cache[player] = player_files.get(player, args.weights_file_path)
     name_counter = Counter()
@@ -206,38 +231,62 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     player = 1
     while player <= args.multi:
         path = player_path_cache[player]
-        if path:
+        if not path:
+            player_errors.append(f'No weights specified for player {player}')
+            player += 1
+            continue
+
+        for doc_index, yaml in enumerate(weights_cache[path]):
+            name = yaml.get("name")
             try:
-                settings: tuple[argparse.Namespace, ...] = settings_cache[path] if settings_cache[path] else \
-                    tuple(roll_settings(yaml, args.plando) for yaml in weights_cache[path])
-                for settingsObject in settings:
-                    for k, v in vars(settingsObject).items():
-                        if v is not None:
-                            try:
-                                getattr(args, k)[player] = v
-                            except AttributeError:
-                                setattr(args, k, {player: v})
-                            except Exception as e:
-                                raise Exception(f"Error setting {k} to {v} for player {player}") from e
+                # Use the cached settings object if it exists, otherwise roll settings within the try-catch
+                # Invariant: settings_cache[path] and weights_cache[path] have the same length
+                settingsObject: argparse.Namespace = (
+                    settings_cache[path][doc_index]
+                    if settings_cache[path]
+                    else roll_settings(yaml, args.plando)
+                )
+                
+                for k, v in vars(settingsObject).items():
+                    if v is not None:
+                        try:
+                            getattr(args, k)[player] = v
+                        except AttributeError:
+                            setattr(args, k, {player: v})
+                        except Exception as e:
+                            raise Exception(f"Error setting {k} to {v} for player {player}") from e
 
-                    # name was not specified
-                    if player not in args.name:
-                        if path == args.weights_file_path:
-                            # weights file, so we need to make the name unique
-                            args.name[player] = f"Player{player}"
-                        else:
-                            # use the filename
-                            args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
-                    args.name[player] = handle_name(args.name[player], player, name_counter)
+                # name was not specified
+                if player not in args.name:
+                    if path == args.weights_file_path:
+                        # weights file, so we need to make the name unique
+                        args.name[player] = f"Player{player}"
+                    else:
+                        # use the filename
+                        args.name[player] = os.path.splitext(os.path.split(path)[-1])[0]
+                args.name[player] = handle_name(args.name[player], player, name_counter)
 
-                    player += 1
             except Exception as e:
-                raise ValueError(f"File {path} is invalid. Please fix your yaml.") from e
-        else:
-            raise RuntimeError(f'No weights specified for player {player}')
+                logging.exception(f"Exception reading settings in file {path} document #{doc_index + 1} "
+                                  f"(name: {args.name.get(player, name)})")
+                player_errors.append(
+                    f"{len(player_errors) + 1}. "
+                    f"File {path} document #{doc_index + 1} (name: {args.name.get(player, name)}) is invalid. "
+                    f"Please fix your yaml.\n{Utils.get_all_causes(e)}")
+
+            # increment for each yaml document in the file
+            player += 1
 
     if len(set(name.lower() for name in args.name.values())) != len(args.name):
-        raise Exception(f"Names have to be unique. Names: {Counter(name.lower() for name in args.name.values())}")
+        player_errors.append(
+            f"{len(player_errors) + 1}. "
+            f"Names have to be unique. Names: {Counter(name.lower() for name in args.name.values())}"
+        )
+
+    if player_errors:
+        errors = "\n\n".join(player_errors)
+        raise ValueError(f"Encountered {len(player_errors)} error(s) in player files. "
+                         f"See logs for full tracebacks.\n\n{errors}")
 
     return args, seed
 
