@@ -124,16 +124,14 @@ def autohost(config: dict):
                     hoster = MultiworldInstance(config, x)
                     hosters.append(hoster)
                     hoster.start()
-
+                activity_timedelta = timedelta(seconds=config["ROOM_IDLE_TIMEOUT"] + 5)
                 while not stop_event.wait(0.1):
                     with db_session:
                         rooms = select(
                             room for room in Room if
-                            room.last_activity >= datetime.utcnow() - timedelta(days=3))
+                            room.last_activity >= datetime.utcnow() - activity_timedelta)
                         for room in rooms:
-                            # we have to filter twice, as the per-room timeout can't currently be PonyORM transpiled.
-                            if room.last_activity >= datetime.utcnow() - timedelta(seconds=room.timeout + 5):
-                                hosters[room.id.int % len(hosters)].start_room(room.id)
+                            hosters[room.id.int % len(hosters)].start_room(room.id)
 
         except AlreadyRunningException:
             logging.info("Autohost reports as already running, not starting another.")
@@ -187,6 +185,7 @@ class MultiworldInstance():
         self.cert = config["SELFLAUNCHCERT"]
         self.key = config["SELFLAUNCHKEY"]
         self.host = config["HOST_ADDRESS"]
+        self.room_idle_timer = config["ROOM_IDLE_TIMEOUT"]
         self.rooms_to_start = multiprocessing.Queue()
         self.rooms_shutting_down = multiprocessing.Queue()
         self.name = f"MultiHoster{id}"
@@ -198,7 +197,7 @@ class MultiworldInstance():
         process = multiprocessing.Process(group=None, target=run_server_process,
                                           args=(self.name, self.ponyconfig, get_static_server_data(),
                                                 self.cert, self.key, self.host,
-                                                self.rooms_to_start, self.rooms_shutting_down),
+                                                self.rooms_to_start, self.rooms_shutting_down, self.room_idle_timer),
                                           name=self.name)
         process.start()
         self.process = process

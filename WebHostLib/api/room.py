@@ -38,6 +38,5 @@ def room_info(room_id: UUID) -> Dict[str, Any]:
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
-        "timeout": room.timeout,
         "downloads": downloads,
     }
