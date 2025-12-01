@@ -20,7 +20,7 @@ class TestClefs(BanjoTooieTestBase):
         item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
 
         # max jamjars cost is 765. There are 9 trebleclefs by default.
-        progression_notes_default = int((765 - 9*20) / 5)
+        progression_notes_default = (765 - 9*20) // 5
 
         assert item_pool_names.count(itemName.NOTE)\
             == max(progression_notes_default

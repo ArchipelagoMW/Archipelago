@@ -36,7 +36,6 @@ components.append(Component("Banjo-Tooie Client", func=run_client, component_typ
 
 
 class BanjoTooieSettings(settings.Group):
-
     class RomPath(settings.OptionalUserFilePath):
         """File path of the Banjo-Tooie (USA) ROM."""
 
@@ -93,7 +92,7 @@ class BanjoTooieWorld(World):
     game = "Banjo-Tooie"
     version = "V4.11.3"
     options: BanjoTooieOptions
-    settings: BanjoTooieSettings
+    settings: typing.ClassVar[BanjoTooieSettings]
     settings_key = "banjo_tooie_options"
     web = BanjoTooieWeb()
     topology_present = True
@@ -246,7 +245,7 @@ class BanjoTooieWorld(World):
 
         banjoItem = all_item_table.get(name)
         if not banjoItem:
-            raise Exception(f"{name} is not a valid item name for Banjo-Tooie")
+            raise ValueError(f"{name} is not a valid item name for Banjo-Tooie")
 
         if item_classification is None:
             item_classification = self.get_classification(banjoItem)
@@ -595,8 +594,8 @@ class BanjoTooieWorld(World):
                 and self.options.randomize_bk_moves != RandomizeBKMoveList.option_none\
                 and self.options.logic_type == LogicType.option_intended:
             raise OptionError("Randomize Worlds and Randomize BK Moves is not compatible with Intended Logic.")
-        if (not self.options.randomize_notes
-                and not self.options.randomize_signposts and not self.options.nestsanity)\
+        if not self.options.randomize_notes \
+                and not self.options.randomize_signposts and not self.options.nestsanity \
                 and self.options.randomize_bk_moves != RandomizeBKMoveList.option_none:
             if self.multiworld.players == 1:
                 raise OptionError("Randomize Notes, signposts or nestsanity is required for Randomize BK Moves.")
@@ -635,8 +634,8 @@ class BanjoTooieWorld(World):
                     and self.options.randomize_bt_moves
                     and (self.options.randomize_signposts or self.options.nestsanity)
                 ):
-            raise OptionError("You cannot have progressive Shoes without randomizing moves,\
-                randomizing BK moves and enabling either nestanity or randomize signpost")
+            raise OptionError("You cannot have progressive Shoes without randomizing moves, "
+                              "randomizing BK moves and enabling either nestanity or randomize signpost")
         if self.options.progressive_water_training != ProgressiveWaterTraining.option_none \
                 and (
                     self.options.randomize_bk_moves == RandomizeBKMoveList.option_none
@@ -973,7 +972,7 @@ class BanjoTooieWorld(World):
             regionName.CCBOSS: regionName.CC,
         }
         bt_players = world.get_game_players(cls.game)
-        spoiler_handle.write('\n\nBanjo-Tooie ({})'.format(BanjoTooieWorld.version))
+        spoiler_handle.write(f"\n\nBanjo-Tooie (V{cls.world_version.as_simple_string()})")
         for player in bt_players:
             currentWorld: BanjoTooieWorld = world.worlds[player]
             name = world.get_player_name(player)
@@ -1018,7 +1017,7 @@ class BanjoTooieWorld(World):
 
         # Elements that are randomised outside the yaml and affects gameplay
         custom_bt_data: Dict[str, Any] = {
-            "player_name": self.multiworld.player_name[self.player],
+            "player_name": self.player_name,
             "seed": self.random.randint(12212, 9090763),
             "world_order": self.world_order,
             "world_requirements": self.world_requirements,

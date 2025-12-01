@@ -1,7 +1,6 @@
 import enum
 import re
-from time import time
-from typing import Dict, List, Set, Union, TYPE_CHECKING
+from typing import List, Set, Union, TYPE_CHECKING
 from dataclasses import dataclass
 from BaseClasses import ItemClassification, Location, LocationProgressType, CollectionState
 from .Options import HintClarity, AddSignpostHintsToArchipelagoHints
@@ -29,13 +28,14 @@ class Hint:
         REQUIRED_BY_MULTIWORLD = 1,
         NOT_REQUIRED = 2
 
-    item_requirement_cache: dict[Location, "Hint.ItemRequirement"] = dict()
+    item_requirement_cache: dict[Location, ItemRequirement] = {}
     state_per_sphere: List[CollectionState] = []
 
     def __init__(self, world: "BanjoTooieWorld", location: Location):
         self.world = world
         self.location = location
 
+    @staticmethod
     def fill_item_requirement_cache(world: "BanjoTooieWorld", hints: List["Hint"]) -> None:
         # Phase 1: We determine in what sphere each hinted location is.
         remaining_hinted_progression_locations = set([
@@ -106,6 +106,7 @@ class Hint:
 
                 Hint.item_requirement_cache[hinted_location] = item_required
 
+    @staticmethod
     def is_last_cryptic_hint_world(world: "BanjoTooieWorld"):
         tooie_worlds: List[BanjoTooieWorld] = [
             tooie_world
@@ -542,7 +543,7 @@ def get_move_locations(world: "BanjoTooieWorld") -> List[Location]:
 
 
 def get_location_by_name(world: "BanjoTooieWorld", name: str) -> Location | None:
-    potential_match = list(filter(lambda location: location.name == name, get_player_hintable_locations(world)))
+    potential_match = [location for location in get_player_hintable_locations(world) if location.name == name]
     if potential_match:
         return potential_match[0]
     return None
@@ -553,7 +554,7 @@ def get_all_hintable_locations(world: "BanjoTooieWorld") -> List[Location]:
 
 
 def get_player_hintable_locations(world: "BanjoTooieWorld") -> List[Location]:
-    return [location for location in world.multiworld.get_locations(world.player) if should_consider_location(location)]
+    return [location for location in world.get_locations() if should_consider_location(location)]
 
 
 def should_consider_location(location: Location) -> bool:
@@ -568,11 +569,8 @@ def should_consider_location(location: Location) -> bool:
         *MumboTokenGames_table.keys(),
         *MumboTokenJinjo_table.keys(),
     ]
-    if location.name in location_hint_blacklist:
-        return False
-    return True
+    return location.name not in location_hint_blacklist:
 
 
 def get_signpost_location_ids() -> List[int]:
-    location_datas = list(filter(lambda location_data: location_data.group == "Signpost", all_location_table.values()))
-    return [location_data.btid for location_data in location_datas]
+    return [location_data.btid for location_data in all_location_table.values() if location_data.group == "Signpost"]
