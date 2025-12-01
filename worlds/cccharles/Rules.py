@@ -86,7 +86,7 @@ def set_rules(world: MultiWorld, options: CCCharlesOptions, player: int) -> None
     set_rule(world.get_location("East House Chest Scraps - 5", player),
         lambda state: state.has("Lockpicks", player))
 
-    # Rocket Testing Bunker
+    # Rocket Bunker
     set_rule(world.get_entrance("Stuck Bunker Door", player),
         lambda state: state.has("Timed Dynamite", player))
 

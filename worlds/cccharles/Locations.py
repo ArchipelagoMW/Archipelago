@@ -46,7 +46,7 @@ loc_tutorial_house = {
 }
 
 loc_swamp = {
-    "Swamp Scraps - South Path To Candice": base_id + 1022, # ItemPickup465_67 Swamp_EnvironmentDetails (X=81964.398 Y=72167.305 Z=10116.385)
+    "Swamp Scraps - South Path To Tutorial House": base_id + 1022, # ItemPickup465_67 Swamp_EnvironmentDetails (X=81964.398 Y=72167.305 Z=10116.385)
     "Swamp Scraps - South Between Trees": base_id + 1023, # ItemPickup460_52 Swamp_EnvironmentDetails (X=89674.047 Y=71610.008 Z=9482.095)
     "Swamp Scraps - South In Clover": base_id + 1024, # ItemPickup459_49 Swamp_EnvironmentDetails (X=91637.156 Y=73345.672 Z=9492.019)
     "Swamp Scraps - South At Crossroads": base_id + 1025, # ItemPickup458_46 Swamp_EnvironmentDetails (X=94601.117 Y=75064.117 Z=9567.464)
