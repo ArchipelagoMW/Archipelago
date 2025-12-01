@@ -579,6 +579,17 @@ class ServerOptions(Group):
         "goal" -> Client can ask for remaining items after goal completion
         """
 
+    class CountdownMode(str):
+        """
+        Countdown modes
+        Determines whether or not a player can initiate a countdown with !countdown
+        Note that /countdown is always available to the host.
+
+        "enabled" -> Client can always initiate a countdown with !countdown.
+        "disabled" -> Client can never initiate a countdown with !countdown.
+        "auto" -> !countdown will be available for any room with less than 30 slots.
+        """
+
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
 
@@ -613,6 +624,7 @@ class ServerOptions(Group):
     release_mode: ReleaseMode = ReleaseMode("auto")
     collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
+    countdown_mode: CountdownMode = CountdownMode("auto")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)

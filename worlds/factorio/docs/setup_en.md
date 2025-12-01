@@ -96,7 +96,7 @@ appropriate to your operating system, and extract the folder to a convenient loc
 Archipelago is to place the extracted game folder into the `Archipelago` directory and rename it to just be "Factorio".
 
 
-![Factorio Download Options](/static/generated/docs/Factorio/factorio-download.png)
+![Factorio Download Options](factorio-download.png)
 
 Next, you should launch your Factorio Server by running `factorio.exe`, which is located at: `bin/x64/factorio.exe`. You
 will be asked to log in to your Factorio account using the same credentials you used on Factorio's website. After you
@@ -127,7 +127,7 @@ This allows you to host your own Factorio game.
    Archipelago if you chose to include it during the installation process.
 7. Enter `/connect [server-address]` into the input box at the bottom of the Archipelago Client and press "Enter"
 
-![Factorio Client for Archipelago Connection Command](/static/generated/docs/Factorio/connect-to-ap-server.png)
+![Factorio Client for Archipelago Connection Command](connect-to-ap-server.png)
 
 8. Launch your Factorio Client
 9. Click on "Multiplayer" in the main menu
@@ -183,6 +183,18 @@ To hide all item sends that are not to or from your factory, do one of the follo
 ```
 factorio_options:
   filter_item_sends: true
+```
+
+### filter_connection_changes
+
+By default, all player joined and player stopped tracking notifications are displayed in-game. In larger async seeds this may become overly spammy.
+To hide all connection changes, do one of the following:
+- Type `/toggle-ap-connection-change-filter` in-game
+- Type `/toggle_connection_change_filter` in the Achipelago Client
+- In your `host.yaml` set
+```
+factorio_options:
+  filter_connection_changes: true
 ```
 
 ### bridge_chat_out
