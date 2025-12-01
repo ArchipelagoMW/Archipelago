@@ -1,6 +1,5 @@
 import asyncio
 import logging
-import socket
 import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger

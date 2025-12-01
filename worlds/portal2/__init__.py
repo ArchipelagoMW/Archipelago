@@ -1,8 +1,10 @@
-from BaseClasses import MultiWorld, Region
+import random
+from BaseClasses import ItemClassification, MultiWorld, Region
 from .Options import Portal2Options
-from .Items import Portal2Item, item_table
-from .Locations import Portal2Location, map_complete_table, cutscene_completion_table
+from .Items import Portal2Item, Portal2ItemData, item_table, junk_items
+from .Locations import Portal2Location, map_complete_table, all_locations_table
 from worlds.AutoWorld import World
+from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 
 class Portal2World(World):
     """Portal 2 is a first person puzzle adventure where you shoot solve test chambers using portal mechanics and other map specific items"""
@@ -15,14 +17,18 @@ class Portal2World(World):
 
     item_name_to_id = {}
     location_name_to_id = {}
+
+    location_count = 0
+    item_count= 0
     
     for key, value in item_table.items():
         item_name_to_id[key] = value.id_offset + BASE_ID
 
-    for key, value in map_complete_table.items():
-        location_name_to_id[key] = value.id_offset + BASE_ID
+    for key, value in all_locations_table.items():
+        location_name_to_id[key] = value.id
     
     def create_item(self, name: str):
+        self.item_count += 1
         return Portal2Item(name, item_table[name].classification, self.item_name_to_id[name], self.player)
     
     def create_location(self, name, id, parent, event=False):
@@ -33,20 +39,36 @@ class Portal2World(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        # add all locations to menu region for now, will change later when we add other locations e.g. item locations, achievements etc.
-        menu_region.add_locations(self.location_name_to_id, Portal2Location)
+        # Add chapters to those regions
+        for i in range(1, 10):
+            # Get chapters
+            chapter_list = {name: info.id for name, info in map_complete_table.items()
+                            if name.split()[1].startswith(str(i))}
+            # Count locations
+            self.location_count += len(chapter_list)
+            # Create Region
+            region = Region(f"Chapter{i}", self.player, self.multiworld)
+            region.add_locations(chapter_list, Portal2Location)
+            menu_region.connect(region, f"Chapter {i} Entrance")
+
+        victory_loc = Portal2Location(self.player, "Beat Final Level", None, "Chapter 9")
+        victory_loc.place_locked_item(Portal2Item("Victory", ItemClassification.progression, None, self.player))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    def set_rules(self):
+        # Cannot access chapter 9 until goal items collected
+        set_rule(self.multiworld.get_entrance("Chapter 9 Entrance", self.player),
+             lambda state: state.has("Adventure Core", self.player) and
+                           state.has("Space Core", self.player) and
+                           state.has("Fact Core", self.player))
 
     def create_items(self):
-        for item in map(self.create_item, item_table.keys()):
-            self.multiworld.itempool.append(item)
+        for item in item_table.keys():
+            self.multiworld.itempool.append(self.create_item(item))
 
-        junk = len(self.location_name_to_id) - len(self.item_name_to_id)
-        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
+        filler_name = self.get_filler_item_name()
+        while self.item_count < self.location_count:
+            self.multiworld.itempool.append(self.create_item(filler_name))
     
     def get_filler_item_name(self):
-        return "Moon Dust"
-    
-    def generate_early(self):
-        if self.options.cutscenesanity:
-            self.location_name_to_id.update({key: value.id_offset + self.BASE_ID for
-                                            key, value in cutscene_completion_table.items()})
+        return random.choice(junk_items)
