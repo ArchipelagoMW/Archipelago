@@ -243,7 +243,7 @@ class BanjoTooieWorld(World):
 
         banjoItem = all_item_table.get(itemname)
         if not banjoItem:
-            raise Exception(f"{itemname} is not a valid item name for Banjo-Tooie")
+            raise ValueError(f"{itemname} is not a valid item name for Banjo-Tooie")
 
         if item_classification is None:
             item_classification = self.get_classification(banjoItem)
