@@ -632,8 +632,8 @@ class BanjoTooieWorld(World):
                     and self.options.randomize_bt_moves
                     and (self.options.randomize_signposts or self.options.nestsanity)
                 ):
-            raise OptionError("You cannot have progressive Shoes without randomizing moves,\
-                randomizing BK moves and enabling either nestanity or randomize signpost")
+            raise OptionError("You cannot have progressive Shoes without randomizing moves, "
+                              "randomizing BK moves and enabling either nestanity or randomize signpost")
         if self.options.progressive_water_training != ProgressiveWaterTraining.option_none \
                 and (
                     self.options.randomize_bk_moves == RandomizeBKMoveList.option_none
