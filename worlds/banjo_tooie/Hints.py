@@ -573,5 +573,4 @@ def should_consider_location(location: Location) -> bool:
 
 
 def get_signpost_location_ids() -> List[int]:
-    location_datas = list(filter(lambda location_data: location_data.group == "Signpost", all_location_table.values()))
-    return [location_data.btid for location_data in location_datas]
+    return [location_data.btid for location_data in all_location_table.values() if location_data.group == "Signpost"]
