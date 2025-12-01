@@ -1,7 +1,6 @@
 import enum
 import re
-from time import time
-from typing import Dict, List, Set, Union, TYPE_CHECKING
+from typing import List, Set, Union, TYPE_CHECKING
 from dataclasses import dataclass
 from BaseClasses import ItemClassification, Location, LocationProgressType, CollectionState
 from .Options import HintClarity, AddSignpostHintsToArchipelagoHints
