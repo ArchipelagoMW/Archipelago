@@ -554,7 +554,7 @@ def get_all_hintable_locations(world: "BanjoTooieWorld") -> List[Location]:
 
 
 def get_player_hintable_locations(world: "BanjoTooieWorld") -> List[Location]:
-    return [location for location in world.multiworld.get_locations(world.player) if should_consider_location(location)]
+    return [location for location in world.get_locations() if should_consider_location(location)]
 
 
 def should_consider_location(location: Location) -> bool:
