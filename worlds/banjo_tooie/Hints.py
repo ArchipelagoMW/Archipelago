@@ -569,9 +569,7 @@ def should_consider_location(location: Location) -> bool:
         *MumboTokenGames_table.keys(),
         *MumboTokenJinjo_table.keys(),
     ]
-    if location.name in location_hint_blacklist:
-        return False
-    return True
+    return location.name not in location_hint_blacklist:
 
 
 def get_signpost_location_ids() -> List[int]:
