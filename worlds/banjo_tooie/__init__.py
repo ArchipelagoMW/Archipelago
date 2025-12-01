@@ -667,9 +667,9 @@ class BanjoTooieWorld(World):
                 self.options.egg_behaviour == EggsBehaviour.option_simple_random_starting_egg:
             eggs: list = []
             if self.options.egg_behaviour == EggsBehaviour.option_random_starting_egg:
-                eggs = list([itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS])
+                eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]
             else:
-                eggs = list([itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS])
+                eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS]
             egg_name = self.random.choice(eggs)
             starting_egg = self.create_item(egg_name)
             self.multiworld.push_precollected(starting_egg)
