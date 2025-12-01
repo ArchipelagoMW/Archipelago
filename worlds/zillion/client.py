@@ -1,9 +1,10 @@
 import asyncio
 import base64
+from collections.abc import Coroutine
 import io
 import pkgutil
 import platform
-from typing import Any, ClassVar, Coroutine, Protocol, cast
+from typing import Any, ClassVar, Protocol, cast
 
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
@@ -23,7 +24,7 @@ from .config import base_id
 
 
 class ZillionCommandProcessor(ClientCommandProcessor):
-    ctx: "ZillionContext"
+    ctx: "ZillionContext"  # type: ignore
 
     def _cmd_sms(self) -> None:
         """ Tell the client that Zillion is running in RetroArch. """
@@ -204,6 +205,8 @@ class ZillionContext(CommonContext):
                                     num_texture = self._number_textures[num]
                                     Rectangle(texture=num_texture, size=num_texture.size, pos=pos)
 
+            map_widget: MapPanel | None = None
+
             @override
             def build(self) -> Layout:
                 container = super().build()
@@ -212,15 +215,17 @@ class ZillionContext(CommonContext):
                 return container
 
             def toggle_map_width(self) -> None:
-                if self.map_widget.width == 0:
-                    self.map_widget.width = ZillionManager.MapPanel.MAP_WIDTH
-                else:
-                    self.map_widget.width = 0
-                self.container.do_layout()
+                if self.map_widget:
+                    if self.map_widget.width == 0:
+                        self.map_widget.width = ZillionManager.MapPanel.MAP_WIDTH
+                    else:
+                        self.map_widget.width = 0
+                    self.container.do_layout()
 
             def set_rooms(self, rooms: list[list[int]]) -> None:
-                self.map_widget.rooms = rooms
-                self.map_widget.update_map()
+                if self.map_widget:
+                    self.map_widget.rooms = rooms
+                    self.map_widget.update_map()
 
         self.ui = ZillionManager(self)
         self.ui_toggle_map = lambda: isinstance(self.ui, ZillionManager) and self.ui.toggle_map_width()
@@ -421,7 +426,7 @@ async def zillion_sync_task(ctx: ZillionContext) -> None:
                 if name == ctx.known_name:
                     ctx.auth = name
                     # this is the name we know
-                    if ctx.server and ctx.server.socket:  # type: ignore
+                    if ctx.server and ctx.server.socket:
                         if ctx.got_room_info.is_set():
                             if ctx.seed_name and ctx.seed_name.endswith(seed_end):
                                 # correct seed
