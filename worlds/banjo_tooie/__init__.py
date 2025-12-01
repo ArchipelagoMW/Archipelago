@@ -592,8 +592,8 @@ class BanjoTooieWorld(World):
                 and self.options.randomize_bk_moves != RandomizeBKMoveList.option_none\
                 and self.options.logic_type == LogicType.option_intended:
             raise OptionError("Randomize Worlds and Randomize BK Moves is not compatible with Intended Logic.")
-        if (not self.options.randomize_notes
-                and not self.options.randomize_signposts and not self.options.nestsanity)\
+        if not self.options.randomize_notes \
+                and not self.options.randomize_signposts and not self.options.nestsanity \
                 and self.options.randomize_bk_moves != RandomizeBKMoveList.option_none:
             if self.multiworld.players == 1:
                 raise OptionError("Randomize Notes, signposts or nestsanity is required for Randomize BK Moves.")
