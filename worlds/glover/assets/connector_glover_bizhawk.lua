@@ -11674,7 +11674,7 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
-base_pointer = 0x400000,
+	base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
     ap_world = 0x7AC,
