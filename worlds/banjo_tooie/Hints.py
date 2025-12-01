@@ -240,7 +240,7 @@ class Hint:
 
         return ' '.join(modified_words)
 
-     
+
 def generate_hints(world: "BanjoTooieWorld"):
     hints: List[Hint] = []
 
@@ -569,7 +569,7 @@ def should_consider_location(location: Location) -> bool:
         *MumboTokenGames_table.keys(),
         *MumboTokenJinjo_table.keys(),
     ]
-    return location.name not in location_hint_blacklist:
+    return location.name not in location_hint_blacklist
 
 
 def get_signpost_location_ids() -> List[int]:
