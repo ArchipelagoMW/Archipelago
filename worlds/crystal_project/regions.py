@@ -719,8 +719,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      DIONE_ROOF_AP_REGION: lambda state: logic.has_glide(state) and logic.has_vertical_movement(state) and logic.obscure_routes_on(state),
                      JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state)})
-    fancy_add_exits(world, DIONE_ROOF_AP_REGION, [DIONE_SHRINE_AP_REGION, QUINTAR_RESERVE_AP_REGION, SHRINE_BALCONY_SHADED_NOOK_AP_REGION, RESERVE_TREETOPS_AP_REGION, CHALICE_ASCENT_AP_REGION],
-                    {CHALICE_ASCENT_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, DIONE_ROOF_AP_REGION, [DIONE_SHRINE_AP_REGION, QUINTAR_RESERVE_AP_REGION, SHRINE_BALCONY_SHADED_NOOK_AP_REGION, RESERVE_TREETOPS_AP_REGION, CHALICE_FOOT_AP_REGION],
+                    {CHALICE_FOOT_AP_REGION: lambda state: logic.has_glide(state)})
     #Dione Shrine end
     fancy_add_exits(world, QUINTAR_MAUSOLEUM_AP_REGION, [QUINTAR_SANCTUM_AP_REGION],
                     #No exit to Quintar Reserve bc the Regionsanity teleport point is behind one of the switch doors, which you can't go backwards through
@@ -771,9 +771,9 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION: lambda state: logic.has_glide(state),
                      SEQUOIA_ATHENAEUM_BALCONY_AP_REGION: lambda state: logic.has_glide(state),
                      PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state)})
-    fancy_add_exits(world, PAMOA_TREE_AP_REGION, [ICY_SPIKES_MADNESS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, HUNTERS_TOWER_AP_REGION, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, CHALICE_ASCENT_AP_REGION],
+    fancy_add_exits(world, PAMOA_TREE_AP_REGION, [ICY_SPIKES_MADNESS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, HUNTERS_TOWER_AP_REGION, RAMPARTS_TALL_TALL_TRAVERSE_AP_REGION, CHALICE_FOOT_AP_REGION],
                     {ICY_SPIKES_MADNESS_AP_REGION: lambda state: logic.has_glide(state),
-                     CHALICE_ASCENT_AP_REGION: lambda state: logic.has_glide(state)})
+                     CHALICE_FOOT_AP_REGION: lambda state: logic.has_glide(state)})
     #Tall, Tall Heights end
     #Northern Cave start
     fancy_add_exits(world, UPPER_NORTHERN_CAVE_AP_REGION, [SLIP_TO_CAVE_OR_SOUVENIRS_AP_REGION, SLIP_GLIDE_RIDE_AP_REGION],
@@ -830,18 +830,24 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state)})
     #Castle Ramparts end
     #The Chalice of Tar start
-    fancy_add_exits(world, CHALICE_RIM_AP_REGION, [CHALICE_ASCENT_AP_REGION, THE_OPEN_SEA_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, DIONE_ROOF_AP_REGION, EASTERN_CHASM_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
+    fancy_add_exits(world, CHALICE_RIM_AP_REGION, [CHALICE_ASCENT_AP_REGION, CHALICE_FOOT_AP_REGION, THE_OPEN_SEA_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, DIONE_ROOF_AP_REGION, EASTERN_CHASM_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION, NORTHERN_STRETCH_RACE_FINISH_AP_REGION, JIDAMBA_SUMMIT_AP_REGION],
                     #Note: Gliding to Eastern Chasm is far enough up you don't enter the Dione Shrine region
                     {THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state),
                      RESERVE_TREETOPS_AP_REGION: lambda state: logic.has_glide(state),
                      EASTERN_CHASM_AP_REGION: lambda state: logic.has_glide(state),
                      JIDAMBA_SUMMIT_AP_REGION: lambda state: (state.has(THE_OPEN_SEA_PASS, player) or options.regionsanity.value != options.regionsanity.option_extreme) and logic.has_glide(state) and logic.obscure_routes_on(state)})
-    fancy_add_exits(world, CHALICE_ASCENT_AP_REGION, [CHALICE_RIM_AP_REGION, SANCTUM_ENTRANCE_AP_REGION, HUNTERS_TOWER_AP_REGION, SANCTUM_EXIT_CLIFFTOP_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, DIONE_ROOF_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION],
+    fancy_add_exits(world, CHALICE_ASCENT_AP_REGION, [CHALICE_RIM_AP_REGION, CHALICE_FOOT_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, DIONE_ROOF_AP_REGION, TALL_TALL_TALL_CHEST_AP_REGION, PAMOA_TREE_AP_REGION],
                     {CHALICE_RIM_AP_REGION: lambda state: logic.has_vertical_movement(state) and logic.has_glide(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
                      RESERVE_TREETOPS_AP_REGION: lambda state: logic.has_glide(state),
                      DIONE_ROOF_AP_REGION: lambda state: logic.has_glide(state),
                      TALL_TALL_TALL_CHEST_AP_REGION: lambda state: logic.has_glide(state),
+                     PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state)})
+    fancy_add_exits(world, CHALICE_FOOT_AP_REGION, [CHALICE_ASCENT_AP_REGION, SANCTUM_ENTRANCE_AP_REGION, HUNTERS_TOWER_AP_REGION, SANCTUM_EXIT_CLIFFTOP_AP_REGION, QUINTAR_RESERVE_AP_REGION, RESERVE_TREETOPS_AP_REGION, DIONE_ROOF_AP_REGION, PAMOA_TREE_AP_REGION],
+                    {CHALICE_ASCENT_AP_REGION: lambda state: logic.has_glide(state),
+                     QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_glide(state),
+                     RESERVE_TREETOPS_AP_REGION: lambda state: logic.has_glide(state),
+                     DIONE_ROOF_AP_REGION: lambda state: logic.has_glide(state),
                      PAMOA_TREE_AP_REGION: lambda state: logic.has_glide(state)})
     #The Chalice of Tar end
     #Flyer's Crag start
@@ -1062,7 +1068,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
     logic = CrystalProjectLogic(world.player, options)
     player = world.player
 
-    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, DELENDE_PLAINS_AP_REGION, DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_PEAK_AP_REGION, MERCURY_SHRINE_AP_REGION, THE_PALE_GROTTO_AP_REGION, SEASIDE_CLIFFS_AP_REGION, YAMAGAWA_MA_AP_REGION, PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, CAPITAL_JAIL_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, SANCTUM_ENTRANCE_AP_REGION, QUINTAR_SANCTUM_AP_REGION, BOOMER_SOCIETY_AP_REGION, OKIMOTO_NS_AP_REGION, SALMON_PASS_EAST_AP_REGION, SALMON_RIVER_AP_REGION, CASTLE_SEQUOIA_AP_REGION, TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION, BEACH_BIRDS_NEST_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, BEAURIOR_ROCK_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, SHOUDU_PROVINCE_AP_REGION, GANYMEDE_SHRINE_AP_REGION, GANYMEDE_STEEPLE_AP_REGION, THE_UNDERCITY_AP_REGION, PIPELINE_NORTH_AP_REGION, PIPELINE_SOUTH_AP_REGION, SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, LOWER_ICE_LAKES_AP_REGION, SOUVENIR_SHOP_AP_REGION, SLIP_GLIDE_RIDE_EXIT_AP_REGION, UPPER_ICE_LAKES_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION, PEAK_RAMPARTS_AP_REGION, SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, LANDS_END_AP_REGION, OWL_TREE_AP_REGION, QUINTAR_RESERVE_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION, LABYRINTH_CORE_AP_REGION, DIONE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, THE_SEQUOIA_AP_REGION, CHALICE_ASCENT_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, DISCIPLINE_HOLLOW_AP_REGION, MODDED_ZONE_AP_REGION],
+    fancy_add_exits(world, MENU_AP_REGION, [SPAWNING_MEADOWS_AP_REGION, DELENDE_PLAINS_AP_REGION, DELENDE_HIGH_BRIDGES_AP_REGION, DELENDE_PEAK_AP_REGION, MERCURY_SHRINE_AP_REGION, THE_PALE_GROTTO_AP_REGION, SEASIDE_CLIFFS_AP_REGION, YAMAGAWA_MA_AP_REGION, PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, CAPITAL_JAIL_AP_REGION, ROLLING_QUINTAR_FIELDS_AP_REGION, SANCTUM_ENTRANCE_AP_REGION, QUINTAR_SANCTUM_AP_REGION, BOOMER_SOCIETY_AP_REGION, OKIMOTO_NS_AP_REGION, SALMON_PASS_EAST_AP_REGION, SALMON_RIVER_AP_REGION, CASTLE_SEQUOIA_AP_REGION, TOWER_OF_ZOT_AP_REGION, POKO_POKO_DESERT_AP_REGION, SARA_SARA_BAZAAR_AP_REGION, IBEK_CAVE_MOUTH_AP_REGION, BEACH_BIRDS_NEST_AP_REGION, BEAURIOR_VOLCANO_AP_REGION, BEAURIOR_ROCK_AP_REGION, ANCIENT_RESERVOIR_AP_REGION, SHOUDU_PROVINCE_AP_REGION, GANYMEDE_SHRINE_AP_REGION, GANYMEDE_STEEPLE_AP_REGION, THE_UNDERCITY_AP_REGION, PIPELINE_NORTH_AP_REGION, PIPELINE_SOUTH_AP_REGION, SEQUOIA_ATHENAEUM_ENTRANCE_AP_REGION, LOWER_ICE_LAKES_AP_REGION, SOUVENIR_SHOP_AP_REGION, SLIP_GLIDE_RIDE_EXIT_AP_REGION, UPPER_ICE_LAKES_AP_REGION, TALL_TALL_SAVE_POINT_AP_REGION, PEAK_RAMPARTS_AP_REGION, SLIP_GLIDE_RIDE_ENTRANCE_AP_REGION, LANDS_END_AP_REGION, OWL_TREE_AP_REGION, QUINTAR_RESERVE_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_EACLANEYA_AP_REGION, LABYRINTH_CORE_AP_REGION, DIONE_SHRINE_AP_REGION, DIONE_ROOF_AP_REGION, THE_SEQUOIA_AP_REGION, CHALICE_FOOT_AP_REGION, THE_OPEN_SEA_AP_REGION, CONTINENTAL_TRAM_AP_REGION, POSEIDON_SHRINE_ROOF_AP_REGION, NEPTUNE_SHRINE_AP_REGION, THE_OLD_WORLD_AP_REGION, THE_NEW_WORLD_AP_REGION, DISCIPLINE_HOLLOW_AP_REGION, MODDED_ZONE_AP_REGION],
                     {SPAWNING_MEADOWS_AP_REGION: lambda state: state.has("HomePoint - AP Spawn Point", player) or state.has("HomePoint - Old Nan's Watering Hole", player),
                      DELENDE_PLAINS_AP_REGION: lambda state: (state.has("HomePoint - The Pale Grotto Entrance", player) or state.has("HomePoint - Soiled Den", player) or state.has("HomePoint - Fish Hatchery", player)),
                      DELENDE_HIGH_BRIDGES_AP_REGION: lambda state: (state.has("HomePoint - Cabin On The Cliff", player) or state.has("HomePoint - Delende Falls", player)),
@@ -1114,7 +1120,7 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      DIONE_SHRINE_AP_REGION: lambda state: state.has("HomePoint - Flyer's Lookout", player),
                      DIONE_ROOF_AP_REGION: lambda state: state.has(DIONE_STONE, player),
                      THE_SEQUOIA_AP_REGION: lambda state: state.has("HomePoint - Top Of The Sequoia", player),
-                     CHALICE_ASCENT_AP_REGION: lambda state: state.has("HomePoint - The Chalice of Tar", player),
+                     CHALICE_FOOT_AP_REGION: lambda state: state.has("HomePoint - The Chalice of Tar", player),
                      THE_OPEN_SEA_AP_REGION: lambda state: state.has("HomePoint - Sailor's Raft", player),
                      CONTINENTAL_TRAM_AP_REGION: lambda state: state.has("HomePoint - Platform A", player),
                      POSEIDON_SHRINE_ROOF_AP_REGION: lambda state: state.has(POSEIDON_STONE, player),

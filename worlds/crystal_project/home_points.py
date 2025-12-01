@@ -124,7 +124,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
 
         LocationData(THE_SEQUOIA_AP_REGION, "HomePoint - Top Of The Sequoia", 2452),
 
-        LocationData(CHALICE_ASCENT_AP_REGION, "HomePoint - The Chalice of Tar", 3055),
+        LocationData(CHALICE_FOOT_AP_REGION, "HomePoint - The Chalice of Tar", 3055),
 
         LocationData(THE_OPEN_SEA_AP_REGION, "HomePoint - Sailor's Raft", 3775),
 

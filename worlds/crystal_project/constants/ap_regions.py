@@ -254,10 +254,11 @@ PEAK_RAMPARTS_AP_REGION = "Peak Ramparts"
 PEAK_RAMPARTS_AP_REGION_TELEPORT_LOCATION = "360,234,-392"
 #Castle Ramparts end
 #The Chalice of Tar start
-CHALICE_RIM_AP_REGION = "The Chalice of Tar Rim"
+CHALICE_RIM_AP_REGION = "The Rim of the Chalice of Tar"
 #On pinnacle above chest
 CHALICE_RIM_AP_REGION_TELEPORT_LOCATION = "612,253,-444"
-CHALICE_ASCENT_AP_REGION = "The Chalice of Tar Ascent"
+CHALICE_ASCENT_AP_REGION = "Ascending the Chalice of Tar"
+CHALICE_FOOT_AP_REGION = "The Foot of the Chalice of Tar"
 #The Chalice of Tar end
 #Flyer's Crag start
 FLYERS_CRAG_UPPER_AP_REGION = "Upper Flyer's Crag"
