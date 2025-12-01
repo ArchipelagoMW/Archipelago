@@ -28,7 +28,7 @@ class Hint:
         REQUIRED_BY_MULTIWORLD = 1,
         NOT_REQUIRED = 2
 
-    item_requirement_cache: dict[Location, "Hint.ItemRequirement"] = dict()
+    item_requirement_cache: dict[Location, ItemRequirement] = {}
     state_per_sphere: List[CollectionState] = []
 
     def __init__(self, world: "BanjoTooieWorld", location: Location):
