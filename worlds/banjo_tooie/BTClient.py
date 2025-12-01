@@ -7,10 +7,9 @@ import os
 import multiprocessing
 import copy
 import pathlib
-import subprocess
 import sys
 import time
-from typing import List, Tuple, Union
+from typing import List, Union
 import zipfile
 import bsdiff4
 import atexit
@@ -33,7 +32,7 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
-"""
+'''
 Payload: lua -> client
 {
     playerName: string,
@@ -60,7 +59,7 @@ Deathlink logic:
 deathlink_pending: we need to kill the player
 deathlink_sent_this_death: we interacted with the multiworld on this death, waiting to reset with living link
 
-"""
+'''
 
 bt_loc_name_to_id = network_data_package["games"]["Banjo-Tooie"]["location_name_to_id"]
 bt_itm_name_to_id = network_data_package["games"]["Banjo-Tooie"]["item_name_to_id"]

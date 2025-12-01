@@ -1,8 +1,8 @@
+import loguru
 from test.bases import WorldTestBase
 from ..Options import LogicType, RandomizeBTMoveList
 from . import BanjoTooieTestBase
 from .. import all_item_table
-
 
 class AdvMovesEnabled(BanjoTooieTestBase):
     options = {
@@ -14,10 +14,6 @@ class AdvMovesEnabled(BanjoTooieTestBase):
         adv_count = 0
 
         item_pool_item_names = [item.name for item in self.world.multiworld.itempool]
-        print("after", WorldTestBase.options)
-        print(item_pool_item_names)
-        print()
-        print(self.world.item_name_groups["Moves"])
         for adv_move in self.world.item_name_groups["Moves"]:
             if adv_move in item_pool_item_names:
                 adv_count += 1
@@ -36,7 +32,7 @@ class AdvMovesDisabled(BanjoTooieTestBase):
         for adv_move in self.world.item_name_groups["Moves"]:
             for item in self.world.multiworld.itempool:
                 if adv_move == item.name:
-                    print(f"Item: {adv_move} Should be here!")
+                    loguru.logger.error(f"Item: {adv_move} Should be here!")
                     adv_count += 1
 
         assert 0 == adv_count
@@ -52,7 +48,7 @@ class AdvMovesDisabled(BanjoTooieTestBase):
                 if location_item == name:
                     placed_correctly += 1
             except Exception:
-                print(f"Issue with Item: {name} Please Investigate")
+                loguru.logger.error(f"Issue with Item: {name} Please Investigate")
                 placed_correctly += 0
         assert adv_items == placed_correctly
 

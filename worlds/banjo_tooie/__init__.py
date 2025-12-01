@@ -1,6 +1,8 @@
 import logging
 from math import ceil
 import time
+
+import loguru
 from Options import OptionError
 import typing
 from typing import Dict, Any, List
@@ -15,7 +17,7 @@ from .Locations import LocationData, all_location_table, MTLoc_Table, GMLoc_tabl
     IHPLLoc_table, IHPGLoc_table, IHCTLoc_table, IHWLLoc_table, IHQMLoc_table, \
     CheatoRewardsLoc_table, JinjoRewardsLoc_table, HoneyBRewardsLoc_table
 from .Regions import create_regions, connect_regions
-from .Options import BanjoTooieOptions, EggsBehaviour, HintClarity, JamjarsSiloCosts, LogicType, ProgressiveEggAim, \
+from .Options import BanjoTooieOptions, EggsBehaviour, JamjarsSiloCosts, LogicType, ProgressiveEggAim, \
     ProgressiveWaterTraining, RandomizeBKMoveList, VictoryCondition, bt_option_groups, WorldRequirements
 from .Rules import BanjoTooieRules
 from .Names import itemName, locationName, regionName
@@ -106,8 +108,8 @@ class BanjoTooieWorld(World):
     glitches_item_name = itemName.UT_GLITCHED
     ut_can_gen_without_yaml = True
 
-    location_name_to_id = {name: data.btid for name, data in all_location_table.items()}
-    location_name_to_group = {name: data.group for name, data in all_location_table.items()}
+    location_name_to_id = {name: data.btid for name, data in all_location_table.items() if data.btid is not None}
+    location_name_to_group = {name: data.group for name, data in all_location_table.items() if data.group is not None}
 
     item_name_groups = {
         # "Jiggy": all_group_table["jiggy"],
@@ -124,15 +126,15 @@ class BanjoTooieWorld(World):
     }
 
     location_name_groups = {
-        "Mayahem Temple": MTLoc_Table.keys(), "Glitter Gulch Mine": GMLoc_table.keys(),
-        "Witchyworld": WWLoc_table.keys(), "Jolly Roger's Lagoon": JRLoc_table.keys(),
-        "Terrydactyland": TLLoc_table.keys(), "Grunty Industries": GILoc_table.keys(),
-        "Hailfire Peaks": HPLoc_table.keys(), "Cloud Cuckooland": CCLoc_table.keys(),
-        "Isle O' Hags": SMLoc_table.keys() | JVLoc_table.keys() | IHWHLoc_table.keys() | IHPLLoc_table.keys() |
-        IHPGLoc_table.keys() | IHCTLoc_table.keys() | IHWLLoc_table.keys() | IHQMLoc_table.keys(),
-        "Cheato Rewards": CheatoRewardsLoc_table.keys(),
-        "Jinjo Rewards": JinjoRewardsLoc_table.keys(),
-        "Honey B Rewards": HoneyBRewardsLoc_table.keys(),
+        "Mayahem Temple": set(MTLoc_Table.keys()), "Glitter Gulch Mine": set(GMLoc_table.keys()),
+        "Witchyworld": set(WWLoc_table.keys()), "Jolly Roger's Lagoon": set(JRLoc_table.keys()),
+        "Terrydactyland": set(TLLoc_table.keys()), "Grunty Industries": set(GILoc_table.keys()),
+        "Hailfire Peaks": set(HPLoc_table.keys()), "Cloud Cuckooland": set(CCLoc_table.keys()),
+        "Isle O' Hags": set(SMLoc_table.keys()) | set(JVLoc_table.keys()) | set(IHWHLoc_table.keys()) | set(IHPLLoc_table.keys()) |
+        set(IHPGLoc_table.keys()) | set(IHCTLoc_table.keys()) | set(IHWLLoc_table.keys()) | set(IHQMLoc_table.keys()),
+        "Cheato Rewards": set(CheatoRewardsLoc_table.keys()),
+        "Jinjo Rewards": set(JinjoRewardsLoc_table.keys()),
+        "Honey B Rewards": set(HoneyBRewardsLoc_table.keys()),
         "Jiggies": {c for c in all_location_table if all_location_table[c].group == "Jiggy"},
         "Jinjos": {c for c in all_location_table if all_location_table[c].group == "Jinjo"},
         "Empty Honeycombs": {c for c in all_location_table if
@@ -213,38 +215,38 @@ class BanjoTooieWorld(World):
         self.hints: dict[int, HintData] = {}
         super(BanjoTooieWorld, self).__init__(world, player)
 
-    def create_item(self, itemname: str) -> Item:
+    def create_item(self, name: str) -> Item:
         item_classification = None
 
-        if itemname == itemName.JIGGY_AS_FILLER:
-            itemname = itemName.JIGGY
+        if name == itemName.JIGGY_AS_FILLER:
+            name = itemName.JIGGY
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.filler
-        elif itemname == itemName.JIGGY_AS_USEFUL:
-            itemname = itemName.JIGGY
+        elif name == itemName.JIGGY_AS_USEFUL:
+            name = itemName.JIGGY
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.useful
-        elif itemname == itemName.NOTE_AS_FILLER:
-            itemname = itemName.NOTE
+        elif name == itemName.NOTE_AS_FILLER:
+            name = itemName.NOTE
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.filler
-        elif itemname == itemName.NOTE_AS_USEFUL:
-            itemname = itemName.NOTE
+        elif name == itemName.NOTE_AS_USEFUL:
+            name = itemName.NOTE
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.useful
-        elif itemname == itemName.DOUBLOON_AS_FILLER:
-            itemname = itemName.DOUBLOON
+        elif name == itemName.DOUBLOON_AS_FILLER:
+            name = itemName.DOUBLOON
             if not hasattr(self.multiworld, "generation_is_fake"):
                 item_classification = ItemClassification.filler
-        elif itemname == itemName.HEALTHUP and (
+        elif name == itemName.HEALTHUP and (
             self.options.logic_type
                 == LogicType.option_easy_tricks or self.options.logic_type == LogicType.option_intended
         ):
             item_classification = ItemClassification.useful
 
-        banjoItem = all_item_table.get(itemname)
+        banjoItem = all_item_table.get(name)
         if not banjoItem:
-            raise Exception(f"{itemname} is not a valid item name for Banjo-Tooie")
+            raise Exception(f"{name} is not a valid item name for Banjo-Tooie")
 
         if item_classification is None:
             item_classification = self.get_classification(banjoItem)
@@ -252,14 +254,14 @@ class BanjoTooieWorld(World):
         if item_classification == ItemClassification.trap:
             self.traps_in_pool += 1
 
-        if itemname == itemName.JIGGY:
+        if name == itemName.JIGGY:
             self.jiggies_in_pool += 1
-        if itemname == itemName.NOTE:
+        if name == itemName.NOTE:
             self.notes_in_pool += 1
-        if itemname == itemName.DOUBLOON:
+        if name == itemName.DOUBLOON:
             self.doubloons_in_pool += 1
 
-        created_item = BanjoTooieItem(itemname, item_classification, banjoItem.btid, self.player)
+        created_item = BanjoTooieItem(name, item_classification, banjoItem.btid, self.player)
         return created_item
 
     def get_classification(self, banjoItem: ItemData) -> ItemClassification:
@@ -295,7 +297,7 @@ class BanjoTooieWorld(World):
         return created_item
 
     def calculate_useful_filler(self, total, progression) -> tuple[int, int]:
-        # We want to split non-progressive items into two halfs
+        # We want to split non-progression items into two halfs
         # half is useful, half is filler
         remainder = total - progression
         useful = ceil(remainder / 2)
@@ -366,7 +368,7 @@ class BanjoTooieWorld(World):
             filler_notes += useful_notes
             useful_notes = 0
         if filler_notes < 0:
-            warnings.warn("Number of notes that need to be inserted is somehow negative.")
+            loguru.logger.warning("Number of notes that need to be inserted is somehow negative.")
 
         itempool += [
             self.create_item(itemName.NOTE) for i in range(progression_notes)
@@ -668,18 +670,18 @@ class BanjoTooieWorld(World):
                 self.options.egg_behaviour == EggsBehaviour.option_simple_random_starting_egg:
             eggs: list = []
             if self.options.egg_behaviour == EggsBehaviour.option_random_starting_egg:
-                eggs = list([itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS])
+                eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]
             else:
-                eggs = list([itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS])
+                eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS]
             egg_name = self.random.choice(eggs)
             starting_egg = self.create_item(egg_name)
             self.multiworld.push_precollected(starting_egg)
-            banjoItem = all_item_table.get(egg_name)
+            banjoItem = all_item_table[egg_name]
             self.starting_egg = banjoItem.btid
         else:
             starting_egg = self.create_item(itemName.BEGGS)
             self.multiworld.push_precollected(starting_egg)
-            banjoItem = all_item_table.get(itemName.BEGGS)
+            banjoItem = all_item_table[itemName.BEGGS]
             self.starting_egg = banjoItem.btid
 
     def choose_starter_attack(self) -> None:
@@ -739,6 +741,10 @@ class BanjoTooieWorld(World):
         return rules.set_rules()
 
     def pre_fill_me(self) -> None:
+        def prefill_locations_with_item(self, item_name: str, locations: list[str]) -> None:
+            for location_name in locations:
+                self.get_location(location_name).place_locked_item(self.create_item(item_name))
+
         if not self.options.randomize_honeycombs:
             self.banjo_pre_fills(itemName.HONEY, "Honeycomb", False)
 
@@ -808,79 +814,81 @@ class BanjoTooieWorld(World):
             for location_name in MumboTokenJinjo_table.keys():
                 self.get_location(location_name).place_locked_item(item)
 
+        prefill_locations_with_item(itemName.JIGGY, [
+            locationName.JIGGYIH1,
+            locationName.JIGGYIH2,
+            locationName.JIGGYIH3,
+            locationName.JIGGYIH4,
+            locationName.JIGGYIH5,
+            locationName.JIGGYIH6,
+            locationName.JIGGYIH7,
+            locationName.JIGGYIH8,
+            locationName.JIGGYIH9
+        ])
         if not self.options.randomize_jinjos:
-            self.get_location(locationName.JIGGYIH1).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH2).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH3).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH4).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH5).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH6).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH7).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH8).place_locked_item(self.create_item(itemName.JIGGY))
-            self.get_location(locationName.JIGGYIH9).place_locked_item(self.create_item(itemName.JIGGY))
-
-            item = self.create_item(itemName.WJINJO)
-            self.get_location(locationName.JINJOJR5).place_locked_item(item)
-
-            item = self.create_item(itemName.OJINJO)
-            self.get_location(locationName.JINJOWW4).place_locked_item(item)
-            self.get_location(locationName.JINJOHP2).place_locked_item(item)
-
-            item = self.create_item(itemName.YJINJO)
-            self.get_location(locationName.JINJOWW3).place_locked_item(item)
-            self.get_location(locationName.JINJOHP4).place_locked_item(item)
-            self.get_location(locationName.JINJOHP3).place_locked_item(item)
-
-            item = self.create_item(itemName.BRJINJO)
-            self.get_location(locationName.JINJOGM1).place_locked_item(item)
-            self.get_location(locationName.JINJOJR2).place_locked_item(item)
-            self.get_location(locationName.JINJOTL2).place_locked_item(item)
-            self.get_location(locationName.JINJOTL5).place_locked_item(item)
-
-            item = self.create_item(itemName.GJINJO)
-            self.get_location(locationName.JINJOWW5).place_locked_item(item)
-            self.get_location(locationName.JINJOJR1).place_locked_item(item)
-            self.get_location(locationName.JINJOTL4).place_locked_item(item)
-            self.get_location(locationName.JINJOGI2).place_locked_item(item)
-            self.get_location(locationName.JINJOHP1).place_locked_item(item)
-
-            item = self.create_item(itemName.RJINJO)
-            self.get_location(locationName.JINJOMT2).place_locked_item(item)
-            self.get_location(locationName.JINJOMT3).place_locked_item(item)
-            self.get_location(locationName.JINJOMT5).place_locked_item(item)
-            self.get_location(locationName.JINJOJR3).place_locked_item(item)
-            self.get_location(locationName.JINJOJR4).place_locked_item(item)
-            self.get_location(locationName.JINJOWW2).place_locked_item(item)
-
-            item = self.create_item(itemName.BLJINJO)
-            self.get_location(locationName.JINJOGM3).place_locked_item(item)
-            self.get_location(locationName.JINJOTL1).place_locked_item(item)
-            self.get_location(locationName.JINJOHP5).place_locked_item(item)
-            self.get_location(locationName.JINJOCC2).place_locked_item(item)
-            self.get_location(locationName.JINJOIH1).place_locked_item(item)
-            self.get_location(locationName.JINJOIH4).place_locked_item(item)
-            self.get_location(locationName.JINJOIH5).place_locked_item(item)
-
-            item = self.create_item(itemName.PJINJO)
-            self.get_location(locationName.JINJOMT1).place_locked_item(item)
-            self.get_location(locationName.JINJOGM5).place_locked_item(item)
-            self.get_location(locationName.JINJOCC1).place_locked_item(item)
-            self.get_location(locationName.JINJOCC3).place_locked_item(item)
-            self.get_location(locationName.JINJOCC5).place_locked_item(item)
-            self.get_location(locationName.JINJOIH2).place_locked_item(item)
-            self.get_location(locationName.JINJOIH3).place_locked_item(item)
-            self.get_location(locationName.JINJOGI4).place_locked_item(item)
-
-            item = self.create_item(itemName.BKJINJO)
-            self.get_location(locationName.JINJOMT4).place_locked_item(item)
-            self.get_location(locationName.JINJOGM2).place_locked_item(item)
-            self.get_location(locationName.JINJOGM4).place_locked_item(item)
-            self.get_location(locationName.JINJOWW1).place_locked_item(item)
-            self.get_location(locationName.JINJOTL3).place_locked_item(item)
-            self.get_location(locationName.JINJOGI1).place_locked_item(item)
-            self.get_location(locationName.JINJOGI5).place_locked_item(item)
-            self.get_location(locationName.JINJOCC4).place_locked_item(item)
-            self.get_location(locationName.JINJOGI3).place_locked_item(item)
+            prefill_locations_with_item(itemName.WJINJO, [
+                locationName.JINJOJR5
+            ])
+            prefill_locations_with_item(itemName.OJINJO, [
+                locationName.JINJOWW4,
+                locationName.JINJOHP2
+            ])
+            prefill_locations_with_item(itemName.YJINJO, [
+                locationName.JINJOWW3,
+                locationName.JINJOHP4,
+                locationName.JINJOHP3
+            ])
+            prefill_locations_with_item(itemName.BRJINJO, [
+                locationName.JINJOGM1,
+                locationName.JINJOJR2,
+                locationName.JINJOTL2,
+                locationName.JINJOTL5
+            ])
+            prefill_locations_with_item(itemName.GJINJO, [
+                locationName.JINJOWW5,
+                locationName.JINJOJR1,
+                locationName.JINJOTL4,
+                locationName.JINJOGI2,
+                locationName.JINJOHP1
+            ])
+            prefill_locations_with_item(itemName.RJINJO, [
+                locationName.JINJOMT2,
+                locationName.JINJOMT3,
+                locationName.JINJOMT5,
+                locationName.JINJOJR3,
+                locationName.JINJOJR4,
+                locationName.JINJOWW2
+            ])
+            prefill_locations_with_item(itemName.BLJINJO, [
+                locationName.JINJOGM3,
+                locationName.JINJOTL1,
+                locationName.JINJOHP5,
+                locationName.JINJOCC2,
+                locationName.JINJOIH1,
+                locationName.JINJOIH4,
+                locationName.JINJOIH5
+            ])
+            prefill_locations_with_item(itemName.PJINJO, [
+                locationName.JINJOMT1,
+                locationName.JINJOGM5,
+                locationName.JINJOCC1,
+                locationName.JINJOCC3,
+                locationName.JINJOCC5,
+                locationName.JINJOIH2,
+                locationName.JINJOIH3,
+                locationName.JINJOGI4
+            ])
+            prefill_locations_with_item(itemName.BKJINJO, [
+                locationName.JINJOMT4,
+                locationName.JINJOGM2,
+                locationName.JINJOGM4,
+                locationName.JINJOWW1,
+                locationName.JINJOTL3,
+                locationName.JINJOGI1,
+                locationName.JINJOGI5,
+                locationName.JINJOCC4,
+                locationName.JINJOGI3
+            ])
 
     def allow_jiggies_as_filler(self) -> bool:
         return self.options.replace_extra_jiggies and self.jiggies_in_pool < self.hard_item_limit
@@ -909,8 +917,6 @@ class BanjoTooieWorld(World):
                 if self.allow_doubloons_as_filler() else 0),
             (itemName.ENEST, self.options.egg_nests_weight * (2 if self.options.nestsanity else 1)),
             (itemName.FNEST, self.options.feather_nests_weight * (2 if self.options.nestsanity else 1)),
-            # Intentionally leaving NONE as last;
-            # because self.random.choices might always choose last if all weights are 0
             (itemName.NONE, self.options.big_o_pants_weight)
         ]
 
@@ -1007,7 +1013,7 @@ class BanjoTooieWorld(World):
             logging.info(f"Took {total:.4f} seconds in BanjoTooieWorld.generate_hints for player {self.player}, named {self.multiworld.player_name[self.player]}.")
         btoptions = {option_name: option.value for option_name, option in self.options.__dict__.items()}
 
-        # TODO: AP 0.6.3: plando not serialisable, so we can't include it in slot_data. Remove this line when 0.6.4 goes live.
+        # plando_items not serialisable, so we can't include it in slot_data.
         btoptions.pop("plando_items")
 
         # Elements that are randomised outside the yaml and affects gameplay

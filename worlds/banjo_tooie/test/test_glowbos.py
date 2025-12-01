@@ -10,7 +10,7 @@ class TestRandomizedGlowbos(BanjoTooieTestBase):
     }
 
     def test_item_pool(self) -> None:
-        item_pool_names = [item.name for item in self.multiworld.itempool]
+        item_pool_names = {item.name for item in self.multiworld.itempool}
         for glowbo in glowbo_table.keys():
             assert glowbo in item_pool_names
 

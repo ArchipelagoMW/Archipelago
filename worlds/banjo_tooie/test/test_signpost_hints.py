@@ -131,8 +131,6 @@ class TestCrypticSignpostsHints(TestSignpostsHints):
                 and location.player == hint_data.location_player_id
             ][0]
 
-            text = hint_data.text[::]
-
             location = hinted_location.name
 
             classification_keywords = {
@@ -146,10 +144,10 @@ class TestCrypticSignpostsHints(TestSignpostsHints):
             }
             keywords = classification_keywords[hinted_location.item.classification]
 
-            assert 'Your' in text
-            assert location in text
-            assert any([keyword in text for keyword in keywords]), f"Item {hinted_location.item.name}\
-                    should be one of these: {keywords} but was hinted: here's the full text: {text}."
+            assert 'Your' in hint_data.text
+            assert location in hint_data.text
+            assert any([keyword in hint_data.text for keyword in keywords]), f"Item {hinted_location.item.name}\
+                    should be one of these: {keywords} but was hinted: here's the full text: {hint_data.text}."
             assert not hint_data.should_add_hint
 
 

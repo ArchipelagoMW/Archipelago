@@ -17,7 +17,7 @@ class TestRandomizedNotes(BanjoTooieTestBase):
 
     def test_item_pool(self) -> None:
         # max jamjars cost is 765. There are 9 trebleclefs by default.
-        progression_notes_default = (765 - 9*20) / 5
+        progression_notes_default = (765 - 9*20) // 5
 
         notes_in_pool = [item for item in self.multiworld.itempool if item.name == itemName.NOTE]
 
@@ -40,8 +40,7 @@ class TestVanillaNotes(BanjoTooieTestBase):
         assert item_pool_names.count(itemName.NOTE) == 0
 
     def test_prefills(self) -> None:
-        vanilla_locations_names = [location_name for location_name, location_data in all_location_table.items()
-                                   if location_data.group == "Note"]
+        vanilla_locations_names = self.world.location_name_groups["Notes"]
         vanilla_locations = [location for location in self.world.get_locations()
                              if location.name in vanilla_locations_names]
 

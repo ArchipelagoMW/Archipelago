@@ -49,161 +49,76 @@ class JinjosDisabled(BanjoTooieTestBase):
         assert 0 == jinjo_counter
 
     def test_prefills(self) -> None:
-        jinjos = 0
-        placed_correctly = 0
-        for name in self.world.item_name_groups["Jinjo"]:
-            banjoItem = all_item_table[name]
-            jinjos += banjoItem.qty
-            try:
-                location_item = ""
-                if name == itemName.WJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOJR5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.OJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOWW4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOHP2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.YJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOWW3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOHP4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOHP3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.BRJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOGM1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOJR2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOTL2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOTL5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.GJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOWW5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOJR1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOTL4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGI2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOHP1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.RJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOMT2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOMT3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOMT5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOJR3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOJR4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOWW2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.BLJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOGM3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOTL1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOHP5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOCC2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOIH1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOIH4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOIH5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.PJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOMT1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGM5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOCC1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOCC3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOCC5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOIH2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOIH3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGI4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                elif name == itemName.BKJINJO:
-                    location_item = self.multiworld.get_location(locationName.JINJOMT4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGM2, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGM4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOWW1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOTL3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGI1, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGI5, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOCC4, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-                    location_item = self.multiworld.get_location(locationName.JINJOGI3, self.player).item.name
-                    if location_item == name:
-                        placed_correctly += 1
-            except Exception:
-                print(f"Issue with Item: {name} Please Investigate")
-                placed_correctly += 0
-        assert jinjos == placed_correctly
+        def check_jinjo_locations(location_names: list[str], jinjo_name: str) -> bool:
+            for location_name in location_names:
+                location_item = self.multiworld.get_location(location_name, self.player).item.name
+                if location_item != jinjo_name:
+                    return False
+            return True
+
+        white_jinjo_locations = [locationName.JINJOJR5]
+        orange_jinjo_locations = [locationName.JINJOWW4, locationName.JINJOHP2]
+        yellow_jinjo_locations = [locationName.JINJOWW3, locationName.JINJOHP4, locationName.JINJOHP3]
+        brown_jinjo_locations = [
+            locationName.JINJOGM1,
+            locationName.JINJOJR2,
+            locationName.JINJOTL2,
+            locationName.JINJOTL5,
+        ]
+        green_jinjo_locations = [
+            locationName.JINJOWW5,
+            locationName.JINJOJR1,
+            locationName.JINJOTL4,
+            locationName.JINJOGI2,
+            locationName.JINJOHP1,
+        ]
+        red_jinjo_locations = [
+            locationName.JINJOMT2,
+            locationName.JINJOMT3,
+            locationName.JINJOMT5,
+            locationName.JINJOJR3,
+            locationName.JINJOJR4,
+            locationName.JINJOWW2,
+        ]
+        blue_jinjo_locations = [
+            locationName.JINJOGM3,
+            locationName.JINJOTL1,
+            locationName.JINJOHP5,
+            locationName.JINJOCC2,
+            locationName.JINJOIH1,
+            locationName.JINJOIH4,
+            locationName.JINJOIH5,
+        ]
+        purple_jinjo_locations = [
+            locationName.JINJOMT1,
+            locationName.JINJOGM5,
+            locationName.JINJOCC1,
+            locationName.JINJOCC3,
+            locationName.JINJOCC5,
+            locationName.JINJOIH2,
+            locationName.JINJOIH3,
+            locationName.JINJOGI4,
+        ]
+        black_jinjo_locations = [
+            locationName.JINJOMT4,
+            locationName.JINJOGM2,
+            locationName.JINJOGM4,
+            locationName.JINJOWW1,
+            locationName.JINJOTL3,
+            locationName.JINJOGI1,
+            locationName.JINJOGI5,
+            locationName.JINJOCC4,
+            locationName.JINJOGI3,
+        ]
+        assert check_jinjo_locations(white_jinjo_locations, itemName.WJINJO)
+        assert check_jinjo_locations(orange_jinjo_locations, itemName.OJINJO)
+        assert check_jinjo_locations(yellow_jinjo_locations, itemName.YJINJO)
+        assert check_jinjo_locations(brown_jinjo_locations, itemName.BRJINJO)
+        assert check_jinjo_locations(green_jinjo_locations, itemName.GJINJO)
+        assert check_jinjo_locations(red_jinjo_locations, itemName.RJINJO)
+        assert check_jinjo_locations(blue_jinjo_locations, itemName.BLJINJO)
+        assert check_jinjo_locations(purple_jinjo_locations, itemName.PJINJO)
+        assert check_jinjo_locations(black_jinjo_locations, itemName.BKJINJO)
 
     def test_item_pool_jiggies(self) -> None:
         assert [item.name for item in self.multiworld.itempool if item.advancement].count(itemName.JIGGY) == 46
