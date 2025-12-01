@@ -6,7 +6,7 @@ from typing import Any, NamedTuple
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
 from worlds.generic.Rules import set_rule
-from .options import FirstRootNode, NineSolsGameOptions
+from .options import FirstRootNode, NineSolsGameOptions, LogicDifficulty
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -183,17 +183,26 @@ def create_regions(world: "NineSolsWorld") -> None:
         exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
         for connection in exit_connections:
             to = connection["to"]
-            requires = connection["requires"]
-            # we'll replace this with a generic "requires": { "option": ... } syntax when we get to trick logic
+
+            vanilla_requires = connection["requires"] if "requires" in connection else None
+            # we'll replace this with a generic "requires": { "option": ... } syntax
             if (region_name == "CC - Root Node" and to == "CC - Root Node After Boss"
                     and options.skip_soulscape_platforming):
-                requires = [  # no WC/TCK/LG/CL, only the platforming required that
+                vanilla_requires = [  # no WC/TCK/LG/CL, only the platforming required that
                     {"item": "Event - Lady Ethereal Soulscape Unlocked"},
                     {"item": "Air Dash"}
                 ]
-            rule = None if len(requires) == 0 else lambda state, r=requires: eval_rule(state, p, options, r)  # noqa
+            medium_requires = connection["medium_requires"] if (
+                    "medium_requires" in connection and
+                    options.logic_difficulty >= LogicDifficulty.option_medium) else None
+            ls_requires = connection["ls_requires"] if (
+                    "ls_requires" in connection and
+                    options.logic_difficulty >= LogicDifficulty.option_ledge_storage) else None
+            all_requires = [{"anyOf": [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]}]
+
+            rule = lambda state, r=all_requires: eval_rule(state, p, options, r) if len(all_requires) > 0 else None  # noqa
             entrance = region.connect(mw.get_region(to, p), None, rule)
-            indirect_region_names = regions_referenced_by_rule(requires)
+            indirect_region_names = regions_referenced_by_rule(all_requires)
             for indirect_region_name in indirect_region_names:
                 mw.register_indirect_condition(mw.get_region(indirect_region_name, p), entrance)
 
