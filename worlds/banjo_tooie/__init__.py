@@ -966,7 +966,7 @@ class BanjoTooieWorld(World):
             regionName.CCBOSS: regionName.CC,
         }
         bt_players = world.get_game_players(cls.game)
-        spoiler_handle.write('\n\nBanjo-Tooie ({})'.format(BanjoTooieWorld.version))
+        spoiler_handle.write(f"\n\nBanjo-Tooie (V{cls.world_version.as_simple_string()})")
         for player in bt_players:
             currentWorld: BanjoTooieWorld = world.worlds[player]
             name = world.get_player_name(player)
