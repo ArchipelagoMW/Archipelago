@@ -83,3 +83,25 @@ class TestLedgeStorageLogic(NineSolsTestBase):
         # Ledge storage logic for OEF itself is parry hover with CL setup:
         self.assertReachableWith("AF (Elevator): Over Electrified Floor", prereq_items + ["Ledge Grab", "Cloud Leap"])
 
+
+# Test a connection that doesn't even exist on vanilla logic
+# I picked the "easy elevator skip" in GoSY because it's the only such connection right next to a first root node
+class TestLedgeStorageOnlyConnection(NineSolsTestBase):
+    options = {
+        "first_root_node": "grotto_of_scriptures_entry",
+        "logic_difficulty": "ledge_storage",
+        "shuffle_grapple": True,
+        "shuffle_wall_climb": True,
+        "shuffle_ledge_grab": True,
+    }
+
+    def test_default(self):
+        self.assertReachableWith("GoS (Entry): Examine Painting", [])
+
+        self.assertNotReachableWith("GoS (Entry): Greenhouse Between Elevators", [])
+        self.assertReachableWith("GoS (Entry): Greenhouse Between Elevators", [
+            "Arrow: Cloud Piercer",
+            "Ledge Grab",
+            "Air Dash"
+        ])
+
