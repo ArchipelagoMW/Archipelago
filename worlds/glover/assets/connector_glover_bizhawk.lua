@@ -274,6 +274,15 @@ local ROM_ITEM_TABLE = {
     "AP_CBALL_TRAP",
 	"AP_GLOVER_DEATH",
 	"AP_GLOVER_TAG",
+	"AP_CHICKEN_SOUND",
+    "AP_HERCULES_TRANSFORM",
+    "AP_SPEED_TRANSFORM",
+    "AP_STICKY_TRANSFORM",
+    "AP_FROG_TRANSFORM",
+    "AP_BOOMERANG_TRANSFORM",
+    "AP_BEACHBALL_TRANSFORM",
+    "AP_HELICOPTER_TRANSFORM",
+    "AP_DEATH_TRANSFORM",
     "AP_MAX_ITEM",
 };
 
@@ -11677,7 +11686,7 @@ GLOVERHACK = {
 	base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9B,
-    ap_world = 0x7AC,
+    ap_world = 0x7BC,
       hub_entrance = 0x0,
       door_number = 0x1,
       garib_locations = 0x4,
@@ -11714,11 +11723,11 @@ GLOVERHACK = {
     ap_world_offset = 0x614,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
-    wayroom_locations = 0xCA2C,
+    wayroom_locations = 0xCA3C,
       wayroom_id = 0x4,
       wayroom_collected = 0x6,
     wayroom_size = 0x8,
-    chicken_collected = 0xCA5C,
+    chicken_collected = 0xCA6C,
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
@@ -11727,11 +11736,11 @@ GLOVERHACK = {
       taglink = 0x4,
     hub_map = 0x8,
     world_map = 0x9,
-    n64_deathlink = 0x729,
-    n64_taglink = 0x72A,
-    ROM_MAJOR_VERSION = 0x7A6,
-    ROM_MINOR_VERSION = 0x7A7,
-    ROM_PATCH_VERSION = 0x7A8
+    n64_deathlink = 0x732,
+    n64_taglink = 0x733,
+    ROM_MAJOR_VERSION = 0x7B8,
+    ROM_MINOR_VERSION = 0x7B9,
+    ROM_PATCH_VERSION = 0x7BA
 }
 
 function GLOVERHACK:new(t)
