@@ -200,8 +200,8 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
 
 def launch(exe: Sequence[str], in_terminal: bool = False) -> bool:
     """Runs the given command/args in `exe` in a new process.
-    
-    If `in_terminal` is True, it will attepmt to run in a terminal window,
+
+    If `in_terminal` is True, it will attempt to run in a terminal window,
     and the return value will indicate whether one was found."""
     if in_terminal:
         if is_windows:
