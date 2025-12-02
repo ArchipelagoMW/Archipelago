@@ -1,4 +1,4 @@
-from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
+from worlds.rac3.constants.data.position import RAC3POSITIONDATA
 
 
 class RAC3CHECKPOINT:

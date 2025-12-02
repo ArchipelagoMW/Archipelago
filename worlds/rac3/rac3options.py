@@ -3,23 +3,23 @@ from typing import Any, List
 
 from Options import OptionGroup, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.options.Deathlink import Deathlink
-from worlds.rac3.options.Exclude import RAC3ExcludeLocations
-from worlds.rac3.options.ExtraArmor import ExtraArmorUpgrade
-from worlds.rac3.options.Multiplier import BoltAndXPMultiplier
-from worlds.rac3.options.Nanotech import NanotechMilestones
-from worlds.rac3.options.ProgWeapons import EnableProgressiveWeapons
-from worlds.rac3.options.RatchetSkins import RatchetSkin
-from worlds.rac3.options.ShipNose import ShipNose
-from worlds.rac3.options.ShipSkin import ShipSkin
-from worlds.rac3.options.ShipWings import ShipWings
-from worlds.rac3.options.Skillpoints import SkillPoints
-from worlds.rac3.options.StartingWeapons import StartingWeapons
-from worlds.rac3.options.TitaniumBolts import TitaniumBolts
-from worlds.rac3.options.Traps import EnableTraps
-from worlds.rac3.options.TrapWeight import TrapWeight
-from worlds.rac3.options.Trophies import Trophies
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.options.deathlink_options import Deathlink
+from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
+from worlds.rac3.options.extra_armor_options import ExtraArmorUpgrade
+from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
+from worlds.rac3.options.nanotech_options import NanotechMilestones
+from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
+from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.ship_nose_options import ShipNose
+from worlds.rac3.options.ship_skin_options import ShipSkin
+from worlds.rac3.options.ship_wings_options import ShipWings
+from worlds.rac3.options.skillpoints_options import SkillPoints
+from worlds.rac3.options.starting_weapons_options import StartingWeapons
+from worlds.rac3.options.titanium_bolts_options import TitaniumBolts
+from worlds.rac3.options.trap_weight_options import TrapWeight
+from worlds.rac3.options.traps_options import EnableTraps
+from worlds.rac3.options.trophies_options import Trophies
 
 
 def create_option_groups() -> List[OptionGroup]:

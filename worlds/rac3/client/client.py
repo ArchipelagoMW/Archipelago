@@ -6,11 +6,11 @@ from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from Utils import Any, async_start, Dict, init_logging
-from worlds.rac3.client.Rac3Callbacks import init, update
-from worlds.rac3.client.Rac3Interface import Rac3Interface
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import RAC3REGION
-from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.client.callbacks import init, update
+from worlds.rac3.client.interface import Rac3Interface
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.region import RAC3REGION
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False

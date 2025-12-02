@@ -2,9 +2,9 @@ from dataclasses import dataclass
 from typing import Optional
 
 from BaseClasses import ItemClassification
-from worlds.rac3.constants.Rac3Items import RAC3ITEM, UPGRADE_DICT
-from worlds.rac3.constants.Rac3ItemTags import RAC3ITEMTAG
-from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.item_tags import RAC3ITEMTAG
+from worlds.rac3.constants.items import RAC3ITEM, UPGRADE_DICT
+from worlds.rac3.constants.status import RAC3STATUS
 
 
 @dataclass
@@ -58,7 +58,7 @@ class RAC3ITEMDATA:
         all_tags: list[str] = [RAC3ITEMTAG.UNUSED]
         if tags is not None:
             all_tags.extend(tags)
-        return RAC3ITEMDATA(idx, ammo=ammo, tags=all_tags)
+        return RAC3ITEMDATA(idx, ammo=ammo, ap_classification=ItemClassification.filler, tags=all_tags)
 
     @staticmethod
     def construct_gadget(idx: int,
@@ -102,7 +102,8 @@ class RAC3ITEMDATA:
             all_tags.extend(tags)
         amount: int = 32 * xp
         return RAC3ITEMDATA(idx, power=power, ammo=ammo, xp=amount, level=idx - base,
-                            level_address=base + RAC3STATUS.LEVEL_TABLE, tags=all_tags)
+                            level_address=base + RAC3STATUS.LEVEL_TABLE, ap_classification=ItemClassification.useful,
+                            tags=all_tags)
 
     @staticmethod
     def construct_weapon_prog(idx: int,
@@ -131,11 +132,14 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_armor(idx: int,
                         ap_classification: ItemClassification,
-                        armor: int):
+                        armor: int,
+                        tags: Optional[list] = None):
         address: int = RAC3STATUS.ARMOR
         reduction: float = armor / 30
-        return RAC3ITEMDATA(idx, address, armor=reduction, ap_classification=ap_classification,
-                            tags=[RAC3ITEMTAG.ARMOR])
+        all_tags: list[str] = [RAC3ITEMTAG.ARMOR]
+        if tags is not None:
+            all_tags.extend(tags)
+        return RAC3ITEMDATA(idx, address, armor=reduction, ap_classification=ap_classification, tags=all_tags)
 
     @staticmethod
     def construct_vidcomic(idx: int, tag: list[str] = None):
@@ -414,7 +418,8 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.COMMAND_CENTER: RAC3ITEMDATA.construct_infobot(0xF3, ItemClassification.progression),
     RAC3ITEM.MUSEUM: RAC3ITEMDATA.construct_infobot(0xF4, ItemClassification.progression),
     # Armor
-    RAC3ITEM.PROGRESSIVE_ARMOR: RAC3ITEMDATA.construct_armor(0xF5, ItemClassification.progression, 0),
+    RAC3ITEM.PROGRESSIVE_ARMOR:
+        RAC3ITEMDATA.construct_armor(0xF5, ItemClassification.progression, 0, [RAC3ITEMTAG.PROGRESSIVE]),
     RAC3ITEM.MAGNAPLATE: RAC3ITEMDATA.construct_armor(0xF6, ItemClassification.progression, 10),
     RAC3ITEM.ADAMANTINE: RAC3ITEMDATA.construct_armor(0xF7, ItemClassification.progression, 15),
     RAC3ITEM.AEGIS: RAC3ITEMDATA.construct_armor(0xF8, ItemClassification.progression, 20),
@@ -481,15 +486,19 @@ item_counts: dict[str, int] = {
     RAC3ITEM.PROGRESSIVE_ARMOR: 4,
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: 5,
     **dict.fromkeys(planet_data.keys(), 1),
-    RAC3ITEM.VICTORY: 0
+    RAC3ITEM.VICTORY: 0,
 }
 item_table: dict[str, RAC3ITEMDATA] = {
     **non_prog_weapon_data,
     **progressive_data,
     **gadget_data,
+    **armor_data,
+    **vidcomic_data,
     **planet_data,
     **filler_data,
     **trap_data,
+    **unused_data,
+    **weapon_upgrade_data
 }
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
 trap_to_status: dict[str, int] = {

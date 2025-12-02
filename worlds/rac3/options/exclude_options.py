@@ -1,5 +1,5 @@
 from Options import ExcludeLocations
-from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
+from worlds.rac3.constants.locations.tags import RAC3TAG
 
 
 class RAC3ExcludeLocations(ExcludeLocations):

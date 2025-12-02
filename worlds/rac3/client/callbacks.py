@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING
 
 from CommonClient import logger
 from NetUtils import ClientStatus
-from worlds.rac3.client.ClientMessage import ClientMessage
+from worlds.rac3.client.message import ClientMessage
 
 ##################################################
 # Only change point: Change filename/Class name  #
 ##################################################
 if TYPE_CHECKING:
-    from worlds.rac3.client.Rac3Client import Rac3Context as Context
+    from worlds.rac3.client.client import Rac3Context as Context
 
 
 ##################################################

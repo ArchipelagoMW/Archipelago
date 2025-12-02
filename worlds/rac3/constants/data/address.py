@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
+from worlds.rac3.constants.check_type import CHECKTYPE
 
 
 @dataclass

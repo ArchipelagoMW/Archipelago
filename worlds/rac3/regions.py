@@ -1,13 +1,12 @@
 from typing import TYPE_CHECKING
 
 from BaseClasses import Location, Region
-from worlds.rac3.constants.data.Rac3LocationData import (LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE,
-                                                         RAC3LOCATIONDATA)
-from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
-from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
-from worlds.rac3.constants.Rac3Items import RAC3ITEM
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -36,7 +35,7 @@ every_5_nanotech = [
     RAC3NANOTECH.LEVEL_85,
     RAC3NANOTECH.LEVEL_90,
     RAC3NANOTECH.LEVEL_95,
-    RAC3NANOTECH.LEVEL_100
+    RAC3NANOTECH.LEVEL_100,
 ]
 
 # Making an array with every 10 nanotech
@@ -49,7 +48,7 @@ every_10_nanotech = [
     RAC3NANOTECH.LEVEL_70,
     RAC3NANOTECH.LEVEL_80,
     RAC3NANOTECH.LEVEL_90,
-    RAC3NANOTECH.LEVEL_100
+    RAC3NANOTECH.LEVEL_100,
 ]
 
 # Making an array with every 20 nanotech
@@ -58,7 +57,7 @@ every_20_nanotech = [
     RAC3NANOTECH.LEVEL_40,
     RAC3NANOTECH.LEVEL_60,
     RAC3NANOTECH.LEVEL_80,
-    RAC3NANOTECH.LEVEL_100
+    RAC3NANOTECH.LEVEL_100,
 ]
 
 
@@ -124,75 +123,72 @@ def create_regions(world: "RaC3World"):
     nanotech_levels = create_region(world, RAC3REGION.NANOTECH)
     menu.connect(nanotech_levels)
 
-    shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
-    menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
-
-    nitro_launcher_upgrades = create_region(world, f"{RAC3ITEM.NITRO_LAUNCHER} Upgrades")
-    menu.connect(nitro_launcher_upgrades, rule=lambda state: state.has(RAC3ITEM.NITRO_LAUNCHER, world.player)),
-
-    n60_storm_upgrades = create_region(world, f"{RAC3ITEM.N60_STORM} Upgrades")
-    menu.connect(n60_storm_upgrades, rule=lambda state: state.has(RAC3ITEM.N60_STORM, world.player)),
-
-    plasma_whip_upgrades = create_region(world, f"{RAC3ITEM.PLASMA_WHIP} Upgrades")
-    menu.connect(plasma_whip_upgrades, rule=lambda state: state.has(RAC3ITEM.PLASMA_WHIP, world.player)),
-
-    infector_upgrades = create_region(world, f"{RAC3ITEM.INFECTOR} Upgrades")
-    menu.connect(infector_upgrades, rule=lambda state: state.has(RAC3ITEM.INFECTOR, world.player)),
-
-    suck_cannon_upgrades = create_region(world, f"{RAC3ITEM.SUCK_CANNON} Upgrades")
-    menu.connect(suck_cannon_upgrades, rule=lambda state: state.has(RAC3ITEM.SUCK_CANNON, world.player)),
-
-    spitting_hydra_upgrades = create_region(world, f"{RAC3ITEM.SPITTING_HYDRA} Upgrades")
-    menu.connect(spitting_hydra_upgrades, rule=lambda state: state.has(RAC3ITEM.SPITTING_HYDRA, world.player)),
-
-    agents_of_doom_upgrades = create_region(world, f"{RAC3ITEM.AGENTS_OF_DOOM} Upgrades")
-    menu.connect(agents_of_doom_upgrades, rule=lambda state: state.has(RAC3ITEM.AGENTS_OF_DOOM, world.player)),
-
-    flux_rifle_upgrades = create_region(world, f"{RAC3ITEM.FLUX_RIFLE} Upgrades")
-    menu.connect(flux_rifle_upgrades, rule=lambda state: state.has(RAC3ITEM.FLUX_RIFLE, world.player)),
-
-    annihilator_upgrades = create_region(world, f"{RAC3ITEM.ANNIHILATOR} Upgrades")
-    menu.connect(annihilator_upgrades, rule=lambda state: state.has(RAC3ITEM.ANNIHILATOR, world.player)),
-
-    holo_shield_glove_upgrades = create_region(world, f"{RAC3ITEM.HOLO_SHIELD} Upgrades")
-    menu.connect(holo_shield_glove_upgrades, rule=lambda state: state.has(RAC3ITEM.HOLO_SHIELD, world.player)),
-
-    disc_blade_gun_upgrades = create_region(world, f"{RAC3ITEM.DISC_BLADE} Upgrades")
-    menu.connect(disc_blade_gun_upgrades, rule=lambda state: state.has(RAC3ITEM.DISC_BLADE, world.player)),
-
-    rift_inducer_upgrades = create_region(world, f"{RAC3ITEM.RIFT_INDUCER} Upgrades")
-    menu.connect(rift_inducer_upgrades, rule=lambda state: state.has(RAC3ITEM.RIFT_INDUCER, world.player)),
-
-    qwack_o_ray_upgrades = create_region(world, f"{RAC3ITEM.QWACK_O_RAY} Upgrades")
-    menu.connect(qwack_o_ray_upgrades, rule=lambda state: state.has(RAC3ITEM.QWACK_O_RAY, world.player)),
-
-    ry3no_upgrades = create_region(world, f"{RAC3ITEM.RY3N0} Upgrades")
-    menu.connect(ry3no_upgrades, rule=lambda state: state.has(RAC3ITEM.RY3N0, world.player)),
-
-    mega_turret_glove_upgrades = create_region(world, f"{RAC3ITEM.MINI_TURRET} Upgrades")
-    menu.connect(mega_turret_glove_upgrades, rule=lambda state: state.has(RAC3ITEM.MINI_TURRET, world.player)),
-
-    lava_gun_upgrades = create_region(world, f"{RAC3ITEM.LAVA_GUN} Upgrades")
-    menu.connect(lava_gun_upgrades, rule=lambda state: state.has(RAC3ITEM.LAVA_GUN, world.player)),
-
-    tesla_barrier_upgrades = create_region(world, f"{RAC3ITEM.SHIELD_CHARGER} Upgrades")
-    menu.connect(tesla_barrier_upgrades, rule=lambda state: state.has(RAC3ITEM.SHIELD_CHARGER, world.player)),
-
-    bouncer_upgrades = create_region(world, f"{RAC3ITEM.BOUNCER} Upgrades")
-    menu.connect(bouncer_upgrades, rule=lambda state: state.has(RAC3ITEM.BOUNCER, world.player)),
-
-    plasma_coil_upgrades = create_region(world, f"{RAC3ITEM.PLASMA_COIL} Upgrades")
-    menu.connect(plasma_coil_upgrades, rule=lambda state: state.has(RAC3ITEM.PLASMA_COIL, world.player))
+    # shock_blaster_upgrades = create_region(world, f"{RAC3ITEM.SHOCK_BLASTER} Upgrades")
+    # menu.connect(shock_blaster_upgrades, rule=lambda state: state.has(RAC3ITEM.SHOCK_BLASTER, world.player)),
+    #
+    # nitro_launcher_upgrades = create_region(world, f"{RAC3ITEM.NITRO_LAUNCHER} Upgrades")
+    # menu.connect(nitro_launcher_upgrades, rule=lambda state: state.has(RAC3ITEM.NITRO_LAUNCHER, world.player)),
+    #
+    # n60_storm_upgrades = create_region(world, f"{RAC3ITEM.N60_STORM} Upgrades")
+    # menu.connect(n60_storm_upgrades, rule=lambda state: state.has(RAC3ITEM.N60_STORM, world.player)),
+    #
+    # plasma_whip_upgrades = create_region(world, f"{RAC3ITEM.PLASMA_WHIP} Upgrades")
+    # menu.connect(plasma_whip_upgrades, rule=lambda state: state.has(RAC3ITEM.PLASMA_WHIP, world.player)),
+    #
+    # infector_upgrades = create_region(world, f"{RAC3ITEM.INFECTOR} Upgrades")
+    # menu.connect(infector_upgrades, rule=lambda state: state.has(RAC3ITEM.INFECTOR, world.player)),
+    #
+    # suck_cannon_upgrades = create_region(world, f"{RAC3ITEM.SUCK_CANNON} Upgrades")
+    # menu.connect(suck_cannon_upgrades, rule=lambda state: state.has(RAC3ITEM.SUCK_CANNON, world.player)),
+    #
+    # spitting_hydra_upgrades = create_region(world, f"{RAC3ITEM.SPITTING_HYDRA} Upgrades")
+    # menu.connect(spitting_hydra_upgrades, rule=lambda state: state.has(RAC3ITEM.SPITTING_HYDRA, world.player)),
+    #
+    # agents_of_doom_upgrades = create_region(world, f"{RAC3ITEM.AGENTS_OF_DOOM} Upgrades")
+    # menu.connect(agents_of_doom_upgrades, rule=lambda state: state.has(RAC3ITEM.AGENTS_OF_DOOM, world.player)),
+    #
+    # flux_rifle_upgrades = create_region(world, f"{RAC3ITEM.FLUX_RIFLE} Upgrades")
+    # menu.connect(flux_rifle_upgrades, rule=lambda state: state.has(RAC3ITEM.FLUX_RIFLE, world.player)),
+    #
+    # annihilator_upgrades = create_region(world, f"{RAC3ITEM.ANNIHILATOR} Upgrades")
+    # menu.connect(annihilator_upgrades, rule=lambda state: state.has(RAC3ITEM.ANNIHILATOR, world.player)),
+    #
+    # holo_shield_glove_upgrades = create_region(world, f"{RAC3ITEM.HOLO_SHIELD} Upgrades")
+    # menu.connect(holo_shield_glove_upgrades, rule=lambda state: state.has(RAC3ITEM.HOLO_SHIELD, world.player)),
+    #
+    # disc_blade_gun_upgrades = create_region(world, f"{RAC3ITEM.DISC_BLADE} Upgrades")
+    # menu.connect(disc_blade_gun_upgrades, rule=lambda state: state.has(RAC3ITEM.DISC_BLADE, world.player)),
+    #
+    # rift_inducer_upgrades = create_region(world, f"{RAC3ITEM.RIFT_INDUCER} Upgrades")
+    # menu.connect(rift_inducer_upgrades, rule=lambda state: state.has(RAC3ITEM.RIFT_INDUCER, world.player)),
+    #
+    # qwack_o_ray_upgrades = create_region(world, f"{RAC3ITEM.QWACK_O_RAY} Upgrades")
+    # menu.connect(qwack_o_ray_upgrades, rule=lambda state: state.has(RAC3ITEM.QWACK_O_RAY, world.player)),
+    #
+    # ry3no_upgrades = create_region(world, f"{RAC3ITEM.RY3N0} Upgrades")
+    # menu.connect(ry3no_upgrades, rule=lambda state: state.has(RAC3ITEM.RY3N0, world.player)),
+    #
+    # mega_turret_glove_upgrades = create_region(world, f"{RAC3ITEM.MINI_TURRET} Upgrades")
+    # menu.connect(mega_turret_glove_upgrades, rule=lambda state: state.has(RAC3ITEM.MINI_TURRET, world.player)),
+    #
+    # lava_gun_upgrades = create_region(world, f"{RAC3ITEM.LAVA_GUN} Upgrades")
+    # menu.connect(lava_gun_upgrades, rule=lambda state: state.has(RAC3ITEM.LAVA_GUN, world.player)),
+    #
+    # tesla_barrier_upgrades = create_region(world, f"{RAC3ITEM.SHIELD_CHARGER} Upgrades")
+    # menu.connect(tesla_barrier_upgrades, rule=lambda state: state.has(RAC3ITEM.SHIELD_CHARGER, world.player)),
+    #
+    # bouncer_upgrades = create_region(world, f"{RAC3ITEM.BOUNCER} Upgrades")
+    # menu.connect(bouncer_upgrades, rule=lambda state: state.has(RAC3ITEM.BOUNCER, world.player)),
+    #
+    # plasma_coil_upgrades = create_region(world, f"{RAC3ITEM.PLASMA_COIL} Upgrades")
+    # menu.connect(plasma_coil_upgrades, rule=lambda state: state.has(RAC3ITEM.PLASMA_COIL, world.player))
 
 
 def create_region(world: "RaC3World", name: str) -> Region:
     reg = Region(name, world.player, world.multiworld)
     options = world.options
     for key, data in RAC3_LOCATION_DATA_TABLE.items():
-        if should_skip_location(data, options):  # Skip locations based on options
-            continue
-
-        if data.REGION == name:
+        if data.REGION == name and not should_skip_location(data, options):
             location = GameLocation(world.player, key, data.AP_CODE, reg)
             reg.locations.append(location)
 

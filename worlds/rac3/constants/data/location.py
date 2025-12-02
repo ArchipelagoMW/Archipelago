@@ -1,17 +1,17 @@
 from dataclasses import dataclass
 
-from worlds.rac3.constants.data.Rac3AddressData import RAC3ADDRESSDATA
-from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
-from worlds.rac3.constants.locations.Rac3Nanotech import RAC3NANOTECH
-from worlds.rac3.constants.locations.Rac3Sewers import RAC3SEWER
-from worlds.rac3.constants.locations.Rac3Skillpoints import RAC3SKILLPOINT
-from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
-from worlds.rac3.constants.locations.Rac3TBolts import RAC3TBOLT
-from worlds.rac3.constants.locations.Rac3Trophies import RAC3TROPHY
-from worlds.rac3.constants.locations.Rac3Vendors import RAC3VENDOR
-from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
-from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.check_type import CHECKTYPE
+from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
+from worlds.rac3.constants.locations.sewers import RAC3SEWER
+from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
+from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
+from worlds.rac3.constants.locations.trophies import RAC3TROPHY
+from worlds.rac3.constants.locations.vendors import RAC3VENDOR
+from worlds.rac3.constants.region import RAC3REGION
 
 LOCATION_NAME_TO_ID: dict[str, int] = {
     RAC3LOCATION.VELDIN_FIRST_RANGER: 0,
@@ -1249,7 +1249,7 @@ LOCATION_NAME_TO_REGION: dict[str, str] = {
     RAC3NANOTECH.LEVEL_97: RAC3REGION.NANOTECH,
     RAC3NANOTECH.LEVEL_98: RAC3REGION.NANOTECH,
     RAC3NANOTECH.LEVEL_99: RAC3REGION.NANOTECH,
-    RAC3NANOTECH.LEVEL_100: RAC3REGION.NANOTECH
+    RAC3NANOTECH.LEVEL_100: RAC3REGION.NANOTECH,
 }
 LOCATION_NAME_TO_TAG: dict[str, set[str]] = {
     RAC3LOCATION.VELDIN_FIRST_RANGER: {RAC3TAG.WEAPONS},

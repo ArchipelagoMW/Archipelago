@@ -1,6 +1,7 @@
 from Options import Toggle
 from worlds.rac3 import RAC3OPTION
 
+
 class EnableTraps(Toggle):
     """
     Determines whether trap items are included in the item pool.

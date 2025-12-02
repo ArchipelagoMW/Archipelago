@@ -4,17 +4,17 @@ from typing import Callable, TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule
 from worlds.rac3 import location_groups
-from worlds.rac3.constants.data.Rac3ItemData import planet_data
-from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
-from worlds.rac3.constants.locations.Rac3Skillpoints import RAC3SKILLPOINT
-from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
-from worlds.rac3.constants.locations.Rac3TBolts import RAC3TBOLT
-from worlds.rac3.constants.locations.Rac3Trophies import RAC3TROPHY
-from worlds.rac3.constants.locations.Rac3Vendors import RAC3VENDOR
-from worlds.rac3.constants.Rac3Items import RAC3ITEM
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import RAC3REGION
-from worlds.rac3.Regions import every_10_nanotech, every_20_nanotech, every_5_nanotech
+from worlds.rac3.constants.data.item import planet_data
+from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
+from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
+from worlds.rac3.constants.locations.trophies import RAC3TROPHY
+from worlds.rac3.constants.locations.vendors import RAC3VENDOR
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.regions import every_10_nanotech, every_20_nanotech, every_5_nanotech
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World

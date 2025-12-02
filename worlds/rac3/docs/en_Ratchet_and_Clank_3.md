@@ -1,10 +1,11 @@
 # Ratchet and Clank 3 Up your Arsenal (PS2)
 
-An Archipelago implementation for Ratchet & Clank 3
+An Archipelago implementation for Ratchet and Clank 3
 
 ## Setup Guide
 
-To get started, see [the Setup Guide](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/docs/setup_en.md).
+To get started,
+see [the Setup Guide](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/docs/setup_en.md).
 
 ## Where is the options page?
 

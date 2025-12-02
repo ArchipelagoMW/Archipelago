@@ -1,8 +1,8 @@
 from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
 
-from worlds.rac3.constants.data.Rac3LocationData import RAC3_LOCATION_DATA_TABLE
-from worlds.rac3.constants.locations.Rac3Tags import RAC3TAG
-from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
+from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World

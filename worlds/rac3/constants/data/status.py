@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from worlds.rac3.constants.Rac3Items import RAC3ITEM
-from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.status import RAC3STATUS
 
 
 @dataclass

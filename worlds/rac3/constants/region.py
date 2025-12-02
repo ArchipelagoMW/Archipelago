@@ -1,6 +1,6 @@
-from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
-from worlds.rac3.constants.Rac3Checkpoint import RAC3CHECKPOINT
-from worlds.rac3.constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.checkpoint import RAC3CHECKPOINT
+from worlds.rac3.constants.data.position import RAC3POSITIONDATA
+from worlds.rac3.constants.items import RAC3ITEM
 
 
 class RAC3REGION:
@@ -89,7 +89,7 @@ SHIP_SLOTS: list[str] = [
     RAC3REGION.SLOT_10,
     RAC3REGION.SLOT_11,
     RAC3REGION.SLOT_12,
-    RAC3REGION.SLOT_13
+    RAC3REGION.SLOT_13,
 ]
 PLANET_FROM_INFOBOT: dict[str, str] = {
     RAC3ITEM.VELDIN: RAC3REGION.VELDIN,

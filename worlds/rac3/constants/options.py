@@ -1,7 +1,7 @@
 class RAC3OPTION:
     OPTIONS = "options"
     GAME_TITLE = "Rac3"
-    GAME_TITLE_FULL = "Ratchet & Clank 3"
+    GAME_TITLE_FULL = "Ratchet and Clank 3"
     START_INVENTORY_FROM_POOL = "start_inventory_from_pool"
     STARTING_WEAPONS = "starting_weapons"
     BOLT_AND_XP_MULTIPLIER = "bolt_and_xp_multiplier"

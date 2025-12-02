@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional
 
-from worlds.rac3.constants.data.Rac3PositionData import RAC3POSITIONDATA
-from worlds.rac3.constants.Rac3Region import PLANET_CHECKPOINT, PLANET_NAME_FROM_ID, PLANET_MENU_OFFSET, RESPAWN_COORDS_OFFSET, RAC3REGION
-from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.data.position import RAC3POSITIONDATA
+from worlds.rac3.constants.region import (PLANET_CHECKPOINT, PLANET_MENU_OFFSET, PLANET_NAME_FROM_ID, RAC3REGION,
+                                          RESPAWN_COORDS_OFFSET)
+from worlds.rac3.constants.status import RAC3STATUS
 
 
 @dataclass
@@ -38,9 +39,10 @@ class RAC3REGIONDATA:
         planet_address = PLANET_MENU_OFFSET[name] + RAC3STATUS.PAUSE_BASE
         checkpoint = PLANET_CHECKPOINT.get(name, None)
         respawn_coords_address = RESPAWN_COORDS_OFFSET.get(name, None)
-        if respawn_coords_address is not None: # Not all planets should have respawn coords changed
+        if respawn_coords_address is not None:  # Not all planets should have respawn coords changed
             respawn_coords_address += RAC3STATUS.RESPAWN_BASE
-        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=planet_address, respawn_coords_address=respawn_coords_address)
+        return RAC3REGIONDATA(idx, checkpoint=checkpoint, pause_address=planet_address,
+                              respawn_coords_address=respawn_coords_address)
 
 
 RAC3_REGION_DATA_TABLE: dict[str, RAC3REGIONDATA] = {

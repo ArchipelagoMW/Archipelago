@@ -2,10 +2,11 @@ from logging import DEBUG, getLogger
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from worlds.rac3.constants.data.Rac3ItemData import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT, non_prog_weapon_data,
-                                         prog_weapon_data, progressive_data)
-from worlds.rac3.constants.Rac3Items import RAC3ITEM
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.data.item import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT,
+                                             non_prog_weapon_data, prog_weapon_data, progressive_data)
+from worlds.rac3.constants.item_tags import RAC3ITEMTAG
+from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.options import RAC3OPTION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -25,9 +26,12 @@ def create_itempool(world: "RaC3World") -> List[Item]:
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table[name].AP_CLASSIFICATION
-        if item_type == ItemClassification.filler or item_type == ItemClassification.trap:
+        item_tags = item_table[name].TAGS
+        if item_type in [ItemClassification.filler, ItemClassification.trap]:
             continue
-        item_amount: int = item_counts.get(name)
+        if RAC3ITEMTAG.WEAPON_UPGRADE in item_tags:
+            continue
+        item_amount: int = item_counts.get(name, 1)
 
         # Already placed items (Starting items and vanilla)
         if name in world.preplaced_items:
@@ -45,10 +49,14 @@ def create_itempool(world: "RaC3World") -> List[Item]:
                 continue
 
         # ExtraArmorUpgrade option
-        if name == RAC3ITEM.PROGRESSIVE_ARMOR:
+        if RAC3ITEMTAG.ARMOR in item_tags:
+            if name != RAC3ITEM.PROGRESSIVE_ARMOR:
+                continue
             item_amount += options.extra_armor_upgrade.value
 
         # Catch accidental duplicates
+        if item_amount is None:
+            rac3_logger.warning(f"{name} has an incorrect amount count")
         if item_amount > 1 and name not in progressive_data.keys():
             rac3_logger.warning(f"multiple copies of {name} added to the item pool")
 
@@ -72,6 +80,8 @@ def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
 
 def create_item(world: "RaC3World", name: str) -> Item:
     data = item_table.get(name, goal_data.get(name))
+    if data is None:
+        raise KeyError(f"{name} not found in item_table")
     return GameItem(name, data.AP_CLASSIFICATION, data.AP_CODE, world.player)
 
 

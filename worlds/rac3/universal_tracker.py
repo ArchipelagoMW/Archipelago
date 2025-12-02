@@ -1,9 +1,9 @@
 from typing import Any, TYPE_CHECKING
 
-from worlds.rac3.constants.data.Rac3LocationData import UT_MAPPING
-from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.location import UT_MAPPING
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -48,5 +48,5 @@ tracker_world = {
     "map_page_locations": "locations/locations.json",
     "map_page_setting_key": r'rac3_current_planet_{player}_{team}',
     "map_page_index": map_page_index,
-    "poptracker_name_mapping": UT_MAPPING
+    "poptracker_name_mapping": UT_MAPPING,
 }

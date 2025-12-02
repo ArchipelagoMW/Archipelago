@@ -6,23 +6,22 @@ from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
-from worlds.rac3.constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
-                                                     ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data,
-                                                     PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, trap_to_status,
-                                                     vidcomic_data, weapon_upgrade_data)
-from worlds.rac3.constants.data.Rac3LocationData import (LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE,
-                                                         RAC3LOCATIONDATA)
-from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from worlds.rac3.constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
-from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
-from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
-from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
-from worlds.rac3.constants.Rac3Input import RAC3INPUT
-from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
-from worlds.rac3.constants.Rac3Options import RAC3OPTION
-from worlds.rac3.constants.Rac3Region import (PLANET_CHECKPOINT, PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RESPAWN_COORDS_OFFSET, RAC3REGION,
-                                              SHIP_SLOTS)
-from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.constants.check_type import CHECKTYPE
+from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
+                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data,
+                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, trap_to_status,
+                                             vidcomic_data, weapon_upgrade_data)
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
+from worlds.rac3.constants.deaths import DEATH_FROM_ACTION
+from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
+from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
+                                          SHIP_SLOTS)
+from worlds.rac3.constants.status import RAC3STATUS
 from worlds.rac3.pcsx2_interface.pine import Pine
 
 
@@ -118,6 +117,7 @@ class UnlockData:
                  unlock_delay: int = 0):
         self.status = status
         self.unlock_delay = unlock_delay
+
     def __repr__(self):
         return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
 
@@ -425,8 +425,8 @@ class Rac3Interface(GameInterface):
                 addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
                 # Don't allow planets that can softlock
                 if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status) and
-                    (name != RAC3ITEM.HOLOSTAR_STUDIOS or
-                     (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
+                        (name != RAC3ITEM.HOLOSTAR_STUDIOS or
+                         (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
                     if self.UnlockItem[name].unlock_delay:
                         # self.logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
                         self._write8(addr, planet.ID)
@@ -553,7 +553,7 @@ class Rac3Interface(GameInterface):
         planet_id = self._read8(RAC3STATUS.PLANET)
         planet = PLANET_NAME_FROM_ID[planet_id]
         pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-        if pause_address is not None: # Vid comics do not have a pause address
+        if pause_address is not None:  # Vid comics do not have a pause address
             is_paused = self._read8(pause_address)
             pressed_square = self._read16(RAC3STATUS.READ_INPUT) & RAC3INPUT.SQUARE
             if is_paused and pressed_square:
@@ -562,7 +562,7 @@ class Rac3Interface(GameInterface):
 
     def unpause_game(self, planet):
         pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-        if pause_address is not None: # Vid comics do not have a pause address
+        if pause_address is not None:  # Vid comics do not have a pause address
             is_paused = self._read8(pause_address)
             if is_paused:
                 self.write_input(RAC3INPUT.START)
@@ -578,7 +578,7 @@ class Rac3Interface(GameInterface):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
-        
+
         self.logger.info(f'Teleporting to ship on: {planet}')
         self.force_respawn()
 
@@ -588,25 +588,24 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             # Todo: add more special cases
-            case RAC3REGION.FLORANA:
-                return self._read_float(RAC3STATUS.RATCHET_Z) > 300  # Dont overwrite if in the Path of Death due to geometry unloading
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:
-                return False # Entrance coordinates in the first section that gets unloaded after leaving
+                return False  # Entrance coordinates in the first section that gets unloaded after leaving
             case RAC3REGION.ZELDRIN_STARPORT:
-                return False # Zeldrin has only one respawn point that is right next to the ship and we dont want anything to happen while aboard the leviathan
+                return False  # Zeldrin has only one respawn point that is right next to the ship and we don't want
+                # anything to happen while aboard the leviathan
         return True
 
     def force_respawn(self):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
-    
+
     def teleport_to_coords(self):
         # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     # Todo: Deathlink
-    def alive(self) -> (bool, str):
+    def alive(self) -> tuple[bool, str]:
         if self._read8(RAC3STATUS.HEALTH) > 0:
             return True, "Ratchet is Alive"
         else:
