@@ -865,6 +865,7 @@ class GloverWorld(World):
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
         options["tag_link"] = self.options.tag_link.value
+        options["trap_link"] = self.options.trap_link.value
         options["starting_ball"] = self.options.starting_ball.value
         options["garib_logic"] = self.options.garib_logic.value
         options["garib_sorting"] = self.options.garib_sorting.value

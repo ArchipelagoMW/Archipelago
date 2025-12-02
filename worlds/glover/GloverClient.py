@@ -316,10 +316,11 @@ class GloverContext(CommonContext):
             "DEATH" : BounceLink("DEATH", "DeathLink"),
             "TAG" : BounceLink("TAG", "TagLink"),
             "TRAP" : MultiLink("TRAP", "TrapLink", {
-                "FROG" : {},
-                "CRYSTAL" : {},
-                "CAMERA" : {},
-                "CURSE_BALL" : {},
+                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap"]},
+                "CRYSTAL" : {"Accepts" : ["Disable Tag Trap", "Double Damage", "Eject Ability", "Instant Crystal Trap", "One Hit KO"]},
+                "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Screen Flip Trap"]},
+                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]}#,
+                #"TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Tutorial Trap", "Spam Trap"]},
                 })
         }
         self.version_warning = False
@@ -436,6 +437,7 @@ class GloverContext(CommonContext):
                                 "Your version: "+version+" | Generated version: "+self.slot_data["version"])
             self.link_table["DEATH"].enabled = bool(self.slot_data["death_link"])
             self.link_table["TAG"].enabled = bool(self.slot_data["tag_link"])
+            self.life_table["TRAP"].enabled = bool(self.slot_data["trap_link"])
             self.n64_sync_task = asyncio.create_task(n64_sync_task(self), name="N64 Sync")
         elif cmd == "ReceivedItems":
             self.tracker.refresh_items()
@@ -461,7 +463,11 @@ class GloverContext(CommonContext):
             if "TagLink" in self.tags and source_name != self.instance_id and "TagLink" in args.get("tags", []):
                 self.link_table["TAG"].info.pending = True
             if "TrapLink" in self.tags and source_name != self.instance_id and "TrapLink" in args.get("tags", []):
-                self.link_table["TRAP"].info.pending = True
+                #Only accept traps that have the correct name in the accepts data
+                trap_name : str = args.get("trap_name", "")
+                for eachSubentry in self.link_table["TRAP"].entries:
+                    if trap_name in self.link_table["TRAP"].entries[eachSubentry].data["Accepts"]:
+                        self.link_table["TRAP"].entries[eachSubentry].info.pending = True
 
     def on_print_json(self, args: dict):
         if self.ui:
@@ -687,7 +693,17 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                     if link_name in link_info.entries:
                         match each_type:
                             case "TRAP":
-                                await ctx.send_traplink(link_name)
+                                match link_name:
+                                    case "FROG":
+                                        await ctx.send_traplink("Frog Trap")
+                                    case "CRYSTAL":
+                                        await ctx.send_traplink("Instant Crystal Trap")
+                                    case "CAMERA":
+                                        await ctx.send_traplink("Camera Rotate Trap")
+                                    case "CURSE_BALL":
+                                        await ctx.send_traplink("Cursed Ball Trap")
+                                    #case "TIP":
+                                    #    await ctx.send_traplink("Tip Trap")
 
     # Locations handling
     demo = payload["DEMO"]

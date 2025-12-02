@@ -79,6 +79,10 @@ class TagLink(Toggle):
     """
     display_name = "Tag Link"
 
+class TrapLink(Toggle):
+    """When you get a trap, sends a similar trap to everyone else with trap link enabled. Of course, the reverse is true too. Default off.
+    """
+    display_name = "Trap Link"
 
 
 class RandomizeJump(Toggle):
@@ -300,6 +304,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     bonus_levels : EnableBonuses
     tag_link : TagLink
+    trap_link : TrapLink
 
     randomize_jump : RandomizeJump
     include_power_ball : IncludePowerBall
