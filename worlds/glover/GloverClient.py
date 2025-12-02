@@ -437,7 +437,7 @@ class GloverContext(CommonContext):
                                 "Your version: "+version+" | Generated version: "+self.slot_data["version"])
             self.link_table["DEATH"].enabled = bool(self.slot_data["death_link"])
             self.link_table["TAG"].enabled = bool(self.slot_data["tag_link"])
-            self.life_table["TRAP"].enabled = bool(self.slot_data["trap_link"])
+            self.link_table["TRAP"].enabled = bool(self.slot_data["trap_link"])
             self.n64_sync_task = asyncio.create_task(n64_sync_task(self), name="N64 Sync")
         elif cmd == "ReceivedItems":
             self.tracker.refresh_items()
