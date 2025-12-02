@@ -11704,6 +11704,7 @@ GLOVERHACK = {
     ap_world = 0x7BC,
       hub_entrance = 0x0,
       door_number = 0x1,
+      warp_spawn_offset = 0x2,
       garib_locations = 0x4,
         garib_id = 0x4,
         garib_collected = 0x6,

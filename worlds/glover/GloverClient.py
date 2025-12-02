@@ -66,7 +66,7 @@ loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
 version: str = "V0.1"
-patch_md5: str = "36661915f95b303e912e642cb4b54315"
+patch_md5: str = "6045a1b0d1aa6c187a9674856df545b4"
 gvr_options = settings.get_settings().glover_options
 program = None
 
