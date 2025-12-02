@@ -637,6 +637,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_garib_logic": ctx.slot_data["garib_logic"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
             "slot_garib_order": ctx.slot_data["garib_order"],
+            "slot_spawning_checkpoints": ctx.slot_data["spawning_checkpoints"],
             "slot_world_lookup": ctx.slot_data["world_lookup"],
             "slot_switches": ctx.slot_data["switches_checks"],
             "slot_checkpoints": ctx.slot_data["checkpoint_checks"],

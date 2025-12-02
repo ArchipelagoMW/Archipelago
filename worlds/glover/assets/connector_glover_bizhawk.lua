@@ -42,8 +42,11 @@ local WORLD_NAME = "";
 local GARIB_GROUPS = false
 local GARIB_ORDER = {}
 
+-------- SPAWNING_CHECKPOINTS --------
+
+local SPAWNING_CHECKPOINTS = {}
+
 -------------- TOTALS VARS -----------
-local TOTAL_LIVES = 0;
 local TOTAL_SINGLE_GARIBS = 0;
 local TOTAL_WORLD_GARIBS = {
 	['AP_ATLANTIS_L1_GARIBS'] = 0,
@@ -102,6 +105,18 @@ local TOTAL_PROGRESSIVE_LEVEL_EVENTS = {
 	['AP_PREHISTORIC_L3_PROGRESSIVE_LOWER_MONOLITH'] = 0,
 	['AP_FORTRESS_L1_PROGRESSIVE_DOOR'] = 0,
 	['AP_FORTRESS_L2_PROGRESSIVE_GATE'] = 0
+}
+local MISC_ITEMS_RECIEVED = {
+    ["CHICKEN"] = 0,
+    ["LIFE"] = 0,
+    ["BOOMERANG"] = 0,
+    ["BEACHBALL"] = 0,
+    ["HERCULES"] = 0,
+    ["HELICOPTER"] = 0,
+    ["SPEED"] = 0,
+	["FROG"] = 0,
+	["DEATH"] = 0,
+    ["STICKY"] = 0
 }
 
 --------------- LINKS ----------------------
@@ -12059,30 +12074,6 @@ function GLOVERHACK:setPCTag(TAG_COUNT)
     mainmemory.writebyte(hackPointerIndex + self.pc_taglink, TAG_COUNT);
 end
 
--- function GLOVERHACK:getAPDeath()
---    return mainmemory.readbyte(self:getPCPointer() + self.pc_death_ap);
--- end
-
--- function GLOVERHACK:getAPTag()
---    return mainmemory.readbyte(self:getPCPointer() + self.pc_tag_ap);
--- end
-
--- function GLOVERHACK:setAPDeath(DEATH_COUNT)
---     mainmemory.writebyte(self:getPCPointer() + self.pc_death_ap, DEATH_COUNT);
--- end
-
--- function GLOVERHACK:setAPTag(TAG_COUNT)
---     mainmemory.writebyte(self:getPCPointer() + self.pc_tag_ap, TAG_COUNT);
--- end
-
--- function GLOVERHACK:getNPointer()
---     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
---     if hackPointerIndex == nil
---     then
---         return
---     end
--- 	return GLOVERHACK:dereferencePointer(self.n64 + hackPointerIndex);
--- end
 
 function GLOVERHACK:getNLocalDeath()
 	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
@@ -12263,23 +12254,6 @@ function tip_check()
 		end
     return checks
 end
-
--- function wayroom_tip_check()
--- 	if CURRENT_MAP == 0x2A
--- 	then
---     	local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
---     	local wayroomBaseIndex = hackPointerIndex + self.wayroom_locations
--- 		local currentWayroomId = mainmemory.readbyte(wayroomBaseIndex + self.wayroom_id)
--- 		local wayroomOffset = wayroomBaseIndex + (currentWayroomId * self.wayroom_size)
---         if mainmemory.readbyte(wayroomOffset + self.wayroom_collected) == 0x0
---         then
---             return nil
---         else
---             return WAYROOM_TIPS_TABLE[currentWayroomId]
---         end
--- 	end
--- 	return nil
--- end
 
 function wayroom_tip_check()
 	local check_table = {}
@@ -12500,27 +12474,36 @@ function received_moves(itemId)
 end
 
 function received_misc(itemId)
-    --if itemId == 6500358 then
-    --    GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], TOTAL_LIVES)
-    if itemId == 6500359 then
-        TOTAL_LIVES = TOTAL_LIVES + 1
-        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], TOTAL_LIVES)
-    --elseif itemId == 6500360 then
-    --    GVR:setItem(ITEM_TABLE["AP_BOOMERANG_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500361 then
-    --    GVR:setItem(ITEM_TABLE["AP_BEACHBALL_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500362 then
-    --    GVR:setItem(ITEM_TABLE["AP_HERCULES_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500363 then
-    --    GVR:setItem(ITEM_TABLE["AP_HELICOPTER_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500364 then
-    --    GVR:setItem(ITEM_TABLE["AP_SPEED_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500365 then
-    --    GVR:setItem(ITEM_TABLE["AP_FROG_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500366 then
-    --    GVR:setItem(ITEM_TABLE["AP_DEATH_SPELL"], TOTAL_LIVES)
-    --elseif itemId == 6500367 then
-    --    GVR:setItem(ITEM_TABLE["AP_STICKY_SPELL"], TOTAL_LIVES)
+    if itemId == 6500358 then
+		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
+        GVR:setItem(ITEM_TABLE["CHICKEN"], MISC_ITEMS_RECIEVED["CHICKEN"])
+    elseif itemId == 6500359 then
+		MISC_ITEMS_RECIEVED["LIFE"] = MISC_ITEMS_RECIEVED["LIFE"] + 1
+        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], MISC_ITEMS_RECIEVED["LIFE"])
+    elseif itemId == 6500360 then
+		MISC_ITEMS_RECIEVED["BOOMERANG"] = MISC_ITEMS_RECIEVED["BOOMERANG"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_SPELL"], MISC_ITEMS_RECIEVED["BOOMERANG"])
+    elseif itemId == 6500361 then
+		MISC_ITEMS_RECIEVED["BEACHBALL"] = MISC_ITEMS_RECIEVED["BEACHBALL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BEACHBALL_SPELL"], MISC_ITEMS_RECIEVED["BEACHBALL"])
+    elseif itemId == 6500362 then
+		MISC_ITEMS_RECIEVED["HERCULES"] = MISC_ITEMS_RECIEVED["HERCULES"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HERCULES_SPELL"], MISC_ITEMS_RECIEVED["HERCULES"])
+    elseif itemId == 6500363 then
+		MISC_ITEMS_RECIEVED["HELICOPTER"] = MISC_ITEMS_RECIEVED["HELICOPTER"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_SPELL"], MISC_ITEMS_RECIEVED["HELICOPTER"])
+    elseif itemId == 6500364 then
+		MISC_ITEMS_RECIEVED["SPEED"] = MISC_ITEMS_RECIEVED["SPEED"] + 1
+        GVR:setItem(ITEM_TABLE["AP_SPEED_SPELL"], MISC_ITEMS_RECIEVED["SPEED"])
+    elseif itemId == 6500365 then
+		MISC_ITEMS_RECIEVED["FROG"] = MISC_ITEMS_RECIEVED["FROG"] + 1
+        GVR:setItem(ITEM_TABLE["AP_FROG_SPELL"], MISC_ITEMS_RECIEVED["FROG"])
+    elseif itemId == 6500366 then
+		MISC_ITEMS_RECIEVED["DEATH"] = MISC_ITEMS_RECIEVED["DEATH"] + 1
+        GVR:setItem(ITEM_TABLE["AP_DEATH_SPELL"], MISC_ITEMS_RECIEVED["DEATH"])
+    elseif itemId == 6500367 then
+		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
+        GVR:setItem(ITEM_TABLE["AP_STICKY_SPELL"], MISC_ITEMS_RECIEVED["STICKY"])
     end
 end
 
@@ -12538,9 +12521,9 @@ function received_traps(itemId)
 		send_linked_item("CAMERA")
 		print("Should've sent Camera")
 	else
-		print("Taglink Unimplimented")
+		print("Tip Trap Unimplimented")
     -- elseif itemId == 6500372 then
-    --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], TOTAL_LIVES)
+    --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], )
     end
 end
 
@@ -12776,6 +12759,29 @@ function setRandomizedWorlds(WORLD_LOOKUP)
 		end
 		setWorldInfo(world_id, hub_number, door_number)
 	end
+end
+
+function setSpawningCheckpoints(IN_CHECKPOINT)
+	SPAWNING_CHECKPOINTS = {
+		["AP_ATLANTIS_L1"] = IN_CHECKPOINT[1] - 1,
+    	["AP_ATLANTIS_L2"] = IN_CHECKPOINT[2] - 1,
+    	["AP_ATLANTIS_L3"] = IN_CHECKPOINT[3] - 1,
+    	["AP_CARNIVAL_L1"] = IN_CHECKPOINT[4] - 1,
+    	["AP_CARNIVAL_L2"] = IN_CHECKPOINT[5] - 1,
+    	["AP_CARNIVAL_L3"] = IN_CHECKPOINT[6] - 1,
+    	["AP_PIRATES_L1"] = IN_CHECKPOINT[7] - 1,
+    	["AP_PIRATES_L2"] = IN_CHECKPOINT[8] - 1,
+    	["AP_PIRATES_L3"] = IN_CHECKPOINT[9] - 1,
+    	["AP_PREHISTORIC_L1"] = IN_CHECKPOINT[10] - 1,
+    	["AP_PREHISTORIC_L2"] = IN_CHECKPOINT[11] - 1,
+    	["AP_PREHISTORIC_L3"] = IN_CHECKPOINT[12] - 1,
+    	["AP_FORTRESS_L1"] = IN_CHECKPOINT[13] - 1,
+    	["AP_FORTRESS_L2"] = IN_CHECKPOINT[14] - 1,
+    	["AP_FORTRESS_L3"] = IN_CHECKPOINT[15] - 1,
+    	["AP_SPACE_L1"] = IN_CHECKPOINT[16] - 1,
+    	["AP_SPACE_L2"] = IN_CHECKPOINT[17] - 1,
+    	["AP_SPACE_L3"] = IN_CHECKPOINT[18] - 1
+	}
 end
 
 function setWorldInfo(world_id, hub_number, door_number)
@@ -13123,6 +13129,10 @@ function process_slot(block)
 	if block['slot_garib_order'] ~= nil
 	then
 		GARIB_ORDER = block['slot_garib_order']
+	end
+	if block["spawning_checkpoints"] ~= nil
+	then
+		setSpawningCheckpoints(block["spawning_checkpoints"])
 	end
 	if block['slot_world_lookup'] ~= nil
 	then

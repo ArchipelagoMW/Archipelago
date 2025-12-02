@@ -935,4 +935,5 @@ class GloverWorld(World):
         options["chicken_hints_locations"] = self.chicken_hints
         options["world_lookup"] = self.lua_world_entry_lookup_table()
         options["garib_order"] = self.lua_decoupled_garib_order()
+        options["spawning_checkpoints"] = self.spawn_checkpoint
         return options
