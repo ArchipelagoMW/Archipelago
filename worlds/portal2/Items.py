@@ -1,6 +1,6 @@
 from enum import Flag, auto
 from BaseClasses import Item, ItemClassification
-from ItemNames import *
+from .ItemNames import *
 
 class ItemTag(Flag):
     # Item type

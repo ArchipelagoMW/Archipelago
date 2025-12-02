@@ -1,6 +1,6 @@
 from enum import Flag, auto
 from BaseClasses import Location
-from ItemNames import *
+from .ItemNames import *
 
 portal_2_base_id = 98275000
 offset_index = 0
@@ -82,21 +82,21 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 7: Three Gels Completion": Portal2LocationData("sp_a3_end", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, paint]),
     # Chapter 8
     "Chapter 8: Test Completion": Portal2LocationData("sp_a4_intro", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, frankenturret, floor_button, button]),
-    "Chapter 8: Funnel Intro Completion": Portal2LocationData("sp_a4_tb_intro", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Ceiling Button Completion": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Wall Button Completion": Portal2LocationData("sp_a4_tb_wall_button", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Polarity Completion": Portal2LocationData("sp_a4_tb_polarity", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Funnel Catch Completion": Portal2LocationData("sp_a4_tb_catch", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Stop The Box Completion": Portal2LocationData("sp_a4_stop_the_box", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Laser Catapult Completion": Portal2LocationData("sp_a4_laser_catapult", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Laser Platform Completion": Portal2LocationData("sp_a4_laser_platform", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Propulsion Catch Completion": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 8: Repulsion Polarity Completion": Portal2LocationData("sp_a4_jump_polarity", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
+    "Chapter 8: Funnel Intro Completion": Portal2LocationData("sp_a4_tb_intro", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, funnel, frankenturret, floor_button]),
+    "Chapter 8: Ceiling Button Completion": Portal2LocationData("sp_a4_tb_trust_drop", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, funnel, frankenturret, floor_button]),
+    "Chapter 8: Wall Button Completion": Portal2LocationData("sp_a4_tb_wall_button", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, funnel, frankenturret, floor_button, button, faith_plate]),
+    "Chapter 8: Polarity Completion": Portal2LocationData("sp_a4_tb_polarity", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, funnel, frankenturret, floor_button]),
+    "Chapter 8: Funnel Catch Completion": Portal2LocationData("sp_a4_tb_catch", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, funnel, frankenturret, floor_button, button, faith_plate]),
+    "Chapter 8: Stop The Box Completion": Portal2LocationData("sp_a4_stop_the_box", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, frankenturret, floor_button, button, faith_plate, bridge]),
+    "Chapter 8: Laser Catapult Completion": Portal2LocationData("sp_a4_laser_catapult", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, frankenturret, floor_button, faith_plate, bridge, reflection_cube, laser, laser_catcher, funnel]),
+    "Chapter 8: Laser Platform Completion": Portal2LocationData("sp_a4_laser_platform", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, floor_button, reflection_cube, laser, laser_catcher, funnel]),
+    "Chapter 8: Propulsion Catch Completion": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, floor_button, funnel, button, frankenturret, paint]),
+    "Chapter 8: Repulsion Polarity Completion": Portal2LocationData("sp_a4_jump_polarity", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2, paint, funnel, floor_button, button]),
     # Chapter 9
-    "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
-    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_1, portal_gun_2,]),
+    "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, []),
+    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, []),
+    "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, []),
+    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, []),
 }
 
 # Optional Checks
