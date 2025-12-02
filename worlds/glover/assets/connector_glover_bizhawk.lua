@@ -12789,7 +12789,7 @@ function processAGIItem(item_list)
             if(6510000 <= memlocation and memlocation <= 6539999) -- Garibs
             then
                 received_garibs(memlocation)
-            elseif(6500190 <= memlocation and memlocation <= 6501906) -- Moves and Balls
+            elseif(6500329 <= memlocation and memlocation <= 6500356) -- Moves and Balls
             then
                 received_moves(memlocation)
             elseif(6500358 <= memlocation and memlocation <= 6500367) -- Misc
