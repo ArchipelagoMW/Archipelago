@@ -6,6 +6,47 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 ---
 
+### I've never added a game to Archipelago before. Should I start with the APWorld or the game client?
+
+Although every AP game is different, the typical recommendation for first-time AP developers is:
+
+- Start with a proof-of-concept for the game client
+  - Figure out how to interface with the game. Whether that means "modding" the game, or patching a ROM file,
+  or developing a separate client program that edits the game's memory, or some other technique.
+  - Figure out how to give items and detect locations in the actual game. Not every item and location,
+  just one of each major type (e.g. opening a chest vs completing a sidequest) to prove all the items and locations
+  you want can actually be implemented.
+  - Figure out how to make a websocket connection to an AP server, possibly using a client library (see [Network Protocol](<network protocol.md>).
+  To make absolutely sure this part works, you may want to test the connection by generating a multiworld
+  with a different game, then making your client temporarily pretend to be that other game.
+- Next, make a "trivial" APWorld, i.e. an APWorld that always generates the same items and locations
+  - If you've never done this before, likely the fastest approach is to copy-paste worlds/apquest/, and read the many
+  comments in there until you understand how to edit the items and locations.
+- Then you can do your first "end-to-end test": generate a multiworld using your APWorld, run a local server to host it,
+connect to that local server from your game client, actually check a location in the game, and finally make sure the
+client successfully sent that location check to the AP server as well as received an item from it.
+
+That's about where general recommendations end. What you should do next will depend entirely on your game
+(e.g. implement more items, write down logic rules, add client features, prototype a tracker, etc).
+If you're not sure, then this would be a good time to re-read [Adding Games](<adding games.md>), and [World API](<world api.md>).
+
+There are several assumptions in this recommendation worth stating explicitly, such as:
+
+- If something you want to do is infeasible, you want to find out that it's infeasible as soon as possible, before
+you write a bunch of code assuming it could be done. That's why we recommend starting with the game client.
+  - Getting an APWorld to generate whatever items/locations you want is always feasible, since items/locations are
+  little more than id numbers and name strings during generation.
+- For a developer new to Archipelago, it's likely much easier to tell if your game client is working correctly than
+your APWorld, which is another reason to save the APWorld until you have a minimal client to test it against.
+An AP veteran might prefer to prototype the APWorld first.
+- You generally want to get to an "end-to-end playable" prototype quickly. On top of all the technical challenges these
+docs describe, it's also important to check that a randomizer is *fun to play*, and figure out what features would be
+essential for a public release.
+- Notice we do *not* recommend doing 100% of client work before the APWorld, or 100% of APWorld work before the client.
+It's important to iterate on both parts, and regularly make sure they still work together.
+
+---
+
 ### My game has a restrictive start that leads to fill errors
 
 A "restrictive start" here means having a combination of very few sphere 1 locations and potentially requiring more
