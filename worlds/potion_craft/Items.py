@@ -188,7 +188,40 @@ talents: Dict[str, TalentData] = {
     "Skilled Manipulator" : TalentData(117, ItemClassification.useful),
     "Talented Potion Seller" : TalentData(118, ItemClassification.useful), #Trading end
     "Fertilizing Herbs and Mushrooms with Potions": TalentData(119, ItemClassification.useful), #Gardening Start
-
+    "Careful Herb Care": TalentData(120, ItemClassification.useful),
+    "Careful Mushroom Care": TalentData(121, ItemClassification.useful),
+    "Careful Crystal Care": TalentData(122, ItemClassification.useful),
+    "Herbalism": TalentData(123, ItemClassification.useful),
+    "Wildly Overgrown Herb Harvesting": TalentData(124, ItemClassification.useful),
+    "Mushroom Harvesting": TalentData(125, ItemClassification.useful),
+    "Wildly Overgrown Mushroom Harvesting": TalentData(126, ItemClassification.useful),
+    "Crystal Harvesting": TalentData(127, ItemClassification.useful),
+    "Wildly Overgrown Crystal Harvesting": TalentData(128, ItemClassification.useful),
+    "Gold Digger": TalentData(129, ItemClassification.useful),
+    "Gold Fever": TalentData(130, ItemClassification.useful),
+    "Herb Planting": TalentData(131, ItemClassification.useful),
+    "Herb Replanting": TalentData(132, ItemClassification.useful),
+    "Herb Seed Harvesting": TalentData(133, ItemClassification.useful),
+    "Quick Herb Growth": TalentData(134, ItemClassification.useful),
+    "Underwater Growing": TalentData(135, ItemClassification.useful),
+    "Cave Herbs": TalentData(136, ItemClassification.useful),
+    "Mushroom Planting": TalentData(137, ItemClassification.useful),
+    "Mushroom Replanting": TalentData(138, ItemClassification.useful),
+    "Mycelium Harvesting": TalentData(139, ItemClassification.useful),
+    "Quick Mushroom Growth": TalentData(140, ItemClassification.useful),
+    "Truffle Growing": TalentData(141, ItemClassification.useful),
+    "Crystal Planting": TalentData(142, ItemClassification.useful),
+    "Crystal Replanting": TalentData(143, ItemClassification.useful),
+    "Crystal Seed Harvesting": TalentData(144, ItemClassification.useful),
+    "Quick Crystal Growth": TalentData(145, ItemClassification.useful),
+    "Fertilizing Crystals with Potions": TalentData(146, ItemClassification.useful), #Gardening End
+    "Bulk Brewing": TalentData(147, ItemClassification.useful), #Alchemy Start
+    "Alchemical Practice": TalentData(148, ItemClassification.useful),
+    "Precious Residue": TalentData(149, ItemClassification.useful),
+    "Alchemy Map: Visibility Radius": TalentData(150, ItemClassification.useful),
+    "The key is to pull it out just in time": TalentData(151, ItemClassification.useful),
+    "Better Restore Salt": TalentData(152, ItemClassification.useful),
+    "Salt Specialist": TalentData(153, ItemClassification.useful),#Alchemy End, talents End
 }
 
 key_items: Dict[str, ItemData] = {

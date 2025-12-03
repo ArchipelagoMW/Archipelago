@@ -67,7 +67,7 @@ class PotionCraftWorld(World):
 
     def fill_slot_data(self) -> id:
         return {
-            "ModVersion": "0.6.0"
+            "ModVersion": "0.0.1" #update mods version when you commit, on rider as well
         }
 
     def generate_output(self, output_directory: str):
