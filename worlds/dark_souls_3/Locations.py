@@ -2086,13 +2086,13 @@ location_tables: Dict[str, List[DS3LocationData]] = {
 
         # Shrine Handmaid after killing Dragonslayer Armour (or Eygon of Carim)
         DS3LocationData("FS: Morne's Helm - shop after killing Eygon or LC boss", "Morne's Helm",
-                        boss=True, shop=True),
+                        boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Armor - shop after killing Eygon or LC boss", "Morne's Armor",
-                        boss=True, shop=True),
+                        boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Gauntlets - shop after killing Eygon or LC boss",
-                        "Morne's Gauntlets", boss=True, shop=True),
+                        "Morne's Gauntlets", boss=True, shop=True, missable=True),
         DS3LocationData("FS: Morne's Leggings - shop after killing Eygon or LC boss",
-                        "Morne's Leggings", boss=True, shop=True),
+                        "Morne's Leggings", boss=True, shop=True, missable=True),
     ],
     "Consumed King's Garden": [
         DS3LocationData("CKG: Soul of Consumed Oceiros", "Soul of Consumed Oceiros",
