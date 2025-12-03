@@ -871,7 +871,7 @@ class GloverWorld(World):
         options["garib_sorting"] = self.options.garib_sorting.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
-        options["spawning_checkpoint_randomizer"] = self.options.spawning_checkpoint_randomizer.value
+        options["randomized_spawns"] = self.options.spawning_checkpoint_randomizer.value
         options["bonus_levels"] = self.options.bonus_levels.value
         #options["atlantis_bonus"] = self.options.atlantis_bonus.value
         options["randomize_jump"] = self.options.randomize_jump.value

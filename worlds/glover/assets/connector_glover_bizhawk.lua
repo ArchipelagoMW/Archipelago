@@ -11996,6 +11996,7 @@ function GLOVERHACK:setRandomizeSwitches(switch)
 end
 
 function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
+	print("Randomize Checkpoint is set to "..tostring(checkpoint).."!")
     mainmemory.writebyte(self.randomize_checkpoints + GLOVERHACK:getSettingPointer(), checkpoint);
 end
 
@@ -13115,10 +13116,10 @@ function process_slot(block)
     then
         GVR:setRandomizeSwitches(block['slot_switches'])
     end
-    -- if block['slot_checkpoints'] ~= nil and block['slot_checkpoints'] ~= 0
-    -- then
-    --     GVR:setRandomizeCheckpoint(block['slot_checkpoints'])
-    -- end
+    if block['slot_randomized_spawns'] ~= nil and block['slot_randomized_spawns'] ~= 0
+    then
+        GVR:setRandomizeCheckpoint(block['slot_randomized_spawns'])
+    end
 	if block['checkedLocations'] ~= nil then
 		flagCheckedLocations(block['checkedLocations'])
 	end

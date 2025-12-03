@@ -640,7 +640,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_spawning_checkpoints": ctx.slot_data["spawning_checkpoints"],
             "slot_world_lookup": ctx.slot_data["world_lookup"],
             "slot_switches": ctx.slot_data["switches_checks"],
-            "slot_checkpoints": ctx.slot_data["checkpoint_checks"],
+            "slot_randomized_spawns": ctx.slot_data["randomized_spawns"],
             "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
     ctx.sendSlot = False
