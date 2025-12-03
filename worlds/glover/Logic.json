@@ -5867,6 +5867,11 @@
 						"mv0": 26,
 						"regionIndex": 14,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 15,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -6374,6 +6379,7 @@
 						"mv0": 3,
 						"mv1": 31,
 						"mv2": 26,
+						"mv3": 25,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -6455,6 +6461,11 @@
 						"mv0": 28,
 						"regionIndex": 8,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 11,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -6468,6 +6479,11 @@
 					{
 						"ballRequirement": false,
 						"regionIndex": 8,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 11,
 						"trickDifficulty": 0
 					}
 				],
@@ -6888,9 +6904,17 @@
 						"trickDifficulty": 0
 					},
 					{
-						"ballRequirement": false,
+						"ballRequirement": true,
 						"mv0": 2,
+						"mv1": 13,
 						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 2,
+						"mv1": 32,
+						"regionIndex": 6,
 						"trickDifficulty": 0
 					}
 				],
@@ -7071,6 +7095,8 @@
 					},
 					{
 						"ballRequirement": false,
+						"mv0": 25,
+						"mv1": 4,
 						"regionIndex": 7,
 						"trickDifficulty": 0
 					},
@@ -8547,7 +8573,7 @@
 					{
 						"ballRequirement": true,
 						"ck0": "Spin Door",
-						"regionIndex": 0,
+						"regionIndex": 3,
 						"trickDifficulty": 0
 					}
 				],
@@ -15441,6 +15467,11 @@
 						"ballRequirement": false,
 						"regionIndex": 8,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 12,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 11
@@ -15670,6 +15701,11 @@
 						"ballRequirement": false,
 						"mv0": 2,
 						"regionIndex": 6,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 8,
 						"trickDifficulty": 0
 					}
 				],
@@ -17140,6 +17176,30 @@
 						"mv2": 26,
 						"regionIndex": 5,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 7,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 7,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17242,6 +17302,11 @@
 						"ballRequirement": true,
 						"mv0": 27,
 						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 10,
 						"trickDifficulty": 0
 					}
 				],
@@ -17783,6 +17848,11 @@
 						"mv2": 26,
 						"regionIndex": 2,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"regionIndex": 4,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17866,6 +17936,12 @@
 						"mv0": 8,
 						"mv1": 32,
 						"regionIndex": 14,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 16,
 						"trickDifficulty": 0
 					}
 				],
@@ -18523,6 +18599,12 @@
 						"ballRequirement": true,
 						"regionIndex": 19,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 32,
+						"regionIndex": 14,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -18561,6 +18643,12 @@
 						"ballRequirement": true,
 						"mv0": 27,
 						"regionIndex": 18,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 10,
+						"regionIndex": 20,
 						"trickDifficulty": 0
 					}
 				],
@@ -18743,6 +18831,13 @@
 					{
 						"ballRequirement": true,
 						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"mv1": 31,
+						"regionIndex": 12,
 						"trickDifficulty": 0
 					}
 				],
@@ -30733,7 +30828,7 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"0x259"
+						"0x263"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 16,
@@ -31170,7 +31265,7 @@
 					],
 					"COUNT": 1,
 					"IDS": [
-						"0x263"
+						"0x259"
 					],
 					"NEEDS_BALL": false,
 					"REGION": 0,
