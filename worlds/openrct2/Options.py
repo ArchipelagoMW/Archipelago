@@ -455,7 +455,7 @@ class Awards(Choice):
     option_all = Awards.all_awards.value
     option_positive = Awards.positive.value
     option_none = Awards.none.value
-    default = Awards.positive.value
+    default = Awards.all_awards.value
 
 class ExcludeSafestPark(OpenRCT2Toggle):
     """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
