@@ -147,7 +147,7 @@ class ResourceSinkPointsPerMinute(NamedRange):
         "~20 crystal oscillator/min": 60000,
         "~50 motor/min": 76000,
         "~10 heavy modular frame/min": 100000,
-        "~10 radio control unit": 300000,
+        "~10 radio control unit/min": 300000,
         "~10 fused modular frame/min": 625000,
         "~10 supercomputer/min": 1000000,
         "~10 pressure conversion cube/min": 2500000,
