@@ -226,7 +226,8 @@ letter or symbol). The ID needs to be unique across all locations within the gam
 Locations and items can share IDs, and locations can share IDs with other games' locations.
 
 World-specific IDs **must** be in the range 1 to 2<sup>53</sup>-1 (the largest integer that a 64-bit float can hold,
-and thus all popular programming languages can handle). IDs ≤ 0 are global and reserved.
+and thus all popular programming languages can handle). IDs ≤ 0 are global and reserved. It's **recommended** to keep
+your IDs in the range 1 to 2<sup>31</sup>-1, so only 32-bit integers are needed to hold your IDs.
 
 Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
