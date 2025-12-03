@@ -552,7 +552,7 @@ test = {}
 
 class CustomAdditionalLogic(OptionDict):
     display_name = "Custom Additional Logic"
-    visibility = Visibility.none
+    visibility = Visibility.spoiler
     schema = Schema({Optional(Or(num+1, name)): RuleSchema()
                      for name, num in MaxSciencePack.options.items() if num != 0})
 
