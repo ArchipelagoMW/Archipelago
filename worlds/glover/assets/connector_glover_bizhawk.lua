@@ -11831,7 +11831,6 @@ function GLOVERHACK:getOffsetLocation(location_addr, offset, type)
 end
 
 function GLOVERHACK:checkRealFlag(offset, byte)
-    -- print("Checking Real Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
 	local realptr = GLOVERHACK:dereferencePointer(self.real_flags + hackPointerIndex);
     -- if realptr == nil
@@ -12020,7 +12019,6 @@ function GLOVERHACK:setTaglinkEnabled(newState)
 end
 
 function GLOVERHACK:getItemsPointer()
-    -- print("Checking Items Flags")
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
 	return self.ap_items + hackPointerIndex;
 end
@@ -12310,7 +12308,6 @@ function potion_check()
                 for loc_id,locationTable in pairs(ADDRESS_MAP[WORLD_NAME]["POTIONS"])
                 do
                     checks[loc_id] = GVR:checkLocationFlag(WORLD_ID, "potion", locationTable['offset'], locationTable['id'])
-                    -- print(loc_id..":"..tostring(checks[loc_id]))
                 end
             end
         end
@@ -12507,16 +12504,12 @@ end
 function received_traps(itemId)
 	if itemId == 6500368 then
 		send_linked_item("FROG")
-		print("Should've sent Frog")
     elseif itemId == 6500369 then
 		send_linked_item("CURSE_BALL")
-		print("Should've sent Curse Ball")
     elseif itemId == 6500370 then
 		send_linked_item("CRYSTAL")
-		print("Should've sent Crystal")
     elseif itemId == 6500371 then
 		send_linked_item("CAMERA")
-		print("Should've sent Camera")
 	else
 		print("Tip Trap Unimplimented")
     -- elseif itemId == 6500372 then
@@ -12768,15 +12761,16 @@ function setWorldInfo(world_id, hub_number, door_number)
 end
 
 function setSpawningCheckpoints(IN_CHECKPOINT)
-    local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
 	for eachIndex, checkpoint_number in pairs(IN_CHECKPOINT)
 	do
-		local level_number = (eachIndex % 3) + 1
-		local world_number = (eachIndex // 3)
+		local level_number = ((eachIndex - 1) % 3) + 1
+		local world_number = (eachIndex - 1) // 3
 		local world_id = level_number + (world_number * 5)
+    	local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
     	local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
 		local spawn_checkpoint_address = world_address + GLOVERHACK.warp_spawn_offset
-		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number)
+		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number - 1)
+		print(ROM_WORLDS_TABLE[world_id].."'s spawning checkpoint is "..tostring(checkpoint_number))
 	end
 end
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
@@ -12798,7 +12792,6 @@ function processAGIItem(item_list)
                 received_misc(memlocation)
             elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
             then
-				print("In Range")
                 received_traps(memlocation)
             elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
             then
@@ -12924,7 +12917,6 @@ function incoming_links(triggered_links)
 			if LINKS_TABLE[each_link] ~= nil
 			then
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
-				print("Inbound "..each_link..", AP: "..tostring(LINKS_TABLE[each_link]['AP'])..", LOCAL: "..tostring(LINKS_TABLE[each_link]['LOCAL']))
 				send_linked_item(each_link)
 			else
 				for each_table, table_info in pairs(LINKS_TABLE)
@@ -12957,22 +12949,18 @@ function send_linked_item(linkName)
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_FROG_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['FROG']['LOCAL'])
-		print("Frog sets gone up by 1")
 	elseif linkName == "CAMERA"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'])
-		print("Camera gone up by 1")
 	elseif linkName == "CURSE_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_CURSE_BALL"], LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'])
-		print("Curse gone up by 1")
 	elseif linkName == "CRYSTAL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'])
-		print("Crystal gone up by 1")
 	else
 		print("Unknown Linked Item: "..linkName)
 	end
@@ -13003,7 +12991,6 @@ function outbound_links()
 				output[link_type] = send_link
 				if send_link
 				then
-					print("Outbound "..link_type..", AP: "..tostring(LINKS_TABLE[link_type]['AP'])..", LOCAL: "..tostring(LINKS_TABLE[link_type]['LOCAL']))
 					LINKS_TABLE[link_type]['AP'] = LINKS_TABLE[link_type]['AP'] + 1
 				end
 			end
@@ -13116,9 +13103,9 @@ function process_slot(block)
 	then
 		GARIB_ORDER = block['slot_garib_order']
 	end
-	if block["spawning_checkpoints"] ~= nil
+	if block['slot_spawning_checkpoints'] ~= nil
 	then
-		setSpawningCheckpoints(block["spawning_checkpoints"])
+		setSpawningCheckpoints(block['slot_spawning_checkpoints'])
 	end
 	if block['slot_world_lookup'] ~= nil
 	then
