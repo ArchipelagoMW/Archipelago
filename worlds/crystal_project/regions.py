@@ -393,8 +393,8 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      THE_OPEN_SEA_AP_REGION: lambda state: logic.has_swimming(state)})
     #A Proving Meadows <-> Skumparadise connector; untraversable w/o a region pass in Regionsanity
     fancy_add_exits(world, PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, [PROVING_MEADOWS_AP_REGION, SKUMPARADISE_AP_REGION],
-                    {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3),
-                     SKUMPARADISE_AP_REGION: lambda state: logic.has_jobs(state, 3)})
+                    {PROVING_MEADOWS_AP_REGION: lambda state: logic.has_jobs(state, 3) and (state.has(PROVING_MEADOWS_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled),
+                     SKUMPARADISE_AP_REGION: lambda state: logic.has_jobs(state, 3) and (state.has(PROVING_MEADOWS_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled)})
     #Proving Meadows end
     fancy_add_exits(world, SKUMPARADISE_AP_REGION, [PROVING_MEADOWS_SKUMPARADISE_CONNECTOR_AP_REGION, CAPITAL_SEQUOIA_AP_REGION])
     #Capital Sequoia start
@@ -477,9 +477,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, CELL_KEY, 6)})
     fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
                     {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state)})
-    fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, CONTINENTAL_TRAM_AP_REGION, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION])
-    #A Pipeline <-> Jidamba connector; untraversable w/o region pass in Regionsanity
-    fancy_add_exits(world, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JIDAMBA_CAVE_AP_REGION])
+    fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, CONTINENTAL_TRAM_AP_REGION, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION],
+                    #The Eaclaneya elevator heist diamond is inside this connector, so it needs the regionsanity check on entering and exiting
+                    {PIPELINE_JIDAMBA_CONNECTOR_AP_REGION: lambda state: state.has(CAPITAL_PIPELINE_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled})
+    #A Pipeline -> Jidamba connector; untraversable w/o region pass in Regionsanity
+    fancy_add_exits(world, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, [JIDAMBA_CAVE_AP_REGION],
+                    {JIDAMBA_CAVE_AP_REGION: lambda state: state.has(CAPITAL_PIPELINE_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled})
     fancy_add_exits(world, COBBLESTONE_CRAG_AP_REGION, [PROVING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, CAPITAL_MOAT_AP_REGION, THE_OPEN_SEA_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, OKIMOTO_NS_AP_REGION],
                     {CAPITAL_MOAT_AP_REGION: lambda state: logic.has_swimming(state),
                      SHOUDU_WATERFRONT_AP_REGION: lambda state: logic.has_horizontal_movement(state),
@@ -897,7 +900,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                     {JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
     #A one-way Tangle -> Eaclaneya connector; untraversable w/o region pass in Regionsanity
     fancy_add_exits(world, TANGLE_EACLANEYA_CONNECTOR_AP_REGION, [JIDAMBA_EACLANEYA_AP_REGION],
-                    {JIDAMBA_EACLANEYA_AP_REGION: lambda state: logic.has_jidamba_keys(state)})
+                    {JIDAMBA_EACLANEYA_AP_REGION: lambda state: logic.has_jidamba_keys(state) and (state.has(JIDAMBA_TANGLE_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled)})
     fancy_add_exits(world, JIDAMBA_CANOPY_AP_REGION, [JIDAMBA_FOREST_FLOOR_AP_REGION, JIDAMBA_DIAMONDSMITH_AP_REGION, EUROPA_SHRINE_AP_REGION, JIDAMBA_SOUTH_CLIFF_AP_REGION, JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_WATERWAYS_AP_REGION],
                     {JIDAMBA_WATERWAYS_AP_REGION: lambda state: logic.has_swimming(state)})
     #I am not listing has_swimming on all these exits; i already wrote a has_swimming rule on every entrance into the Waterways
