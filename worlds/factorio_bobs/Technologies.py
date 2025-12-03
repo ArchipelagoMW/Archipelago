@@ -348,7 +348,7 @@ progressive_rows["progressive-bob-vehicle-roboport-equipment"] = ("bob-vehicle-r
                                                                   "bob-vehicle-roboport-equipment-4",
                                                                   "bob-vehicle-roboport-modular-equipment-4")
 del progressive_rows["progressive-bob-robots"]
-del progressive_rows["progressive-bob-robotics"]
+del progressive_rows["progressive-robotics"]
 progressive_rows["progressive-robots"] = ("robotics", "construction-robotics", "logistic-robotics",
                                           "bob-robotics-2", "bob-robots-1",
                                           "bob-robotics-3", "bob-robots-2",
