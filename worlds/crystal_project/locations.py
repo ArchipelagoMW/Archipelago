@@ -1197,9 +1197,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Eaclaneya Courtyard
         LocationData(JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset),  # Jidamba Tangle map chest
         #Summit
-        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset),  # Flame Guard chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2801 + treasure_index_offset),  # Flame Guard chest
         LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop Eaclaneya", 2808 + treasure_index_offset),  # Rune Bow chest
-        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset),  # Flamespike chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2802 + treasure_index_offset),  # Flamespike chest
         LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Scramble down the escarpment from Weaver Outpost to pedestal", 2803 + treasure_index_offset),  # Siege Bow chest
         #Canopy
         LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up in the canopy south of shrine", 1171 + treasure_index_offset),  # Demon Helm chest
