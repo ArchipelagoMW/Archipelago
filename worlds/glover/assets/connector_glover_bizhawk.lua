@@ -12770,7 +12770,7 @@ function setSpawningCheckpoints(IN_CHECKPOINT)
     	local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
 		local spawn_checkpoint_address = world_address + GLOVERHACK.warp_spawn_offset
 		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number - 1)
-		print(ROM_WORLDS_TABLE[world_id].."'s spawning checkpoint is "..tostring(checkpoint_number))
+		print(ROM_WORLDS_TABLE[world_id].."'s Spawning Checkpoint: "..tostring(checkpoint_number).."("..tostring(spawn_checkpoint_address)..")")
 	end
 end
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
