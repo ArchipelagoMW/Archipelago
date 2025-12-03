@@ -40,6 +40,8 @@ def mystery_argparse(argv: list[str] | None = None):
     parser.add_argument('--spoiler', type=int, default=defaults.spoiler)
     parser.add_argument('--outputpath', default=settings.general_options.output_path,
                         help="Path to output folder. Absolute or relative to cwd.")  # absolute or relative to cwd
+    parser.add_argument('--allow_quantity', action="store_true", default=defaults.allow_quantity,
+                        help='Allows the use of the quantity option in yamls. Default is the set value in the host.yaml.')
     parser.add_argument('--race', action='store_true', default=defaults.race)
     parser.add_argument('--meta_file_path', default=defaults.meta_file_path)
     parser.add_argument('--log_level', default=defaults.loglevel, help='Sets log level')
@@ -119,9 +121,9 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
     else:
         meta_weights = None
 
-
     player_id = 1
     player_files = {}
+    allow_quantity = args.allow_quantity
     for file in os.scandir(args.player_files_path):
         fname = file.name
         if file.is_file() and not fname.startswith(".") and not fname.lower().endswith(".ini") and \
@@ -133,7 +135,14 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                     if yaml is None:
                         logging.warning(f"Ignoring empty yaml document #{doc_idx + 1} in {fname}")
                     else:
-                        weights_for_file.append(yaml)
+                        quantity = yaml.get("quantity", 1)
+                        if quantity <= 0:
+                            raise ValueError("A quantity of 0 or less is invalid. Please change it to at least 1.")
+                        if not allow_quantity and quantity > 1:
+                            raise ValueError("Quantity greater than 1 is deactivated by host settings.")
+
+                        for _ in range(quantity):
+                            weights_for_file.append(yaml)
                 weights_cache[fname] = tuple(weights_for_file)
                         
             except Exception as e:

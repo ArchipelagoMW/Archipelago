@@ -60,7 +60,7 @@ adding more randomness and "mystery" to your options. Every configurable setting
 
 Currently, there are only a few options that are root options. Everything else should be nested within one of these root
 options or in some cases nested within other nested options. The only options that should exist in root
-are `description`, `name`, `game`, `requires`, and the name of the games you want options for.
+are `description`, `name`, `game`, `quantity`, `requires`, and the name of the games you want options for.
 
 * `description` is ignored by the generator and is simply a good way for you to organize if you have multiple files
   using this to detail the intention of the file.
@@ -77,6 +77,9 @@ are `description`, `name`, `game`, `requires`, and the name of the games you wan
 
 * `game` is where either your chosen game goes or, if you would like, can be filled with multiple games each with
   different weights.
+
+* `quantity` is the amount of times this yaml should be used when generating. This option is optional, the default value is 1.
+  To ensure that the name is unique with a value of at least two, the keywords from above must be used.
 
 * `requires` details different requirements from the generator for the YAML to work as you expect it to. Generally this
   is good for detailing the version of Archipelago this YAML was prepared for. If it is rolled on an older version,
