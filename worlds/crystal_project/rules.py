@@ -88,7 +88,7 @@ class CrystalProjectLogic:
         if is_rental_salmon_enough:
             return state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled
         else:
-            return state.has(PROGRESSIVE_SALMON_VIOLA, self.player) and (state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled)
+            return (state.has(PROGRESSIVE_SALMON_VIOLA, self.player) or state.has(PROGRESSIVE_MOUNT, self.player, 5)) and (state.has(SALMON_RIVER_PASS, self.player) or self.options.regionsanity.value == self.options.regionsanity.option_disabled)
 
     def has_golden_quintar(self, state: CollectionState) -> bool:
         return state.has(PROGRESSIVE_QUINTAR_WOODWIND, self.player, 3) or state.has(PROGRESSIVE_MOUNT, self.player, 7)
