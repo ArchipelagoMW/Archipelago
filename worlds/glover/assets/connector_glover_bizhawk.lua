@@ -42,10 +42,6 @@ local WORLD_NAME = "";
 local GARIB_GROUPS = false
 local GARIB_ORDER = {}
 
--------- SPAWNING_CHECKPOINTS --------
-
-local SPAWNING_CHECKPOINTS = {}
-
 -------------- TOTALS VARS -----------
 local TOTAL_SINGLE_GARIBS = 0;
 local TOTAL_WORLD_GARIBS = {
@@ -12762,29 +12758,6 @@ function setRandomizedWorlds(WORLD_LOOKUP)
 	end
 end
 
-function setSpawningCheckpoints(IN_CHECKPOINT)
-	SPAWNING_CHECKPOINTS = {
-		["AP_ATLANTIS_L1"] = IN_CHECKPOINT[1] - 1,
-    	["AP_ATLANTIS_L2"] = IN_CHECKPOINT[2] - 1,
-    	["AP_ATLANTIS_L3"] = IN_CHECKPOINT[3] - 1,
-    	["AP_CARNIVAL_L1"] = IN_CHECKPOINT[4] - 1,
-    	["AP_CARNIVAL_L2"] = IN_CHECKPOINT[5] - 1,
-    	["AP_CARNIVAL_L3"] = IN_CHECKPOINT[6] - 1,
-    	["AP_PIRATES_L1"] = IN_CHECKPOINT[7] - 1,
-    	["AP_PIRATES_L2"] = IN_CHECKPOINT[8] - 1,
-    	["AP_PIRATES_L3"] = IN_CHECKPOINT[9] - 1,
-    	["AP_PREHISTORIC_L1"] = IN_CHECKPOINT[10] - 1,
-    	["AP_PREHISTORIC_L2"] = IN_CHECKPOINT[11] - 1,
-    	["AP_PREHISTORIC_L3"] = IN_CHECKPOINT[12] - 1,
-    	["AP_FORTRESS_L1"] = IN_CHECKPOINT[13] - 1,
-    	["AP_FORTRESS_L2"] = IN_CHECKPOINT[14] - 1,
-    	["AP_FORTRESS_L3"] = IN_CHECKPOINT[15] - 1,
-    	["AP_SPACE_L1"] = IN_CHECKPOINT[16] - 1,
-    	["AP_SPACE_L2"] = IN_CHECKPOINT[17] - 1,
-    	["AP_SPACE_L3"] = IN_CHECKPOINT[18] - 1
-	}
-end
-
 function setWorldInfo(world_id, hub_number, door_number)
     local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
     local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
@@ -12794,6 +12767,18 @@ function setWorldInfo(world_id, hub_number, door_number)
 	mainmemory.writebyte(door_address, door_number)
 end
 
+function setSpawningCheckpoints(IN_CHECKPOINT)
+    local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
+	for eachIndex, checkpoint_number in pairs(IN_CHECKPOINT)
+	do
+		local level_number = (eachIndex % 3) + 1
+		local world_number = (eachIndex // 3)
+		local world_id = level_number + (world_number * 5)
+    	local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
+		local spawn_checkpoint_address = world_address + GLOVERHACK.warp_spawn_offset
+		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number)
+	end
+end
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
 
 function processAGIItem(item_list)
