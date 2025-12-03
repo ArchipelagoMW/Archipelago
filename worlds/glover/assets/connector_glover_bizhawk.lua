@@ -294,6 +294,7 @@ local ROM_ITEM_TABLE = {
     "AP_BEACHBALL_TRANSFORM",
     "AP_HELICOPTER_TRANSFORM",
     "AP_DEATH_TRANSFORM",
+	"AP_DEBUG",
     "AP_MAX_ITEM",
 };
 
@@ -12834,6 +12835,13 @@ function process_block(block)
 	if block['triggered_links'] ~= nil
 	then
 		incoming_links(block['triggered_links'])
+	end
+	if block['debug_mode'] ~= nil
+	then
+		if block['debug_mode']
+		then
+			GVR:setItem(ITEM_TABLE["AP_DEBUG"], 1)
+		end
 	end
 end
 

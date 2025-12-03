@@ -284,6 +284,11 @@ class GloverCommandProcessor(ClientCommandProcessor):
         if isinstance(self.ctx, GloverContext):
             async_start(self.ctx.link_table["TRAP"].override_toggle(self.ctx), name="Update Traplink")
 
+    def _cmd_debug(self):
+        """Toggle debug mode."""
+        if isinstance(self.ctx, GloverContext):
+            async_start(self.ctx.toggle_debug(), name="Update Debug")
+
 class GloverContext(CommonContext):
     command_processor = GloverCommandProcessor
     items_handling = 0b111 #full
@@ -330,6 +335,7 @@ class GloverContext(CommonContext):
         self.sync_ready = False
         self.startup = False
         self.handled_scouts = []
+        self.debug_mode = False
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -354,6 +360,9 @@ class GloverContext(CommonContext):
         text = data.get("cause", "")
         if text:
             logger.info(f"DeathLink: {text}")
+
+    async def toggle_debug(self):
+        self.debug_mode = not self.debug_mode
 
     async def send_death(self, death_text: str = ""):
         if self.server and self.server.socket:
@@ -612,6 +621,7 @@ def get_payload(ctx: GloverContext):
                 "items": [get_item_value(item.item) for item in ctx.items_received],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggered_links": triggered_links,
+                "debug_mode" : ctx.debug_mode,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     else:
@@ -619,6 +629,7 @@ def get_payload(ctx: GloverContext):
                 "items": [],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggered_links": triggered_links,
+                "debug_mode" : ctx.debug_mode,
                 "messages": [message for (i, message) in ctx.messages.items() if i != 0],
             })
     if len(ctx.messages) > 0:
