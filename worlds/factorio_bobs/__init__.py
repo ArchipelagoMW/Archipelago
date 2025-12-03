@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import collections
 import logging
+import random
 import typing
 
 import Utils
@@ -65,6 +66,8 @@ class FactorioBobs(World):
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
     research new technologies, and become more efficient in your quest to build a rocket and return home.
     """
+    SEEDED_RANDOM_SEED_KEY = "seeded_random_seed"
+
     logger: logging.Logger
 
     game = "Factorio Bob's"
@@ -96,6 +99,9 @@ class FactorioBobs(World):
                               "Atomic Rocket", "Atomic Cliff Remover", "Inventory Spill")
     want_progressives: dict[str, bool] = collections.defaultdict(lambda: False)
 
+    seeded_random_seed: int
+    seeded_random: random.Random
+
     def __init__(self, world, player: int):
         super(FactorioBobs, self).__init__(world, player)
         self.additional_logic: dict[int, AndRule] = {}
@@ -107,6 +113,12 @@ class FactorioBobs(World):
         self.tech_tree_layout_prerequisites = {}
 
         self.logger = logging.getLogger(f"{self.game}:{self.player}")
+
+        self.set_seeded_random_seed(self.random.getrandbits(64))
+
+    def set_seeded_random_seed(self, seed: int):
+        self.seeded_random_seed = seed
+        self.seeded_random = random.Random(self.seeded_random_seed)
 
     generate_output = generate_mod
 
@@ -131,6 +143,10 @@ class FactorioBobs(World):
         if not hasattr(self.multiworld, "generation_is_fake"):
             self.set_custom_recipes()
         elif hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            slot_data = self.multiworld.re_gen_passthrough[self.game]
+            if FactorioBobs.SEEDED_RANDOM_SEED_KEY in slot_data:
+                self.set_seeded_random_seed(slot_data[FactorioBobs.SEEDED_RANDOM_SEED_KEY])
+                del slot_data[FactorioBobs.SEEDED_RANDOM_SEED_KEY]
             for product_name, ingredients_name in self.multiworld.re_gen_passthrough[self.game].items():
                 new_ingredients = {}
                 liquids_used = 0
@@ -224,7 +240,6 @@ class FactorioBobs(World):
 
     def create_regions(self):
         player = self.player
-        random = self.random
         nauvis = Region(self.origin_region_name, player, self.multiworld)
 
         location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo
@@ -238,15 +253,17 @@ class FactorioBobs(World):
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
 
-        if not hasattr(self.multiworld, "generation_is_fake"):
+        if (hasattr(self.multiworld, "generation_is_fake") # if fake
+                and not (hasattr(self.multiworld, "re_gen_passthrough") # and doesn't have seed then fallback
+                         and FactorioBobs.SEEDED_RANDOM_SEED_KEY in self.multiworld.re_gen_passthrough[self.game])):
+            location_names = location_pool
+        else:
             try:
-                location_names = random.sample(location_pool, location_count)
+                location_names = self.seeded_random.sample(location_pool, location_count)
             except ValueError as e:
                 # should be "ValueError: Sample larger than population or is negative"
                 raise Exception("Too many traps for too few locations. Either decrease the trap count, "
                                 f"or increase the location count (higher max science pack). (Player {self.player})") from e
-        else:
-            location_names = location_pool
 
         self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
                                   for loc_name in location_names]
@@ -254,12 +271,12 @@ class FactorioBobs(World):
         min_cost = self.options.min_tech_cost.value
         max_cost = self.options.max_tech_cost.value
         if distribution == distribution.option_even:
-            rand_values = (random.randint(min_cost, max_cost) for _ in self.science_locations)
+            rand_values = (self.seeded_random.randint(min_cost, max_cost) for _ in self.science_locations)
         else:
             mode = {distribution.option_low: min_cost,
                     distribution.option_middle: (min_cost+max_cost)//2,
                     distribution.option_high: max_cost}[distribution.value]
-            rand_values = (random.triangular(min_cost, max_cost, mode) for _ in self.science_locations)
+            rand_values = (self.seeded_random.triangular(min_cost, max_cost, mode) for _ in self.science_locations)
         rand_values = sorted(rand_values)
         if self.options.ramping_tech_costs:
             def sorter(loc: FactorioScienceLocation):
@@ -694,7 +711,7 @@ class FactorioBobs(World):
         return item
 
     def fill_slot_data(self):
-        slot_data = {}
+        slot_data: dict[str, typing.Any] = {FactorioBobs.SEEDED_RANDOM_SEED_KEY: self.seeded_random_seed}
         for recipe in self.custom_recipes.values():
             ingredients = []
             for ingredient in recipe.ingredients:
@@ -724,9 +741,12 @@ class FactorioScienceLocation(FactorioLocation):
         self.rel_cost = int(split_name[2])
 
         self.ingredients = {FactorioBobs.ordered_science_packs[self.complexity]: 1}
+        world: World = parent.multiworld.worlds[self.player]
+        assert type(world) is FactorioBobs
+        world: FactorioBobs
         for complexity in range(self.complexity):
-            if (parent.multiworld.worlds[self.player].options.tech_cost_mix >
-                    parent.multiworld.worlds[self.player].random.randint(0, 99)):
+            if (world.options.tech_cost_mix >
+                    world.seeded_random.randint(0, 99)):
                 self.ingredients[FactorioBobs.ordered_science_packs[complexity]] = 1
 
     @property
