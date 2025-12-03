@@ -551,6 +551,9 @@ class AdditionalLogic(Choice):
 test = {}
 
 class CustomAdditionalLogic(OptionDict):
+    """Custom logic: hidden
+    example found here: https://discord.com/channels/731205301247803413/1426234278462750860/1437568465987829975
+    """
     display_name = "Custom Additional Logic"
     visibility = Visibility.spoiler
     schema = Schema({Optional(Or(num+1, name)): RuleSchema()
