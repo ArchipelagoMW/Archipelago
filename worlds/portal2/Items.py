@@ -32,7 +32,6 @@ class Portal2Item(Item):
 
 item_table: dict[str, Portal2ItemData] = {
     # Portal Guns
-    portal_gun_1: Portal2ItemData("weapon_portalgun", "CanFirePortal1", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression and ItemClassification.useful), # May remove
     portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression and ItemClassification.useful),
     potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
 
