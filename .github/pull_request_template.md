@@ -3,10 +3,13 @@ targeting and what it's changing.
 
 ex. "MyGame4: implement new game" or "Docs: add new guide for customizing MyGame3"
 
-## What is this fixing or adding?
+## What is this adding, removing or changing?
 
 
-## How was this tested?
+## Why is the change being made?
+
+
+## How should this be tested?
 
 
 ## If this makes graphical changes, please attach screenshots.
