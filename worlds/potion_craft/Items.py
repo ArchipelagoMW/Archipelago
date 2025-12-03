@@ -187,7 +187,7 @@ talents: Dict[str, TalentData] = {
     "Reduced Markup Chance" : TalentData(116, ItemClassification.useful),
     "Skilled Manipulator" : TalentData(117, ItemClassification.useful),
     "Talented Potion Seller" : TalentData(118, ItemClassification.useful), #Trading end
-    "Fertilizing Herbs and Mushrooms with Potions": TalentData(119, ItemClassification.useful), #Gardening Start
+    "Fertilizing Herbs and Mushrooms with Potions": TalentData(119, ItemClassification.progression), #Gardening Start
     "Careful Herb Care": TalentData(120, ItemClassification.useful),
     "Careful Mushroom Care": TalentData(121, ItemClassification.useful),
     "Careful Crystal Care": TalentData(122, ItemClassification.useful),
@@ -199,19 +199,19 @@ talents: Dict[str, TalentData] = {
     "Wildly Overgrown Crystal Harvesting": TalentData(128, ItemClassification.useful),
     "Gold Digger": TalentData(129, ItemClassification.useful),
     "Gold Fever": TalentData(130, ItemClassification.useful),
-    "Herb Planting": TalentData(131, ItemClassification.useful),
-    "Herb Replanting": TalentData(132, ItemClassification.useful),
+    "Herb Planting": TalentData(131, ItemClassification.progression),
+    "Herb Replanting": TalentData(132, ItemClassification.progression),
     "Herb Seed Harvesting": TalentData(133, ItemClassification.useful),
     "Quick Herb Growth": TalentData(134, ItemClassification.useful),
-    "Underwater Growing": TalentData(135, ItemClassification.useful),
-    "Cave Herbs": TalentData(136, ItemClassification.useful),
+    "Underwater Growing": TalentData(135, ItemClassification.progression),
+    "Cave Herbs": TalentData(136, ItemClassification.progression),
     "Mushroom Planting": TalentData(137, ItemClassification.useful),
     "Mushroom Replanting": TalentData(138, ItemClassification.useful),
     "Mycelium Harvesting": TalentData(139, ItemClassification.useful),
     "Quick Mushroom Growth": TalentData(140, ItemClassification.useful),
-    "Truffle Growing": TalentData(141, ItemClassification.useful),
-    "Crystal Planting": TalentData(142, ItemClassification.useful),
-    "Crystal Replanting": TalentData(143, ItemClassification.useful),
+    "Truffle Growing": TalentData(141, ItemClassification.progression),
+    "Crystal Planting": TalentData(142, ItemClassification.progression),
+    "Crystal Replanting": TalentData(143, ItemClassification.progression),
     "Crystal Seed Harvesting": TalentData(144, ItemClassification.useful),
     "Quick Crystal Growth": TalentData(145, ItemClassification.useful),
     "Fertilizing Crystals with Potions": TalentData(146, ItemClassification.useful), #Gardening End
@@ -225,12 +225,12 @@ talents: Dict[str, TalentData] = {
 }
 
 key_items: Dict[str, ItemData] = {
-    "Progressive Alchemy Machine" : ItemData(500, ItemClassification.useful),
-    "Progressive Garden" : ItemData(501, ItemClassification.useful),
+    "Progressive Alchemy Machine" : ItemData(500, ItemClassification.progression),
+    "Progressive Garden" : ItemData(501, ItemClassification.progression),
     "Recipe Page" : ItemData(502, ItemClassification.useful),
     "Progressive Salt" : ItemData(503, ItemClassification.progression),
     "Progressive Crystal Recipe" : ItemData(504, ItemClassification.progression),
-
+    "Progressive Potion Base": ItemData(505, ItemClassification.progression),
 }
 
 
