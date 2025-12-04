@@ -20,6 +20,11 @@ from worlds.rac3.options.titanium_bolts_options import TitaniumBolts
 from worlds.rac3.options.trap_weight_options import TrapWeight
 from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
+from worlds.rac3.options.Rangers import Rangers
+from worlds.rac3.options.Arena import Arena
+from worlds.rac3.options.VidComics import VidComics
+from worlds.rac3.options.VRChallenges import VRChallenges
+from worlds.rac3.options.SewerCrystals import SewerCrystals
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -49,12 +54,17 @@ class RaC3Options(PerGameCommonOptions):
     skin: RatchetSkin
     traps_enabled: EnableTraps
     trap_weight: TrapWeight
+    rangers: Rangers
+    arena: Arena
+    vidcomics: VidComics
+    vr_challenges: VRChallenges
+    sewer_crystals: SewerCrystals
 
 
 rac3_option_groups: dict[str, List[Any]] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
                      ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-                     TrapWeight],
+                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -77,4 +87,9 @@ slot_data_options: list[str] = [
     RAC3OPTION.SKIN,
     RAC3OPTION.ENABLE_TRAPS,
     RAC3OPTION.TRAP_WEIGHT,
+    RAC3OPTION.RANGERS,
+    RAC3OPTION.ARENA,
+    RAC3OPTION.VIDCOMICS,
+    RAC3OPTION.VR_CHALLENGES,
+    RAC3OPTION.SEWER_CRYSTALS,
 ]

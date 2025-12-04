@@ -141,6 +141,11 @@ class RaC3World(World):
             RAC3OPTION.SKIN: self.options.skin.value,
             RAC3OPTION.ENABLE_TRAPS: self.options.traps_enabled.value,
             RAC3OPTION.TRAP_WEIGHT: self.options.trap_weight.value,
+            RAC3OPTION.RANGERS: self.options.rangers.value,
+            RAC3OPTION.ARENA: self.options.arena.value,
+            RAC3OPTION.VIDCOMICS: self.options.vidcomics.value,
+            RAC3OPTION.VR_CHALLENGES: self.options.vr_challenges.value,
+            RAC3OPTION.SEWER_CRYSTALS: self.options.sewer_crystals.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

@@ -7,6 +7,7 @@ from worlds.rac3 import location_groups
 from worlds.rac3.constants.data.item import planet_data
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.Rac3Sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
@@ -326,55 +327,55 @@ def set_rules(world: "RaC3World"):
         # RAC3SEWER.TRADE_48
         # RAC3SEWER.TRADE_49
         # RAC3SEWER.TRADE_50
-        # RAC3SEWER.TRADE_51
-        # RAC3SEWER.TRADE_52
-        # RAC3SEWER.TRADE_53
-        # RAC3SEWER.TRADE_54
-        # RAC3SEWER.TRADE_55
-        # RAC3SEWER.TRADE_56
-        # RAC3SEWER.TRADE_57
-        # RAC3SEWER.TRADE_58
-        # RAC3SEWER.TRADE_59
-        # RAC3SEWER.TRADE_60
-        # RAC3SEWER.TRADE_61
-        # RAC3SEWER.TRADE_62
-        # RAC3SEWER.TRADE_63
-        # RAC3SEWER.TRADE_64
-        # RAC3SEWER.TRADE_65
-        # RAC3SEWER.TRADE_66
-        # RAC3SEWER.TRADE_67
-        # RAC3SEWER.TRADE_68
-        # RAC3SEWER.TRADE_69
-        # RAC3SEWER.TRADE_70
-        # RAC3SEWER.TRADE_71
-        # RAC3SEWER.TRADE_72
-        # RAC3SEWER.TRADE_73
-        # RAC3SEWER.TRADE_74
-        # RAC3SEWER.TRADE_75
-        # RAC3SEWER.TRADE_76
-        # RAC3SEWER.TRADE_77
-        # RAC3SEWER.TRADE_78
-        # RAC3SEWER.TRADE_79
-        # RAC3SEWER.TRADE_80
-        # RAC3SEWER.TRADE_81
-        # RAC3SEWER.TRADE_82
-        # RAC3SEWER.TRADE_83
-        # RAC3SEWER.TRADE_84
-        # RAC3SEWER.TRADE_85
-        # RAC3SEWER.TRADE_86
-        # RAC3SEWER.TRADE_87
-        # RAC3SEWER.TRADE_88
-        # RAC3SEWER.TRADE_89
-        # RAC3SEWER.TRADE_90
-        # RAC3SEWER.TRADE_91
-        # RAC3SEWER.TRADE_92
-        # RAC3SEWER.TRADE_93
-        # RAC3SEWER.TRADE_94
-        # RAC3SEWER.TRADE_95
-        # RAC3SEWER.TRADE_96
-        # RAC3SEWER.TRADE_97
-        # RAC3SEWER.TRADE_98
-        # RAC3SEWER.TRADE_99
+         RAC3SEWER.TRADE_51: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_52: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_53: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_54: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_55: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_56: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_57: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_58: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_59: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_60: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_61: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_62: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_63: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_64: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_65: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_66: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_67: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_68: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_69: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_70: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_71: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_72: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_73: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_74: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_75: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_76: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_77: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_78: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_79: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_80: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_81: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_82: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_83: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_84: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_85: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_86: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_87: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_88: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_89: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_90: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_91: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_92: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_93: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_94: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_95: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_96: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_97: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_98: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+         RAC3SEWER.TRADE_99: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
 
         # RAC3VENDOR.TYHRRANOSIS_ANNIHILATOR
@@ -507,16 +508,16 @@ def set_rules(world: "RaC3World"):
     # ----- Nanotech -----#
 
     match world.options.nanotech_milestones.value:
-        case 1:  # 5 nanotech level is a check
-            for level, name in enumerate(every_5_nanotech):
+        case 1:  # 20 nanotech level is a check
+            for level, name in enumerate(every_20_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))
         case 2:  # 10 nanotech level is a check
             for level, name in enumerate(every_10_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))
-        case 3:  # 20 nanotech level is a check
-            for level, name in enumerate(every_20_nanotech):
+        case 3:  # 5 nanotech level is a check
+            for level, name in enumerate(every_5_nanotech):
                 add_rule(world.get_location(name),
                          lambda state: state.has_from_list(planet_data.keys(), world.player, level))
 

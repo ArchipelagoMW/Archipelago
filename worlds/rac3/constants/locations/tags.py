@@ -13,3 +13,4 @@ class RAC3TAG:
     WEAPONS = "Weapons"
     GADGETS = "Gadgets"
     INFOBOT = "Infobot"
+    VR = "VR"

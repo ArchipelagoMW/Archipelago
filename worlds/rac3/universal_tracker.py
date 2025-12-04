@@ -29,7 +29,12 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.skin = world.passthrough[RAC3OPTION.SKIN]
             world.options.traps_enabled.value = world.passthrough[RAC3OPTION.ENABLE_TRAPS]
             world.options.trap_weight.value = world.passthrough[RAC3OPTION.TRAP_WEIGHT]
+            world.options.rangers.value = world.passthrough[RAC3OPTION.RANGERS]
+            world.options.arena.value = world.passthrough[RAC3OPTION.ARENA]
+            world.options.vidcomics.value = world.passthrough[RAC3OPTION.VIDCOMICS]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
+            world.options.vr_challenges.value = world.passthrough[RAC3OPTION.VR_CHALLENGES]
+            world.options.sewer_crystals.value = world.passthrough[RAC3OPTION.SEWER_CRYSTALS]
         else:
             world.using_ut = False
     else:

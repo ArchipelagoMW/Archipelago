@@ -20,3 +20,8 @@ class RAC3OPTION:
     DEATHLINK = "death_link"
     ENABLE_TRAPS = "enable_traps"
     TRAP_WEIGHT = "trap_weight"
+    RANGERS = "rangers"
+    ARENA = "arena"
+    VIDCOMICS = "vidcomics"
+    VR_CHALLENGES = "vr_challenges"
+    SEWER_CRYSTALS = "sewer_crystals"
