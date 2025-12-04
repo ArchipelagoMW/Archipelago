@@ -261,14 +261,46 @@ class CrystalProjectWorld(World):
                         self.starter_ap_region = display_region_subregions_dictionary[display_region_name][0]
                         break
 
+            display_regions_desperate_for_a_salmon: list[str] = [THE_OPEN_SEA_DISPLAY_NAME, THE_DEEP_SEA_DISPLAY_NAME, THE_DEPTHS_DISPLAY_NAME]
+
             # If this is UT re-gen the value isn't empty and we skip trying to pick a starter_region since we already have one
             if self.starter_ap_region == "":
                 valid_starting_regions = []
+                display_regions_forbidden_from_being_starters: list[str] = [MENU_DISPLAY_NAME, THE_OLD_WORLD_DISPLAY_NAME, MODDED_ZONE_DISPLAY_NAME]
+
                 for ap_region in self.get_regions():
-                    #apregions are only valid if they are the first apregion inside the display region (for now)
-                    if len(ap_region.locations) > 2 and ap_region.name != MENU_AP_REGION and ap_region.name != MODDED_ZONE_AP_REGION\
+                    #ap regions are only valid if they are the first ap region inside the display region (for now)
+                    if len(ap_region.locations) >= 2 and ap_region.name not in display_regions_forbidden_from_being_starters\
                             and display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] == ap_region.name:
-                        valid_starting_regions.append(ap_region)
+                        reachable_locations_in_region: int = 0
+                        #Getting the state into the right place: match the starter region to the currently selected region, give the pass for that region, and give the levels if necessary
+                        current_state: CollectionState = CollectionState(self.multiworld)
+                        self.origin_region_name = ap_region.name
+                        current_state.collect(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[ap_region.name]]), prevent_sweep=True)
+
+                        if ap_region_to_display_region_dictionary[ap_region.name] in display_regions_desperate_for_a_salmon:
+                            current_state.collect(self.create_item(PROGRESSIVE_SALMON_VIOLA), prevent_sweep=True)
+
+                        if not self.options.level_gating.value == self.options.level_gating.option_none:
+                            logic = CrystalProjectLogic(self.player, self.options)
+                            self.starting_progressive_levels = logic.get_progressive_level_count(display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0])
+                            if self.starting_progressive_levels < 1:
+                                self.starting_progressive_levels = 1
+                            for _ in range(self.starting_progressive_levels):
+                                current_state.collect(self.create_item(PROGRESSIVE_LEVEL), prevent_sweep=True)
+
+                        #Checking all locations in current AP Region and the other AP Regions inside the same Display Region
+                        for ap_region_name_in_same_display_region in display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]]:
+                            ap_region_in_same_display_region = self.get_region(ap_region_name_in_same_display_region)
+
+                            for possible_reachable_location in ap_region_in_same_display_region.locations:
+                                if current_state.can_reach(possible_reachable_location):
+                                    reachable_locations_in_region += 1
+
+                        if reachable_locations_in_region >= 2:
+                            valid_starting_regions.append(ap_region)
+                            #logging.getLogger().info(ap_region.name + " is a valid starter region.")
+
                 self.starter_ap_region = self.random.choice(valid_starting_regions).name
                 #Until we have a teleport location in every single ap region, for now we take specifically the first ap region in the display regions subregion list
                 self.starter_ap_region = display_region_subregions_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
@@ -277,6 +309,10 @@ class CrystalProjectWorld(World):
             if len(starting_passes_list) == 0:
                 #Converts the AP Region that was picked as the starting region to the Display Region containing that AP Region
                 self.multiworld.push_precollected(self.create_item(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]]))
+
+            #Giving players who start in a swimming-required region a salmon to start
+            if self.starter_ap_region in display_regions_desperate_for_a_salmon:
+                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_SALMON_VIOLA))
 
         self.origin_region_name = self.starter_ap_region
         #logging.getLogger().info("Starting region is " + self.starter_ap_region)
