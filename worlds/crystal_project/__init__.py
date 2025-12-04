@@ -315,7 +315,7 @@ class CrystalProjectWorld(World):
                 self.multiworld.push_precollected(self.create_item(PROGRESSIVE_SALMON_VIOLA))
 
         self.origin_region_name = self.starter_ap_region
-        #logging.getLogger().info("Starting region is " + self.starter_ap_region)
+        logging.getLogger().info("Starting region for " + self.player_name + " is " + self.starter_ap_region)
 
         # now that we know your starter region, we know how many progressive levels you need to start with
         if not self.options.level_gating.value == self.options.level_gating.option_none:
