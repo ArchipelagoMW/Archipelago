@@ -139,7 +139,10 @@ class RAC3ITEMDATA:
 
     @staticmethod
     def construct_vidcomic(idx: int, tag: list[str] = None):
-        address: int = idx - 0xFB + RAC3STATUS.VIDCOMIC
+        # Progressive order: 1, 2, 3, 4, 5
+        # Memory order:      1, 4, 2, 3, 5
+        progressive_to_memory = [0, 2, 3, 1, 4]
+        address: int = progressive_to_memory[idx - 0xFB] + RAC3STATUS.VIDCOMIC
         if tag:
             tags = [RAC3ITEMTAG.VIDCOMIC, RAC3ITEMTAG.PROGRESSIVE]
         else:
@@ -420,6 +423,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.AEGIS: RAC3ITEMDATA.construct_armor(0xF8, ItemClassification.progression, 20),
     RAC3ITEM.INFERNOX: RAC3ITEMDATA.construct_armor(0xF9, ItemClassification.progression, 24),
     # VidComics
+    # In memory they are in order 1,4,2,3,5
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: RAC3ITEMDATA.construct_vidcomic(0xFA, [RAC3ITEMTAG.PROGRESSIVE]),
     RAC3ITEM.VIDCOMIC1: RAC3ITEMDATA.construct_vidcomic(0xFB),
     RAC3ITEM.VIDCOMIC2: RAC3ITEMDATA.construct_vidcomic(0xFC),
