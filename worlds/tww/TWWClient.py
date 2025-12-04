@@ -382,6 +382,9 @@ async def give_items(ctx: TWWContext) -> None:
 
         if item_id is None:
             logger.warning(f'Item "{item_name}" does not have an associated item ID!')
+
+            # Skip ahead to the next item since we cannot give this one.
+            write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
         else:
             # Special case: Use a different item ID for the second progressive magic meter.
             if item_name == "Progressive Magic Meter":
