@@ -121,6 +121,9 @@ class TestYCSpawn(NineSolsTestBase):
         self.assertReachableWith("FSP: Receive Peach Blossom Village Quest", [])
         self.assertReachableWith("Yinglong Canal: Near Root Node", [])
 
+        # regression test for duplicate Grapple bug
+        self.assertEqual(len([x for x in self.multiworld.get_items() if x.name == "Grapple"]), 0)
+
 
 class TestYCSpawnAllShuffle(NineSolsTestBase):
     options = {
@@ -136,6 +139,9 @@ class TestYCSpawnAllShuffle(NineSolsTestBase):
 
         self.assertReachableWith("FSP: Receive Peach Blossom Village Quest", [])
         self.assertNotReachableWith("Yinglong Canal: Near Root Node", [])  # because shuffle_ledge_grab
+
+        # regression test for duplicate Grapple bug
+        self.assertEqual(len([x for x in self.multiworld.get_items() if x.name == "Grapple"]), 1)
 
 
 class TestFGHSpawn(NineSolsTestBase):

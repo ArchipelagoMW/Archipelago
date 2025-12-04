@@ -126,7 +126,12 @@ def create_items(world: "NineSolsWorld") -> None:
             continue  # we'll place these as a group later
         elif name == "Grapple":
             if options.shuffle_grapple:
-                prog_and_useful_items.append(create_item(player, name, options))
+                g = create_item(player, name, options)
+                if options.first_root_node == FirstRootNode.option_yinglong_canal and options.shuffle_ledge_grab.value:
+                    # since there's no "local_sphere_2_items", we have to place it ourselves:
+                    multiworld.get_location("Yinglong Canal: Near Root Node", player).place_locked_item(g)
+                else:
+                    prog_and_useful_items.append(g)
             else:
                 multiworld.push_precollected(create_item(player, name, options))
         elif name == "Wall Climb":
@@ -230,8 +235,8 @@ def create_items(world: "NineSolsWorld") -> None:
         if options.shuffle_ledge_grab.value:
             multiworld.local_early_items[player]["Ledge Grab"] = 1
         if options.shuffle_grapple.value:
-            if options.shuffle_ledge_grab.value:  # since there's no "local_sphere_2_items", we name the location:
-                multiworld.get_location("Yinglong Canal: Near Root Node", player).place_locked_item(create_item(player, "Grapple"))
+            if options.shuffle_ledge_grab.value:
+                pass  # since there's no "local_sphere_2_items", this has to be handled above when Grapple is created
             else:
                 multiworld.local_early_items[player]["Grapple"] = 1
     if options.first_root_node == FirstRootNode.option_central_transport_hub:
