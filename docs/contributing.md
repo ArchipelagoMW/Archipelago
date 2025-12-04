@@ -11,8 +11,9 @@ game contributions:
 We consider worlds ("game implementations") as dependencies of Archipelago.
 
 * If you want to contribute to an existing world, please check if the world has contributing guidelines or get in touch
-  with the world maintainer. World maintainers are typically listed in the [CODEOWNERS](./CODEOWNERS) file, but the best
-  way to get in touch may be via the [Discord](https://archipelago.gg/discord).
+  with the world maintainer. Maintainers for worlds that are in this repository are typically listed in the
+  [CODEOWNERS](./CODEOWNERS) file, but the best way to get in touch may be via the
+  [Discord](https://archipelago.gg/discord).
 
 * If you want to contribute a new world, or take on world maintainership, please consider the following:
   * Dependencies need to be fit for purpose. This means e.g. reasonable performance, memory usage and load times as
