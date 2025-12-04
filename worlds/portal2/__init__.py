@@ -50,6 +50,7 @@ class Portal2World(World):
         chapter_region = Region(chapter_name, self.player, self.multiworld)
         chapter_start_entrance = chapter_region.create_exit(f"{chapter_name} To First Map")
         chapter_start_entrance.randomization_group = chapter_number * 10
+        chapter_start_entrance.randomization_type = EntranceType.ONE_WAY
 
         # Get all map locations for that chapter
         map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
@@ -72,8 +73,10 @@ class Portal2World(World):
 
             start_entrance = region_start.create_er_target(f"{name} Start Entrance")
             start_entrance.randomization_group = chapter_number
+            start_entrance.randomization_type = EntranceType.ONE_WAY
             progress_to_next_map_entrance = region_end.create_exit(f"{name} To Next Map")
             progress_to_next_map_entrance.randomization_group = chapter_number
+            progress_to_next_map_entrance.randomization_type = EntranceType.ONE_WAY
 
         return chapter_region
 
