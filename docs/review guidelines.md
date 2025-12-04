@@ -103,7 +103,7 @@ We recommend using mypy, pyright or basedpyright locally to check for type error
 ruff or flake8 for general warnings.
 See / use ruff.toml for agreed-on rules.
 
-For other language we don't have a defined setup yet.
+We don't currently have a defined setup for any other languages.
 
 All new code should make use of type hints if possible.
 Only critical problems should block a PR, but it should be pointed out as a nitpick if there are any typing or linter
