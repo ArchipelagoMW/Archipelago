@@ -3,7 +3,7 @@ from typing import Any, ClassVar, Optional, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from worlds.LauncherComponents import Component, components, launch_subprocess, SuffixIdentifier, Type
+from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, SuffixIdentifier, Type
 from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.options import RAC3OPTION
@@ -21,8 +21,13 @@ def run_client(_url: Optional[str] = None):
     launch_subprocess(launch_client, name=f"{RAC3OPTION.GAME_TITLE}Client")
 
 
-components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client", func=run_client, component_type=Type.CLIENT,
-                            file_identifier=SuffixIdentifier(".aprac3")))
+components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client",
+                            func=run_client,
+                            component_type=Type.CLIENT,
+                            file_identifier=SuffixIdentifier(".aprac3"),
+                            icon="uya_icon"))
+
+icon_paths["uya_icon"] = f"ap:{__name__}/icons/uya_icon.png"
 
 
 class RaC3Web(WebWorld):

@@ -358,8 +358,6 @@ class Rac3Interface(GameInterface):
             pass
         return _addr
 
-    # TODO: fixing this syntax KEKW
-
     # initialization
     def remove_all_items(self):
         for item in self.UnlockItem.keys():
@@ -462,7 +460,7 @@ class Rac3Interface(GameInterface):
                     else:
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
-            if number > self.UnlockItem[RAC3REGION.SLOT_0].status - 1:
+            if number >= self.UnlockItem[RAC3REGION.SLOT_0].status:
                 # self.logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
         # self.logger.debug('---------PlanetCycler End---------')
