@@ -248,7 +248,7 @@ components: List[Component] = [
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
 
     Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL,
-              description="Write item/location data to a file and open it."),
+              description="Write item/location data for installed worlds to a file and open it."),
 ]
 
 
