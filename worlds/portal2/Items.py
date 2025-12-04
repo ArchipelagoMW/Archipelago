@@ -32,7 +32,7 @@ class Portal2Item(Item):
 
 item_table: dict[str, Portal2ItemData] = {
     # Portal Guns
-    portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression and ItemClassification.useful),
+    portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression | ItemClassification.useful),
     potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
 
     # Cubes (GetModelName())
@@ -63,9 +63,9 @@ item_table: dict[str, Portal2ItemData] = {
     turrets: Portal2ItemData("npc_portal_turret_floor", None, ItemTag.ENTITY | ItemTag.DISABLE, ItemClassification.progression),
 
     # Goal Items
-    adventure_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    space_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    fact_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
+    adventure_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
+    space_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
+    fact_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
 
     moon_dust: Portal2ItemData("", None, None, ItemClassification.filler),
     lemon: Portal2ItemData("", None, None, ItemClassification.filler),

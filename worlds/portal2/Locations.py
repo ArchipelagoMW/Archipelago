@@ -93,10 +93,10 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 8: Propulsion Catch Completion": Portal2LocationData("sp_a4_speed_tb_catch", LocationType.MAP_COMPLETION, [ portal_gun_2, floor_button, funnel, button, frankenturret, paint]),
     "Chapter 8: Repulsion Polarity Completion": Portal2LocationData("sp_a4_jump_polarity", LocationType.MAP_COMPLETION, [ portal_gun_2, paint, funnel, floor_button, button]),
     # Chapter 9
-    "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, []),
-    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, []),
-    "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, []),
-    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, []),
+    "Chapter 9: Finale 1 Completion": Portal2LocationData("sp_a4_finale1", LocationType.MAP_COMPLETION, [portal_gun_2, faith_plate, funnel, paint, adventure_core, space_core, fact_core]),
+    "Chapter 9: Finale 2 Completion": Portal2LocationData("sp_a4_finale2", LocationType.MAP_COMPLETION, [portal_gun_2, funnel, paint, floor_button]),
+    "Chapter 9: Finale 3 Completion": Portal2LocationData("sp_a4_finale3", LocationType.MAP_COMPLETION, [portal_gun_2, paint, funnel]),
+    "Chapter 9: Finale 4 Completion": Portal2LocationData("sp_a4_finale4", LocationType.MAP_COMPLETION, [portal_gun_2, paint]),
 }
 
 # Optional Checks
