@@ -160,6 +160,8 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 ctx.is_connected_to_server = connected_to_server
                 if connected_to_game:
                     await init(ctx)
+                else:
+                    logger.info("Waiting for game connection...")
 
             if connected_to_game and not ctx.is_connected_to_game:
                 logger.info(f"Connected to {RAC3OPTION.GAME_TITLE_FULL}")
@@ -167,6 +169,8 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 ctx.is_connected_to_game = connected_to_game
                 if connected_to_server:
                     await init(ctx)
+                else:
+                    logger.info("Waiting for serve connection...")
 
             if not connected_to_game:
                 if ctx.is_connected_to_game:

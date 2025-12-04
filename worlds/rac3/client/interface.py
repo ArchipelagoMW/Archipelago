@@ -80,9 +80,9 @@ class GameInterface:
         if not self.pcsx2_interface.is_connected():
             self.pcsx2_interface.connect()
             if not self.pcsx2_interface.is_connected():
-                self.logger.info('No Connection to PCSX2 Emulator')
+                self.logger.debug('No Connection to PCSX2 Emulator')
                 return
-            self.logger.info('Connected to PCSX2 Emulator')
+            self.logger.debug('Connected to PCSX2 Emulator')
         self.current_game = None
         try:
             self.verify_game_version()
