@@ -4,13 +4,16 @@ from typing import Any, List
 from Options import OptionGroup, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.options.arena_options import Arena
 from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.extra_armor_options import ExtraArmorUpgrade
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
 from worlds.rac3.options.nanotech_options import NanotechMilestones
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
+from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
 from worlds.rac3.options.ship_wings_options import ShipWings
@@ -20,11 +23,8 @@ from worlds.rac3.options.titanium_bolts_options import TitaniumBolts
 from worlds.rac3.options.trap_weight_options import TrapWeight
 from worlds.rac3.options.traps_options import EnableTraps
 from worlds.rac3.options.trophies_options import Trophies
-from worlds.rac3.options.Rangers import Rangers
-from worlds.rac3.options.Arena import Arena
-from worlds.rac3.options.VidComics import VidComics
-from worlds.rac3.options.VRChallenges import VRChallenges
-from worlds.rac3.options.SewerCrystals import SewerCrystals
+from worlds.rac3.options.vidcomics_options import VidComics
+from worlds.rac3.options.vr_challenges_options import VRChallenges
 
 
 def create_option_groups() -> List[OptionGroup]:
@@ -43,22 +43,22 @@ class RaC3Options(PerGameCommonOptions):
     bolt_and_xp_multiplier: BoltAndXPMultiplier
     enable_progressive_weapons: EnableProgressiveWeapons
     extra_armor_upgrade: ExtraArmorUpgrade
+    traps_enabled: EnableTraps
+    trap_weight: TrapWeight
     skill_points: SkillPoints
     trophies: Trophies
     titanium_bolts: TitaniumBolts
+    rangers: Rangers
+    vidcomics: VidComics
+    vr_challenges: VRChallenges
+    arena: Arena
+    sewer_crystals: SewerCrystals
     nanotech_milestones: NanotechMilestones
     exclude_locations: RAC3ExcludeLocations
     ship_nose: ShipNose
     ship_wings: ShipWings
     ship_skin: ShipSkin
     skin: RatchetSkin
-    traps_enabled: EnableTraps
-    trap_weight: TrapWeight
-    rangers: Rangers
-    arena: Arena
-    vidcomics: VidComics
-    vr_challenges: VRChallenges
-    sewer_crystals: SewerCrystals
 
 
 rac3_option_groups: dict[str, List[Any]] = {
