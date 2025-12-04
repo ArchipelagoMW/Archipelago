@@ -508,7 +508,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      SALMON_PASS_EAST_AP_REGION: lambda state: logic.has_horizontal_movement(state) or logic.has_swimming(state),
                      SOUTH_SALMON_RIVER_AP_REGION: lambda state: logic.has_swimming(state)})
     #Salmon River start
-    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [POSEIDON_SHRINE_PROPER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, SALMON_PASS_WEST_AP_REGION, SALMON_BAY_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
+    fancy_add_exits(world, SALMON_RIVER_AP_REGION, [POSEIDON_SHRINE_PROPER_AP_REGION, RIVER_CATS_EGO_AP_REGION, SOUTH_SALMON_RIVER_AP_REGION, SALMON_PASS_WEST_AP_REGION, LOWER_ICE_LAKES_AP_REGION],
                     #Note: connection to Tall Tall can be with goat (obscure), owl, (rental salmon + ibek (obscure), quintar + ibek) via poseidon shrine/salmon shack roof, or poseidon stone + ibek/owl
                     {POSEIDON_SHRINE_PROPER_AP_REGION: lambda state: (logic.has_swimming(state) and logic.obscure_routes_on(state)) or logic.has_horizontal_movement(state),
                      RIVER_CATS_EGO_AP_REGION: lambda state: (logic.obscure_routes_on(state) and logic.has_rental_salmon(state)) or logic.has_swimming(state),
