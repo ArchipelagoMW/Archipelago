@@ -8,9 +8,8 @@ from typing import Dict, Optional
 
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
-                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data,
-                                             PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE, trap_to_status,
-                                             vidcomic_data, weapon_upgrade_data)
+                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT,
+                                             RAC3_ITEM_DATA_TABLE, trap_to_status, vidcomic_data, weapon_upgrade_data)
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
@@ -81,17 +80,12 @@ class GameInterface:
         if not self.pcsx2_interface.is_connected():
             self.pcsx2_interface.connect()
             if not self.pcsx2_interface.is_connected():
+                self.logger.info('No Connection to PCSX2 Emulator')
                 return
             self.logger.info('Connected to PCSX2 Emulator')
+        self.current_game = None
         try:
-            game_id = self.pcsx2_interface.get_game_id()
-            # The first read of the address will be null if the client is faster than the emulator
-            self.current_game = None
-            if game_id == RAC3STATUS.GAME_ID:
-                self.current_game = game_id
-            if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
-                self.logger.warning(f'Connected to the wrong game ({game_id})')
-                self.game_id_error = game_id
+            self.verify_game_version()
         except RuntimeError:
             pass
         except ConnectionError as error:
@@ -102,10 +96,45 @@ class GameInterface:
         self.current_game = None
         self.logger.info("Disconnected from PCSX2 Emulator")
 
+    def verify_game_version(self) -> bool:
+        game_id = self.pcsx2_interface.get_game_id()
+        # The first read of the address will be null if the client is faster than the emulator
+        if game_id is None:
+            return False
+        if game_id != self.current_game:
+            self.logger.info(f'Detecting new game version...')
+            match game_id:  # Todo: Add other game versions
+                case RAC3STATUS.US_ID:
+                    self.current_game = game_id
+                    self.logger.info(f'Version Detected: US release')
+                case RAC3STATUS.US_GH_ID:
+                    self.current_game = game_id
+                    self.logger.info(f'Version Detected: US Greatest Hits release')
+                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                        'inconsistencies found')
+                case RAC3STATUS.JP_ID:
+                    self.current_game = game_id
+                    self.logger.info(f'Version Detected: Japanese release')
+                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                        'inconsistencies found')
+                case RAC3STATUS.EU_ID:
+                    self.current_game = game_id
+                    self.logger.info(f'Version Detected: EU release')
+                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                        'inconsistencies found')
+                case _:
+                    self.current_game = None
+                    self.logger.info('Unknown game version detected')
+        if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
+            self.logger.warning(f'Connected to the wrong game ({game_id})')
+            self.game_id_error = game_id
+            return False
+        else:
+            return True
+
     def get_connection_state(self) -> bool:
         try:
-            connected = self.pcsx2_interface.is_connected()
-            return connected and self.current_game is not None
+            return self.pcsx2_interface.is_connected() and self.verify_game_version()
         except RuntimeError:
             return False
 
@@ -191,7 +220,7 @@ class Rac3Interface(GameInterface):
         return False
 
     def proc_option(self, slot_data):
-        self.logger.info(f'{slot_data}')
+        self.logger.debug(f'{slot_data}')
         self.boltAndXPMultiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
         self.weaponLevelLockFlag = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
         self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
@@ -578,8 +607,9 @@ class Rac3Interface(GameInterface):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
-
-        self.logger.info(f'Teleporting to ship on: {planet}')
+            self.logger.debug(f'Teleporting to ship on: {planet}')
+        else:
+            self.logger.debug(f'Teleporting to last checkpoint on: {planet}')
         self.force_respawn()
 
     def should_overwrite_respawn(self, planet):
@@ -588,6 +618,9 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             # Todo: add more special cases
+            case RAC3REGION.FLORANA:
+                return self._read_float(
+                    RAC3STATUS.RATCHET_Z) > 300  # Don't overwrite if in the Path of Death due to geometry unloading
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:
@@ -601,7 +634,6 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def teleport_to_coords(self):
-        # Todo: find respawn coordinate address for each planet and write to it, then trigger a respawn.
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
 
     # Todo: Deathlink

@@ -27,7 +27,7 @@ except ImportError:
 # Game title dedicated
 
 CLIENT_INIT_LOG = f"{RAC3OPTION.GAME_TITLE}_Client"
-CLIENT_VERSION = "0.1.0"
+CLIENT_VERSION = "0.1.0"  # Todo: Update Client Version to match build version
 
 
 class CommandProcessor(ClientCommandProcessor):
@@ -89,7 +89,9 @@ class Rac3Context(CommonContext):
     is_connected_to_game: bool = False
     is_connected_to_server: bool = False
     slot_data: Optional[dict[str, Any]] = None
-    last_error_message: Optional[str] = None
+    last_server_message: Optional[str] = None
+    last_pine_message: Optional[str] = None
+    last_game_message: Optional[str] = None
     death_link = False
     queued_deaths: int = 0
     current_planet: str = RAC3REGION.GALAXY
@@ -145,29 +147,48 @@ class Rac3Context(CommonContext):
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
 
 
-def update_connection_status(ctx: Rac3Context, status: bool):
-    if ctx.is_connected_to_game == status:
-        return
-
-    if status:
-        logger.info(f"Connected to {RAC3OPTION.GAME_TITLE}")
-    else:
-        logger.info("Unable to connect to the PCSX2 instance, attempting to reconnect...")
-
-    ctx.is_connected_to_game = status
-
-
 async def pcsx2_sync_task(ctx: Rac3Context):
-    logger.info(f"Starting {RAC3OPTION.GAME_TITLE} Connector, attempting to connect to emulator...")
-    ctx.game_interface.connect_to_game()
+    logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
+
     while not ctx.exit_event.is_set():
         try:
-            is_connected = ctx.game_interface.get_connection_state()
-            update_connection_status(ctx, is_connected)
-            if is_connected:
+            connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
+            connected_to_game = ctx.game_interface.get_connection_state()
+
+            if connected_to_server and not ctx.is_connected_to_server:
+                logger.info("Connected to server")
+                ctx.is_connected_to_server = connected_to_server
+                if connected_to_game:
+                    await init(ctx)
+
+            if connected_to_game and not ctx.is_connected_to_game:
+                logger.info(f"Connected to {RAC3OPTION.GAME_TITLE_FULL}")
+                ctx.last_pine_message = None
+                ctx.is_connected_to_game = connected_to_game
+                if connected_to_server:
+                    await init(ctx)
+
+            if not connected_to_game:
+                if ctx.is_connected_to_game:
+                    ctx.game_interface.disconnect_from_game()
+                    logger.info("Connection to game lost, attempting to reconnect...")
+                elif ctx.last_pine_message is None:
+                    message = "Not connected to the PCSX2 instance, attempting to connect..."
+                    logger.info(message)
+                    ctx.last_pine_message = message
+                ctx.game_interface.connect_to_game()
+
+            if not connected_to_server:
+                if ctx.server:
+                    ctx.last_server_message = None
+                elif ctx.last_server_message is None:
+                    message = "Waiting for player to connect to server"
+                    logger.info(message)
+                    ctx.last_server_message = message
+
+            if connected_to_game and connected_to_server:
                 await _handle_game_ready(ctx)
-            else:
-                await _handle_game_not_ready(ctx)
+
         except ConnectionError:
             logger.info(f"ConnectionError")
             ctx.game_interface.disconnect_from_game()
@@ -179,37 +200,47 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 logger.error(format_exc())
             await sleep(3)
             continue
+        await sleep(3)
+    logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
 
 async def _handle_game_ready(ctx: Rac3Context) -> None:
-    connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
+    # Quite a lot of stuff ended up in this function, even though it might
+    # have fit better in init(). It just didn't work when I put it there,
+    # probably because of when the game loads stuff.
 
-    new_connection = ctx.is_connected_to_server != connected_to_server
-    if new_connection:
-        await init(ctx, connected_to_server)
-        ctx.is_connected_to_server = connected_to_server
+    if ctx.slot_data is not None:
+        # Check if exit to main menu
+        menu = ctx.main_menu
+        ctx.main_menu = ctx.game_interface.check_main_menu()
 
-    await update(ctx, connected_to_server)
+        if ctx.main_menu:
+            if ctx.last_game_message is None:
+                message = "Currently on Main Menu, please load a file..."
+                logger.info(message)
+                ctx.last_game_message = message
 
-    if ctx.server:
-        ctx.last_error_message = None
-        if not ctx.slot:
+        if menu is True and ctx.main_menu is False:
+            logger.info("Starting game...")
+            ctx.game_interface.reset_file()
+            logger.info("Old state removed!")
+            logger.info("Checking for items...")
+            for item in ctx.items_received:
+                ctx.game_interface.item_received(item.item)
+            ctx.processed_item_count = len(ctx.items_received)
+            logger.info("Items received!")
+            logger.info("Checking locations...")
+            for loc in ctx.locations_checked:
+                ctx.game_interface.collect_location(loc)
+            logger.info("Locations collected!")
+            logger.info("Checking cosmetics...")
+            ctx.game_interface.add_cosmetics()
+            logger.info("Load the latest autosave to apply cosmetics")
+            logger.info("Game READY!")
+
+        if not ctx.main_menu:
+            await update(ctx)
             await sleep(1)
-            return
-    else:
-        message = "Waiting for player to connect to server"
-        if ctx.last_error_message is not message:
-            logger.info("Waiting for player to connect to server")
-            ctx.last_error_message = message
-        await sleep(1)
-
-    await sleep(1)
-
-
-async def _handle_game_not_ready(ctx: Rac3Context):
-    """If the game is not connected, this will attempt to retry connecting to the game."""
-    ctx.game_interface.connect_to_game()
-    await sleep(3)
 
 
 def launch_client():

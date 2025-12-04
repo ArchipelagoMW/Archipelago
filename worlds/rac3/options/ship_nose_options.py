@@ -11,3 +11,4 @@ class ShipNose(Choice):
     option_standard = 0
     option_split = 1
     option_scoop = 2
+    default = "random"

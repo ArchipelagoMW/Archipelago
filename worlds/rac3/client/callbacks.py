@@ -17,61 +17,27 @@ if TYPE_CHECKING:
 ##################################################
 
 # common functions
-async def update(ctx: 'Context', ap_connected: bool) -> None:
+async def update(ctx: 'Context') -> None:
     """Called continuously"""
+    # Check received items
+    await handle_received_items(ctx)
+    # Check collected locations
+    await handle_checked_locations(ctx)
+    # Check player dead or not
+    await handle_deathlink(ctx)
+    # Check goal is checked or not
+    await handle_check_goal(ctx)
+    # Check planet id
+    await handle_planet_changed(ctx)
 
-    # Quite a lot of stuff ended up in this function, even though it might
-    # have fit better in init(). It just didn't work when I put it there,
-    # probably because of when the game loads stuff.
+    ctx.game_interface.update()
 
-    if ap_connected and ctx.slot_data is not None:
-        # Check if exit to main menu
-        menu = ctx.main_menu
-        ctx.main_menu = ctx.game_interface.check_main_menu()
-
-        if ctx.main_menu:
-            logger.info("Currently on Main Menu, please load a file...")
-
-        if menu is True and ctx.main_menu is False:
-            logger.info("Starting game...")
-            ctx.game_interface.reset_file()
-            logger.info("Old state removed!")
-            logger.info("Checking for items...")
-            for item in ctx.items_received:
-                ctx.game_interface.item_received(item.item)
-            ctx.processed_item_count = len(ctx.items_received)
-            logger.info("Items received!")
-            logger.info("Checking locations...")
-            for loc in ctx.locations_checked:
-                ctx.game_interface.collect_location(loc)
-            logger.info("Locations collected!")
-            logger.info("Checking cosmetics...")
-            ctx.game_interface.add_cosmetics()
-            logger.info("Game READY!")
-
-        if not ctx.main_menu:
-            # Check received items
-            await handle_received_items(ctx)
-            # Check collected locations
-            await handle_checked_locations(ctx)
-            # Check player dead or not
-            await handle_deathlink(ctx)
-            # Check goal is checked or not
-            await handle_check_goal(ctx)
-            # Check planet id
-            await handle_planet_changed(ctx)
-
-            ctx.game_interface.update()
-
-            # logger.info(f"Update is called")
+    # logger.info(f"Update is called")
 
 
-async def init(ctx: 'Context', ap_connected: bool) -> None:
-    """Called when the player connects to the AP server or enters a new episode"""
-    if ap_connected:
-        # Initialize all date
-        ctx.game_interface.init()
-        pass
+async def init(ctx: 'Context') -> None:
+    """Called when the player connects to the AP server"""
+    ctx.game_interface.init()
 
 
 async def handle_planet_changed(ctx: 'Context') -> None:

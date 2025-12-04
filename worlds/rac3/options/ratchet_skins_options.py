@@ -18,3 +18,4 @@ class RatchetSkin(Choice):
     option_robo_rooster = 11
     option_trooper = 12
     option_robo = 13
+    default = "random"
