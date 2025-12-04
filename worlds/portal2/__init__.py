@@ -48,8 +48,9 @@ class Portal2World(World):
     def create_disjointed_maps_for_er(self, chapter_number: int) -> Region:
         chapter_name = f"Chapter {chapter_number}"
         chapter_region = Region(chapter_name, self.player, self.multiworld)
+        self.multiworld.regions.append(chapter_region)
         chapter_start_entrance = chapter_region.create_exit(f"{chapter_name} To First Map")
-        chapter_start_entrance.randomization_group = chapter_number * 10
+        chapter_start_entrance.randomization_group = chapter_number
         chapter_start_entrance.randomization_type = EntranceType.ONE_WAY
 
         # Get all map locations for that chapter
@@ -63,13 +64,16 @@ class Portal2World(World):
         You can randomize maps by connecting the Progress Entrance to randomized Map Starts. But you do not randomize the BeatMap entrances, and they're the ones with the rules
         """
         for name, map_name in zip(map_prefix, map_location_names):
+            # Increment the location counter for filler items
+            self.location_count += 1
+
             region_start = Region(f"{name} Start", self.player, self.multiworld)
+            self.multiworld.regions.append(region_start)
             region_end = Region(f"{name} End", self.player, self.multiworld)
+            self.multiworld.regions.append(region_end)
             region_end.add_locations({map_name: self.location_name_to_id[map_name]})
 
-            beat_map = region_start.create_exit(f"Beat {name}")
-            beat_map.access_rule = lambda state: state.has_all(all_locations_table[map_name].required_items, self.player)
-            beat_map.connected_region = region_end
+            region_start.connect(region_end, f"Beat {name}", lambda state: state.has_all(all_locations_table[map_name].required_items, self.player))
 
             start_entrance = region_start.create_er_target(f"{name} Start Entrance")
             start_entrance.randomization_group = chapter_number
@@ -77,6 +81,13 @@ class Portal2World(World):
             progress_to_next_map_entrance = region_end.create_exit(f"{name} To Next Map")
             progress_to_next_map_entrance.randomization_group = chapter_number
             progress_to_next_map_entrance.randomization_type = EntranceType.ONE_WAY
+
+        # Add dead end region to each chapter
+        chapter_end_region = Region(f"{chapter_name} End", self.player, self.multiworld)
+        self.multiworld.regions.append(chapter_end_region)
+        chapter_end_entrance = chapter_region.create_er_target(f"{chapter_name} End")
+        chapter_end_entrance.randomization_group = chapter_number
+        chapter_end_entrance.randomization_type = EntranceType.ONE_WAY
 
         return chapter_region
 
@@ -94,8 +105,10 @@ class Portal2World(World):
 
         # For chapter 9
         chapter_9_region = Region("Chapter 9", self.player, self.multiworld)
+        self.multiworld.regions.append(chapter_9_region)
         chapter_9_locations = [name for name in all_locations_table.keys() if name.startswith("Chapter 9")]
         chapter_9_region.add_locations({name: all_locations_table[name] for name in chapter_9_locations})
+        self.location_count += len(chapter_9_locations)
         all_chapter_9_requirements = set()
         for loc in chapter_9_locations:
             all_chapter_9_requirements.update(all_locations_table[loc].required_items)
@@ -124,9 +137,8 @@ class Portal2World(World):
         
     def connect_entrances(self):
         try:
-            groups_dict = {i*10:[i] for i in range(1, 9)}
-            groups_dict.update({i:[i] for i in range(1, 9)})
-            er_placement_state = randomize_entrances(self, False, groups_dict)
+            groups_dict = {i:[i] for i in range(1, 9)}
+            er_placement_state = randomize_entrances(self, True, groups_dict)
             print("Pairings " + str(er_placement_state.pairings))
             print("Placements " + str(er_placement_state.placements))
         finally:

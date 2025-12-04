@@ -380,9 +380,11 @@ def randomize_entrances(
     if not er_targets:
         er_targets = sorted([entrance for region in world.multiworld.get_regions(world.player)
                              for entrance in region.entrances if not entrance.parent_region], key=lambda x: x.name)
+        print(er_targets)
     if not exits:
         exits = sorted([ex for region in world.multiworld.get_regions(world.player)
                         for ex in region.exits if not ex.connected_region], key=lambda x: x.name)
+        print(exits)
     if len(er_targets) != len(exits):
         raise EntranceRandomizationError(f"Unable to randomize entrances due to a mismatched count of "
                                          f"entrances ({len(er_targets)}) and exits ({len(exits)}.")
