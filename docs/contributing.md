@@ -81,4 +81,4 @@ Please refer to the [WebHost README](/WebHostLib/README.md).
 Other than these requests, we tend to judge code on a case-by-case basis.
 
 For other questions, feel free to explore the [main documentation folder](/docs), and ask us questions in the
-#ao-core-dev and #ap-world-dev channels of the [Discord](https://archipelago.gg/discord).
+#ap-core-dev and #ap-world-dev channels of the [Discord](https://archipelago.gg/discord).

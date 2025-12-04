@@ -116,7 +116,7 @@ Additionally, individual files can be made to require passing strict type checki
 
 ### 9. Style Guide
 
-Style Guide is not just formatting, but may list *Dos and Don'ts* for each individual language.
+The [Style Guide](style.md) is not just formatting, but may list *Dos and Don'ts* for each individual language.
 
 If there are only formatting problems, this may be a nitpick. If the change adds a lot of *Don't*, a change should be
 requested.
