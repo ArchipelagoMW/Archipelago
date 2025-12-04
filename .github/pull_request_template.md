@@ -9,7 +9,8 @@ ex. "MyGame4: implement new game" or "Docs: add new guide for customizing MyGame
 ## Why is the change being made?
 
 
-## How should this be tested?
+## How was this tested?
+(Give information so that reviewers can reproduce your testing.)
 
 
 ## If this makes graphical changes, please attach screenshots.
