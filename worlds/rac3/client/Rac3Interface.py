@@ -433,7 +433,7 @@ class Rac3Interface(GameInterface):
                     else:
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
-            if number > self.UnlockItem[RAC3REGION.SLOT_0].status:
+            if number > self.UnlockItem[RAC3REGION.SLOT_0].status - 1:
                 # self.logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
         # self.logger.debug('---------PlanetCycler End---------')
