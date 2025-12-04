@@ -209,6 +209,13 @@ class TWWContext(CommonContext):
             # Request the connected slot's dictionary (used as a set) of visited stages.
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
+        elif cmd == "ReceivedItems":
+            # Loop through all received items and check for the index of the first progressive magic meter.
+            magic_meter_id = ITEM_TABLE["Progressive Magic Meter"].code
+            for idx, item in enumerate(self.items_received):
+                if item.item == magic_meter_id:
+                    self.received_magic_idx = idx
+                    break
         elif cmd == "Retrieved":
             requested_keys_dict = args["keys"]
             # Read the connected slot's dictionary (used as a set) of visited stages.
@@ -330,29 +337,21 @@ def _give_death(ctx: TWWContext) -> None:
         write_short(CURR_HEALTH_ADDR, 0)
 
 
-def _give_item(ctx: TWWContext, item_name: str) -> bool:
+def _try_give_item(ctx: TWWContext, item_id: int) -> bool:
     """
-    Give an item to the player in-game.
+    Attempt to give an item to the player in-game.
 
     :param ctx: The Wind Waker client context.
-    :param item_name: Name of the item to give.
+    :param item_id: The item ID of the item to give.
     :return: Whether the item was successfully given.
     """
     if not check_ingame() or dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR) == 0xFF:
         return False
 
-    item_id = ITEM_TABLE[item_name].item_id
-
     # Loop through the item array, placing the item in an empty slot.
     for idx in range(ctx.len_give_item_array):
         slot = dolphin_memory_engine.read_byte(GIVE_ITEM_ARRAY_ADDR + idx)
         if slot == 0xFF:
-            # Special case: Use a different item ID for the second progressive magic meter.
-            if item_name == "Progressive Magic Meter":
-                if ctx.received_magic_idx == -1:
-                    ctx.received_magic_idx = idx
-                elif idx > ctx.received_magic_idx:
-                    item_id = 0xB2
             dolphin_memory_engine.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
             return True
 
@@ -362,7 +361,7 @@ def _give_item(ctx: TWWContext, item_name: str) -> bool:
 
 async def give_items(ctx: TWWContext) -> None:
     """
-    Give the player all outstanding items they have yet to receive.
+    Give the player the next outstanding item they have yet to receive.
 
     :param ctx: The Wind Waker client context.
     """
@@ -372,20 +371,28 @@ async def give_items(ctx: TWWContext) -> None:
         expected_idx = read_short(EXPECTED_INDEX_ADDR)
 
         # Check if there are new items.
-        received_items = ctx.items_received
-        if len(received_items) <= expected_idx:
+        if len(ctx.items_received) <= expected_idx:
             # There are no new items.
             return
 
-        # Loop through items to give.
-        # Give the player all items at an index greater than or equal to the expected index.
-        for idx, item in enumerate(received_items[expected_idx:], start=expected_idx):
-            # Attempt to give the item and increment the expected index.
-            while not _give_item(ctx, LOOKUP_ID_TO_NAME[item.item]):
-                await asyncio.sleep(0.01)
+        # Attempt to give the player the next item they have yet to receive.
+        item = ctx.items_received[expected_idx]
+        item_name = LOOKUP_ID_TO_NAME[item.item]
+        item_id = ITEM_TABLE[item_name].item_id
 
-            # Increment the expected index.
-            write_short(EXPECTED_INDEX_ADDR, idx + 1)
+        if item_id is None:
+            logger.warning(f'Item "{item_name}" does not have an associated item ID!')
+        else:
+            # Special case: Use a different item ID for the second progressive magic meter.
+            if item_name == "Progressive Magic Meter":
+                if ctx.received_magic_idx == -1:
+                    ctx.received_magic_idx = expected_idx
+                elif expected_idx > ctx.received_magic_idx:
+                    item_id = 0xB2
+
+            # Attempt to give the item and increment the expected index.
+            if _try_give_item(ctx, item_id):
+                write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
 
 
 def check_special_location(location_name: str, data: TWWLocationData) -> bool:
@@ -520,6 +527,7 @@ async def check_locations(ctx: TWWContext) -> None:
     curr_stage_id = dolphin_memory_engine.read_byte(CURR_STAGE_ID_ADDR)
 
     # Loop through all locations to see if each has been checked.
+    new_locations = []
     for location, data in LOCATION_TABLE.items():
         checked = False
         if data.type == TWWLocationType.CHART:
@@ -542,12 +550,14 @@ async def check_locations(ctx: TWWContext) -> None:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.finished_game = True
             else:
-                ctx.locations_checked.add(TWWLocation.get_apid(data.code))
+                location_id = TWWLocation.get_apid(data.code)
+                if location_id not in ctx.locations_checked:
+                    new_locations.append(location_id)
+                    ctx.locations_checked.add(location_id)
 
     # Send the list of newly-checked locations to the server.
-    locations_checked = ctx.locations_checked.difference(ctx.checked_locations)
-    if locations_checked:
-        await ctx.send_msgs([{"cmd": "LocationChecks", "locations": locations_checked}])
+    if new_locations:
+        await ctx.check_locations(new_locations)
 
 
 async def check_current_stage_changed(ctx: TWWContext) -> None:
