@@ -1,3 +1,4 @@
+from types import NoneType
 from .Options import MrHints, ChickenHints
 from BaseClasses import Item, ItemClassification, Location
 
@@ -148,7 +149,8 @@ def get_valid_items(self, item_classes : list[ItemClassification] | None) -> lis
         if (not each_item.classification in item_classes) and item_classes != []:
             continue
         #Only items that are in your game [If feature implimented, may change]
-        if each_item.location.player != self.player:
-            continue
+        #if each_item.location is not NoneType:
+        #    if each_item.location.player != self.player:
+        #        continue
         valid_items.append(each_item)
     return valid_items

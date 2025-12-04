@@ -5,20 +5,24 @@ from typing import Any, Dict
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
 import settings
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
 from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import construct_blank_world_garibs, create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
-from Utils import visualize_regions
+from Utils import local_path, visualize_regions
 from .Hints import create_hints
 
 def run_client():
     from .GloverClient import main  # lazy import
     launch_subprocess(main)
 
-components.append(Component("Glover Client", func=run_client, component_type=Type.CLIENT))
+components.append(Component("Glover Client", func=run_client, component_type=Type.CLIENT,
+                            icon='Glover Icon',
+                            description="Glover's N64 AP. Shazam!"))
+
+icon_paths['Glover Icon'] = "ap:worlds.glover/assets/icon.png"
 
 class GloverSettings(settings.Group):
 
