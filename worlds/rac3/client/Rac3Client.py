@@ -4,11 +4,11 @@ from multiprocessing import freeze_support
 from traceback import format_exc
 from typing import Optional
 
-from client.Rac3Callbacks import init, update
-from client.Rac3Interface import Rac3Interface
+from worlds.rac3.client.Rac3Callbacks import init, update
+from worlds.rac3.client.Rac3Interface import Rac3Interface
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 from Utils import Any, async_start, Dict, init_logging
 
 # Load Universal Tracker modules with aliases

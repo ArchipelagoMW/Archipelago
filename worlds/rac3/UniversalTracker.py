@@ -1,9 +1,9 @@
 from typing import Any, TYPE_CHECKING
 
-from constants.data.Rac3LocationData import UT_MAPPING
-from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import RAC3REGION
+from worlds.rac3.constants.data.Rac3LocationData import UT_MAPPING
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import RAC3REGION
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -29,7 +29,12 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.skin = world.passthrough[RAC3OPTION.SKIN]
             world.options.traps_enabled.value = world.passthrough[RAC3OPTION.ENABLE_TRAPS]
             world.options.trap_weight.value = world.passthrough[RAC3OPTION.TRAP_WEIGHT]
+            world.options.rangers.value = world.passthrough[RAC3OPTION.RANGERS]
+            world.options.arena.value = world.passthrough[RAC3OPTION.ARENA]
+            world.options.vidcomics.value = world.passthrough[RAC3OPTION.VIDCOMICS]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
+            world.options.vr_challenges.value = world.passthrough[RAC3OPTION.VR_CHALLENGES]
+            world.options.sewer_crystals.value = world.passthrough[RAC3OPTION.SEWER_CRYSTALS]
         else:
             world.using_ut = False
     else:

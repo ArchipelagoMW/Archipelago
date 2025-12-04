@@ -1,7 +1,7 @@
 from time import time
 from typing import TYPE_CHECKING
 
-from client.ClientMessage import ClientMessage
+from worlds.rac3.client.ClientMessage import ClientMessage
 from CommonClient import logger
 from NetUtils import ClientStatus
 
@@ -9,7 +9,7 @@ from NetUtils import ClientStatus
 # Only change point: Change filename/Class name  #
 ##################################################
 if TYPE_CHECKING:
-    from client.Rac3Client import Rac3Context as Context
+    from worlds.rac3.client.Rac3Client import Rac3Context as Context
 
 
 ##################################################

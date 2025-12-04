@@ -2,21 +2,21 @@ from logging import DEBUG, getLogger
 from typing import Any, ClassVar, Optional
 
 from BaseClasses import CollectionState, Item, MultiWorld, Tutorial
-from constants.data.Rac3ItemData import item_groups, RAC3_ITEM_DATA_TABLE
-from constants.Rac3Items import RAC3ITEM
-from constants.Rac3Options import RAC3OPTION
-from Items import create_item, create_itempool, get_filler_item_selection, starting_weapons
-from Locations import get_level_locations, get_location_names, get_regions, get_total_locations, location_groups
-from Rac3Options import RaC3Options
-from Regions import create_regions
-from Rules import set_rules
-from UniversalTracker import setup_options_from_slot_data, tracker_world
+from worlds.rac3.constants.data.Rac3ItemData import item_groups, RAC3_ITEM_DATA_TABLE
+from worlds.rac3.constants.Rac3Items import RAC3ITEM
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.Items import create_item, create_itempool, get_filler_item_selection, starting_weapons
+from worlds.rac3.Locations import get_level_locations, get_location_names, get_regions, get_total_locations, location_groups
+from worlds.rac3.Rac3Options import RaC3Options
+from worlds.rac3.Regions import create_regions
+from worlds.rac3.Rules import set_rules
+from worlds.rac3.UniversalTracker import setup_options_from_slot_data, tracker_world
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, launch_subprocess, SuffixIdentifier, Type
 
 
 def run_client(_url: Optional[str] = None):
-    from client.Rac3Client import launch_client
+    from worlds.rac3.client.Rac3Client import launch_client
     launch_subprocess(launch_client, name=f"{RAC3OPTION.GAME_TITLE}Client")
 
 
@@ -133,6 +133,11 @@ class RaC3World(World):
             RAC3OPTION.SKIN: self.options.skin.value,
             RAC3OPTION.ENABLE_TRAPS: self.options.traps_enabled.value,
             RAC3OPTION.TRAP_WEIGHT: self.options.trap_weight.value,
+            RAC3OPTION.RANGERS: self.options.rangers.value,
+            RAC3OPTION.ARENA: self.options.arena.value,
+            RAC3OPTION.VIDCOMICS: self.options.vidcomics.value,
+            RAC3OPTION.VR_CHALLENGES: self.options.vr_challenges.value,
+            RAC3OPTION.SEWER_CRYSTALS: self.options.sewer_crystals.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self)
         }
 

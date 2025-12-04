@@ -6,20 +6,20 @@ from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
-from constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
+from worlds.rac3.constants.data.Rac3ItemData import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE, ITEM_NAME_FROM_ID,
                                          non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT, RAC3_ITEM_DATA_TABLE,
                                          trap_to_status, vidcomic_data, weapon_upgrade_data)
-from constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
-from constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
-from constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
-from constants.locations.Rac3General import RAC3LOCATION
-from constants.Rac3CheckType import CHECKTYPE
-from constants.Rac3Deaths import DEATH_FROM_ACTION
-from constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
-from constants.Rac3Options import RAC3OPTION
-from constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
-from constants.Rac3Status import RAC3STATUS
-from pcsx2_interface.pine import Pine
+from worlds.rac3.constants.data.Rac3LocationData import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
+from worlds.rac3.constants.data.Rac3RegionData import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.data.Rac3StatusData import RAC3_STATUS_DATA_TABLE
+from worlds.rac3.constants.locations.Rac3General import RAC3LOCATION
+from worlds.rac3.constants.Rac3CheckType import CHECKTYPE
+from worlds.rac3.constants.Rac3Deaths import DEATH_FROM_ACTION
+from worlds.rac3.constants.Rac3Items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
+from worlds.rac3.constants.Rac3Options import RAC3OPTION
+from worlds.rac3.constants.Rac3Region import PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, SHIP_SLOTS
+from worlds.rac3.constants.Rac3Status import RAC3STATUS
+from worlds.rac3.pcsx2_interface.pine import Pine
 
 
 class Dummy(IntEnum):

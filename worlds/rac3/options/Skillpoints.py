@@ -7,7 +7,9 @@ class SkillPoints(Choice):
     """
     Determines which skill points are locations in the world.
     None: No skill points are locations.
-    Simple: 15 simple skill points are locations. Still taking feedback on the selection:
+    Simple: 15 simple skill points are locations.Any Skill Points locked behind other locations such as
+    Ranger Missions require those options to be enabled.
+    Still taking feedback on the selection:
     - Stay Squeaky Clean
     - Reflect on how to score
     - Lights, camera action!
@@ -23,7 +25,8 @@ class SkillPoints(Choice):
     - Go for hang time
     - Break the Dan
     - You break it, you win it
-    Every Skill Point: All 30 skill points are locations.
+    Every Skill Point: All 30 Skill Points are added as locations. Any Skill Points locked behind other locations such as
+    Ranger Missions require those options to be enabled
     """
     display_name = RAC3OPTION.SKILL_POINTS
     option_none = 0
