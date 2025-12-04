@@ -44,7 +44,7 @@ class Portal2World(World):
         return return_location
     
     def get_filler_item_name(self):
-        return self.multiworld.random.choice(junk_items)
+        return self.random.choice(junk_items)
     
     def update_cumulative_requirements(self, map_list: list[tuple[str, list[str]]]):
         for i in range(len(map_list)):
@@ -74,13 +74,12 @@ class Portal2World(World):
         # Create a region for each level and place the location in that region (This handles the in order map completion logic for each chapter)
         regions: list[Region] = [region]
         for chapter_name, chapter_reqs in chapter_map_list:
-            print(chapter_reqs)
             base_name = chapter_name.removesuffix("Completion")
             map_region = Region(base_name + "Region", self.player, self.multiworld)
             map_region.add_locations({chapter_name: self.location_name_to_id[chapter_name]}, Portal2Location)
             # Add item rules
             for location in map_region.locations:
-                location.item_rule = (lambda item, _reqs=chapter_reqs: False if item == None else item.name not in _reqs)
+                location.item_rule = (lambda item, _reqs=chapter_reqs: item.name not in _reqs)
             regions.append(map_region)
 
         for i in range(len(regions) - 1):
@@ -97,7 +96,7 @@ class Portal2World(World):
         used_maps: list[str] = []
 
         def pick_maps(number: int) -> None:
-            self.multiworld.random.shuffle(map_pool)
+            self.random.shuffle(map_pool)
             for _ in range(number):
                 map_choice = map_pool.pop(0)
                 used_maps.append(map_choice)
@@ -122,7 +121,7 @@ class Portal2World(World):
 
         # Add maps that only require <= 4 items and pick 10
         map_pool += [name for name, ri in all_maps_required_items.items() if ri and ri != [portal_gun_2] and len(ri) <= 4]
-        pick_maps(10)
+        pick_maps(len(item_table) if len(item_table) < len(map_pool) else len(map_pool))
 
         # Add remaining maps and add the remainder of the maps to the game
         map_pool += [name for name, _ in all_maps_required_items.items() if name not in map_pool and name not in used_maps]
@@ -153,8 +152,7 @@ class Portal2World(World):
         menu_region.connect(chapter_9_region, f"Chapter 9 Entrance")
 
         # Add a final location to the end of chapter 9 for end game event
-        victory_loc = Portal2Location(self.player, "Beat Final Level", None, map_regions[-1])
-        victory_loc.place_locked_item(Portal2Item("Victory", ItemClassification.progression, None, self.player))
+        map_regions[-1].add_event("Beat Final Level", "Victory", None, Portal2Location, None, True)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_items(self):
