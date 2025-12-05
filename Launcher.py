@@ -221,9 +221,10 @@ def create_shortcut(button: Any, component: Component) -> None:
     env = os.environ
     if "APPIMAGE" in env:
         script = env["APPIMAGE"]
+        wkdir = None # defaults to ~ on Linux
     else:
         script = sys.argv[0]
-    wkdir = Utils.local_path()
+        wkdir = Utils.local_path()
 
     script = f"{script} \"{component.display_name}\""
     make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
