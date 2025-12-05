@@ -6,6 +6,15 @@ on:
       - main
       - staging
   workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "Is this a pre-release?"
+        type: boolean
+        required: true
+        default: false
+      custom_version:
+        description: "Optional exact version (leave blank to auto-generate)"
+        required: false
   repository_dispatch:
     types: [trigger-build-apworld]
 
@@ -26,11 +35,25 @@ jobs:
         id: branch
         shell: bash
         run: |
-          branch="${{ github.event.client_payload.branch }}"
-          if [ -z "$branch" ]; then
+          # 1. workflow_dispatch: use the branch the user selected in the UI
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            # github.ref always contains refs/heads/<branch>
             branch="${GITHUB_REF#refs/heads/}"
+            echo "branch=$branch" >> $GITHUB_OUTPUT
+            echo "🏗️ Manual trigger — using branch: $branch"
+            exit 0
           fi
-          echo "🏗️ Building branch: $branch"
+
+          # 2. repository_dispatch override
+          if [[ "${{ github.event_name }}" == "repository_dispatch" ]]; then
+            echo "branch=${{ github.event.client_payload.branch }}" >> $GITHUB_OUTPUT
+            echo "🏗️ External trigger — using payload branch: ${{ github.event.client_payload.branch }}"
+            exit 0
+          fi
+
+          # 3. push event default
+          branch="${GITHUB_REF#refs/heads/}"
+          echo "🏗️ Push event — using branch: $branch"
           echo "branch=$branch" >> $GITHUB_OUTPUT
 
       - name: Checkout repository
@@ -77,17 +100,93 @@ jobs:
           echo "✅ Relevant changes detected — proceed with build/release."
           echo "should_build=true" >> $GITHUB_OUTPUT
 
-      - name: Set up Python
+      - name: Set up Python 3.12
         if: steps.changes.outputs.should_build == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          architecture: 'x64'
 
       - name: Install Python dependencies
         if: steps.changes.outputs.should_build == 'true'
         run: |
           python -m pip install --upgrade pip setuptools wheel factorio-rcon-py nest-asyncio pyinstaller pillow requests zstandard pyevermizer dolphin-memory-engine Pymem --disable-pip-version-check || true  # ignore failures for other worlds
           pip install -r requirements.txt
+          pip install maseya-z3pr>=1.0.0rc1 xxtea>=3.0.0 
+          # pip install zilliandomizer==0.9.1
+
+      - name: 🧪 Run Archipelago generation and create YAML
+        if: steps.changes.outputs.should_build == 'true'
+        shell: pwsh
+        env:
+          AP_NO_UPDATE: "1"
+          SKIP_REQUIREMENTS_UPDATE: "1"
+        run: |
+          $ErrorActionPreference = "Stop"
+          $rootDir = "${{ github.workspace }}"
+          Set-Location $rootDir
+
+          Write-Host "🧪 Generating template options..."
+          python Launcher.py "Generate Template Options" || true
+
+          Write-Host "📂 Checking Players/Templates folder..."
+          Get-ChildItem -Recurse Players/Templates | Write-Host
+
+          # Ensure Players folder exists
+          if (-Not (Test-Path Players)) { New-Item -ItemType Directory -Path Players }
+
+          # Copy the RaC3 template YAML
+          $yamlSource = Join-Path $rootDir 'Players/Templates/Ratchet & Clank 3.yaml'
+          $yamlDest   = Join-Path $rootDir 'Players/Ratchet & Clank 3.yaml'
+          $yamlRoot   = Join-Path $rootDir 'rac3.yaml'
+          if (-Not (Test-Path $yamlSource)) { Write-Error "Template YAML not found: $yamlSource" }
+          Copy-Item -LiteralPath $yamlSource -Destination $yamlDest -Force
+
+          # Read YAML
+          $yamlContent = Get-Content -LiteralPath $yamlDest -Raw
+
+          # Detect existing version
+          if ($yamlContent -match 'version:\s*(\d+)\.(\d+)\.(\d+)') {
+              $major = [int]$matches[1]
+              $minor = [int]$matches[2]
+              $patch = [int]$matches[3]
+              Write-Host "Found template version: $major.$minor.$patch"
+
+              if ($patch -gt 0) {
+                  $patch -= 1
+              } elseif ($minor -gt 0) {
+                  $minor -= 1
+                  $patch = 0
+              } else {
+                  Write-Warning "Version is already at 0.0.0 — cannot decrement"
+              }
+
+              $newVersion = "$major.$minor.$patch"
+              Write-Host "Lowered version for build: $newVersion"
+
+              # Replace version in YAML
+              $yamlContent = $yamlContent -replace 'version:\s*\d+\.\d+\.\d+', "version: $newVersion"
+          } else {
+              Write-Warning "No version line found in YAML — skipping version edit"
+          }
+
+          # Write YAML back
+          Set-Content -LiteralPath $yamlDest -Value $yamlContent -Force
+          Copy-Item -LiteralPath $yamlDest -Destination $yamlRoot -Force
+          Write-Host "✅ YAML edited successfully."
+
+          # Optional: test seed generation
+          Write-Host "🧪 Testing seed generation..."
+          python Generate.py || true
+
+          Write-Host "✅ Test step completed."
+
+      - name: Upload template artifact
+        if: steps.changes.outputs.should_build == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: rac3.yaml
+          path: ./rac3.yaml
 
       - name: Build .apworld for rac3
         if: steps.changes.outputs.should_build == 'true'
@@ -151,6 +250,12 @@ jobs:
           ref: ${{ needs.build.outputs.branch }}
           fetch-depth: 0
 
+      - name: Download template artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: rac3.yaml
+          path: .
+
       - name: Download built artifact
         uses: actions/download-artifact@v4
         with:
@@ -170,47 +275,69 @@ jobs:
 
           echo "🔢 Determining next semantic version for branch: $branch"
 
-          # Get the latest tag, depending on branch type
-          if [[ "$branch" == "main" ]]; then
-            latest_tag=$(git tag --sort=-v:refname | grep -v -- '-pre' | head -n 1 || true)
-          else
-            latest_tag=$(git tag --sort=-v:refname | head -n 1 || true)
-          fi
-
-          if [[ -z "$latest_tag" ]]; then
-            echo "⚠️ No previous tags found. Starting from v0.0.0"
-            latest_tag="v0.0.0"
-          fi
-
+          # Get latest tag (any tag, pre or stable)
+          latest_tag=$(git tag --sort=-v:refname | head -n 1 || true)
+          [[ -z "$latest_tag" ]] && latest_tag="v0.0.0"
           echo "Latest tag: $latest_tag"
 
           # Strip leading "v" if present
           tag_stripped="${latest_tag#v}"
           # Split version safely (defaults if missing)
           IFS='.' read -r major minor patch <<< "$tag_stripped"
-          major=${major:-0}
-          minor=${minor:-0}
-          patch=${patch:-0}
+          major=${major:-0}; minor=${minor:-0}; patch=${patch:-0}
 
-          # Bump version based on branch type
-          if [[ "$branch" == "main" ]]; then
-            minor=$((minor + 1))
-            patch=0
-            version="${major}.${minor}.${patch}"
+          # Manual inputs
+          manual="${{ github.event_name == 'workflow_dispatch' }}"
+          manual_pre="${{ github.event.inputs.prerelease || false }}"
+          custom_version="${{ github.event.inputs.custom_version }}"
+
+          # Custom version overrides everything
+          if [[ "$manual" == "true" && -n "$custom_version" ]]; then
+              custom_version="$(echo -n "$custom_version" | xargs)"
+              echo "📝 Custom version provided: $custom_version"
+
+              if [[ "$custom_version" == *"-pre" ]]; then
+                  is_pre="true"
+              else
+                  is_pre="false"
+              fi
+
+              echo "version=$custom_version" >> $GITHUB_OUTPUT
+              echo "is_pre=$is_pre" >> $GITHUB_OUTPUT
+              echo "branch=$branch" >> $GITHUB_OUTPUT
+              exit 0
+          fi
+
+          # Determine prerelease
+          if [[ "$manual" == "true" ]]; then
+              is_pre="$manual_pre"
           else
-            patch=$((patch + 1))
-            version="${major}.${minor}.${patch}-pre"
+              # Auto pre-release for non-main branches by default
+              is_pre="$([[ "$branch" != "main" ]] && echo "true" || echo "false")"
+          fi
+
+          # Auto bump version
+          if [[ "$is_pre" == "true" ]]; then
+              # Pre-release: increment patch from latest tag
+              patch=$((patch + 1))
+              version="${major}.${minor}.${patch}-pre"
+          else
+              # Stable: increment minor, reset patch
+              minor=$((minor + 1))
+              patch=0
+              version="${major}.${minor}.${patch}"
           fi
 
           echo "✅ Next version: $version"
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "branch=$branch" >> $GITHUB_OUTPUT
+          echo "is_pre=$is_pre" >> $GITHUB_OUTPUT
 
-      - name: Add manifest to .apworld
+      - name: Add manifest to .apworld and set CLIENT_VERSION
         shell: bash
         run: |
           set -e
-          echo "🧾 Updating archipelago.json manifest..."
+          echo "🧾 Updating archipelago.json manifest & set CLIENT_VERSION"
 
           version="${{ steps.semver.outputs.version }}"
           version="${version#v}"
@@ -221,7 +348,7 @@ jobs:
           authors=$(git log --format='%aN' -- worlds/rac3 | sort -u)
 
           # Add custom authors. Example: ("NewContributor" "AnotherDev")
-          custom_authors=("1theory")
+          custom_authors=("AmondoVagyok" "Myth197" "Taoshi" "1theory")
           for a in "${custom_authors[@]}"; do
             if ! echo "$authors" | grep -Fxq "$a"; then
               authors="${authors}"$'\n'"${a}"
@@ -247,20 +374,30 @@ jobs:
           # Update only root archipelago.json
           jq --arg world_version "$version" \
              --argjson authors "$authors_json" \
-             --arg min_ap "0.6.3" \
+             --arg min_ap "0.5.0" \
              --arg max_ap "$ap_version" \
              '.world_version = $world_version
               | .authors = $authors
-              | .minimum_ap_version = $min_ap
-              | .maximum_ap_version = $max_ap' \
+              | .minimum_ap_version = $min_ap' \
              tmp_unzip/archipelago.json > tmp_unzip/archipelago.json.tmp
 
+          # Maximum AP not set. If needed can use the below to set to current used AP version
+          # | .maximum_ap_version = $max_ap
+          
           # Replace the old file with the updated one
           mv tmp_unzip/archipelago.json.tmp tmp_unzip/archipelago.json
 
           # Remove nested archipelago.json but keep the root one
           find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
           echo "🗑️ Removed extra archipelago.json"
+
+          # Update CLIENT_VERSION in Rac3Client.py
+          client_file="tmp_unzip/rac3/Rac3Client.py"
+          old_version=$(grep '^CLIENT_VERSION = ' "$client_file" | cut -d'"' -f2 || echo "<none>")
+          echo "🔧 Updating CLIENT_VERSION in $client_file from $old_version to $version"
+          sed -i -E "s/^(CLIENT_VERSION = ).*/\1\"$version\"/" "$client_file"
+          # Remove backup if any (from sed -i on some platforms)
+          rm -f "${client_file}.bak"
 
           # Rezip the .apworld
           cd tmp_unzip
@@ -277,11 +414,12 @@ jobs:
         with:
           files: |
             rac3.apworld
-            RaC3.yaml
+            rac3.yaml
           tag_name: v${{ steps.semver.outputs.version }}
           name: "RaC3 APWorld v${{ steps.semver.outputs.version }}"
           body: "Generating release notes..."
-          prerelease: ${{ contains(steps.semver.outputs.version, '-pre') }}
+          prerelease: ${{ steps.semver.outputs.is_pre == 'true' }}
+          target_commitish: ${{ needs.build.outputs.branch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -348,7 +486,7 @@ jobs:
           </details>
       
           **Full changelog and compare**: ${changelog}
-
+      
           ### Notes
           This release was automatically generated from the **${branch}** branch.  
           Latest (main) releases are recommended, as pre-releases (staging) may contain experimental or in-progress changes.
