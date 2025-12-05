@@ -8,7 +8,10 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 ### I've never added a game to Archipelago before. Should I start with the APWorld or the game client?
 
-Although every AP game is different, the typical recommendation for first-time AP developers is:
+Strictly speaking, this is a false dichotomy: we do *not* recommend doing 100% of client work before the APWorld,
+or 100% of APWorld work before the client. It's important to iterate on both parts and test them together.
+However, the early iterations tend to be very similar for most games,
+so the typical recommendation for first-time AP developers is:
 
 - Start with a proof-of-concept for [the game client](adding%20games.md#client)
   - Figure out how to interface with the game. Whether that means "modding" the game, or patching a ROM file,
@@ -31,7 +34,7 @@ That's about where general recommendations end. What you should do next will dep
 (e.g. implement more items, write down logic rules, add client features, prototype a tracker, etc).
 If you're not sure, then this would be a good time to re-read [Adding Games](<adding%20games.md>), and [World API](<world%20api.md>).
 
-There are several assumptions in this recommendation worth stating explicitly, such as:
+There are a few assumptions in this recommendation worth stating explicitly, namely:
 
 - If something you want to do is infeasible, you want to find out that it's infeasible as soon as possible, before
   you write a bunch of code assuming it could be done. That's why we recommend starting with the game client.
@@ -43,8 +46,6 @@ There are several assumptions in this recommendation worth stating explicitly, s
 - A first-time world developer may or may not be deeply familiar with Archipelago, but they're almost certainly familiar
   with the game they want to randomize. So judging whether your game client is working correctly might be significantly
   easier than judging if your APWorld is working.
-- Notice we do *not* recommend doing 100% of client work before the APWorld, or 100% of APWorld work before the client.
-  It's important to iterate on both parts, and regularly make sure they still work together.
 
 ---
 
