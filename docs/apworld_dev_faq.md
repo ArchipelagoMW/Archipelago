@@ -143,7 +143,7 @@ So when the game itself does not follow this assumption, the options are:
 
 ---
 
-### What are "local" vs "remote items", and what are the pros and cons of each?
+### What are "local" vs "remote" items, and what are the pros and cons of each?
 
 This topic often gets confusing because these terms refer to multiple things:
 
