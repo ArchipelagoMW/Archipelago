@@ -22,7 +22,8 @@ class PSYContainer(APPlayerContainer):
                  player=None, player_name: str = "", server: str = ""):
         self.patch_data = patch_data
         self.file_path = base_path
-        container_path = os.path.join(output_directory, base_path + ".zip")
+        container_path = os.path.join(output_directory, base_path)
+        self.patch_file_ending = ".zip"
         super().__init__(container_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
@@ -238,7 +239,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # Combine all the parts into one long piece of text
     randoseed = ''.join(randoseed_parts)
 
-    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
+    mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__ + ".zip")
 
     mod = PSYContainer(randoseed, mod_dir, output_directory, self.player,
                        self.multiworld.get_file_safe_player_name(self.player))
