@@ -205,7 +205,7 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 logger.error(format_exc())
             await sleep(3)
             continue
-        await sleep(3)
+        await sleep(1)
     logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
 
