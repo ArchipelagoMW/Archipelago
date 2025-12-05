@@ -220,7 +220,7 @@ def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
     env = os.environ
     if "APPIMAGE" in env:
-        script = env["APPIMAGE"]
+        script = env["ARGV0"]
         wkdir = None # defaults to ~ on Linux
     else:
         script = sys.argv[0]
