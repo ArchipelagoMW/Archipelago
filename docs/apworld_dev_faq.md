@@ -148,12 +148,12 @@ So when the game itself does not follow this assumption, the options are:
 This topic often gets confusing because these terms refer to multiple things:
 
 - Whether an item happens to get placed in the same slot it originates from, or a different slot. I'll call these
-"locally placed" and "remotely placed" items.
+  "locally placed" and "remotely placed" items.
 - Whether an AP client implements location checking for locally placed items by skipping the usual AP server roundtrip
-(i.e. sending [LocationChecks](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#locationchecks)
-then receiving [ReceivedItems](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#receiveditems)
-) and directly giving the item to the player, or by doing the AP server roundtrip regardless. I'll call these
-"locally implemented" items and "remotely implemented" items.
+  (i.e. sending [LocationChecks](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#locationchecks)
+  then receiving [ReceivedItems](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#receiveditems)
+  ) and directly giving the item to the player, or by doing the AP server roundtrip regardless. I'll call these
+  "locally implemented" items and "remotely implemented" items.
   - Locally implementing items requires the AP client to know what the locally placed items were without asking an AP
     server (or else you'd effectively be doing remote items with extra steps). Typically, it gets that information from
     a patch file, which is one reason why games that already need a patch file are more likely to choose local items.
@@ -161,8 +161,8 @@ then receiving [ReceivedItems](https://github.com/ArchipelagoMW/Archipelago/blob
     to learn what items are placed on what locations. Features that require this information are sometimes mistakenly
     assumed to require locally implemented items, but location scouts work just as well as patch file data.
 - [The `items_handling` bitflags in the Connect packet](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#items_handling-flags).
-Typically, AP clients with locally implemented items will set only the "from other worlds" flag, while clients with
-remotely implemented items will also set the "from your own world" flag.
+  Typically, AP clients with locally implemented items will set only the "from other worlds" flag, while clients with
+  remotely implemented items will also set the "from your own world" flag.
 
 When people talk about "local vs remote items" as a choice that world devs have to make, they mean deciding whether
 your client will locally or remotely implement the items which happen to be locally placed. The major pros and cons of
