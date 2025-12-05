@@ -2,11 +2,13 @@
   "include": [
     "../BizHawkClient.py",
     "../Patch.py",
+    "../rule_builder.py",
     "../test/param.py",
     "../test/general/test_groups.py",
     "../test/general/test_helpers.py",
     "../test/general/test_memory.py",
     "../test/general/test_names.py",
+    "../test/general/test_rule_builder.py",
     "../test/multiworld/__init__.py",
     "../test/multiworld/test_multiworlds.py",
     "../test/netutils/__init__.py",
