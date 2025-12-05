@@ -2,9 +2,18 @@ from dataclasses import dataclass
 from typing import Tuple, Union, Optional
 
 from . import season_data as season
+from .game_item import Source
 from ..mods.mod_data import ModNames
 from ..strings.fish_names import Fish, SVEFish, DistantLandsFish
 from ..strings.region_names import Region, SVERegion, LogicRegion
+from ..strings.tool_names import FishingRod
+
+
+@dataclass(frozen=True, kw_only=True)
+class FishingSource(Source):
+    region: str
+    minimum_rod: str = FishingRod.training
+    fishing_level: int = 0
 
 
 @dataclass(frozen=True)

@@ -4,6 +4,7 @@ from .assertion import WorldAssertMixin
 from .bases import SVTestBase
 from .. import options, items_by_group, Group
 from ..options import TrapDistribution
+from ..strings.ap_names.ap_option_names import EatsanityOptionName
 
 default_distribution = {trap.name: TrapDistribution.default_weight for trap in items_by_group[Group.TRAP] if Group.DEPRECATED not in trap.groups}
 threshold_difference = 2
@@ -19,7 +20,7 @@ class TestTrapDifficultyCanRemoveAllTraps(WorldAssertMixin, SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_no_traps,
     }
 
@@ -41,7 +42,7 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
     }
 
@@ -56,16 +57,25 @@ class TestDefaultDistributionHasAllTraps(WorldAssertMixin, SVTestBase):
 
 class TestDistributionIsRespectedAllTraps(WorldAssertMixin, SVTestBase):
     options = {
+        options.BundlePerRoom.internal_name: options.BundlePerRoom.option_four_extra,
         options.QuestLocations.internal_name: 56,
+        options.FestivalLocations.internal_name: options.FestivalLocations.option_hard,
         options.Fishsanity.internal_name: options.Fishsanity.option_all,
         options.Museumsanity.internal_name: options.Museumsanity.option_all,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+        options.Monstersanity.internal_name: options.Monstersanity.option_progressive_goals,
         options.Shipsanity.internal_name: options.Shipsanity.option_everything,
         options.Cooksanity.internal_name: options.Cooksanity.option_all,
         options.Craftsanity.internal_name: options.Craftsanity.option_all,
-        options.Mods.internal_name: frozenset(options.Mods.valid_keys),
+        options.Eatsanity.internal_name: frozenset([EatsanityOptionName.shop, EatsanityOptionName.fish, EatsanityOptionName.artisan, EatsanityOptionName.crops, EatsanityOptionName.cooking, EatsanityOptionName.poisonous]),
+        options.Booksanity.internal_name: options.Booksanity.option_all,
+        options.Moviesanity.internal_name: options.Moviesanity.option_all_movies_and_all_loved_snacks,
+        options.Secretsanity.internal_name: frozenset(options.Secretsanity.valid_keys),
+        options.Hatsanity.internal_name: options.Hatsanity.preset_all,
+        options.IncludeEndgameLocations.internal_name: options.IncludeEndgameLocations.option_true,
+        options.Mods.internal_name: frozenset(options.all_mods_except_invalid_combinations),
         options.TrapDifficulty.internal_name: options.TrapDifficulty.option_medium,
-        options.TrapDistribution.internal_name: default_distribution | {"Nudge Trap": 100, "Bark Trap": 1, "Meow Trap": 1000, "Shuffle Trap": 0}
+        options.TrapDistribution.internal_name: {"Nudge Trap": 100, "Bark Trap": 1, "Meow Trap": 1000, "Shuffle Trap": 0}
     }
 
     @classmethod
