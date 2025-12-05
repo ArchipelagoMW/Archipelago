@@ -90,12 +90,6 @@ class CrystalProjectLogic:
     def obscure_routes_on(self, state: CollectionState) -> bool:
         return self.options.obscure_routes.value == self.options.obscure_routes.option_true
 
-    def new_world_requirements(self, state: CollectionState) -> bool:
-        if self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley:
-            return self.has_jobs(state, self.options.new_world_stone_job_quantity.value)
-        else:
-            return state.has(NEW_WORLD_STONE, self.player)
-
     def old_world_requirements(self, state: CollectionState) -> bool:
         if self.options.goal.value == self.options.goal.option_true_astley:
             return self.has_swimming(state) and state.has(DEITY_EYE, self.player, 4) and state.has(STEM_WARD, self.player) and state.can_reach(THE_DEPTHS_AP_REGION, player=self.player)

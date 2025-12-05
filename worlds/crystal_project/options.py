@@ -18,10 +18,10 @@ class Goal(Choice):
     
     Checking the first sign in the Spawning Meadows will tell you the selected goal. A goal items counter is displayed on the in-game party screen in the menu.
     
-    Astley: Defeat Astley in the New World. A New World Stone will be given to the player after obtaining a certain number of jobs (starting Jobs don't count).
+    Astley: Defeat Astley in the New World. The throne room in the new world will unlock with enough jobs (starting Jobs don't count).
 
     True Astley: A saga awaits you! Collect 4 Deity Eyes and the STEM WARD to challenge Gabriel for the Old World Stone. Then travel to the Old World to defeat Periculum and earn the Proof of Merit.
-    Along the way, gather enough Jobs to unlock the New World Stone. Then you can venture to the New World to defeat true Astley to win!
+    Along the way, gather enough Jobs to unlock the throne room. Then you can venture to the New World to defeat true Astley to win!
     
     Clamshells: Collect enough clamshells for Mañana Man in Seaside Cliffs.
     """
@@ -31,9 +31,9 @@ class Goal(Choice):
     option_clamshells = 2
     default = 0
 
-class NewWorldStoneJobQuantity(Range):
+class AstleyJobQuantity(Range):
     """
-    If your goal is Astley, select how many Jobs you need to find before being sent the New World Stone for the final fight.
+    If your goal is Astley or True Astley, select how many Jobs you need to find before the throne room for the final fight is unlocked.
 
     This option is validated at generation time, and if it is higher than the number of jobs you can obtain, it will be capped to what is possible. By default, the maximum you can obtain is 18.
 
@@ -41,7 +41,7 @@ class NewWorldStoneJobQuantity(Range):
 
     Picking Job Rando: None and Included Regions: Beginner or Advanced will reduce the maximum number available to 4 or 11, respectively.
     """
-    display_name = "Job count that locks the New World Stone"
+    display_name = "Job count that unlocks Astley's throne room"
     range_start = 1
     range_end = 99
     default = 18
@@ -441,7 +441,7 @@ class UseMods(Toggle):
 class CrystalProjectOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     goal: Goal
-    new_world_stone_job_quantity: NewWorldStoneJobQuantity
+    astley_job_quantity: AstleyJobQuantity
     clamshell_goal_quantity: ClamshellGoalQuantity
     extra_clamshells_in_pool: ExtraClamshellsInPool
     job_rando: JobRando
@@ -475,7 +475,7 @@ class CrystalProjectOptions(PerGameCommonOptions):
     use_mods: UseMods
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
-    "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, NewWorldStoneJobQuantity],
+    "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, AstleyJobQuantity],
     "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity, HomePointHustle],
     "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
