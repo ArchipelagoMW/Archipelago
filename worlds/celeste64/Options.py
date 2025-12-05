@@ -84,6 +84,20 @@ class Checkpointsanity(Toggle):
     display_name = "Checkpointsanity"
 
 
+class MadelineHairLength(Choice):
+    """
+    How long Madeline's hair is
+    """
+    display_name = "Madeline Hair Length"
+    option_very_short = 1
+    option_short = 5
+    option_default = 10
+    option_long = 15
+    option_very_long = 30
+    option_absurd = 60
+    default = 10
+
+
 class ColorChoice(TextChoice):
     option_strawberry = 0xDB2C00
     option_empty = 0x6EC0FF
@@ -211,6 +225,7 @@ celeste_64_option_groups = [
         Checkpointsanity,
     ]),
     OptionGroup("Aesthetic Options", [
+        MadelineHairLength,
         MadelineOneDashHairColor,
         MadelineTwoDashHairColor,
         MadelineNoDashHairColor,
@@ -240,6 +255,7 @@ class Celeste64Options(PerGameCommonOptions):
     carsanity: Carsanity
     checkpointsanity: Checkpointsanity
 
+    madeline_hair_length: MadelineHairLength
     madeline_one_dash_hair_color: MadelineOneDashHairColor
     madeline_two_dash_hair_color: MadelineTwoDashHairColor
     madeline_no_dash_hair_color: MadelineNoDashHairColor

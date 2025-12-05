@@ -200,6 +200,7 @@ class Celeste64World(World):
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
             "checkpointsanity": self.options.checkpointsanity.value,
+            "madeline_hair_length": self.options.madeline_hair_length.value,
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
