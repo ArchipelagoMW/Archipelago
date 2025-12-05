@@ -37,12 +37,12 @@ There are several assumptions in this recommendation worth stating explicitly, s
   you write a bunch of code assuming it could be done. That's why we recommend starting with the game client.
   - Getting an APWorld to generate whatever items/locations you want is always feasible, since items/locations are
     little more than id numbers and name strings during generation.
-- For a developer new to Archipelago, it's likely much easier to tell if your game client is working correctly than
-  your APWorld, which is another reason to save the APWorld until you have a minimal client to test it against.
-  An AP veteran might prefer to prototype the APWorld first.
 - You generally want to get to an "end-to-end playable" prototype quickly. On top of all the technical challenges these
   docs describe, it's also important to check that a randomizer is *fun to play*, and figure out what features would be
   essential for a public release.
+- A first-time world developer may or may not be deeply familiar with Archipelago, but they're almost certainly familiar
+  with the game they want to randomize. So judging whether your game client is working correctly might be significantly
+  easier than judging if your APWorld is working.
 - Notice we do *not* recommend doing 100% of client work before the APWorld, or 100% of APWorld work before the client.
   It's important to iterate on both parts, and regularly make sure they still work together.
 
