@@ -111,7 +111,10 @@ class KH2World(World):
             "AutoFormLogic",
             "LevelDepth",
             "DonaldGoofyStatsanity",
-            "CorSkipToggle"
+            "CorSkipToggle",
+            "SuperBosses",
+            "Cups",
+            "AtlanticaToggle",
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
