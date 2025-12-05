@@ -7,6 +7,8 @@ class ItemTag(Flag):
     ENTITY = auto()
     WEAPON = auto()
     CUBE = auto()
+    GEL = auto()
+    CORE = auto()
 
     # Affect applied
     DELETE = auto()
@@ -51,7 +53,7 @@ item_table: dict[str, Portal2ItemData] = {
 
     # Puzzle Elements
     frankenturret: Portal2ItemData("prop_monster_box", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
-    paint: Portal2ItemData("info_paint_sprayer", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression), # Not yet implemented in game
+    paint: Portal2ItemData("info_paint_sprayer", None, ItemTag.ENTITY | ItemTag.GEL | ItemTag.DELETE, ItemClassification.progression),
     laser: Portal2ItemData("env_portal_laser", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     faith_plate: Portal2ItemData("trigger_catapult", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
     funnel: Portal2ItemData("prop_tractor_beam", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression),
@@ -63,9 +65,9 @@ item_table: dict[str, Portal2ItemData] = {
     turrets: Portal2ItemData("npc_portal_turret_floor", None, ItemTag.ENTITY | ItemTag.DISABLE, ItemClassification.progression),
 
     # Goal Items
-    adventure_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
-    space_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
-    fact_core: Portal2ItemData("npc_personality_core", None, ItemTag.ENTITY | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
+    adventure_core: Portal2ItemData("npc_personality_core", "@core02", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
+    space_core: Portal2ItemData("npc_personality_core", "@core01", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
+    fact_core: Portal2ItemData("npc_personality_core", "@core03", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
 
     moon_dust: Portal2ItemData("", None, None, ItemClassification.filler),
     lemon: Portal2ItemData("", None, None, ItemClassification.filler),

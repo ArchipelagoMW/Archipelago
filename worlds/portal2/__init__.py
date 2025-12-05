@@ -126,14 +126,6 @@ class Portal2World(World):
         filler_name = self.get_filler_item_name()
         while self.item_count < self.location_count:
             self.multiworld.itempool.append(self.create_item(filler_name))
-
-    def set_rules(self):
-        # Cannot access chapter 9 until goal items collected
-        # set_rule(self.multiworld.get_entrance("Chapter 9 Entrance", self.player),
-        #      lambda state: state.has("Adventure Core", self.player) and
-        #                    state.has("Space Core", self.player) and
-        #                    state.has("Fact Core", self.player))
-        pass
         
     def connect_entrances(self):
         try:
