@@ -10,7 +10,7 @@ including [Contributing](contributing.md), [Adding Games](<adding games.md>), an
 
 Although every AP game is different, the typical recommendation for first-time AP developers is:
 
-- Start with a proof-of-concept for the game client
+- Start with a proof-of-concept for [the game client](adding%20games.md#client)
   - Figure out how to interface with the game. Whether that means "modding" the game, or patching a ROM file,
     or developing a separate client program that edits the game's memory, or some other technique.
   - Figure out how to give items and detect locations in the actual game. Not every item and location,
