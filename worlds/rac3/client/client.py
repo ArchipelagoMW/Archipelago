@@ -27,7 +27,7 @@ except ImportError:
 # Game title dedicated
 
 CLIENT_INIT_LOG = f"{RAC3OPTION.GAME_TITLE}_Client"
-CLIENT_VERSION = "0.1.0"  # Todo: Update Client Version to match build version
+CLIENT_VERSION = "0.1.0"  # This is automatically updated by the GitHub actions workflow
 
 
 class CommandProcessor(ClientCommandProcessor):
@@ -70,7 +70,8 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f"Death Link not found in slot_data. You are probably not connected")
 
     def _cmd_respawn(self):
-        """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead."""
+        """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead.
+        You can also pause the game and hold Square on the pause menu to run this command from in-game."""
         if isinstance(self.ctx, Rac3Context):
             pause_address = RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS
             if pause_address is not None:
