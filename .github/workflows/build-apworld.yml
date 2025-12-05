@@ -391,8 +391,8 @@ jobs:
           find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
           echo "🗑️ Removed extra archipelago.json"
 
-          # Update CLIENT_VERSION in Rac3Client.py
-          client_file="tmp_unzip/rac3/Rac3Client.py"
+          # Update CLIENT_VERSION in client.py
+          client_file="tmp_unzip/rac3/client/client.py"
           old_version=$(grep '^CLIENT_VERSION = ' "$client_file" | cut -d'"' -f2 || echo "<none>")
           echo "🔧 Updating CLIENT_VERSION in $client_file from $old_version to $version"
           sed -i -E "s/^(CLIENT_VERSION = ).*/\1\"$version\"/" "$client_file"
