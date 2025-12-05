@@ -37,7 +37,7 @@ class Portal2World(World):
         self.item_count += 1
         return Portal2Item(name, item_table[name].classification, self.item_name_to_id[name], self.player)
     
-    def create_location(self, name, id, parent, event=False):
+    def create_location(self, name, id, parent):
         return_location = Portal2Location(self.player, name, id, parent)
         return return_location
     
@@ -141,4 +141,7 @@ class Portal2World(World):
     def fill_slot_data(self):
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
-        return {}
+        return {
+            "death_link": self.options.death_link,
+            "goal_map_code": "sp_a4_finale4"
+        }

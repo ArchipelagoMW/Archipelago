@@ -1,8 +1,10 @@
 import asyncio
 import logging
+import time
 import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
+from NetUtils import ClientStatus
 from worlds.portal2.Items import item_table
 from worlds.portal2.ItemHandling import handle_item
 from worlds.portal2.Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
@@ -16,16 +18,25 @@ logger = logging.getLogger("Portal2Client")
 class Portal2CommandProcessor(ClientCommandProcessor):
 
     def _cmd_checkcon(self):
+        """Responds with the status of the client's connection to the Portal 2 mod"""
         if self.ctx.check_game_connection():
             self.output("Connection to Portal 2 is up and running")
         else:
             self.output("Disconnected from Portal 2. Make sure the mod is open and the -netconport launch option is set")
 
     def _cmd_command(self, *command):
+        """Sends a command to the game. Should not be used unless you get softlocked"""
         self.ctx.command_queue.append(' '.join(command) + "\n")
+
+    def _cmd_toggledeathlink(self):
+        """Toggles death link for this client"""
+        self.ctx.death_link_active != self.ctx.death_link_active
+        self.ctx.update_death_link(self.ctx.death_link_active)
+        self.output(f"Death link has been {"enabled" if self.ctx.death_link_active else "disabled"}")
 
     # Debug commands
     def _cmd_mapid(self, map_code):
+        """Debug command for finding the map location id from the in game map name"""
         self.output(self.ctx.map_code_to_location_id(map_code))
 
 class Portal2Context(CommonContext):
@@ -37,6 +48,9 @@ class Portal2Context(CommonContext):
 
     HOST = "localhost"
     PORT = 3000
+
+    death_link_active = False
+    goal_map_code = ""
 
     item_list = []
     item_remove_commands = []
@@ -51,7 +65,10 @@ class Portal2Context(CommonContext):
 
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
-        return f'{';'.join(self.item_remove_commands)};script CreateCompleteLevelAlertHook()\n'
+        return f'{';'.join(self.item_remove_commands)};\
+                script CreateCompleteLevelAlertHook();\
+                script AttachDeathTrigger()\
+                {";script AttachDeathTrigger()" if self.death_link_active else ""}\n'
 
     def send_player_to_main_menu_command(self):
         '''Sends the player back to the main menu (called on map completion)'''
@@ -153,9 +170,20 @@ class Portal2Context(CommonContext):
 
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
+            if done_map == self.goal_map_code:
+                self.finished_game = True
+                await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             logger.info("Check made: " + done_map)
             await self.check_locations([self.map_code_to_location_id(done_map)])
             self.command_queue.append(self.send_player_to_main_menu_command())
+        
+        elif message.startswith("send deathlink"):
+            if self.death_link_active and time.time() - self.last_death_link > 10:
+                self.send_death()
+
+    def on_deathlink(self, data):
+        self.command_queue.append("kill")
+        return super().on_deathlink(data)
 
     def check_game_connection(self):
         logger.info("Sender active: "  + str(self.sender_active) + " Listener active: " + str(self.listener_active))
@@ -186,6 +214,13 @@ class Portal2Context(CommonContext):
         if not self.location_name_to_id:
             raise Exception("location_name_to_id dict has not been created yet")
         return self.location_name_to_id[location_name]
+    
+    def handle_slot_data(self, slot_data: dict):
+        if "death_link" in slot_data:
+            self.death_link_active = slot_data["death_link"]
+
+        if "goal_map_code" in slot_data:
+            self.goal_map_code = slot_data("goal_map_code")
 
     def on_package(self, cmd, args):
         # Add item names to list
@@ -199,6 +234,9 @@ class Portal2Context(CommonContext):
             items_received_temp = [self.item_names.lookup_in_game(i.item) for i in self.items_received if i.player == self.slot]
             self.item_list = list(set(self.item_list) - set(items_received_temp))
             self.update_item_remove_commands()
+
+        if cmd == "Connected":
+            self.handle_slot_data(args["slot_data"])
 
     def update_item_remove_commands(self):
         temp_commands = []
