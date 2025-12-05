@@ -218,7 +218,11 @@ def launch(exe, in_terminal=False):
 
 def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
-    script = sys.argv[0]
+    env = os.environ
+    if "APPIMAGE" in env:
+        script = env["APPIMAGE"]
+    else:
+        script = sys.argv[0]
     wkdir = Utils.local_path()
 
     script = f"{script} \"{component.display_name}\""
