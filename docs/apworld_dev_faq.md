@@ -20,7 +20,7 @@ Although every AP game is different, the typical recommendation for first-time A
     To make absolutely sure this part works, you may want to test the connection by generating a multiworld
     with a different game, then making your client temporarily pretend to be that other game.
 - Next, make a "trivial" APWorld, i.e. an APWorld that always generates the same items and locations
-  - If you've never done this before, likely the fastest approach is to copy-paste worlds/apquest/, and read the many
+  - If you've never done this before, likely the fastest approach is to copy-paste [APQuest](<../worlds/apquest>), and read the many
     comments in there until you understand how to edit the items and locations.
 - Then you can do your first "end-to-end test": generate a multiworld using your APWorld, run a local server to host it,
   connect to that local server from your game client, actually check a location in the game, and finally make sure the
