@@ -121,7 +121,7 @@ class CrystalProjectWorld(World):
                     self.options.goal.value = slot_data["goal"]
                     self.options.clamshell_goal_quantity.value = slot_data["clamshellGoalQuantity"]
                     self.options.extra_clamshells_in_pool.value = slot_data["extraClamshellsInPool"]
-                    self.options.new_world_stone_job_quantity.value = slot_data["jobGoalAmount"]
+                    self.options.astley_job_quantity.value = slot_data["jobGoalAmount"]
                     self.options.job_rando.value = slot_data["jobRando"]
                     self.starting_jobs = slot_data["startingJobsForUT"]
                     self.options.starting_job_quantity.value = slot_data["startingJobQuantity"]
@@ -237,10 +237,10 @@ class CrystalProjectWorld(World):
             if self.options.use_mods.value == self.options.use_mods.option_false:
                 jobs_earnable -= self.modded_job_count
 
-        if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.new_world_stone_job_quantity.value > jobs_earnable:
+        if (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley) and self.options.astley_job_quantity.value > jobs_earnable:
             message = "For player {2}: newWorldStoneJobQuantity was set to {0} but your options only had {1} jobs in pool. Reduced newWorldStoneJobQuantity to {1}."
-            logging.getLogger().info(message.format(self.options.new_world_stone_job_quantity.value, jobs_earnable, self.player_name))
-            self.options.new_world_stone_job_quantity.value = jobs_earnable
+            logging.getLogger().info(message.format(self.options.astley_job_quantity.value, jobs_earnable, self.player_name))
+            self.options.astley_job_quantity.value = jobs_earnable
 
         if self.options.regionsanity.value == self.options.regionsanity.option_disabled:
             self.starter_ap_region = SPAWNING_MEADOWS_AP_REGION
@@ -596,6 +596,12 @@ class CrystalProjectWorld(World):
                     item = self.create_item(home_point.name)
                     pool.append(item)
 
+        #for any Astley goal, make sure new world stone is in the pool
+        if self.options.goal.value != self.options.goal.option_clamshells:
+            item = self.set_classifications(NEW_WORLD_STONE)
+            if item not in pool:
+                pool.append(item)
+
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
             pool.append(item)
@@ -609,8 +615,9 @@ class CrystalProjectWorld(World):
         return item
 
     def set_rules(self) -> None:
+        logic = CrystalProjectLogic(self.player, self.options)
         if self.options.goal == self.options.goal.option_astley:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player) and logic.has_jobs(state, self.options.astley_job_quantity.value)
             self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
@@ -670,7 +677,7 @@ class CrystalProjectWorld(World):
             "goal": self.options.goal.value,
             "clamshellGoalQuantity": self.get_goal_clamshells(),
             "extraClamshellsInPool": self.get_extra_clamshells(),
-            "jobGoalAmount": self.options.new_world_stone_job_quantity.value,
+            "jobGoalAmount": self.options.astley_job_quantity.value,
             "jobRando": self.options.job_rando.value,
             "startingJobsForUT": self.starting_jobs,
             "startingJobQuantity": self.options.starting_job_quantity.value,
