@@ -452,9 +452,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked in broken East Wing jail cell", 708 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Locked in East Wing bedroom", 763 + treasure_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Cell Key chest
         #Dark Wing
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Dark Wing entry left cell", 2911 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Capital Jail map chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Sneaky chest in Dark Wing", 929 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Hood chest
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Corner lava jump in Dark Wing", 920 + treasure_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Woven Shirt chest
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Dark Wing entry left cell", 2911 + treasure_index_offset), #Capital Jail map chest
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Sneaky chest in Dark Wing", 929 + treasure_index_offset), #Woven Hood chest
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " Chest - Corner lava jump in Dark Wing", 920 + treasure_index_offset), #Woven Shirt chest
 
         #NPCs
         #South Wing
@@ -466,7 +466,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in broken East Wing jail cell accompanied by blue flower", 760 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Ore
         LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver locked in East Wing bedroom", 782 + npc_index_offset, lambda state: logic.has_key(state, EAST_WING_KEY) and logic.has_key(state, CELL_KEY, 6)), #Dust
         #Dark Wing
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)), #Dust
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + " NPC - Silver in Dark Wing entry right cell", 472 + npc_index_offset), #Dust
 
         #Capital Pipeline
         #Treasure chests
@@ -1415,7 +1415,7 @@ def get_crystal_locations(player: int, options: CrystalProjectOptions | None) ->
         LocationData(BEATSMITH_DISCO_AP_REGION, CAPITAL_SEQUOIA_DISPLAY_NAME + BEATSMITH_JOB_CRYSTAL_LOCATION, 1087 + crystal_index_offset),
         LocationData(QUINTAR_NEST_AP_REGION, QUINTAR_NEST_DISPLAY_NAME + HUNTER_JOB_CRYSTAL_LOCATION, 621 + crystal_index_offset),
         LocationData(QUINTAR_SANCTUM_AP_REGION, QUINTAR_SANCTUM_DISPLAY_NAME + CHEMIST_JOB_CRYSTAL_LOCATION, 970 + crystal_index_offset),
-        LocationData(CAPITAL_JAIL_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset, lambda state: logic.has_key(state, DARK_WING_KEY)),
+        LocationData(JAIL_DARK_WING_AP_REGION, CAPITAL_JAIL_DISPLAY_NAME + REAPER_JOB_CRYSTAL_LOCATION, 908 + crystal_index_offset),
         LocationData(OKIMOTO_NS_AP_REGION, OKIMOTO_NS_DISPLAY_NAME + NINJA_JOB_CRYSTAL_LOCATION, 699 + crystal_index_offset),
         LocationData(RIVER_CATS_EGO_AP_REGION, RIVER_CATS_EGO_AP_REGION + NOMAD_JOB_CRYSTAL_LOCATION, 630 + crystal_index_offset),
         LocationData(ANCIENT_RESERVOIR_AP_REGION, ANCIENT_RESERVOIR_DISPLAY_NAME + DERVISH_JOB_CRYSTAL_LOCATION, 1121 + crystal_index_offset),

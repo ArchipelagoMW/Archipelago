@@ -81,6 +81,7 @@ CAPITAL_JAIL_AP_REGION = "Capital Jail"
 CAPITAL_JAIL_AP_REGION_TELEPORT_LOCATION = "405,95,-301"
 JAIL_SOUTH_WING_AP_REGION = "Capital Jail South Wing"
 JAIL_SOUTH_WING_RUBBLE_AP_REGION = "Capital Jail South Wing Rubble"
+JAIL_DARK_WING_AP_REGION = "Capital Jail Dark Wing"
 #Capital Jail end
 #Capital Pipeline start
 PIPELINE_NORTH_AP_REGION = "Capital Pipeline North"

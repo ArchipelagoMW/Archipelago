@@ -43,7 +43,7 @@ def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptio
         LocationData(CAPITAL_SEQUOIA_AP_REGION, "HomePoint - Training Grounds", 3057),
 
         LocationData(CAPITAL_JAIL_AP_REGION, "HomePoint - Capital Jail Entrance", 643),
-        LocationData(CAPITAL_JAIL_AP_REGION, "HomePoint - Capital Jail Dark Wing", 915, lambda state: logic.has_key(state, DARK_WING_KEY)),
+        LocationData(JAIL_DARK_WING_AP_REGION, "HomePoint - Capital Jail Dark Wing", 915),
 
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "HomePoint - Quintar Enthusiast's House", 440),
         LocationData(ROLLING_QUINTAR_FIELDS_AP_REGION, "HomePoint - Rent-A-Quintar", 462),

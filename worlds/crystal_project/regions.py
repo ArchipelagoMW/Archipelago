@@ -468,13 +468,19 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      OKIMOTO_NS_AP_REGION: lambda state: logic.has_vertical_movement(state),
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     #Quintar Sanctum end
-    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, JAIL_SOUTH_WING_AP_REGION],
-                    {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY)})
+    #Capital Jail start
+    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, JAIL_SOUTH_WING_AP_REGION, JAIL_DARK_WING_AP_REGION],
+                    {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY),
+                     JAIL_DARK_WING_AP_REGION: lambda state: logic.has_key(state, DARK_WING_KEY)})
     fancy_add_exits(world, JAIL_SOUTH_WING_AP_REGION, [CAPITAL_JAIL_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
                     {CAPITAL_JAIL_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY),
                      JAIL_SOUTH_WING_RUBBLE_AP_REGION: lambda state: logic.has_key(state, CELL_KEY, 6)})
     fancy_add_exits(world, JAIL_SOUTH_WING_RUBBLE_AP_REGION, [JAIL_SOUTH_WING_AP_REGION, PIPELINE_NORTH_AP_REGION],
                     {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, CELL_KEY, 6)})
+    fancy_add_exits(world, JAIL_DARK_WING_AP_REGION, [CAPITAL_JAIL_AP_REGION],
+                    {CAPITAL_JAIL_AP_REGION: lambda state: logic.has_key(state, DARK_WING_KEY)})
+    #Capital Jail end
+    #Capital Pipeline start
     fancy_add_exits(world, PIPELINE_NORTH_AP_REGION, [PIPELINE_SOUTH_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
                     {PIPELINE_SOUTH_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     fancy_add_exits(world, PIPELINE_SOUTH_AP_REGION, [PIPELINE_NORTH_AP_REGION, CONTINENTAL_TRAM_AP_REGION, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION],
@@ -483,6 +489,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     #A Pipeline -> Jidamba connector; untraversable w/o region pass in Regionsanity
     fancy_add_exits(world, PIPELINE_JIDAMBA_CONNECTOR_AP_REGION, [JIDAMBA_CAVE_AP_REGION],
                     {JIDAMBA_CAVE_AP_REGION: lambda state: state.has(CAPITAL_PIPELINE_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled})
+    #Capital Pipeline end
     fancy_add_exits(world, COBBLESTONE_CRAG_AP_REGION, [PROVING_MEADOWS_AP_REGION, CAPITAL_SEQUOIA_AP_REGION, CAPITAL_MOAT_AP_REGION, THE_OPEN_SEA_AP_REGION, SHOUDU_WATERFRONT_AP_REGION, OKIMOTO_NS_AP_REGION],
                     {CAPITAL_MOAT_AP_REGION: lambda state: logic.has_swimming(state),
                      SHOUDU_WATERFRONT_AP_REGION: lambda state: logic.has_horizontal_movement(state),
