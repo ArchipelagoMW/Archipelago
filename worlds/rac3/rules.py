@@ -24,10 +24,11 @@ rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
 
 
-def all_locations(state: CollectionState, world: "RaC3World", tag):
+def all_locations(state: CollectionState, world: "RaC3World", tag, skip):
     check = True
-    for loc in location_groups[tag]:
-        check &= state.can_reach_location(loc, world.player)
+    for loc in world.get_locations():
+        if loc.name in location_groups[tag] and loc.name != skip:
+            check &= state.can_reach_location(loc.name, world.player)
     return check
 
 
@@ -176,11 +177,15 @@ def set_rules(world: "RaC3World"):
             lambda state: state.has(RAC3ITEM.PROGRESSIVE_VIDCOMIC, world.player, 5),
         RAC3SKILLPOINT.PHOENIX_COMIC_5: lambda state: state.has(RAC3ITEM.PROGRESSIVE_VIDCOMIC, world.player, 5),
         RAC3SKILLPOINT.PHOENIX_ARCADE: lambda state: state.has(RAC3ITEM.PROGRESSIVE_VIDCOMIC, world.player, 5),
-        RAC3TROPHY.PHOENIX_TITANIUM_COLLECTOR: lambda state: all_locations(state, world, RAC3TAG.T_BOLT),
-        RAC3TROPHY.PHOENIX_FRIEND_OF_THE_RANGERS: lambda state: all_locations(state, world, RAC3TAG.RANGERS),
+        RAC3TROPHY.PHOENIX_TITANIUM_COLLECTOR:
+            lambda state: all_locations(state, world, RAC3TAG.T_BOLT, RAC3TROPHY.PHOENIX_TITANIUM_COLLECTOR),
+        RAC3TROPHY.PHOENIX_FRIEND_OF_THE_RANGERS:
+            lambda state: all_locations(state, world, RAC3TAG.RANGERS, RAC3TROPHY.PHOENIX_FRIEND_OF_THE_RANGERS),
         RAC3TROPHY.PHOENIX_ANNIHILATION_NATION_CHAMPION:
-            lambda state: all_locations(state, world, RAC3REGION.ANNIHILATION_NATION),
-        RAC3TROPHY.PHOENIX_SKILL_MASTER: lambda state: all_locations(state, world, RAC3TAG.SKILLPOINT),
+            lambda state: all_locations(state, world, RAC3REGION.ANNIHILATION_NATION,
+                                        RAC3TROPHY.PHOENIX_ANNIHILATION_NATION_CHAMPION),
+        RAC3TROPHY.PHOENIX_SKILL_MASTER:
+            lambda state: all_locations(state, world, RAC3TAG.SKILLPOINT, RAC3TROPHY.PHOENIX_SKILL_MASTER),
 
         # RAC3VENDOR.MARCADIA_HYDRA
         # RAC3TBOLT.MARCADIA_POOL
@@ -524,7 +529,7 @@ def set_rules(world: "RaC3World"):
         case 4:  # Every nanotech level is a check
             for level, name in enumerate(location_groups[RAC3TAG.NANOTECH]):
                 add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(planet_data.keys(), world.player, level))
+                         lambda state: state.has_from_list(planet_data.keys(), world.player, level // 5))
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])
