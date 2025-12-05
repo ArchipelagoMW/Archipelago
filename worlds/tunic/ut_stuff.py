@@ -1,5 +1,6 @@
 from typing import Any, TYPE_CHECKING
 
+from .er_data import portal_mapping
 from .options import EntranceLayout, LaurelsLocation
 
 if TYPE_CHECKING:
@@ -40,6 +41,58 @@ def setup_options_from_slot_data(world: "TunicWorld") -> None:
             world.using_ut = False
     else:
         world.using_ut = False
+
+
+def modify_shop_key(portal_sdt: str) -> str:
+    if portal_sdt.startswith("Shop, ") and not portal_sdt.startswith("Shop, P"):
+        # the mod internally uses Shop, Previous Region instead of just having the number
+        return portal_sdt.replace("Shop, ", "Shop, Previous Region ")
+    return portal_sdt
+
+
+def setup_found_entrances_datastorage(world: "TunicWorld") -> None:
+    world.found_entrances_datastorage_key = []
+    for portal_sdt1, portal_sdt2 in world.passthrough["Entrance Rando"].items():
+        world.found_entrances_datastorage_key.append("Slot:{player}:" + modify_shop_key(portal_sdt1))
+        if not world.options.decoupled:
+            world.found_entrances_datastorage_key.append("Slot:{player}:" + modify_shop_key(portal_sdt2))
+
+
+def disconnect_entrances(world: "TunicWorld") -> None:
+    world.disconnected_entrances = {}
+    for entrance in world.get_entrances():
+        if entrance.name.startswith("Shop Portal"):
+            world.disconnected_entrances[entrance] = entrance.connected_region
+            entrance.connected_region = None
+            continue
+        # LS entrances start with the same name as the non-LS portal entrance
+        name = entrance.name.split(" (LS) ", 1)[0]
+        for portal in portal_mapping:
+            if portal.name == name:
+                world.disconnected_entrances[entrance] = entrance.connected_region
+                entrance.connected_region = None
+
+
+def get_entrance_name_from_sdt(portal_sdt: str) -> str:
+    if portal_sdt.startswith("Shop, P"):
+        shop_number = portal_sdt.replace("Shop, Previous Region ", "").replace("_", "")
+        return f"Shop Portal {shop_number}"
+    for portal in portal_mapping:
+        if portal.scene_destination() == portal_sdt:
+            return portal.name
+    else:
+        raise Exception("Portal SDT not found for some reason.")
+
+
+def reconnect_found_entrance(world: "TunicWorld", portal_sdt: str) -> None:
+    portal_name = get_entrance_name_from_sdt(portal_sdt)
+    entrance_connected = False
+    for entrance, region in world.disconnected_entrances.items():
+        if entrance.name.startswith(portal_name):
+            entrance.connect(region)
+            entrance_connected = True
+    if not entrance_connected:
+        raise Exception("Portal name not found in reconnect_found_entrance")
 
 
 # for UT poptracker integration map tab switching
