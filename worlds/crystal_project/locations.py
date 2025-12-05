@@ -556,16 +556,17 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
         #NPCs
         LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Reid chilling by the Fish Hatchery", 2410 + npc_index_offset), #(113, 172, -372) Courtyard Key; Fixed Missable
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race Participation Prize", 50639 + npc_index_offset, lambda state: logic.has_rental_salmon(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 14th place prize", 50640 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 12th place prize", 50641 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 10th place prize", 50642 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 8th place prize", 50643 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 6th place prize", 50644 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 4th place prize", 50645 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 3rd place prize", 50646 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 2nd place prize", 50647 + npc_index_offset, lambda state: logic.has_swimming(state)),
-        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.has_swimming(state)),
+        #TODO: require rental salmon for more of these checks once the skilled rental salmon setting is implemented
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race Participation Prize", 50639 + npc_index_offset, lambda state: logic.fish_race_requirements(state, True)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 14th place prize", 50640 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 12th place prize", 50641 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 10th place prize", 50642 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 8th place prize", 50643 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 6th place prize", 50644 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 4th place prize", 50645 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 3rd place prize", 50646 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Salmon Race 2nd place prize", 50647 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
+        LocationData(SALMON_RIVER_AP_REGION, SALMON_RIVER_DISPLAY_NAME + " NPC - Win the Salmon Race", 639 + npc_index_offset, lambda state: logic.fish_race_requirements(state)),
         #Mushroom Mountain
         LocationData(MUSHROOM_MOUNTAIN_AP_REGION, "Overpass NPC - Fall off mushroom mountain onto Gold", 2739 + npc_index_offset), #(63, 191, -399) 2nd Gold Dust on Overpass (Cloudy Wind)
 
@@ -1197,9 +1198,9 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         #Eaclaneya Courtyard
         LocationData(JIDAMBA_EACLANEYA_COURTYARD_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Eaclaneya entrance hall", 2919 + treasure_index_offset),  # Jidamba Tangle map chest
         #Summit
-        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2801 + treasure_index_offset),  # Flame Guard chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2801 + treasure_index_offset),  # Flame Guard chest
         LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Atop Eaclaneya", 2808 + treasure_index_offset),  # Rune Bow chest
-        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against western side of Eaclaneya", 2802 + treasure_index_offset),  # Flamespike chest
+        LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Tucked against eastern side of Eaclaneya", 2802 + treasure_index_offset),  # Flamespike chest
         LocationData(JIDAMBA_SUMMIT_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Scramble down the escarpment from Weaver Outpost to pedestal", 2803 + treasure_index_offset),  # Siege Bow chest
         #Canopy
         LocationData(JIDAMBA_CANOPY_AP_REGION, JIDAMBA_TANGLE_DISPLAY_NAME + " Chest - Up in the canopy south of shrine", 1171 + treasure_index_offset),  # Demon Helm chest
