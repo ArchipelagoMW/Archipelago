@@ -559,7 +559,7 @@ for resource_name, resource_data in resources_future.result().items():
         "category": resource_data["category"]
     }
     if "required_fluid" in resource_data:
-        recipe_sources.setdefault(f"mining-{resource_name}", set()).update(mining_with_fluid_sources)
+        recipe_sources[f"mining-{resource_name}"] = mining_with_fluid_sources
 del resources_future
 
 for recipe_name, recipe_data in raw_recipes.items():
