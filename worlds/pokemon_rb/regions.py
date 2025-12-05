@@ -1589,22 +1589,7 @@ def create_regions(world):
                 else:
                     world.item_pool.append(item)
 
-    world.random.shuffle(world.item_pool)
-    def acceptable_item(item):
-        return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
-                and "Coins" not in item.name and "Progressive" not in item.name
-                and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
-                and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
-                     "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
-    for i, item in enumerate(world.item_pool):
-        if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
-            world.pc_item = world.item_pool.pop(i)
-            break
-    else:
-        for i, item in enumerate(world.item_pool):
-            if acceptable_item(item):
-                world.pc_item = world.item_pool.pop(i)
-                break
+
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -1635,6 +1620,25 @@ def create_regions(world):
     if __debug__:
         for region in locations_per_region:
             assert not locations_per_region[region], f"locations not assigned to region {region}"
+
+    world.random.shuffle(world.item_pool)
+
+    def acceptable_item(item):
+        return ("Badge" not in item.name and "Trap" not in item.name and item.name != "Pokedex"
+                and "Coins" not in item.name and "Progressive" not in item.name
+                and ("Player's House 2F - Player's PC" not in world.options.exclude_locations or item.excludable)
+                and ("Player's House 2F - Player's PC" in world.options.exclude_locations or
+                     "Player's House 2F - Player's PC" not in world.options.priority_locations or item.advancement))
+    for i, item in enumerate(world.item_pool):
+        if acceptable_item(item) and (item.name not in world.options.non_local_items.value):
+            multiworld.get_location("Player's House 2F - Player's PC", player).place_locked_item(world.item_pool.pop(i))
+            break
+    else:
+        for i, item in enumerate(world.item_pool):
+            if acceptable_item(item):
+                multiworld.get_location("Player's House 2F - Player's PC",
+                                        player).place_locked_item(world.item_pool.pop(i))
+                break
 
     if world.options.randomize_rock_tunnel:
         for party in rock_tunnel_parties:

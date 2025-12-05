@@ -111,7 +111,6 @@ class PokemonRedBlueWorld(World):
         self.dexsanity_table = []
         self.trainersanity_table = []
         self.local_locs = []
-        self.pc_item = None
         self.rock_tunnel_1f_data = None
         self.rock_tunnel_b1f_data = None
         self.rock_tunnel_seed = None
@@ -501,16 +500,8 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-        loc = self.multiworld.get_location("Player's House 2F - Player's PC", self.player)
-        # Absolutely cannot have another player's item
-        if loc.item is not None and loc.item.player != self.player:
-            self.multiworld.itempool.append(loc.item)
-            loc.item = None
-        loc.place_locked_item(self.pc_item)
-
     def get_pre_fill_items(self) -> typing.List["Item"]:
         pool = [self.create_item(mon) for mon in poke_data.pokemon_data]
-        pool.append(self.pc_item)
         return pool
 
     @classmethod
