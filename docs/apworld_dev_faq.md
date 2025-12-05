@@ -16,7 +16,7 @@ Although every AP game is different, the typical recommendation for first-time A
   - Figure out how to give items and detect locations in the actual game. Not every item and location,
     just one of each major type (e.g. opening a chest vs completing a sidequest) to prove all the items and locations
     you want can actually be implemented.
-  - Figure out how to make a websocket connection to an AP server, possibly using a client library (see [Network Protocol](<network protocol.md>).
+  - Figure out how to make a websocket connection to an AP server, possibly using a client library (see [Network Protocol](<network%20protocol.md>).
     To make absolutely sure this part works, you may want to test the connection by generating a multiworld
     with a different game, then making your client temporarily pretend to be that other game.
 - Next, make a "trivial" APWorld, i.e. an APWorld that always generates the same items and locations
@@ -28,7 +28,7 @@ Although every AP game is different, the typical recommendation for first-time A
 
 That's about where general recommendations end. What you should do next will depend entirely on your game
 (e.g. implement more items, write down logic rules, add client features, prototype a tracker, etc).
-If you're not sure, then this would be a good time to re-read [Adding Games](<adding games.md>), and [World API](<world api.md>).
+If you're not sure, then this would be a good time to re-read [Adding Games](<adding%20games.md>), and [World API](<world%20api.md>).
 
 There are several assumptions in this recommendation worth stating explicitly, such as:
 
