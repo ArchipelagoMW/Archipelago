@@ -89,7 +89,6 @@ class FactorioBobs(World):
         raise Exception(f"Update Archipelago to use this world ({game}).")
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
-    tech_mix: int = 0
     skip_silo: bool = False
     origin_region_name = "Nauvis"
     science_locations: typing.List[FactorioScienceLocation]
@@ -134,7 +133,6 @@ class FactorioBobs(World):
         if self.options.max_tech_cost < self.options.min_tech_cost:
             self.options.min_tech_cost.value, self.options.max_tech_cost.value = \
                 self.options.max_tech_cost.value, self.options.min_tech_cost.value
-        self.tech_mix = self.options.tech_cost_mix.value
         self.skip_silo = self.options.silo.value == Silo.option_spawn
         self.want_progressives = collections.defaultdict(
             lambda: self.options.progressive.want_progressives(self.random))
