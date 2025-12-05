@@ -171,7 +171,7 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 if connected_to_server:
                     await init(ctx)
                 else:
-                    logger.info("Waiting for serve connection...")
+                    logger.info("Waiting for server connection...")
 
             if not connected_to_game:
                 if ctx.is_connected_to_game:
