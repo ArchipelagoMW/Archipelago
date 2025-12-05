@@ -3,13 +3,13 @@ from __future__ import annotations
 import string
 from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List, Optional
+from typing import Dict, Set, FrozenSet, Tuple, Union, List
 
 import Utils
 from . import FactorioOptions
 from .FactorioUtils import FactorioElement, load_json_data
-from .InternalItem import raw_recipes, Recipe, InternalItem, recipe_sources, mining_with_fluid_sources, \
-    machine_per_category, all_ingredients, valid_ingredients, artifacts, invalid_ingredients
+from .InternalItem import raw_recipes, InternalItem, recipe_sources, mining_with_fluid_sources, \
+    all_ingredients, valid_ingredients, artifacts, invalid_ingredients
 
 factorio_tech_id = factorio_base_id = 2 ** 17
 
@@ -102,42 +102,6 @@ class CustomTechnology(Technology):
             technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
         return technologies
 
-
-def unlock_just_tech(recipe: Recipe, _done) -> Set[Technology]:
-    current_technologies = recipe.unlocking_technologies
-    for ingredient in recipe.ingredients:
-        current_technologies |= recursively_get_unlocking_technologies(ingredient, _done,
-                                                                       unlock_func=unlock_just_tech)
-    return current_technologies
-
-
-def unlock(recipe: Recipe, _done) -> Set[Technology]:
-    current_technologies = recipe.unlocking_technologies
-    for ingredient in recipe.ingredients:
-        current_technologies |= recursively_get_unlocking_technologies(ingredient, _done, unlock_func=unlock)
-    current_technologies |= machine_per_category[recipe.category].all_unlocking_technologies()
-
-    return current_technologies
-
-
-def recursively_get_unlocking_technologies(ingredient: InternalItem, _done=None, unlock_func=unlock_just_tech) -> Set[
-    Technology]:
-    if _done:
-        if ingredient in _done:
-            return set()
-        else:
-            _done.add(ingredient)
-    else:
-        _done = {ingredient}
-    if ingredient is None:
-        return set()
-    ingredient.get_raw_ingredients()
-    recipe = ingredient.best_recipe
-    if not recipe:
-        return set()
-    current_technologies = unlock_func(recipe, _done)
-
-    return current_technologies
 
 # recipes and technologies can share names in Factorio
 for technology_name, data in sorted(techs_future.result().items()):
@@ -442,38 +406,38 @@ def get_ordered_items(key: Callable[[InternalItem], int] = lambda item: item.get
     ordered_items: list[InternalItem] = list(sorted(valid_items, key=key))
     return starting_pool, ordered_items
 
-@Utils.cache_argsless
-def get_science_pack_pools() -> Dict[str, List[InternalItem]]:
-    science_pack_pools: Dict[str, Set[InternalItem]] = {}
-    # already_taken = exclusion_list.copy()
-    already_taken = set()
-    current_difficulty = 5
-    science_packs = FactorioOptions.MaxSciencePack.get_ordered_science_packs()
-    for science_pack in science_packs:
-        current = science_pack_pools[science_pack] = set()
-        for name, item in valid_ingredients.items():
-            if (item.name not in science_packs
-                    and not (science_pack == "automation-science-pack"
-                             and (item.all_unlocking_technologies()
-                                  or item.is_fluid
-                                  or any(raw.name in excluded_automation_ingredients for raw in item.get_raw_ingredients().keys())))
-                    and item not in already_taken
-                    and item.get_score() < current_difficulty):
-                current.add(item)
-
-        if science_pack == "logistic-science-pack":
-            current.add(all_ingredients["steam"])
-
-        already_taken |= current
-        current_difficulty *= 2
-
-    sorted_pools: Dict[str, List[InternalItem]] = {science: list(sorted(sci_pool, key=lambda item: item.name))
-                                                   for science, sci_pool in science_pack_pools.items()}
-
-    for science in science_packs:
-        print(f"{science}: {sorted_pools[science]}")
-
-    return sorted_pools
+# @Utils.cache_argsless
+# def get_science_pack_pools() -> Dict[str, List[InternalItem]]:
+#     science_pack_pools: Dict[str, Set[InternalItem]] = {}
+#     # already_taken = exclusion_list.copy()
+#     already_taken = set()
+#     current_difficulty = 5
+#     science_packs = FactorioOptions.MaxSciencePack.get_ordered_science_packs()
+#     for science_pack in science_packs:
+#         current = science_pack_pools[science_pack] = set()
+#         for name, item in valid_ingredients.items():
+#             if (item.name not in science_packs
+#                     and not (science_pack == "automation-science-pack"
+#                              and (item.all_unlocking_technologies()
+#                                   or item.is_fluid
+#                                   or any(raw.name in excluded_automation_ingredients for raw in item.get_raw_ingredients().keys())))
+#                     and item not in already_taken
+#                     and item.get_score() < current_difficulty):
+#                 current.add(item)
+#
+#         if science_pack == "logistic-science-pack":
+#             current.add(all_ingredients["steam"])
+#
+#         already_taken |= current
+#         current_difficulty *= 2
+#
+#     sorted_pools: Dict[str, List[InternalItem]] = {science: list(sorted(sci_pool, key=lambda item: item.name))
+#                                                    for science, sci_pool in science_pack_pools.items()}
+#
+#     for science in science_packs:
+#         print(f"{science}: {sorted_pools[science]}")
+#
+#     return sorted_pools
 
 
 # cleanup async helpers
