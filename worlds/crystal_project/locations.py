@@ -28,7 +28,7 @@ regionsanity_index_offset = 100000000
 home_point_location_index_offset = 1000000000
 
 def get_location_name_to_id() -> dict[str, int]:
-    from .home_points import get_home_points
+    from .home_point_locations import get_home_points
     
     location_name_to_id = {location.name: location.code for location in get_treasure_and_npc_locations(-1, None)}
     crystal_name_to_id = {crystal.name: crystal.code for crystal in get_crystal_locations(-1, None)}
@@ -2009,7 +2009,7 @@ def get_region_completion_locations(player: int, options: CrystalProjectOptions)
 def get_location_names_per_category() -> Dict[str, Set[str]]:
     categories: Dict[str, Set[str]] = {}
 
-    from .home_points import get_home_points
+    from .home_point_locations import get_home_points
 
     for location in get_crystal_locations(-1, None):
         categories.setdefault("Crystals", set()).add(location.name)

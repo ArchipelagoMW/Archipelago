@@ -9,7 +9,7 @@ from .constants.display_regions import *
 from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
-from .home_points import get_home_points
+from .home_point_locations import get_home_points
 from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
     set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
