@@ -141,15 +141,17 @@ class Celeste64World(World):
 
 
     def create_regions(self) -> None:
-        from .Regions import region_data_table
+        from .Regions import region_data_table, cassette_entrance_regions, cassette_regions
         # Create regions.
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
             self.multiworld.regions.append(region)
 
+        self.generate_cassette_order()
+
         # Create locations.
         for region_name, region_data in region_data_table.items():
-            region = self.multiworld.get_region(region_name, self.player)
+            region = self.get_region(region_name)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in strawberry_location_data_table.items()
                 if location_data.region == region_name
@@ -181,6 +183,11 @@ class Celeste64World(World):
             from .Rules import connect_region
             connect_region(self, region, region_data_table[region_name].connecting_regions)
 
+            if region_name in cassette_entrance_regions:
+                cassette_entrance_index = cassette_entrance_regions.index(region_name)
+                mapped_cassette_name = cassette_regions[self.cassette_mapping[cassette_entrance_index]]
+                self.get_region(region_name).connect(self.get_region(mapped_cassette_name), lambda state: state.has(ItemName.cassettes))
+
         # Have to do this here because of other games using State in a way that's bad
         from .Rules import set_rules
         set_rules(self)
@@ -195,17 +202,29 @@ class Celeste64World(World):
             "death_link": self.options.death_link.value,
             "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.strawberries_required,
+
             "move_shuffle": self.options.move_shuffle.value,
+            "cassette_mapping": self.cassette_mapping,
+
             "friendsanity": self.options.friendsanity.value,
             "signsanity": self.options.signsanity.value,
             "carsanity": self.options.carsanity.value,
             "checkpointsanity": self.options.checkpointsanity.value,
+
             "madeline_hair_length": self.options.madeline_hair_length.value,
             "madeline_one_dash_hair_color": self.madeline_one_dash_hair_color,
             "madeline_two_dash_hair_color": self.madeline_two_dash_hair_color,
             "madeline_no_dash_hair_color": self.madeline_no_dash_hair_color,
             "madeline_feather_hair_color": self.madeline_feather_hair_color,
+
             "badeline_chaser_source": self.options.badeline_chaser_source.value,
             "badeline_chaser_frequency": self.options.badeline_chaser_frequency.value,
             "badeline_chaser_speed": self.options.badeline_chaser_speed.value,
         }
+
+    def generate_cassette_order(self) -> dict[int, int]:
+        cassettelist_o = list(range(0, 10))
+        cassettelist_s = cassettelist_o.copy()
+        if self.options.cassette_shuffle:
+            self.random.shuffle(cassettelist_s)
+        self.cassette_mapping = dict(zip(cassettelist_o, cassettelist_s))

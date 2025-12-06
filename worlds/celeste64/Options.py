@@ -56,6 +56,12 @@ class MoveShuffle(Toggle):
     """
     display_name = "Move Shuffle"
 
+class CassetteShuffle(Toggle):
+    """
+    Whether the cassette levels are shuffled
+    """
+    display_name = "Cassette Shuffle"
+
 
 class Friendsanity(Toggle):
     """
@@ -249,6 +255,7 @@ class Celeste64Options(PerGameCommonOptions):
 
     logic_difficulty: LogicDifficulty
     move_shuffle: MoveShuffle
+    cassette_shuffle: CassetteShuffle
 
     friendsanity: Friendsanity
     signsanity: Signsanity
