@@ -7,9 +7,8 @@ from .Locations import Portal2Location, map_complete_table, cutscene_completion_
 from worlds.AutoWorld import World
 from worlds.generic.Rules import set_rule
 from entrance_rando import *
-from .ItemNames import portal_gun_2
 
-randomize_maps = True
+randomize_maps = False
 
 class Portal2World(World):
     """Portal 2 is a first person puzzle adventure where you shoot solve test chambers using portal mechanics and other map specific items"""
@@ -134,8 +133,13 @@ class Portal2World(World):
 
         # Add chapters to those regions
         for i in range(1,9):
-            chapter_region = self.create_disjointed_maps_for_er(i)
+            if randomize_maps:
+                chapter_region = self.create_disjointed_maps_for_er(i)
+            else:
+                chapter_region, last_region = self.create_connected_maps(i)
+
             menu_region.connect(chapter_region, f"Chapter {i} Entrance")
+        
 
         # For chapter 9
         chapter_9_region, last_region = self.create_connected_maps(9)
@@ -163,9 +167,10 @@ class Portal2World(World):
         
     def connect_entrances(self):
         try:
-            groups_dict = {i*10:[i] for i in range(1, 9)}
-            groups_dict.update({i:[i, i*100] for i in range(1, 9)})
-            randomize_entrances(self, False, groups_dict)
+            if randomize_maps:
+                groups_dict = {i*10:[i] for i in range(1, 9)}
+                groups_dict.update({i:[i, i*100] for i in range(1, 9)})
+                randomize_entrances(self, False, groups_dict)
         finally:
             state = self.multiworld.get_all_state(False)
             state.update_reachable_regions(self.player)
