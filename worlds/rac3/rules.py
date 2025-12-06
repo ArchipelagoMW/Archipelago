@@ -234,7 +234,8 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_ONE_HIT_WONDER:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_TIME_TO_SUCK:
-            lambda state: state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) 
+                          and state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
         RAC3LOCATION.NATION_NAPTIME:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_MORE_CYCLING_WEAPONS:
@@ -242,7 +243,8 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_DODGE_THE_TWINS:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_CHOP_CHOP:
-            lambda state: state.has_any([RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE], world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) 
+                          and state.has_any([RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE], world.player),
         RAC3LOCATION.NATION_SLEEP_INDUCER:
             lambda state: state.has_any([RAC3ITEM.RIFT_INDUCER, RAC3ITEM.PROGRESSIVE_RIFT_INDUCER], world.player)
                           and state.can_reach_location(RAC3LOCATION.NATION_CHOP_CHOP, world.player),
