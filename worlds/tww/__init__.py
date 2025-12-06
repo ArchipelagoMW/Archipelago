@@ -99,6 +99,14 @@ class TWWWeb(WebWorld):
             "setup_fr.md",
             "setup/fr",
             ["mobby45"]
+        ),
+         Tutorial(
+            "Guía de Configuración para el Multimundo",
+            "Una guía para configurar el software Archipelago The Wind Waker en tu computadora.",
+            "Español",
+            "setup_es.md",
+            "setup/es",
+            ["ChinchyPandora7"]
         )
     ]
     theme = "ocean"
