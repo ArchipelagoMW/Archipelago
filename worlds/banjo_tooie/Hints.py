@@ -180,11 +180,8 @@ class Hint:
                 return f"{formatted_location} has a {formatted_accessibility}legendary one-of-a-kind item."
             if self.location.item.classification == ItemClassification.progression:
                 return f"{formatted_location} has a {formatted_accessibility}wonderful item."
-            # Either skip balancing or deprioritised
-            if self.location.item.classification & ItemClassification.progression_skip_balancing\
-                    == ItemClassification.progression_skip_balancing\
-                or self.location.item.classification & ItemClassification.progression_deprioritized\
-                    == ItemClassification.progression_deprioritized:
+            if ItemClassification.skip_balancing in self.location.item.classification \
+                or ItemClassification.deprioritized in self.location.item.classification:
                 return f"{formatted_location} has a {formatted_accessibility}great item."
         if self.location.item.classification == ItemClassification.useful:
             return f"{formatted_location} has a {formatted_accessibility}good item."
