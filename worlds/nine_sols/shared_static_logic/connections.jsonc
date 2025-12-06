@@ -942,7 +942,7 @@
         // The lasers on the return trip hard require AD AND TCK, unless we expect players to figure out you can
         // ground dash through the lasers from tiny ledges. All other platforming gets absorbed by that requirement.
         { "item": "Air Dash" },
-        { "item": "Tai-Chi Kick" }
+        { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Tai-Chi Kick" } ] }
     ] },
     { "from": "OW - Lower Right Exit", "to": "OW - Root Node & Middle Exits", "requires": [
         { "region": "OW - Activate Crates And Return" },
