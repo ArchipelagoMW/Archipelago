@@ -228,7 +228,7 @@ def create_shortcut(button: Any, component: Component) -> None:
 
     script = f"{script} \"{component.display_name}\""
     make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
-                  startmenu=False, terminal=False, working_dir=wkdir)
+                  startmenu=False, terminal=False, working_dir=wkdir, noexe=Utils.is_frozen())
     button.menu.dismiss()
 
 
