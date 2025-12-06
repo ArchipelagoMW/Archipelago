@@ -161,8 +161,10 @@ This topic often gets confusing because these terms refer to multiple things:
     to learn what items are placed on what locations. Features that require this information are sometimes mistakenly
     assumed to require locally implemented items, but location scouts work just as well as patch file data.
 - [The `items_handling` bitflags in the Connect packet](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md#items_handling-flags).
-  Typically, AP clients with locally implemented items will set only the "from other worlds" flag, while clients with
-  remotely implemented items will also set the "from your own world" flag.
+  AP clients with remotely implemented items will typically set all three flags, including "from your own world".
+  Clients with locally implemented items might set only the "from other worlds" flag.
+  - Whether a local items client sets the "starting inventory" flag likely depends on other details. For example, if a ROM
+    is being patched, and starting inventory can be added to that patch, then it makes sense to leave the flag unset.
 
 When people talk about "local vs remote items" as a choice that world devs have to make, they mean deciding whether
 your client will locally or remotely implement the items which happen to be locally placed. The major pros and cons of
