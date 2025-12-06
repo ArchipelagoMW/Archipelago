@@ -245,7 +245,7 @@ class RAC3ITEM:
     QWARKS_HIDEOUT = "Infobot: Qwarks Hideout"
     KOROS = "Infobot: Koros"
     COMMAND_CENTER = "Infobot: Command Center"
-    MUSEUM = "Infobot: Museum"
+    MUSEUM = "Infobot: Insomniac Museum"
 
     TITANIUM_BOLT = "Titanium Bolt"
     WEAPON_XP = "Weapon Level-Up"
@@ -255,7 +255,7 @@ class RAC3ITEM:
     JACKPOT = "Jackpot"
 
     MIRROR_TRAP = "Mirror Trap"
-    OHKO_TRAP = "Instadeath Trap"
+    OHKO_TRAP = "1-Hit KO Trap"
     LOCK_TRAP = "Item Lock Trap"
     WRENCH_TRAP = "Wrench Trap"
     PANCAKE_TRAP = "Pancake Trap"
