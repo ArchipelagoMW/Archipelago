@@ -148,7 +148,7 @@ class RAC3ITEMDATA:
         progressive_to_memory = [0, 2, 3, 1, 4]
         address: int = progressive_to_memory[idx - 0xFB] + RAC3STATUS.VIDCOMIC
         if tag:
-            tags = [RAC3ITEMTAG.VIDCOMIC, RAC3ITEMTAG.PROGRESSIVE]
+            tags = tag + [RAC3ITEMTAG.VIDCOMIC]
         else:
             tags = [RAC3ITEMTAG.VIDCOMIC]
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=tags)
@@ -430,11 +430,11 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     # VidComics
     # In memory they are in order 1,4,2,3,5
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: RAC3ITEMDATA.construct_vidcomic(0xFA, [RAC3ITEMTAG.PROGRESSIVE]),
-    RAC3ITEM.VIDCOMIC1: RAC3ITEMDATA.construct_vidcomic(0xFB),
-    RAC3ITEM.VIDCOMIC2: RAC3ITEMDATA.construct_vidcomic(0xFC),
-    RAC3ITEM.VIDCOMIC3: RAC3ITEMDATA.construct_vidcomic(0xFD),
-    RAC3ITEM.VIDCOMIC4: RAC3ITEMDATA.construct_vidcomic(0xFE),
-    RAC3ITEM.VIDCOMIC5: RAC3ITEMDATA.construct_vidcomic(0xFF),
+    RAC3ITEM.VIDCOMIC1: RAC3ITEMDATA.construct_vidcomic(0xFB, [RAC3ITEMTAG.UNUSED]),
+    RAC3ITEM.VIDCOMIC2: RAC3ITEMDATA.construct_vidcomic(0xFC, [RAC3ITEMTAG.UNUSED]),
+    RAC3ITEM.VIDCOMIC3: RAC3ITEMDATA.construct_vidcomic(0xFD, [RAC3ITEMTAG.UNUSED]),
+    RAC3ITEM.VIDCOMIC4: RAC3ITEMDATA.construct_vidcomic(0xFE, [RAC3ITEMTAG.UNUSED]),
+    RAC3ITEM.VIDCOMIC5: RAC3ITEMDATA.construct_vidcomic(0xFF, [RAC3ITEMTAG.UNUSED]),
     # Filler
     RAC3ITEM.TITANIUM_BOLT: RAC3ITEMDATA.construct_other(0x100),
     RAC3ITEM.WEAPON_XP: RAC3ITEMDATA.construct_other(0x101),
