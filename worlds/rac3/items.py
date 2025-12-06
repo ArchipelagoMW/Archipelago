@@ -31,6 +31,9 @@ def create_itempool(world: "RaC3World") -> List[Item]:
             continue
         if RAC3ITEMTAG.WEAPON_UPGRADE in item_tags:
             continue
+        # Remove regular vidcomics but keep progressive ones
+        if RAC3ITEMTAG.VIDCOMIC in item_tags and not RAC3ITEMTAG.PROGRESSIVE in item_tags:
+            continue
         item_amount: int = item_counts.get(name, 1)
 
         # Already placed items (Starting items and vanilla)
