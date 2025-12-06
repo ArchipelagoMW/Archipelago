@@ -163,16 +163,37 @@ class Regionsanity(Choice):
 
     If you put any region pass items in your starting inventory, the first one will be chosen as your starting region.
 
-    If regionsanity is set to extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
+    If Regionsanity is set to Extreme, the Grandmaster won't even let you walk through regions you don't have the pass for.
     Spend more than 10 seconds in a region without a pass and the Grandmaster will teleport you!
 
-    You will start the game with a pass for one reachable region.
+    You will start the game in a random region with a pass. You will be leveled appropriately.
     """
     display_name = "Regionsanity"
     option_disabled = 0
     option_enabled = 1
     option_extreme = 2
     default = 0
+
+class RegionsanityStarterRegionMinLevel(Range):
+    """
+    This sets the lowest possible level your random starter region could be in Regionsanity.
+    All regions without combat have a level of 0 (e.g. Capital Sequoia and Eastern Chasm). Otherwise, Beginner Regions start at level 3, Advanced at 18, Expert at 36, and End-Game at 60.
+    """
+    display_name = "Regionsanity Starter Region Minimum Level"
+    range_start = 0
+    range_end = 63
+    default = 0
+
+class RegionsanityStarterRegionMaxLevel(Range):
+    """
+    This sets the highest possible level your random starter region could be in Regionsanity.
+    Beginner Regions end at level 15, Advanced at level 38 (except Capital Pipeline at level 50 lol), Expert at 60, and End-Game at 63.
+    (The Old World is not allowed to be your starter region. Sorry if you just really wanted to fight Periculum with no gear right off the bat.)
+    """
+    display_name = "Regionsanity Starter Region Maximum Level"
+    range_start = 0
+    range_end = 63
+    default = 30
 
 class HomePointHustle(Choice):
     """
@@ -201,6 +222,17 @@ class ProgressiveMountMode(DefaultOnToggle):
     """
     display_name = "Progressive Mount Mode"
 
+class StartingLevel(Range):
+    """
+    Choose what level your party starts at.
+
+    NOTE: If any variant of Regionsanity is enabled, you may start at a higher level based on the level of your random starter region. See Regionsanity settings above.
+    """
+    display_name = "Starting Level"
+    range_start = 3
+    range_end = 99
+    default = 3
+
 class LevelGating(Choice):
     """
     When enabled, the party's level is considered for Archipelago logic, and Progressive Level items are added to the pool. (This won't stop you from beating the game at level 3. ^_^)
@@ -213,11 +245,17 @@ class LevelGating(Choice):
     Level Capped: The party's maximum level is hard capped. Progressive Levels are added to the pool. Collecting them allows your party to gain more levels, and in-game tracking will light up
     checks that you have access to based on that max level.
 
-    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. For example, if the Progressive Level
-    Size Setting is 6 (see below), 1 Progressive Level will bring your party's level up to 6, 2 Progressive Levels will bring your party's level up to 12, etc. If your party
-    has already reached that level, no extra levels will be granted. 2 LP are granted per 1 level granted. In-game tracking will light up checks that you have access to based on the number you have collected.
+    Level Catch-Up: Progressive Levels are added to the pool. Collecting them will help your party catch up in levels (and LP!) based on the number you've collected. 2 LP are granted per 1 level granted.
+    For example, if your Starting Level is 3 (above) and Progressive Level Size (below) is 6, 1 Progressive Level will bring your party's level up to 9. If your party has already reached that level,
+    no extra levels will be granted. In-game tracking will light up checks that you have access to based on the number you have collected.
 
     Level Set: A combination of Level Catch-Up and Capped. The player will always be at the level set by the Progressive Level. There is no escape.
+
+    For example, if your Starting Level (above) is 3 and Progressive Level Size (below) is 6, the Level Gating options would behave like this:
+       Level Passes - Your party's level starts at 3. The first Progressive Level you collect will signal that areas up to 9 are now logic, the second up to 15, etc.
+       Level Capped - Your party's level and level cap start at 3. The first Progressive Level you collect will increase your party's level cap to 9, the second to 15, and so on.
+       Level Catch-Up - Your party's level starts at 3. The first Progressive Level you collect will bring your party's level up to 9 if it isn't already, the second up to 15, and so on.
+       Level Set - Your party's level and level cap start at 3. The first Progressive Level you collect will increase your party's level and level cap to 9, the second to 15, and so on.
     """
     display_name = "Level Gating"
     option_none = 0
@@ -225,11 +263,11 @@ class LevelGating(Choice):
     option_level_capped = 2
     option_level_catch_up = 3
     option_level_set = 4
-    default = 1
+    default = 3
 
 class LevelComparedToEnemies(Range):
     """
-    If Level Gating is on, this option changes what level you're expected to fight enemies.
+    If Level Gating is on, this option changes what level you're expected to fight enemies. In Regionsanity, it will be added to your starting level.
     Set it higher if you want to be a higher level than enemies when you enter a region, or lower if you want to be lower.
 
     For example, if this is set to 5, and the enemy level of a region is 12, then the Level Gating options would require you to unlock level 17 (or for Level Capped, max level 17) for that region.
@@ -240,7 +278,7 @@ class LevelComparedToEnemies(Range):
     Note: Remember to increase your Max Level (see below) if you want regions with high-level enemies to still be lower level than you.
     Note #2: Spark color changes: red at -10 levels, orange at -5, green at +3, and grey +10. (Though enemies can be 3-5 levels above the min enemy level for a region.)
     """
-    display_name = "Level compared to enemies"
+    display_name = "Level Compared to Enemies"
     range_start = -10
     range_end = 10
     default = 0
@@ -248,18 +286,10 @@ class LevelComparedToEnemies(Range):
 
 class ProgressiveLevelSize(Range):
     """
-    If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant, as well as the starting level expectation.
-
-    For example, if Progressive Level Size is 6, the three Level Gating options would behave like this:
-       Level Passes - At the start, areas up to level 6 are considered in logic. The first Progressive Level you collect will signal that areas up to 12 are now logic, the second up to 18, etc.
-       Level Capped - Your party's level cap starts at 6. The first Progressive Level you collect will increase your party's level cap to 12, the second to 18, and so on.
-       Level Catch-Up - Your party is leveled up to 6 at the start. The first Progressive Level you collect will bring your party's level up to 12 if it isn't already, the second up to 18, and so on.
-       Level Set - Your party's level and level cap start at 6. The first Progressive Level you collect will increase your party's level and level cap to 12, the second to 18, and so on.
-
-    This setting will only increase your party's starting level (3 by default) if you pick Level Catch-Up.
+    If Level Gating is on, Progressive Levels will be added to the item pool. This sets the number of levels that an individual Progressive Level will grant.
     """
     display_name = "Progressive Level Size"
-    range_start = 3
+    range_start = 1
     range_end = 10
     default = 6
 
@@ -450,9 +480,12 @@ class CrystalProjectOptions(PerGameCommonOptions):
     kill_bosses_mode: KillBossesMode
     shopsanity: Shopsanity
     regionsanity: Regionsanity
+    regionsanity_starter_region_min_level: RegionsanityStarterRegionMinLevel
+    regionsanity_starter_region_max_level: RegionsanityStarterRegionMaxLevel
     home_point_hustle: HomePointHustle
     included_regions: IncludedRegions
     progressive_mount_mode: ProgressiveMountMode
+    starting_level: StartingLevel
     level_gating: LevelGating
     level_compared_to_enemies: LevelComparedToEnemies
     progressive_level_size: ProgressiveLevelSize
@@ -476,8 +509,8 @@ class CrystalProjectOptions(PerGameCommonOptions):
 
 crystal_project_option_groups: Dict[str, List[Any]] = {
     "Goal Options": [Goal, ClamshellGoalQuantity, ExtraClamshellsInPool, AstleyJobQuantity],
-    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity, HomePointHustle],
-    "Progression Options": [ProgressiveMountMode, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
+    "Location Options": [IncludedRegions, JobRando, StartingJobQuantity, DisableSparks, KillBossesMode, Shopsanity, Regionsanity, RegionsanityStarterRegionMinLevel, RegionsanityStarterRegionMaxLevel, HomePointHustle],
+    "Progression Options": [ProgressiveMountMode, StartingLevel, LevelGating, LevelComparedToEnemies, ProgressiveLevelSize, MaxLevel, KeyMode, ObscureRoutes, PrioritizeCrystals, AutoSpendLP, AutoEquipPassives, EasyLeveling],
     "Item Pool Options": [ProgressiveEquipmentMode, StartWithTreasureFinder, StartWithMaps, FillFullMap, IncludeSummonAbilities, IncludeScholarAbilities],
     "Bonus Fun": [ItemInfoMode, RandomizeMusic, UseMods]
 }

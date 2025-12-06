@@ -110,7 +110,6 @@ class CrystalProjectWorld(World):
         self.jobs_not_to_exclude: List[str] = []
         self.included_regions: List[str] = []
         self.statically_placed_jobs: int = 0
-        self.starting_progressive_levels: int = 1
 
     def generate_early(self):
         # implement .yaml-less Universal Tracker support
@@ -128,8 +127,10 @@ class CrystalProjectWorld(World):
                     self.options.kill_bosses_mode.value = slot_data["killBossesMode"]
                     self.options.shopsanity.value = slot_data["shopsanity"]
                     self.options.regionsanity.value = slot_data["regionsanity"]
+                    self.starter_ap_region = slot_data["starterRegion"]
                     self.options.included_regions.value = slot_data["includedRegionsOption"]
                     self.options.progressive_mount_mode.value = slot_data["progressiveMountMode"]
+                    self.options.starting_level.value = slot_data["startingLevel"]
                     self.options.level_gating.value = slot_data["levelGating"]
                     self.options.level_compared_to_enemies.value = slot_data["levelComparedToEnemies"]
                     self.options.progressive_level_size.value = slot_data["progressiveLevelSize"]
@@ -141,7 +142,6 @@ class CrystalProjectWorld(World):
                     self.options.use_mods.value = slot_data["useMods"]
                     # self.modded_locations = slot_data["moddedLocationsForUT"]
                     # self.modded_shops = slot_data["moddedShopsForUT"]
-                    self.starter_ap_region = slot_data["starterRegion"]
 
         if self.options.prioritize_crystals.value == self.options.prioritize_crystals.option_true:
             self.options.priority_locations.value = self.options.priority_locations.value.union(get_location_names_per_category()["Crystals"])
@@ -267,11 +267,17 @@ class CrystalProjectWorld(World):
             if self.starter_ap_region == "":
                 valid_starting_regions = []
                 display_regions_forbidden_from_being_starters: list[str] = [MENU_DISPLAY_NAME, THE_OLD_WORLD_DISPLAY_NAME, MODDED_ZONE_DISPLAY_NAME]
+                actual_starting_level_value = self.options.starting_level.value
+
+                if self.options.regionsanity_starter_region_max_level.value < self.options.regionsanity_starter_region_min_level.value:
+                    raise Exception(f"For player {self.player_name}: YAML settings were contradictory. Regionsanity Starter Level Min Value {self.options.regionsanity_starter_region_min_level.value} "
+                                    f"is higher than Regionsanity Starter Level Max Value {self.options.regionsanity_starter_region_max_level.value}. Change settings and regenerate.")
 
                 for ap_region in self.get_regions():
-                    #ap regions are only valid if they are the first ap region inside the display region (for now)
-                    if len(ap_region.locations) >= 2 and ap_region.name not in display_regions_forbidden_from_being_starters\
-                            and display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] == ap_region.name:
+                    #ap regions are only valid starter regions if they are the first ap region inside the display region (for now)
+                    if (len(ap_region.locations) >= 2 and ap_region.name not in display_regions_forbidden_from_being_starters
+                            and display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] == ap_region.name
+                            and self.options.regionsanity_starter_region_min_level.value <= display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] <= self.options.regionsanity_starter_region_max_level.value):
                         reachable_locations_in_region: int = 0
                         #Getting the state into the right place: match the starter region to the currently selected region, give the pass for that region, and give the levels if necessary
                         current_state: CollectionState = CollectionState(self.multiworld)
@@ -282,12 +288,8 @@ class CrystalProjectWorld(World):
                             current_state.collect(self.create_item(PROGRESSIVE_SALMON_VIOLA), prevent_sweep=True)
 
                         if not self.options.level_gating.value == self.options.level_gating.option_none:
-                            logic = CrystalProjectLogic(self.player, self.options)
-                            self.starting_progressive_levels = logic.get_progressive_level_count(display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0])
-                            if self.starting_progressive_levels < 1:
-                                self.starting_progressive_levels = 1
-                            for _ in range(self.starting_progressive_levels):
-                                current_state.collect(self.create_item(PROGRESSIVE_LEVEL), prevent_sweep=True)
+                            #Temporarily changing starting level value to what it would be if this AP Region were picked, so we know what locations are actually available for the player in that situation
+                            self.options.starting_level.value = max(actual_starting_level_value, display_region_levels_dictionary[ap_region_to_display_region_dictionary[ap_region.name]][0] + self.options.level_compared_to_enemies.value)
 
                         #Checking all locations in current AP Region and the other AP Regions inside the same Display Region
                         for ap_region_name_in_same_display_region in display_region_subregions_dictionary[ap_region_to_display_region_dictionary[ap_region.name]]:
@@ -300,6 +302,13 @@ class CrystalProjectWorld(World):
                         if reachable_locations_in_region >= 2:
                             valid_starting_regions.append(ap_region)
                             #logging.getLogger().info(ap_region.name + " is a valid starter region.")
+
+                #Returning starting level to the player's setting
+                self.options.starting_level.value = actual_starting_level_value
+
+                if len(valid_starting_regions) == 0:
+                    raise Exception(f"For player {self.player_name}: YAML settings were too restrictive. No valid regions are between Regionsanity Starter Level Min Value {self.options.regionsanity_starter_region_min_level.value} "
+                                    f"and Regionsanity Starter Level Max Value {self.options.regionsanity_starter_region_max_level.value}. Change settings and regenerate.")
 
                 self.starter_ap_region = self.random.choice(valid_starting_regions).name
                 #Until we have a teleport location in every single ap region, for now we take specifically the first ap region in the display regions subregion list
@@ -317,14 +326,16 @@ class CrystalProjectWorld(World):
         self.origin_region_name = self.starter_ap_region
         logging.getLogger().info("Starting region for " + self.player_name + " is " + self.starter_ap_region)
 
-        # now that we know your starter region, we know how many progressive levels you need to start with
-        if not self.options.level_gating.value == self.options.level_gating.option_none:
-            logic = CrystalProjectLogic(self.player, self.options)
-            self.starting_progressive_levels = logic.get_progressive_level_count(display_region_levels_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0])
-            if self.starting_progressive_levels < 1:
-                self.starting_progressive_levels = 1
-            for _ in range(self.starting_progressive_levels):
-                self.multiworld.push_precollected(self.create_item(PROGRESSIVE_LEVEL))
+        # now that we know your starter region, we know your starting level and how many progressive levels you need to start with
+        starter_region_level = display_region_levels_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
+        #We take whichever is greater: the player's Starting Level option number or the starter region's level
+        self.options.starting_level.value = max(self.options.starting_level.value, starter_region_level + self.options.level_compared_to_enemies.value)
+        if self.options.starting_level.value < 3:
+            self.options.starting_level.value = 3
+        if self.options.starting_level.value > self.options.max_level.value:
+            self.options.starting_level.value = self.options.max_level.value
+        message = "Starting level for {0} is {1}."
+        logging.getLogger().info(message.format(self.player_name, self.options.starting_level.value))
 
     def create_item(self, name: str) -> Item:
         if name in item_table:
@@ -381,11 +392,14 @@ class CrystalProjectWorld(World):
     def get_total_progressive_levels(self, max_progressive_levels: int) -> int:
         if max_progressive_levels < 1:
             max_progressive_levels = 1
+
+        level_up_amount = self.options.max_level.value - self.options.starting_level.value
+
         # this formula is how we can do ceiling division in Python
-        progressive_levels = -(self.options.max_level.value // -self.options.progressive_level_size.value)
+        progressive_levels = -(level_up_amount // -self.options.progressive_level_size.value)
         #don't forget to -1
         if progressive_levels > max_progressive_levels:
-            potential_progressive_level_size = -(self.options.max_level.value // -max_progressive_levels)
+            potential_progressive_level_size = -(level_up_amount // -max_progressive_levels)
             potential_max_level = self.options.max_level.value
 
             if potential_progressive_level_size > self.options.progressive_level_size.range_end:
@@ -393,7 +407,7 @@ class CrystalProjectWorld(World):
                 potential_max_level = max_progressive_levels * potential_progressive_level_size
 
             if self.options.max_level.value > potential_max_level:
-                raise Exception(f"For player {self.player_name}: yaml settings were too restrictive. Needed at least {-(self.options.max_level.value // -potential_progressive_level_size)} Progressive Levels, but only room for {max_progressive_levels} Progressive Levels in the pool. "
+                raise Exception(f"For player {self.player_name}: yaml settings were too restrictive. Needed at least {-(level_up_amount // -potential_progressive_level_size)} Progressive Levels, but only room for {max_progressive_levels} Progressive Levels in the pool. "
                                 f"This is usually caused by mods that add more items than locations. Change settings and regenerate.")
             else:
                 message = (f"For player {self.player_name}: yaml settings were too restrictive. Only room for {max_progressive_levels} Progressive Levels in the pool. "
@@ -402,7 +416,7 @@ class CrystalProjectWorld(World):
 
                 self.options.progressive_level_size.value = potential_progressive_level_size
 
-        progressive_levels = -(self.options.max_level.value // -self.options.progressive_level_size.value)
+        progressive_levels = -(level_up_amount // -self.options.progressive_level_size.value)
         return progressive_levels
 
     #making randomized scholar ability pool
@@ -579,11 +593,13 @@ class CrystalProjectWorld(World):
             #guarantee space for 2 clamshells
             min_clamshells = 2
             #any starting progressive levels you have increase the number of max progressive levels you could have
-            max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - min_clamshells + self.starting_progressive_levels
-            #players start with one or more
-            for _ in range (self.get_total_progressive_levels(max_progressive_levels) - self.starting_progressive_levels):
-                item = self.set_classifications(PROGRESSIVE_LEVEL)
-                pool.append(item)
+            max_progressive_levels: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool) - min_clamshells
+            #players start with zero or more
+            progressive_levels_to_add_to_pool = self.get_total_progressive_levels(max_progressive_levels)
+            if progressive_levels_to_add_to_pool > 0:
+                for _ in range (progressive_levels_to_add_to_pool):
+                    item = self.set_classifications(PROGRESSIVE_LEVEL)
+                    pool.append(item)
 
         max_clamshells: int = len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)
         for _ in range(self.get_total_clamshells(max_clamshells)):
@@ -686,9 +702,11 @@ class CrystalProjectWorld(World):
             "killBossesMode" : bool(self.options.kill_bosses_mode.value),
             "shopsanity": self.options.shopsanity.value,
             "regionsanity": self.options.regionsanity.value,
+            "starterRegion": self.starter_ap_region,
             "includedRegions": self.included_regions,
             "includedRegionsOption": self.options.included_regions.value,
             "progressiveMountMode": self.options.progressive_mount_mode.value,
+            "startingLevel": self.options.starting_level.value,
             "levelGating": self.options.level_gating.value,
             "levelComparedToEnemies": self.options.level_compared_to_enemies.value,
             "progressiveLevelSize": self.options.progressive_level_size.value,
@@ -709,7 +727,6 @@ class CrystalProjectWorld(World):
             "removedLocations": slot_data_removed_locations,
             # "moddedLocationsForUT": self.modded_locations,
             # "moddedShopsForUT": self.modded_shops,
-            "starterRegion": self.starter_ap_region, # stored for UT re-gen
             "prefillMap": bool(self.options.fill_full_map.value),
             "disableSparks": bool(self.options.disable_sparks.value),
             "homePointHustle": self.options.home_point_hustle.value,
