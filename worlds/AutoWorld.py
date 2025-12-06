@@ -93,8 +93,7 @@ class AutoWorldRegister(type):
                     # all the "magic" game names that core AP tests assume exist and fail without
                     or dct["game"] == "Archipelago"
                     or dct["game"] == "Test Game"
-                    or dct["game"] == "A Link to the Past"
-                    or dct["game"] == "Timespinner"
+                    or dct["game"] == "APQuest"
                     # these two are easy to miss since they're only required by the CI-only hosting/__main__.py test
                     or dct["game"] == "VVVVVV" or dct["game"] == "Temp World"):
                 AutoWorldRegister.world_types[dct["game"]] = new_class
@@ -233,7 +232,7 @@ class WebWorld(metaclass=WebWorldRegister):
     tutorials: List["Tutorial"]
     """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
-    theme = "grass"
+    theme: str = "grass"
     """Choose a theme for you /game/* pages.
     Available: dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, stone"""
 
