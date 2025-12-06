@@ -24,11 +24,6 @@ except ImportError:
 
     print("ERROR: Universal Tracker is not loaded")
 
-# Game title dedicated
-
-CLIENT_INIT_LOG = f"{RAC3OPTION.GAME_TITLE}_Client"
-CLIENT_VERSION = "0.1.0"  # This is automatically updated by the GitHub actions workflow
-
 
 class CommandProcessor(ClientCommandProcessor):
     # This is not mandatory for the game. Just a client command implementation.
@@ -36,6 +31,24 @@ class CommandProcessor(ClientCommandProcessor):
     #     """Kill the game."""
     #     if isinstance(self.ctx, Rac3Context):
     #         self.ctx.game_interface.kill_player()
+    def _cmd_connect_rac3(self):
+        """Attempt to connect the client to the emulator"""
+        if isinstance(self.ctx, Rac3Context):
+            if self.ctx.game_interface.get_connection_state():
+                logger.info("Already Connected to Emulator")
+            else:
+                self.ctx.game_interface.connect_to_game()
+
+    def _cmd_auto_connect(self):
+        """Toggle the client attempting to connect to the emulator automatically"""
+        pass
+        # if isinstance(self.ctx, Rac3Context):
+        #     self.ctx.auto_connect = not self.ctx.auto_connect
+        #     if self.ctx.auto_connect:
+        #         logger.info("Emulator Auto-connect enabled")
+        #     else:
+        #         logger.info("Emulator Auto-connect disabled")
+
     def _cmd_weapon_exp_test(self):
         """Give weapon exp for testing purposes."""
         if isinstance(self.ctx, Rac3Context):
@@ -117,7 +130,7 @@ class Rac3Context(CommonContext):
 
     def make_gui(self):
         ui = super().make_gui()
-        ui.base_title = f"{RAC3OPTION.GAME_TITLE} Client v{CLIENT_VERSION}"
+        ui.base_title = f"{RAC3OPTION.GAME_TITLE} Client v{RAC3OPTION.VERSION_NUMBER}"
         if tracker_loaded:
             ui.base_title += f" | Universal Tracker {UT_VERSION}"
 
@@ -140,9 +153,9 @@ class Rac3Context(CommonContext):
 
             # Set death link tag if it was requested in options
             if RAC3OPTION.DEATHLINK in self.slot_data:
-                self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
-                async_start(self.update_death_link(
-                    bool(self.slot_data[RAC3OPTION.DEATHLINK])))
+                if self.slot_data[RAC3OPTION.DEATHLINK]:
+                    self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
+                async_start(self.update_death_link(self.death_link))
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
@@ -150,20 +163,34 @@ class Rac3Context(CommonContext):
 
 async def pcsx2_sync_task(ctx: Rac3Context):
     logger.info(f"Starting {RAC3OPTION.GAME_TITLE_FULL} Connector")
-
+    connected_to_game: bool = False
+    connection_retry_attempts: int = 0
     while not ctx.exit_event.is_set():
         try:
             connected_to_server = (ctx.server is not None) and (ctx.slot is not None)
-            connected_to_game = ctx.game_interface.get_connection_state()
-
             if connected_to_server and not ctx.is_connected_to_server:
                 logger.info("Connected to server")
                 ctx.is_connected_to_server = connected_to_server
+                if ctx.slot_data.get(RAC3OPTION.VERSION, "0.0.0") < RAC3OPTION.VERSION_NUMBER:
+                    await ctx.disconnect(False)
+                    logger.warning(
+                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please downgrade to v"
+                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                    await sleep(10)
+                    continue
+                if ctx.slot_data[RAC3OPTION.VERSION] > RAC3OPTION.VERSION_NUMBER:
+                    await ctx.disconnect(False)
+                    logger.warning(
+                        f"Client is v{RAC3OPTION.VERSION_NUMBER}, please upgrade to v"
+                        f"{ctx.slot_data[RAC3OPTION.VERSION]}")
+                    await sleep(10)
+                    continue
                 if connected_to_game:
                     await init(ctx)
                 else:
                     logger.info("Waiting for game connection...")
 
+            connected_to_game = ctx.game_interface.get_connection_state()
             if connected_to_game and not ctx.is_connected_to_game:
                 logger.info(f"Connected to {RAC3OPTION.GAME_TITLE_FULL}")
                 ctx.last_pine_message = None
@@ -173,15 +200,24 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 else:
                     logger.info("Waiting for server connection...")
 
-            if not connected_to_game:
+            if not connected_to_game and not ctx.game_interface.is_connecting:
                 if ctx.is_connected_to_game:
                     ctx.game_interface.disconnect_from_game()
-                    logger.info("Connection to game lost, attempting to reconnect...")
+                    logger.info("Connection to game lost")
                 elif ctx.last_pine_message is None:
-                    message = "Not connected to the PCSX2 instance, attempting to connect..."
+                    message = "Not connected to the PCSX2 instance"
                     logger.info(message)
                     ctx.last_pine_message = message
                 ctx.game_interface.connect_to_game()
+                if not ctx.game_interface.get_connection_state():
+                    if connection_retry_attempts < 3:
+                        connection_retry_attempts += 1
+
+                    retry_wait = connection_retry_attempts * 10
+                    logger.warning(f'Could not connect to RaC3! Will retry connection in {retry_wait} seconds...')
+                    await sleep(retry_wait)
+                else:
+                    connection_retry_attempts = 0
 
             if not connected_to_server:
                 if ctx.server:
@@ -203,8 +239,8 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 logger.error(str(e))
             else:
                 logger.error(format_exc())
-            await sleep(3)
-            continue
+            # await sleep(3)
+
         await sleep(1)
     logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
@@ -224,6 +260,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
                 message = "Currently on Main Menu, please load a file..."
                 logger.info(message)
                 ctx.last_game_message = message
+            await sleep(5)
 
         if menu is True and ctx.main_menu is False:
             logger.info("Starting game...")
@@ -245,11 +282,10 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
 
         if not ctx.main_menu:
             await update(ctx)
-            await sleep(1)
 
 
 def launch_client():
-    init_logging(CLIENT_INIT_LOG)
+    init_logging(f"{RAC3OPTION.GAME_TITLE}_Client")
 
     async def main():
         freeze_support()

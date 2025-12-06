@@ -1,7 +1,6 @@
 from time import time
 from typing import TYPE_CHECKING
 
-from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
 

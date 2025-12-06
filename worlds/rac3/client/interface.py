@@ -32,7 +32,7 @@ class GameInterface:
     """
     Base class for connecting with a pcsx2 game
     """
-
+    is_connecting: bool = False
     pcsx2_interface: Pine = Pine()
     logger: Logger
     game_id_error: Optional[str] = None
@@ -78,16 +78,19 @@ class GameInterface:
         right game
         """
         if not self.pcsx2_interface.is_connected():
+            self.is_connecting = True
+            self.logger.debug('Begin attempting emulator connection...')
             self.pcsx2_interface.connect()
+            self.is_connecting = False
             if not self.pcsx2_interface.is_connected():
                 self.logger.debug('No Connection to PCSX2 Emulator')
                 return
-            self.logger.debug('Connected to PCSX2 Emulator')
+            self.logger.info('Connected to PCSX2 Emulator')
         self.current_game = None
         try:
             self.verify_game_version()
         except RuntimeError:
-            pass
+            self.logger.warning('PCSX2 Emulator is unreachable')
         except ConnectionError as error:
             self.logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
 
@@ -97,9 +100,15 @@ class GameInterface:
         self.logger.info("Disconnected from PCSX2 Emulator")
 
     def verify_game_version(self) -> bool:
-        game_id = self.pcsx2_interface.get_game_id()
+        self.logger.debug('Start Game Verfication')
+        try:
+            game_id = self.pcsx2_interface.get_game_id()
+        except ConnectionError as error:
+            self.logger.debug(f'Game Verify Connection Error: {error}')
+            return False
         # The first read of the address will be null if the client is faster than the emulator
         if game_id is None:
+            self.logger.info('No Game Loaded')
             return False
         if game_id != self.current_game:
             self.logger.info(f'Detecting new game version...')
@@ -130,11 +139,15 @@ class GameInterface:
             self.game_id_error = game_id
             return False
         else:
+            self.logger.debug('Valid Game detected')
             return True
 
     def get_connection_state(self) -> bool:
         try:
-            return self.pcsx2_interface.is_connected() and self.verify_game_version()
+            if self.pcsx2_interface.is_connected():
+                return self.verify_game_version()
+            else:
+                return False
         except RuntimeError:
             return False
 
@@ -578,6 +591,8 @@ class Rac3Interface(GameInterface):
 
     def input_cycler(self):
         planet_id = self._read8(RAC3STATUS.PLANET)
+        if planet_id > 55:
+            return
         planet = PLANET_NAME_FROM_ID[planet_id]
         pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
         if pause_address is not None:  # Vid comics do not have a pause address

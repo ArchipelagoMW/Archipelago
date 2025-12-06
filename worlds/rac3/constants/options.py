@@ -2,6 +2,8 @@ class RAC3OPTION:
     OPTIONS = "options"
     GAME_TITLE = "Rac3"
     GAME_TITLE_FULL = "Ratchet and Clank 3"
+    VERSION = "Version"
+    VERSION_NUMBER = "0.1.0"  # This is automatically updated by the GitHub actions workflow
     START_INVENTORY_FROM_POOL = "start_inventory_from_pool"
     STARTING_WEAPONS = "starting_weapons"
     BOLT_AND_XP_MULTIPLIER = "bolt_and_xp_multiplier"

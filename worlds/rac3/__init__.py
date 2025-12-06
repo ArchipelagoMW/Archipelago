@@ -125,6 +125,7 @@ class RaC3World(World):
     def fill_slot_data(self) -> dict[str, object]:
         # Todo: Add version to slot data for verification during client connection
         slot_data: dict[str, object] = {
+            RAC3OPTION.VERSION: RAC3OPTION.VERSION_NUMBER,
             RAC3OPTION.START_INVENTORY_FROM_POOL: self.options.start_inventory_from_pool.value,
             RAC3OPTION.STARTING_WEAPONS: self.options.starting_weapons.value,
             RAC3OPTION.BOLT_AND_XP_MULTIPLIER: self.options.bolt_and_xp_multiplier.value,
