@@ -2154,8 +2154,6 @@ def connect_regions(self):
             regionName.CCBOSS
         ]:
 
-            source_rule = None
-            boss_room_rule = None
 
             if source == regionName.MTBOSS:
                 source_rule = lambda state: rules.has_green_relics(state, 20)

@@ -685,8 +685,6 @@ class BanjoTooieWorld(World):
 
     def choose_starter_attack(self) -> None:
         if self.options.randomize_bk_moves != RandomizeBKMoveList.option_none:
-            chosen_attack: str
-            base_attacks: list
             if self.options.logic_type == LogicType.option_intended:
                 if self.options.progressive_egg_aiming == ProgressiveEggAim.option_basic:
                     base_attacks = [itemName.PEGGAIM, itemName.BBARGE, itemName.ROLL, itemName.ARAT]
