@@ -60,15 +60,13 @@ class Portal2Context(CommonContext):
     sender_active : bool = False
     listener_active : bool = False
 
-    item_name_to_id: dict[str, int] = None
     location_name_to_id: dict[str, int] = None
 
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
-        return f'{';'.join(self.item_remove_commands)};\
-                script CreateCompleteLevelAlertHook();\
-                script AttachDeathTrigger()\
-                {";script AttachDeathTrigger()" if self.death_link_active else ""}\n'
+        return (f"{';'.join(self.item_remove_commands)};"
+                "script CreateCompleteLevelAlertHook();"
+                f"{";script AttachDeathTrigger()" if self.death_link_active else ""}\n")
 
     def send_player_to_main_menu_command(self):
         '''Sends the player back to the main menu (called on map completion)'''
@@ -170,12 +168,15 @@ class Portal2Context(CommonContext):
 
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
-            if done_map == self.goal_map_code:
+            if done_map == self.goal_map_code and not self.finished_game:
                 self.finished_game = True
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            else:
+                self.command_queue.append(self.send_player_to_main_menu_command())
             logger.info("Check made: " + done_map)
-            await self.check_locations([self.map_code_to_location_id(done_map)])
-            self.command_queue.append(self.send_player_to_main_menu_command())
+            map_id = self.map_code_to_location_id(done_map)
+            if map_id:
+                await self.check_locations([map_id])
         
         elif message.startswith("send deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
@@ -188,11 +189,6 @@ class Portal2Context(CommonContext):
     def check_game_connection(self):
         logger.info("Sender active: "  + str(self.sender_active) + " Listener active: " + str(self.listener_active))
         return self.sender_active and self.listener_active
-    
-    def update_game(self, game_package, game):
-        super().update_game(game_package, game)
-        self.item_name_to_id = game_package["item_name_to_id"]
-        self.location_name_to_id = game_package["location_name_to_id"]
     
     # Used for nothing?
     def location_id_to_map_code(self, location_id: str) -> str:
@@ -207,12 +203,14 @@ class Portal2Context(CommonContext):
     
     def map_code_to_location_id(self, map_code: str):
         '''Convert in game map name to location id for location checks'''
-        if not map_code in map_codes_to_location_names:
+        if map_code not in map_codes_to_location_names:
             return None
         
         location_name = map_codes_to_location_names[map_code]
         if not self.location_name_to_id:
             raise Exception("location_name_to_id dict has not been created yet")
+        if location_name not in self.location_name_to_id:
+            return None
         return self.location_name_to_id[location_name]
     
     def handle_slot_data(self, slot_data: dict):
@@ -220,19 +218,26 @@ class Portal2Context(CommonContext):
             self.death_link_active = slot_data["death_link"]
 
         if "goal_map_code" in slot_data:
-            self.goal_map_code = slot_data("goal_map_code")
+            self.goal_map_code = slot_data["goal_map_code"]
+
+        if "location_name_to_id" in slot_data:
+            self.location_name_to_id = slot_data["location_name_to_id"]
 
     def on_package(self, cmd, args):
+        def update_item_list():
+            # Update item list to only include items not collected
+            items_received_names = [self.item_names.lookup_in_game(i.item, self.game) for i in self.items_received]
+            self.item_list = list(set(self.item_list) - set(items_received_names))
+
         # Add item names to list
         if cmd == "Retrieved":
             if f"_read_item_name_groups_{self.game}" in args["keys"]:
                 self.item_list = args["keys"][f"_read_item_name_groups_{self.game}"]["Everything"]
+                update_item_list()
                 self.update_item_remove_commands()
 
         if cmd == "ReceivedItems":
-            # Update item list to only include items not collected
-            items_received_temp = [self.item_names.lookup_in_game(i.item) for i in self.items_received if i.player == self.slot]
-            self.item_list = list(set(self.item_list) - set(items_received_temp))
+            update_item_list()
             self.update_item_remove_commands()
 
         if cmd == "Connected":

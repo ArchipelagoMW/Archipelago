@@ -48,8 +48,8 @@ def handle_item(item_name: str) -> list[str]:
 
     if ItemTag.CORE in item_tags:
         core_name = item_data.variant
-        print(core_name)
         return_commands.append(f'script DeleteCoreOnOutput("{core_name}", "core_hit_trigger", "OnTrigger")')
+        return_commands.append(f'script DeleteEntity("{"core"+core_name[-1]+"_display"}")')
     
     return return_commands
     
