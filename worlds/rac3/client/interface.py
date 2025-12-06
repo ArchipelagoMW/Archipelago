@@ -636,6 +636,8 @@ class Rac3Interface(GameInterface):
                     RAC3STATUS.RATCHET_Z) > 300  # Don't overwrite if in the Path of Death due to geometry unloading
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
+            case RAC3REGION.AQUATOS:
+                return False  # Respawn puts you out of bounds
             case RAC3REGION.TYHRRANOSIS:
                 return False  # Entrance coordinates in the first section that gets unloaded after leaving
             case RAC3REGION.ZELDRIN_STARPORT:
