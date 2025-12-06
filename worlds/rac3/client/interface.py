@@ -542,6 +542,18 @@ class Rac3Interface(GameInterface):
             target_level = current_level + 1
             target_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][target_level]]].XP_THRESHOLD
             self._write32(weapon_data.XP_ADDRESS, target_xp)
+    
+    def grant_weapon_exp(self, weapon_name, xp_amount):
+        """Grant weapon exp to a specific weapon"""
+        weapon_data = non_prog_weapon_data[weapon_name]
+        current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID
+        if current_level < 5:
+            current_xp = self._read32(weapon_data.XP_ADDRESS)
+            max_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][5]]].XP_THRESHOLD
+            new_xp = current_xp + xp_amount
+            if new_xp > max_xp:
+                new_xp = max_xp
+            self._write32(weapon_data.XP_ADDRESS, new_xp)
 
     # Equip the most recently collected weapon/gadget, update recent uses
     def update_equip(self, name):
