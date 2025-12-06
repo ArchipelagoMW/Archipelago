@@ -77,24 +77,23 @@ def finishedGame(ctx: KH2Context):
 
 async def checkWorldLocations(self):
     try:
-        currentworldint = self.kh2_read_byte(self.Now)
-        if self.last_world_int != currentworldint:
-            self.last_world_int = currentworldint
+        if self.last_world_int != self.current_world_int:
+            self.last_world_int = self.current_world_int
             await self.send_msgs([{
                 "cmd":     "Set", "key": "Slot: " + str(self.slot) + " :CurrentWorld",
                 "default": 0, "want_reply": False, "operations": [{
                     "operation": "replace",
-                    "value":     currentworldint
+                    "value":     self.current_world_int
                 }]
             }])
-        if currentworldint in self.worldid_to_locations:
-            curworldid = self.worldid_to_locations[currentworldint]
+        if self.current_world_int in self.worldid_to_locations:
+            curworldid = self.worldid_to_locations[self.current_world_int]
             for location, data in curworldid.items():
                 if location in self.kh2_loc_name_to_id.keys():
                     locationId = self.kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
-                            and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
+                    if location in self.world_locations_checked:
                         self.sending = self.sending + [(int(locationId))]
+                        self.world_locations_checked.remove(location)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
@@ -105,7 +104,7 @@ async def checkWorldLocations(self):
 async def checkLevels(self):
     try:
         for location, data in SoraLevels.items():
-            currentLevel = self.kh2_read_byte(self.Save + 0x24FF)
+            currentLevel = self.sora_form_levels["Sora"]
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked \
                     and currentLevel >= data.bitIndex:

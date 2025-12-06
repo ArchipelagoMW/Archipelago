@@ -11,6 +11,11 @@ else:
 class KH2CommandProcessor(ClientCommandProcessor):
     ctx: KH2Context
 
+    def _cmd_test(self, msg=""):
+        """test"""
+        msg = msg.lower()
+        self.ctx.socket.send(0,[str(msg)])
+
     def _cmd_receive_notif(self, notification_type=""):
         """Change receive notification type.Valid Inputs:Puzzle, Info, Chest and None
         Puzzle: Puzzle Piece Popup when you receive an item.

@@ -1,5 +1,7 @@
 from CommonClient import logger
 from typing import TYPE_CHECKING
+
+from worlds.kh2 import ItemData
 from .WorldLocations import *
 from ..Names import ItemName
 import re
@@ -203,17 +205,20 @@ async def verifyItems(self):
             amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["Amount"][item_name]
 
             if item_name == "Torn Page":
+                amount_of_items = 0
                 # Torn Pages are handled differently because they can be consumed.
                 # Will check the progression in 100 acre and - the amount of visits
                 # amountofitems-amount of visits done
                 for location, data in tornPageLocks.items():
                     if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
                         amount_of_items -= 1
-            # 255 is the max limit for a byte
-            if amount_of_items > 255:
-                amount_of_items = 255
+                # 255 is the max limit for a byte
+                if amount_of_items > 255:
+                    amount_of_items = 255
             if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items and amount_of_items >= 0:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+                #self.socket.send_singleItem(str(item_data.kh2id), str(item_data.ability))
+
 
         for item_name in master_keyblade:
             item_data = self.item_name_to_data[item_name]
@@ -231,6 +236,8 @@ async def verifyItems(self):
                 else:
                     self.kh2_write_byte(self.Save + item_data.memaddr, 1)
 
+            #self.socket.send(item_data.kh2id, item_data.ability)
+
         for item_name in master_staff:
             item_data = self.item_name_to_data[item_name]
             if self.kh2_read_byte(self.Save + item_data.memaddr) != 1 \
@@ -238,12 +245,16 @@ async def verifyItems(self):
                     and item_name not in self.kh2_seed_save["SoldEquipment"]:
                 self.kh2_write_byte(self.Save + item_data.memaddr, 1)
 
+            #self.socket.send(item_data.kh2id, item_data.ability)
+
         for item_name in master_shield:
             item_data = self.item_name_to_data[item_name]
             if self.kh2_read_byte(self.Save + item_data.memaddr) != 1 \
                     and self.kh2_read_short(self.Save + 0x2718) != item_data.kh2id \
                     and item_name not in self.kh2_seed_save["SoldEquipment"]:
                 self.kh2_write_byte(self.Save + item_data.memaddr, 1)
+
+            #self.socket.send(item_data.kh2id, item_data.ability)
 
         for item_name in master_ability:
             item_data = self.item_name_to_data[item_name]
@@ -258,6 +269,8 @@ async def verifyItems(self):
                     else:
                         self.kh2_write_short(self.Save + slot, item_data.memaddr)
         # removes the duped ability if client gave faster than the game.
+
+            #self.socket.send(item_data.kh2id, item_data.ability)
 
         for ability in self.front_ability_slots:
             if self.kh2_read_short(self.Save + ability) != 0:
@@ -291,6 +304,8 @@ async def verifyItems(self):
                     elif ability | 0x8000 < (0x8000 + max_growth):
                         self.kh2_write_short(self.Save + slot, current_growth_level + 1)
 
+                #self.socket.send(item_data.kh2id, item_data.ability)
+
         for item_name in master_bitmask:
             item_data = self.item_name_to_data[item_name]
             itemMemory = self.kh2_read_byte(self.Save + item_data.memaddr)
@@ -299,6 +314,8 @@ async def verifyItems(self):
                 if item_name in {"Valor Form", "Wisdom Form", "Limit Form", "Master Form", "Final Form"}:
                     self.kh2_write_byte(self.Save + 0x3410, 0)
                 self.kh2_write_byte(self.Save + item_data.memaddr, itemMemory | 0x01 << item_data.bitmask)
+
+            #self.socket.send(item_data.kh2id, item_data.ability)
 
         for item_name in master_equipment:
             item_data = self.item_name_to_data[item_name]
@@ -312,11 +329,14 @@ async def verifyItems(self):
                 for SlotOffset in Equipment_Anchor_List:
                     if self.kh2_read_short(self.Save + self.CharacterAnchors[partyMember] + SlotOffset) == item_data.kh2id:
                         amount_found_in_slots += 1
+                    pass
             if item_name in self.kh2_seed_save["SoldEquipment"]:
                 amount_found_in_slots += self.kh2_seed_save["SoldEquipment"][item_name]
             inInventory = self.kh2_seed_save_cache["AmountInvo"]["Equipment"][item_name] - amount_found_in_slots
             if inInventory != self.kh2_read_byte(self.Save + item_data.memaddr):
                 self.kh2_write_byte(self.Save + item_data.memaddr, inInventory)
+
+            #self.socket.send(item_data.kh2id, item_data.ability)
 
         for item_name in master_magic:
             item_data = self.item_name_to_data[item_name]
@@ -327,6 +347,8 @@ async def verifyItems(self):
                     and self.kh2_read_longlong(self.PlayerGaugePointer) != 0 \
                     and self.kh2_read_int(self.kh2_read_longlong(self.PlayerGaugePointer) + 0x88 - self.kh2_return_base_address()) != 0:
                 self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+
+            #self.socket.send(item_data.kh2id, item_data.ability)
 
         for item_name in master_stat:
             amount_of_items = 0
