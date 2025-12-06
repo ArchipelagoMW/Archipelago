@@ -8,7 +8,7 @@ from worlds.AutoWorld import World
 from worlds.generic.Rules import set_rule
 from entrance_rando import *
 
-randomize_maps = False
+randomize_maps = True
 
 class Portal2World(World):
     """Portal 2 is a first person puzzle adventure where you shoot solve test chambers using portal mechanics and other map specific items"""
@@ -75,8 +75,9 @@ class Portal2World(World):
             self.multiworld.regions.append(region_end)
             region_end.add_locations({map_name: self.location_name_to_id[map_name]})
 
-            print(map_name + " : " + str(all_locations_table[map_name].required_items))
-            region_start.connect(region_end, f"Beat {name}", lambda state: state.has_all(all_locations_table[map_name].required_items, self.player))
+            item_reqs = all_locations_table[map_name].required_items
+            print(map_name + " : " + str(item_reqs))
+            region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
 
             start_entrance = region_start.create_er_target(f"{name} Start Entrance")
             start_entrance.randomization_group = chapter_number
@@ -113,8 +114,9 @@ class Portal2World(World):
             region_end = Region(f"{name} End", self.player, self.multiworld)
             self.multiworld.regions.append(region_end)
             region_end.add_locations({map_name: self.location_name_to_id[map_name]})
-            print(map_name + " : " + str(all_locations_table[map_name].required_items))
-            region_start.connect(region_end, f"Beat {name}", lambda state: state.has_all(all_locations_table[map_name].required_items, self.player))
+            item_reqs = all_locations_table[map_name].required_items
+            print(map_name + " : " + str(item_reqs))
+            region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
 
             if last_region:
                 last_region.connect(region_start)
