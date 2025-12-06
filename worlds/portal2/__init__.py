@@ -7,6 +7,7 @@ from .Locations import Portal2Location, map_complete_table, cutscene_completion_
 from worlds.AutoWorld import World
 from worlds.generic.Rules import set_rule
 from entrance_rando import *
+from .ItemNames import portal_gun_2
 
 randomize_maps = True
 
@@ -26,6 +27,8 @@ class Portal2World(World):
 
     location_count = 0
     item_count= 0
+
+    maps_in_use: list[str] = list(map_complete_table.keys())
     
     for key, value in item_table.items():
         item_name_to_id[key] = value.id
@@ -40,80 +43,59 @@ class Portal2World(World):
         return Portal2Item(name, item_table[name].classification, self.item_name_to_id[name], self.player)
     
     def create_location(self, name, id, parent):
-        return_location = Portal2Location(self.player, name, id, parent)
-        return return_location
+        self.location_count += 1
+        return Portal2Location(self.player, name, id, parent)
     
     def get_filler_item_name(self):
         return self.random.choice(junk_items)
     
-    
-    def create_disjointed_maps_for_er(self, chapter_number: int) -> Region:
-        chapter_name = f"Chapter {chapter_number}"
-        chapter_region = Region(chapter_name, self.player, self.multiworld)
-        self.multiworld.regions.append(chapter_region)
-        chapter_start_entrance = chapter_region.create_exit(f"{chapter_name} To First Map")
-        chapter_start_entrance.randomization_group = chapter_number * 10
-        chapter_start_entrance.randomization_type = EntranceType.ONE_WAY
+    def create_randomized_maps(self) -> dict[str, list[str]]:
+        def pick_maps(number: int) -> None:
+            self.random.shuffle(map_pool)
+            for _ in range(number):
+                map_choice = map_pool.pop(0)
+                used_maps.append(map_choice)
+                chapter_maps[map_choice.split(":")[0]].append(map_choice)
+        
+        chapter_maps: dict[str, list[str]] = {f"Chapter {i}": [] for i in range(1,9)}
 
-        # Get all map locations for that chapter
-        map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
-        map_prefix = [name.removesuffix(" Completion") for name in map_location_names]
+        map_pool: list[str] = []
+        used_maps: list[str] = []
 
-        """
-        Each map is actually 2 regions
-        Region(MapAStart) -> Entrance(BeatMapA) -> Region(MapAEnd) -> Entrance(ProgressToNextMap)
-        The BeatMapA entrance has the rule "Has [itemsYouNeedToBeatTheRoom]"
-        You can randomize maps by connecting the Progress Entrance to randomized Map Starts. But you do not randomize the BeatMap entrances, and they're the ones with the rules
-        """
-        for name, map_name in zip(map_prefix, map_location_names):
-            # Increment the location counter for filler items
-            self.location_count += 1
+        possible_maps = [name for name in self.maps_in_use if not name.startswith("Chapter 9")]
 
-            region_start = Region(f"{name} Start", self.player, self.multiworld)
-            self.multiworld.regions.append(region_start)
-            region_end = Region(f"{name} End", self.player, self.multiworld)
-            self.multiworld.regions.append(region_end)
-            region_end.add_locations({map_name: self.location_name_to_id[map_name]})
+        # Maps with no requirements
+        map_pool += [name for name in possible_maps if len(all_locations_table[name].required_items) == 0]
+        pick_maps(3)
 
-            item_reqs = all_locations_table[map_name].required_items
-            print(map_name + " : " + str(item_reqs))
-            region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
+        # Maps with just portal gun upgrade
+        map_pool += [name for name in possible_maps if all_locations_table[name].required_items == [portal_gun_2]]
+        pick_maps(3)
 
-            start_entrance = region_start.create_er_target(f"{name} Start Entrance")
-            start_entrance.randomization_group = chapter_number
-            start_entrance.randomization_type = EntranceType.ONE_WAY
-            progress_to_next_map_entrance = region_end.create_exit(f"{name} To Next Map")
-            progress_to_next_map_entrance.randomization_group = chapter_number
-            progress_to_next_map_entrance.randomization_type = EntranceType.ONE_WAY
+        # All other maps
+        map_pool += [name for name in possible_maps if name not in used_maps and name not in map_pool]
+        pick_maps(len(map_pool))
 
-        # Add dead end region to each chapter
-        chapter_end_region = Region(f"{chapter_name} End", self.player, self.multiworld)
-        self.multiworld.regions.append(chapter_end_region)
-        chapter_end_entrance = chapter_region.create_er_target(f"{chapter_name} End")
-        chapter_end_entrance.randomization_group = chapter_number * 100
-        chapter_end_entrance.randomization_type = EntranceType.ONE_WAY
+        return chapter_maps
 
-        return chapter_region
-
-    def create_connected_maps(self, chapter_number: int):
+    def create_connected_maps(self, chapter_number: int, map_location_names: list[str] = None):
         chapter_name = f"Chapter {chapter_number}"
         chapter_region = Region(chapter_name, self.player, self.multiworld)
         self.multiworld.regions.append(chapter_region)
 
         # Get all map locations for that chapter
-        map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
+        if not map_location_names:
+            map_location_names = [name for name in all_locations_table.keys() if name.startswith(chapter_name)]
         map_prefix = [name.removesuffix(" Completion") for name in map_location_names]
 
         last_region: Region = None
         for name, map_name in zip(map_prefix, map_location_names):
-            # Increment the location counter for filler items
-            self.location_count += 1
-
             region_start = Region(f"{name} Start", self.player, self.multiworld)
             self.multiworld.regions.append(region_start)
             region_end = Region(f"{name} End", self.player, self.multiworld)
             self.multiworld.regions.append(region_end)
-            region_end.add_locations({map_name: self.location_name_to_id[map_name]})
+            region_end.add_locations({map_name: self.location_name_to_id[map_name]}, Portal2Location)
+            self.location_count += 1
             item_reqs = all_locations_table[map_name].required_items
             print(map_name + " : " + str(item_reqs))
             region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
@@ -129,14 +111,20 @@ class Portal2World(World):
 
     # Overridden methods called by Main.py in execution order
 
+    def generate_early(self):
+        if self.options.cutscenesanity.value:
+            self.maps_in_use += list(cutscene_completion_table.keys())
+
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
+        chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
             if randomize_maps:
-                chapter_region = self.create_disjointed_maps_for_er(i)
+                # chapter_region = self.create_disjointed_maps_for_er(i)
+                chapter_region, last_region = self.create_connected_maps(i, chapter_maps_dict[f"Chapter {i}"])
             else:
                 chapter_region, last_region = self.create_connected_maps(i)
 
@@ -168,16 +156,11 @@ class Portal2World(World):
             self.multiworld.itempool.append(self.create_item(filler_name))
         
     def connect_entrances(self):
-        try:
-            if randomize_maps:
-                groups_dict = {i*10:[i] for i in range(1, 9)}
-                groups_dict.update({i:[i, i*100] for i in range(1, 9)})
-                randomize_entrances(self, False, groups_dict)
-        finally:
-            state = self.multiworld.get_all_state(False)
-            state.update_reachable_regions(self.player)
-            Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), f"output/map_Player{self.player}.puml", show_entrance_names=True, regions_to_highlight=state.reachable_regions[self.player])
-            
+        # Not in use but useful for debugging
+        state = self.multiworld.get_all_state(False)
+        state.update_reachable_regions(self.player)
+        Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), f"output/map_Player{self.player}.puml", show_entrance_names=True, regions_to_highlight=state.reachable_regions[self.player])
+        
     def fill_slot_data(self):
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
