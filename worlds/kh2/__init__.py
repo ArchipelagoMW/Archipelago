@@ -14,6 +14,7 @@ from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
+from .ClientStuff.WorldLocations import bounty_name_to_address
 
 
 def launch_client():
@@ -264,7 +265,7 @@ class KH2World(World):
                 else:
                     random_boss = self.random.choice(self.random_super_boss_list)
                 self.plando_locations[random_boss] = ItemName.Bounty
-                self.slot_data_bounties.append(random_boss)
+                self.slot_data_bounties.append(bounty_name_to_address[random_boss])
                 self.random_super_boss_list.remove(random_boss)
                 self.total_locations -= 1
 

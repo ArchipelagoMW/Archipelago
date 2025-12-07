@@ -36,7 +36,8 @@ class MessageType (IntEnum):
     ReceiveAllItems = 8,
     RequestAllItems = 9,
     ReceiveSingleItem = 10,
-    Victory = 11
+    Victory = 11,
+    Closed = 20
     pass
 
 class KH2Socket():
@@ -73,7 +74,7 @@ class KH2Socket():
         msg = str(msgId)
         for val in values:
             msg += ";" + str(val)
-        msg += "\n"
+        msg += "\r\n"
         self.client_socket.send(msg.encode("utf-8"))
         print("Sent message: "+msg)
 
@@ -482,8 +483,8 @@ class KH2Context(CommonContext):
         with open(self.kh2_client_settings_join, 'w') as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
             f2.close()
-        await super(KH2Context, self).shutdown()
         self.socket.shutdown_server()
+        await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "RoomInfo":
@@ -554,19 +555,19 @@ class KH2Context(CommonContext):
             global slotDataSent
             if not slotDataSent:
                 if KH2Connected > 0:
+                    for location in self.kh2slotdata['BountyBosses']:
+                        self.socket.send(MessageType.BountyList, [location])
                     self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
                     self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
                     self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
                     self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
-                    for location in self.kh2slotdata['BountyBosses']:
-                        self.socket.send(MessageType.BountyList, [str(location)])
                     slotDataSent = True
                 else: #Hold slot data until game client connects
+                    self.slot_data_info['BountyBosses'] = self.kh2slotdata['BountyBosses']
                     self.slot_data_info['FinalXemnas'] = 'Final Xemnas;' + str(self.kh2slotdata['FinalXemnas'])
                     self.slot_data_info['Goal'] = 'Goal;' +str(self.kh2slotdata['Goal'])
                     self.slot_data_info['LuckyEmblemsRequired'] = 'LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired'])
                     self.slot_data_info['BountyRequired'] = 'BountyRequired;' + str(self.kh2slotdata['BountyRequired'])
-                    self.slot_data_info['BountyRequired'] = 'BountyBosses;' + str(self.kh2slotdata['BountyBosses'])
 
         if cmd == "ReceivedItems":
             # Sora   Front of Ability List:0x2546
@@ -845,6 +846,15 @@ async def kh2_watcher(ctx: KH2Context):
                     KH2Connected = 1
 
             if ctx.kh2connected and ctx.serverconnected:
+                global slotDataSent
+                if not slotDataSent and KH2Connected > 0:
+                    for location in ctx.self.slot_data_info['BountyBosses']:
+                        ctx.self.socket.send(MessageType.BountyList, [location])
+                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['FinalXemnas']))
+                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['Goal']))
+                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['LuckyEmblemsRequired']))
+                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['BountyRequired']))
+                    slotDataSent = True
                 ctx.sending = []
                 await asyncio.create_task(ctx.checkWorldLocations())
                 await asyncio.create_task(ctx.checkLevels())
