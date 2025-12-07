@@ -3,7 +3,9 @@ from typing import Tuple
 
 from BaseClasses import CollectionState
 from .bases import CrystalProjectTestBase
+from .. import display_region_subregions_dictionary
 from ..constants.ap_regions import *
+from ..constants.display_regions import *
 from ..constants.home_points import *
 from ..constants.region_passes import *
 
@@ -104,21 +106,34 @@ class TestHomePointHustle(CrystalProjectTestBase):
             HOMEPOINT_DISCIPLINE_HOLLOW_NAME: HOMEPOINT_DISCIPLINE_HOLLOW_AP_REGION
         }
         expected_entrances_list: list[str] = []
-        #TODO: Add other menu entrances not in this list bc currently it's not testing if the homepoint item also gives you access to wrong region if not in this dictionary
-        entrances_not_expected_list = list(home_point_name_to_ap_region_dict.values())
+        entrances_not_expected_list: list[str] = []
+        display_entrances_not_expected_list = self.multiworld.worlds[self.player].included_regions
+        # not removing Modded Zone bc this test does not have Use Mods enabled
+        display_entrances_not_expected_list.remove(MENU_DISPLAY_NAME)
+
+        for included_display_region in display_entrances_not_expected_list:
+            for included_ap_region in display_region_subregions_dictionary[included_display_region]:
+                for entrance in self.multiworld.worlds[self.player].get_region(MENU_AP_REGION).exits:
+                    if MENU_AP_REGION + " -> " + included_ap_region == entrance.name:
+                        entrances_not_expected_list.append(included_ap_region)
+                        break
 
         self.assert_region_entrances(MENU_AP_REGION, reachable_regions=tuple(expected_entrances_list),
                                      unreachable_regions=tuple(entrances_not_expected_list))
 
         pristine_state = CollectionState(self.multiworld)
+        pristine_entrances_not_expected_list = entrances_not_expected_list
 
         for key in home_point_name_to_ap_region_dict:
-            self.multiworld.state = pristine_state
+            self.multiworld.state = pristine_state.copy()
             expected_entrances_list: list[str] = []
-            entrances_not_expected_list = list(home_point_name_to_ap_region_dict.values())
+            entrances_not_expected_list = pristine_entrances_not_expected_list.copy()
 
             self.collect(self.get_item_by_name(key))
             expected_entrances_list.append(home_point_name_to_ap_region_dict[key])
             entrances_not_expected_list.remove(home_point_name_to_ap_region_dict[key])
 
             self.assertTrue(self.can_reach_entrance(MENU_AP_REGION + " -> " + home_point_name_to_ap_region_dict[key]), msg="Test Can Reach Entrance " + home_point_name_to_ap_region_dict[key] + " using " + key)
+
+            self.assert_region_entrances(MENU_AP_REGION, reachable_regions=tuple(expected_entrances_list),
+                                         unreachable_regions=tuple(entrances_not_expected_list))

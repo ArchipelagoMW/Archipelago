@@ -634,10 +634,12 @@ class CrystalProjectWorld(World):
         logic = CrystalProjectLogic(self.player, self.options)
         if self.options.goal == self.options.goal.option_astley:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player) and logic.has_jobs(state, self.options.astley_job_quantity.value)
-            self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
+            if THE_NEW_WORLD_DISPLAY_NAME not in self.included_regions:
+                self.included_regions.append(THE_NEW_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_true_astley:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(THE_OLD_WORLD_AP_REGION, player=self.player) and state.can_reach(THE_NEW_WORLD_AP_REGION, player=self.player)
-            self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
+            if THE_OLD_WORLD_DISPLAY_NAME not in self.included_regions:
+                self.included_regions.append(THE_OLD_WORLD_DISPLAY_NAME)
         elif self.options.goal == self.options.goal.option_clamshells:
             self.multiworld.completion_condition[self.player] = lambda state: state.has(CLAMSHELL, self.player, self.options.clamshell_goal_quantity.value) and state.can_reach(SEASIDE_CLIFFS_AP_REGION, player=self.player)
 
