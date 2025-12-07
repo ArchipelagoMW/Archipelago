@@ -542,18 +542,6 @@ class Rac3Interface(GameInterface):
             target_level = current_level + 1
             target_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][target_level]]].XP_THRESHOLD
             self._write32(weapon_data.XP_ADDRESS, target_xp)
-    
-    def grant_weapon_exp(self, weapon_name, xp_amount):
-        """Grant weapon exp to a specific weapon"""
-        weapon_data = non_prog_weapon_data[weapon_name]
-        current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID
-        if current_level < 5:
-            current_xp = self._read32(weapon_data.XP_ADDRESS)
-            max_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][5]]].XP_THRESHOLD
-            new_xp = current_xp + xp_amount
-            if new_xp > max_xp:
-                new_xp = max_xp
-            self._write32(weapon_data.XP_ADDRESS, new_xp)
 
     # Equip the most recently collected weapon/gadget, update recent uses
     def update_equip(self, name):
@@ -631,7 +619,7 @@ class Rac3Interface(GameInterface):
     def teleport_to_ship(self, planet):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
-                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
+                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 12))
             self.logger.debug(f'Teleporting to ship on: {planet}')
         else:
             self.logger.debug(f'Teleporting to last checkpoint on: {planet}')
@@ -643,13 +631,8 @@ class Rac3Interface(GameInterface):
             return False
         match planet:
             # Todo: add more special cases
-            case RAC3REGION.FLORANA:
-                return self._read_float(
-                    RAC3STATUS.RATCHET_Z) > 300  # Don't overwrite if in the Path of Death due to geometry unloading
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
-            case RAC3REGION.AQUATOS:
-                return False  # Respawn puts you out of bounds
             case RAC3REGION.TYHRRANOSIS:
                 return False  # Entrance coordinates in the first section that gets unloaded after leaving
             case RAC3REGION.ZELDRIN_STARPORT:
@@ -661,7 +644,7 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def teleport_to_coords(self):
-        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 7))
+        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 12))
 
     # Todo: Deathlink
     def alive(self) -> tuple[bool, str]:
