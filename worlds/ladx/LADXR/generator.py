@@ -1,11 +1,9 @@
 import binascii
 import importlib.util
 import importlib.machinery
-import os
 import random
 import pickle
 import Utils
-import settings
 from collections import defaultdict
 from typing import Dict
 
@@ -57,6 +55,7 @@ from .patches import bingo as _
 from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
+from . import utils
 
 from .patches import bank34
 from .roomEditor import RoomEditor, Object
@@ -64,8 +63,27 @@ from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
 from .. import Options
 
+class VersionError(Exception):
+    pass
+
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(base_rom: bytes, args, patch_data: Dict):
+    from .. import LinksAwakeningWorld
+    patcher_version = LinksAwakeningWorld.world_version
+    generated_version = Utils.tuplize_version(patch_data.get("generated_world_version", "2.0.0"))
+    if generated_version.major != patcher_version.major or generated_version.minor != patcher_version.minor:
+        Utils.messagebox(
+            "Error",
+            "The apworld version that this patch was generated on is incompatible with your installed world.\n\n"
+            f"Generated on {generated_version.as_simple_string()}\n"
+            f"Installed version {patcher_version.as_simple_string()}",
+            True
+        )
+        raise VersionError(
+            f"The installed world ({patcher_version.as_simple_string()}) is incompatible with the world this patch "
+            f"was generated on ({generated_version.as_simple_string()})"
+        )
+
     random.seed(patch_data["seed"] + patch_data["player"])
     multi_key = binascii.unhexlify(patch_data["multi_key"].encode())
     item_list = pickle.loads(binascii.unhexlify(patch_data["item_list"].encode()))
@@ -84,9 +102,8 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         pymod.prePatch(rom)
 
     if options["gfxmod"]:
-        user_settings = settings.get_settings()
         try:
-            gfx_mod_file = user_settings["ladx_options"]["gfx_mod_file"]
+            gfx_mod_file = LinksAwakeningWorld.settings.gfx_mod_file
             patches.aesthetics.gfxMod(rom, gfx_mod_file)
         except FileNotFoundError:
             pass # if user just doesnt provide gfxmod file, let patching continue
@@ -231,10 +248,10 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
         rom.patch(0, 0x0003, "00", "01")
 
     # Patch the sword check on the shopkeeper turning around.
-    #if ladxr_settings["steal"] == 'never':
-    #    rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
-    #elif ladxr_settings["steal"] == 'always':
-    #    rom.patch(4, 0x36F9, "FA4EDB", "3E0100")
+    if options["stealing"] == Options.Stealing.option_disabled:
+        rom.patch(4, 0x36F9, "FA4EDB", "3E0000")
+        rom.texts[0x2E] = utils.formatText("Hey!  Welcome!  Did you know that I have eyes on the back of my head?")
+        rom.texts[0x2F] = utils.formatText("Nothing escapes my gaze! Your thieving ways shall never prosper!")
 
     #if ladxr_settings["hpmode"] == 'inverted':
     #    patches.health.setStartHealth(rom, 9)
@@ -325,7 +342,7 @@ def generateRom(base_rom: bytes, args, patch_data: Dict):
             0x1A9, 0x1AA, 0x1AB, 0x1AC, 0x1AD,
 
             # Prices
-            0x02C, 0x02D, 0x030, 0x031, 0x032, 0x033, # Shop items
+            0x02C, 0x02D, 0x02E, 0x02F, 0x030, 0x031, 0x032, 0x033, # Shop items
             0x03B, # Trendy Game
             0x045, # Fisherman
             0x018, 0x019, # Crazy Tracy
