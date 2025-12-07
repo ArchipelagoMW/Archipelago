@@ -283,7 +283,8 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.JACKPOT, 1)
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
-                self._write32(RAC3STATUS.NANOTECH_EXP, exp + 1000 + randint(1, 100))
+                level = self._read8(RAC3STATUS.MAX_HEALTH)
+                self._write32(RAC3STATUS.NANOTECH_EXP, exp + 10000 + randint(1, 300 * level))
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
                 for weapon_name in non_prog_weapon_data.keys():
