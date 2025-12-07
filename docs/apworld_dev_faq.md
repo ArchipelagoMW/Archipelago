@@ -174,7 +174,7 @@ Next, "local" and "remote" items confusingly refer to multiple concepts, so it's
 
 When people talk about "local vs remote items" as a choice that world devs have to make, they mean deciding whether
 your client will locally or remotely implement the items which happen to be locally placed (or make both
-implementations and let the player choose).
+implementations, or let the player choose an implementation).
 
 Theoretically, the biggest benefit of "local items" is that it allows a solo (single slot) multiworld to be played
 entirely offline, with no AP server, from start to finish. This is similar to a "standalone"/non-AP randomizer,
@@ -194,4 +194,4 @@ So to recap:
 - Remote items enable same slot co-op.
 - Local items enable solo offline play.
 - If you want to support both solo offline play and same slot co-op,
-  you need to expose local vs remote items as an option to the player.
+  you might need to expose local vs remote items as an option to the player.
