@@ -1,14 +1,16 @@
+from argparse import Namespace
 import asyncio
 import logging
+import sys
 import time
 import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
 from NetUtils import ClientStatus
-from worlds.portal2.Items import item_table
-from worlds.portal2.ItemHandling import handle_item
-from worlds.portal2.Locations import location_names_to_map_codes, map_codes_to_location_names, all_locations_table
 import Utils
+
+from ..ItemHandling import handle_item
+from ..Locations import location_names_to_map_codes, map_codes_to_location_names
 
 if __name__ == "__main__":
     Utils.init_logging("Portal2Client", exception_logger="Portal2Client")
@@ -292,26 +294,24 @@ class Portal2Context(CommonContext):
         await self.get_username()
         await self.send_connect(game=self.game)
 
-if __name__ == '__main__':
-    async def main():
-        ctx = Portal2Context()
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-        ctx.game_command_sender_task = asyncio.create_task(ctx.p2_command_sender(), name="sender loop")
-        ctx.game_message_listener_task = asyncio.create_task(ctx.p2_message_listener(), name="listener loop")
+async def main(args: Namespace):
+    ctx = Portal2Context(args.connect, args.password)
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+    ctx.game_command_sender_task = asyncio.create_task(ctx.p2_command_sender(), name="sender loop")
+    ctx.game_message_listener_task = asyncio.create_task(ctx.p2_message_listener(), name="listener loop")
 
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
 
-        await ctx.exit_event.wait()
-        await ctx.shutdown()
+    await ctx.exit_event.wait()
+    await ctx.shutdown()
 
-    import colorama
+def launch(*args: str) -> None:
+    from .Launch import launch_portal_2_client
 
-    # use colorama to display colored text highlighting on windows
-    colorama.just_fix_windows_console()
+    launch_portal_2_client(*args)
 
-    logger.setLevel(logging.INFO)
 
-    asyncio.run(main())
-    colorama.deinit()
+if __name__ == "__main__":
+    launch(*sys.argv[1:])

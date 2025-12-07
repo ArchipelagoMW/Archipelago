@@ -9,6 +9,8 @@ from worlds.generic.Rules import set_rule
 from entrance_rando import *
 from .ItemNames import portal_gun_2
 
+from . import Components as components
+
 randomize_maps = True
 
 class Portal2World(World):
