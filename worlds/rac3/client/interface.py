@@ -620,7 +620,7 @@ class Rac3Interface(GameInterface):
     def teleport_to_ship(self, planet):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
-                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 12))
+                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
             self.logger.debug(f'Teleporting to ship on: {planet}')
         else:
             self.logger.debug(f'Teleporting to last checkpoint on: {planet}')
@@ -645,7 +645,7 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def teleport_to_coords(self):
-        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 12))
+        self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
 
     # Todo: Deathlink
     def alive(self) -> tuple[bool, str]:
