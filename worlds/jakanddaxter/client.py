@@ -601,7 +601,7 @@ async def run_game(ctx: JakAndDaxterContext):
                f"Please check your host.yaml file.\n"
                f"If the value of 'jakanddaxter_options > auto_detect_root_directory' is true, verify that OpenGOAL "
                f"is installed properly.\n"
-               f"If it is false, check the value of 'jakanddaxter_options > root_directory'."
+               f"If it is false, check the value of 'jakanddaxter_options > root_directory'. "
                f"Verify it is a valid existing path, and all backslashes have been replaced with forward slashes.")
         ctx.on_log_error(logger, msg)
         return

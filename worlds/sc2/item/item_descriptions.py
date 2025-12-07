@@ -775,7 +775,7 @@ item_descriptions = {
     item_names.BULLFROG_BROODLINGS: "Bullfrogs spawn two broodlings on impact, in addition to unloading their cargo.",
     item_names.BULLFROG_HARD_IMPACT: "Bullfrogs deal more damage and stun longer on impact.",
     item_names.INFESTED_BANSHEE_BRACED_EXOSKELETON: "Infested Banshees gain +100 life.",
-    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Infested Banshees regenerate 20 life and energy per second while burrowed.",
+    item_names.INFESTED_BANSHEE_RAPID_HIBERNATION: "Allows Infested Banshees to Burrow. Infested Banshees regenerate 20 life and energy per second while burrowed.",
     item_names.INFESTED_BANSHEE_FLESHFUSED_TARGETING_OPTICS: "Infested Banshees gain +2 range while cloaked.",
     item_names.INFESTED_LIBERATOR_CLOUD_DISPERSAL: "Infested Liberators instantly transform into a cloud of microscopic organisms while attacking, reducing the damage they take by 85%.",
     item_names.INFESTED_LIBERATOR_VIRAL_CONTAMINATION: "Increases the damage Infested Liberators deal to their primary target by 100%.",
