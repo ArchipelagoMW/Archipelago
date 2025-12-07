@@ -136,6 +136,7 @@ class RaC3World(World):
             RAC3OPTION.TITANIUM_BOLTS: self.options.titanium_bolts.value,
             RAC3OPTION.NANOTECH_MILESTONES: self.options.nanotech_milestones.value,
             RAC3OPTION.EXCLUDE: self.options.exclude_locations.value,
+            RAC3OPTION.DEATHLINK: self.options.deathlink.value,
             RAC3OPTION.SHIP_NOSE: self.options.ship_nose.value,
             RAC3OPTION.SHIP_WINGS: self.options.ship_wings.value,
             RAC3OPTION.SHIP_SKIN: self.options.ship_skin.value,

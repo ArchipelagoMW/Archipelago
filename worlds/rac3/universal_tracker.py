@@ -33,6 +33,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.arena.value = world.passthrough[RAC3OPTION.ARENA]
             world.options.vidcomics.value = world.passthrough[RAC3OPTION.VIDCOMICS]
             world.options.exclude_locations.value = world.passthrough[RAC3OPTION.EXCLUDE]
+            world.options.deathlink.value = world.passthrough[RAC3OPTION.DEATHLINK]
             world.options.vr_challenges.value = world.passthrough[RAC3OPTION.VR_CHALLENGES]
             world.options.sewer_crystals.value = world.passthrough[RAC3OPTION.SEWER_CRYSTALS]
         else:
