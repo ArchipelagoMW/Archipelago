@@ -77,6 +77,7 @@ class KH2World(World):
         # random_super_boss_list List[str]
         # has to be in __init__ or else other players affect each other's bounties
         self.random_super_boss_list = list()
+        self.slot_data_bounties = list()
         self.growth_list = list()
         # lists of KH2Item
         self.keyblade_ability_pool = list()
@@ -116,7 +117,7 @@ class KH2World(World):
                 "CorSkipToggle"
         )
         slot_data.update({
-            "hitlist":                [],  # remove this after next update
+            "BountyBosses":           self.slot_data_bounties,
             "PoptrackerVersionCheck": 4.3,
             "KeybladeAbilities":      self.sora_ability_dict,
             "StaffAbilities":         self.donald_ability_dict,
@@ -263,6 +264,7 @@ class KH2World(World):
                 else:
                     random_boss = self.random.choice(self.random_super_boss_list)
                 self.plando_locations[random_boss] = ItemName.Bounty
+                self.slot_data_bounties.append(random_boss)
                 self.random_super_boss_list.remove(random_boss)
                 self.total_locations -= 1
 

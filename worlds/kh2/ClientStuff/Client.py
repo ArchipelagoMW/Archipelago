@@ -1,4 +1,5 @@
 from __future__ import annotations
+from ast import Dict
 from enum import IntEnum
 import ModuleUpdate
 import Utils
@@ -19,23 +20,24 @@ from .WorldLocations import *
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
 from .CMDProcessor import KH2CommandProcessor
-from .SendChecks import finishedGame
 KH2Connected = -1
+slotDataSent = False
 
 class MessageType (IntEnum):
-  Invalid = -1,
-  Test = 0,
-  WorldLocationChecked = 1,
-  LevelChecked = 2,
-  ReceiveAllItems = 3,
-  RequestAllItems = 4,
-  ReceiveSingleItem = 5,
-  ClientCommand = 7,
-  Deathlink = 8,
-  PortalChecked = 9,
-  SlotData = 10,
-  Victory = 11
-  pass
+    Invalid = -1,
+    Test = 0,
+    WorldLocationChecked = 1,
+    LevelChecked = 2,
+    KeybladeChecked = 3,
+    ClientCommand = 4,
+    Deathlink = 5,
+    SlotData = 6,
+    BountyList = 7,
+    ReceiveAllItems = 8,
+    RequestAllItems = 9,
+    ReceiveSingleItem = 10,
+    Victory = 11
+    pass
 
 class KH2Socket():
     def __init__(self, client, host: str = "127.0.0.1", port:int = 13713):
@@ -85,12 +87,22 @@ class KH2Socket():
         if msgType == MessageType.WorldLocationChecked:
             self.client.world_locations_checked.append(message[1])
 
-        if (msgType == MessageType.LevelChecked):
+        elif (msgType == MessageType.LevelChecked):
             self.client.sora_form_levels[message[2]] = int(message[1])
 
-        if (msgType == MessageType.SlotData):
+        elif (msgType == MessageType.KeybladeChecked):
+            self.client.keyblade_ability_checked.append(message[1])
+
+        elif (msgType == MessageType.SlotData):
             self.client.current_world_int = int(message[1])
 
+        elif (msgType == MessageType.Deathlink):
+            self.client.Room = int(message[1])
+            self.client.Event = int(message[2])
+            self.client.World = int(message[3])
+
+        elif (msgType == MessageType.Victory):
+            self.client.kh2_finished_game = True
         #TODO actually handle messages
 
     def send_singleItem(self, id: int, itemCnt):
@@ -126,6 +138,9 @@ class KH2Socket():
             sendMsg += 1
             self.send(3, msg)
 
+    def send_slot_data(self, data):
+        self.send(MessageType.SlotData, [data])
+
     def shutdown_server(self):
         self.client_socket.close()
         self.server_socket.close()
@@ -137,6 +152,7 @@ class KH2Context(CommonContext):
     socket: KH2Socket = None
     check_location_IDs = []
     received_items_IDs = []
+    slot_data_info: Dict[str, str] = {}
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
@@ -303,14 +319,18 @@ class KH2Context(CommonContext):
         self.current_world_int = -1
         self.sora_form_levels = {
             "Sora": 1,
-            "Valor": 1,
-            "Wisdom": 1,
-            "Limit": 1,
-            "Master": 1,
-            "Final": 1,
-            "Summon": 1,
+            "ValorLevel": 1,
+            "WisdomLevel": 1,
+            "LimitLevel": 1,
+            "MasterLevel": 1,
+            "FinalLevel": 1,
+            "SummonLevel": 1,
         }
         self.world_locations_checked = list()
+        self.Room = -1
+        self.Event = -1
+        self.World = -1
+        self.keyblade_ability_checked = list()
         # PC Address anchors
         # epic .10 addresses
         self.Now = 0x0716DF8
@@ -531,6 +551,23 @@ class KH2Context(CommonContext):
 
             self.locations_checked = set(args["checked_locations"])
 
+            global slotDataSent
+            if not slotDataSent:
+                if KH2Connected > 0:
+                    self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
+                    self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
+                    self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
+                    self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
+                    for location in self.kh2slotdata['BountyBosses']:
+                        self.socket.send(MessageType.BountyList, [str(location)])
+                    slotDataSent = True
+                else: #Hold slot data until game client connects
+                    self.slot_data_info['FinalXemnas'] = 'Final Xemnas;' + str(self.kh2slotdata['FinalXemnas'])
+                    self.slot_data_info['Goal'] = 'Goal;' +str(self.kh2slotdata['Goal'])
+                    self.slot_data_info['LuckyEmblemsRequired'] = 'LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired'])
+                    self.slot_data_info['BountyRequired'] = 'BountyRequired;' + str(self.kh2slotdata['BountyRequired'])
+                    self.slot_data_info['BountyRequired'] = 'BountyBosses;' + str(self.kh2slotdata['BountyBosses'])
+
         if cmd == "ReceivedItems":
             # Sora   Front of Ability List:0x2546
             # Donald Front of Ability List:0x2658
@@ -698,38 +735,30 @@ class KH2Context(CommonContext):
         self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        """Gets dispatched when a new DeathLink is triggered by another linked player."""
-        if data["source"] not in self.deathlink_blacklist:
-            self.last_death_link = max(data["time"], self.last_death_link)
-            text = data.get("cause", "")
-            if text:
-                logger.info(f"DeathLink: {text}")
-            else:
-                logger.info(f"DeathLink: Received from {data['source']}")
-            # kills sora by setting flag for the lua to read
-            self.kh2_write_byte(0x810000, 1)
+        if (self.deathlink_toggle):
+            """Gets dispatched when a new DeathLink is triggered by another linked player."""
+            if data["source"] not in self.deathlink_blacklist:
+                self.last_death_link = max(data["time"], self.last_death_link)
+                text = data.get("cause", "")
+                if text:
+                    logger.info(f"DeathLink: {text}")
+                else:
+                    logger.info(f"DeathLink: Received from {data['source']}")
+                self.socket.send(MessageType.Deathlink,{data["time"]})
+                # kills sora by setting flag for the lua to read
+                #self.kh2_write_byte(0x810000, 1)
 
     async def is_dead(self):
-        # General Death link logic: if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
-        # if deathlink is on and script is hasnt killed sora and sora isnt dead
-        if self.deathlink_toggle and self.kh2_read_byte(0x810000) == 0 and self.kh2_read_byte(0x810001) != 0:
-            # set deathlink flag so it doesn't send out bunch
-            # basically making the game think it got its death from a deathlink instead of from the game
-            self.kh2_write_byte(0x810000, 0)
-            # 0x810001 is set to 1 when you die via the goa script. This is done because the polling rate for the client can miss a death
-            # but the lua script runs eveery frame so we cant miss them now
-            self.kh2_write_byte(0x810001, 0)
-            #todo: read these from the goa lua instead since the deathlink is after they contiune which means that its just before they would've gotten into the fight
-            Room = self.kh2_read_byte(0x810002)
-            Event = self.kh2_read_byte(0x810003)
-            World = self.kh2_read_byte(0x810004)
-            if (World, Room, Event) in DeathLinkPair.keys():
-
-                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
-                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(World,Room, Event)]}.")
+        if (self.deathlink_toggle):
+            if (self.World, self.Room, self.Event) in DeathLinkPair.keys():
+                logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
+                await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
             else:
                 logger.info(f"Deathlink: {self.player_names[self.slot]} lost their heart to darkness.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} lost their heart to darkness.")
+            self.World = -1
+            self.Room = -1
+            self.Event = -1
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
@@ -828,9 +857,8 @@ async def kh2_watcher(ctx: KH2Context):
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
 
-                if finishedGame(ctx) and not ctx.kh2_finished_game:
+                if ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.kh2_finished_game = True
 
                 if ctx.sending:
                     ctx.sending = list(await ctx.check_locations(ctx.sending))

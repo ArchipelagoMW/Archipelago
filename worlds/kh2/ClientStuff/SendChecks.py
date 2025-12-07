@@ -8,73 +8,6 @@ if TYPE_CHECKING:
 else:
     KH2Context = object
 
-
-def finishedGame(ctx: KH2Context):
-    if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if not ctx.final_xemnas and ctx.kh2_read_byte(
-                ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
-                & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
-            ctx.final_xemnas = True
-    # three proofs
-    if ctx.kh2slotdata['Goal'] == 0:
-        if ctx.kh2_read_byte(ctx.Save + 0x36B2) > 0 \
-                and ctx.kh2_read_byte(ctx.Save + 0x36B3) > 0 \
-                and ctx.kh2_read_byte(ctx.Save + 0x36B4) > 0:
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata['Goal'] == 1:
-        if ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata['Goal'] == 2:
-        # for backwards compat
-        if "hitlist" in ctx.kh2slotdata:
-            locations = ctx.sending
-            for boss in ctx.kh2slotdata["hitlist"]:
-                if boss in locations:
-                    ctx.hitlist_bounties += 1
-        if ctx.hitlist_bounties >= ctx.kh2slotdata["BountyRequired"] or ctx.kh2_seed_save_cache["AmountInvo"]["Amount"][
-            "Bounty"] >= ctx.kh2slotdata["BountyRequired"]:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-    elif ctx.kh2slotdata["Goal"] == 3:
-        if ctx.kh2_seed_save_cache["AmountInvo"]["Amount"]["Bounty"] >= ctx.kh2slotdata["BountyRequired"] and \
-                ctx.kh2_read_byte(ctx.Save + 0x3641) >= ctx.kh2slotdata['LuckyEmblemsRequired']:
-            if ctx.kh2_read_byte(ctx.Save + 0x36B3) < 1:
-                ctx.kh2_write_byte(ctx.Save + 0x36B2, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B3, 1)
-                ctx.kh2_write_byte(ctx.Save + 0x36B4, 1)
-                logger.info("The Final Door is now Open")
-            if ctx.kh2slotdata['FinalXemnas'] == 1:
-                if ctx.final_xemnas:
-                    return True
-                return False
-            return True
-        return False
-
-
 async def checkWorldLocations(self):
     try:
         if self.last_world_int != self.current_world_int:
@@ -117,7 +50,7 @@ async def checkLevels(self):
         }
         for i in range(6):
             for location, data in formDict[i][1].items():
-                formlevel = self.kh2_read_byte(self.Save + data.addrObtained)
+                formlevel = self.sora_form_levels[formDict[i][0]]
                 if location in self.kh2_loc_name_to_id.keys():
                     # if current form level is above other form level
                     locationId = self.kh2_loc_name_to_id[location]
@@ -138,14 +71,15 @@ async def checkSlots(self):
         for location, data in weaponSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked:
-                if self.kh2_read_byte(self.Save + data.addrObtained) > 0:
+                if location in self.keyblade_ability_checked:
                     self.sending = self.sending + [(int(locationId))]
+                    self.keyblade_ability_checked.remove(location)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
-            if locationId not in self.locations_checked and self.kh2_read_byte(self.Save + 0x06B2) == 0:
-                if self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
-                    self.sending = self.sending + [(int(locationId))]
+            if locationId not in self.locations_checked and location in self.keyblade_ability_checked:
+                self.sending = self.sending + [(int(locationId))]
+                self.keyblade_ability_checked.remove(location)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
