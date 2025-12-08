@@ -15,8 +15,10 @@ from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
@@ -189,9 +191,9 @@ class Rac3Interface(GameInterface):
     weaponLevelLockFlag = None
     boltAndXPMultiplier = None
     boltAndXPMultiplierValue = None
-    ship = 0
-    ship_skin = 0
-    skin = 0
+    ship: int = 0
+    ship_skin: int = 0
+    skin: int = 0
     trap_timers: dict[str, int] = {}
 
     # Called at once when client started
@@ -201,6 +203,14 @@ class Rac3Interface(GameInterface):
     def reset_file(self):
         self.remove_all_items()
         self.undo_collections()
+
+    def important_items(self, item):
+        """Runs when loading into game from the main menu to update the player with important items from the server,
+        skips filler and trap items to not flood the player with bolts/xp"""
+        if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
+                RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS):
+            return
+        self.item_received(item)
 
     # Called in periodically
     def update(self):
@@ -392,10 +402,29 @@ class Rac3Interface(GameInterface):
         self.trap_cycler()
 
     def undo_collections(self):
-        pass
+        sewer, nano = 0, 0
+        for location in RAC3_LOCATION_DATA_TABLE.values():
+            if RAC3TAG.SEWER in location.TAGS:
+                if not sewer:
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)
+                    sewer += 1
+                continue
+            if RAC3TAG.NANOTECH in location.TAGS:
+                if not nano:
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)
+                    nano += 1
+                continue
+            for check in location.CHECK_ADDRESS:
+                if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
+                    self._write8(check.ADDRESS, self._read8(check.ADDRESS) & (0xFF ^ (0x01 << check.VALUE)))
 
     def collect_location(self, ap_code):
-        pass
+        loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
+        if RAC3TAG.NANOTECH in loc_data.TAGS or RAC3TAG.SEWER in loc_data.TAGS:
+            return
+        for check in loc_data.CHECK_ADDRESS:
+            if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
+                self._write8(check.ADDRESS, self._read8(check.ADDRESS) | (0x01 << check.VALUE))
 
     def add_cosmetics(self):
         self._write8(RAC3STATUS.SHIP_CONFIG, self.ship)

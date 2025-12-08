@@ -321,7 +321,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             logger.info("Old state removed!")
             logger.info("Checking for items...")
             for item in ctx.items_received:
-                ctx.game_interface.item_received(item.item)
+                ctx.game_interface.important_items(item.item)
             ctx.processed_item_count = len(ctx.items_received)
             logger.info("Items received!")
             logger.info("Checking locations...")
