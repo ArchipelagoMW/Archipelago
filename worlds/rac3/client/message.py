@@ -31,10 +31,10 @@ class ClientMessage:
     def output(self) -> dict:
         output = {}
         for attr in dir(self):
-            print(attr)
+            # print(attr)
             if attr == '__dict__':
                 output.update(getattr(self, attr))
-                print("Added to Output")
+                # print("Added to Output")
         return output
 
     @staticmethod

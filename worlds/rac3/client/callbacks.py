@@ -1,8 +1,10 @@
 from time import time
 from typing import TYPE_CHECKING
 
+from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.constants.region import RAC3REGION
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -47,7 +49,7 @@ async def handle_planet_changed(ctx: 'Context') -> None:
     ctx.current_planet = ctx.game_interface.map_switch()
     if planet is not ctx.current_planet:
 
-        if ctx.current_planet == "Tyhrranosis":
+        if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
 
         await ctx.send_msgs([ClientMessage.set(ctx.slot, ctx.team, ctx.current_planet)])
@@ -99,12 +101,15 @@ async def handle_deathlink(ctx: 'Context') -> None:
         alive, message = ctx.game_interface.alive()
         if alive:
             if ctx.queued_deaths > 0:
+                logger.debug(f'Deaths requires processing: {ctx.queued_deaths}')
                 if ctx.game_interface.kill_player():
+                    logger.debug(f'Deaths processed')
                     ctx.queued_deaths = 0
                     ctx.last_death_link = time()
         else:
+            logger.debug(f'Sending Death, queue: {ctx.queued_deaths}')
             await ctx.send_death(message)
-            ctx.last_death_link = time()
+            logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
 
 async def handle_check_goal(ctx: 'Context') -> None:

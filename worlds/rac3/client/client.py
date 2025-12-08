@@ -1,11 +1,13 @@
 # Common import
 from asyncio import create_task, run, sleep, Task
 from multiprocessing import freeze_support
+from time import time
 from traceback import format_exc
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from Utils import Any, async_start, Dict, init_logging
+from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
 from worlds.rac3.client.callbacks import init, update
 from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
@@ -26,72 +28,124 @@ except ImportError:
 
 
 class CommandProcessor(ClientCommandProcessor):
+    def verify(self, level: int = 4) -> bool:
+        """
+        Checks various levels of connection before allowing a command.
+        Level 1: Client is for Ratchet and Clank 3
+        Level 2: Client is connected to a multiworld server
+        Level 3: Client is connected to the game
+        Level 4: Player is in game
+        """
+        if isinstance(self.ctx, Rac3Context):
+            if level == 1:
+                return True
+            if self.ctx.slot_data:
+                if level == 2:
+                    return True
+                if self.ctx.is_connected_to_game:
+                    if level == 3:
+                        return True
+                    if not self.ctx.main_menu:
+                        return True
+                    else:
+                        self.output("Not in game, please load a game file")
+                        return False
+                else:
+                    self.output("No Game Detected, please connect to Ratchet and Clank 3")
+                    return False
+            else:
+                self.output("No slot data, please connect to a multiworld server")
+                return False
+        else:
+            self.output("Somehow this client isn't for Ratchet and Clank 3, delete this build and try again")
+            return False
+
     # This is not mandatory for the game. Just a client command implementation.
-    # def _cmd_kill(self):
-    #     """Kill the game."""
-    #     if isinstance(self.ctx, Rac3Context):
-    #         self.ctx.game_interface.kill_player()
+    def _cmd_kill(self):
+        """Kill the game."""
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.on_deathlink({"time": time(), "cause": "Amondo got gaslit"})
+
     def _cmd_connect_rac3(self):
         """Attempt to connect the client to the emulator"""
+        if not self.verify(1):
+            return
         if isinstance(self.ctx, Rac3Context):
             if self.ctx.game_interface.get_connection_state():
-                logger.info("Already Connected to Emulator")
+                self.output("Already Connected to Emulator")
             else:
                 self.ctx.game_interface.connect_to_game()
 
-    def _cmd_auto_connect(self):
-        """Toggle the client attempting to connect to the emulator automatically"""
-        pass
-        # if isinstance(self.ctx, Rac3Context):
-        #     self.ctx.auto_connect = not self.ctx.auto_connect
-        #     if self.ctx.auto_connect:
-        #         logger.info("Emulator Auto-connect enabled")
-        #     else:
-        #         logger.info("Emulator Auto-connect disabled")
+    # def _cmd_auto_connect(self):
+    #     """Toggle the client attempting to connect to the emulator automatically"""
+    #     if isinstance(self.ctx, Rac3Context):
+    #         self.ctx.auto_connect = not self.ctx.auto_connect
+    #         if self.ctx.auto_connect:
+    #             logger.info("Emulator Auto-connect enabled")
+    #         else:
+    #             logger.info("Emulator Auto-connect disabled")
+    #     else:
+    #         logger.info("Somehow this client isn't for Ratchet and Clank 3, delete this build and try again")
 
     def _cmd_weapon_exp_test(self):
         """Give weapon exp for testing purposes."""
+        if not self.verify(4):
+            return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.item_received(50000092)
+            if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
+                self.output(f"Weapon EXP item not compatible with Progressive Weapons")
+            else:
+                self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE)
+                self.output(f"Weapon EXP Received")
 
     def _cmd_bolt_test(self):
         """Give bolts for testing purposes."""
+        if not self.verify(4):
+            return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.item_received(50000091)
+            self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE)
+            self.output(f"Bolts Received")
 
     def _cmd_rac3_info(self):
         """Dump Rac3 info for debugging purposes."""
+        if not self.verify(4):
+            return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.dump_info(self.ctx.current_planet, self.ctx.slot_data)
 
     def _cmd_force_update(self):
         """Force an update to the game state by running all update cycle methods."""
+        if not self.verify(4):
+            return
         if isinstance(self.ctx, Rac3Context):
             self.ctx.game_interface.update()
+            self.output(f"Update cycle complete")
 
     def _cmd_deathlink(self):
-        """If your Death Link setting is set to "Toggle", use this command to turn Death Link on and off."""
+        """Toggles Death Link on and off."""
+        if not self.verify(2):
+            return
         if isinstance(self.ctx, Rac3Context):
             if RAC3OPTION.DEATHLINK in self.ctx.slot_data.keys():
-                if self.ctx.slot_data[RAC3OPTION.DEATHLINK] == "toggle":
-                    self.ctx.death_link = not self.ctx.death_link
-                    self.output(f'Death Link set to {self.ctx.death_link}')
-                else:
-                    self.output(f"Death Link is not set to 'toggle' for this seed")
-                    self.output(f"Death Link = {self.ctx.slot_data[RAC3OPTION.DEATHLINK]}")
+                self.ctx.death_link = not self.ctx.death_link
+                async_start(self.ctx.update_death_link(self.ctx.death_link))
+                self.output(f'Death Link set to {self.ctx.death_link}')
             else:
-                self.output(f"Death Link not found in slot_data. You are probably not connected")
+                self.output(f"Death Link not found in slot_data. Please report this")
 
     def _cmd_respawn(self):
         """Teleports Ratchet back to the ship. If used in an unusual place, forces a respawn instead.
         You can also pause the game and hold Square on the pause menu to run this command from in-game."""
+        if not self.verify(4):
+            return
         if isinstance(self.ctx, Rac3Context):
             pause_address = RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS
             if pause_address is not None:
                 self.ctx.game_interface.unpause_game(self.ctx.current_planet)
                 self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
+                self.output(f'Player respawned on {self.ctx.current_planet}')
             else:
-                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}.')
+                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}')
 
 
 class Rac3Context(CommonContext):

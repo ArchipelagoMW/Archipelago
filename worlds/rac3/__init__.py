@@ -123,7 +123,6 @@ class RaC3World(World):
         return create_item(self, name)
 
     def fill_slot_data(self) -> dict[str, object]:
-        # Todo: Add version to slot data for verification during client connection
         slot_data: dict[str, object] = {
             RAC3OPTION.VERSION: RAC3OPTION.VERSION_NUMBER,
             RAC3OPTION.START_INVENTORY_FROM_POOL: self.options.start_inventory_from_pool.value,
