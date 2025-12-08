@@ -422,7 +422,7 @@ class KH2Context(CommonContext):
         self.deathlink_blacklist = []
 
     from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
-    from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests, verifyLevel
+    from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests
     from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
 
     async def server_auth(self, password_requested: bool = False):
@@ -861,7 +861,6 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.checkSlots())
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
-                await asyncio.create_task(ctx.verifyLevel())
                 await asyncio.create_task(ctx.is_dead())
 
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):

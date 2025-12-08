@@ -105,16 +105,3 @@ async def verifyChests(self):
             self.kh2connected = False
         logger.info(e)
         logger.info("line 491")
-
-
-async def verifyLevel(self):
-    for leveltype, anchor in {
-        "SoraLevel":   0x24FF,
-        "ValorLevel":  0x32F6,
-        "WisdomLevel": 0x332E,
-        "LimitLevel":  0x3366,
-        "MasterLevel": 0x339E,
-        "FinalLevel":  0x33D6
-    }.items():
-        if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
-            self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
