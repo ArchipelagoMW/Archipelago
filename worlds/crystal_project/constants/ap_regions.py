@@ -57,6 +57,7 @@ BEATSMITH_DISCO_AP_REGION = "Beatsmith Disco"
 #Jojo Sewers start
 JOJO_SEWERS_AP_REGION = "Jojo Sewers Main (lol)"
 JOJO_SEWERS_AP_REGION_TELEPORT_LOCATION = "426,155,-300"
+OMINOUS_RED_SEWERS_AP_REGION = "Ominous Red-Lit Sewers"
 SEWERS_SECRET_PASSWORD_AP_REGION = "Sewers Secret Password"
 SEWERS_TO_BOOMER_SOCIETY_AP_REGION = "Sewers to Boomer Society"
 #Jojo Sewers end
