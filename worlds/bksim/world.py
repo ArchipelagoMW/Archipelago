@@ -19,7 +19,7 @@ class BKSimWorld(World):
     location_name_to_id = locations.location_name_to_id
     item_name_to_id = items.item_name_to_id
 
-    origin_region_name = RID.HOME
+    origin_region_name = str(RID.HOME)
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)

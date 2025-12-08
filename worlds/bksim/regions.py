@@ -13,7 +13,7 @@ def create_regions(world: BKSimWorld) -> None:
     player = world.player
 
     for rid in RID:
-        multiworld.regions.append(Region(rid, player, multiworld))
+        multiworld.regions.append(Region(str(rid), player, multiworld))
 
     locs_per_weather = world.options.locs_per_weather.value
     for locid, locinfo in enumerate(location_table, 1):
