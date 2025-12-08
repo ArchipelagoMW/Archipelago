@@ -532,15 +532,21 @@ class Rac3Interface(GameInterface):
                 target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
                 logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
+                self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
 
     def weapon_level_up(self, weapon_name):
         """Level up a weapon from xp reward"""
         weapon_data = non_prog_weapon_data[weapon_name]
-        current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID
+        current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID + 1
         if current_level < 5:
             target_level = current_level + 1
-            target_xp = weapon_upgrade_data[ITEM_NAME_FROM_ID[UPGRADE_DICT[weapon_name][target_level]]].XP_THRESHOLD
+            target_id = UPGRADE_DICT[weapon_name][target_level - 1]
+            target_name = ITEM_NAME_FROM_ID[target_id]
+            target_xp = weapon_upgrade_data[target_name].XP_THRESHOLD
+            logger.debug(f'level up {weapon_name} to {target_name}, target level: {current_level}, '
+                         f'target id: {target_id}, target xp:{target_xp}')
             self._write32(weapon_data.XP_ADDRESS, target_xp)
+            self._write8(weapon_data.LEVEL_ADDRESS, target_level)
 
     # Equip the most recently collected weapon/gadget, update recent uses
     def update_equip(self, name):
