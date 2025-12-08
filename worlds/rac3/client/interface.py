@@ -683,17 +683,47 @@ class Rac3Interface(GameInterface):
 
     # Todo: Deathlink
     def alive(self) -> tuple[bool, str]:
-        death = DEATH_FROM_ACTION.get(self._read8(RAC3STATUS.ACTION), False)
-        if self._read8(RAC3STATUS.HEALTH) > 0 and not death:
-            return True, "Ratchet is Alive"
-        else:
-            logger.debug(f'Death Detected!')
+        action_state = self._read8(RAC3STATUS.ACTION)
+        is_dead = self._read8(RAC3STATUS.HEALTH) == 0
+        death = DEATH_FROM_ACTION.get(action_state, False)
+
+        if is_dead:
+            logger.debug(f'Death Detected! (0 health)')
             return False, f"Ratchet {death}"
 
+        if action_state == 0x31: # Eaten or in vehicle
+            in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
+            if in_vehicle:
+                death = False
+
+        if death:
+            logger.debug(f'Death Detected! ({death})')
+            return False, f"Ratchet {death}"
+
+        logger.debug(f'Ratchet is Alive')
+        return True, "Ratchet is Alive"
+
     def kill_player(self) -> bool:
-        pause_state = self._read8(RAC3STATUS.PAUSE_STATE) # 0x0 = unpaused
+        pause_state_addr = RAC3STATUS.PAUSE_STATE
+        current_planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
+        
+        # Ranger missions and Qwark's Hideout have different pause state addresses than the rest
+        match current_planet:
+            case RAC3REGION.QWARKS_HIDEOUT:
+                pause_state_addr += 0x40
+            case RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA | RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS:
+                pause_state_addr += 0x50
+
+        pause_state = self._read8(pause_state_addr) # 0x0 = unpaused
         if not pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
+            in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
+            if in_vehicle:
+                health_addr = self._read32(self._read32(self._read32(RAC3STATUS.VEHICLE_POINTER) + 0x68))
+                vehicle_blow_up_addr = self._read32(RAC3STATUS.VEHICLE_POINTER) + 0xBC
+                self._write32(health_addr, 0) # health is a float but we can write 0 as int32
+                self._write8(vehicle_blow_up_addr, 0x9) # 0x9: blow up vehicle immediately 0xA: force respawn
+                logger.debug(f'player in vehicle, killing vehicle too')
             logger.debug(f'player successfully killed')
             return True
         else:
