@@ -50,7 +50,7 @@ class CrystalProjectWorld(World):
     options: CrystalProjectOptions
     topology_present = True  # show path to required location checks in spoiler
 
-    # Add the homepoints to the item_table so they don't require any special code after this
+    # Add the home points to the item_table so they don't require any special code after this
     home_points = get_home_points(-1, options)
     for home_point in home_points:
         item_table[home_point.name] = ItemData(HOME_POINT, home_point.code + home_point_item_index_offset, ItemClassification.progression)
@@ -250,10 +250,32 @@ class CrystalProjectWorld(World):
             #checking the start inventory for region passes and using the first one to set the starter region, if any
             for item_name in self.options.start_inventory.keys():
                 if item_name in self.item_name_groups[PASS]:
-                    starting_passes_list.append(item_name)
+                    is_inv_pass_for_included_region: bool = False
+                    for display_region in self.included_regions:
+                        is_inv_pass_for_included_region = False
+                        if (display_region != MENU_DISPLAY_NAME and display_region != MODDED_ZONE_DISPLAY_NAME
+                                and display_region_name_to_pass_dict[display_region] == item_name):
+                                is_inv_pass_for_included_region = True
+                                starting_passes_list.append(item_name)
+                                break
+                    if not is_inv_pass_for_included_region:
+                        raise Exception(f"For player {self.player_name}: YAML settings were contradictory. Starting inventory contains {item_name}, "
+                                        f"but that region is not in {self.options.included_regions}. Change settings and regenerate.")
+
             for item_name in self.options.start_inventory_from_pool.keys():
                 if item_name in self.item_name_groups[PASS]:
-                    starting_passes_list.append(item_name)
+                    is_inv_pool_pass_for_included_region: bool = False
+                    for display_region in self.included_regions:
+                        is_inv_pool_pass_for_included_region = False
+                        if (display_region != MENU_DISPLAY_NAME and display_region != MODDED_ZONE_DISPLAY_NAME
+                                and display_region_name_to_pass_dict[display_region] == item_name):
+                            is_inv_pool_pass_for_included_region = True
+                            starting_passes_list.append(item_name)
+                            break
+                    if not is_inv_pool_pass_for_included_region:
+                        raise Exception(f"For player {self.player_name}: YAML settings were contradictory. Starting inventory from pool contains {item_name}, "
+                                        f"but that region is not in {self.options.included_regions}. Change settings and regenerate.")
+
             if len(starting_passes_list) > 0:
                 for display_region_name in display_region_name_to_pass_dict:
                     if display_region_name_to_pass_dict[display_region_name] == starting_passes_list[0]:
@@ -324,7 +346,7 @@ class CrystalProjectWorld(World):
                 self.multiworld.push_precollected(self.create_item(PROGRESSIVE_SALMON_VIOLA))
 
         self.origin_region_name = self.starter_ap_region
-        logging.getLogger().info("Starting region for " + self.player_name + " is " + self.starter_ap_region)
+        logging.getLogger().info("Starting region for " + self.player_name + " is " + ap_region_to_display_region_dictionary[self.starter_ap_region])
 
         # now that we know your starter region, we know your starting level and how many progressive levels you need to start with
         starter_region_level = display_region_levels_dictionary[ap_region_to_display_region_dictionary[self.starter_ap_region]][0]
@@ -525,8 +547,24 @@ class CrystalProjectWorld(World):
             excluded_items.add(display_region_name_to_pass_dict[ap_region_to_display_region_dictionary[self.starter_ap_region]])
 
         if self.options.home_point_hustle.value == self.options.home_point_hustle.option_disabled:
-            for home_point in self.item_name_groups[HOME_POINT]:
-                excluded_items.add(home_point)
+            for home_point_item in self.item_name_groups[HOME_POINT]:
+                excluded_items.add(home_point_item)
+        else:
+            all_home_point_locations = get_home_points(self.player, self.options)
+
+            for home_point_item in self.item_name_groups[HOME_POINT]:
+                is_in_included_region: bool = False
+                for location in all_home_point_locations:
+                    if home_point_item == location.name:
+                        if ap_region_to_display_region_dictionary[location.ap_region] in self.included_regions:
+                            is_in_included_region = True
+                            break
+                        elif (ap_region_to_display_region_dictionary[location.ap_region] == THE_NEW_WORLD_DISPLAY_NAME
+                              and (self.options.goal.value == self.options.goal.option_astley or self.options.goal.value == self.options.goal.option_true_astley)):
+                            is_in_included_region = True
+                            break
+                if not is_in_included_region:
+                    excluded_items.add(home_point_item)
 
         return excluded_items
 
@@ -580,6 +618,18 @@ class CrystalProjectWorld(World):
                 item = self.create_item(scholar_ability)
                 pool.append(item)
 
+        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
+            for home_point in self.home_points:
+                if ap_region_to_display_region_dictionary[home_point.ap_region] in self.included_regions:
+                    item = self.create_item(home_point.name)
+                    pool.append(item)
+
+        #for any Astley goal, make sure new world stone is in the pool
+        if self.options.goal.value != self.options.goal.option_clamshells:
+            item = self.set_classifications(NEW_WORLD_STONE)
+            if item not in pool:
+                pool.append(item)
+
         if self.options.use_mods:
             combined_locations: List[ModLocationData] = self.modded_locations
             combined_locations.extend(self.modded_shops)
@@ -605,18 +655,6 @@ class CrystalProjectWorld(World):
         for _ in range(self.get_total_clamshells(max_clamshells)):
             item = self.set_classifications(CLAMSHELL)
             pool.append(item)
-
-        if self.options.home_point_hustle.value != self.options.home_point_hustle.option_disabled:
-            for home_point in self.home_points:
-                if ap_region_to_display_region_dictionary[home_point.ap_region] in self.included_regions:
-                    item = self.create_item(home_point.name)
-                    pool.append(item)
-
-        #for any Astley goal, make sure new world stone is in the pool
-        if self.options.goal.value != self.options.goal.option_clamshells:
-            item = self.set_classifications(NEW_WORLD_STONE)
-            if item not in pool:
-                pool.append(item)
 
         for _ in range(len(self.multiworld.get_unfilled_locations(self.player)) - len(pool)):
             item = self.create_item(self.get_filler_item_name())
