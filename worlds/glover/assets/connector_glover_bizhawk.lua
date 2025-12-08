@@ -11819,6 +11819,7 @@ GLOVERHACK = {
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
+      checkpoint_items = 0x2,
       randomize_switches = 0x3,
       deathlink = 0x4,
       taglink = 0x5,
