@@ -437,11 +437,17 @@ class GloverWorld(World):
     def percent_of(self, percent : int) -> float:
         return (float(percent) / 100.0)
 
-    def percents_sum_100(self, percents_dict : dict) -> bool:
+    def percents_sum_100(self, percents_dict : dict) -> dict:
         sum : float = 0
         for all_percentages in percents_dict.values():
             sum += all_percentages
-        return math.isclose(sum, 1)
+        if math.isclose(sum, 1):
+            return percents_dict
+        if math.isclose(sum, 0):
+            raise ValueError("All weight entries are 0!")
+        for all_entries, all_percentages in percents_dict.items():
+            percents_dict[all_entries] /= sum
+        return percents_dict
 
     def highest_dict_value(self, input_dict : dict) -> str:
         best_names : list[str]
@@ -549,11 +555,11 @@ class GloverWorld(World):
             "Tip Trap" :								self.percent_of(self.options.tip_trap_weight.value)
         }
         
-        #Apply the filler
-        if not self.percents_sum_100(filler_percentages):
-            raise ValueError("The total of filler percentages isn't 100!")
-        if not self.percents_sum_100(trap_percentages):
-            raise ValueError("The total of trap percentages isn't 100!")
+        #Weighted off the sum assuming there are entries
+        if total_filler_items != 0:
+            filler_percentages = self.percents_sum_100(filler_percentages)
+        if total_trap_items != 0:
+            trap_percentages = self.percents_sum_100(trap_percentages)
         
         #Filler begins
         all_filler_items = []
