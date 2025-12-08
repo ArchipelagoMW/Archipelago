@@ -559,6 +559,7 @@ class Shipsanity(Choice):
     option_full_shipment = 5
     option_full_shipment_with_fish = 7
     option_everything = 9
+    alias_all = option_everything
 
 
 class Cooksanity(Choice):
