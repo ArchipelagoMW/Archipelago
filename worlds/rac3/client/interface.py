@@ -659,10 +659,13 @@ class Rac3Interface(GameInterface):
 
     def should_overwrite_respawn(self, planet):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        if is_clank:
+        is_vidcomic = 'VidComic' in planet
+        if is_clank or is_vidcomic:
             return False
         match planet:
             # Todo: add more special cases
+            case RAC3REGION.VELDIN:
+                return False # Problems with F-sector
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:
@@ -688,9 +691,8 @@ class Rac3Interface(GameInterface):
             return False, f"Ratchet {death}"
 
     def kill_player(self) -> bool:
-        planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
-        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-        if not self._read8(pause_address):
+        pause_state = self._read8(RAC3STATUS.PAUSE_STATE) # 0x0 = unpaused
+        if not pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
             logger.debug(f'player successfully killed')
             return True
