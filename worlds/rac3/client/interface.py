@@ -191,6 +191,7 @@ class Rac3Interface(GameInterface):
     weaponLevelLockFlag = None
     boltAndXPMultiplier = None
     boltAndXPMultiplierValue = None
+    respawning = False
     ship: int = 0
     ship_skin: int = 0
     skin: int = 0
@@ -229,6 +230,9 @@ class Rac3Interface(GameInterface):
             self.weapon_exp_cycler()
         # Logic Fixes
         self.logic_fixes()
+        if self.respawning:
+            if self._read8(RAC3STATUS.FORCE_RELOAD) == 0:
+                self.respawning = False
 
     @staticmethod
     def get_victory_code():
@@ -676,6 +680,7 @@ class Rac3Interface(GameInterface):
         return True
 
     def force_respawn(self):
+        self.respawning = True
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def teleport_to_coords(self):
@@ -702,8 +707,7 @@ class Rac3Interface(GameInterface):
         
         # Special case for Nefarious's Base pitfall which doesnt set action state to death
         if in_nefarious_base and is_clank:
-            z = self._read_float(RAC3STATUS.RATCHET_Z)
-            if z < 79 and self._read8(RAC3STATUS.FORCE_RELOAD):
+            if not self.respawning and self._read8(RAC3STATUS.FORCE_RELOAD):
                 death = 'Fell to their doom in Nefarious\'s Base'
 
         if death:
