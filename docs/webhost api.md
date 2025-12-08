@@ -187,7 +187,7 @@ Will provide a dict of room data with the following keys:
     - `shutdown` if the room is shutdown and offline
 - Tracker SUUID (`tracker`)
 - A list of players (`players`)
-    - Each item containing a list with the Slot name and Game
+    - Each item in the list will contain a dict with the `name`, `game`, and `slot` of each player
 - Last known hosted port (`last_port`)
 - Last activity timestamp (`last_activity`)
 - The room timeout value (`timeout`)
@@ -222,26 +222,31 @@ Example:
     "last_activity": "Fri, 18 Apr 2025 20:35:45 GMT",
     "last_port": 52122,
     "players": [
-        [
-            "Slot_Name_1",
-            "Ocarina of Time"
-        ],
-        [
-            "Slot_Name_2",
-            "Ocarina of Time"
-        ],
-        [
-            "Slot_Name_3",
-            "Ocarina of Time"
-        ],
-        [
-            "Slot_Name_4",
-            "Ocarina of Time"
-        ],
-        [
-            "Slot_Name_5",
-            "Ocarina of Time"
-        ]
+        {
+            name: "Slot_Name_1",
+            game: "Ocarina of Time",
+            slot: 1
+        },
+        {
+            name: "Slot_Name_1",
+            game: "Ocarina of Time",
+            slot: 2
+        },
+        {
+            name: "Slot_Name_1",
+            game: "Ocarina of Time",
+            slot: 3
+        },
+        {
+            name: "Slot_Name_1",
+            game: "Ocarina of Time",
+            slot: 4
+        },
+        {
+            name: "Slot_Name_1",
+            game: "Ocarina of Time",
+            slot: 5
+        }
     ],
     "remaining_time":59.928921,
     "status":"active",
@@ -296,7 +301,7 @@ Each item in the list will contain a dict with the seed's details:
 - Seed SUUID (`seed_id`)
 - Creation timestamp (`creation_time`)
 - A list of player slots (`players`)
-    - Each item in the list will contain a list of the slot name and game
+    - Each item in the list will contain a dict with the `name`, `game`, and `slot` of each player
 
 Example:
 ```
@@ -304,48 +309,57 @@ Example:
     {
         "creation_time": "Fri, 18 Apr 2025 19:46:52 GMT",
         "players": [
-            [
-                "Slot_Name_1",
-                "Ocarina of Time"
-            ],
-            [
-                "Slot_Name_2",
-                "Ocarina of Time"
-            ],
-            [
-                "Slot_Name_3",
-                "Ocarina of Time"
-            ],
-            [
-                "Slot_Name_4",
-                "Ocarina of Time"
-            ],
-            [
-                "Slot_Name_5",
-                "Ocarina of Time"
-            ]
+            {
+                name: "Slot_Name_1",
+                game: "Ocarina of Time",
+                slot: 1
+            },
+            {
+                name: "Slot_Name_1",
+                game: "Ocarina of Time",
+                slot: 2
+            },
+            {
+                name: "Slot_Name_1",
+                game: "Ocarina of Time",
+                slot: 3
+            },
+            {
+                name: "Slot_Name_1",
+                game: "Ocarina of Time",
+                slot: 4
+            },
+            {
+                name: "Slot_Name_1",
+                game: "Ocarina of Time",
+                slot: 5
+            }
         ],
         "seed_id": "efbd62c2-aaeb-4dda-88c3-f461c029cef6"
     },
     {
         "creation_time": "Fri, 18 Apr 2025 20:36:39 GMT",
         "players": [
-            [
-                "Slot_Name_1",
-                "Clique"
-            ],
-            [
-                "Slot_Name_2",
-                "Clique"
-            ],
-            [
-                "Slot_Name_3",
-                "Clique"
-            ],
-            [
-                "Slot_Name_4",
-                "Archipelago"
-            ]
+            {
+               name: "Slot_Name_1",
+               game: "Clique",
+               slot: 1
+            },
+            {
+               name: "Slot_Name_2",
+               game: "Clique",
+               slot: 2
+            },
+            {
+               name: "Slot_Name_3",
+               game: "Clique",
+               slot: 3
+            },
+            {
+               name: "Slot_Name_4",
+               game: "Archipelago",
+               slot: 4
+            }
         ],
         "seed_id": "a528e34c-3b4f-42a9-9f8f-00a4fd40bacb"
     }
