@@ -645,10 +645,11 @@ class Rac3Interface(GameInterface):
 
     # Todo: Deathlink
     def alive(self) -> tuple[bool, str]:
-        if self._read8(RAC3STATUS.HEALTH) > 0:
+        death = DEATH_FROM_ACTION.get(self._read8(RAC3STATUS.ACTION), False)
+        if self._read8(RAC3STATUS.HEALTH) > 0 and not death:
             return True, "Ratchet is Alive"
         else:
-            death = DEATH_FROM_ACTION.get(self._read8(RAC3STATUS.ACTION), "Died")
+            logger.debug(f'Death Detected!')
             return False, f"Ratchet {death}"
 
     def kill_player(self) -> bool:
@@ -656,6 +657,8 @@ class Rac3Interface(GameInterface):
         pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
         if not self._read8(pause_address):
             self._write8(RAC3STATUS.HEALTH, 0)
+            logger.debug(f'player successfully killed')
             return True
         else:
+            logger.debug(f'player unable to be killed')
             return False

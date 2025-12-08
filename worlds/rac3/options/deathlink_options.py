@@ -8,6 +8,5 @@ class Deathlink(Choice):
     """
     display_name = RAC3OPTION.DEATHLINK
     option_off = 0
-    option_toggle = 1
-    option_on = 2
+    option_on = 1
     default = 0

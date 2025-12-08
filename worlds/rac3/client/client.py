@@ -173,7 +173,6 @@ class Rac3Context(CommonContext):
         self.game_interface = Rac3Interface()
 
     def on_deathlink(self, data: Dict[str, Any]) -> None:
-        self.last_death_link = max(data["time"], self.last_death_link)
         text = data.get("cause", "")
         if text:
             logger.info(f"Death Link: {text}")
@@ -209,7 +208,7 @@ class Rac3Context(CommonContext):
             if RAC3OPTION.DEATHLINK in self.slot_data:
                 if self.slot_data[RAC3OPTION.DEATHLINK]:
                     self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
-                async_start(self.update_death_link(self.death_link))
+                    async_start(self.update_death_link(self.death_link))
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
