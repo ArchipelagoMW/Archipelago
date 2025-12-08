@@ -122,14 +122,14 @@ for world_source in world_sources:
         for dirpath, dirnames, filenames in os.walk(world_source.resolved_path):
             for file in filenames:
                 if file.endswith("archipelago.json"):
-                    manifest = json.load(open(os.path.join(dirpath, file), "r"))
+                    with open(os.path.join(dirpath, file), mode="r", encoding="utf-8") as manifest_file:
+                        manifest = json.load(manifest_file)
                     break
             if manifest:
                 break
         game = manifest.get("game")
         if game in AutoWorldRegister.world_types:
-            AutoWorldRegister.world_types[game].world_version = Version(*tuplize_version(manifest.get("world_version",
-                                                                                                      "0.0.0")))
+            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
 
 if apworlds:
     # encapsulation for namespace / gc purposes
