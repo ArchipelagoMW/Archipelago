@@ -14,7 +14,7 @@ class BKSim_Item(Item):
 
 
 class ItemInfo(typing.NamedTuple):
-    name: str
+    name: ITEM
     flag: ItemClassification
 
 
@@ -73,7 +73,7 @@ def create_items(world: BKSimWorld) -> None:
     for q in range(len(item_table)):
         data: ItemInfo = item_table[q]
         count: int = counts[q]
-        itempool += [BKSim_Item(data.name, data.flag, q + 1, player) for _ in range(count)]
+        itempool += [BKSim_Item(str(data.name), data.flag, q + 1, player) for _ in range(count)]
     multiworld.itempool += itempool
 
 
