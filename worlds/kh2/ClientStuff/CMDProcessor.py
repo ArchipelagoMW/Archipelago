@@ -88,7 +88,8 @@ class KH2CommandProcessor(ClientCommandProcessor):
             self.ctx.deathlink_blacklist.remove(player_name)
 
     #def _cmd_kill(self):
-    #    self.ctx.kh2_write_byte(0x810000, 1)
+    #    """Test deathlink"""
+    #    self.ctx.socket.send(5,())
 
     #def _cmd_chest(self,itemid:int):
     #    from .RecieveItems import to_khscii

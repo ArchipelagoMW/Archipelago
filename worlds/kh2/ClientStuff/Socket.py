@@ -80,6 +80,7 @@ class KH2Socket():
             self.client.Room = int(message[1])
             self.client.Event = int(message[2])
             self.client.World = int(message[3])
+            self.client.SoraDied = True
 
         elif (msgType == MessageType.Victory):
             self.client.kh2_finished_game = True

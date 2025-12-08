@@ -225,6 +225,7 @@ class KH2Context(CommonContext):
         self.Room = -1
         self.Event = -1
         self.World = -1
+        self.SoraDied = False
         self.keyblade_ability_checked = list()
         # PC Address anchors
         # epic .10 addresses
@@ -639,12 +640,10 @@ class KH2Context(CommonContext):
                     logger.info(f"DeathLink: {text}")
                 else:
                     logger.info(f"DeathLink: Received from {data['source']}")
-                self.socket.send(MessageType.Deathlink,{data["time"]})
-                # kills sora by setting flag for the lua to read
-                #self.kh2_write_byte(0x810000, 1)
+                self.socket.send(MessageType.Deathlink,())
 
     async def is_dead(self):
-        if (self.deathlink_toggle):
+        if (self.deathlink_toggle and self.SoraDied):
             if (self.World, self.Room, self.Event) in DeathLinkPair.keys():
                 logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
@@ -654,6 +653,7 @@ class KH2Context(CommonContext):
             self.World = -1
             self.Room = -1
             self.Event = -1
+            self.SoraDied = False
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
