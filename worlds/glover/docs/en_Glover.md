@@ -2,7 +2,7 @@
 
 ## Where is the options page?
 
-The [player options page](www.youtube.com/watch?v=dQw4w9WgXcQ) for Glover contains all the options you need to create a config file.
+The [player options page (todo)](www.youtube.com/watch?v=dQw4w9WgXcQ) for Glover contains all the options you need to create a config file.
 
 ## What does randomization do to Glover?
 
