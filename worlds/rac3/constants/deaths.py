@@ -15,3 +15,8 @@ DEATH_FROM_ACTION: dict[int, str] = {
     0x7E: RAC3DEATH.DROWNED, # Lava Bounce
     0x81: RAC3DEATH.FROZEN,
 }
+
+CLANK_DEATH_FROM_ACTION: dict[int, str] = {
+    0x50: RAC3DEATH.FROZEN,
+    0x74: RAC3DEATH.FELL
+}

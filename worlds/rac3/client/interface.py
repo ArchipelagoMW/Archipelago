@@ -13,7 +13,7 @@ from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
-from worlds.rac3.constants.deaths import DEATH_FROM_ACTION
+from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
@@ -22,7 +22,7 @@ from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
-from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.status import PLAYER_TYPE_TO_NAME, RAC3STATUS
 from worlds.rac3.pcsx2_interface.pine import Pine
 
 
@@ -684,24 +684,34 @@ class Rac3Interface(GameInterface):
     # Todo: Deathlink
     def alive(self) -> tuple[bool, str]:
         action_state = self._read8(RAC3STATUS.ACTION)
-        is_dead = self._read8(RAC3STATUS.HEALTH) == 0
-        death = DEATH_FROM_ACTION.get(action_state, False)
+        player_type = self._read8(RAC3STATUS.PLAYER_TYPE)
+        is_dead = self._read8(RAC3STATUS.HEALTH) == 0 or (player_type == 2 and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0)
+        is_clank = player_type == 1
+        death = DEATH_FROM_ACTION.get(action_state, False) if not is_clank else CLANK_DEATH_FROM_ACTION.get(action_state, False)
+        character = PLAYER_TYPE_TO_NAME[player_type]
+        in_nefarious_base = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)] == RAC3REGION.AQUATOS_BASE
 
         if is_dead:
             logger.debug(f'Death Detected! (0 health)')
-            return False, f"Ratchet {death}"
+            return False, f"{character} {'Ran out of nanotech' if not death else death}"
 
         if action_state == 0x31: # Eaten or in vehicle
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
             if in_vehicle:
                 death = False
+        
+        # Special case for Nefarious's Base pitfall which doesnt set action state to death
+        if in_nefarious_base and is_clank:
+            z = self._read_float(RAC3STATUS.RATCHET_Z)
+            if z < 79 and self._read8(RAC3STATUS.FORCE_RELOAD):
+                death = 'Fell to their doom in Nefarious\'s Base'
 
         if death:
             logger.debug(f'Death Detected! ({death})')
-            return False, f"Ratchet {death}"
+            return False, f"{character} {death}"
 
-        logger.debug(f'Ratchet is Alive')
-        return True, "Ratchet is Alive"
+        logger.debug(f'{character} is Alive')
+        return True, f"{character} is Alive"
 
     def kill_player(self) -> bool:
         pause_state_addr = RAC3STATUS.PAUSE_STATE
@@ -719,6 +729,7 @@ class Rac3Interface(GameInterface):
             self._write8(RAC3STATUS.HEALTH, 0)
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
             in_vidcomic = current_planet in [RAC3REGION.QWARK_VID_COMIC_UNUSED_1, RAC3REGION.QWARK_VID_COMIC_1, RAC3REGION.QWARK_VID_COMIC_4, RAC3REGION.QWARK_VID_COMIC_2, RAC3REGION.QWARK_VID_COMIC_3, RAC3REGION.QWARK_VID_COMIC_5, RAC3REGION.QWARK_VID_COMIC_UNUSED_2]
+            player_type = self._read8(RAC3STATUS.PLAYER_TYPE)
             if in_vehicle:
                 health_addr = self._read32(self._read32(self._read32(RAC3STATUS.VEHICLE_POINTER) + 0x68))
                 vehicle_blow_up_addr = self._read32(RAC3STATUS.VEHICLE_POINTER) + 0xBC
@@ -731,6 +742,25 @@ class Rac3Interface(GameInterface):
                 self._write8(RAC3STATUS.ACTION + 0xC, 0x9E)  # Past state
                 self._write8(RAC3STATUS.ACTION + 0x18, 0x9E) # Writing to this address seems to help ensure the death animation triggers
                 logger.debug(f'player in vidcomic, qwark must die dramatically')
+            elif player_type == 1: # Clank
+                # Clank taking damage state (updates state to trigger death animation once at 0 health)
+                self._write8(RAC3STATUS.ACTION, 0x42)
+                self._write8(RAC3STATUS.ACTION + 0xC, 0x42)  # Past state
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x42) # Writing to this address seems to help ensure the death animation triggers
+                logger.debug(f'player is clank, clank must die dramatically')
+            elif player_type == 2: # Giant Clank
+                # Giant Clank punched state (updates state to trigger death animation once at 0 health)
+                self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
+                self._write8(RAC3STATUS.ACTION, 0x5D)
+                self._write8(RAC3STATUS.ACTION + 0xC, 0x5D)  # Past state
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x5D) # Writing to this address seems to help ensure the death animation triggers
+                logger.debug(f'player is giant clank, giant clank must die dramatically')
+            elif player_type == 3: # Tyhrranoid
+                # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
+                self._write8(RAC3STATUS.ACTION, 0x55)
+                self._write8(RAC3STATUS.ACTION + 0xC, 0x55)  # Past state
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x55) # Writing to this address seems to help ensure the death animation triggers
+                logger.debug(f'player is tyhrranoid, tyhrranoid must be squished')
             logger.debug(f'player successfully killed')
             return True
         else:
