@@ -13202,6 +13202,10 @@ function process_slot(block)
     then
         GVR:setRandomizeSwitches(block['slot_switches'])
     end
+	if block['slot_easy_ball_walk'] ~= nil and block['slot_easy_ball_walk'] ~= 0
+	then
+		print("Easy Ball Walk!")
+	end
     if block['slot_randomized_spawns'] ~= nil and block['slot_randomized_spawns'] ~= 0
     then
         GVR:setRandomizeCheckpoint(block['slot_randomized_spawns'])

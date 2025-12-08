@@ -120,6 +120,11 @@ class Insectity(Toggle):
     """
     display_name = "Insectity"
 
+class EasyBallWalk(Toggle):
+    """Forces the game to de-invert ball controls.
+    """
+    display_name = "Easy Ball Walk"
+
 class MrHints(Choice):
     """Mr. Tips give AP hints. Default 1.
     """
@@ -313,6 +318,8 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     mr_tip_checks : MrTipChecks
     enemysanity : Enemysanity
     insectity : Insectity
+
+    easy_ball_walk : EasyBallWalk
 
     mr_hints : MrHints
     chicken_hints : ChickenHints

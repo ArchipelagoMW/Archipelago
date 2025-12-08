@@ -167,7 +167,7 @@ class GloverWorld(World):
         return -1
 
     def __init__(self, world, player):
-        self.version = "V0.1"
+        self.version = "V0.2"
         self.spawn_checkpoint = [
             2,3,3,
             4,5,4,
@@ -275,15 +275,7 @@ class GloverWorld(World):
         return -1
 
     def generate_early(self):
-        #Setup the spawning checkpoints
-        if self.options.spawning_checkpoint_randomizer:
-            #If randomized, pick a number from it's assigned value to the current value
-            for each_index, each_item in enumerate(self.spawn_checkpoint):
-                self.spawn_checkpoint[each_index] = self.random.randint(1, each_item)
-        else:
-            #By default, they're all Checkpoint 1
-            for each_item in range(len(self.spawn_checkpoint)):
-                self.spawn_checkpoint[each_item] = 1
+        self.checkpoint_randomization()
         #Level entry randomization
         if self.options.entrance_randomizer:
             #When all levels exist, you can just shuffle this
@@ -375,6 +367,50 @@ class GloverWorld(World):
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
         self.fake_item_names = create_trap_name_table(self)
+
+    def checkpoint_randomization(self):
+        #Setup the spawning checkpoints
+        if self.options.spawning_checkpoint_randomizer:
+            spawning_options : list[list[int]] = []
+            for each_index, each_item in enumerate(self.spawn_checkpoint):
+                spawning_options.append(list(range(1, each_item + 1)))
+            #If everything must be accessable
+            if self.options.accessibility.value == 0 and self.options.checkpoint_checks != 1:
+                #Carnival 2 (Pre-Rollercoaster)
+                spawning_options[4] = [1]
+                #Fear 3 (Post-Warp)
+                spawning_options[14] = [1, 2, 3]
+                #Intended Locks
+                if self.options.difficulty_logic.value == 0:
+                    #Prehistoric 1 (Icicles)
+                    spawning_options[9] = [1]
+                    #Prehistoric 3 (Lava Platforms)
+                    spawning_options[11] = [1, 2, 3]
+                
+                #Without Switch Items
+                if not self.options.switches_checks:
+                    #Intended Locks
+                    if self.options.difficulty_logic.value == 0:
+                        #Carnival 3 (Hands)
+                        spawning_options[5] = [1, 2, 3]
+                        #Pirates 1 (Raise Ship)
+                        spawning_options[6] = [1, 2, 3]
+                        #Prehistoric 2 (Lava Platforms)
+                        spawning_options[10] = [1, 2]
+                    #Easy/Intended Locks
+                    if self.options.difficulty_logic.value <= 1:
+                        #Prehistoric 3 (Lava Platforms)
+                        spawning_options[11] = [1, 2]
+                        #Fear 2 (Lever Room)
+                        spawning_options[13] = [1, 2]
+
+
+        for each_index, each_item in enumerate(self.spawn_checkpoint):
+            self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
+        else:
+            #By default, they're all Checkpoint 1
+            for each_item in range(len(self.spawn_checkpoint)):
+                self.spawn_checkpoint[each_item] = 1
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -891,6 +927,7 @@ class GloverWorld(World):
         options["mr_tip_checks"] = self.options.mr_tip_checks.value
         options["enemysanity"] = self.options.enemysanity.value
         options["insectity"] = self.options.insectity.value
+        options["easy_ball_walk"] = self.options.easy_ball_walk.value
         options["mr_hints"] = self.options.mr_hints.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
