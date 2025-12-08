@@ -170,7 +170,7 @@ class Rac3Context(CommonContext):
 
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
-        self.game_interface = Rac3Interface(logger)
+        self.game_interface = Rac3Interface()
 
     def on_deathlink(self, data: Dict[str, Any]) -> None:
         self.last_death_link = max(data["time"], self.last_death_link)

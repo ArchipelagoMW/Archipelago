@@ -1,11 +1,11 @@
 import time
 from dataclasses import dataclass
 from enum import IntEnum
-from logging import Logger
 from random import randint
 from struct import unpack
 from typing import Dict, Optional
 
+from CommonClient import logger
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT,
@@ -34,13 +34,12 @@ class GameInterface:
     """
     is_connecting: bool = False
     pcsx2_interface: Pine = Pine()
-    logger: Logger
     game_id_error: Optional[str] = None
     current_game: Optional[str] = None
     addresses: Dict = {}
 
-    def __init__(self, logger) -> None:
-        self.logger = logger
+    def __init__(self) -> None:
+        pass
 
     def _read8(self, address: int):
         return self.pcsx2_interface.read_int8(address)
@@ -79,67 +78,67 @@ class GameInterface:
         """
         if not self.pcsx2_interface.is_connected():
             self.is_connecting = True
-            self.logger.debug('Begin attempting emulator connection...')
+            logger.debug('Begin attempting emulator connection...')
             self.pcsx2_interface.connect()
             self.is_connecting = False
             if not self.pcsx2_interface.is_connected():
-                self.logger.debug('No Connection to PCSX2 Emulator')
+                logger.debug('No Connection to PCSX2 Emulator')
                 return
-            self.logger.info('Connected to PCSX2 Emulator')
+            logger.info('Connected to PCSX2 Emulator')
         self.current_game = None
         try:
             self.verify_game_version()
         except RuntimeError:
-            self.logger.warning('PCSX2 Emulator is unreachable')
+            logger.warning('PCSX2 Emulator is unreachable')
         except ConnectionError as error:
-            self.logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
+            logger.warning(f'Connection to PCSX2 Emulator lost: {error}')
 
     def disconnect_from_game(self):
         self.pcsx2_interface.disconnect()
         self.current_game = None
-        self.logger.info("Disconnected from PCSX2 Emulator")
+        logger.info("Disconnected from PCSX2 Emulator")
 
     def verify_game_version(self) -> bool:
-        self.logger.debug('Start Game Verfication')
+        logger.debug('Start Game Verfication')
         try:
             game_id = self.pcsx2_interface.get_game_id()
         except ConnectionError as error:
-            self.logger.debug(f'Game Verify Connection Error: {error}')
+            logger.debug(f'Game Verify Connection Error: {error}')
             return False
         # The first read of the address will be null if the client is faster than the emulator
         if game_id is None:
-            self.logger.info('No Game Loaded')
+            logger.info('No Game Loaded')
             return False
         if game_id != self.current_game:
-            self.logger.info(f'Detecting new game version...')
+            logger.info(f'Detecting new game version...')
             match game_id:  # Todo: Add other game versions
                 case RAC3STATUS.US_ID:
                     self.current_game = game_id
-                    self.logger.info(f'Version Detected: US release')
+                    logger.info(f'Version Detected: US release')
                 case RAC3STATUS.US_GH_ID:
                     self.current_game = game_id
-                    self.logger.info(f'Version Detected: US Greatest Hits release')
-                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                        'inconsistencies found')
+                    logger.info(f'Version Detected: US Greatest Hits release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
                 case RAC3STATUS.JP_ID:
                     self.current_game = game_id
-                    self.logger.info(f'Version Detected: Japanese release')
-                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                        'inconsistencies found')
+                    logger.info(f'Version Detected: Japanese release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
                 case RAC3STATUS.EU_ID:
                     self.current_game = game_id
-                    self.logger.info(f'Version Detected: EU release')
-                    self.logger.warning('WARNING: Game version untested, please inform apworld devs of any '
-                                        'inconsistencies found')
+                    logger.info(f'Version Detected: EU release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
                 case _:
                     self.current_game = None
-                    self.logger.info('Unknown game version detected')
+                    logger.info('Unknown game version detected')
         if self.current_game is None and self.game_id_error != game_id and game_id != b'\x00\x00\x00\x00\x00\x00':
-            self.logger.warning(f'Connected to the wrong game ({game_id})')
+            logger.warning(f'Connected to the wrong game ({game_id})')
             self.game_id_error = game_id
             return False
         else:
-            self.logger.debug('Valid Game detected')
+            logger.debug('Valid Game detected')
             return True
 
     def get_connection_state(self) -> bool:
@@ -220,7 +219,6 @@ class Rac3Interface(GameInterface):
             self.weapon_exp_cycler()
         # Logic Fixes
         self.logic_fixes()
-        self.tracker_update()
 
     @staticmethod
     def get_victory_code():
@@ -233,7 +231,7 @@ class Rac3Interface(GameInterface):
         return False
 
     def proc_option(self, slot_data):
-        self.logger.debug(f'{slot_data}')
+        logger.debug(f'{slot_data}')
         self.boltAndXPMultiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
         self.weaponLevelLockFlag = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
         self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
@@ -253,7 +251,7 @@ class Rac3Interface(GameInterface):
 
     def item_received(self, item_code):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
-        self.logger.debug(f'Item received: {name}, AP code: {item_code}')
+        logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in planet_data.keys():
             self.UnlockItem[RAC3REGION.SLOT_0].status += 1
             self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
@@ -339,14 +337,14 @@ class Rac3Interface(GameInterface):
     # Game dedicated functions        #
     ###################################
 
-    def __init__(self, logger):
-        super().__init__(logger)  # GameInterfaceの初期化
+    def __init__(self):
+        super().__init__()  # GameInterfaceの初期化
 
     def init_variables(self):
         # Unlock state variables/ArmorUpgrade variable
         self.UnlockItem = {name: UnlockData() for name in ITEM_FROM_AP_CODE.values()}
         self.UnlockItem.update({RAC3REGION.SLOT_0: UnlockData()})
-        self.logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
+        logger.debug(f'UnlockItem dict:{self.UnlockItem.keys()}')
 
         # Proc options
         ### Bolt and XPMultiplier
@@ -415,7 +413,7 @@ class Rac3Interface(GameInterface):
 
     # interval update function: Check unlock/lock status of items
     def weapon_cycler(self):
-        # self.logger.debug('---------WeaponCycler Start---------')
+        # logger.debug('---------WeaponCycler Start---------')
         for name in non_prog_weapon_data.keys():
             addr = non_prog_weapon_data[name].UNLOCK_ADDRESS
             if self.UnlockItem[name].status:
@@ -459,7 +457,7 @@ class Rac3Interface(GameInterface):
                 self._write8(addr, 0)
 
     def planet_cycler(self):
-        # self.logger.debug('---------PlanetCycler Start---------')
+        # logger.debug('---------PlanetCycler Start---------')
         for name in planet_data.keys():
             planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
             if self.UnlockItem[name].status:
@@ -469,18 +467,18 @@ class Rac3Interface(GameInterface):
                         (name != RAC3ITEM.HOLOSTAR_STUDIOS or
                          (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
                     if self.UnlockItem[name].unlock_delay:
-                        # self.logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
+                        # logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
                         self._write8(addr, planet.ID)
                     else:
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
             if number >= self.UnlockItem[RAC3REGION.SLOT_0].status:
-                # self.logger.debug(f'Remove planet at {slot}')
+                # logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
-        # self.logger.debug('---------PlanetCycler End---------')
+        # logger.debug('---------PlanetCycler End---------')
 
     def vidcomic_cycler(self):
-        # self.logger.debug("---------VidComicCycler Start---------")
+        # logger.debug("---------VidComicCycler Start---------")
         prog_comic = self.UnlockItem[RAC3ITEM.PROGRESSIVE_VIDCOMIC]
         for index, name in enumerate(vidcomic_data.keys()):
             comic = self.UnlockItem[name]
@@ -527,12 +525,12 @@ class Rac3Interface(GameInterface):
         # TODO: Track weapon EXP
         for weapon_name in non_prog_weapon_data.keys():
             target_level = self.UnlockItem[weapon_name].status
-            self.logger.debug(f'weapon: {weapon_name}, target: {target_level}')
+            logger.debug(f'weapon: {weapon_name}, target: {target_level}')
             if target_level:
                 target_id = UPGRADE_DICT[weapon_name][target_level - 1]
                 target_name = ITEM_NAME_FROM_ID[target_id]
                 target_xp = RAC3_ITEM_DATA_TABLE[target_name].XP_THRESHOLD
-                self.logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
+                logger.debug(f'{target_name}, id: {target_id}, xp:{target_xp}')
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
 
     def weapon_level_up(self, weapon_name):
@@ -558,16 +556,14 @@ class Rac3Interface(GameInterface):
             self.verify_quick_select_and_last_used()
 
     def dump_info(self, current_planet, slot_data):
-        print(f'Collected Items: {self.UnlockItem}')
+        logger.info(f'Collected Items: {self.UnlockItem}')
         count = 0
         for name in SHIP_SLOTS:
-            print(f'Planet{count}: {PLANET_NAME_FROM_ID[self._read8(RAC3_REGION_DATA_TABLE[name].SLOT_ADDRESS)]}')
+            logger.info(
+                f'Planet{count}: {PLANET_NAME_FROM_ID[self._read8(RAC3_REGION_DATA_TABLE[name].SLOT_ADDRESS)]}')
             count += 1
-        print(f'Current planet Tracked: {current_planet}')
-        print(f'Slot Data: {slot_data}')
-
-    def tracker_update(self):
-        pass
+        logger.info(f'Current planet Tracked: {current_planet}')
+        logger.info(f'Slot Data: {slot_data}')
 
     def trap_cycler(self):
         traps = list(self.trap_timers.keys())
@@ -621,9 +617,9 @@ class Rac3Interface(GameInterface):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
-            self.logger.debug(f'Teleporting to ship on: {planet}')
+            logger.debug(f'Teleporting to ship on: {planet}')
         else:
-            self.logger.debug(f'Teleporting to last checkpoint on: {planet}')
+            logger.debug(f'Teleporting to last checkpoint on: {planet}')
         self.force_respawn()
 
     def should_overwrite_respawn(self, planet):
