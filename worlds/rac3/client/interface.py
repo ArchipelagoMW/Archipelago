@@ -659,8 +659,8 @@ class Rac3Interface(GameInterface):
 
     def should_overwrite_respawn(self, planet):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        is_vidcomic = 'VidComic' in planet
-        if is_clank or is_vidcomic:
+        in_vidcomic = planet in [RAC3REGION.QWARK_VID_COMIC_UNUSED_1, RAC3REGION.QWARK_VID_COMIC_1, RAC3REGION.QWARK_VID_COMIC_4, RAC3REGION.QWARK_VID_COMIC_2, RAC3REGION.QWARK_VID_COMIC_3, RAC3REGION.QWARK_VID_COMIC_5, RAC3REGION.QWARK_VID_COMIC_UNUSED_2]
+        if is_clank or in_vidcomic:
             return False
         match planet:
             # Todo: add more special cases
@@ -718,12 +718,19 @@ class Rac3Interface(GameInterface):
         if not pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
+            in_vidcomic = current_planet in [RAC3REGION.QWARK_VID_COMIC_UNUSED_1, RAC3REGION.QWARK_VID_COMIC_1, RAC3REGION.QWARK_VID_COMIC_4, RAC3REGION.QWARK_VID_COMIC_2, RAC3REGION.QWARK_VID_COMIC_3, RAC3REGION.QWARK_VID_COMIC_5, RAC3REGION.QWARK_VID_COMIC_UNUSED_2]
             if in_vehicle:
                 health_addr = self._read32(self._read32(self._read32(RAC3STATUS.VEHICLE_POINTER) + 0x68))
                 vehicle_blow_up_addr = self._read32(RAC3STATUS.VEHICLE_POINTER) + 0xBC
                 self._write32(health_addr, 0) # health is a float but we can write 0 as int32
                 self._write8(vehicle_blow_up_addr, 0x9) # 0x9: blow up vehicle immediately 0xA: force respawn
                 logger.debug(f'player in vehicle, killing vehicle too')
+            elif in_vidcomic:
+                # Qwark taking damage state (updates state to trigger death animation once at 0 health)
+                self._write8(RAC3STATUS.ACTION, 0x9E)
+                self._write8(RAC3STATUS.ACTION + 0xC, 0x9E)  # Past state
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x9E) # Writing to this address seems to help ensure the death animation triggers
+                logger.debug(f'player in vidcomic, qwark must die dramatically')
             logger.debug(f'player successfully killed')
             return True
         else:

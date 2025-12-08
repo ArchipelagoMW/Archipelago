@@ -12,7 +12,8 @@ from worlds.rac3.client.callbacks import init, update
 from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.constants.region import PLANET_NAME_FROM_ID, RAC3REGION
+from worlds.rac3.constants.status import RAC3STATUS
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False
@@ -139,13 +140,15 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            pause_address = RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS
+            planet_id = self.ctx.game_interface._read8(RAC3STATUS.PLANET)
+            planet = PLANET_NAME_FROM_ID[planet_id]
+            pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
             if pause_address is not None:
-                self.ctx.game_interface.unpause_game(self.ctx.current_planet)
-                self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
-                self.output(f'Player respawned on {self.ctx.current_planet}')
+                self.ctx.game_interface.unpause_game(planet)
+                self.ctx.game_interface.teleport_to_ship(planet)
+                self.output(f'Player respawned on {planet}')
             else:
-                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}')
+                self.output(f'Ship teleport is disabled on {planet}')
 
 
 class Rac3Context(CommonContext):
