@@ -85,7 +85,7 @@ class GloverWorld(World):
     Glover is an N64 physics puzzle platforming game.
     """
     game : str = "Glover"
-    version : str = "V0.1"
+    version : str = "V1.0"
     web = GloverWeb()
     topology_present = True
     settings: GloverSettings
@@ -167,7 +167,7 @@ class GloverWorld(World):
         return -1
 
     def __init__(self, world, player):
-        self.version = "V0.2"
+        self.version = "V1.0"
         self.spawn_checkpoint = [
             2,3,3,
             4,5,4,
@@ -373,7 +373,8 @@ class GloverWorld(World):
         if self.options.spawning_checkpoint_randomizer:
             spawning_options : list[list[int]] = []
             for each_index, each_item in enumerate(self.spawn_checkpoint):
-                spawning_options.append(list(range(1, each_item + 1)))
+                listEntry : list[int] = list(range(1, each_item + 1))
+                spawning_options.append(listEntry)
             #If everything must be accessable
             if self.options.accessibility.value == 0 and self.options.checkpoint_checks != 1:
                 #Carnival 2 (Pre-Rollercoaster)
@@ -403,8 +404,8 @@ class GloverWorld(World):
                         #Fear 2 (Lever Room)
                         spawning_options[13] = [1, 2]
 
-        for each_index, each_item in enumerate(self.spawn_checkpoint):
-            self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
+            for each_index, each_item in enumerate(self.spawn_checkpoint):
+                self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
         else:
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
@@ -791,6 +792,10 @@ class GloverWorld(World):
             "Hubworld Out of This World Gate"
         ]
 
+        if not self.options.portalsanity:
+            final_location : Location = self.returning_crystal(castle_cave, 7)
+            final_location.place_locked_item(self.create_event("Endscreen"))
+
         #Apply hubworld entrances
         for entrance_index, entrance_name in enumerate(self.overworld_entrances):
             loading_zone : str = hub_entry_names[entrance_index]
@@ -807,9 +812,6 @@ class GloverWorld(World):
             
             #Make the hubworld operate normally while portalsanity's off
             if not self.options.portalsanity:
-                #Ending
-                final_location : Location = self.returning_crystal(castle_cave, 7)
-                final_location.place_locked_item(self.create_event("Endscreen"))
                 #The Thing
                 crystal_location : Location | None = None
                 match entrance_index:
@@ -852,6 +854,7 @@ class GloverWorld(World):
 
     #Crystal return locations
     def returning_crystal(self, castle_cave : Region, required_balls : int, suffix : str = "") -> Location:
+        print(str(required_balls) + suffix)
         player = self.player
         crystal_return_location : Location = Location(player, "Ball Turn-In " + str(required_balls) + suffix, None, castle_cave)
         castle_cave.locations.append(crystal_return_location)

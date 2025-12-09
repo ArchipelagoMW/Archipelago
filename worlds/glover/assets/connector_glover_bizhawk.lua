@@ -11,7 +11,7 @@ local math = require('math')
 require('common')
 
 local SCRIPT_VERSION = 1
-local GVR_VERSION = "V0.1"
+local GVR_VERSION = "V1.0"
 local PLAYER = ""
 local SEED = 0
 
@@ -12764,7 +12764,11 @@ end
 function receive_checkpoint(world_index, checkpoint_number)
 	local world_id = numericLevelToWorldId(world_index)
 	local item_name = ROM_WORLDS_TABLE[world_id].."_CHECKPOINT"..tostring(checkpoint_number)
-	GVR:setItem(ITEM_TABLE[item_name], 1)
+	-- Ignore Space 2
+	if world_id ~= 27
+	then
+		GVR:setItem(ITEM_TABLE[item_name], 1)
+	end
 end
 
 ---------------------------------- MAP FUNCTIONS -----------------------------------
@@ -13245,7 +13249,7 @@ function process_slot(block)
 	end
     if block['slot_mr_hints'] ~= nil and block['slot_mr_hints'] ~= 0
     then
-        GVR:setTipHints(block['slot_mr_hints'] > 0)
+        GVR:setTipHints(1)
     end
 	if block['slot_mr_hints_locations'] ~= nil
 	then
