@@ -476,14 +476,22 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.ARIDIA_QWACK_O_RAY
         RAC3SKILLPOINT.ARIDIA_ZAP: lambda state: state.has(RAC3ITEM.REFRACTOR, world.player),
         # RAC3LOCATION.ARIDIA_RANGERS_1
-        RAC3TBOLT.ARIDIA_BRIDGE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        # RAC3SKILLPOINT.ARIDIA_HANG_TIME
-        # RAC3LOCATION.ARIDIA_RANGERS_2
-        # RAC3LOCATION.ARIDIA_RANGERS_3
-        # RAC3LOCATION.ARIDIA_RANGERS_4
-        RAC3TBOLT.ARIDIA_BASE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        # RAC3LOCATION.ARIDIA_RANGERS_5
-        # RAC3LOCATION.ARIDIA_WARP_PAD
+        RAC3LOCATION.ARIDIA_RANGERS_2:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_1, world.player),
+        RAC3TBOLT.ARIDIA_BRIDGE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and
+                                               state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
+        RAC3SKILLPOINT.ARIDIA_HANG_TIME:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
+        RAC3LOCATION.ARIDIA_RANGERS_3:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_2, world.player),
+        RAC3LOCATION.ARIDIA_RANGERS_4:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_3, world.player),
+        RAC3TBOLT.ARIDIA_BASE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and
+                                             state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_4, world.player),
+        RAC3LOCATION.ARIDIA_RANGERS_5:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_4, world.player),
+        RAC3LOCATION.ARIDIA_WARP_PAD:
+            lambda state: state.can_reach_location(RAC3LOCATION.ARIDIA_RANGERS_5, world.player),
 
         RAC3TBOLT.HIDEOUT: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3LOCATION.HIDEOUT_PDA: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
