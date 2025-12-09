@@ -50,6 +50,7 @@ class KH2Socket():
                 return
             except OSError as e:
                 print(f"Socket accept failed ({e}); retrying in 5s")
+                self.isConnected = False
                 await asyncio.sleep(5)
 
     def _safe_close_client(self):
@@ -73,18 +74,26 @@ class KH2Socket():
                 self.handle_message(values)
             except (ConnectionResetError, OSError) as e:
                 if not self.closing:
-                    logger.info(f"Connection lost, waiting for KH2 to reconnect")
+                    logger.info("Connection to game lost, reconnecting...")
                     self._safe_close_client()
                     await self._accept_client()
                     return
 
     def send(self, msgId: int, values: list):
-        msg = str(msgId)
-        for val in values:
-            msg += ";" + str(val)
-        msg += "\r\n"
-        self.client_socket.send(msg.encode("utf-8"))
-        print("Sent message: "+msg)
+        if not self.isConnected or self.client_socket is None:
+               return
+        try:
+            msg = str(msgId)
+            for val in values:
+                msg += ";" + str(val)
+            msg += "\r\n"
+            self.client_socket.send(msg.encode("utf-8"))
+            print("Sent message: "+msg)
+        except (OSError, ConnectionResetError, BrokenPipeError) as e:
+            print(f"Error sending message {msgId}: {e}; connection may be lost")
+            self.isConnected = False
+        except Exception as e:
+            print(f"Error sending message {msgId}: {e}")
 
     def handle_message(self, message: list[str]):
         if message[0] == '':
@@ -113,7 +122,6 @@ class KH2Socket():
 
         elif (msgType == MessageType.Victory):
             self.client.kh2_finished_game = True
-        #TODO actually handle messages
 
     def send_singleItem(self, id: int, itemCnt):
         msgCont = [str(id), str(itemCnt)]
