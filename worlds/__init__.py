@@ -101,22 +101,6 @@ for world_source in world_sources:
     else:
         world_source.load()
 
-apworld_module_specs = {}
-for apworld in apworlds:
-    importer = zipimport.zipimporter(apworld.resolved_path)
-    world_name = Path(apworld.path).stem
-
-    spec = importer.find_spec(f"worlds.{world_name}")
-    apworld_module_specs[f"worlds.{world_name}"] = spec
-
-class APWorldModuleFinder(importlib.abc.MetaPathFinder):
-    def find_spec(
-        self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
-    ) -> importlib.machinery.ModuleSpec | None:
-        return apworld_module_specs.get(fullname)
-
-sys.meta_path.insert(0, APWorldModuleFinder())
-
 from .AutoWorld import AutoWorldRegister
 
 for world_source in world_sources:
@@ -178,6 +162,16 @@ if apworlds:
         core_compatible.sort(
             key=lambda element: element[1].world_version if element[1].world_version else Version(0, 0, 0),
             reverse=True)
+
+        apworld_module_specs = {}
+        class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+            def find_spec(
+                    self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
+            ) -> importlib.machinery.ModuleSpec | None:
+                return apworld_module_specs.get(fullname)
+
+        sys.meta_path.insert(0, APWorldModuleFinder())
+
         for apworld_source, apworld in core_compatible:
             if apworld.game and apworld.game in AutoWorldRegister.world_types:
                 fail_world(apworld.game,
@@ -185,6 +179,12 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
+                importer = zipimport.zipimporter(apworld.resolved_path)
+                world_name = Path(apworld.path).stem
+
+                spec = importer.find_spec(f"worlds.{world_name}")
+                apworld_module_specs[f"worlds.{world_name}"] = spec
+
                 apworld_source.load()
                 if apworld.game in AutoWorldRegister.world_types:
                     # world could fail to load at this point
