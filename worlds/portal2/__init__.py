@@ -1,5 +1,6 @@
 from BaseClasses import ItemClassification, MultiWorld, Region
 from Options import PerGameCommonOptions
+import settings
 from .Options import CutsceneSanity, Portal2Options
 from .Items import Portal2Item, Portal2ItemData, item_table, junk_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
@@ -12,11 +13,19 @@ from . import Components as components
 
 randomize_maps = True
 
+class Portal2Settings(settings.Group):
+    class Portal2ExtrasFilePath(settings.UserFilePath):
+        """The file path of the extras.txt file (used to generate the menu in game)"""
+        description = "Portal 2 extras.txt file inside the mod"
+
+    menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath("C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt")
+
 class Portal2World(World):
     """Portal 2 is a first person puzzle adventure where you shoot solve test chambers using portal mechanics and other map specific items"""
     game = "Portal 2"  # name of the game/world
     options_dataclass = Portal2Options  # options the player can set
     options: Portal2Options  # typing hints for option results
+    settings: Portal2Settings
     topology_present = True  # show path to required location checks in spoiler
 
     BASE_ID = 98275000

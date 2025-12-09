@@ -22,7 +22,8 @@ class MenuElement:
 class MapMenuElement(MenuElement):
     next_map: MenuElement = None
     completed: bool = False
-    def __init__(self, chapter_number, map_number, title, map_code, required_items, pic):
+    def __init__(self, chapter_number, map_number, title, map_code, location_id, required_items, pic):
+        self.location_id = location_id
         subtitle = "Required items: " + " ,".join(required_items)
         super().__init__(f"chapter {chapter_number}.{map_number}", f"---{title}", subtitle, f"map {map_code}", pic)
 
@@ -33,21 +34,22 @@ class MapMenuElement(MenuElement):
         else:
             return text + str(self.next_map)
 
-    def complete_map(self, map_code: str):
-        if self.command.endswith(map_code):
+    def complete_map(self, map_id: int):
+        if self.location_id == map_id:
             self.completed = True
-            self.title.replace("---", "   ")
+            self.title = "    " + self.title[3:]
         else:
-            self.next_map.complete_map(map_code)
+            if self.next_map:
+                self.next_map.complete_map(map_id)
 
 class ChapterMenuElement(MenuElement):
     first_map: MapMenuElement = None
     def __init__(self, chapter_number: int, map_names: list[str]):
-        super().__init__(f"chapter{chapter_number}", f"Chapter {chapter_number}", pic=f"vgu/chapters/chapter{chapter_number}")
+        super().__init__(f"chapter{chapter_number}", f"Chapter {chapter_number}", pic=f"vgui/chapters/chapter{chapter_number}")
         current_map: MapMenuElement = None
         for i, name in enumerate(map_names):
             location = all_locations_table[name]
-            next_map = MapMenuElement(chapter_number, i, name.removesuffix(" Completion"), location.map_name, location.required_items, self.pic)
+            next_map = MapMenuElement(chapter_number, i, name.removesuffix(" Completion"), location.map_name, location.id, location.required_items, self.pic)
             if not self.first_map:
                 self.first_map = next_map
                 current_map = self.first_map
@@ -58,8 +60,8 @@ class ChapterMenuElement(MenuElement):
     def __str__(self):
         return super().__str__() + str(self.first_map)
     
-    def complete_map(self, map_code: str):
-        self.first_map.complete_map(map_code)
+    def complete_map(self, map_id: int):
+        self.first_map.complete_map(map_id)
 
 
 class Menu:
@@ -77,9 +79,9 @@ class Menu:
             '}\n'
         )
 
-    def complete_map(self, map_code: str):
+    def complete_map(self, map_id: int):
         for chapter in self.chapters:
-            chapter.complete_map(map_code)
+            chapter.complete_map(map_id)
 
 if __name__ == "__main__":
     from ..Locations import map_complete_table

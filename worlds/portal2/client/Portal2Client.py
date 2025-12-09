@@ -12,7 +12,7 @@ import Utils
 from ..mod_helpers.ItemHandling import handle_item
 from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names
-from .. import Portal2Settings
+from .. import Portal2World
 
 if __name__ == "__main__":
     Utils.init_logging("Portal2Client", exception_logger="Portal2Client")
@@ -32,16 +32,15 @@ class Portal2CommandProcessor(ClientCommandProcessor):
         """Sends a command to the game. Should not be used unless you get softlocked"""
         self.ctx.command_queue.append(' '.join(command) + "\n")
 
-    def _cmd_toggledeathlink(self):
+    def _cmd_deathlink(self):
         """Toggles death link for this client"""
         self.ctx.death_link_active != self.ctx.death_link_active
         self.ctx.update_death_link(self.ctx.death_link_active)
         self.output(f"Death link has been {"enabled" if self.ctx.death_link_active else "disabled"}")
 
-    # Debug commands
-    def _cmd_mapid(self, map_code):
-        """Debug command for finding the map location id from the in game map name"""
-        self.output(self.ctx.map_code_to_location_id(map_code))
+    def _cmd_refreshmenu(self):
+        """Refreshed the in game menu in case of maps being inaccessible when they should be"""
+        self.ctx.refresh_menu()
 
 class Portal2Context(CommonContext):
     command_processor = Portal2CommandProcessor
@@ -76,6 +75,19 @@ class Portal2Context(CommonContext):
     def send_player_to_main_menu_command(self):
         '''Sends the player back to the main menu (called on map completion)'''
         return 'disconnect;startupmenu force\n'
+    
+    def update_menu(self, finished_map: str = None):
+        menu_file = Portal2World.settings.menu_file
+        if finished_map:
+            self.menu.complete_map(finished_map)
+        # Write the menu to that file
+        with open(menu_file, "w") as f:
+            f.write(str(self.menu))
+
+    def refresh_menu(self):
+        for location_id in self.checked_locations:
+            self.menu.complete_map(location_id)
+        self.update_menu()
 
     async def p2_message_listener(self):
         '''Listener for the messages sent from portal 2 to the client'''
@@ -182,6 +194,7 @@ class Portal2Context(CommonContext):
             map_id = self.map_code_to_location_id(done_map)
             if map_id:
                 await self.check_locations([map_id])
+                self.update_menu(map_id)
         
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
@@ -230,7 +243,7 @@ class Portal2Context(CommonContext):
 
         if "chapter_dict" in slot_data:
             self.menu = Menu(slot_data["chapter_dict"])
-            #TODO: Set up Extras menu function call
+            self.refresh_menu()
         else:
             raise Exception("chapter_dict not found in slot data")
 
