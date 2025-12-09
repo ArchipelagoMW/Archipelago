@@ -9,20 +9,20 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3ITEMDATA:
-    ID = None
-    LEVEL = None
-    LEVEL_ADDRESS = None
-    UNLOCK_ADDRESS = None
-    UNLOCK_ADDRESS_2 = None
-    XP_ADDRESS = None
-    XP_THRESHOLD = None
-    POWER = None
-    ARMOR = None
-    AMMO_ADDRESS = None
-    AMMO = None
-    AP_CODE = None
-    AP_CLASSIFICATION = None
-    TAGS = None
+    ID: int = None
+    LEVEL: int = None
+    LEVEL_ADDRESS: int = None
+    UNLOCK_ADDRESS: int = None
+    UNLOCK_ADDRESS_2: int = None
+    XP_ADDRESS: int = None
+    XP_THRESHOLD: int = None
+    POWER: int = None
+    ARMOR: float = None
+    AMMO_ADDRESS: int = None
+    AMMO: int = None
+    AP_CODE: int = None
+    AP_CLASSIFICATION: ItemClassification = None
+    TAGS: list[str] = None
 
     def __init__(self,
                  idx: int,
@@ -35,26 +35,26 @@ class RAC3ITEMDATA:
                  level_address: Optional[int] = None,
                  armor: Optional[float] = None,
                  ap_classification: Optional[ItemClassification] = ItemClassification.filler,
-                 tags: list = None):
-        self.ID: int = idx
-        self.AP_CODE: int = idx + 50000000
-        self.AP_CLASSIFICATION: ItemClassification = ap_classification
-        self.LEVEL: Optional[int] = level
-        self.LEVEL_ADDRESS: Optional[int] = level_address
-        self.UNLOCK_ADDRESS: Optional[int] = address
-        self.UNLOCK_ADDRESS_2: Optional[int] = address_2
-        self.XP_ADDRESS: int = 4 * idx + RAC3STATUS.ITEM_XP_ADDRESS
-        self.XP_THRESHOLD: Optional[int] = xp
-        self.POWER: Optional[int] = power
-        self.ARMOR: Optional[float] = armor
-        self.AMMO_ADDRESS: int = 4 * idx + RAC3STATUS.ITEM_AMMO_ADDRESS
-        self.AMMO: Optional[int] = ammo
-        self.TAGS: list[str] = tags
+                 tags: list[str] = None):
+        self.ID = idx
+        self.AP_CODE = idx + 50000000
+        self.AP_CLASSIFICATION = ap_classification
+        self.LEVEL = level
+        self.LEVEL_ADDRESS = level_address
+        self.UNLOCK_ADDRESS = address
+        self.UNLOCK_ADDRESS_2 = address_2
+        self.XP_ADDRESS = 4 * idx + RAC3STATUS.ITEM_XP_ADDRESS
+        self.XP_THRESHOLD = xp
+        self.POWER = power
+        self.ARMOR = armor
+        self.AMMO_ADDRESS = 4 * idx + RAC3STATUS.ITEM_AMMO_ADDRESS
+        self.AMMO = ammo
+        self.TAGS = tags
 
     @staticmethod
     def construct_unused(idx: int,
                          ammo: Optional[int] = None,
-                         tags: list = None):
+                         tags: Optional[list[str]] = None):
         all_tags: list[str] = [RAC3ITEMTAG.UNUSED]
         if tags is not None:
             all_tags.extend(tags)
@@ -63,7 +63,7 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_gadget(idx: int,
                          ap_classification: ItemClassification,
-                         tags: list[str] = None):
+                         tags: Optional[list[str]] = None):
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.GADGET]
@@ -76,10 +76,10 @@ class RAC3ITEMDATA:
                          power: int,
                          ammo: Optional[int] = None,
                          ap_classification: Optional[ItemClassification] = None,
-                         tags: Optional[list] = None):
+                         tags: Optional[list[str]] = None):
         address: int = idx + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
-        all_tags = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON]
+        all_tags: list[str] = [RAC3ITEMTAG.WEAPON, RAC3ITEMTAG.NON_PROG_WEAPON]
         if idx != 0x16:
             all_tags.append(RAC3ITEMTAG.EQUIPABLE)
         if tags is not None:
@@ -93,7 +93,7 @@ class RAC3ITEMDATA:
                                power: int,
                                ammo: Optional[int] = None,
                                xp: Optional[int] = 0,
-                               tags: Optional[list] = None):
+                               tags: Optional[list[str]] = None):
         entry: dict[str, list[int]] = dict(filter(lambda data_kv: idx in data_kv[1], UPGRADE_DICT.items()))
         base: int = list(entry.values())[0][0]
         name: str = list(entry.keys())[0][0]
@@ -108,7 +108,7 @@ class RAC3ITEMDATA:
     @staticmethod
     def construct_weapon_prog(idx: int,
                               ap_classification: ItemClassification,
-                              tags=None):
+                              tags: Optional[list[str]] = None):
         address: int = (idx - 0xCB) * 8 + 0x27 + RAC3STATUS.ITEM_UNLOCK_ADDRESS
         address_2: int = address + RAC3STATUS.ITEM_UNLOCK_ADDRESS_2_OFFSET
         all_tags: list[str] = [RAC3ITEMTAG.PROG_WEAPON, RAC3ITEMTAG.PROGRESSIVE, RAC3ITEMTAG.WEAPON]
@@ -133,7 +133,7 @@ class RAC3ITEMDATA:
     def construct_armor(idx: int,
                         ap_classification: ItemClassification,
                         armor: int,
-                        tags: Optional[list] = None):
+                        tags: Optional[list[str]] = None):
         address: int = RAC3STATUS.ARMOR
         reduction: float = armor / 30
         all_tags: list[str] = [RAC3ITEMTAG.ARMOR]
@@ -142,15 +142,16 @@ class RAC3ITEMDATA:
         return RAC3ITEMDATA(idx, address, armor=reduction, ap_classification=ap_classification, tags=all_tags)
 
     @staticmethod
-    def construct_vidcomic(idx: int, tag: list[str] = None):
+    def construct_vidcomic(idx: int,
+                           tag: Optional[list[str]] = None):
         # Progressive order: 1, 2, 3, 4, 5
         # Memory order:      1, 4, 2, 3, 5
-        progressive_to_memory = [0, 2, 3, 1, 4]
+        progressive_to_memory: list[int] = [0, 2, 3, 1, 4]
         address: int = progressive_to_memory[idx - 0xFB] + RAC3STATUS.VIDCOMIC
         if tag:
-            tags = tag + [RAC3ITEMTAG.VIDCOMIC]
+            tags: list[str] = tag + [RAC3ITEMTAG.VIDCOMIC]
         else:
-            tags = [RAC3ITEMTAG.VIDCOMIC]
+            tags: list[str] = [RAC3ITEMTAG.VIDCOMIC]
         return RAC3ITEMDATA(idx, address, ap_classification=ItemClassification.progression, tags=tags)
 
     @staticmethod
@@ -451,7 +452,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
 }
 
 
-def from_prop(prop) -> filter:
+def from_prop(prop: str) -> filter:
     return filter(lambda data_kv: getattr(data_kv[1], prop) is not None, RAC3_ITEM_DATA_TABLE.items())
 
 
@@ -460,7 +461,7 @@ ITEM_NAME_FROM_ID: dict[int, str] = dict((kv[1].ID, kv[0]) for kv in from_prop("
 ITEM_NAME_FROM_ADDRESS: dict[int, str] = dict((kv[1].UNLOCK_ADDRESS, kv[0]) for kv in from_prop("UNLOCK_ADDRESS"))
 
 
-def from_tag(tag) -> dict[str, RAC3ITEMDATA]:
+def from_tag(tag: str) -> dict[str, RAC3ITEMDATA]:
     return dict(filter(lambda data_kv: tag in data_kv[1].TAGS, RAC3_ITEM_DATA_TABLE.items()))
 
 

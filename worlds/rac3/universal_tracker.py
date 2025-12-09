@@ -42,14 +42,14 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
         world.using_ut = False
 
 
-def map_page_index(data: Any) -> int:
+def map_page_index(data: str) -> int:
     if data:
         return RAC3_REGION_DATA_TABLE[data].ID
     else:
         return RAC3_REGION_DATA_TABLE[RAC3REGION.GALAXY].ID
 
 
-tracker_world = {
+tracker_world: dict[str, Any] = {
     "map_page_maps": "maps/maps.json",
     "map_page_locations": "locations/locations.json",
     "map_page_setting_key": r'rac3_current_planet_{player}_{team}',

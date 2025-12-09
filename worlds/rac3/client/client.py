@@ -6,7 +6,7 @@ from traceback import format_exc
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
-from Utils import Any, async_start, Dict, init_logging
+from Utils import Any, async_start, init_logging
 from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
 from worlds.rac3.client.callbacks import init, update
 from worlds.rac3.client.interface import Rac3Interface
@@ -15,7 +15,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
 # Load Universal Tracker modules with aliases
-tracker_loaded = False
+tracker_loaded: bool = False
 try:
     from worlds.tracker.TrackerClient import (TrackerCommandProcessor as ClientCommandProcessor,
                                               TrackerGameContext as CommonContext, UT_VERSION)
@@ -150,28 +150,27 @@ class CommandProcessor(ClientCommandProcessor):
 class Rac3Context(CommonContext):
     # Client variables
     command_processor = CommandProcessor
+    current_planet: str = RAC3REGION.GALAXY
+    death_link: bool = False
+    game: str = RAC3OPTION.GAME_TITLE_FULL
     game_interface: Rac3Interface
-    game = RAC3OPTION.GAME_TITLE_FULL
-    pcsx2_sync_task: Optional[Task] = None
     is_connected_to_game: bool = False
     is_connected_to_server: bool = False
-    slot_data: Optional[dict[str, Any]] = None
-    last_server_message: Optional[str] = None
-    last_pine_message: Optional[str] = None
+    items_handling: int = 0b111  # This is mandatory
     last_game_message: Optional[str] = None
-    death_link = False
-    queued_deaths: int = 0
-    current_planet: str = RAC3REGION.GALAXY
+    last_pine_message: Optional[str] = None
+    last_server_message: Optional[str] = None
     main_menu: bool = True
-    processed_item_count = 0
+    pcsx2_sync_task: Optional[Task] = None
+    processed_item_count: int = 0
+    queued_deaths: int = 0
+    slot_data: Optional[dict[str, Any]] = None
 
-    items_handling = 0b111  # This is mandatory
-
-    def __init__(self, server_address, password):
+    def __init__(self, server_address: str, password: str):
         super().__init__(server_address, password)
         self.game_interface = Rac3Interface()
 
-    def on_deathlink(self, data: Dict[str, Any]) -> None:
+    def on_deathlink(self, data: dict[str, Any]) -> None:
         text = data.get("cause", "")
         if text:
             logger.info(f"Death Link: {text}")

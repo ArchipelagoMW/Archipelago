@@ -7,10 +7,10 @@ from worlds.rac3.constants.status import RAC3STATUS
 
 @dataclass
 class RAC3STATUSDATA:
-    SLOT_ADDRESS = None
+    SLOT_ADDRESS: int = None
 
     def __init__(self, slot: Optional[int] = None):
-        self.SLOT_ADDRESS: int = 4 * slot + RAC3STATUS.QUICK_SELECT
+        self.SLOT_ADDRESS = 4 * slot + RAC3STATUS.QUICK_SELECT
 
 
 RAC3_STATUS_DATA_TABLE: dict[str, RAC3STATUSDATA] = {

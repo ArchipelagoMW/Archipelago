@@ -9,6 +9,7 @@ from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
+from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -19,7 +20,7 @@ class GameLocation(Location):
 
 
 # Making an array with every 5 nanotech
-every_5_nanotech = [
+every_5_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_15,
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_25,
@@ -41,7 +42,7 @@ every_5_nanotech = [
 ]
 
 # Making an array with every 10 nanotech
-every_10_nanotech = [
+every_10_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_30,
     RAC3NANOTECH.LEVEL_40,
@@ -54,7 +55,7 @@ every_10_nanotech = [
 ]
 
 # Making an array with every 20 nanotech
-every_20_nanotech = [
+every_20_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_20,
     RAC3NANOTECH.LEVEL_40,
     RAC3NANOTECH.LEVEL_60,
@@ -62,7 +63,7 @@ every_20_nanotech = [
     RAC3NANOTECH.LEVEL_100,
 ]
 
-every_5_sewer_crystals = [
+every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_5,
     RAC3SEWER.TRADE_10,
     RAC3SEWER.TRADE_15,
@@ -86,7 +87,7 @@ every_5_sewer_crystals = [
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 
-every_10_sewer_crystals = [
+every_10_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_10,
     RAC3SEWER.TRADE_20,
     RAC3SEWER.TRADE_30,
@@ -100,7 +101,7 @@ every_10_sewer_crystals = [
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 
-every_20_sewer_crystals = [
+every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_20,
     RAC3SEWER.TRADE_40,
     RAC3SEWER.TRADE_60,
@@ -245,14 +246,13 @@ def create_region(world: "RaC3World", name: str) -> Region:
     return reg
 
 
-def create_region_and_connect(world: "RaC3World",
-                              name: str, entrance_name: str, connected_region: Region) -> Region:
+def create_region_and_connect(world: "RaC3World", name: str, entrance_name: str, connected_region: Region) -> Region:
     reg: Region = create_region(world, name)
     connected_region.connect(reg, entrance_name)
     return reg
 
 
-def should_skip_location(data: RAC3LOCATIONDATA, options) -> bool:
+def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> bool:
     """Return False if the location should be skipped based on options."""
     for tag in data.TAGS:
         match tag:

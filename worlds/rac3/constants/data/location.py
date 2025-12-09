@@ -2118,12 +2118,12 @@ class RAC3LOCATIONDATA:
 
     @staticmethod
     def construct(location_name: str):
-        planet_name = LOCATION_NAME_TO_REGION[location_name]
-        planet_id = RAC3_REGION_DATA_TABLE[planet_name].ID
-        loc_id = LOCATION_NAME_TO_ID[location_name]
+        planet_name: str = LOCATION_NAME_TO_REGION[location_name]
+        planet_id: int = RAC3_REGION_DATA_TABLE[planet_name].ID
+        loc_id: int = LOCATION_NAME_TO_ID[location_name]
         tags: set[str] = set(LOCATION_NAME_TO_TAG[location_name])
         if planet_id:
-            section_id = LOCATION_NAME_TO_SECTION[location_name]
+            section_id: int = LOCATION_NAME_TO_SECTION[location_name]
             UT_MAPPING[f"{planet_id}/{loc_id}"] = loc_id + 51000000
             UT_MAPPING[f"{section_id}/{loc_id}"] = loc_id + 51000000
             tags.union({planet_name})
@@ -2138,7 +2138,7 @@ class RAC3LOCATIONDATA:
                 case RAC3REGION.NANOTECH:
                     section_id = LOCATION_NAME_TO_SECTION[location_name]
                     UT_MAPPING[f"0/{section_id}/{loc_id}"] = loc_id + 51000000
-        check = []
+        check: list[RAC3ADDRESSDATA] = []
         for item in LOCATION_NAME_TO_ADDRESS[location_name]:
             check += [RAC3ADDRESSDATA(item)]
         return RAC3LOCATIONDATA(loc_id, planet_name, check, tags)

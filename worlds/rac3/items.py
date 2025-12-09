@@ -1,13 +1,14 @@
 from logging import DEBUG, getLogger
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
 from worlds.rac3.constants.data.item import (goal_data, item_counts, item_table, NAME_TO_PROG_DICT,
-                                             non_prog_weapon_data, prog_weapon_data, progressive_data)
+                                             non_prog_weapon_data, prog_weapon_data, progressive_data, RAC3ITEMDATA)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.rac3options import RaC3Options
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -21,13 +22,13 @@ rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
 
 
-def create_itempool(world: "RaC3World") -> List[Item]:
-    itempool: List[Item] = []
-    options = world.options
+def create_itempool(world: "RaC3World") -> list[Item]:
+    itempool: list[Item] = []
+    options: type[RaC3Options] = world.options
 
     for name in item_table.keys():
         item_type: ItemClassification = item_table[name].AP_CLASSIFICATION
-        item_tags = item_table[name].TAGS
+        item_tags: list[str] = item_table[name].TAGS
         if item_type in [ItemClassification.filler, ItemClassification.trap]:
             continue
         if RAC3ITEMTAG.WEAPON_UPGRADE in item_tags:
@@ -71,9 +72,9 @@ def create_itempool(world: "RaC3World") -> List[Item]:
 
 
 def create_multiple_items(world: "RaC3World", name: str, count: int = 1,
-                          item_type: ItemClassification = ItemClassification.progression) -> List[Item]:
-    data = item_table[name]
-    itemlist: List[Item] = []
+                          item_type: ItemClassification = ItemClassification.progression) -> list[Item]:
+    data: RAC3ITEMDATA = item_table[name]
+    itemlist: list[Item] = []
 
     for _ in range(count):
         itemlist += [GameItem(name, item_type, data.AP_CODE, world.player)]
@@ -106,7 +107,7 @@ def get_filler_item_selection(world: "RaC3World"):
     return [name for name, count in frequencies.items() for _ in range(count)]
 
 
-def starting_weapons(world, dictionary: dict[str, int]) -> list[str]:
+def starting_weapons(world: "RaC3World", dictionary: dict[str, int]) -> list[str]:
     weapon_list: list[str] = []
     for name in dictionary:
         count = dictionary[name]

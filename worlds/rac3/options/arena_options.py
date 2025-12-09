@@ -1,6 +1,7 @@
 from Options import Choice
 from worlds.rac3 import RAC3OPTION
 
+
 class Arena(Choice):
     """
     Determines whether Annihilation Nation challenges and anything that is located in or behind them is a location.

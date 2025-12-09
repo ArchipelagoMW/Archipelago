@@ -24,8 +24,8 @@ rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)
 rac3_logger.setLevel(DEBUG)
 
 
-def all_locations(state: CollectionState, world: "RaC3World", tag, skip):
-    check = True
+def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: str):
+    check:bool = True
     for loc in world.get_locations():
         if loc.name in location_groups[tag] and loc.name != skip:
             check &= state.can_reach_location(loc.name, world.player)
@@ -234,7 +234,7 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_ONE_HIT_WONDER:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_TIME_TO_SUCK:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) 
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
                           and state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
         RAC3LOCATION.NATION_NAPTIME:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
@@ -243,7 +243,7 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_DODGE_THE_TWINS:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_CHOP_CHOP:
-            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player) 
+            lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player)
                           and state.has_any([RAC3ITEM.DISC_BLADE, RAC3ITEM.PROGRESSIVE_DISC_BLADE], world.player),
         RAC3LOCATION.NATION_SLEEP_INDUCER:
             lambda state: state.has_any([RAC3ITEM.RIFT_INDUCER, RAC3ITEM.PROGRESSIVE_RIFT_INDUCER], world.player)

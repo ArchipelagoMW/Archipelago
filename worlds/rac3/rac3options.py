@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Any, List
 
 from Options import OptionGroup, StartInventoryPool
 from worlds.AutoWorld import PerGameCommonOptions
@@ -27,8 +26,8 @@ from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
 
 
-def create_option_groups() -> List[OptionGroup]:
-    option_group_list: List[OptionGroup] = []
+def create_option_groups() -> list[OptionGroup]:
+    option_group_list: list[OptionGroup] = []
     for name, options in rac3_option_groups.items():
         option_group_list.append(OptionGroup(name=name, options=options))
 
@@ -61,7 +60,7 @@ class RaC3Options(PerGameCommonOptions):
     skin: RatchetSkin
 
 
-rac3_option_groups: dict[str, List[Any]] = {
+rac3_option_groups: dict[str, list] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
                      ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
                      TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals],

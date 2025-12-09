@@ -1,3 +1,4 @@
+from BaseClasses import CollectionState
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.region import RAC3REGION
@@ -7,7 +8,7 @@ from worlds.rac3.test import RAC3TestBase
 class TestBiobliterator(RAC3TestBase):
 
     def test_logic(self):
-        state = self.multiworld.state
+        state: CollectionState = self.multiworld.state
         self.assertTrue(self.can_reach_region(RAC3REGION.VELDIN), "Can't start on Veldin")
         self.assertFalse(self.can_reach_region(RAC3REGION.FLORANA), "Florana reachable without coordinates")
         self.assertFalse(self.can_reach_region(RAC3REGION.STARSHIP_PHOENIX),

@@ -1,6 +1,7 @@
 from Options import Choice
 from worlds.rac3 import RAC3OPTION
 
+
 class VRChallenges(Choice):
     """
     Determines whether VR Challenges and anything that is located in or behind them is a location.

@@ -17,12 +17,12 @@ def get_location_names() -> dict[str, int]:
     return {name: data.AP_CODE for name, data in RAC3_LOCATION_DATA_TABLE.items()}
 
 
-def get_regions() -> list:
+def get_regions() -> list[str]:
     regions = [data.REGION for data in RAC3_LOCATION_DATA_TABLE.values()]
     return regions
 
 
-def get_from_tag(tag) -> set:
+def get_from_tag(tag) -> set[str]:
     return set(loc for loc in RAC3_LOCATION_DATA_TABLE.keys() if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS)
 
 
@@ -152,7 +152,7 @@ def get_from_tag(tag) -> set:
 # }
 
 
-all_tags = [
+all_tags: list[str] = [
     RAC3TAG.SKILLPOINT,
     RAC3TAG.T_BOLT,
     RAC3TAG.SEWER,
@@ -204,9 +204,9 @@ location_groups: dict[str, set[str]] = {
 }
 
 
-def get_level_locations(region):
+def get_level_locations(region: str) -> map:
     return map(lambda l: l[0], get_level_location_data(region))
 
 
-def get_level_location_data(region):
+def get_level_location_data(region: str) -> filter:
     return filter(lambda l: l[1].REGION == region, RAC3_LOCATION_DATA_TABLE.items())

@@ -65,9 +65,10 @@ class RAC3STATUS:
     MARCADIA_SECTION = 0x001DEF34
     VEHICLE_POINTER = 0x001A65C0
 
-PLAYER_TYPE_TO_NAME = {
-    0x0: "Ratchet",
-    0x1: "Clank",
-    0x2: "Giant Clank",
-    0x3: "Tyhrranoid",
+
+PLAYER_TYPE_TO_NAME: dict[int, str] = {
+    0x00: "Ratchet",
+    0x01: "Clank",
+    0x02: "Giant Clank",
+    0x03: "Tyhrranoid",
 }

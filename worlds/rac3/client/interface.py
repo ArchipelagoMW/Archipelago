@@ -3,10 +3,11 @@ from dataclasses import dataclass
 from enum import IntEnum
 from random import randint, uniform
 from struct import unpack
-from typing import Dict, Optional
+from typing import Any, Optional
 
 from CommonClient import logger
 from worlds.rac3.constants.check_type import CHECKTYPE
+from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT,
                                              RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
@@ -34,11 +35,10 @@ class GameInterface:
     """
     Base class for connecting with a pcsx2 game
     """
+    current_game: Optional[str] = None
+    game_id_error: Optional[str] = None
     is_connecting: bool = False
     pcsx2_interface: Pine = Pine()
-    game_id_error: Optional[str] = None
-    current_game: Optional[str] = None
-    addresses: Dict = {}
 
     def __init__(self) -> None:
         pass
@@ -155,6 +155,8 @@ class GameInterface:
 
 @dataclass
 class UnlockData:
+    status: int
+    unlock_delay: int
     def __init__(self,
                  status: int = 0,
                  unlock_delay: int = 0):
@@ -165,7 +167,7 @@ class UnlockData:
         return f'{{ status: {self.status}, unlock_delay: {self.unlock_delay} }}'
 
 
-def compare(value, check) -> bool:
+def compare(value: int, check: RAC3ADDRESSDATA) -> bool:
     match check.TYPE & CHECKTYPE.SIGN:
         case CHECKTYPE.EQ:
             return value == check.VALUE
@@ -205,7 +207,7 @@ class Rac3Interface(GameInterface):
         self.remove_all_items()
         self.undo_collections()
 
-    def important_items(self, item):
+    def important_items(self, item: int):
         """Runs when loading into game from the main menu to update the player with important items from the server,
         skips filler and trap items to not flood the player with bolts/xp"""
         if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
@@ -244,7 +246,7 @@ class Rac3Interface(GameInterface):
             return True
         return False
 
-    def proc_option(self, slot_data):
+    def proc_option(self, slot_data: dict[str, Any]):
         logger.debug(f'{slot_data}')
         self.boltAndXPMultiplier = slot_data[RAC3OPTION.BOLT_AND_XP_MULTIPLIER]
         self.weaponLevelLockFlag = slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]
@@ -264,7 +266,7 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code):
+    def item_received(self, item_code: int):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in planet_data.keys():
@@ -329,7 +331,7 @@ class Rac3Interface(GameInterface):
         if name in equipable_data.keys() and self.UnlockItem[name].status == 1:
             self.update_equip(name)
 
-    def is_location_checked(self, ap_code) -> bool:
+    def is_location_checked(self, ap_code: int) -> bool:
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
         if not loc_data:
             return False
@@ -366,7 +368,7 @@ class Rac3Interface(GameInterface):
 
     # Address conversion from str to int(with US to JP)
     @staticmethod
-    def address_convert(address):
+    def address_convert(address: int):
         _addr = address
         if isinstance(address, str):
             _addr = int(address, 0)
@@ -420,7 +422,7 @@ class Rac3Interface(GameInterface):
                 if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
                     self._write8(check.ADDRESS, self._read8(check.ADDRESS) & (0xFF ^ (0x01 << check.VALUE)))
 
-    def collect_location(self, ap_code):
+    def collect_location(self, ap_code: int):
         loc_data: RAC3LOCATIONDATA = RAC3_LOCATION_DATA_TABLE[LOCATION_FROM_AP_CODE[ap_code]]
         if RAC3TAG.NANOTECH in loc_data.TAGS or RAC3TAG.SEWER in loc_data.TAGS:
             return
@@ -565,7 +567,7 @@ class Rac3Interface(GameInterface):
                 self._write32(non_prog_weapon_data[weapon_name].XP_ADDRESS, target_xp)
                 self._write8(non_prog_weapon_data[weapon_name].LEVEL_ADDRESS, target_id)
 
-    def weapon_level_up(self, weapon_name):
+    def weapon_level_up(self, weapon_name: str):
         """Level up a weapon from xp reward"""
         weapon_data = non_prog_weapon_data[weapon_name]
         current_level = self._read8(weapon_data.LEVEL_ADDRESS) - weapon_data.ID + 1
@@ -580,7 +582,7 @@ class Rac3Interface(GameInterface):
             self._write8(weapon_data.LEVEL_ADDRESS, target_level)
 
     # Equip the most recently collected weapon/gadget, update recent uses
-    def update_equip(self, name):
+    def update_equip(self, name: str):
         if equipable_data[name].ID:
             self._write8(RAC3STATUS.LAST_USED_2, self._read8(RAC3STATUS.LAST_USED_1))
             self._write8(RAC3STATUS.LAST_USED_1, self._read8(RAC3STATUS.LAST_USED_0))
@@ -592,7 +594,7 @@ class Rac3Interface(GameInterface):
                     break
             self.verify_quick_select_and_last_used()
 
-    def dump_info(self, current_planet, slot_data):
+    def dump_info(self, current_planet: str, slot_data: dict[str, Any]):
         logger.info(f'Collected Items: {self.UnlockItem}')
         count = 0
         for name in SHIP_SLOTS:
@@ -645,7 +647,7 @@ class Rac3Interface(GameInterface):
                 self.unpause_game(planet)
                 self.teleport_to_ship(planet)
 
-    def unpause_game(self, planet):
+    def unpause_game(self, planet: str):
         pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
         if pause_address is not None:  # Vid comics do not have a pause address
             is_paused = self._read8(pause_address)
@@ -659,7 +661,7 @@ class Rac3Interface(GameInterface):
         self._write16(RAC3STATUS.WRITE_INPUT_1, bitmasked)
         self._write16(RAC3STATUS.WRITE_INPUT_2, bitmasked)
 
-    def teleport_to_ship(self, planet):
+    def teleport_to_ship(self, planet: str):
         if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
                 RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
@@ -668,7 +670,7 @@ class Rac3Interface(GameInterface):
             logger.debug(f'Teleporting to last checkpoint on: {planet}')
         self.force_respawn()
 
-    def should_overwrite_respawn(self, planet):
+    def should_overwrite_respawn(self, planet: str):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
         in_vidcomic = planet in VIDCOMIC_REGIONS
         if is_clank or in_vidcomic:
@@ -676,7 +678,7 @@ class Rac3Interface(GameInterface):
         match planet:
             # Todo: add more special cases
             case RAC3REGION.VELDIN:
-                return False # Problems with F-sector
+                return False  # Problems with F-sector
             case RAC3REGION.MARCADIA:
                 return self._read_float(RAC3STATUS.MARCADIA_SECTION) < 3  # 1: Main, 2: Rangers, 3: LDF
             case RAC3REGION.TYHRRANOSIS:
@@ -698,9 +700,11 @@ class Rac3Interface(GameInterface):
     def alive(self) -> tuple[bool, str]:
         action_state = self._read8(RAC3STATUS.ACTION)
         player_type = self._read8(RAC3STATUS.PLAYER_TYPE)
-        is_dead = self._read8(RAC3STATUS.HEALTH) == 0 or (player_type == 2 and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0)
+        is_dead = (self._read8(RAC3STATUS.HEALTH) == 0
+                   or (player_type == 2 and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0))
         is_clank = player_type == 1
-        death = DEATH_FROM_ACTION.get(action_state, False) if not is_clank else CLANK_DEATH_FROM_ACTION.get(action_state, False)
+        death = DEATH_FROM_ACTION.get(action_state, False) if not is_clank else CLANK_DEATH_FROM_ACTION.get(
+            action_state, False)
         character = PLAYER_TYPE_TO_NAME[player_type]
         in_nefarious_base = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)] == RAC3REGION.AQUATOS_BASE
 
@@ -708,12 +712,12 @@ class Rac3Interface(GameInterface):
             logger.debug(f'Death Detected! (0 health)')
             return False, f"{character} {'Ran out of nanotech' if not death else death}"
 
-        if action_state == 0x31: # Eaten or in vehicle
+        if action_state == 0x31:  # Eaten or in vehicle
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
             if in_vehicle:
                 death = False
-        
-        # Special case for Nefarious's Base pitfall which doesnt set action state to death
+
+        # Special case for Nefarious's Base pitfall which doesn't set action state to death
         if in_nefarious_base and is_clank:
             if not self.respawning and self._read8(RAC3STATUS.FORCE_RELOAD):
                 death = 'Fell to their doom in Nefarious\'s Base'
@@ -728,15 +732,16 @@ class Rac3Interface(GameInterface):
     def kill_player(self) -> bool:
         pause_state_addr = RAC3STATUS.PAUSE_STATE
         current_planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
-        
+
         # Ranger missions and Qwark's Hideout have different pause state addresses than the rest
         match current_planet:
             case RAC3REGION.QWARKS_HIDEOUT:
                 pause_state_addr += 0x40
-            case RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA | RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS:
+            case (RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA |
+                  RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
                 pause_state_addr += 0x50
 
-        pause_state = self._read8(pause_state_addr) # 0x0 = unpaused
+        pause_state = self._read8(pause_state_addr)  # 0x0 = unpaused
         if not pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
@@ -745,33 +750,33 @@ class Rac3Interface(GameInterface):
             if in_vehicle:
                 health_addr = self._read32(self._read32(self._read32(RAC3STATUS.VEHICLE_POINTER) + 0x68))
                 vehicle_blow_up_addr = self._read32(RAC3STATUS.VEHICLE_POINTER) + 0xBC
-                self._write32(health_addr, 0) # health is a float but we can write 0 as int32
-                self._write8(vehicle_blow_up_addr, 0x9) # 0x9: blow up vehicle immediately 0xA: force respawn
+                self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
+                self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
                 logger.debug(f'player in vehicle, killing vehicle too')
             elif in_vidcomic:
                 # Qwark taking damage state (updates state to trigger death animation once at 0 health)
                 self._write8(RAC3STATUS.ACTION, 0x9E)
                 self._write8(RAC3STATUS.ACTION + 0xC, 0x9E)  # Past state
-                self._write8(RAC3STATUS.ACTION + 0x18, 0x9E) # Writing to this address seems to help ensure the death animation triggers
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x9E)  # This address helps the death animation trigger
                 logger.debug(f'player in vidcomic, qwark must die dramatically')
-            elif player_type == 1: # Clank
+            elif player_type == 1:  # Clank
                 # Clank taking damage state (updates state to trigger death animation once at 0 health)
                 self._write8(RAC3STATUS.ACTION, 0x42)
                 self._write8(RAC3STATUS.ACTION + 0xC, 0x42)  # Past state
-                self._write8(RAC3STATUS.ACTION + 0x18, 0x42) # Writing to this address seems to help ensure the death animation triggers
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x42)  # This address helps the death animation trigger
                 logger.debug(f'player is clank, clank must die dramatically')
-            elif player_type == 2: # Giant Clank
+            elif player_type == 2:  # Giant Clank
                 # Giant Clank punched state (updates state to trigger death animation once at 0 health)
                 self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
                 self._write8(RAC3STATUS.ACTION, 0x5D)
                 self._write8(RAC3STATUS.ACTION + 0xC, 0x5D)  # Past state
-                self._write8(RAC3STATUS.ACTION + 0x18, 0x5D) # Writing to this address seems to help ensure the death animation triggers
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x5D)  # This address helps the death animation trigger
                 logger.debug(f'player is giant clank, giant clank must die dramatically')
-            elif player_type == 3: # Tyhrranoid
+            elif player_type == 3:  # Tyhrranoid
                 # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
                 self._write8(RAC3STATUS.ACTION, 0x55)
                 self._write8(RAC3STATUS.ACTION + 0xC, 0x55)  # Past state
-                self._write8(RAC3STATUS.ACTION + 0x18, 0x55) # Writing to this address seems to help ensure the death animation triggers
+                self._write8(RAC3STATUS.ACTION + 0x18, 0x55)  # This address helps the death animation trigger
                 logger.debug(f'player is tyhrranoid, tyhrranoid must be squished')
             logger.debug(f'player successfully killed')
             return True

@@ -65,8 +65,8 @@ class RaC3World(World):
 
     using_ut: bool  # so we can check if we're using UT only once
     passthrough: dict[str, Any]
-    ut_can_gen_without_yaml = True
-    disable_ut = False
+    ut_can_gen_without_yaml: bool = True
+    disable_ut: bool = False
     tracker_world: ClassVar = tracker_world
 
     for region in get_regions():
@@ -125,8 +125,8 @@ class RaC3World(World):
     def create_item(self, name: str) -> Item:
         return create_item(self, name)
 
-    def fill_slot_data(self) -> dict[str, object]:
-        slot_data: dict[str, object] = {
+    def fill_slot_data(self) -> dict[str, Any]:
+        slot_data: dict[str, Any] = {
             RAC3OPTION.VERSION: RAC3OPTION.VERSION_NUMBER,
             RAC3OPTION.START_INVENTORY_FROM_POOL: self.options.start_inventory_from_pool.value,
             RAC3OPTION.STARTING_WEAPONS: self.options.starting_weapons.value,
