@@ -11806,14 +11806,6 @@ GLOVERHACK = {
     wayroom_locations = 0x1BAB8,
       wayroom_id = 0x4,
       wayroom_collected = 0x6,
-        tip_text = 0x8,
-          line1 = 0x0,
-          line2 = 0x15,
-          line3 = 0x2A,
-          line4 = 0x3F,
-          line5 = 0x54,
-          line6 = 0x69,
-         last_line = 0x7E,
     wayroom_size = 0x88,
     chicken_collected = 0x1BDE8,
     settings = 0x96,
@@ -12749,11 +12741,13 @@ function received_events(itemId)
 end
 
 function received_checkpoints(itemId)
-	local checkpoint_index = 6500130 - itemId + 1
+	print("Item ID "..tostring(itemId))
+	local checkpoint_index = itemId + 1 - 6500130
 	for world_index, max_checkpoints in pairs({2,3,3,4,5,4,3,3,4,3,4,4,3,3,5,2,1,4})
 	do
 		if checkpoint_index <= max_checkpoints
 		then
+			print("Received "..tostring(checkpoint_index))
 			receive_checkpoint(world_index, checkpoint_index)
 			break
 		end
@@ -12764,6 +12758,7 @@ end
 function receive_checkpoint(world_index, checkpoint_number)
 	local world_id = numericLevelToWorldId(world_index)
 	local item_name = ROM_WORLDS_TABLE[world_id].."_CHECKPOINT"..tostring(checkpoint_number)
+	print(item_name)
 	-- Ignore Space 2
 	if world_id ~= 27
 	then
