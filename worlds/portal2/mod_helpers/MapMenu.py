@@ -36,6 +36,8 @@ class MapMenuElement(MenuElement):
 
     def complete_map(self, map_id: int):
         if self.location_id == map_id:
+            if self.completed:
+                return
             self.completed = True
             self.title = "    " + self.title[3:]
         else:

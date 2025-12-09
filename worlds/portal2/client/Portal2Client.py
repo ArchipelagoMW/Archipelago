@@ -71,10 +71,6 @@ class Portal2Context(CommonContext):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
         return (f"{';'.join(self.item_remove_commands)};"
                 f"{";script AttachDeathTrigger()" if self.death_link_active else ""}\n")
-
-    def send_player_to_main_menu_command(self):
-        '''Sends the player back to the main menu (called on map completion)'''
-        return 'disconnect;startupmenu force\n'
     
     def update_menu(self, finished_map: str = None):
         menu_file = Portal2World.settings.menu_file
@@ -188,8 +184,6 @@ class Portal2Context(CommonContext):
             if done_map == self.goal_map_code and not self.finished_game:
                 self.finished_game = True
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-            else:
-                self.command_queue.append(self.send_player_to_main_menu_command())
             logger.info("Check made: " + done_map)
             map_id = self.map_code_to_location_id(done_map)
             if map_id:
