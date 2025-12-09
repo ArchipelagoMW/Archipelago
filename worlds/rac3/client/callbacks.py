@@ -46,13 +46,13 @@ async def handle_planet_changed(ctx: 'Context') -> None:
     if ctx.slot_data is None:
         return
     planet = ctx.current_planet
-    ctx.current_planet = ctx.game_interface.map_switch()
+    ctx.current_planet, _map = ctx.game_interface.map_switch()
     if planet is not ctx.current_planet:
 
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
 
-        await ctx.send_msgs([ClientMessage.set(ctx.slot, ctx.team, ctx.current_planet)])
+        await ctx.send_msgs([ClientMessage.set(ctx.slot, ctx.team, _map)])
 
 
 async def handle_received_items(ctx: 'Context') -> None:

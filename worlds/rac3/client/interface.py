@@ -252,13 +252,14 @@ class Rac3Interface(GameInterface):
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
 
-    def map_switch(self):
+    def map_switch(self) -> tuple[str, str]:
         planet = self._read8(RAC3STATUS.PLANET)
+        _planet = planet
         if planet > 55 or not self._read8(RAC3STATUS.MAP_CHECK):
-            planet = 0
+            _planet = 0
         elif planet > 29:
-            planet = 3
-        return PLANET_NAME_FROM_ID[planet]
+            _planet = 3
+        return PLANET_NAME_FROM_ID[planet], PLANET_NAME_FROM_ID[_planet]
 
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)

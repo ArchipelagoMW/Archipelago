@@ -140,15 +140,12 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            planet_id = self.ctx.game_interface._read8(RAC3STATUS.PLANET)
-            planet = PLANET_NAME_FROM_ID[planet_id]
-            pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-            if pause_address is not None:
-                self.ctx.game_interface.unpause_game(planet)
-                self.ctx.game_interface.teleport_to_ship(planet)
-                self.output(f'Player respawned on {planet}')
+            if RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS is not None:
+                self.ctx.game_interface.unpause_game(self.ctx.current_planet)
+                self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
+                self.output(f'Player respawned on {self.ctx.current_planet}')
             else:
-                self.output(f'Ship teleport is disabled on {planet}')
+                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}')
 
 
 class Rac3Context(CommonContext):
