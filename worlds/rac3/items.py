@@ -6,6 +6,7 @@ from worlds.rac3.constants.data.item import (goal_data, item_counts, item_table,
                                              non_prog_weapon_data, prog_weapon_data, progressive_data)
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
 
 if TYPE_CHECKING:
@@ -65,7 +66,7 @@ def create_itempool(world: "RaC3World") -> List[Item]:
         itempool += create_multiple_items(world, name, item_amount, item_type)
 
     victory = create_item(world, RAC3ITEM.VICTORY)
-    world.multiworld.get_location("Command Center: Biobliterator Defeated!", world.player).place_locked_item(victory)
+    world.multiworld.get_location(RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR, world.player).place_locked_item(victory)
     return itempool
 
 

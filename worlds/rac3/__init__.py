@@ -6,6 +6,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, SuffixIdentifier, Type
 from worlds.rac3.constants.data.item import item_groups, RAC3_ITEM_DATA_TABLE
 from worlds.rac3.constants.items import RAC3ITEM
+from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.items import create_item, create_itempool, get_filler_item_selection, starting_weapons
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
@@ -34,7 +35,7 @@ class RaC3Web(WebWorld):
     theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up Ratchet and Clank 3: Up Your Arsenal for Archipelago. "
+        f"A guide to setting up {RAC3OPTION.GAME_TITLE_FULL}: Up Your Arsenal for Archipelago. "
         "This guide covers single-player, multiworld, and related software.",
         "English",
         "setup_en.md",
@@ -48,8 +49,8 @@ rac3_logger.setLevel(DEBUG)
 
 
 class RaC3World(World):
-    """
-    Ratchet and Clank 3 is a third person action shooter.
+    f"""
+    {RAC3OPTION.GAME_TITLE_FULL} is a third person action shooter.
     Blast your enemies with over the top weaponry and save the galaxy from total disaster.
     """
 
@@ -96,11 +97,13 @@ class RaC3World(World):
         starting_planets = [RAC3ITEM.FLORANA, RAC3ITEM.STARSHIP_PHOENIX]
 
         if len(starting_weapon_list) > 0:
-            self.get_location("Veldin: First Ranger").place_locked_item(self.create_item(starting_weapon_list[0]))
+            self.get_location(RAC3LOCATION.VELDIN_FIRST_RANGER).place_locked_item(
+                self.create_item(starting_weapon_list[0]))
             if len(starting_weapon_list) > 1:
-                self.get_location("Veldin: Second Ranger").place_locked_item(self.create_item(starting_weapon_list[1]))
-        self.get_location("Veldin: Save Veldin").place_locked_item(self.create_item(starting_planets[0]))
-        self.get_location("Florana: Defeat Qwark").place_locked_item(self.create_item(starting_planets[1]))
+                self.get_location(RAC3LOCATION.VELDIN_SECOND_RANGER).place_locked_item(
+                    self.create_item(starting_weapon_list[1]))
+        self.get_location(RAC3LOCATION.VELDIN_SAVE_VELDIN).place_locked_item(self.create_item(starting_planets[0]))
+        self.get_location(RAC3LOCATION.FLORANA_DEFEAT_QWARK).place_locked_item(self.create_item(starting_planets[1]))
         self.preplaced_items.extend(starting_weapon_list)
         self.preplaced_items.extend(starting_planets)
 

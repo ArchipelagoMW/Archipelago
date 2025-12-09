@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.locations.tags import RAC3TAG
@@ -13,7 +13,7 @@ def get_total_locations(world: "RaC3World") -> int:
     return len(locations)
 
 
-def get_location_names() -> Dict[str, int]:
+def get_location_names() -> dict[str, int]:
     return {name: data.AP_CODE for name, data in RAC3_LOCATION_DATA_TABLE.items()}
 
 
@@ -26,114 +26,114 @@ def get_from_tag(tag) -> set:
     return set(loc for loc in RAC3_LOCATION_DATA_TABLE.keys() if tag in RAC3_LOCATION_DATA_TABLE[loc].TAGS)
 
 
-class LocData(NamedTuple):
-    ap_code: Optional[int]
-    region: Optional[str]
+# class LocData(NamedTuple):
+#     ap_code: Optional[int]
+#     region: Optional[str]
 
 
-weapon_upgrades = {
-
-    "Shock Blaster: V2": LocData(50150000, "Shock Blaster Upgrades"),
-    "Shock Blaster: V3": LocData(50150001, "Shock Blaster Upgrades"),
-    "Shock Blaster: V4": LocData(50150002, "Shock Blaster Upgrades"),
-    "Shock Blaster: V5": LocData(50150003, "Shock Blaster Upgrades"),
-
-    "Nitro Launcher: V2": LocData(50150004, "Nitro Launcher Upgrades"),
-    "Nitro Launcher: V3": LocData(50150005, "Nitro Launcher Upgrades"),
-    "Nitro Launcher: V4": LocData(50150006, "Nitro Launcher Upgrades"),
-    "Nitro Launcher: V5": LocData(50150007, "Nitro Launcher Upgrades"),
-
-    "N60 Storm: V2": LocData(50150008, "N60 Storm Upgrades"),
-    "N60 Storm: V3": LocData(50150009, "N60 Storm Upgrades"),
-    "N60 Storm: V4": LocData(50150010, "N60 Storm Upgrades"),
-    "N60 Storm: V5": LocData(50150011, "N60 Storm Upgrades"),
-
-    "Plasma Whip: V2": LocData(50150012, "Plasma Whip Upgrades"),
-    "Plasma Whip: V3": LocData(50150013, "Plasma Whip Upgrades"),
-    "Plasma Whip: V4": LocData(50150014, "Plasma Whip Upgrades"),
-    "Plasma Whip: V5": LocData(50150015, "Plasma Whip Upgrades"),
-
-    "Infector: V2": LocData(50150016, "Infector Upgrades"),
-    "Infector: V3": LocData(50150017, "Infector Upgrades"),
-    "Infector: V4": LocData(50150018, "Infector Upgrades"),
-    "Infector: V5": LocData(50150019, "Infector Upgrades"),
-
-    "Suck Cannon: V2": LocData(50150020, "Suck Cannon Upgrades"),
-    "Suck Cannon: V3": LocData(50150021, "Suck Cannon Upgrades"),
-    "Suck Cannon: V4": LocData(50150022, "Suck Cannon Upgrades"),
-    "Suck Cannon: V5": LocData(50150023, "Suck Cannon Upgrades"),
-
-    "Spitting Hydra: V2": LocData(50150024, "Spitting Hydra Upgrades"),
-    "Spitting Hydra: V3": LocData(50150025, "Spitting Hydra Upgrades"),
-    "Spitting Hydra: V4": LocData(50150026, "Spitting Hydra Upgrades"),
-    "Spitting Hydra: V5": LocData(50150027, "Spitting Hydra Upgrades"),
-
-    "Agents of Doom: V2": LocData(50150028, "Agents of Doom Upgrades"),
-    "Agents of Doom: V3": LocData(50150029, "Agents of Doom Upgrades"),
-    "Agents of Doom: V4": LocData(50150030, "Agents of Doom Upgrades"),
-    "Agents of Doom: V5": LocData(50150031, "Agents of Doom Upgrades"),
-
-    "Flux Rifle: V2": LocData(50150032, "Flux Rifle Upgrades"),
-    "Flux Rifle: V3": LocData(50150033, "Flux Rifle Upgrades"),
-    "Flux Rifle: V4": LocData(50150034, "Flux Rifle Upgrades"),
-    "Flux Rifle: V5": LocData(50150035, "Flux Rifle Upgrades"),
-
-    "Annihilator: V2": LocData(50150036, "Annihilator Upgrades"),
-    "Annihilator: V3": LocData(50150037, "Annihilator Upgrades"),
-    "Annihilator: V4": LocData(50150038, "Annihilator Upgrades"),
-    "Annihilator: V5": LocData(50150039, "Annihilator Upgrades"),
-
-    "Holo-Shield Glove: V2": LocData(50150040, "Holo-Shield Glove Upgrades"),
-    "Holo-Shield Glove: V3": LocData(50150041, "Holo-Shield Glove Upgrades"),
-    "Holo-Shield Glove: V4": LocData(50150042, "Holo-Shield Glove Upgrades"),
-    "Holo-Shield Glove: V5": LocData(50150043, "Holo-Shield Glove Upgrades"),
-
-    "Disc-Blade Gun: V2": LocData(50150044, "Disc-Blade Gun Upgrades"),
-    "Disc-Blade Gun: V3": LocData(50150045, "Disc-Blade Gun Upgrades"),
-    "Disc-Blade Gun: V4": LocData(50150046, "Disc-Blade Gun Upgrades"),
-    "Disc-Blade Gun: V5": LocData(50150047, "Disc-Blade Gun Upgrades"),
-
-    "Rift Inducer: V2": LocData(50150048, "Rift Inducer Upgrades"),
-    "Rift Inducer: V3": LocData(50150049, "Rift Inducer Upgrades"),
-    "Rift Inducer: V4": LocData(50150050, "Rift Inducer Upgrades"),
-    "Rift Inducer: V5": LocData(50150051, "Rift Inducer Upgrades"),
-
-    "Qwack-O-Ray: V2": LocData(50150052, "Qwack-O-Ray Upgrades"),
-    "Qwack-O-Ray: V3": LocData(50150053, "Qwack-O-Ray Upgrades"),
-    "Qwack-O-Ray: V4": LocData(50150054, "Qwack-O-Ray Upgrades"),
-    "Qwack-O-Ray: V5": LocData(50150055, "Qwack-O-Ray Upgrades"),
-
-    "RY3N0: V2": LocData(50150056, "RY3N0 Upgrades"),
-    "RY3N0: V3": LocData(50150057, "RY3N0 Upgrades"),
-    "RY3N0: V4": LocData(50150058, "RY3N0 Upgrades"),
-    "RY3N0: V5": LocData(50150059, "RY3N0 Upgrades"),
-
-    "Mini-Turret Glove: V2": LocData(50150060, "Mini-Turret Glove Upgrades"),
-    "Mini-Turret Glove: V3": LocData(50150061, "Mini-Turret Glove Upgrades"),
-    "Mini-Turret Glove: V4": LocData(50150062, "Mini-Turret Glove Upgrades"),
-    "Mini-Turret Glove: V5": LocData(50150063, "Mini-Turret Glove Upgrades"),
-
-    "Lava Gun: V2": LocData(50150064, "Lava Gun Upgrades"),
-    "Lava Gun: V3": LocData(50150065, "Lava Gun Upgrades"),
-    "Lava Gun: V4": LocData(50150066, "Lava Gun Upgrades"),
-    "Lava Gun: V5": LocData(50150067, "Lava Gun Upgrades"),
-
-    "Shield Charger: V2": LocData(50150068, "Shield Charger Upgrades"),
-    "Shield Charger: V3": LocData(50150069, "Shield Charger Upgrades"),
-    "Shield Charger: V4": LocData(50150070, "Shield Charger Upgrades"),
-    "Shield Charger: V5": LocData(50150071, "Shield Charger Upgrades"),
-
-    "Bouncer: V2": LocData(50150072, "Bouncer Upgrades"),
-    "Bouncer: V3": LocData(50150073, "Bouncer Upgrades"),
-    "Bouncer: V4": LocData(50150074, "Bouncer Upgrades"),
-    "Bouncer: V5": LocData(50150075, "Bouncer Upgrades"),
-
-    "Plasma Coil: V2": LocData(50150076, "Plasma Coil Upgrades"),
-    "Plasma Coil: V3": LocData(50150077, "Plasma Coil Upgrades"),
-    "Plasma Coil: V4": LocData(50150078, "Plasma Coil Upgrades"),
-    "Plasma Coil: V5": LocData(50150079, "Plasma Coil Upgrades"),
-
-}
+# weapon_upgrades = {
+#
+#     "Shock Blaster: V2": LocData(50150000, "Shock Blaster Upgrades"),
+#     "Shock Blaster: V3": LocData(50150001, "Shock Blaster Upgrades"),
+#     "Shock Blaster: V4": LocData(50150002, "Shock Blaster Upgrades"),
+#     "Shock Blaster: V5": LocData(50150003, "Shock Blaster Upgrades"),
+#
+#     "Nitro Launcher: V2": LocData(50150004, "Nitro Launcher Upgrades"),
+#     "Nitro Launcher: V3": LocData(50150005, "Nitro Launcher Upgrades"),
+#     "Nitro Launcher: V4": LocData(50150006, "Nitro Launcher Upgrades"),
+#     "Nitro Launcher: V5": LocData(50150007, "Nitro Launcher Upgrades"),
+#
+#     "N60 Storm: V2": LocData(50150008, "N60 Storm Upgrades"),
+#     "N60 Storm: V3": LocData(50150009, "N60 Storm Upgrades"),
+#     "N60 Storm: V4": LocData(50150010, "N60 Storm Upgrades"),
+#     "N60 Storm: V5": LocData(50150011, "N60 Storm Upgrades"),
+#
+#     "Plasma Whip: V2": LocData(50150012, "Plasma Whip Upgrades"),
+#     "Plasma Whip: V3": LocData(50150013, "Plasma Whip Upgrades"),
+#     "Plasma Whip: V4": LocData(50150014, "Plasma Whip Upgrades"),
+#     "Plasma Whip: V5": LocData(50150015, "Plasma Whip Upgrades"),
+#
+#     "Infector: V2": LocData(50150016, "Infector Upgrades"),
+#     "Infector: V3": LocData(50150017, "Infector Upgrades"),
+#     "Infector: V4": LocData(50150018, "Infector Upgrades"),
+#     "Infector: V5": LocData(50150019, "Infector Upgrades"),
+#
+#     "Suck Cannon: V2": LocData(50150020, "Suck Cannon Upgrades"),
+#     "Suck Cannon: V3": LocData(50150021, "Suck Cannon Upgrades"),
+#     "Suck Cannon: V4": LocData(50150022, "Suck Cannon Upgrades"),
+#     "Suck Cannon: V5": LocData(50150023, "Suck Cannon Upgrades"),
+#
+#     "Spitting Hydra: V2": LocData(50150024, "Spitting Hydra Upgrades"),
+#     "Spitting Hydra: V3": LocData(50150025, "Spitting Hydra Upgrades"),
+#     "Spitting Hydra: V4": LocData(50150026, "Spitting Hydra Upgrades"),
+#     "Spitting Hydra: V5": LocData(50150027, "Spitting Hydra Upgrades"),
+#
+#     "Agents of Doom: V2": LocData(50150028, "Agents of Doom Upgrades"),
+#     "Agents of Doom: V3": LocData(50150029, "Agents of Doom Upgrades"),
+#     "Agents of Doom: V4": LocData(50150030, "Agents of Doom Upgrades"),
+#     "Agents of Doom: V5": LocData(50150031, "Agents of Doom Upgrades"),
+#
+#     "Flux Rifle: V2": LocData(50150032, "Flux Rifle Upgrades"),
+#     "Flux Rifle: V3": LocData(50150033, "Flux Rifle Upgrades"),
+#     "Flux Rifle: V4": LocData(50150034, "Flux Rifle Upgrades"),
+#     "Flux Rifle: V5": LocData(50150035, "Flux Rifle Upgrades"),
+#
+#     "Annihilator: V2": LocData(50150036, "Annihilator Upgrades"),
+#     "Annihilator: V3": LocData(50150037, "Annihilator Upgrades"),
+#     "Annihilator: V4": LocData(50150038, "Annihilator Upgrades"),
+#     "Annihilator: V5": LocData(50150039, "Annihilator Upgrades"),
+#
+#     "Holo-Shield Glove: V2": LocData(50150040, "Holo-Shield Glove Upgrades"),
+#     "Holo-Shield Glove: V3": LocData(50150041, "Holo-Shield Glove Upgrades"),
+#     "Holo-Shield Glove: V4": LocData(50150042, "Holo-Shield Glove Upgrades"),
+#     "Holo-Shield Glove: V5": LocData(50150043, "Holo-Shield Glove Upgrades"),
+#
+#     "Disc-Blade Gun: V2": LocData(50150044, "Disc-Blade Gun Upgrades"),
+#     "Disc-Blade Gun: V3": LocData(50150045, "Disc-Blade Gun Upgrades"),
+#     "Disc-Blade Gun: V4": LocData(50150046, "Disc-Blade Gun Upgrades"),
+#     "Disc-Blade Gun: V5": LocData(50150047, "Disc-Blade Gun Upgrades"),
+#
+#     "Rift Inducer: V2": LocData(50150048, "Rift Inducer Upgrades"),
+#     "Rift Inducer: V3": LocData(50150049, "Rift Inducer Upgrades"),
+#     "Rift Inducer: V4": LocData(50150050, "Rift Inducer Upgrades"),
+#     "Rift Inducer: V5": LocData(50150051, "Rift Inducer Upgrades"),
+#
+#     "Qwack-O-Ray: V2": LocData(50150052, "Qwack-O-Ray Upgrades"),
+#     "Qwack-O-Ray: V3": LocData(50150053, "Qwack-O-Ray Upgrades"),
+#     "Qwack-O-Ray: V4": LocData(50150054, "Qwack-O-Ray Upgrades"),
+#     "Qwack-O-Ray: V5": LocData(50150055, "Qwack-O-Ray Upgrades"),
+#
+#     "RY3N0: V2": LocData(50150056, "RY3N0 Upgrades"),
+#     "RY3N0: V3": LocData(50150057, "RY3N0 Upgrades"),
+#     "RY3N0: V4": LocData(50150058, "RY3N0 Upgrades"),
+#     "RY3N0: V5": LocData(50150059, "RY3N0 Upgrades"),
+#
+#     "Mini-Turret Glove: V2": LocData(50150060, "Mini-Turret Glove Upgrades"),
+#     "Mini-Turret Glove: V3": LocData(50150061, "Mini-Turret Glove Upgrades"),
+#     "Mini-Turret Glove: V4": LocData(50150062, "Mini-Turret Glove Upgrades"),
+#     "Mini-Turret Glove: V5": LocData(50150063, "Mini-Turret Glove Upgrades"),
+#
+#     "Lava Gun: V2": LocData(50150064, "Lava Gun Upgrades"),
+#     "Lava Gun: V3": LocData(50150065, "Lava Gun Upgrades"),
+#     "Lava Gun: V4": LocData(50150066, "Lava Gun Upgrades"),
+#     "Lava Gun: V5": LocData(50150067, "Lava Gun Upgrades"),
+#
+#     "Shield Charger: V2": LocData(50150068, "Shield Charger Upgrades"),
+#     "Shield Charger: V3": LocData(50150069, "Shield Charger Upgrades"),
+#     "Shield Charger: V4": LocData(50150070, "Shield Charger Upgrades"),
+#     "Shield Charger: V5": LocData(50150071, "Shield Charger Upgrades"),
+#
+#     "Bouncer: V2": LocData(50150072, "Bouncer Upgrades"),
+#     "Bouncer: V3": LocData(50150073, "Bouncer Upgrades"),
+#     "Bouncer: V4": LocData(50150074, "Bouncer Upgrades"),
+#     "Bouncer: V5": LocData(50150075, "Bouncer Upgrades"),
+#
+#     "Plasma Coil: V2": LocData(50150076, "Plasma Coil Upgrades"),
+#     "Plasma Coil: V3": LocData(50150077, "Plasma Coil Upgrades"),
+#     "Plasma Coil: V4": LocData(50150078, "Plasma Coil Upgrades"),
+#     "Plasma Coil: V5": LocData(50150079, "Plasma Coil Upgrades"),
+#
+# }
 
 # class EventData(NamedTuple):
 #     ap_code: None

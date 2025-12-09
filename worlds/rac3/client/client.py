@@ -32,7 +32,7 @@ class CommandProcessor(ClientCommandProcessor):
     def verify(self, level: int = 4) -> bool:
         """
         Checks various levels of connection before allowing a command.
-        Level 1: Client is for Ratchet and Clank 3
+        Level 1: Client is for RAC 3
         Level 2: Client is connected to a multiworld server
         Level 3: Client is connected to the game
         Level 4: Player is in game
@@ -52,13 +52,13 @@ class CommandProcessor(ClientCommandProcessor):
                         self.output("Not in game, please load a game file")
                         return False
                 else:
-                    self.output("No Game Detected, please connect to Ratchet and Clank 3")
+                    self.output(f"No Game Detected, please connect to {RAC3OPTION.GAME_TITLE_FULL}")
                     return False
             else:
                 self.output("No slot data, please connect to a multiworld server")
                 return False
         else:
-            self.output("Somehow this client isn't for Ratchet and Clank 3, delete this build and try again")
+            self.output(f"Somehow this client isn't for {RAC3OPTION.GAME_TITLE_FULL}, delete this build and try again")
             return False
 
     # This is not mandatory for the game. Just a client command implementation.
