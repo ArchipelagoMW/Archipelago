@@ -386,7 +386,6 @@ class GloverWorld(World):
                     spawning_options[9] = [1]
                     #Prehistoric 3 (Lava Platforms)
                     spawning_options[11] = [1, 2, 3]
-                
                 #Without Switch Items
                 if not self.options.switches_checks:
                     #Intended Locks
@@ -404,7 +403,6 @@ class GloverWorld(World):
                         #Fear 2 (Lever Room)
                         spawning_options[13] = [1, 2]
 
-
         for each_index, each_item in enumerate(self.spawn_checkpoint):
             self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
         else:
@@ -421,6 +419,9 @@ class GloverWorld(World):
         
         #Randomize the entrances for those remaining regions
         self.entrance_randomizer()
+
+        #Create the victory conditon
+        self.setup_victory()
 
         #Create the rules for garibs now, so filler generation works correct
         self.garib_item_rules()
@@ -728,11 +729,6 @@ class GloverWorld(World):
         hubworld.connect(castle_cave)
         castle_cave.connect(multiworld.get_region("Castle Cave: Main W/Ball", player))
 
-        #Ending
-        final_location : Location = self.returning_crystal(castle_cave, 7)
-        final_location.place_locked_item(self.create_event("Victory"))
-        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
-
         #Apply wayroom entrances
         for world_index, each_world_prefix in enumerate(self.world_prefixes):
             world_offset : int  = world_index * 5
@@ -811,6 +807,9 @@ class GloverWorld(World):
             
             #Make the hubworld operate normally while portalsanity's off
             if not self.options.portalsanity:
+                #Ending
+                final_location : Location = self.returning_crystal(castle_cave, 7)
+                final_location.place_locked_item(self.create_event("Endscreen"))
                 #The Thing
                 crystal_location : Location | None = None
                 match entrance_index:
@@ -835,6 +834,21 @@ class GloverWorld(World):
                 #Put the gate to it at the crystal location
                 if crystal_location != None:
                     crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
+
+    #Puts the victory location
+    def setup_victory(self):
+        multiworld = self.multiworld
+        player = self.player
+        victory_condition = "ERROR"
+        match self.options.victory_condition.value:
+            case 1:
+                castle_cave : Region = multiworld.get_region("Castle Cave", player)
+                victory_condition = str(self.options.required_crystals.value) + " Balls Returned"
+                victory_location : Location = self.returning_crystal(castle_cave, self.options.required_crystals.value, "G")
+                victory_location.place_locked_item(self.create_event(victory_condition))
+            case _:
+                victory_condition = "Endscreen"
+        multiworld.completion_condition[player] = lambda state: state.has(victory_condition, player)
 
     #Crystal return locations
     def returning_crystal(self, castle_cave : Region, required_balls : int, suffix : str = "") -> Location:
@@ -908,6 +922,8 @@ class GloverWorld(World):
 
     def build_options(self):
         options = {}
+        options["victory_condition"] = self.options.victory_condition.value
+        options["required_crystals"] = self.options.required_crystals.value
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
         options["tag_link"] = self.options.tag_link.value

@@ -1,6 +1,23 @@
 from dataclasses import dataclass
 from Options import ExcludeLocations, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin
 
+class VictoryCondition(Choice):
+    """The condition needed to beat Glover.
+    Endscreen: Get to the endscreen.
+    Crystal Count: Get the number of crystals required."""
+    display_name = "Victory Condition"
+    option_endscreen = 0
+    option_crystal_count = 1
+    #option_hard_tricks = 2
+
+class RequiredCrystals(Range):
+    """The number of crystals needed to beat Glover while Victory Condition is Crystal Count. Default 4."""
+    display_name = "Required Crystals"
+    range_start = 2
+    range_end = 7
+    default = 4
+
+
 class DifficultyLogic(Choice):
     """What tricks are allowed. Default Intended.
     Intended: No clips, no skips, no glitches. Things that are reasonable for a player to do.
@@ -300,6 +317,8 @@ class TrapTipWeight(Range):
 
 @dataclass
 class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
+    victory_condition : VictoryCondition
+    required_crystals : RequiredCrystals
     difficulty_logic : DifficultyLogic
     starting_ball : StartingBall
     garib_logic : GaribLogic

@@ -901,13 +901,22 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             ctx.handled_scouts.extend(scoutsVague)
         
         #GAME VICTORY
-        if payload["outro"] == True and not ctx.finished_game:
+        won_game : bool = False
+        match ctx.slot_data["victory_condition"]:
+            case 0:
+                won_game = payload["outro"] == True
+            case 1:
+                crystal_address = int(0x79A) + int(ctx.slot_data["required_crystals"]) - 1
+                if crystal_address in ball_return_list:
+                    won_game = ball_return_list[crystal_address] == True
+        if won_game and not ctx.finished_game:
             await ctx.send_msgs([{
                 "cmd": "StatusUpdate",
                 "status": 30
             }])
             ctx.finished_game = True
             ctx._set_message("You have completed your goal", None)
+
 
         # Tracker
         if ctx.current_world != glover_world:
