@@ -65,8 +65,8 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
-version: str = "V0.1"
-patch_md5: str = "5533af150b6836223ffa232f07dc4ca6"
+version: str = "V1.0"
+patch_md5: str = "9db1becce27d8c37907971dd9b6134a5"
 gvr_options = settings.get_settings().glover_options
 program = None
 
