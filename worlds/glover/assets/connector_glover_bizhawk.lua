@@ -13245,8 +13245,12 @@ function process_slot(block)
 	end
     if block['slot_mr_hints'] ~= nil and block['slot_mr_hints'] ~= 0
     then
-        GVR:setTipHints(block['slot_mr_hints'])
+        GVR:setTipHints(block['slot_mr_hints'] > 0)
     end
+	if block['slot_mr_hints_locations'] ~= nil
+	then
+		print(block['slot_mr_hints_locations'])
+	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then
         GVR:setCheckpointChecks(block['slot_checkpoint_checks'])
