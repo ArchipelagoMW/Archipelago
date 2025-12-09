@@ -179,7 +179,7 @@ if apworlds:
                            f"as its game {apworld.game} is already loaded.",
                            add_as_failed_to_load=False)
             else:
-                importer = zipimport.zipimporter(apworld.resolved_path)
+                importer = zipimport.zipimporter(apworld_source.resolved_path)
                 world_name = Path(apworld.path).stem
 
                 spec = importer.find_spec(f"worlds.{world_name}")
