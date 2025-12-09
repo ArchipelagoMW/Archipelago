@@ -2,8 +2,8 @@ from argparse import Namespace
 from typing import Any, List, Optional, Tuple, Type
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
-from worlds import network_data_package
-from worlds.AutoWorld import World, WebWorld, call_all
+from test.general.stub_world import TestWorld
+from worlds.AutoWorld import World, call_all
 
 gen_steps = (
     "generate_early",
@@ -67,22 +67,6 @@ def setup_multiworld(worlds: list[type[World]] | type[World], steps: tuple[str, 
     for step in steps:
         call_all(multiworld, step)
     return multiworld
-
-
-class TestWebWorld(WebWorld):
-    tutorials = []
-
-
-class TestWorld(World):
-    game = f"Test Game"
-    item_name_to_id = {}
-    location_name_to_id = {}
-    hidden = True
-    web = TestWebWorld()
-
-
-# add our test world to the data package, so we can test it later
-network_data_package["games"][TestWorld.game] = TestWorld.get_data_package_data()
 
 
 def generate_test_multiworld(players: int = 1) -> MultiWorld:
