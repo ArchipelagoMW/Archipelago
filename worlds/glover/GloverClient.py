@@ -652,7 +652,9 @@ def get_slot_payload(ctx: GloverContext):
             "slot_world_lookup": ctx.slot_data["world_lookup"],
             "slot_switches": ctx.slot_data["switches_checks"],
             "slot_easy_ball_walk": ctx.slot_data["easy_ball_walk"],
+            "slot_checkpoint_checks": ctx.slot_data["checkpoint_checks"],
             "slot_randomized_spawns": ctx.slot_data["randomized_spawns"],
+            "slot_mr_hints":ctx.slot_data["mr_hints"],
             "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
     ctx.sendSlot = False
@@ -830,7 +832,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                             else:
                                 if not id in ctx.handled_scouts:
                                     scoutsVague.append(id)
-                                    logger.info(hint['vague_hint'])
+                                    logger.info(hint['text'])
         if ctx.checkpoint_table != checkpointslist:
             ctx.checkpoint_table = checkpointslist
             for locationId, value in checkpointslist.items():
@@ -875,7 +877,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                             else:
                                 if not id in ctx.handled_scouts:
                                     scoutsVague.append(id)
-                                    logger.info(hint['vague_hint'])
+                                    logger.info(hint['text'])
         #TODO: Make it so rechecking Chicken Hint at later hubs works in-game
 
         if len(locs1) > 0:

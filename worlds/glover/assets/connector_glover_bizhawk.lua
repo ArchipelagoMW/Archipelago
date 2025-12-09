@@ -12066,6 +12066,14 @@ function GLOVERHACK:setGaribLogic(glogic)
     mainmemory.writebyte(self.garib_logic + GLOVERHACK:getSettingPointer(), glogic);
 end
 
+function GLOVERHACK:setInverseBall(binvert)
+	mainmemory.writebyte(self.inverse + GLOVERHACK:getSettingPointer(), binvert);
+end
+
+function GLOVERHACK:setTipHints(mrhints)
+	mainmemory.writebyte(self.tip_hints + GLOVERHACK:getSettingPointer(), mrhints);
+end
+
 -- function GLOVERHACK:setGaribSorting(gsort)
 --     mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
 -- end
@@ -12074,8 +12082,11 @@ function GLOVERHACK:setRandomizeSwitches(switch)
     mainmemory.writebyte(self.randomize_switches + GLOVERHACK:getSettingPointer(), switch);
 end
 
+function GLOVERHACK:setCheckpointChecks(checkpoints)
+	mainmemory.writebyte(self.checkpoint_items + GLOVERHACK:getSettingPointer(), checkpoints);
+end
+
 function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
-	print("Randomize Checkpoint is set to "..tostring(checkpoint).."!")
     mainmemory.writebyte(self.randomize_checkpoints + GLOVERHACK:getSettingPointer(), checkpoint);
 end
 
@@ -13193,7 +13204,7 @@ function process_slot(block)
 	end
     if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= ""
 	then
-		LINKS_TABLE['TAG']['ENABLED'] =block['slot_taglink']
+		LINKS_TABLE['TAG']['ENABLED'] = block['slot_taglink']
 	end
     if block['slot_traplink'] ~= nil and block['slot_traplink'] ~= ""
 	then
@@ -13230,8 +13241,16 @@ function process_slot(block)
     end
 	if block['slot_easy_ball_walk'] ~= nil and block['slot_easy_ball_walk'] ~= 0
 	then
-		print("Easy Ball Walk!")
+		GVR:setInverseBall(block['slot_easy_ball_walk'])
 	end
+    if block['slot_mr_hints'] ~= nil and block['slot_mr_hints'] ~= 0
+    then
+        GVR:setTipHints(block['slot_mr_hints'])
+    end
+    if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
+    then
+        GVR:setCheckpointChecks(block['slot_checkpoint_checks'])
+    end
     if block['slot_randomized_spawns'] ~= nil and block['slot_randomized_spawns'] ~= 0
     then
         GVR:setRandomizeCheckpoint(block['slot_randomized_spawns'])
