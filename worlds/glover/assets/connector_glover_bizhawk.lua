@@ -12737,6 +12737,25 @@ function received_events(itemId)
     end
 end
 
+function received_checkpoints(itemId)
+	local checkpoint_index = 6500130 - itemId + 1
+	for world_index, max_checkpoints in pairs({2,3,3,4,5,4,3,3,4,3,4,4,3,3,5,2,1,4})
+	do
+		if checkpoint_index <= max_checkpoints
+		then
+			receive_checkpoint(world_index, checkpoint_index)
+			break
+		end
+		checkpoint_index = checkpoint_index - max_checkpoints
+	end
+end
+
+function receive_checkpoint(world_index, checkpoint_number)
+	local world_id = numericLevelToWorldId(world_index)
+	local item_name = ROM_WORLDS_TABLE[world_id].."_CHECKPOINT"..tostring(checkpoint_number)
+	GVR:setItem(ITEM_TABLE[item_name], 1)
+end
+
 ---------------------------------- MAP FUNCTIONS -----------------------------------
 
 function set_map(map)
@@ -12843,15 +12862,19 @@ end
 function setSpawningCheckpoints(IN_CHECKPOINT)
 	for eachIndex, checkpoint_number in pairs(IN_CHECKPOINT)
 	do
-		local level_number = ((eachIndex - 1) % 3) + 1
-		local world_number = (eachIndex - 1) // 3
-		local world_id = level_number + (world_number * 5)
+		local world_id = numericLevelToWorldId(eachIndex)
     	local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
     	local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
 		local spawn_checkpoint_address = world_address + GLOVERHACK.warp_spawn_offset
 		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number - 1)
-		print(ROM_WORLDS_TABLE[world_id].."'s Spawning Checkpoint: "..tostring(checkpoint_number).."("..tostring(spawn_checkpoint_address)..")")
+		receive_checkpoint(eachIndex, checkpoint_number)
 	end
+end
+
+function numericLevelToWorldId(input)
+	local level_number = ((input - 1) % 3) + 1
+	local world_number = (input - 1) // 3
+	return level_number + (world_number * 5)
 end
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
 
@@ -12876,6 +12899,9 @@ function processAGIItem(item_list)
             elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
             then
                 received_events(memlocation)
+            elseif(6500130 <= memlocation and memlocation <= 6500189) -- Events
+            then
+                received_checkpoints(memlocation)
             end
             receive_map[tostring(ap_id)] = tostring(memlocation)
         end
