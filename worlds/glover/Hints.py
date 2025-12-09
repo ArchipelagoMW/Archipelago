@@ -79,10 +79,10 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
     }
     hint_text = in_location.hint_text
     locations_owner = self.multiworld.player_name[in_location.player] + "'s"
-    if in_location.player == self.multiworld.player:
+    if in_location.player == self.player:
         locations_owner = "your"
     item_owner = self.multiworld.player_name[in_item.player] + "'s"
-    if in_item.player == self.multiworld.player:
+    if in_item.player == self.player:
         item_owner = "your"
     if vague_hint:
         hint_text = hint_text.removeprefix("at ")

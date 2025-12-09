@@ -265,22 +265,23 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
     
     #Assign entrances required by checkpoints here
     for checkpoint_number in range(1, len(checkpoint_entry_pairs)):
-
         #Create a checkpoint connection
         checkpoint_name : str = level_name + " Checkpoint " + str(checkpoint_number)
         connecting_region : Region | None = None
         for each_region_pair in map_regions:
             #If the checkpoint leads to that region
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
+                print(checkpoint_entry_pairs)
                 if start_without_ball:
                     #And it exists
                     if each_region_pair.no_ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name, player)
+                        print(each_region_pair.name)
                 else:
                     #And it exists
                     if each_region_pair.ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
-                break
+                        print(each_region_pair.name)
         
         if connecting_region != None:
             entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
@@ -491,6 +492,7 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
         #Go over the Glover worlds
         for level_index, level_key in enumerate(each_world):
             if level_index == 5 and not self.options.bonus_levels:
+                loc_con_index += 1
                 continue
             each_level = each_world[level_key]
             checkpoint_entry_pairs : list = levels_in_order[loc_con_index]
@@ -501,7 +503,7 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             map_regions : List[RegionPair] = []
             location_data_list : List[LocationData] = []
             
-            #Bonus levels are off by default
+            #Bonus levels
             if not (level_index == 5 and not self.options.bonus_levels):
                 for check_name in each_level:
                     check_info = each_level[check_name]
@@ -515,8 +517,9 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                         #You get the one from checkpoints by default
                         region_checkpoints = []
                         for check_index in range(1, len(checkpoint_entry_pairs)):
-                            matching_name = checkpoint_entry_pairs[check_index]
-                            if matching_name == check_name:
+                            matching_index = checkpoint_entry_pairs[check_index]
+                            if matching_index == check_info["I"]:
+                                print(matching_index)
                                 region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             
             #Sort the in-level regions

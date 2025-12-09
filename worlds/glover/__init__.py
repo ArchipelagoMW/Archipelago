@@ -469,7 +469,6 @@ class GloverWorld(World):
         if item_data.type == "Trap":
             fake_item_name = select_trap_item_name(self, name_for_use)
             item_output.fake_name = fake_item_name
-            #print(item_output.hint_text)
         return item_output
 
     def percent_of(self, percent : int) -> float:
@@ -854,7 +853,6 @@ class GloverWorld(World):
 
     #Crystal return locations
     def returning_crystal(self, castle_cave : Region, required_balls : int, suffix : str = "") -> Location:
-        print(str(required_balls) + suffix)
         player = self.player
         crystal_return_location : Location = Location(player, "Ball Turn-In " + str(required_balls) + suffix, None, castle_cave)
         castle_cave.locations.append(crystal_return_location)
