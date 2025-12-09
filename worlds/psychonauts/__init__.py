@@ -21,7 +21,7 @@ from .Items import (
     BASE_ITEM_CLASSIFICATIONS,
     SKIP_BALANCING_FOR_DUPLICATES,
 )
-from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
+from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS
 from .Names import ItemName, LocationName
 from .Options import Goal, PsychonautsOptions, SLOT_DATA_OPTIONS
 from .PsychoSeed import gen_psy_seed
@@ -172,6 +172,12 @@ class PSYWorld(World):
         # PSI Cards to the pool as Mental Cobweb Locations.
         item_counts[ItemName.PsiCard] += len(MENTAL_COBWEB_LOCATIONS)
 
+    @staticmethod
+    def _add_rank_sanity_items(item_counts: Dict[str, int]):
+        # Add PSI Cards to the pool to fill empty ranks
+        extra_rank_count = 80
+        item_counts[ItemName.PsiCard] += extra_rank_count
+
     def create_items(self):
         """
         Fills ItemPool 
@@ -204,6 +210,10 @@ class PSYWorld(World):
         # Add items for MentalCobwebShuffle
         if self.options.MentalCobwebShuffle:
             self._add_mental_cobweb_shuffle_items(adjusted_item_counts)
+        
+        # Add items for RankSanity
+        if self.options.RankSanity:
+            self._add_rank_sanity_items(adjusted_item_counts)
 
         # Create the initial item pool.
         item_pool = list(map(self.create_item, repeated_item_names_gen(ITEM_DICTIONARY, adjusted_item_counts)))
@@ -241,6 +251,10 @@ class PSYWorld(World):
             Regions.create_deep_arrowhead_locations(self.multiworld, self.player)
         if self.options.MentalCobwebShuffle:
             Regions.create_mental_cobweb_locations(self.multiworld, self.player)
+        if self.options.RankSanity:
+            Regions.create_100_rank_locations(self.multiworld, self.player)
+        else:
+            Regions.create_20_rank_locations(self.multiworld, self.player)
 
     def set_rules(self):
         """

@@ -173,6 +173,9 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append cobwebShuffle setting
     randoseed_parts.append(f"           Ob.cobwebShuffle = {_lua_bool(self.options.MentalCobwebShuffle)}\n")
 
+    # append rankSanity setting
+    randoseed_parts.append(f"           Ob.rankSanity = {_lua_bool(self.options.RankSanity)}\n")
+
     # append Goal settings
     beat_oleander = _lua_bool(self.options.Goal == Goal.option_asylum_brain_tank
                               or self.options.Goal == Goal.option_asylum_brain_tank_and_brain_hunt)

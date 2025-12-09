@@ -24,6 +24,16 @@ from .Locations import (
     WW_COBWEB_CHECKS,
     BV_COBWEB_CHECKS,
     MC_COBWEB_CHECKS,
+    RANK_20_CHECKS,
+    RANK_40_CHECKS,
+    RANK_60_CHECKS,
+    RANK_80_CHECKS,
+    RANK_101_CHECKS,
+    FIVE_RANK_20_CHECKS,
+    FIVE_RANK_40_CHECKS,
+    FIVE_RANK_60_CHECKS,
+    FIVE_RANK_80_CHECKS,
+    FIVE_RANK_101_CHECKS,
 )
 from .Names import LocationName
 from . import Options
@@ -39,6 +49,13 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
         LocationName.StaircaseLedgesCard,
         LocationName.UpperLedgeFossil,
     ],
+
+    # Create Empty Regions for Ranks to be placed inside
+    RegionName.RANK2to20: [],
+    RegionName.RANK21to40: [],
+    RegionName.RANK41to60: [],
+    RegionName.RANK61to80: [],
+    RegionName.RANK81to101: [],
 
     # Wilderness and GPC
     RegionName.CAGP: [
@@ -191,36 +208,6 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
     RegionName.CAJA: [
         LocationName.TopofSanctuaryCard,
         LocationName.BottomofSanctuaryCard,
-    ],
-    RegionName.RANK5to20: [
-        LocationName.PSIRank05,
-        LocationName.PSIRank10,
-        LocationName.PSIRank15,
-        LocationName.PSIRank20,
-    ],
-    RegionName.RANK25to40: [
-        LocationName.PSIRank25,
-        LocationName.PSIRank30,
-        LocationName.PSIRank35,
-        LocationName.PSIRank40,
-    ],
-    RegionName.RANK45to60: [
-        LocationName.PSIRank45,
-        LocationName.PSIRank50,
-        LocationName.PSIRank55,
-        LocationName.PSIRank60,
-    ],
-    RegionName.RANK65to80: [
-        LocationName.PSIRank65,
-        LocationName.PSIRank70,
-        LocationName.PSIRank75,
-        LocationName.PSIRank80,
-    ],
-    RegionName.RANK85to101: [
-        LocationName.PSIRank85,
-        LocationName.PSIRank90,
-        LocationName.PSIRank95,
-        LocationName.PSIRank101,
     ],
 
     # Asylum Grounds
@@ -700,6 +687,21 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, mctc_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, mctc_escort_cobwebs)
 
+def create_20_rank_locations(multiworld: MultiWorld, player: int):
+    # Adds locations for every Five Ranks earned
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK2to20, FIVE_RANK_20_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK21to40, FIVE_RANK_40_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK41to60, FIVE_RANK_60_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK61to80, FIVE_RANK_80_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK81to101, FIVE_RANK_101_CHECKS)
+
+def create_100_rank_locations(multiworld: MultiWorld, player: int):
+    # Adds locations for EVERY Rank earned
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK2to20, RANK_20_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK21to40, RANK_40_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK41to60, RANK_60_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK61to80, RANK_80_CHECKS)
+    _add_locations_to_existing_region(multiworld, player, RegionName.RANK81to101, RANK_101_CHECKS)
 
 def create_psyregions(multiworld: MultiWorld, player: int):
     # Create all default regions.
@@ -734,12 +736,12 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.CASA: {
             # GPC/Wilderness is the main connection to the outside, real world.
             RegionName.CAGP,
-            # CAJA and RANK regions are all within the same physical location (Ford's Sanctuary) and are always
+            # CAJA (Ford's Sanctuary)
             # accessible via fast travel in Sasha's Lab and other CA regions, as well as via a teleport item (Bacon) in
             # the player's inventory.
             RegionName.CAJA,
             RegionName.CAJABrains,
-            RegionName.RANK5to20,
+            RegionName.RANK2to20,
             # The remaining regions are the first region into each mind, accessed from the Collective Unconscious.
             RegionName.BBA1,
             RegionName.SACU,
@@ -753,10 +755,10 @@ def connect_regions(multiworld: MultiWorld, player: int):
             RegionName.MCTC,
         },
         # Rank regions connect to each other in sequence.
-        RegionName.RANK5to20: {RegionName.RANK25to40},
-        RegionName.RANK25to40: {RegionName.RANK45to60},
-        RegionName.RANK45to60: {RegionName.RANK65to80},
-        RegionName.RANK65to80: {RegionName.RANK85to101},
+        RegionName.RANK2to20: {RegionName.RANK21to40},
+        RegionName.RANK21to40: {RegionName.RANK41to60},
+        RegionName.RANK41to60: {RegionName.RANK61to80},
+        RegionName.RANK61to80: {RegionName.RANK81to101},
 
         # Outside, real world:
         RegionName.CAGP: {

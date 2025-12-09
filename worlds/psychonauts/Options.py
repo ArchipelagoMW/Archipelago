@@ -106,6 +106,9 @@ class MentalCobwebShuffle(Toggle):
     Raz's inventory, so the loom in Ford's Sanctuary will have no use."""
     display_name = "Mental Cobweb Shuffle"
 
+class RankSanity(Toggle):
+    """Add Rank Rewards to EVERY Rank Up, instead of the traditional Five Ranks Up."""
+    display_name = "Rank Sanity"
 
 @dataclass
 class PsychonautsOptions(PerGameCommonOptions):
@@ -123,6 +126,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     RequireMeatCircus: RequireMeatCircus
     DeepArrowheadShuffle: DeepArrowheadShuffle
     MentalCobwebShuffle: MentalCobwebShuffle
+    RankSanity: RankSanity
 
 
 SLOT_DATA_OPTIONS: List[str] = [
@@ -138,4 +142,5 @@ SLOT_DATA_OPTIONS: List[str] = [
     "RequireMeatCircus",
     "DeepArrowheadShuffle",
     "MentalCobwebShuffle",
+    "RankSanity",
 ]

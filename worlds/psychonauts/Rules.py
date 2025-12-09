@@ -3,7 +3,7 @@ from typing import Dict, TYPE_CHECKING, Set
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
 from .Items import BRAIN_JARS, LOCAL_SET
-from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS
+from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIVE_RANK_LOCATIONS
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
 
@@ -37,8 +37,8 @@ class PsyRules:
             # Technically, all that is required to reach Rank 101 is Sasha's Button because Arrowheads can be farmed and
             # then Ranks can be purchased at the Main Lodge Store. However, this would be incredibly slow in practice.
 
-            # Meeting four of these conditions adds ranks 5-20 to logic
-            RegionName.RANK5to20: lambda state: sum([
+            # Meeting four of these conditions adds ranks 2-20 to logic
+            RegionName.RANK2to20: lambda state: sum([
                 self.has_button(state),
                 self.has_coach_mind(state),
                 self.has_most_sasha_mind_access(state),
@@ -50,8 +50,8 @@ class PsyRules:
                 self.has_edgar_mind(state),
             ]) >= 4,
 
-            # Meeting five of these conditions adds ranks 25-40 to logic
-            RegionName.RANK25to40: lambda state: sum([
+            # Meeting five of these conditions adds ranks 21-40 to logic
+            RegionName.RANK21to40: lambda state: sum([
                 self.has_button(state) and (
                             self.has_oarsmans_badge(state)
                             or self.has_squirrel_dinner(state)
@@ -67,8 +67,8 @@ class PsyRules:
                 self.has_half_oly_mind_access(state),
             ]) >= 5,
 
-            # Having Sasha's Button AND Meeting six of these conditions adds ranks 45-60 to logic
-            RegionName.RANK45to60: lambda state: self.has_button(state) and sum([
+            # Having Sasha's Button AND Meeting six of these conditions adds ranks 41-60 to logic
+            RegionName.RANK41to60: lambda state: self.has_button(state) and sum([
                 self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
                 self.has_most_sasha_mind_access(state),
@@ -83,9 +83,9 @@ class PsyRules:
 
             ]) >= 6,
 
-            # Rank Regions form a dependent sequence, so ranks 45 and higher all require Sasha's Button.
-            # Meeting seven of these conditions adds ranks 65-80 to logic
-            RegionName.RANK65to80: lambda state: sum([
+            # Rank Regions form a dependent sequence, so ranks 41 and higher all require Sasha's Button.
+            # Meeting seven of these conditions adds ranks 61-80 to logic
+            RegionName.RANK61to80: lambda state: sum([
                 self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
                 self.has_most_sasha_mind_access(state),
@@ -99,8 +99,8 @@ class PsyRules:
                 self.has_most_oly_mind_access(state),
             ]) >= 7,
 
-            # Meeting eight of these conditions adds ranks 85-101 to logic
-            RegionName.RANK85to101: lambda state: sum([
+            # Meeting eight of these conditions adds ranks 81-101 to logic
+            RegionName.RANK81to101: lambda state: sum([
                 self.has_all_extra_campground_access(state),
                 self.has_coach_mind(state),
                 self.has_most_sasha_mind_access(state),
@@ -426,6 +426,15 @@ class PsyRules:
         # instead relying on the Archipelago client to tell Psychonauts to spawn in the item as if it were receiving a
         # non-local item, so these locations cannot contain Psychonauts items that can only be placed locally.
         local_only_forbidden: Set[str] = set()
+
+        # Ranks are now always spawned by Archipelago, no local only items
+        if self.world.options.RankSanity:
+            # Update ALL rank locations
+            local_only_forbidden.update(RANK_LOCATIONS.keys())
+        else:
+            # Update only every five rank locations
+            local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
+
 
         if self.world.options.DeepArrowheadShuffle:
             # Deep Arrowhead Shuffle locations do not place items into the world.
