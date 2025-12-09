@@ -663,25 +663,26 @@ class TunicWorld(World):
                 # Remove parentheses for better readability
                 spoiler_handle.write(f'{ability[ability.find("(")+1:ability.find(")")]}: {self.ability_unlocks[ability]} Gold Questagons\n')
 
-    def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
-        if self.options.entrance_rando:
-            hint_data.update({self.player: {}})
-            # all state seems to have efficient paths
-            all_state = self.multiworld.get_all_state(True)
-            all_state.update_reachable_regions(self.player)
-            paths = all_state.path
-            portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
-            for location in self.multiworld.get_locations(self.player):
-                # skipping event locations
-                if not location.address:
+    @classmethod
+    def stage_extend_hint_information(cls, multiworld: MultiWorld, hint_data: dict[int, dict[int, str]]) -> None:
+        tunic_er_worlds: list[TunicWorld] = [world for world in multiworld.get_game_worlds("TUNIC")
+                                             if world.options.entrance_rando]
+        hint_data.update({world.player: {} for world in tunic_er_worlds})
+        all_state = multiworld.get_all_state()
+        paths = all_state.path
+        portal_names = {portal.name for portal in portal_mapping}.union({f"Shop Portal {i + 1}" for i in range(500)})
+        for world in tunic_er_worlds:
+            all_state.update_reachable_regions(world.player)
+            for region in world.get_regions():
+                if region.name == "Menu":
                     continue
-                path_to_loc = []
+                path_to_region = []
                 previous_name = "placeholder"
                 try:
-                    name, connection = paths[location.parent_region]
+                    name, connection = paths[region]
                 except KeyError:
                     # logic bug, proceed with warning since it takes a long time to update AP
-                    warning(f"{location.name} is not logically accessible for {self.player_name}. "
+                    warning(f"{region.name} is not logically accessible for {world.player_name}. "
                             "Creating entrance hint Inaccessible. Please report this to the TUNIC rando devs. "
                             "If you are using Plando Items (excluding early locations), then this is likely the cause.")
                     hint_text = "Inaccessible"
@@ -694,11 +695,16 @@ class TunicWorld(World):
                         # was getting some cases like Library Grave -> Library Grave -> other place
                         if name in portal_names and name != previous_name:
                             previous_name = name
-                            path_to_loc.append(name)
-                    hint_text = " -> ".join(reversed(path_to_loc))
+                            path_to_region.append(name)
+                    hint_text = " -> ".join(reversed(path_to_region))
 
                 if hint_text:
-                    hint_data[self.player][location.address] = hint_text
+                    for location in region.get_locations():
+                        if location.address is None:
+                            continue
+                        hint_data[world.player][location.address] = hint_text
+                        if location.name == "Beneath the Well - [Entryway] Chest":
+                            print(hint_text)
 
     def get_real_location(self, location: Location) -> tuple[str, int]:
         # if it's not in a group, it's not in an item link
