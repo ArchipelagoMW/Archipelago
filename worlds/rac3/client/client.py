@@ -12,8 +12,7 @@ from worlds.rac3.client.callbacks import init, update
 from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.options import RAC3OPTION
-from worlds.rac3.constants.region import PLANET_NAME_FROM_ID, RAC3REGION
-from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.region import RAC3REGION
 
 # Load Universal Tracker modules with aliases
 tracker_loaded = False

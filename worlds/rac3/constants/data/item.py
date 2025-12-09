@@ -505,7 +505,7 @@ item_table: dict[str, RAC3ITEMDATA] = {
     **weapon_upgrade_data
 }
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
-trap_to_status: dict[str, int] = {
+timer_to_status: dict[str, int] = {
     RAC3ITEM.LOCK_TRAP: RAC3STATUS.WEAPON_LOCK,
 }
 

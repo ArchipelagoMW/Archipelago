@@ -1,7 +1,7 @@
 import time
 from dataclasses import dataclass
 from enum import IntEnum
-from random import randint
+from random import randint, uniform
 from struct import unpack
 from typing import Dict, Optional
 
@@ -9,7 +9,7 @@ from CommonClient import logger
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
                                              ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT,
-                                             RAC3_ITEM_DATA_TABLE, trap_to_status, vidcomic_data, weapon_upgrade_data)
+                                             RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
@@ -187,15 +187,15 @@ class Rac3Interface(GameInterface):
     # Mandatory functions                  #
     ########################################
 
-    UnlockItem = None
-    weaponLevelLockFlag = None
-    boltAndXPMultiplier = None
-    boltAndXPMultiplierValue = None
-    respawning = False
+    UnlockItem: dict[str, UnlockData] = None
+    boltAndXPMultiplier: int = None
+    boltAndXPMultiplierValue: int = None
+    respawning: bool = False
     ship: int = 0
     ship_skin: int = 0
     skin: int = 0
-    trap_timers: dict[str, int] = {}
+    timers: dict[str, int] = {}
+    weaponLevelLockFlag: bool = None
 
     # Called at once when client started
     def init(self):
@@ -221,11 +221,11 @@ class Rac3Interface(GameInterface):
         self.weapon_cycler()
         self.vidcomic_cycler()
         self.armor_cycler()
-        self.trap_cycler()
+        self.timer_cycler()
         self.input_cycler()
         self.verify_quick_select_and_last_used()
         # Proc Options
-        self._write8(RAC3STATUS.MULTIPLIER, self.boltAndXPMultiplierValue)
+        self.multiplier_cycler()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -289,11 +289,9 @@ class Rac3Interface(GameInterface):
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
                 self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + randint(1, 100))
             case RAC3ITEM.JACKPOT:
-                addr = RAC3STATUS.JACKPOT_TIMER
-                timer = self._read32(addr)
-                self._write32(addr, timer + 1000 + randint(1, 100))
-                # Activate Jackpot
-                self._write8(RAC3STATUS.JACKPOT, 1)
+                _time = int(time.time() + uniform(10, 30))
+                self.timers[name + str(_time)] = _time
+                self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
                 level = self._read8(RAC3STATUS.MAX_HEALTH)
@@ -321,10 +319,10 @@ class Rac3Interface(GameInterface):
 
                 # skip if already locked like in weapon challenges or weapon cycle challenges
                 if already_locked == 0:
-                    if self.trap_timers.get(name, False):
-                        self.trap_timers[name] += 10
+                    if self.timers.get(name, False):
+                        self.timers[name] += randint(5, 15)
                     else:
-                        self.trap_timers[name] = int(time.time()) + 10
+                        self.timers[name] = int(time.time() + uniform(5, 15))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -363,8 +361,7 @@ class Rac3Interface(GameInterface):
 
         # Proc options
         ### Bolt and XPMultiplier
-        val = int(self.boltAndXPMultiplier)
-        self.boltAndXPMultiplierValue = val - 1  # 0 = x1, 1 = x2, 3 = x4 ...
+        self.boltAndXPMultiplierValue = int(self.boltAndXPMultiplier)
         ### EnableWeaponLevelAsItem: if enabled, EXP disabler is running.
 
     # Address conversion from str to int(with US to JP)
@@ -395,7 +392,7 @@ class Rac3Interface(GameInterface):
         # self.UnlockItem[RAC3ITEM.FLORANA].status = 1
         # self.UnlockItem[RAC3ITEM.STARSHIP_PHOENIX].status = 1
         # self.UnlockItem[RAC3ITEM.MUSEUM].status = 1
-        self.trap_timers.clear()
+        self.timers.clear()
 
         self.weapon_cycler()
         self.gadget_cycler()
@@ -404,7 +401,7 @@ class Rac3Interface(GameInterface):
         self.armor_cycler()
         self.verify_quick_select_and_last_used()
         self.weapon_exp_cycler()
-        self.trap_cycler()
+        self.timer_cycler()
 
     def undo_collections(self):
         sewer, nano = 0, 0
@@ -605,20 +602,29 @@ class Rac3Interface(GameInterface):
         logger.info(f'Current planet Tracked: {current_planet}')
         logger.info(f'Slot Data: {slot_data}')
 
-    def trap_cycler(self):
-        traps = list(self.trap_timers.keys())
-        for name in traps:
-            if time.time() < self.trap_timers[name]:
-                self._write8(trap_to_status[name], 1)
-            else:
-                self.trap_timers.pop(name)
+    def multiplier_cycler(self):
+        self._write32(RAC3STATUS.JACKPOT_TIMER, 0xFFFFFFFF)
+        self._write8(RAC3STATUS.JACKPOT, self.boltAndXPMultiplierValue)
 
-                # Special case for lock trap
-                # Clear when timer ends directly rather than from the trap cleanup loop below
-                match name:
-                    case RAC3ITEM.LOCK_TRAP:
+    def timer_cycler(self):
+        timers = list(self.timers.items())
+        for name, _time in timers:
+            if name.endswith(str(_time)):
+                _name = name[:-len(str(_time))]
+            else:
+                _name = name
+            if time.time() < _time:
+                if _name == name:
+                    self._write8(timer_to_status[name], 1)
+            else:
+                self.timers.pop(name)
+                match _name:
+                    case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
+                        # Clear when timer ends directly rather than from the trap cleanup loop below
                         # Todo: Check for arena mission
                         self._write8(RAC3STATUS.WEAPON_LOCK, 0)
+                    case RAC3ITEM.JACKPOT:
+                        self.boltAndXPMultiplierValue -= 1
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
