@@ -1,14 +1,17 @@
 import importlib
+import importlib.abc
+import importlib.machinery
 import importlib.util
 import logging
 import os
 import sys
-import warnings
 import zipimport
 import time
 import dataclasses
 import json
-from typing import List
+from pathlib import Path
+from types import ModuleType
+from typing import List, Sequence
 
 from NetUtils import DataPackage
 from Utils import local_path, user_path, Version, version_tuple, tuplize_version
@@ -53,21 +56,7 @@ class WorldSource:
     def load(self) -> bool:
         try:
             start = time.perf_counter()
-            if self.is_zip:
-                importer = zipimport.zipimporter(self.resolved_path)
-                spec = importer.find_spec(os.path.basename(self.path).rsplit(".", 1)[0])
-                assert spec, f"{self.path} is not a loadable module"
-                mod = importlib.util.module_from_spec(spec)
-
-                mod.__package__ = f"worlds.{mod.__package__}"
-
-                mod.__name__ = f"worlds.{mod.__name__}"
-                sys.modules[mod.__name__] = mod
-                with warnings.catch_warnings():
-                    warnings.filterwarnings("ignore", message="__package__ != __spec__.parent")
-                    importer.exec_module(mod)
-            else:
-                importlib.import_module(f".{self.path}", "worlds")
+            importlib.import_module(f".{Path(self.path).stem}", "worlds")
             self.time_taken = time.perf_counter()-start
             return True
 
@@ -112,6 +101,21 @@ for world_source in world_sources:
     else:
         world_source.load()
 
+apworld_module_specs = {}
+for apworld in apworlds:
+    importer = zipimport.zipimporter(apworld.resolved_path)
+    world_name = Path(apworld.path).stem
+
+    spec = importer.find_spec(f"worlds.{world_name}")
+    apworld_module_specs[f"worlds.{world_name}"] = spec
+
+class APWorldModuleFinder(importlib.abc.MetaPathFinder):
+    def find_spec(
+        self, fullname: str, _path: Sequence[str] | None, _target: ModuleType = None
+    ) -> importlib.machinery.ModuleSpec | None:
+        return apworld_module_specs.get(fullname)
+
+sys.meta_path.insert(0, APWorldModuleFinder())
 
 from .AutoWorld import AutoWorldRegister
 
