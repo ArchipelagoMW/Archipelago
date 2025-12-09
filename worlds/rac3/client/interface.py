@@ -21,7 +21,7 @@ from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
-                                          SHIP_SLOTS)
+                                          SHIP_SLOTS, VIDCOMIC_REGIONS)
 from worlds.rac3.constants.status import PLAYER_TYPE_TO_NAME, RAC3STATUS
 from worlds.rac3.pcsx2_interface.pine import Pine
 
@@ -670,7 +670,7 @@ class Rac3Interface(GameInterface):
 
     def should_overwrite_respawn(self, planet):
         is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        in_vidcomic = planet in [RAC3REGION.QWARK_VID_COMIC_UNUSED_1, RAC3REGION.QWARK_VID_COMIC_1, RAC3REGION.QWARK_VID_COMIC_4, RAC3REGION.QWARK_VID_COMIC_2, RAC3REGION.QWARK_VID_COMIC_3, RAC3REGION.QWARK_VID_COMIC_5, RAC3REGION.QWARK_VID_COMIC_UNUSED_2]
+        in_vidcomic = planet in VIDCOMIC_REGIONS
         if is_clank or in_vidcomic:
             return False
         match planet:
@@ -684,7 +684,8 @@ class Rac3Interface(GameInterface):
             case RAC3REGION.ZELDRIN_STARPORT:
                 return False  # Zeldrin has only one respawn point that is right next to the ship and we don't want
                 # anything to happen while aboard the leviathan
-        return True
+            case _:
+                return True
 
     def force_respawn(self):
         self.respawning = True
@@ -739,7 +740,7 @@ class Rac3Interface(GameInterface):
         if not pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
             in_vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER) != 0
-            in_vidcomic = current_planet in [RAC3REGION.QWARK_VID_COMIC_UNUSED_1, RAC3REGION.QWARK_VID_COMIC_1, RAC3REGION.QWARK_VID_COMIC_4, RAC3REGION.QWARK_VID_COMIC_2, RAC3REGION.QWARK_VID_COMIC_3, RAC3REGION.QWARK_VID_COMIC_5, RAC3REGION.QWARK_VID_COMIC_UNUSED_2]
+            in_vidcomic = current_planet in VIDCOMIC_REGIONS
             player_type = self._read8(RAC3STATUS.PLAYER_TYPE)
             if in_vehicle:
                 health_addr = self._read32(self._read32(self._read32(RAC3STATUS.VEHICLE_POINTER) + 0x68))
