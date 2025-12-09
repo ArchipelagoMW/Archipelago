@@ -9,8 +9,10 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus
 import Utils
 
-from ..ItemHandling import handle_item
+from ..mod_helpers.ItemHandling import handle_item
+from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names
+from .. import Portal2Settings
 
 if __name__ == "__main__":
     Utils.init_logging("Portal2Client", exception_logger="Portal2Client")
@@ -64,10 +66,11 @@ class Portal2Context(CommonContext):
 
     location_name_to_id: dict[str, int] = None
 
+    menu: Menu = None
+
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
         return (f"{';'.join(self.item_remove_commands)};"
-                "script CreateCompleteLevelAlertHook();"
                 f"{";script AttachDeathTrigger()" if self.death_link_active else ""}\n")
 
     def send_player_to_main_menu_command(self):
@@ -180,7 +183,7 @@ class Portal2Context(CommonContext):
             if map_id:
                 await self.check_locations([map_id])
         
-        elif message.startswith("send deathlink"):
+        elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
                 self.send_death()
 
@@ -224,6 +227,12 @@ class Portal2Context(CommonContext):
 
         if "location_name_to_id" in slot_data:
             self.location_name_to_id = slot_data["location_name_to_id"]
+
+        if "chapter_dict" in slot_data:
+            self.menu = Menu(slot_data["chapter_dict"])
+            #TODO: Set up Extras menu function call
+        else:
+            raise Exception("chapter_dict not found in slot data")
 
     def on_package(self, cmd, args):
         def update_item_list():
@@ -303,7 +312,7 @@ async def main(args: Namespace):
     if gui_enabled:
         ctx.run_gui()
     ctx.run_cli()
-
+    
     await ctx.exit_event.wait()
     await ctx.shutdown()
 

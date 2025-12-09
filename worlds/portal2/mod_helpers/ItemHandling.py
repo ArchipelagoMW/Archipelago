@@ -1,4 +1,4 @@
-from .Items import *
+from ..Items import *
 
 # Constants
 DELETE_CUBE = ItemTag.CUBE | ItemTag.DELETE

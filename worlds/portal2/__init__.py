@@ -1,6 +1,5 @@
 from BaseClasses import ItemClassification, MultiWorld, Region
 from Options import PerGameCommonOptions
-import Utils
 from .Options import CutsceneSanity, Portal2Options
 from .Items import Portal2Item, Portal2ItemData, item_table, junk_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
@@ -121,12 +120,12 @@ class Portal2World(World):
         menu_region = Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu_region)
 
-        chapter_maps_dict = self.create_randomized_maps()
+        self.chapter_maps_dict = self.create_randomized_maps()
         # Add chapters to those regions
         for i in range(1,9):
             if randomize_maps:
                 # chapter_region = self.create_disjointed_maps_for_er(i)
-                chapter_region, last_region = self.create_connected_maps(i, chapter_maps_dict[f"Chapter {i}"])
+                chapter_region, last_region = self.create_connected_maps(i, self.chapter_maps_dict[f"Chapter {i}"])
             else:
                 chapter_region, last_region = self.create_connected_maps(i)
 
@@ -134,6 +133,7 @@ class Portal2World(World):
         
 
         # For chapter 9
+        self.chapter_maps_dict["Chapter 9"] = [name for name in all_locations_table.keys() if name.startswith("Chapter 9")]
         chapter_9_region, last_region = self.create_connected_maps(9)
         all_chapter_9_requirements = set()
         for name, value in all_locations_table.items():
@@ -156,13 +156,7 @@ class Portal2World(World):
         filler_name = self.get_filler_item_name()
         while self.item_count < self.location_count:
             self.multiworld.itempool.append(self.create_item(filler_name))
-        
-    def connect_entrances(self):
-        # Not in use but useful for debugging
-        state = self.multiworld.get_all_state(False)
-        state.update_reachable_regions(self.player)
-        Utils.visualize_regions(self.multiworld.get_region("Menu", self.player), f"output/map_Player{self.player}.puml", show_entrance_names=True, regions_to_highlight=state.reachable_regions[self.player])
-        
+    
     def fill_slot_data(self):
         # Return the chapter map orders e.g. {chapter1: ['sp_a1_intro2', 'sp_a1_intro5', ...], chapter2: [...], ...}
         # This is for generating and updating the Extras menu (level select screen) in portal 2 at the start and when checks are made
@@ -173,6 +167,7 @@ class Portal2World(World):
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
             "goal_map_code": all_locations_table[self.goal_location].map_name,
-            "location_name_to_id": self.location_name_to_id
+            "location_name_to_id": self.location_name_to_id,
+            "chapter_dict": {int(name[-1]): values for name, values in self.chapter_maps_dict.items()}
         })
         return slot_data
