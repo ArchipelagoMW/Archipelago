@@ -12421,6 +12421,10 @@ end
 function ball_returned_check()
     local check = {}
 	local highest_returned = mainmemory.readbyte(0x1EAA57)
+	-- Only run this in the crystal cave
+	if CURRENT_MAP ~= 0x08 then
+		return check
+	end
 	for i=1,7
 	do
 		check[tostring(0x79A + (i - 1))] = i <= highest_returned
@@ -12881,6 +12885,37 @@ function setSpawningCheckpoints(IN_CHECKPOINT)
 	end
 end
 
+function applyCustomHintText(tipTable)
+	for ap_id, hint_info in pairs(tipTable)
+	do
+		for map_name, map_info in pairs(ADDRESS_MAP)
+		do
+			if map_info["TIP"] ~= nil
+			then
+				if map_info["TIP"][ap_id] ~= nil
+				then
+					local world_id = WORLDS_TABLE[map_name]
+					local offset = map_info["TIP"][ap_id]['offset']
+					local hint_text = hint_info["text"]
+					print(tostring(world_id).."-"..tostring(offset)..": "..hint_text)
+					--tip_locations = 0x490,
+					--  tip_id = 0x4,
+					--  tip_collected = 0x6,
+					--  tip_text = 0x8,
+					--    line1 = 0x0,
+					--    line2 = 0x15,
+					--    line3 = 0x2A,
+					--    line4 = 0x3F,
+					--    line5 = 0x54,
+					--    line6 = 0x69,
+					--   last_line = 0x7E,
+					--tip_size = 0x88,
+				end
+			end
+		end
+	end
+end
+
 function numericLevelToWorldId(input)
 	local level_number = ((input - 1) % 3) + 1
 	local world_number = (input - 1) // 3
@@ -13248,7 +13283,7 @@ function process_slot(block)
     end
 	if block['slot_mr_hints_locations'] ~= nil
 	then
-		print(block['slot_mr_hints_locations'])
+		applyCustomHintText(block['slot_mr_hints_locations'])
 	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then

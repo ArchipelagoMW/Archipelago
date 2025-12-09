@@ -22556,6 +22556,12 @@
 						"ballRequirement": true,
 						"regionIndex": 9,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 19,
+						"regionIndex": 8,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -22574,6 +22580,12 @@
 					{
 						"ballRequirement": false,
 						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 19,
+						"regionIndex": 8,
 						"trickDifficulty": 0
 					}
 				],
