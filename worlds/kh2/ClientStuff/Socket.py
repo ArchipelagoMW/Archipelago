@@ -1,6 +1,7 @@
 from enum import IntEnum
 import asyncio
 import socket
+from CommonClient import logger
 
 class MessageType (IntEnum):
     Invalid = -1,
@@ -27,27 +28,55 @@ class KH2Socket():
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket = None
         self.isConnected = False
+        self.closing = False
         pass;
 
     async def start_server(self):
-        print("Starting server... waiting for game.")
+        self.loop = asyncio.get_event_loop()
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(1)
-        #self.client_socket, addr = self.server_socket.accept()
-        self.loop = asyncio.get_event_loop()
-        self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
-        self.loop.create_task(self.listen())
-        self.isConnected = True
+        await self._accept_client()
+
+    async def _accept_client(self):
+        """Wait for a client to connect and start a listener task."""
+        while not self.closing:
+            logger.info("Waiting for KH2 game connection...")
+            try:
+                self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
+                self.isConnected = True
+                print(f"Client connected from {addr}")
+                logger.info("Connected")
+                self.loop.create_task(self.listen())
+                return
+            except OSError as e:
+                print(f"Socket accept failed ({e}); retrying in 5s")
+                await asyncio.sleep(5)
+
+    def _safe_close_client(self):
+        """Close the current client socket without killing the server socket."""
+        try:
+            if self.client_socket:
+                self.client_socket.close()
+        finally:
+            self.client_socket = None
+            self.isConnected = False
 
     async def listen(self):
-        while True:
-            message = await self.loop.sock_recv(self.client_socket, 1024)
-            msgStr = message.decode("utf-8")
-            while "\n" in msgStr:
-                line, msgStr = msgStr.split("\n", 1)
-                values = line.split(";")
-                print("Received message:", line)
+        while not self.closing:
+            try:
+                message = await self.loop.sock_recv(self.client_socket, 1024)
+                if not message:
+                    raise ConnectionResetError("Client disconnected")
+                msgStr = message.decode("utf-8").replace("\n", "")
+                values = msgStr.split(";")
+                print("Received message: "+msgStr)
                 self.handle_message(values)
+            except (ConnectionResetError, OSError) as e:
+                if not self.closing:
+                    logger.info(f"Connection lost, waiting for KH2 to reconnect")
+                    self._safe_close_client()
+                    await self._accept_client()
+                    return
 
     def send(self, msgId: int, values: list):
         msg = str(msgId)
@@ -123,5 +152,7 @@ class KH2Socket():
         self.send(MessageType.SlotData, [data])
 
     def shutdown_server(self):
+        self.closing = True
+        self.client_socket.shutdown(socket.SHUT_WR)
         self.client_socket.close()
         self.server_socket.close()

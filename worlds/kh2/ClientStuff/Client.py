@@ -378,7 +378,11 @@ class KH2Context(CommonContext):
         with open(self.kh2_client_settings_join, 'w') as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
             f2.close()
-        self.socket.shutdown_server()
+        try:
+            self.socket.send(MessageType.Closed, ())
+            self.socket.shutdown_server()
+        except:
+            pass
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
