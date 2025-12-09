@@ -909,7 +909,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             case 0:
                 won_game = payload["outro"] == True
             case 1:
-                crystal_address = int(0x79A) + int(ctx.slot_data["required_crystals"]) - 1
+                crystal_address = str(int(0x79A) + int(ctx.slot_data["required_crystals"]) - 1)
                 if crystal_address in ball_return_list:
                     won_game = ball_return_list[crystal_address] == True
         if won_game and not ctx.finished_game:
