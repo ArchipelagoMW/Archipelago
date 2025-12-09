@@ -44,6 +44,7 @@ class KH2Socket():
             try:
                 self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
                 self.isConnected = True
+                self.client.kh2connected = True
                 print(f"Client connected from {addr}")
                 logger.info("Connected")
                 self.loop.create_task(self.listen())
@@ -51,6 +52,7 @@ class KH2Socket():
             except OSError as e:
                 print(f"Socket accept failed ({e}); retrying in 5s")
                 self.isConnected = False
+                self.client.kh2connected = False
                 await asyncio.sleep(5)
 
     def _safe_close_client(self):
@@ -61,6 +63,7 @@ class KH2Socket():
         finally:
             self.client_socket = None
             self.isConnected = False
+            self.client.kh2connected = False
 
     async def listen(self):
         while not self.closing:
@@ -123,9 +126,12 @@ class KH2Socket():
         elif (msgType == MessageType.Victory):
             self.client.kh2_finished_game = True
 
+        elif msgType == MessageType.RequestAllItems:
+            self.client.get_items()
+
     def send_singleItem(self, id: int, itemCnt):
-        msgCont = [str(id), str(itemCnt)]
-        self.send(5, msgCont)
+        msgCont = [str(id.kh2id), str(itemCnt)]
+        self.send(MessageType.ReceiveSingleItem, msgCont)
 
 
     def send_multipleItems(self, items, itemCnt):
@@ -141,7 +147,7 @@ class KH2Socket():
         for item in items:
             if currItemCount == 0:
                 values.append([])
-            values[currMsg].append(item.item)
+            values[currMsg].append(item.kh2id)
             currItemCount += 1
             sendCnt += 1
             if currItemCount > msgLimit:
@@ -151,10 +157,9 @@ class KH2Socket():
 
         sendMsg = 0
         for msg in values:
-            msg.append(itemCnt-(sendCnt-(msgLimit*sendMsg)))
             sendCnt -= 1
             sendMsg += 1
-            self.send(3, msg)
+            self.send(MessageType.ReceiveAllItems, msg)
 
     def send_slot_data(self, data):
         self.send(MessageType.SlotData, [data])

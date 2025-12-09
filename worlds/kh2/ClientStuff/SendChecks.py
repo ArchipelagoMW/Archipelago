@@ -87,21 +87,21 @@ async def checkSlots(self):
         logger.info("line 475")
 
 
-async def verifyChests(self):
-    try:
-        for location in self.locations_checked:
-            locationName = self.lookup_id_to_location[location]
-            if locationName in self.chest_set:
-                if locationName in self.location_name_to_worlddata.keys():
-                    locationData = self.location_name_to_worlddata[locationName]
-                    if self.kh2_read_byte(
-                            self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
-                        roomData = self.kh2_read_byte(self.Save + locationData.addrObtained)
-                        self.kh2_write_byte(self.Save + locationData.addrObtained,
-                                            roomData | 0x01 << locationData.bitIndex)
-
-    except Exception as e:
-        if self.kh2connected:
-            self.kh2connected = False
-        logger.info(e)
-        logger.info("line 491")
+#async def verifyChests(self):
+#    try:
+#        for location in self.locations_checked:
+#            locationName = self.lookup_id_to_location[location]
+#            if locationName in self.chest_set:
+#                if locationName in self.location_name_to_worlddata.keys():
+#                    locationData = self.location_name_to_worlddata[locationName]
+#                    if self.kh2_read_byte(
+#                            self.Save + locationData.addrObtained) & 0x1 << locationData.bitIndex == 0:
+#                        roomData = self.kh2_read_byte(self.Save + locationData.addrObtained)
+#                        self.kh2_write_byte(self.Save + locationData.addrObtained,
+#                                            roomData | 0x01 << locationData.bitIndex)
+#
+#    except Exception as e:
+#        if self.kh2connected:
+#            self.kh2connected = False
+#        logger.info(e)
+#        logger.info("line 491")

@@ -10,7 +10,6 @@ import asyncio
 import json
 import requests
 
-from pymem import pymem
 from .Socket import KH2Socket
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot
@@ -20,7 +19,6 @@ from .WorldLocations import *
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
 from .CMDProcessor import KH2CommandProcessor
-KH2Connected = -1
 slotDataSent = False
 
 class MessageType (IntEnum):
@@ -317,7 +315,7 @@ class KH2Context(CommonContext):
         self.deathlink_blacklist = []
 
     from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
-    from .SendChecks import checkWorldLocations, checkSlots, checkLevels, verifyChests
+    from .SendChecks import checkWorldLocations, checkSlots, checkLevels
     from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
 
     async def server_auth(self, password_requested: bool = False):
@@ -345,7 +343,6 @@ class KH2Context(CommonContext):
         CommonContext.event_invalid_slot(self)
 
     async def connection_closed(self):
-        self.kh2connected = False
         self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(self.kh2_seed_save_path_join, 'w') as f:
@@ -354,7 +351,6 @@ class KH2Context(CommonContext):
         await super(KH2Context, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
-        self.kh2connected = False
         self.serverconnected = False
         self.locations_checked = []
         if self.kh2seedname not in {None} and self.auth not in {None}:
@@ -392,7 +388,6 @@ class KH2Context(CommonContext):
             elif self.kh2seedname != args['seed_name']:
                 self.disconnect_from_server = True
                 self.serverconnected = False
-                self.kh2connected = False
                 logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
                 return
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
@@ -453,7 +448,7 @@ class KH2Context(CommonContext):
 
             global slotDataSent
             if not slotDataSent:
-                if KH2Connected > 0:
+                if self.kh2connected:
                     for location in self.kh2slotdata['BountyBosses']:
                         self.socket.send(MessageType.BountyList, [location])
                     self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
@@ -513,11 +508,21 @@ class KH2Context(CommonContext):
                 }
             if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
+                converted_items = list()
                 for item in args['items']:
-                    networkItem = NetworkItem(*item)
-
-                    # actually give player the item
-                    asyncio.create_task(self.give_item(networkItem.item, networkItem.location))
+                    self.received_items_IDs.append(NetworkItem(*item))
+                    name = self.lookup_id_to_item[item.item]
+                    if name not in self.kh2slotdata["KeybladeAbilities"]:
+                        converted_items.append(self.item_name_to_data[name])
+                if self.kh2connected:
+                    #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
+                    while not self.lookup_id_to_item:
+                        asyncio.sleep(0.5)
+                    if converted_items:
+                        if len(converted_items) > 1:
+                            self.socket.send_multipleItems(converted_items, len(self.received_items_IDs))
+                        else:
+                            self.socket.send_singleItem(converted_items[0], len(self.received_items_IDs))
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
@@ -614,16 +619,6 @@ class KH2Context(CommonContext):
             self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
 
         self.all_weapon_location_id = {self.kh2_loc_name_to_id[loc] for loc in all_weapon_slot}
-
-        try:
-            if not self.kh2:
-                self.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                self.get_addresses()
-
-        except Exception as e:
-            if self.kh2connected:
-                self.kh2connected = False
-            logger.info("Game is not open. If it is open run the launcher/client as admin.")
         self.serverconnected = True
         self.slot_name = self.auth
 
@@ -672,94 +667,41 @@ class KH2Context(CommonContext):
         self.ui = KH2Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-    def get_addresses(self):
-        if not self.kh2connected and self.kh2 is not None:
-            if self.kh2_game_version is None:
-                # current verions is .10 then runs the get from github stuff
-                if self.kh2_read_string(0x9A98B0, 4) == "KH2J":
-                    self.kh2_game_version = "STEAM"
-                    self.Now = 0x0717008
-                    self.Save = 0x09A98B0
-                    self.Slot1 = 0x2A23598
-                    self.Journal = 0x7434E0
-                    self.Shop = 0x7435D0
-                    self.InfoBarPointer = 0xABE828
-                    self.isDead = 0x0BEF4A8
-                    self.FadeStatus = 0xABB4B8
-                    self.PlayerGaugePointer = 0x0ABD248
-                elif self.kh2_read_string(0x9A9330, 4) == "KH2J":
-                    self.kh2_game_version = "EGS"
-                else:
-                    if self.game_communication_path:
-                        logger.info("Checking with most up to date addresses from the addresses json.")
-                        # if mem addresses file is found then check version and if old get new one
-                        kh2memaddresses_path = os.path.join(self.game_communication_path, "kh2memaddresses.json")
-                        if not os.path.exists(kh2memaddresses_path):
-                            logger.info("File is not found. Downloading json with memory addresses. This might take a moment")
-                            mem_resp = requests.get("https://raw.githubusercontent.com/JaredWeakStrike/KH2APMemoryValues/master/kh2memaddresses.json")
-                            if mem_resp.status_code == 200:
-                                self.mem_json = json.loads(mem_resp.content)
-                                with open(kh2memaddresses_path, 'w') as f:
-                                    f.write(json.dumps(self.mem_json, indent=4))
-                                    f.close()
-                        else:
-                            with open(kh2memaddresses_path) as f:
-                                self.mem_json = json.load(f)
-                                f.close()
-                        if self.mem_json:
-                            for key in self.mem_json.keys():
-                                if self.kh2_read_string(int(self.mem_json[key]["GameVersionCheck"], 0), 4) == "KH2J":
-                                    self.Now = int(self.mem_json[key]["Now"], 0)
-                                    self.Save = int(self.mem_json[key]["Save"], 0)
-                                    self.Slot1 = int(self.mem_json[key]["Slot1"], 0)
-                                    self.Journal = int(self.mem_json[key]["Journal"], 0)
-                                    self.Shop = int(self.mem_json[key]["Shop"], 0)
-                                    self.InfoBarPointer = int(self.mem_json[key]["InfoBarPointer"], 0)
-                                    self.isDead = int(self.mem_json[key]["isDead"], 0)
-                                    self.FadeStatus = int(self.mem_json[key]["FadeStatus"], 0)
-                                    self.PlayerGaugePointer = int(self.mem_json[key]["PlayerGaugePointer"], 0)
-                                    self.kh2_game_version = key
+    def get_items(self):
 
-            if self.kh2_game_version is not None:
-                logger.info(f"You are now auto-tracking {self.kh2_game_version}")
-                self.kh2connected = True
-            else:
-                logger.info("Your game version does not match what the client requires. Check in the "
-                            "kingdom-hearts-2-final-mix channel for more information on correcting the game "
-                            "version.")
-                self.kh2connected = False
+        if len(self.received_items_IDs) > 1:
+            self.socket.send_multipleItems(self.received_items_IDs, len(self.received_items_IDs))
+        elif len(self.received_items_IDs) == 1:
+            self.socket.send_singleItem(self.received_items_IDs[0].item, 1)
 
+        global slotDataSent
+        if not slotDataSent and self.kh2connected:
+            for location in self.slot_data_info['BountyBosses']:
+                self.socket.send(MessageType.BountyList, [location])
+            self.socket.send_slot_data(str(self.slot_data_info['FinalXemnas']))
+            self.socket.send_slot_data(str(self.slot_data_info['Goal']))
+            self.socket.send_slot_data(str(self.slot_data_info['LuckyEmblemsRequired']))
+            self.socket.send_slot_data(str(self.slot_data_info['BountyRequired']))
+            slotDataSent = True
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
         try:
             #Check for game connection
-            global KH2Connected
-            if KH2Connected == -1:
+            if not ctx.kh2connected:
                 logger.info("Searching for KH2 Game Client...Please load your save file before Connecting.")
-                KH2Connected = 0
-            elif KH2Connected == 0:
                 if ctx.socket.isConnected:
                     logger.info(f"KH2 Game Client Found")
-                    KH2Connected = 1
+                    ctx.kh2connected = True
 
             if ctx.kh2connected and ctx.serverconnected:
-                global slotDataSent
-                if not slotDataSent and KH2Connected > 0:
-                    for location in ctx.self.slot_data_info['BountyBosses']:
-                        ctx.self.socket.send(MessageType.BountyList, [location])
-                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['FinalXemnas']))
-                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['Goal']))
-                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['LuckyEmblemsRequired']))
-                    ctx.self.socket.send_slot_data(str(ctx.self.slot_data_info['BountyRequired']))
-                    slotDataSent = True
                 ctx.sending = []
                 await asyncio.create_task(ctx.checkWorldLocations())
                 await asyncio.create_task(ctx.checkLevels())
                 await asyncio.create_task(ctx.checkSlots())
-                await asyncio.create_task(ctx.verifyChests())
-                await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.is_dead())
+                #await asyncio.create_task(ctx.verifyChests())
+                #await asyncio.create_task(ctx.verifyItems())
 
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
@@ -781,16 +723,8 @@ async def kh2_watcher(ctx: KH2Context):
 
             elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. trying to reconnect.")
-                ctx.kh2 = None
                 #todo: change this to be an option for the client to auto reconnect with the default being yes
                 # reason is because the await sleep causes the client to hang if you close the game then the client without disconnecting.
-                while not ctx.kh2connected and ctx.serverconnected:
-                    try:
-                        ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
-                        ctx.get_addresses()
-                        logger.info("Game Connection Established.")
-                    except Exception as e:
-                        await asyncio.sleep(5)
             if ctx.disconnect_from_server:
                 ctx.disconnect_from_server = False
                 await ctx.disconnect()
