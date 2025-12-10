@@ -636,7 +636,7 @@ class Rac3Interface(GameInterface):
         logger.info(f'Slot Data: {slot_data}')
 
     def multiplier_cycler(self):
-        self._write32(RAC3STATUS.JACKPOT_TIMER, 0xFFFFFFFF)
+        self._write32(RAC3STATUS.JACKPOT_TIMER, 0x7FFFFFFF)
         self._write8(RAC3STATUS.JACKPOT, self.boltAndXPMultiplierValue)
 
     def timer_cycler(self):
