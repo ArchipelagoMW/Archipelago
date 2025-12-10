@@ -696,7 +696,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 0,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Glover Switch": [
@@ -2739,7 +2739,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 0,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Glover Switch": [
@@ -12143,7 +12143,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 7,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Poolside": {
@@ -12427,7 +12427,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 3,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Three Elevators": {
@@ -13444,7 +13444,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 16,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Crooked Rockpath": {
@@ -16841,7 +16841,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 12,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Right Below Ice Garibs": [
@@ -18051,7 +18051,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 14,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Lower Spawn": {
@@ -19652,7 +19652,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 4,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Trees Garib": [
@@ -25660,8 +25660,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"mv0": 3,
-					"mv1": 25,
 					"regionIndex": 9,
 					"trickDifficulty": 0
 				}
@@ -25947,8 +25945,6 @@
 				},
 				{
 					"ballRequirement": false,
-					"mv0": 3,
-					"mv1": 25,
 					"regionIndex": 19,
 					"trickDifficulty": 0
 				}
@@ -27228,7 +27224,7 @@
 					{
 						"ballRequirement": false,
 						"mv0": 3,
-					"mv1": 25,
+						"mv1": 25,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
@@ -30400,7 +30396,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 4,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Under Spike Garibs": [
@@ -30949,7 +30945,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 1,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Glass": {
@@ -31096,7 +31092,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 15,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Last Conveyor Garibs": [
@@ -31893,7 +31889,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 0,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Teleport Entry": {
