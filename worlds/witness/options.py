@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from schema import And, Schema
-
 from Options import (
     Choice,
     DefaultOnToggle,
@@ -66,6 +64,72 @@ class ShuffleSymbols(DefaultOnToggle):
     If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
     """
     display_name = "Shuffle Symbols"
+
+
+class ProgressiveSymbols(OptionSet):
+    """
+    Make some symbols progressive, if they exist.
+
+    By default, includes the chains where the second item can't be used without the first.
+
+    Progressive Dots: Dots -> Full Dots
+    Progressive Symmetry: Symmetry -> Colored Dots
+    Progressive Stars: Stars -> Stars + Same Colored Symbol
+    Progressive Squares: Black/White Squares -> Colored Squares
+    Progressive Shapers: Shapers -> Rotated Shapers -> Negative Shapers
+    Progressive Discard Symbols: Triangles -> Arrows
+    """
+    display_name = "Progressive Symbols"
+
+    valid_keys = {
+        "Progressive Dots",
+        "Progressive Symmetry",
+        "Progressive Stars",
+        "Progressive Squares",
+        "Progressive Shapers",
+        "Progressive Discard Symbols"
+    }
+
+    default = frozenset({"Progressive Dots", "Progressive Symmetry", "Progressive Stars"})
+
+
+class SecondStageSymbolsActIndependently(OptionSet):
+    """
+    Makes certain second stage symbols act independently of first stage symbols if they are not progressive.
+
+    - "Full Dots": "Full Dots" unlocks Full Dots panels even if you don't have "Dots". "Dots" is renamed to "Sparse Dots".
+    - "Stars + Same Colored Symbol": "Stars + Same Colored Symbol" unlocks Stars + Same Colored Symbol panels even if you don't have "Stars". "Stars" is renamed to "Simlpe Stars".
+    - "Colored Dots": Removes the Symmetry requirement from the Symmetry Laser panel sets so that Colored Dots can unlock something on their own. This is on by default.
+
+    Rotated Shapers always act independently from Shapers. The ability to make them dependent on Shapers by omitting them in this option may be added in the future.
+    """
+
+    valid_keys = {
+        "Full Dots",
+        "Stars + Same Colored Symbol",
+        "Colored Dots",
+    }
+
+    default = frozenset({"Colored Dots"})
+
+    visibility = Visibility.template | Visibility.complex_ui
+
+
+class ColoredDotsAreProgressiveDots(Toggle):
+    """
+    Put Colored Dots into the "Progressive Dots" group, after Dots.
+    This removes Progressive Symmetry.
+    """
+
+    visibility = Visibility.template | Visibility.complex_ui
+
+
+class SoundDotsAreProgressiveDots(Toggle):
+    """
+    Put Sound Dots into the "Progressive Dots" group, before Full Dots.
+    """
+
+    visibility = Visibility.template | Visibility.complex_ui
 
 
 class ShuffleLasers(Choice):
@@ -529,6 +593,10 @@ class PuzzleRandomizationSeed(Range):
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
     shuffle_symbols: ShuffleSymbols
+    progressive_symbols: ProgressiveSymbols
+    colored_dots_are_progressive_dots: ColoredDotsAreProgressiveDots
+    sound_dots_are_progressive_dots: SoundDotsAreProgressiveDots
+    second_stage_symbols_act_independently: SecondStageSymbolsActIndependently
     shuffle_doors: ShuffleDoors
     door_groupings: DoorGroupings
     shuffle_boat: ShuffleBoat
@@ -590,6 +658,10 @@ witness_option_groups = [
     ]),
     OptionGroup("Progression Items", [
         ShuffleSymbols,
+        ProgressiveSymbols,
+        SecondStageSymbolsActIndependently,
+        ColoredDotsAreProgressiveDots,
+        SoundDotsAreProgressiveDots,
         ShuffleDoors,
         DoorGroupings,
         ShuffleLasers,
