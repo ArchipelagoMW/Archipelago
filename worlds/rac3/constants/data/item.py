@@ -470,7 +470,7 @@ equipable_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.EQUIPABLE)
 filler_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.FILLER)
 gadget_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.GADGET)
 goal_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.GOAL)
-planet_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.INFOBOT)
+infobot_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.INFOBOT)
 ngplus_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NGPLUS)
 non_prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.NON_PROG_WEAPON)
 prog_weapon_data: dict[str, RAC3ITEMDATA] = from_tag(RAC3ITEMTAG.PROG_WEAPON)
@@ -490,7 +490,7 @@ item_counts: dict[str, int] = {
     **dict.fromkeys(gadget_data.keys(), 1),
     RAC3ITEM.PROGRESSIVE_ARMOR: 4,
     RAC3ITEM.PROGRESSIVE_VIDCOMIC: 5,
-    **dict.fromkeys(planet_data.keys(), 1),
+    **dict.fromkeys(infobot_data.keys(), 1),
     RAC3ITEM.VICTORY: 0,
 }
 item_table: dict[str, RAC3ITEMDATA] = {
@@ -499,7 +499,7 @@ item_table: dict[str, RAC3ITEMDATA] = {
     **gadget_data,
     **armor_data,
     **vidcomic_data,
-    **planet_data,
+    **infobot_data,
     **filler_data,
     **trap_data,
     **unused_data,
@@ -516,7 +516,7 @@ item_groups: dict[str, set[str]] = {
     RAC3ITEMTAG.FILLER: set(filler_data.keys()),
     RAC3ITEMTAG.GADGET: set(gadget_data.keys()),
     RAC3ITEMTAG.GOAL: set(goal_data.keys()),
-    RAC3ITEMTAG.INFOBOT: set(planet_data.keys()),
+    RAC3ITEMTAG.INFOBOT: set(infobot_data.keys()),
     RAC3ITEMTAG.NGPLUS: set(ngplus_data.keys()),
     RAC3ITEMTAG.NON_PROG_WEAPON: set(non_prog_weapon_data.keys()),
     RAC3ITEMTAG.PROG_WEAPON: set(prog_weapon_data.keys()),

@@ -4,7 +4,7 @@ from typing import Callable, TYPE_CHECKING
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule
 from worlds.rac3 import location_groups
-from worlds.rac3.constants.data.item import planet_data
+from worlds.rac3.constants.data.item import infobot_data
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
@@ -25,7 +25,7 @@ rac3_logger.setLevel(DEBUG)
 
 
 def all_locations(state: CollectionState, world: "RaC3World", tag: str, skip: str):
-    check:bool = True
+    check: bool = True
     for loc in world.get_locations():
         if loc.name in location_groups[tag] and loc.name != skip:
             check &= state.can_reach_location(loc.name, world.player)
@@ -526,20 +526,20 @@ def set_rules(world: "RaC3World"):
         case 1:  # 20 nanotech level is a check
             for level, name in enumerate(every_20_nanotech):
                 add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(planet_data.keys(), world.player, level))
+                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level * 4))
         case 2:  # 10 nanotech level is a check
             for level, name in enumerate(every_10_nanotech):
                 add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(planet_data.keys(), world.player, level))
+                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level * 2))
         case 3:  # 5 nanotech level is a check
             for level, name in enumerate(every_5_nanotech):
                 add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(planet_data.keys(), world.player, level))
+                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level))
 
         case 4:  # Every nanotech level is a check
             for level, name in enumerate(location_groups[RAC3TAG.NANOTECH]):
                 add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(planet_data.keys(), world.player, level // 5))
+                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level // 5))
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])

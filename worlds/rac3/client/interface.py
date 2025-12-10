@@ -8,8 +8,8 @@ from typing import Any, Optional
 from CommonClient import logger
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
-from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, ITEM_FROM_AP_CODE,
-                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, planet_data, PROG_TO_NAME_DICT,
+from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
+                                             ITEM_NAME_FROM_ID, non_prog_weapon_data, PROG_TO_NAME_DICT,
                                              RAC3_ITEM_DATA_TABLE, timer_to_status, vidcomic_data, weapon_upgrade_data)
 from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE, RAC3LOCATIONDATA
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
@@ -157,6 +157,7 @@ class GameInterface:
 class UnlockData:
     status: int
     unlock_delay: int
+
     def __init__(self,
                  status: int = 0,
                  unlock_delay: int = 0):
@@ -269,7 +270,7 @@ class Rac3Interface(GameInterface):
     def item_received(self, item_code: int):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         logger.debug(f'Item received: {name}, AP code: {item_code}')
-        if name in planet_data.keys():
+        if name in infobot_data.keys():
             self.UnlockItem[RAC3REGION.SLOT_0].status += 1
             self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
         else:
@@ -491,7 +492,7 @@ class Rac3Interface(GameInterface):
 
     def planet_cycler(self):
         # logger.debug('---------PlanetCycler Start---------')
-        for name in planet_data.keys():
+        for name in infobot_data.keys():
             planet = RAC3_REGION_DATA_TABLE[PLANET_FROM_INFOBOT[name]]
             if self.UnlockItem[name].status:
                 addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
