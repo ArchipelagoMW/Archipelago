@@ -208,6 +208,7 @@ class Rac3Interface(GameInterface):
     pause_state: bool = False
     inputs: int = RAC3INPUT.NOTHING
     health: int = 10
+    ryno: bool = False
 
     # Called at once when client started
     def init(self):
@@ -321,7 +322,9 @@ class Rac3Interface(GameInterface):
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
                         level = self._read8(non_prog_weapon_data[weapon_name].LEVEL)
-                        if level < 5:
+                        if ((weapon_name != RAC3ITEM.RY3N0 and level < 5) or
+                                (weapon_name == RAC3ITEM.RY3N0 and level < 4) or
+                                (weapon_name == RAC3ITEM.RY3N0 and level < 5 and not self.ryno)):
                             valid_weapons.append(weapon_name)
 
                 if valid_weapons:
@@ -475,6 +478,13 @@ class Rac3Interface(GameInterface):
                     self.UnlockItem[name].unlock_delay = 0
                 else:
                     self.UnlockItem[name].unlock_delay += 1
+                if name == RAC3ITEM.RY3N0 and self.ryno:
+                    _xp = self._read8(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS)
+                    threshold_id = UPGRADE_DICT[name][3]
+                    threshold_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[threshold_id]].XP_THRESHOLD
+                    if _xp > threshold_xp:
+                        self._write8(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS, threshold_xp)
+                        self._write8(RAC3_ITEM_DATA_TABLE[name].LEVEL_ADDRESS, threshold_id)
             else:
                 self._write8(addr, 0)
 
@@ -595,6 +605,8 @@ class Rac3Interface(GameInterface):
         # TODO: Track weapon EXP
         for weapon_name in non_prog_weapon_data.keys():
             target_level = self.UnlockItem[weapon_name].status
+            if self.ryno and weapon_name == RAC3ITEM.RY3N0 and target_level > 4:
+                target_level = 4
             logger.debug(f'weapon: {weapon_name}, target: {target_level}')
             if target_level:
                 target_id = UPGRADE_DICT[weapon_name][target_level - 1]

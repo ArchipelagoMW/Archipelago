@@ -143,6 +143,17 @@ class CommandProcessor(ClientCommandProcessor):
             else:
                 self.output(f'Player cannot respawn right now')
 
+    def _cmd_ryno(self):
+        """Toggles the maximum upgrade level for the RYNO between lv5 and lv4"""
+        if not self.verify(4):
+            return
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.game_interface.ryno = not self.ctx.game_interface.ryno
+            if self.ctx.game_interface.ryno:
+                self.output(f'RYNO max upgrade is Lv4')
+            else:
+                self.output(f'RYNO max upgrade is Lv5')
+
 
 class Rac3Context(CommonContext):
     # Client variables
