@@ -1,7 +1,7 @@
 import time
 from dataclasses import dataclass
 from enum import IntEnum
-from random import randint, uniform
+from random import choice, randint, uniform
 from struct import unpack
 from typing import Any, Optional
 
@@ -759,14 +759,20 @@ class Rac3Interface(GameInterface):
     def kill_player(self) -> bool:
         if not self.pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
+            death = choice(list(DEATH_FROM_ACTION.keys()))
             if self.vehicle != 0:
                 health_addr = self._read32(self._read32(self.vehicle + 0x68))
                 vehicle_blow_up_addr = self.vehicle + 0xBC
                 self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
                 self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
+                self._write8(RAC3STATUS.ACTION, death)
                 logger.debug(f'player in vehicle, killing vehicle too')
+                logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
             else:
                 match self.player_type:
+                    case RAC3PLAYERTYPE.RATCHET:
+                        self._write8(RAC3STATUS.ACTION, death)
+                        logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x42)
