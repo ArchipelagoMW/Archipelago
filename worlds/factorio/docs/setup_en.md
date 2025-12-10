@@ -39,8 +39,9 @@ Validator page: [Yaml Validation Page](/check)
 Connecting to someone else's game is the simplest way to play Factorio with Archipelago. It allows multiple people to
 play in a single world, all contributing to the completion of the seed.
 
-**Note:** If you are the only one in the Archipelago multiworld who is playing Factorio, you are
-hosting your own Factorio game, not joining someone else's game.
+**Note:** If nobody else on the multiworld is joining your Factorio game, then you are
+hosting your own. This includes cases where more than one person is playing Factorio, but
+all on separate worlds.
 
 1. Acquire the Archipelago mod for this seed. Once you create the multiworld on the Archipelago website, there will be a link next to your name in the "Download Link" column for your Archipelago room. It will be called `AP-<seed>-<playernumber>-<playername>_<archipelago_version>.zip`.
 2. Copy the mod file into your Factorio `mods` folder, which by default is located at:
