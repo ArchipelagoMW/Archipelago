@@ -105,3 +105,61 @@ class TestLedgeStorageOnlyConnection(NineSolsTestBase):
             "Air Dash"
         ])
 
+
+# Test the one-way barrier break path to FU - Behind Moving Boxes
+class TestVanillaFGHLogic(NineSolsTestBase):
+    options = {
+        "logic_difficulty": "vanilla",
+        "first_root_node": "factory_great_hall",
+        "shuffle_grapple": True,
+        "shuffle_wall_climb": True,
+        "shuffle_ledge_grab": True,
+    }
+
+    def test_default(self):
+        self.assertReachableWith("Factory (U): Near Upper Right Exit", [])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [])
+
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", ["Arrow: Thunder Buster"])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [
+            "Ledge Grab",
+            "Mystic Nymph: Scout Mode",
+            "Wall Climb",
+        ])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [
+            "Air Dash",
+            "Mystic Nymph: Scout Mode",
+            "Wall Climb",
+        ])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [
+            "Air Dash",
+            "Ledge Grab",
+            "Wall Climb",
+        ])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [
+            "Air Dash",
+            "Ledge Grab",
+            "Mystic Nymph: Scout Mode",
+        ])
+        self.assertReachableWith("Factory (U): Behind Moving Boxes", [
+            "Air Dash",
+            "Ledge Grab",
+            "Mystic Nymph: Scout Mode",
+            "Wall Climb",
+        ])
+
+
+class TestMediumFGHLogic(NineSolsTestBase):
+    options = {
+        "logic_difficulty": "medium",
+        "first_root_node": "factory_great_hall",
+        "shuffle_grapple": True,
+        "shuffle_wall_climb": True,
+        "shuffle_ledge_grab": True,
+    }
+
+    def test_default(self):
+        self.assertReachableWith("Factory (U): Near Upper Right Exit", [])
+        self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [])
+
+        self.assertReachableWith("Factory (U): Behind Moving Boxes", ["Arrow: Thunder Buster"])
