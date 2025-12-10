@@ -64,11 +64,3 @@ class RAC3STATUS:
     READ_INPUT = 0x001CD260
     MARCADIA_SECTION = 0x001DEF34
     VEHICLE_POINTER = 0x001A65C0
-
-
-PLAYER_TYPE_TO_NAME: dict[int, str] = {
-    0x00: "Ratchet",
-    0x01: "Clank",
-    0x02: "Giant Clank",
-    0x03: "Tyhrranoid",
-}

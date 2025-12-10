@@ -1,0 +1,15 @@
+class RAC3PLAYERTYPE:
+    RATCHET = "Ratchet"
+    CLANK = "Clank"
+    GIANT = "Giant Clank"
+    TYHRRANOID = "Tyhrranoid"
+    QWARK = "Qwark"
+
+
+PLAYER_TYPE_TO_NAME: dict[int, str] = {
+    0x00: RAC3PLAYERTYPE.RATCHET,
+    0x01: RAC3PLAYERTYPE.CLANK,
+    0x02: RAC3PLAYERTYPE.GIANT,
+    0x03: RAC3PLAYERTYPE.TYHRRANOID,
+    0x05: RAC3PLAYERTYPE.QWARK,
+}
