@@ -23156,6 +23156,15 @@
 						"ballRequirement": true,
 						"ck0": "Doorway Key 1",
 						"ck1": "Doorway Key 2",
+						"ck2": "Progressive Doorway 2",
+						"regionIndex": 13,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 26,
+						"mv2": 27,
 						"regionIndex": 13,
 						"trickDifficulty": 0
 					}
@@ -23175,6 +23184,13 @@
 					},
 					{
 						"ballRequirement": false,
+						"mv0": 25,
+						"regionIndex": 13,
+						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": false,
+						"ck0": "Progressive Doorway 2",
 						"regionIndex": 13,
 						"trickDifficulty": 0
 					}

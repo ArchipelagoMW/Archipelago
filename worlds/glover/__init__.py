@@ -397,6 +397,8 @@ class GloverWorld(World):
                         spawning_options[6] = [1, 2, 3]
                         #Prehistoric 2 (Lava Platforms)
                         spawning_options[10] = [1, 2]
+                        #Fear 1 (Ball Gate)
+                        spawning_options[12] = [1, 2]
                     #Easy/Intended Locks
                     if self.options.difficulty_logic.value <= 1:
                         #Prehistoric 3 (Lava Platforms)

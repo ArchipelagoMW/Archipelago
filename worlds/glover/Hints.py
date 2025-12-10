@@ -81,9 +81,7 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
     locations_owner = self.multiworld.player_name[in_location.player] + "'s"
     if in_location.player == self.player:
         locations_owner = "your"
-    item_owner = self.multiworld.player_name[in_item.player] + "'s"
-    if in_item.player == self.player:
-        item_owner = "your"
+    item_owner = self.multiworld.player_name[in_item.player]
     if vague_hint:
         hint_text = hint_text.removeprefix("at ")
         item_class = " " + str(in_item.classification.value) + " "
@@ -112,8 +110,13 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
             
             case 17:
                 item_class = " is good for "
-        hint["text"] = vauge_prefix + locations_owner + "'s " + hint_text + item_class + item_owner
+        if item_owner == "your":
+            item_owner = "you"
+        hint["text"] = vauge_prefix + locations_owner.title() + " " + hint_text + item_class + item_owner
     else:
+        item_owner += "'s"
+        if in_item.player == self.player:
+            item_owner = "your"
         item_name = in_item.hint_text
         world_specification = " in " + locations_owner + " world "
         if in_location.player == in_item.player:
