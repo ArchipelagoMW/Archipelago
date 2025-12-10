@@ -13,5 +13,5 @@ def should_generate(category: str | None, world: "NineSolsWorld") -> bool:
     elif '|' in category:
         return any(should_generate(c, world) for c in category.split('|'))
     elif category == "medium_logic":
-        return world.options.logic_difficulty >= LogicDifficulty.option_medium
+        return world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut
     raise ValueError(f'Invalid category: {category}')
