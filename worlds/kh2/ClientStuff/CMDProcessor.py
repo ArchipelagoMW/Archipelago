@@ -76,7 +76,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         else:
             self.ctx.deathlink_toggle = True
             self.output(f"Death Link turned on")
-        self.ctx.socket.send(5,[str(self.ctx.deathlink_toggle).lower()])
+        self.ctx.socket.send(5,[str(self.ctx.deathlink_toggle)])
 
     def _cmd_add_to_blacklist(self, player_name: str = ""):
         """Adds player to deathlink blacklist"""

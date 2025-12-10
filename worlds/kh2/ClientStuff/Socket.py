@@ -17,6 +17,7 @@ class MessageType (IntEnum):
     RequestAllItems = 9,
     ReceiveSingleItem = 10,
     Victory = 11,
+    Handshake = 12,
     Closed = 20
     pass
 
@@ -128,6 +129,11 @@ class KH2Socket():
 
         elif msgType == MessageType.RequestAllItems:
             self.client.get_items()
+
+        elif msgType == MessageType.Handshake:
+            self.send(MessageType.Handshake, [str(self.client.serverconnected)])
+            print("Responded to Handshake")
+
 
     def send_singleItem(self, id: int, itemCnt):
         msgCont = [str(id.kh2id), str(itemCnt)]

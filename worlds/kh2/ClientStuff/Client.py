@@ -35,6 +35,7 @@ class MessageType (IntEnum):
     RequestAllItems = 9,
     ReceiveSingleItem = 10,
     Victory = 11,
+    Handshake = 12,
     Closed = 20
     pass
 
@@ -510,19 +511,22 @@ class KH2Context(CommonContext):
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 converted_items = list()
                 for item in args['items']:
-                    self.received_items_IDs.append(NetworkItem(*item))
                     name = self.lookup_id_to_item[item.item]
-                    if name not in self.kh2slotdata["KeybladeAbilities"]:
-                        converted_items.append(self.item_name_to_data[name])
+                    if name not in self.kh2slotdata["KeybladeAbilities"] and \
+                        name not in self.kh2slotdata["StaffAbilities"] and \
+                        name not in self.kh2slotdata["ShieldAbilities"]:
+                        itemtosend = self.item_name_to_data[name]
+                        converted_items.append(itemtosend)
+                        self.received_items_IDs.append(itemtosend)
                 if self.kh2connected:
                     #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
                     while not self.lookup_id_to_item:
                         asyncio.sleep(0.5)
                     if converted_items:
                         if len(converted_items) > 1:
-                            self.socket.send_multipleItems(converted_items, len(self.received_items_IDs))
+                            self.socket.send_multipleItems(converted_items, len(converted_items))
                         else:
-                            self.socket.send_singleItem(converted_items[0], len(self.received_items_IDs))
+                            self.socket.send_singleItem(converted_items[0], len(converted_items))
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
@@ -689,7 +693,7 @@ async def kh2_watcher(ctx: KH2Context):
         try:
             #Check for game connection
             if not ctx.kh2connected:
-                logger.info("Searching for KH2 Game Client...Please load your save file before Connecting.")
+                #logger.info("Searching for KH2 Game Client...Please load your save file before Connecting.")
                 if ctx.socket.isConnected:
                     logger.info(f"KH2 Game Client Found")
                     ctx.kh2connected = True
