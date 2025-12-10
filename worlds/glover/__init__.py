@@ -494,22 +494,6 @@ class GloverWorld(World):
             percents_dict[all_entries] /= sum
         return percents_dict
 
-    def highest_dict_value(self, input_dict : dict) -> str:
-        best_names : list[str]
-        best_value : float = -99
-        #Goes through all items
-        for each_name, each_value in input_dict.items():
-            if math.isclose(best_value, each_value):
-                best_names.append(each_name)
-            elif each_value > best_value:
-                best_value = each_value
-                best_names = [each_name]
-        #If there's multiple valid options, pick one at random
-        if len(best_names) > 1:
-            return self.random.choice(best_names)
-        else:
-            return best_names[0]
-
     def create_items(self) -> None:
         #Garib Logic
         garib_items = []
@@ -569,61 +553,86 @@ class GloverWorld(World):
             for _ in range(find_item_data(self, each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
                 core_item_count += 1
-        #Event Items
-        #for each_item in event_items:
-        #    self.multiworld.itempool.append(self.create_event(each_item))
+        #Setup the filler table logic
+        self.setup_filler_table()
 
-        #Calculate the amount of trap filler and the amount of regular filler
+        #Calculate the total number of filler items needed to fill the missing locations
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
         total_core_items : int = core_item_count + len(self.get_pre_fill_items())
         total_filler_items : int = int(total_locations - total_core_items)
-        total_trap_items : int = int(self.percent_of(self.options.trap_percentage.value) * total_filler_items)
-        total_filler_items -= total_trap_items
-        filler_percentages : dict = {
-            "Extra Garibs" : 							self.percent_of(self.options.filler_extra_garibs_weight.value),
-            "Chicken Sound" : 							self.percent_of(self.options.filler_chicken_sound_weight.value),
-	        "Life" : 									self.percent_of(self.options.filler_life_weight.value),
-            "Boomerang Spell" : 								self.percent_of(self.options.filler_boomerang_weight.value),
-            "Beachball Spell" : 								self.percent_of(self.options.filler_beachball_weight.value),
-            "Hercules Spell" : 								self.percent_of(self.options.filler_hercules_weight.value),
-            "Helicopter Spell" : 								self.percent_of(self.options.filler_helicopter_weight.value),
-            "Speed Spell" : 									self.percent_of(self.options.filler_speed_weight.value),
-            "Frog Spell" : 									self.percent_of(self.options.filler_frog_weight.value),
-            "Death Spell" : 									self.percent_of(self.options.filler_death_weight.value),
-            "Sticky Spell" : 									self.percent_of(self.options.filler_sticky_weight.value),
+        
+        #Create a filler item for each missing location
+        for _ in range(total_filler_items):
+            self.multiworld.itempool.append(self.create_filler())
+    
+    #Constructs the table for refrence using the get_filler_item_name function
+    def setup_filler_table(self):
+        filler_percentages : dict[str, float] = {
+            "Extra Garibs" : 		    self.percent_of(self.options.filler_extra_garibs_weight.value),
+            "Chicken Sound" : 		    self.percent_of(self.options.filler_chicken_sound_weight.value),
+	        "Life" : 				    self.percent_of(self.options.filler_life_weight.value),
+            "Boomerang Spell" : 	    self.percent_of(self.options.filler_boomerang_weight.value),
+            "Beachball Spell" : 	    self.percent_of(self.options.filler_beachball_weight.value),
+            "Hercules Spell" : 		    self.percent_of(self.options.filler_hercules_weight.value),
+            "Helicopter Spell" :	    self.percent_of(self.options.filler_helicopter_weight.value),
+            "Speed Spell" : 		    self.percent_of(self.options.filler_speed_weight.value),
+            "Frog Spell" : 			    self.percent_of(self.options.filler_frog_weight.value),
+            "Death Spell" : 		    self.percent_of(self.options.filler_death_weight.value),
+            "Sticky Spell" : 		    self.percent_of(self.options.filler_sticky_weight.value),
 	    }
-        trap_percentages : dict = {
-            "Frog Trap" : 								self.percent_of(self.options.frog_trap_weight.value),
-            "Cursed Ball Trap" :								self.percent_of(self.options.cursed_ball_trap_weight.value),
-            "Instant Crystal Trap" :							self.percent_of(self.options.instant_crystal_trap_weight.value),
-            "Camera Rotate Trap" :							self.percent_of(self.options.camera_rotate_trap_weight.value),
-            "Tip Trap" :								self.percent_of(self.options.tip_trap_weight.value)
+        trap_percentages : dict[str, float] = {
+            "Frog Trap" : 			    self.percent_of(self.options.frog_trap_weight.value),
+            "Cursed Ball Trap" :	    self.percent_of(self.options.cursed_ball_trap_weight.value),
+            "Instant Crystal Trap" :    self.percent_of(self.options.instant_crystal_trap_weight.value),
+            "Camera Rotate Trap" :	    self.percent_of(self.options.camera_rotate_trap_weight.value),
+            "Tip Trap" :			    self.percent_of(self.options.tip_trap_weight.value)
         }
         
-        #Weighted off the sum assuming there are entries
-        if total_filler_items != 0:
+        trap_percentage = self.percent_of(self.options.trap_percentage.value)
+        filler_percentage = 1 - trap_percentage
+
+        #Weighted off the sum assuming there are entries, multiplied by the percentage of each type
+        if filler_percentage != 0:
             filler_percentages = self.percents_sum_100(filler_percentages)
-        if total_trap_items != 0:
+            for each_filler in filler_percentages:
+                filler_percentages[each_filler] *= filler_percentage
+        if trap_percentage != 0:
             trap_percentages = self.percents_sum_100(trap_percentages)
+            for each_trap in trap_percentages:
+                trap_percentages[each_trap] *= trap_percentage
         
-        #Filler begins
-        all_filler_items = []
-
-        #Filler Item Count
-        for each_item in range(int(total_filler_items)):
-            item_key : str = self.highest_dict_value(filler_percentages)
-            filler_percentages[item_key] -= 1.0 / total_filler_items
-            all_filler_items.append(item_key)
+        #Create the percentage table for calculation
+        self.filler_percent_table : dict[str, float] = {**filler_percentages, **trap_percentages}
+        #Trim 0 entries
+        self.filler_percent_table = {key:val for key, val in self.filler_percent_table.items() if val > 0}
         
-        #Trap Count
-        for each_item in range(int(total_trap_items)):
-            item_key : str = self.highest_dict_value(trap_percentages)
-            trap_percentages[item_key] -= 1.0 / total_trap_items
-            all_filler_items.append(item_key)
+        #Create the counter of filler items for comparision
+        self.filler_item_counts : dict[str, int] = {}
+        for each_entry in self.filler_percent_table:
+            self.filler_item_counts[each_entry] = 0
+        self.total_filler : float = 0.0
 
-        #Create the filler items
-        for each_item in all_filler_items:
-            self.multiworld.itempool.append(self.create_item(each_item))
+
+    def get_filler_item_name(self):
+        output : str
+        #Make sure there's 1 of every weighted item at minimum
+        one_minimum = {key:val for key, val in self.filler_item_counts.items() if val == 0}
+        if len(one_minimum) > 0:
+            output = self.random.choice(list(one_minimum.keys()))
+        else:
+            #Create a table to see how far you are from the target percentage
+            percentage_offsets : dict[str, float] = {}
+            for each_item in self.filler_item_counts:
+                #First, get the current actual item percentage
+                each_percent = self.filler_item_counts[each_item] / self.total_filler
+                #The offset is the target percentage minus the current percentage
+                percentage_offsets[each_item] = self.filler_item_counts[each_item] - each_percent
+            output = max(percentage_offsets, key=percentage_offsets.get)
+
+        #Return the next expected item
+        self.filler_item_counts[output] += 1
+        self.total_filler += 1
+        return output
 
     def next_garib_level(self) -> str:
         lowest_extra_garibs : int = 999

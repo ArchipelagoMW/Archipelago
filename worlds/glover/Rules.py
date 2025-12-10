@@ -126,7 +126,8 @@ def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
     #If there's no nonblank methods at this step, it must be open
     if len(nonblank_methods) == 0:
         return
-    
+    #Reorder the access methods to get around the 'or'ing problem
+    nonblank_methods.sort(key=sort_access_method)
     #Otherwise, go over each valid method and assign
     for index, each_method in enumerate(nonblank_methods):
         #Start with the rule set
@@ -135,3 +136,11 @@ def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
             continue
         #Otherwise, this is an alternate method
         add_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player), "or")
+
+#Move all methods that require switches to the end of the list
+def sort_access_method(in_method):
+    for each_requirement in in_method.required_items:
+        #Switches
+        if not each_requirement in move_lookup:
+            return 1
+    return 0
