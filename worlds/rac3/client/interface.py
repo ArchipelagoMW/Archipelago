@@ -479,11 +479,11 @@ class Rac3Interface(GameInterface):
                 else:
                     self.UnlockItem[name].unlock_delay += 1
                 if name == RAC3ITEM.RY3N0 and self.ryno:
-                    _xp = self._read8(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS)
+                    _xp = self._read32(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS)
                     threshold_id = UPGRADE_DICT[name][3]
                     threshold_xp = RAC3_ITEM_DATA_TABLE[ITEM_NAME_FROM_ID[threshold_id]].XP_THRESHOLD
                     if _xp > threshold_xp:
-                        self._write8(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS, threshold_xp)
+                        self._write32(RAC3_ITEM_DATA_TABLE[name].XP_ADDRESS, threshold_xp)
                         self._write8(RAC3_ITEM_DATA_TABLE[name].LEVEL_ADDRESS, threshold_id)
             else:
                 self._write8(addr, 0)
@@ -753,7 +753,7 @@ class Rac3Interface(GameInterface):
             logger.debug(f'Death Detected! (0 health)')
             return False, f"{self.player_type} {'Ran out of nanotech' if not death else death}"
 
-        if self.action == 0x31 or self.vehicle:  # Eaten or in vehicle
+        if self.action == 0x31 and self.vehicle:  # Eaten or in vehicle
             death = False
 
         # Special case for Nefarious's Base pitfall which doesn't set action state to death
@@ -777,13 +777,13 @@ class Rac3Interface(GameInterface):
                 vehicle_blow_up_addr = self.vehicle + 0xBC
                 self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
                 self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
-                self._write8(RAC3STATUS.ACTION, death)
+                #self._write8(RAC3STATUS.ACTION, death)
                 logger.debug(f'player in vehicle, killing vehicle too')
                 logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
             else:
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
-                        self._write8(RAC3STATUS.ACTION, death)
+                        #self._write8(RAC3STATUS.ACTION, death)
                         logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
