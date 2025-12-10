@@ -120,9 +120,9 @@ class KH2World(World):
         slot_data.update({
             "BountyBosses":           self.slot_data_bounties,
             "PoptrackerVersionCheck": 4.3,
-            "KeybladeAbilities":      self.sora_ability_dict,
-            "StaffAbilities":         self.donald_ability_dict,
-            "ShieldAbilities":        self.goofy_ability_dict,
+            "SoraAbilities":      self.sora_ability_dict,
+            "DonaldAbilities":         self.donald_ability_dict,
+            "GoofyAbilities":        self.goofy_ability_dict,
         })
         return slot_data
 

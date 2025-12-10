@@ -45,7 +45,6 @@ class KH2Socket():
             try:
                 self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
                 self.isConnected = True
-                self.client.kh2connected = True
                 print(f"Client connected from {addr}")
                 logger.info("Connected")
                 self.loop.create_task(self.listen())
@@ -53,7 +52,6 @@ class KH2Socket():
             except OSError as e:
                 print(f"Socket accept failed ({e}); retrying in 5s")
                 self.isConnected = False
-                self.client.kh2connected = False
                 await asyncio.sleep(5)
 
     def _safe_close_client(self):
@@ -64,7 +62,6 @@ class KH2Socket():
         finally:
             self.client_socket = None
             self.isConnected = False
-            self.client.kh2connected = False
 
     async def listen(self):
         while not self.closing:
@@ -131,13 +128,13 @@ class KH2Socket():
             self.client.get_items()
 
         elif msgType == MessageType.Handshake:
+            self.client.kh2connectionconfirmed = True
             self.send(MessageType.Handshake, [str(self.client.serverconnected)])
             print("Responded to Handshake")
 
 
-    def send_singleItem(self, id: int, itemCnt):
-        msgCont = [str(id.kh2id), str(itemCnt)]
-        self.send(MessageType.ReceiveSingleItem, msgCont)
+    def send_singleItem(self, msg: list):
+        self.send(MessageType.ReceiveSingleItem, msg)
 
 
     def send_multipleItems(self, items, itemCnt):
@@ -153,7 +150,7 @@ class KH2Socket():
         for item in items:
             if currItemCount == 0:
                 values.append([])
-            values[currMsg].append(item.kh2id)
+            values[currMsg].append(item)
             currItemCount += 1
             sendCnt += 1
             if currItemCount > msgLimit:

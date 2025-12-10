@@ -13,7 +13,6 @@ class KH2CommandProcessor(ClientCommandProcessor):
 
     def _cmd_test(self, msg=""):
         """test"""
-        msg = msg.lower()
         self.ctx.socket.send(0,[str(msg)])
 
     def _cmd_receive_notif(self, notification_type=""):

@@ -19,7 +19,7 @@ from .WorldLocations import *
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
 from .CMDProcessor import KH2CommandProcessor
-slotDataSent = False
+slot_data_sent = False
 
 class MessageType (IntEnum):
     Invalid = -1,
@@ -59,6 +59,7 @@ class KH2Context(CommonContext):
         self.donald_ability_to_slot = dict()
         self.all_weapon_location_id = None
         self.sora_ability_to_slot = dict()
+        self.kh2connectionconfirmed = False
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
         self.kh2_seed_save = None
@@ -436,7 +437,7 @@ class KH2Context(CommonContext):
 
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
-            self.all_party_abilities = {**self.kh2slotdata['KeybladeAbilities'], **self.kh2slotdata['StaffAbilities'], **self.kh2slotdata['ShieldAbilities']}
+            self.all_party_abilities = {**self.kh2slotdata["SoraAbilities"], **self.kh2slotdata["DonaldAbilities"], **self.kh2slotdata["GoofyAbilities"]}
 
             self.kh2_data_package = Utils.load_data_package_for_checksum(
                     "Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
@@ -450,16 +451,16 @@ class KH2Context(CommonContext):
 
             self.locations_checked = set(args["checked_locations"])
 
-            global slotDataSent
-            if not slotDataSent:
-                if self.kh2connected:
+            global slot_data_sent
+            if not slot_data_sent:
+                if self.kh2connectionconfirmed:
                     for location in self.kh2slotdata['BountyBosses']:
                         self.socket.send(MessageType.BountyList, [location])
                     self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
                     self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
                     self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
                     self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
-                    slotDataSent = True
+                    slot_data_sent = True
                 else: #Hold slot data until game client connects
                     self.slot_data_info['BountyBosses'] = self.kh2slotdata['BountyBosses']
                     self.slot_data_info['FinalXemnas'] = 'Final Xemnas;' + str(self.kh2slotdata['FinalXemnas'])
@@ -510,37 +511,50 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
-                self.kh2_seed_save_cache["itemIndex"] = start_index
+            index = args["index"]
+            if self.serverconnected:
                 converted_items = list()
                 for item in args['items']:
                     name = self.lookup_id_to_item[item.item]
-                    itemtosend = self.item_name_to_data[name]
-                    if item.location not in self.check_location_IDs or item.location in Summon_Checks or \
-                        (item.location in popups_set and itemtosend.ability):
-                        self.received_items_IDs.append(itemtosend)
-                        if itemtosend.ability and name not in self.master_growth:
-                            abilityfound = self.number_of_abilities_sent.get(name)
-                            print("test")
-                            if not abilityfound:
-                                self.number_of_abilities_sent[name] = 1
-                            else:
-                                self.number_of_abilities_sent[name] += 1
-                            print(self.number_of_abilities_sent[name])
-                            print(self.all_party_abilities.get(name))
-                            if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
-                                converted_items.append(itemtosend)
+                    item_to_send = self.item_name_to_data[name]
+                    msg_to_send = list()
+                    if item_to_send.ability:
+                        ability_found = self.number_of_abilities_sent.get(name)
+                        if not ability_found:
+                            self.number_of_abilities_sent[name] = 1
                         else:
-                            converted_items.append(itemtosend)
-                if self.kh2connected:
+                            self.number_of_abilities_sent[name] += 1
+                        if name not in self.master_growth:
+                            if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
+                                if "Doanld" in name:
+                                    msg_to_send = [str(item_to_send.kh2id), "Donald", str(index)]
+                                    converted_items.append(msg_to_send)
+                                    self.received_items_IDs.append(msg_to_send)
+                                elif "Goofy" in name:
+                                    msg_to_send = [str(item_to_send.kh2id), "Goofy", str(index)]
+                                    converted_items.append(msg_to_send)
+                                    self.received_items_IDs.append(msg_to_send)
+                                else:
+                                    msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
+                                    converted_items.append(msg_to_send)
+                                    self.received_items_IDs.append(msg_to_send)
+                        else:
+                            msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
+                            converted_items.append(msg_to_send)
+                            self.received_items_IDs.append(msg_to_send)
+                    else:
+                        msg_to_send = [str(item_to_send.kh2id), "false", str(index)]
+                        converted_items.append(msg_to_send)
+                        self.received_items_IDs.append(msg_to_send)
+                    index += 1
+                if self.kh2connectionconfirmed:
                     #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
                     while not self.lookup_id_to_item:
                         asyncio.sleep(0.5)
-                    if converted_items:
-                        if len(converted_items) > 1:
-                            self.socket.send_multipleItems(converted_items, len(converted_items))
-                        else:
-                            self.socket.send_singleItem(converted_items[0], len(converted_items))
+                    while len(converted_items) >= 1:
+                        print(converted_items[0])
+                        self.socket.send_singleItem(converted_items[0])
+                        converted_items.pop(0)
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
@@ -629,14 +643,12 @@ class KH2Context(CommonContext):
                             self.queued_chest_popup += [f"{itemName} to {playerName}"]
 
     def connect_to_game(self):
-        if "KeybladeAbilities" in self.kh2slotdata.keys():
+        if "SoraAbilities" in self.kh2slotdata.keys():
             # sora ability to slot
-            self.AbilityQuantityDict.update(self.kh2slotdata["KeybladeAbilities"])
+            self.AbilityQuantityDict.update(self.kh2slotdata["SoraAbilities"])
             # itemid:[slots that are available for that item]
-            self.AbilityQuantityDict.update(self.kh2slotdata["StaffAbilities"])
-            self.AbilityQuantityDict.update(self.kh2slotdata["ShieldAbilities"])
-
-        self.all_weapon_location_id = {self.kh2_loc_name_to_id[loc] for loc in all_weapon_slot}
+            self.AbilityQuantityDict.update(self.kh2slotdata["DonaldAbilities"])
+            self.AbilityQuantityDict.update(self.kh2slotdata["GoofyAbilities"])
         self.serverconnected = True
         self.slot_name = self.auth
 
@@ -686,21 +698,19 @@ class KH2Context(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def get_items(self):
+        """Resend all items upon client request"""
+        for item in self.received_items_IDs:
+             self.socket.send_singleItem(item)
 
-        if len(self.received_items_IDs) > 1:
-            self.socket.send_multipleItems(self.received_items_IDs, len(self.received_items_IDs))
-        elif len(self.received_items_IDs) == 1:
-            self.socket.send_singleItem(self.received_items_IDs[0].item, 1)
-
-        global slotDataSent
-        if not slotDataSent and self.kh2connected:
+        global slot_data_sent
+        if not slot_data_sent and self.kh2connectionconfirmed:
             for location in self.slot_data_info['BountyBosses']:
                 self.socket.send(MessageType.BountyList, [location])
             self.socket.send_slot_data(str(self.slot_data_info['FinalXemnas']))
             self.socket.send_slot_data(str(self.slot_data_info['Goal']))
             self.socket.send_slot_data(str(self.slot_data_info['LuckyEmblemsRequired']))
             self.socket.send_slot_data(str(self.slot_data_info['BountyRequired']))
-            slotDataSent = True
+            slot_data_sent = True
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
@@ -712,7 +722,7 @@ async def kh2_watcher(ctx: KH2Context):
                     logger.info(f"KH2 Game Client Found")
                     ctx.kh2connected = True
 
-            if ctx.kh2connected and ctx.serverconnected:
+            if ctx.kh2connectionconfirmed and ctx.serverconnected:
                 ctx.sending = []
                 await asyncio.create_task(ctx.checkWorldLocations())
                 await asyncio.create_task(ctx.checkLevels())
@@ -732,17 +742,12 @@ async def kh2_watcher(ctx: KH2Context):
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
 
-                if ctx.queued_puzzle_popup:
-                    await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
-                if ctx.queued_info_popup:
-                    await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
-                if ctx.queued_chest_popup:
-                    await asyncio.create_task(ctx.displayChestTextInGame(ctx.queued_chest_popup[0]))
-
-            elif not ctx.kh2connected and ctx.serverconnected:
-                logger.info("Game Connection lost. trying to reconnect.")
-                #todo: change this to be an option for the client to auto reconnect with the default being yes
-                # reason is because the await sleep causes the client to hang if you close the game then the client without disconnecting.
+                #if ctx.queued_puzzle_popup:
+                #    await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
+                #if ctx.queued_info_popup:
+                #    await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
+                #if ctx.queued_chest_popup:
+                #    await asyncio.create_task(ctx.displayChestTextInGame(ctx.queued_chest_popup[0]))
             if ctx.disconnect_from_server:
                 ctx.disconnect_from_server = False
                 await ctx.disconnect()
