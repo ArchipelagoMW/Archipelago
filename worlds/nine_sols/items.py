@@ -67,21 +67,20 @@ item_name_groups = {
 }
 
 
-def get_item_classification(name: str, options: NineSolsGameOptions = None) -> ItemClassification:
+def get_item_classification(name: str, world: "NineSolsWorld") -> ItemClassification:
     item_type = item_data_table[name].type
     classification = item_types_default_map[item_type]
 
-    if options is not None:
-        if item_type == "progression_if_medium_logic":
-            classification = ItemClassification.useful
-            if options.logic_difficulty >= LogicDifficulty.option_medium:
-                classification = ItemClassification.progression
+    if item_type == "progression_if_medium_logic":
+        classification = ItemClassification.useful
+        if world.options.logic_difficulty >= LogicDifficulty.option_medium:
+            classification = ItemClassification.progression
 
     return classification
 
 
-def create_item(player: int, name: str, options: NineSolsGameOptions = None) -> NineSolsItem:
-    return NineSolsItem(name, get_item_classification(name, options), item_data_table[name].code, player)
+def create_item(world: "NineSolsWorld", name: str) -> NineSolsItem:
+    return NineSolsItem(name, get_item_classification(name, world), item_data_table[name].code, world.player)
 
 
 # All progression and useful item types have a hardcoded number of instances regardless of options.
@@ -118,41 +117,41 @@ def create_items(world: "NineSolsWorld") -> None:
     prog_and_useful_items: list[NineSolsItem] = []
     unique_filler: list[NineSolsItem] = []
     for name, item in items_to_create.items():
-        classification = get_item_classification(name, options)
+        classification = get_item_classification(name, world)
         if item.code is None:
             # here we rely on our event items and event locations having identical names
-            multiworld.get_location(name, player).place_locked_item(create_item(player, name, options))
+            multiworld.get_location(name, player).place_locked_item(create_item(world, name))
         elif name.startswith("Seal of ") and not options.shuffle_sol_seals:
             continue  # we'll place these as a group later
         elif name == "Grapple":
             if options.shuffle_grapple:
-                g = create_item(player, name, options)
+                g = create_item(world, name)
                 if options.first_root_node == FirstRootNode.option_yinglong_canal and options.shuffle_ledge_grab.value:
                     # since there's no "local_sphere_2_items", we have to place it ourselves:
                     multiworld.get_location("Yinglong Canal: Near Root Node", player).place_locked_item(g)
                 else:
                     prog_and_useful_items.append(g)
             else:
-                multiworld.push_precollected(create_item(player, name, options))
+                multiworld.push_precollected(create_item(world, name))
         elif name == "Wall Climb":
             if options.shuffle_wall_climb:
-                prog_and_useful_items.append(create_item(player, name, options))
+                prog_and_useful_items.append(create_item(world, name))
             else:
-                multiworld.push_precollected(create_item(player, name, options))
+                multiworld.push_precollected(create_item(world, name))
         elif name == "Ledge Grab":
             if options.shuffle_ledge_grab:
-                prog_and_useful_items.append(create_item(player, name, options))
+                prog_and_useful_items.append(create_item(world, name))
             else:
-                multiworld.push_precollected(create_item(player, name, options))
+                multiworld.push_precollected(create_item(world, name))
         elif classification == ItemClassification.filler:
             if name not in repeatable_filler_weights:
-                unique_filler.append(create_item(player, name, options))
+                unique_filler.append(create_item(world, name))
         elif classification != ItemClassification.trap:
             instances = 1
             if name in repeated_prog_useful_items:
                 instances = repeated_prog_useful_items[name]
             for _ in range(0, instances):
-                prog_and_useful_items.append(create_item(player, name, options))
+                prog_and_useful_items.append(create_item(world, name))
 
     if not options.shuffle_sol_seals:
         for (location, item) in [
@@ -165,7 +164,7 @@ def create_items(world: "NineSolsWorld") -> None:
             ["ED (Living Area): Fuxi's Vital Sanctum", "Seal of Fuxi"],
             ["Nuwa's Vital Sanctum", "Seal of Nuwa"],
         ]:
-            multiworld.get_location(location, player).place_locked_item(create_item(player, item))
+            multiworld.get_location(location, player).place_locked_item(create_item(world, item))
 
     # unique_filler_with_traps = unique_filler
 
@@ -203,7 +202,7 @@ def create_items(world: "NineSolsWorld") -> None:
         weights=normalized_filler_weights,
         k=repeatable_filler_needed
     )
-    repeatable_filler_items = list(create_item(player, name) for name in repeatable_filler_names)
+    repeatable_filler_items = list(create_item(world, name) for name in repeatable_filler_names)
 
     # if apply_trap_items:
     #     filler_weights_sum = sum(repeatable_filler_weights.values())

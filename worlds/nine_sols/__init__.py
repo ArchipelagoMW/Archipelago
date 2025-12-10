@@ -84,7 +84,7 @@ class NineSolsWorld(World):
     item_name_groups = item_name_groups
 
     def create_item(self, name: str) -> NineSolsItem:
-        return create_item(self.player, name)
+        return create_item(self, name)
 
     def create_items(self) -> None:
         create_items(self)
