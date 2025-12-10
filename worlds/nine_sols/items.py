@@ -73,13 +73,15 @@ def get_item_classification(name: str, world: "NineSolsWorld") -> ItemClassifica
 
     if item_type == "progression_if_medium_logic":
         classification = ItemClassification.useful
-        if world.options.logic_difficulty >= LogicDifficulty.option_medium:
+        if world.options.logic_difficulty >= LogicDifficulty.option_medium or world.using_ut:
             classification = ItemClassification.progression
 
     return classification
 
 
 def create_item(world: "NineSolsWorld", name: str) -> NineSolsItem:
+    if name == "UT Glitch Logic":
+        return NineSolsItem(name, ItemClassification.progression, None, world.player)
     return NineSolsItem(name, get_item_classification(name, world), item_data_table[name].code, world.player)
 
 

@@ -18,6 +18,7 @@ class TestDefaultWorld(NineSolsTestBase):
             'seals_for_prison',
             'jade_costs',
             'first_root_node_name',
+            'logic_difficulty',
         })
         # now for the "real" slot_data tests on our default world:
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
@@ -25,6 +26,8 @@ class TestDefaultWorld(NineSolsTestBase):
         self.assertEqual(slot_data['seals_for_ethereal'], 4)
         self.assertEqual(slot_data['seals_for_prison'], 3)
         self.assertEqual(slot_data['jade_costs'], 'vanilla')
+        self.assertEqual(slot_data['first_root_node_name'], 'apeman_facility_monitoring')
+        self.assertEqual(slot_data['logic_difficulty'], 0)
 
         # breathing tests for logic assertion helpers
         self.assertReachableWith("Central Hall: Examine Launch Memorial", [])

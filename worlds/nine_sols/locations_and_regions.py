@@ -182,35 +182,20 @@ def create_regions(world: "NineSolsWorld") -> None:
 
         exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
         for connection in exit_connections:
-            to = connection["to"]
-
-            vanilla_requires = connection["requires"] if "requires" in connection else None
-            # we'll replace this with a generic "requires": { "option": ... } syntax
-            if (region_name == "CC - Root Node" and to == "CC - Root Node After Boss"
-                    and options.skip_soulscape_platforming):
-                vanilla_requires = [  # no WC/TCK/LG/CL, only the platforming required that
-                    {"item": "Event - Lady Ethereal Soulscape Unlocked"},
-                    {"item": "Air Dash"}
-                ]
-            medium_requires = connection["medium_requires"] if (
-                    "medium_requires" in connection and
-                    options.logic_difficulty >= LogicDifficulty.option_medium) else None
-            ls_requires = connection["ls_requires"] if (
-                    "ls_requires" in connection and
-                    options.logic_difficulty >= LogicDifficulty.option_ledge_storage) else None
-            all_requires = [{"anyOf": [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]}]
-
+            all_requires = get_all_requires(connection, world)
             rule = lambda state, r=all_requires: eval_rule(state, p, options, r) if len(all_requires) > 0 else None  # noqa
-            entrance = region.connect(mw.get_region(to, p), None, rule)
+            entrance = region.connect(mw.get_region(connection["to"], p), None, rule)
             indirect_region_names = regions_referenced_by_rule(all_requires)
             for indirect_region_name in indirect_region_names:
                 mw.register_indirect_condition(mw.get_region(indirect_region_name, p), entrance)
 
     # add access rules to the created locations
     for ld in locations_data:
-        if ld["name"] in locations_to_create and len(ld["requires"]) > 0:
-            set_rule(mw.get_location(ld["name"], p),
-                     lambda state, r=ld["requires"]: eval_rule(state, p, options, r))  # noqa
+        if ld["name"] in locations_to_create:
+            all_requires = get_all_requires(ld, world)
+            if len(all_requires) > 0:
+                set_rule(mw.get_location(ld["name"], p),
+                         lambda state, r=all_requires: eval_rule(state, p, options, r))  # noqa
 
     world.origin_region_name = "FSP - Root Node"
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
@@ -251,6 +236,38 @@ def create_regions(world: "NineSolsWorld") -> None:
         raise Exception("Unrecognized first_root_node")
 
     mw.get_region(world.origin_region_name, p).add_exits([first_node_region])
+
+
+# `logic` can be a location or a connection
+def get_all_requires(logic: Any, world: "NineSolsWorld") -> list[Any]:
+    vanilla_requires = logic["requires"] if "requires" in logic else None
+    # TODO: replace this hack with a generic "requires": { "option": ... } syntax
+    if (
+        "from" in logic and "to" in logic
+        and logic["from"] == "CC - Root Node" and logic["to"] == "CC - Root Node After Boss"
+        and world.options.skip_soulscape_platforming
+    ):
+        vanilla_requires = [  # no WC/TCK/LG/CL, only the platforming required that
+            {"item": "Event - Lady Ethereal Soulscape Unlocked"},
+            {"item": "Air Dash"}
+        ]
+
+    medium_requires = None
+    if "medium_requires" in logic:
+        if world.options.logic_difficulty >= LogicDifficulty.option_medium:
+            medium_requires = logic["medium_requires"]
+        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_vanilla:
+            medium_requires = [{"item": world.glitches_item_name}] + logic["medium_requires"]
+
+    ls_requires = None
+    if "ls_requires" in logic:
+        if world.options.logic_difficulty >= LogicDifficulty.option_ledge_storage:
+            ls_requires = logic["ls_requires"]
+        elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_medium:
+            ls_requires = [{"item": world.glitches_item_name}] + logic["ls_requires"]
+
+    all_requires = [{"anyOf": [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]}]
+    return all_requires
 
 
 # In the .jsonc files we use, a location or region connection's "access rule" is defined
