@@ -200,6 +200,13 @@ class Rac3Interface(GameInterface):
     skin: int = 0
     timers: dict[str, int] = {}
     weaponLevelLockFlag: bool = None
+    planet: str = RAC3REGION.GALAXY
+    player_type: str = RAC3PLAYERTYPE.RATCHET
+    vehicle: int = 0
+    action: int = 0  # Todo: Player Action
+    pause_menu: bool = False
+    pause_state: bool = False
+    inputs: int = RAC3INPUT.NOTHING
 
     # Called at once when client started
     def init(self):
@@ -217,8 +224,19 @@ class Rac3Interface(GameInterface):
             return
         self.item_received(item)
 
+    def early_update(self):
+        self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
+        self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
+        self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
+        self.action = self._read8(RAC3STATUS.ACTION)
+        self.inputs = self._read16(RAC3STATUS.READ_INPUT)
+        self.pause_check()
+        if self.respawning:
+            if not self._read8(RAC3STATUS.FORCE_RELOAD):
+                self.respawning = False
+
     # Called in periodically
-    def update(self):
+    def late_update(self):
         # Memory checking
         self.gadget_cycler()
         self.planet_cycler()
@@ -226,7 +244,6 @@ class Rac3Interface(GameInterface):
         self.vidcomic_cycler()
         self.armor_cycler()
         self.timer_cycler()
-        self.input_cycler()
         self.verify_quick_select_and_last_used()
         # Proc Options
         self.multiplier_cycler()
@@ -234,9 +251,6 @@ class Rac3Interface(GameInterface):
             self.weapon_exp_cycler()
         # Logic Fixes
         self.logic_fixes()
-        if self.respawning:
-            if self._read8(RAC3STATUS.FORCE_RELOAD) == 0:
-                self.respawning = False
 
     @staticmethod
     def get_victory_code():
@@ -257,7 +271,7 @@ class Rac3Interface(GameInterface):
         self.skin = slot_data[RAC3OPTION.SKIN]
 
     def map_switch(self) -> tuple[str, str]:
-        planet = self._read8(RAC3STATUS.PLANET)
+        planet = RAC3_REGION_DATA_TABLE[self.planet].ID
         _planet = planet
         if planet > 55 or not self._read8(RAC3STATUS.MAP_CHECK):
             _planet = 0
@@ -440,10 +454,8 @@ class Rac3Interface(GameInterface):
 
     # Logic Fixes
     def logic_fixes(self):
-        current_planet = self._read8(RAC3STATUS.PLANET)
-
         # Fix can't play Qwark VidComics in some case which first event is skipped
-        if current_planet == RAC3_REGION_DATA_TABLE[RAC3REGION.STARSHIP_PHOENIX].ID:
+        if self.planet == RAC3REGION.STARSHIP_PHOENIX:
             self._write8(0x001426E8, 1)  # Todo: Take Qwark to Cage Mission
 
     # interval update function: Check unlock/lock status of items
@@ -460,24 +472,41 @@ class Rac3Interface(GameInterface):
             else:
                 self._write8(addr, 0)
 
-        replace_equip: int = 0
         equip_data = self._read8(RAC3STATUS.EQUIPPED)
         if equip_data > 1 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(equip_data)).status == 0:  # Not unlocked
-            last_0 = self._read8(RAC3STATUS.LAST_USED_0)
-            if last_0 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_0)).status:
-                replace_equip = last_0
+            last_1 = self._read8(RAC3STATUS.LAST_USED_1)
+            if last_1 == 0:
+                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
+                self._write8(RAC3STATUS.LAST_USED_0, 0)
+                return
+            last_2 = self._read8(RAC3STATUS.LAST_USED_2)
+            last_3 = self._read8(RAC3STATUS.LAST_USED_3)
+            if self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_1)).status:
+                self._write8(RAC3STATUS.EQUIPPED, last_1)
+                self._write8(RAC3STATUS.LAST_USED_0, last_1)
+                self._write8(RAC3STATUS.LAST_USED_1, last_2)
+                self._write8(RAC3STATUS.LAST_USED_2, last_3)
+                return
+            if last_2 == 0:
+                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
+                self._write8(RAC3STATUS.LAST_USED_0, 0)
+                self._write8(RAC3STATUS.LAST_USED_1, 0)
+                return
+            last_4 = self._read8(RAC3STATUS.LAST_USED_4)
+            if self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_2)).status:
+                self._write8(RAC3STATUS.EQUIPPED, last_2)
+                self._write8(RAC3STATUS.LAST_USED_0, last_2)
+                self._write8(RAC3STATUS.LAST_USED_1, last_3)
+                self._write8(RAC3STATUS.LAST_USED_2, last_4)
+                return
+            last_5 = self._read8(RAC3STATUS.LAST_USED_5)
+            self._write8(RAC3STATUS.LAST_USED_0, last_3)
+            self._write8(RAC3STATUS.LAST_USED_1, last_4)
+            self._write8(RAC3STATUS.LAST_USED_2, last_5)
+            if last_3 == 0 or self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_3)).status:
+                self._write8(RAC3STATUS.EQUIPPED, equipable_data[RAC3ITEM.WRENCH].ID)
             else:
-                last_1 = self._read8(RAC3STATUS.LAST_USED_1)
-                if last_1 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_1)).status:
-                    replace_equip = last_1
-                else:
-                    last_2 = self._read8(RAC3STATUS.LAST_USED_2)
-                    if last_2 and self.UnlockItem.get(ITEM_NAME_FROM_ID.get(last_2)).status:
-                        replace_equip = last_2
-                    else:
-                        replace_equip = equipable_data[RAC3ITEM.WRENCH].ID
-        if replace_equip:
-            self._write8(RAC3STATUS.EQUIPPED, replace_equip)
+                self._write8(RAC3STATUS.EQUIPPED, last_3)
 
     def gadget_cycler(self):
         for name in gadget_data.keys():
@@ -596,14 +625,14 @@ class Rac3Interface(GameInterface):
                     break
             self.verify_quick_select_and_last_used()
 
-    def dump_info(self, current_planet: str, slot_data: dict[str, Any]):
+    def dump_info(self, slot_data: dict[str, Any]):
         logger.info(f'Collected Items: {self.UnlockItem}')
         count = 0
         for name in SHIP_SLOTS:
             logger.info(
                 f'Planet{count}: {PLANET_NAME_FROM_ID[self._read8(RAC3_REGION_DATA_TABLE[name].SLOT_ADDRESS)]}')
             count += 1
-        logger.info(f'Current planet Tracked: {current_planet}')
+        logger.info(f'Current planet Tracked: {self.planet}')
         logger.info(f'Slot Data: {slot_data}')
 
     def multiplier_cycler(self):

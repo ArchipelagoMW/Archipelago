@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 # common functions
 async def update(ctx: 'Context') -> None:
     """Called continuously"""
+    ctx.game_interface.early_update()
     # Check received items
     await handle_received_items(ctx)
     # Check collected locations
@@ -31,10 +32,9 @@ async def update(ctx: 'Context') -> None:
     await handle_check_goal(ctx)
     # Check planet id
     await handle_planet_changed(ctx)
-
-    ctx.game_interface.update()
     # Check player respawn
     await handle_respawn(ctx, False)
+    ctx.game_interface.late_update()
 
     # logger.info(f"Update is called")
 

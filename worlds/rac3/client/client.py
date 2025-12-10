@@ -110,14 +110,14 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.dump_info(self.ctx.current_planet, self.ctx.slot_data)
+            self.ctx.game_interface.dump_info(self.ctx.slot_data)
 
     def _cmd_force_update(self):
         """Force an update to the game state by running all update cycle methods."""
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.update()
+            update(self.ctx)
             self.output(f"Update cycle complete")
 
     def _cmd_deathlink(self):
