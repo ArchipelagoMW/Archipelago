@@ -322,6 +322,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             logger.info("Checking locations...")
             for loc in ctx.locations_checked:
                 ctx.game_interface.collect_location(loc)
+            ctx.game_interface.fix_health()
             logger.info("Locations collected!")
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()

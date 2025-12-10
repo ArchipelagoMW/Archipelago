@@ -207,6 +207,7 @@ class Rac3Interface(GameInterface):
     pause_menu: bool = False
     pause_state: bool = False
     inputs: int = RAC3INPUT.NOTHING
+    health: int = 10
 
     # Called at once when client started
     def init(self):
@@ -230,6 +231,7 @@ class Rac3Interface(GameInterface):
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
         self.inputs = self._read16(RAC3STATUS.READ_INPUT)
+        self.health = self._read8(RAC3STATUS.HEALTH)
         self.pause_check()
         if self.respawning:
             if not self._read8(RAC3STATUS.FORCE_RELOAD):
@@ -422,6 +424,7 @@ class Rac3Interface(GameInterface):
         self.timer_cycler()
 
     def undo_collections(self):
+        self.health = self._read8(RAC3STATUS.HEALTH)
         sewer, nano = 0, 0
         for location in RAC3_LOCATION_DATA_TABLE.values():
             if RAC3TAG.SEWER in location.TAGS:
@@ -431,7 +434,7 @@ class Rac3Interface(GameInterface):
                 continue
             if RAC3TAG.NANOTECH in location.TAGS:
                 if not nano:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10)
                     nano += 1
                 continue
             for check in location.CHECK_ADDRESS:
@@ -445,6 +448,9 @@ class Rac3Interface(GameInterface):
         for check in loc_data.CHECK_ADDRESS:
             if check.TYPE & CHECKTYPE.SIZE == CHECKTYPE.BIT:
                 self._write8(check.ADDRESS, self._read8(check.ADDRESS) | (0x01 << check.VALUE))
+
+    def fix_health(self):
+        self._write8(RAC3STATUS.HEALTH, self.health)
 
     def add_cosmetics(self):
         self._write8(RAC3STATUS.SHIP_CONFIG, self.ship)
@@ -724,7 +730,7 @@ class Rac3Interface(GameInterface):
     def alive(self) -> tuple[bool, str]:
         if not self.action:
             return True, "alive"
-        is_dead = (self._read8(RAC3STATUS.HEALTH) == 0
+        is_dead = (self.health == 0
                    or (self.player_type == RAC3PLAYERTYPE.GIANT and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0))
         is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
         death = DEATH_FROM_ACTION.get(self.action, False) if not is_clank else CLANK_DEATH_FROM_ACTION.get(self.action,
