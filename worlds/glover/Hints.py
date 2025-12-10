@@ -11,7 +11,7 @@ def create_hints(self):
     valid_chicken_items = get_valid_items(self, chicken_catagories)
 
     #Get Mr. Tip Hints First
-    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "Mr. Tip Says:\n")
+    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "")
     #Remove any items you've already gotten from being hints from the chicken
     for each_item in tips_pair[0]:
         if each_item in valid_chicken_items:
@@ -20,17 +20,18 @@ def create_hints(self):
     chicken_locations = []
     for each_index in range(7):
         chicken_locations.append("Chicken Hint " + str(each_index + 1))
-    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2, "Cheat Chicken Says:\n")[1]
+    chicken_hints = create_hint_lookup(self, chicken_locations, valid_chicken_items, chicken_catagories, self.options.chicken_hints == 2, "Cheat Chicken Says:\n")
     
     #Apply the hints to the world
-    return [tips_pair[1], chicken_hints]
+    return [tips_pair[1], chicken_hints[1], tips_pair[2], chicken_hints[2]]
 
 def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item], valid_catagories : list [ItemClassification], vague_hint : bool, vauge_prefix : str):
     hint_lookup : dict[str, dict[str,int]] = {}
+    hint_text : dict[str, str] = {}
     newly_chosen_items : list[Item] = []
     #If nothing's valid, give an empty array
     if valid_catagories == None:
-        return [[],[]]
+        return [[],{},{}]
     #If there's multiple valid catagories, we're in balanced mode
     if len(valid_catagories) > 1:
         valid_item_catagories : dict[ItemClassification:list[Item]] = {}
@@ -51,7 +52,9 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
                 valid_item_catagories[current_catagory].remove(next_item)
                 newly_chosen_items.append(next_item)
                 to_scout : Location = next_item.location
-                hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item, vauge_prefix)
+                address = location_name_to_address(self, each_tip_spot)
+                hint_lookup[address] = location_to_hint_info(self, to_scout)
+                hint_text[address] = generate_hint_text(self, vague_hint, to_scout, next_item, vauge_prefix)
                 grabbed_from_catagory[current_catagory] += 1
             else:
                 #If this catagory has no more items, remove it
@@ -59,7 +62,7 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
                 #If no catagories have items, bail
                 if len(grabbed_from_catagory) == 0:
                     break
-        return [newly_chosen_items, hint_lookup]
+        return [newly_chosen_items, hint_lookup, hint_text]
     #Otherwise, just grab from the single catagory
     for each_tip_spot in hint_locations:
         if len(valid_items) > 0:
@@ -67,20 +70,20 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
             valid_items.remove(next_item)
             newly_chosen_items.append(next_item)
             to_scout : Location = next_item.location
-            hint_lookup[location_name_to_address(self, each_tip_spot)] = location_to_hint_info(self, vague_hint, to_scout, next_item, vauge_prefix)
+            address = location_name_to_address(self, each_tip_spot)
+            hint_lookup[address] = location_to_hint_info(self, to_scout)
+            hint_text[address] = generate_hint_text(self, vague_hint, to_scout, next_item, vauge_prefix)
         else:
             break
-    return [newly_chosen_items, hint_lookup]
+    return [newly_chosen_items, hint_lookup, hint_text]
 
-def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_item : Item, vauge_prefix : str) -> dict[str:str]:
-    hint : dict[str:str] = {
-        "player_id" : in_location.player,
-        "location_id" : in_location.address
-    }
+def generate_hint_text(self, vague_hint : bool, in_location : Location, in_item : Item, vauge_prefix : str) -> str:
     hint_text = in_location.hint_text
     locations_owner = self.multiworld.player_name[in_location.player] + "'s"
     if in_location.player == self.player:
         locations_owner = "your"
+    if in_item.player == self.player:
+        item_owner = "you"
     item_owner = self.multiworld.player_name[in_item.player]
     if vague_hint:
         hint_text = hint_text.removeprefix("at ")
@@ -110,18 +113,21 @@ def location_to_hint_info(self, vague_hint : bool, in_location : Location, in_it
             
             case 17:
                 item_class = " is good for "
-        if item_owner == "your":
-            item_owner = "you"
-        hint["text"] = vauge_prefix + locations_owner.title() + " " + hint_text + item_class + item_owner
-    else:
-        item_owner += "'s"
-        if in_item.player == self.player:
-            item_owner = "your"
-        item_name = in_item.hint_text
-        world_specification = " in " + locations_owner + " world "
-        if in_location.player == in_item.player:
-            world_specification = ""
-        hint["text"] = item_owner.title() + " " + item_name + " is" + world_specification + hint_text
+        return vauge_prefix + locations_owner.title() + " " + hint_text + item_class + item_owner
+    item_owner += "'s"
+    if in_item.player == self.player:
+        item_owner += "r"
+    item_name = in_item.hint_text
+    world_specification = " in " + locations_owner + " world "
+    if in_location.player == in_item.player:
+        world_specification = ""
+    return item_owner.title() + " " + item_name + " is" + world_specification + hint_text
+
+def location_to_hint_info(self, in_location : Location) -> dict[str:str]:
+    hint : dict[str:str] = {
+        "player_id" : in_location.player,
+        "location_id" : in_location.address
+    }
     return hint
 
 def location_name_to_address(self, location_name : str) -> str:

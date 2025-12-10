@@ -412,7 +412,11 @@ local WAYROOM_TIPS_TABLE = {
 	0x534,
 	0x671
 }
-
+local ROM_WAYROOM_TIPS_TABLE = {} -- Reverses the Wayroom Tips Table
+for index, item in pairs(WAYROOM_TIPS_TABLE)
+do
+    ROM_WAYROOM_TIPS_TABLE[item] = index
+end
 -- Address Map for Glover
 local ADDRESS_MAP = {
 	["AP_ATLANTIS_L1"] = {
@@ -12745,13 +12749,11 @@ function received_events(itemId)
 end
 
 function received_checkpoints(itemId)
-	print("Item ID "..tostring(itemId))
 	local checkpoint_index = itemId + 1 - 6500130
 	for world_index, max_checkpoints in pairs({2,3,3,4,5,4,3,3,4,3,4,4,3,3,5,2,1,4})
 	do
 		if checkpoint_index <= max_checkpoints
 		then
-			print("Received "..tostring(checkpoint_index))
 			receive_checkpoint(world_index, checkpoint_index)
 			break
 		end
@@ -12762,7 +12764,6 @@ end
 function receive_checkpoint(world_index, checkpoint_number)
 	local world_id = numericLevelToWorldId(world_index)
 	local item_name = ROM_WORLDS_TABLE[world_id].."_CHECKPOINT"..tostring(checkpoint_number)
-	print(item_name)
 	-- Ignore Space 2
 	if world_id ~= 27
 	then
@@ -12885,8 +12886,9 @@ function setSpawningCheckpoints(IN_CHECKPOINT)
 	end
 end
 
-function applyCustomHintText(tipTable)
-	for ap_id, hint_info in pairs(tipTable)
+function applyCustomTipText(tipTable)
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer)
+	for ap_id, tip_text in pairs(tipTable)
 	do
 		for map_name, map_info in pairs(ADDRESS_MAP)
 		do
@@ -12895,25 +12897,106 @@ function applyCustomHintText(tipTable)
 				if map_info["TIP"][ap_id] ~= nil
 				then
 					local world_id = WORLDS_TABLE[map_name]
+    				local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
 					local offset = map_info["TIP"][ap_id]['offset']
-					local hint_text = hint_info["text"]
-					print(tostring(world_id).."-"..tostring(offset)..": "..hint_text)
-					--tip_locations = 0x490,
-					--  tip_id = 0x4,
-					--  tip_collected = 0x6,
-					--  tip_text = 0x8,
-					--    line1 = 0x0,
-					--    line2 = 0x15,
-					--    line3 = 0x2A,
-					--    line4 = 0x3F,
-					--    line5 = 0x54,
-					--    line6 = 0x69,
-					--   last_line = 0x7E,
-					--tip_size = 0x88,
+					local offset_location = GLOVERHACK:getOffsetLocation(GLOVERHACK.tip_locations, offset, "tip")
+					local tip_address = world_address + offset_location
+    				local check_id = mainmemory.read_u16_be(tip_address + GLOVERHACK.tip_id)
+    				if check_id ~= tonumber(ap_id) then
+    				    print("TIP Text ID DOES NOT MATCH! CHECK OFFSET FOR ID")
+						print(check_id)
+    				    print(ap_id)
+    				end
+					setTipText(tip_address, tip_text)
 				end
 			end
 		end
+		if WAYROOM_TIPS_TABLE[ap_id] ~= nil or 1972 == ap_id
+		then
+			local table_id = 1
+			if 1972 ~= ap_id
+			then
+				table_id = ROM_WAYROOM_TIPS_TABLE[ap_id]
+			end
+			local wayroomBaseIndex = hackPointerIndex + GVR.wayroom_locations
+			local addr_location = GVR.wayroom_size * (table_id - 1)
+			local tip_address = wayroomBaseIndex + addr_location
+			local rom_id = mainmemory.readbyte(tip_address + GVR.wayroom_id)
+			if rom_id > 4
+			then
+				rom_id = rom_id - 1
+			end
+			if(rom_id ~= table_id - 1)
+			then
+				print("Check wayroom text math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
+			end
+			setTipText(tip_address, tip_text)
+		end
 	end
+end
+
+function setTipText(tip_address, input_text)
+	local text_address = tip_address + GLOVERHACK.tip_text
+	local tip_dialogue = stringToTipTable(input_text)
+	local furthest_line = 0
+	for line_index, line_text in pairs(tip_dialogue)
+	do
+		if furthest_line < line_index then
+			furthest_line = line_index
+		end
+		local line_offset = GLOVERHACK.line1
+		if line_index == 2 then
+			line_offset = GLOVERHACK.line2
+		elseif line_index == 3 then
+			line_offset = GLOVERHACK.line3
+		elseif line_index == 4 then
+			line_offset = GLOVERHACK.line4
+		elseif line_index == 5 then
+			line_offset = GLOVERHACK.line5
+		elseif line_index == 6 then
+			line_offset = GLOVERHACK.line6
+		end
+		local text_start_address = text_address + line_offset
+		for each_char = 0, string.len(line_text) - 1 do
+			mainmemory.writebyte(text_start_address + each_char, line_text:byte(each_char + 1))
+		end
+	end
+	local text_end = tip_address + GLOVERHACK.tip_text + GLOVERHACK.last_line
+	mainmemory.writebyte(text_end, furthest_line)
+end
+
+function stringToTipTable(full_string)
+	local cur_line = 1
+	local output_lines = {[1]=""}
+	for word in full_string:gmatch("%S+")
+	do
+		local sentence_size = string.len(output_lines[cur_line])
+		local first_word = sentence_size > 0
+		local word_prefix = ""
+		word = string.upper(word)
+		if first_word
+		then
+			word_prefix = " "
+			sentence_size = sentence_size + 1
+		end
+		--Truncate oversized words
+		if string.len(word) > 20
+		then
+			word = word:sub(1, 20)
+		end
+		--Line steps
+		if sentence_size + string.len(word) > 20
+		then
+			cur_line = cur_line + 1
+			output_lines[cur_line] = ""
+			sentence_size = 0
+			if cur_line > 6 then
+				return output_lines
+			end
+		end
+		output_lines[cur_line] = output_lines[cur_line]..word_prefix..word
+	end
+	return output_lines
 end
 
 function numericLevelToWorldId(input)
@@ -13281,9 +13364,9 @@ function process_slot(block)
     then
         GVR:setTipHints(1)
     end
-	if block['slot_mr_hints_locations'] ~= nil
+	if block['slot_mr_tips_text'] ~= nil
 	then
-		applyCustomHintText(block['slot_mr_hints_locations'])
+		applyCustomTipText(block['slot_mr_tips_text'])
 	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then

@@ -958,10 +958,21 @@ class GloverWorld(World):
 
     def generate_hints(self):
         hint_groups = create_hints(self)
-        #Mr. Tip Hints
         self.mr_hints = hint_groups[0]
-        #Chicken Hints
         self.chicken_hints = hint_groups[1]
+        self.mr_tip_text = hint_groups[2]
+        if self.options.chicken_hints.value == 2:
+            self.vague_chicken_text = hint_groups[3]
+        else:
+            self.vague_chicken_text = {}
+
+    def generate_tip_text(self):
+        for each_tip in self.tip_locations:
+            tip_address = str(self.multiworld.get_location(each_tip, self.player).address)
+            if tip_address in self.mr_tip_text:
+                continue
+            #Create unique tip text
+            self.mr_tip_text[tip_address] = "SMG WAS HERE"
 
     def lua_world_name(self, original_name):
         lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]
@@ -997,8 +1008,11 @@ class GloverWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.build_options()
         self.generate_hints()
+        self.generate_tip_text()
         options["mr_hints_locations"] = self.mr_hints
+        options["mr_tips_text"] = self.mr_tip_text
         options["chicken_hints_locations"] = self.chicken_hints
+        options["vague_chicken_text"] = self.vague_chicken_text
         options["world_lookup"] = self.lua_world_entry_lookup_table()
         options["garib_order"] = self.lua_decoupled_garib_order()
         options["spawning_checkpoints"] = self.spawn_checkpoint
