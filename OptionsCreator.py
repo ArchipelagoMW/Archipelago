@@ -1,3 +1,9 @@
+if __name__ == "__main__":
+    import ModuleUpdate
+
+    ModuleUpdate.update()
+
+
 from kvui import (ThemedApp, ScrollBox, MainLayout, ContainerLayout, dp, Widget, MDBoxLayout, TooltipLabel, MDLabel,
                   ToggleButton, MarkupDropdown, ResizableTextField)
 from kivy.uix.behaviors.button import ButtonBehavior
@@ -330,6 +336,11 @@ class OptionsCreator(ThemedApp):
             box.range.slider.dropdown.open()
 
         box = VisualNamedRange(option=option, name=name, range_widget=self.create_range(option, name))
+        if option.default in option.special_range_names:
+            # value can get mismatched in this case
+            box.range.slider.value = min(max(option.special_range_names[option.default], option.range_start),
+                                               option.range_end)
+            box.range.tag.text = str(int(box.range.slider.value))
         box.range.slider.bind(on_touch_move=lambda _, _2: set_to_custom(box))
         items = [
             {
@@ -365,7 +376,7 @@ class OptionsCreator(ThemedApp):
             # for some reason this fixes an issue causing some to not open
             dropdown.open()
 
-        default_random = option.default == "random"
+        default_string = isinstance(option.default, str)
         main_button = VisualChoice(option=option, name=name)
         main_button.bind(on_release=open_dropdown)
 
@@ -377,7 +388,7 @@ class OptionsCreator(ThemedApp):
             for choice in option.name_lookup
         ]
         dropdown = MDDropdownMenu(caller=main_button, items=items)
-        self.options[name] = option.name_lookup[option.default] if not default_random else option.default
+        self.options[name] = option.name_lookup[option.default] if not default_string else option.default
         return main_button
 
     def create_text_choice(self, option: typing.Type[TextChoice], name: str):
@@ -560,8 +571,11 @@ class OptionsCreator(ThemedApp):
                 groups[group].append((name, option))
 
             for group, options in groups.items():
+                options = [(name, option) for name, option in options
+                           if name and option.visibility & Visibility.simple_ui]
                 if not options:
                     continue  # Game Options can be empty if every other option is in another group
+                    # Can also have an option group of options that should not render on simple ui
                 group_item = MDExpansionPanel(size_hint_y=None)
                 group_header = MDExpansionPanelHeader(MDListItem(MDListItemSupportingText(text=group),
                                                                  TrailingPressedIconButton(icon="chevron-right",
@@ -583,8 +597,7 @@ class OptionsCreator(ThemedApp):
                 group_box.layout.orientation = "vertical"
                 group_box.layout.spacing = dp(3)
                 for name, option in options:
-                    if name and option is not Removed and option.visibility & Visibility.simple_ui:
-                        group_content.add_widget(self.create_option(option, name, cls))
+                    group_content.add_widget(self.create_option(option, name, cls))
                 expansion_box.layout.add_widget(group_item)
             self.option_layout.add_widget(expansion_box)
         self.game_label.text = f"Game: {self.current_game}"
