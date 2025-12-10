@@ -12,7 +12,7 @@ import requests
 
 from .Socket import KH2Socket
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
-    SupportAbility_Table, ActionAbility_Table, all_weapon_slot
+    SupportAbility_Table, ActionAbility_Table, all_weapon_slot, Summon_Checks, popups_set
 from worlds.kh2.Names import ItemName
 from .WorldLocations import *
 
@@ -59,6 +59,8 @@ class KH2Context(CommonContext):
         self.donald_ability_to_slot = dict()
         self.all_weapon_location_id = None
         self.sora_ability_to_slot = dict()
+        self.number_of_abilities_sent = dict()
+        self.all_party_abilities = dict()
         self.kh2_seed_save = None
         self.kh2_local_items = None
         self.growthlevel = None
@@ -434,6 +436,7 @@ class KH2Context(CommonContext):
 
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
+            self.all_party_abilities = {**self.kh2slotdata['KeybladeAbilities'], **self.kh2slotdata['StaffAbilities'], **self.kh2slotdata['ShieldAbilities']}
 
             self.kh2_data_package = Utils.load_data_package_for_checksum(
                     "Kingdom Hearts 2", self.checksums["Kingdom Hearts 2"])
@@ -512,12 +515,23 @@ class KH2Context(CommonContext):
                 converted_items = list()
                 for item in args['items']:
                     name = self.lookup_id_to_item[item.item]
-                    if name not in self.kh2slotdata["KeybladeAbilities"] and \
-                        name not in self.kh2slotdata["StaffAbilities"] and \
-                        name not in self.kh2slotdata["ShieldAbilities"]:
-                        itemtosend = self.item_name_to_data[name]
-                        converted_items.append(itemtosend)
+                    itemtosend = self.item_name_to_data[name]
+                    if item.location not in self.check_location_IDs or item.location in Summon_Checks or \
+                        (item.location in popups_set and itemtosend.ability):
                         self.received_items_IDs.append(itemtosend)
+                        if itemtosend.ability and name not in self.master_growth:
+                            abilityfound = self.number_of_abilities_sent.get(name)
+                            print("test")
+                            if not abilityfound:
+                                self.number_of_abilities_sent[name] = 1
+                            else:
+                                self.number_of_abilities_sent[name] += 1
+                            print(self.number_of_abilities_sent[name])
+                            print(self.all_party_abilities.get(name))
+                            if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
+                                converted_items.append(itemtosend)
+                        else:
+                            converted_items.append(itemtosend)
                 if self.kh2connected:
                     #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
                     while not self.lookup_id_to_item:
