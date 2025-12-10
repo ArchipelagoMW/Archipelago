@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.region import RAC3REGION
 
 ##################################################
@@ -32,6 +33,8 @@ async def update(ctx: 'Context') -> None:
     await handle_planet_changed(ctx)
 
     ctx.game_interface.update()
+    # Check player respawn
+    await handle_respawn(ctx, False)
 
     # logger.info(f"Update is called")
 
@@ -111,6 +114,22 @@ async def handle_deathlink(ctx: 'Context') -> None:
             await ctx.send_death(message)
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
+
+async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
+    """Check if the player should respawn"""
+    if ctx.death_link and ctx.game_interface.action not in {0, 1, 2, 3, 4, 0x13, 0x1D, 0x2E, 0x32, 0x33, 0x34, 0x37,
+                                                              0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
+                                                              0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
+        return False # Todo: Action states
+    planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
+    if planet_data.ID > 55:
+        return False
+    if planet_data.PAUSE_ADDRESS is not None:  # Vid comics do not have a pause address
+        if ctx.game_interface.respawn_inputs() or skip_inputs:
+            ctx.game_interface.unpause_game()
+            ctx.game_interface.teleport_to_ship()
+            return True
+    return False
 
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""

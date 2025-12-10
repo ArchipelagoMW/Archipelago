@@ -635,25 +635,20 @@ class Rac3Interface(GameInterface):
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
 
-    def input_cycler(self):
-        planet_id = self._read8(RAC3STATUS.PLANET)
-        if planet_id > 55:
-            return
-        planet = PLANET_NAME_FROM_ID[planet_id]
-        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-        if pause_address is not None:  # Vid comics do not have a pause address
-            is_paused = self._read8(pause_address)
-            pressed_square = self._read16(RAC3STATUS.READ_INPUT) & RAC3INPUT.SQUARE
-            if is_paused and pressed_square:
-                self.unpause_game(planet)
-                self.teleport_to_ship(planet)
+    def pause_check(self):
+        pause_address = RAC3_REGION_DATA_TABLE[self.planet].PAUSE_ADDRESS
+        self.pause_menu = bool(self._read8(pause_address)) if pause_address else False
+        self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE))
+        match self.planet:
+            case RAC3REGION.QWARKS_HIDEOUT:
+                self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x40))
+            case (RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA |
+                  RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
+                self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x50))
 
-    def unpause_game(self, planet: str):
-        pause_address = RAC3_REGION_DATA_TABLE[planet].PAUSE_ADDRESS
-        if pause_address is not None:  # Vid comics do not have a pause address
-            is_paused = self._read8(pause_address)
-            if is_paused:
-                self.write_input(RAC3INPUT.START)
+    def unpause_game(self):
+        if self.pause_menu:
+            self.write_input(RAC3INPUT.START)
 
     def write_input(self, button: RAC3INPUT):
         left_shifted = (button & 0x00FF) << 8
@@ -662,21 +657,20 @@ class Rac3Interface(GameInterface):
         self._write16(RAC3STATUS.WRITE_INPUT_1, bitmasked)
         self._write16(RAC3STATUS.WRITE_INPUT_2, bitmasked)
 
-    def teleport_to_ship(self, planet: str):
-        if self.should_overwrite_respawn(planet) and planet in RESPAWN_COORDS_OFFSET.keys():
+    def teleport_to_ship(self):
+        if self.should_overwrite_respawn() and self.planet in RESPAWN_COORDS_OFFSET.keys():
             self._write_bytes(
-                RESPAWN_COORDS_OFFSET[planet] + RAC3STATUS.RESPAWN_BASE, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
-            logger.debug(f'Teleporting to ship on: {planet}')
+                RESPAWN_COORDS_OFFSET[self.planet] + RAC3STATUS.RESPAWN_BASE,
+                self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
+            logger.debug(f'Teleporting to ship on: {self.planet}')
         else:
-            logger.debug(f'Teleporting to last checkpoint on: {planet}')
+            logger.debug(f'Teleporting to last checkpoint on: {self.planet}')
         self.force_respawn()
 
-    def should_overwrite_respawn(self, planet: str):
-        is_clank = self._read8(RAC3STATUS.PLAYER_TYPE) == 1
-        in_vidcomic = planet in VIDCOMIC_REGIONS
-        if is_clank or in_vidcomic:
+    def should_overwrite_respawn(self):
+        if self.player_type in {RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.GIANT, RAC3PLAYERTYPE.QWARK}:
             return False
-        match planet:
+        match self.planet:
             # Todo: add more special cases
             case RAC3REGION.VELDIN:
                 return False  # Problems with F-sector
@@ -784,3 +778,7 @@ class Rac3Interface(GameInterface):
         else:
             logger.debug(f'player unable to be killed')
             return False
+
+    def respawn_inputs(self) -> bool:
+        pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
+        return self.pause_menu and pressed_square

@@ -8,9 +8,8 @@ from typing import Optional
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
 from Utils import Any, async_start, init_logging
 from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
-from worlds.rac3.client.callbacks import init, update
+from worlds.rac3.client.callbacks import handle_respawn, init, update
 from worlds.rac3.client.interface import Rac3Interface
-from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
@@ -139,12 +138,10 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            if RAC3_REGION_DATA_TABLE[self.ctx.current_planet].PAUSE_ADDRESS is not None:
-                self.ctx.game_interface.unpause_game(self.ctx.current_planet)
-                self.ctx.game_interface.teleport_to_ship(self.ctx.current_planet)
+            if handle_respawn(self.ctx, True):
                 self.output(f'Player respawned on {self.ctx.current_planet}')
             else:
-                self.output(f'Ship teleport is disabled on {self.ctx.current_planet}')
+                self.output(f'Player cannot respawn right now')
 
 
 class Rac3Context(CommonContext):
