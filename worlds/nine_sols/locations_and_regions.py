@@ -152,7 +152,7 @@ def create_regions(world: "NineSolsWorld") -> None:
 
     # start by ensuring every region is a key in region_data_table
     locations_to_create = {k: v for k, v in location_data_table.items()
-                           if should_generate(v.category, options)}
+                           if should_generate(v.category, world)}
 
     for ld in locations_to_create.values():
         region_name = ld.region
@@ -160,7 +160,7 @@ def create_regions(world: "NineSolsWorld") -> None:
             region_data_table[region_name] = NineSolsRegionData()
 
     connections_to_create = [c for c in connections_data
-                             if should_generate(c["category"] if "category" in c else None, options)]
+                             if should_generate(c["category"] if "category" in c else None, world)]
 
     for cd in connections_to_create:
         if cd["from"] not in region_data_table:

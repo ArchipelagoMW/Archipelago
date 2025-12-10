@@ -1,13 +1,17 @@
-from .options import NineSolsGameOptions, LogicDifficulty
+import typing
+from .options import LogicDifficulty
+
+if typing.TYPE_CHECKING:
+    from . import NineSolsWorld
 
 
-def should_generate(category: str | None, options: NineSolsGameOptions) -> bool:
+def should_generate(category: str | None, world: "NineSolsWorld") -> bool:
     if category is None:  # this item/location/connection gets generated no matter what the player options are
         return True
     elif '&' in category:
-        return all(should_generate(c, options) for c in category.split('&'))
+        return all(should_generate(c, world) for c in category.split('&'))
     elif '|' in category:
-        return any(should_generate(c, options) for c in category.split('|'))
+        return any(should_generate(c, world) for c in category.split('|'))
     elif category == "medium_logic":
-        return options.logic_difficulty >= LogicDifficulty.option_medium
+        return world.options.logic_difficulty >= LogicDifficulty.option_medium
     raise ValueError(f'Invalid category: {category}')

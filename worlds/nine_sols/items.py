@@ -114,7 +114,7 @@ def create_items(world: "NineSolsWorld") -> None:
     options = world.options
     player = world.player
 
-    items_to_create = {k: v for k, v in item_data_table.items() if should_generate(v.category, options)}
+    items_to_create = {k: v for k, v in item_data_table.items() if should_generate(v.category, world)}
 
     prog_and_useful_items: list[NineSolsItem] = []
     unique_filler: list[NineSolsItem] = []
