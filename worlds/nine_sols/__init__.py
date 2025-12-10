@@ -30,9 +30,6 @@ class NineSolsWorld(World):
     game = "Nine Sols"
     web = NineSolsWebWorld()
 
-    jade_costs = 'vanilla'
-    # TODO: alternate spawns, etc
-
     # this is how we tell the Universal Tracker we want to use re_gen_passthrough
     @staticmethod
     def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
@@ -48,6 +45,10 @@ class NineSolsWorld(World):
         "map_page_setting_key": "{player}_{team}_nine_sols_area",
         "map_page_index": map_page_index
     }
+
+    def __init__(self, multiworld, player):
+        super(NineSolsWorld, self).__init__(multiworld, player)
+        self.jade_costs = 'vanilla'
 
     def generate_early(self) -> None:
         if self.options.jade_cost_max < self.options.jade_cost_min:
