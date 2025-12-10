@@ -399,13 +399,19 @@ class GloverWorld(World):
                         spawning_options[10] = [1, 2]
                         #Fear 1 (Ball Gate)
                         spawning_options[12] = [1, 2]
+                        #Space 3 (Glass Gate)
+                        spawning_options[17] = [1, 2, 3]
                     #Easy/Intended Locks
                     if self.options.difficulty_logic.value <= 1:
                         #Prehistoric 3 (Lava Platforms)
                         spawning_options[11] = [1, 2]
                         #Fear 2 (Lever Room)
                         spawning_options[13] = [1, 2]
-
+            print(spawning_options)
+            for each_index, each_entry in enumerate(spawning_options):
+                spawning_options[each_index] = [max(each_entry)]
+            print(spawning_options)
+            
             for each_index, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
         else:

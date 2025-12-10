@@ -114,7 +114,9 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
     methods : List[AccessMethod] = []
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
-        methods.append(create_access_method(check_method, level_name))
+        new_method = create_access_method(self, check_method, level_name)
+        if new_method != None:
+            methods.append(new_method)
     #Only create if there's a method for it
     methods = remove_higher_difficulty_methods(self, methods)
     if len(methods) == 0:
@@ -176,14 +178,18 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         if index == 0:
             continue
         #All other entries are methods
-        ball_region_methods.append(create_access_method(check_pairing, level_name))
+        new_method = create_access_method(self, check_pairing, level_name)
+        if new_method != None:
+            ball_region_methods.append(new_method)
     
     no_ball_region = Region(region_name, player, multiworld, level_name)
     for index, check_pairing in enumerate(check_info["D"]):
         #Skip the settings entry
         if index == 0:
             continue
-        no_ball_region_methods.append(create_access_method(check_pairing, level_name))
+        new_method = create_access_method(self, check_pairing, level_name)
+        if new_method != None:
+            no_ball_region_methods.append(new_method)
     
     #Ball regions that work
     ball_region_exists : bool = False
@@ -192,7 +198,7 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         multiworld.regions.append(ball_region)
         ball_region_exists = True
         ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), ball_region_methods))
-    
+
     #No ball regions that exist
     no_ball_region_exists : bool = False
     no_ball_region_methods = remove_higher_difficulty_methods(self, no_ball_region_methods)
@@ -200,7 +206,7 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         multiworld.regions.append(no_ball_region)
         no_ball_region_exists = True
         no_ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), no_ball_region_methods))
-    
+
     return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, ball_region_exists, no_ball_region_exists)
 
 def self_ref_region(check_method : AccessMethod, base_region : int, base_ball : bool) -> bool:
@@ -218,6 +224,8 @@ def connect_region_pairs(self : GloverWorld, pairs : List[RegionPair]):
             pair_ball_connections : dict[Region, list[AccessMethod]] = {}
             for each_method in each_pair.ball_region_methods:
                 region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if region_to_connect == None:
+                    continue
                 if not region_to_connect in pair_ball_connections.keys():
                     pair_ball_connections[region_to_connect] = [each_method]
             #Create the rules using methods
@@ -230,6 +238,8 @@ def connect_region_pairs(self : GloverWorld, pairs : List[RegionPair]):
             pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
             for each_method in each_pair.no_ball_region_methods:
                 region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if region_to_connect == None:
+                    continue
                 if not region_to_connect in pair_no_ball_connections.keys():
                     pair_no_ball_connections[region_to_connect] = [each_method]
             no_ball_region = multiworld.get_region(each_pair.name, player)
@@ -284,20 +294,26 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
             entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
             #The default checkpoint's always useable
             if default_checkpoint != checkpoint_number:
+                print(checkpoint_name + " bridges to " + connecting_region.name)
                 #Other ones need the checkpoint item
-                print(checkpoint_name)
                 set_rule(entrance, lambda state : state.has(checkpoint_name, player))
+            else:
+                print("Spawning checkpoint is " + checkpoint_name + ", bridging to " + connecting_region.name)
 
     multiworld.regions.append(region)
     return RegionLevel(level_name, default_checkpoint, map_regions)
 
-def create_access_method(info : dict, level_name : str) -> AccessMethod:
+def create_access_method(self, info : dict, level_name : str) -> AccessMethod:
     required_moves : list = []
     for each_key, each_result in info.items():
         if each_key.startswith("mv"):
-            required_moves.append(move_lookup[each_result])
+            each_move = move_lookup[each_result]
+            required_moves.append(each_move)
         if each_key.startswith("ck"):
             required_moves.append(level_name + " " + each_result)
+    #Remove Power Ball methods
+    if "Power Ball" in required_moves and not self.options.include_power_ball:
+        return None
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
     if "Not Bowling" in required_moves and "Not Crystal" in required_moves:
         required_moves.remove("Not Bowling")
@@ -455,7 +471,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 location : Location = Location(player, each_location_data.name, address, region_for_use)
                 region_for_use.locations.append(location)
                 if not rules_applied:
-                        access_methods_to_rules(self, each_location_data.methods, location)
+                    access_methods_to_rules(self, each_location_data.methods, location)
                 match each_location_data.type:
                     #Switches with no paired level event store their level event 
                     #items as event items rather than AP items.
@@ -477,6 +493,11 @@ def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs :
         if method.ball_in_region:
             lookup_name += " W/Ball"
         if each_pair.base_id == method.region_index:
+            if method.ball_in_region:
+                if not each_pair.ball_region_exists:
+                    return None
+            elif not each_pair.no_ball_region_exists:
+                return None
             return multiworld.get_region(lookup_name, player)
     raise IndexError(region_pairs[0].name.split(':')[0] + " method calls for region indexed " + str(method.region_index) + " that does not exist!")
 
@@ -501,6 +522,9 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             map_regions : List[RegionPair] = []
             location_data_list : List[LocationData] = []
             
+            print(level_name)
+            print(checkpoint_entry_pairs)
+
             #Bonus levels
             if not (level_index == 5 and not self.options.bonus_levels):
                 for check_name in each_level:
@@ -512,12 +536,6 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                     if type(check_info) is dict:
                         new_region_pair = create_region_pair(self, check_info, check_name, level_name)
                         map_regions.append(new_region_pair)
-                        #You get the one from checkpoints by default
-                        region_checkpoints = []
-                        for check_index in range(1, len(checkpoint_entry_pairs)):
-                            matching_index = checkpoint_entry_pairs[check_index]
-                            if matching_index == check_info["I"]:
-                                region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))

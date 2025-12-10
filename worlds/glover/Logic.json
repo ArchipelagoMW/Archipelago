@@ -7845,18 +7845,6 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Spin Door",
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"ck0": "Hands",
-						"regionIndex": 13,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
 						"regionIndex": 4,
 						"trickDifficulty": 0
 					},
@@ -7875,6 +7863,24 @@
 						"mv2": 32,
 						"regionIndex": 13,
 						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 27,
+						"regionIndex": 12,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Spin Door",
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Hands",
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -17817,6 +17823,18 @@
 						"mv0": 15,
 						"regionIndex": 18,
 						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 13,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -19481,6 +19499,18 @@
 						"mv3": 15,
 						"regionIndex": 14,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 26,
+						"regionIndex": 13,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 11,
+						"regionIndex": 13,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -20991,6 +21021,7 @@
 					},
 					{
 						"ballRequirement": true,
+						"ck0": "Lava Spinning",
 						"mv0": 8,
 						"mv1": 13,
 						"regionIndex": 9,
@@ -21004,12 +21035,43 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 32,
-						"mv1": 8,
-						"mv2": 25,
-						"mv3": 3,
+						"mv0": 8,
+						"mv1": 2,
+						"mv2": 10,
+						"mv3": 13,
+						"mv4": 27,
+						"regionIndex": 9,
+						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 12,
+						"mv1": 13,
+						"mv2": 26,
+						"mv3": 25,
+						"mv4": 4,
+						"mv5": 27,
 						"regionIndex": 9,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 2,
+						"mv1": 12,
+						"mv2": 27,
+						"regionIndex": 9,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 8,
+						"mv1": 32,
+						"mv2": 10,
+						"mv3": 2,
+						"regionIndex": 9,
+						"trickDifficulty": 1
 					}
 				],
 				"D": [
@@ -21037,6 +21099,12 @@
 					{
 						"ballRequirement": false,
 						"regionIndex": 11,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 2,
+						"regionIndex": 9,
 						"trickDifficulty": 0
 					}
 				],
@@ -21109,12 +21177,6 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Lava Spinning",
-						"regionIndex": 9,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
 						"mv0": 8,
 						"mv1": 32,
 						"regionIndex": 9,
@@ -21145,6 +21207,12 @@
 						"mv2": 27,
 						"regionIndex": 7,
 						"trickDifficulty": 2
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"regionIndex": 9,
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -21211,37 +21279,23 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Lava Spinning",
-						"mv0": 8,
-						"mv1": 13,
+						"mv0": 25,
+						"mv1": 2,
+						"mv2": 8,
+						"mv3": 10,
+						"mv4": 13,
 						"regionIndex": 0,
-						"trickDifficulty": 0
+						"trickDifficulty": 1
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Lava Spinning",
-						"mv0": 8,
-						"mv1": 32,
-						"mv2": 27,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"ck0": "Lava Spinning",
-						"mv0": 11,
-						"mv1": 25,
-						"mv2": 26,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
-						"ck0": "Lava Spinning",
-						"mv0": 12,
-						"mv1": 25,
-						"regionIndex": 0,
-						"trickDifficulty": 0
+						"mv0": 25,
+						"mv1": 8,
+						"mv2": 2,
+						"mv3": 10,
+						"mv4": 13,
+						"regionIndex": 10,
+						"trickDifficulty": 1
 					},
 					{
 						"ballRequirement": true,
@@ -21292,19 +21346,34 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 8,
-						"mv1": 13,
-						"mv2": 10,
-						"mv3": 2,
-						"mv4": 25,
-						"regionIndex": 10,
-						"trickDifficulty": 1
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"mv1": 12,
+						"regionIndex": 0,
+						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 25,
+						"mv1": 11,
+						"mv2": 26,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
 						"mv0": 32,
 						"mv1": 8,
-						"regionIndex": 10,
+						"regionIndex": 0,
+						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": true,
+						"ck0": "Lava Spinning",
+						"mv0": 8,
+						"mv1": 14,
+						"regionIndex": 0,
 						"trickDifficulty": 0
 					}
 				],
@@ -31162,9 +31231,11 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Glass Gate",
+						"mv0": 15,
+						"mv1": 25,
+						"mv2": 2,
 						"regionIndex": 17,
-						"trickDifficulty": 0
+						"trickDifficulty": 1
 					},
 					{
 						"ballRequirement": true,
@@ -31175,11 +31246,9 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 15,
-						"mv1": 25,
-						"mv2": 2,
+						"ck0": "Glass Gate",
 						"regionIndex": 17,
-						"trickDifficulty": 1
+						"trickDifficulty": 0
 					}
 				],
 				"D": [
@@ -31786,7 +31855,6 @@
 					},
 					{
 						"ballRequirement": true,
-						"ck0": "Hazard Gate",
 						"regionIndex": 1,
 						"trickDifficulty": 0
 					}
