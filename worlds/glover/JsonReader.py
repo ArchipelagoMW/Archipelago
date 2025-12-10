@@ -271,23 +271,21 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
         for each_region_pair in map_regions:
             #If the checkpoint leads to that region
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
-                print(checkpoint_entry_pairs)
                 if start_without_ball:
                     #And it exists
                     if each_region_pair.no_ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name, player)
-                        print(each_region_pair.name)
                 else:
                     #And it exists
                     if each_region_pair.ball_region_exists:
                         connecting_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
-                        print(each_region_pair.name)
         
         if connecting_region != None:
             entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
             #The default checkpoint's always useable
             if default_checkpoint != checkpoint_number:
                 #Other ones need the checkpoint item
+                print(checkpoint_name)
                 set_rule(entrance, lambda state : state.has(checkpoint_name, player))
 
     multiworld.regions.append(region)
@@ -305,8 +303,8 @@ def create_access_method(info : dict, level_name : str) -> AccessMethod:
         required_moves.remove("Not Bowling")
         required_moves.remove("Not Crystal")
         required_moves.append("Not Bowling or Crystal")
-    #Make sure there's a jump required for double jumps and fist slams
-    if not "Jump" in required_moves and ("Double Jump" in required_moves or "Fist Slam" in required_moves):
+    #Make sure there's a jump required for double jumps
+    if not "Jump" in required_moves and ("Double Jump" in required_moves):
         required_moves.append("Jump")
     #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
@@ -519,7 +517,6 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                         for check_index in range(1, len(checkpoint_entry_pairs)):
                             matching_index = checkpoint_entry_pairs[check_index]
                             if matching_index == check_info["I"]:
-                                print(matching_index)
                                 region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             
             #Sort the in-level regions

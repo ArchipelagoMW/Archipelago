@@ -118,15 +118,26 @@ switches_to_event_items = {
 }
 
 def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
-    valid_methods = []
+    nonblank_methods = []
     for each_method in all_methods:
         if len(each_method.required_items) == 0:
             continue
-        valid_methods.append(each_method)
-    #If there's no valid methods, it must be open
-    if len(valid_methods) == 0:
+        nonblank_methods.append(each_method)
+    #If there's no nonblank methods at this step, it must be open
+    if len(nonblank_methods) == 0:
         return
     
+    #Remove all methods that require the power ball
+    valid_methods = []
+    for each_method in nonblank_methods:
+        if "Power Ball" in each_method.required_items and not self.options.include_power_ball:
+            continue
+        valid_methods.append(each_method)
+    #If there's no valid methods at this step, it must be closed
+    if len(valid_methods) == 0:
+        set_rule(spot, False)
+        return
+
     #Otherwise, go over each valid method and assign
     for index, each_method in enumerate(valid_methods):
         #Start with the rule set
