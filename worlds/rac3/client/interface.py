@@ -742,6 +742,7 @@ class Rac3Interface(GameInterface):
     def alive(self) -> tuple[bool, str]:
         if not self.action:
             return True, "alive"
+        
         is_dead = (self.health == 0
                    or (self.player_type == RAC3PLAYERTYPE.GIANT and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0))
         is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
@@ -755,6 +756,11 @@ class Rac3Interface(GameInterface):
 
         if self.action == 0x31 and self.vehicle:  # Eaten or in vehicle
             death = False
+        
+        if self.vehicle:
+            vehicle_blown_up = self._read8(self.vehicle + 0xBC) == 0xA  # 0xA: vehicle blown up, waiting for respawn
+            if vehicle_blown_up:
+                death = 'Stayed in a blowing up vehicle'
 
         # Special case for Nefarious's Base pitfall which doesn't set action state to death
         if in_nefarious_base and is_clank:
