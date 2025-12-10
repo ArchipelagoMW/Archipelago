@@ -89,9 +89,8 @@ Vous n'avez qu'à faire ces étapes qu'une fois.
 1. Entrez dans le menu principal RetroArch
 2. Allez dans Réglages --> Interface utilisateur. Mettez "Afficher les réglages avancés" sur ON.
 3. Allez dans Réglages --> Réseau. Mettez "Commandes Réseau" sur ON. (trouvé sous Request Device 16.) Laissez le 
-Port des commandes réseau à 555355.
-
-![Screenshot of Network Commands setting](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-fr.png)
+   Port des commandes réseau à 555355. \
+   ![Screenshot of Network Commands setting](../../generic/docs/retroarch-network-commands-fr.png)
 4. Allez dans Menu Principal --> Mise à jour en ligne --> Téléchargement de cœurs. Descendez jusqu'a"Nintendo - SNES / SFC (bsnes-mercury Performance)" et 
    sélectionnez le.
 
