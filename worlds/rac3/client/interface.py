@@ -610,7 +610,7 @@ class Rac3Interface(GameInterface):
             logger.debug(f'level up {weapon_name} to {target_name}, target level: {current_level}, '
                          f'target id: {target_id}, target xp:{target_xp}')
             self._write32(weapon_data.XP_ADDRESS, target_xp)
-            self._write8(weapon_data.LEVEL_ADDRESS, target_level)
+            self._write8(weapon_data.LEVEL_ADDRESS, target_id)
 
     # Equip the most recently collected weapon/gadget, update recent uses
     def update_equip(self, name: str):
