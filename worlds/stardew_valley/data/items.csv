@@ -224,7 +224,7 @@ id,name,classification,groups,content_packs
 239,Sewing Machine,progression,"SPECIAL_ORDER_BOARD",
 240,Coffee Maker,progression,"SPECIAL_ORDER_BOARD,FILLER_MACHINE",
 241,Mini-Fridge,useful,"SPECIAL_ORDER_BOARD,FILLER_STORAGE",
-242,Mini-Shipping Bin,progression,"SPECIAL_ORDER_BOARD,FILLER_MACHINE",
+242,Mini-Shipping Bin,useful,"SPECIAL_ORDER_BOARD,FILLER_MACHINE",
 243,Deluxe Fish Tank,useful,"SPECIAL_ORDER_BOARD,FILLER_DECORATION",
 244,10 Qi Gems,progression,"GINGER_ISLAND,SPECIAL_ORDER_QI",
 245,20 Qi Gems,progression,"GINGER_ISLAND,SPECIAL_ORDER_QI",
