@@ -155,6 +155,10 @@ def set_rules(self) -> None:
                             return True
             check_foresta(loc.parent_region)
 
+    if self.options.map_shuffle or self.options.crest_shuffle:
+        process_rules(self.multiworld.get_entrance("Subregion Frozen Fields to Subregion Aquaria", self.player),
+                      ["SummerAquaria"])
+
     if self.options.logic == "friendly":
         process_rules(self.multiworld.get_entrance("Overworld - Ice Pyramid", self.player),
                       ["MagicMirror"])

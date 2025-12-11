@@ -7,10 +7,11 @@ import warnings
 import zipimport
 import time
 import dataclasses
+import json
 from typing import List
 
 from NetUtils import DataPackage
-from Utils import local_path, user_path, Version, version_tuple
+from Utils import local_path, user_path, Version, version_tuple, tuplize_version
 
 local_folder = os.path.dirname(__file__)
 user_folder = user_path("worlds") if user_path() != local_path() else user_path("custom_worlds")
@@ -111,7 +112,24 @@ for world_source in world_sources:
     else:
         world_source.load()
 
+
 from .AutoWorld import AutoWorldRegister
+
+for world_source in world_sources:
+    if not world_source.is_zip:
+        # look for manifest
+        manifest = {}
+        for dirpath, dirnames, filenames in os.walk(world_source.resolved_path):
+            for file in filenames:
+                if file.endswith("archipelago.json"):
+                    with open(os.path.join(dirpath, file), mode="r", encoding="utf-8") as manifest_file:
+                        manifest = json.load(manifest_file)
+                    break
+            if manifest:
+                break
+        game = manifest.get("game")
+        if game in AutoWorldRegister.world_types:
+            AutoWorldRegister.world_types[game].world_version = tuplize_version(manifest.get("world_version", "0.0.0"))
 
 if apworlds:
     # encapsulation for namespace / gc purposes
@@ -164,6 +182,10 @@ if apworlds:
                            add_as_failed_to_load=False)
             else:
                 apworld_source.load()
+                if apworld.game in AutoWorldRegister.world_types:
+                    # world could fail to load at this point
+                    if apworld.world_version:
+                        AutoWorldRegister.world_types[apworld.game].world_version = apworld.world_version
     load_apworlds()
     del load_apworlds
 

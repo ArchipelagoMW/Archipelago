@@ -257,7 +257,7 @@ class KeybladeStats(Choice):
     """
     Determines whether Keyblade stats should be randomized.
     
-    Randomize: Randomly generates STR and MP bonuses for each keyblade between the defined minimums and maximums.
+    Randomize: Randomly generates stats for each keyblade between the defined minimums and maximums.
     
     Shuffle: Shuffles the stats of the vanilla keyblades amongst each other.
     
@@ -547,9 +547,9 @@ class RemoteItems(Choice):
 
 class Slot2LevelChecks(Range):
     """
-    Determines how many levels have an additional item.  Usually, this item is an ability.
+    Determines how many levels have an additional item.
     
-    If Remote Items is OFF, these checks will only contain abilities.
+    If Remote Items is OFF, these checks will only contain abilities or items for other players.
     """
     display_name = "Slot 2 Level Checks"
     default = 0
@@ -589,7 +589,7 @@ class OrichalcumInPool(Range):
     
     You need 17 to synth every recipe that requires it.
     """
-    display_name = "Mythril In Pool"
+    display_name = "Orichalcum In Pool"
     default = 20
     range_start = 17
     range_end = 30

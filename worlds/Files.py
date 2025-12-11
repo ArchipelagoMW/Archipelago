@@ -21,6 +21,10 @@ if TYPE_CHECKING:
     from Utils import Version
 
 
+class ImproperlyConfiguredAutoPatchError(Exception):
+    pass
+
+
 class AutoPatchRegister(abc.ABCMeta):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
@@ -30,8 +34,28 @@ class AutoPatchRegister(abc.ABCMeta):
         new_class = super().__new__(mcs, name, bases, dct)
         if "game" in dct:
             AutoPatchRegister.patch_types[dct["game"]] = new_class
-            if not dct["patch_file_ending"]:
-                raise Exception(f"Need an expected file ending for {name}")
+
+            if not callable(getattr(new_class, "patch", None)):
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Container {new_class} uses metaclass AutoPatchRegister, but does not have a patch method defined."
+                )
+
+            patch_file_ending = dct.get("patch_file_ending")
+            if patch_file_ending == ".zip":
+                raise ImproperlyConfiguredAutoPatchError(
+                    f'Auto patch container {new_class} uses file ending ".zip", which is not allowed.'
+                )
+            if patch_file_ending is None:
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Need an expected file ending for auto patch container {new_class}"
+                )
+
+            existing_handler = AutoPatchRegister.file_endings.get(patch_file_ending)
+            if existing_handler:
+                raise ImproperlyConfiguredAutoPatchError(
+                    f"Two auto patch containers are using the same file extension: {new_class}, {existing_handler}"
+                )
+
             AutoPatchRegister.file_endings[dct["patch_file_ending"]] = new_class
         return new_class
 
@@ -69,7 +93,7 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
             return handler
 
 
-container_version: int = 6
+container_version: int = 7
 
 
 def is_ap_player_container(game: str, data: bytes, player: int):
@@ -175,17 +199,18 @@ class APWorldContainer(APContainer):
     maximum_ap_version: "Version | None" = None
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
-        from Utils import tuplize_version, Version
+        from Utils import tuplize_version
         manifest = super().read_contents(opened_zipfile)
         self.game = manifest["game"]
         for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             if version_key in manifest:
-                setattr(self, version_key, Version(*tuplize_version(manifest[version_key])))
+                setattr(self, version_key, tuplize_version(manifest[version_key]))
         return manifest
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super().get_manifest()
         manifest["game"] = self.game
+        manifest["compatible_version"] = 7
         for version_key in ("world_version", "minimum_ap_version", "maximum_ap_version"):
             version = getattr(self, version_key)
             if version:
