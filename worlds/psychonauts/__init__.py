@@ -178,6 +178,13 @@ class PSYWorld(World):
         extra_rank_count = 80
         item_counts[ItemName.PsiCard] += extra_rank_count
 
+    @staticmethod
+    def _add_figment_percentage_items(item_counts: Dict[str, int]):
+        # Add PSI Cards to the pool to fill figment percentage checks
+        # Can be called multiple times for each 20 percent threshold
+        percentage_count = 10
+        item_counts[ItemName.PsiCard] += percentage_count
+
     def create_items(self):
         """
         Fills ItemPool 
@@ -215,6 +222,24 @@ class PSYWorld(World):
         if self.options.RankSanity:
             self._add_rank_sanity_items(adjusted_item_counts)
 
+        # Add items for FigmentPercentageChecks
+        # Call this each time to add 10 items to the pool for every 20 percent required
+        # 20 Percent
+        if self.options.FigmentPercentageChecks.value >= 1:
+            self._add_figment_percentage_items(adjusted_item_counts)
+        # 40 Percent
+        if self.options.FigmentPercentageChecks.value >= 2:
+            self._add_figment_percentage_items(adjusted_item_counts)
+        # 60 Percent
+        if self.options.FigmentPercentageChecks.value >= 3:
+            self._add_figment_percentage_items(adjusted_item_counts)
+        # 80 Percent
+        if self.options.FigmentPercentageChecks.value >= 4:
+            self._add_figment_percentage_items(adjusted_item_counts)
+        # 100 Percent
+        if self.options.FigmentPercentageChecks.value >= 5:
+            self._add_figment_percentage_items(adjusted_item_counts)   
+
         # Create the initial item pool.
         item_pool = list(map(self.create_item, repeated_item_names_gen(ITEM_DICTIONARY, adjusted_item_counts)))
 
@@ -247,6 +272,16 @@ class PSYWorld(World):
         Regions.connect_regions(self.multiworld, self.player)
         Regions.place_events(self)
 
+        if self.options.FigmentPercentageChecks.value >= 1:
+            Regions.create_figments_20_locations(self.multiworld, self.player)
+        if self.options.FigmentPercentageChecks.value >= 2:
+            Regions.create_figments_40_locations(self.multiworld, self.player)
+        if self.options.FigmentPercentageChecks.value >= 3:
+            Regions.create_figments_60_locations(self.multiworld, self.player)
+        if self.options.FigmentPercentageChecks.value >= 4:
+            Regions.create_figments_80_locations(self.multiworld, self.player)
+        if self.options.FigmentPercentageChecks.value == 5:
+            Regions.create_figments_100_locations(self.multiworld, self.player)
         if self.options.DeepArrowheadShuffle:
             Regions.create_deep_arrowhead_locations(self.multiworld, self.player)
         if self.options.MentalCobwebShuffle:

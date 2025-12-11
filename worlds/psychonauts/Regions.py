@@ -446,6 +446,8 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
     RegionName.MMDM: [
         LocationName.MilkmanComplete,
     ],
+    RegionName.MMDMRollingPin: [
+    ],
 
     # Gloria's Theater
     RegionName.THMS: [
@@ -687,6 +689,7 @@ def create_mental_cobweb_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, mctc_cobwebs)
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, mctc_escort_cobwebs)
 
+
 def create_20_rank_locations(multiworld: MultiWorld, player: int):
     # Adds locations for every Five Ranks earned
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK2to20, FIVE_RANK_20_CHECKS)
@@ -695,6 +698,7 @@ def create_20_rank_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK61to80, FIVE_RANK_80_CHECKS)
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK81to101, FIVE_RANK_101_CHECKS)
 
+
 def create_100_rank_locations(multiworld: MultiWorld, player: int):
     # Adds locations for EVERY Rank earned
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK2to20, RANK_20_CHECKS)
@@ -702,6 +706,77 @@ def create_100_rank_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK41to60, RANK_60_CHECKS)
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK61to80, RANK_80_CHECKS)
     _add_locations_to_existing_region(multiworld, player, RegionName.RANK81to101, RANK_101_CHECKS)
+
+
+def create_figments_20_locations(multiworld: MultiWorld, player: int):
+    # Adds locations to each mind for finding 20 percent of figments
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA1, {LocationName.BBFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, {LocationName.SAFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THMS, {LocationName.THFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments20})
+
+
+def create_figments_40_locations(multiworld: MultiWorld, player: int):
+    # Adds locations to each mind for finding 40 percent of figments
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA1, {LocationName.BBFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, {LocationName.SAFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THMS, {LocationName.THFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments40})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments40})
+
+
+def create_figments_60_locations(multiworld: MultiWorld, player: int):
+    # Adds locations to each mind for finding 60 percent of figments
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA1, {LocationName.BBFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, {LocationName.SAFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THMS, {LocationName.THFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments60})
+
+
+def create_figments_80_locations(multiworld: MultiWorld, player: int):
+    # Adds locations to each mind for finding 80 percent of figments
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA1, {LocationName.BBFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, {LocationName.SAFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THMS, {LocationName.THFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments80})
+
+
+def create_figments_100_locations(multiworld: MultiWorld, player: int):
+    # Adds locations to each mind for finding 100 percent of figments
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA2Duster, {LocationName.BBFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACULev, {LocationName.SAFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIBA, {LocationName.NIFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMAShield, {LocationName.LOFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLevPyro, {LocationName.WWFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVESBoss, {LocationName.BVFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments100})
+
 
 def create_psyregions(multiworld: MultiWorld, player: int):
     # Create all default regions.
@@ -802,6 +877,7 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.MMI1Hedgetrimmers: {RegionName.MMI1RollingPin},
         RegionName.MMI2: {RegionName.MMI1Powerlines},
         RegionName.MMI1Powerlines: {RegionName.MMDM},
+        RegionName.MMDM: {RegionName.MMDMRollingPin},
 
         # Gloria's Theater
         RegionName.THMS: {RegionName.THMSLev, RegionName.THMSDuster},

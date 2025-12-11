@@ -98,6 +98,20 @@ class RequireMeatCircus(DefaultOnToggle):
     """Require finishing Meat Circus Final Bosses in addition to your goal."""
     display_name = "Require Meat Circus"
 
+class FigmentPercentageChecks(Choice):
+    """Controls the maximum percentage of figments needed from each mind that will send checks.
+
+    One check is sent for every 20 percent of figments found in each mind, up to the maximum set here.
+
+    If set to 0, no figment collecting is required."""
+    display_name = "Figment Percentage Max"
+    option_0_percent = 0
+    option_20_percent = 1
+    option_40_percent = 2
+    option_60_percent = 3
+    option_80_percent = 4
+    option_100_percent = 5
+    default = 0
 
 class DeepArrowheadShuffle(Toggle):
     """Add Deep Arrowhead checks and shuffle the Dowsing Rod and extra Arrowhead Bundles into the item pool.
@@ -138,6 +152,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     Goal: Goal
     BrainsRequired: BrainsRequired
     RequireMeatCircus: RequireMeatCircus
+    FigmentPercentageChecks: FigmentPercentageChecks
     DeepArrowheadShuffle: DeepArrowheadShuffle
     MentalCobwebShuffle: MentalCobwebShuffle
     RankSanity: RankSanity
@@ -154,6 +169,7 @@ SLOT_DATA_OPTIONS: List[str] = [
     "Goal",
     "BrainsRequired",
     "RequireMeatCircus",
+    "FigmentPercentageChecks",
     "DeepArrowheadShuffle",
     "MentalCobwebShuffle",
     "RankSanity",

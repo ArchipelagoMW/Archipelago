@@ -189,6 +189,8 @@ class PsyRules:
 
             RegionName.MMDM: lambda state: self.has_invisibility(state) and self.has_telekinesis(state),
 
+            RegionName.MMDMRollingPin: lambda state: self.has_hedge_trimmers(state) and self.has_rolling_pin(state),
+
             RegionName.THMS: self.has_gloria_mind,
 
             RegionName.THMSLev: self.has_levitation,

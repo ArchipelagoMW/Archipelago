@@ -157,7 +157,8 @@ PSYCHORANDO_ITEM_TABLE: Dict[str, int] = {
     # 110 Psicards, filler item, increase if adding more positions
     # 54 are added for Cobweb Shuffle
     # 80 are added for Rank Sanity
-    ItemName.PsiCard: 110 + 54 + 80,
+    # 50 are added for Figment Percentage Checks
+    ItemName.PsiCard: 110 + 54 + 80 + 50,
 
     # AP Placeholders, 318 total.
     # These have no corresponding AP item and are assumed to always be last in PsychoRando's item order.
