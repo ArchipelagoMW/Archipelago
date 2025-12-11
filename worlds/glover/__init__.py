@@ -3,6 +3,7 @@ import math
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
+from Options import OptionError
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
@@ -305,16 +306,30 @@ class GloverWorld(World):
                 self.wayroom_entrances.insert(19, "Pht?")
                 self.wayroom_entrances.insert(24, "FoF?")
                 self.wayroom_entrances.insert(29, "Otw?")
-        #for each_entry in self.options.entrance_overrides:
-        #    index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
-        #    original_world = self.wayroom_entrances[index]
-        #    original_index = self.wayroom_entrances.index(each_entry["level"])
-        #    self.wayroom_entrances[index] = each_entry["level"]
-        #    self.wayroom_entrances[original_index] = original_world
+            
+            #Override randomized entrances here
+            for each_entry in self.options.entrance_overrides:
+                index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
+                original_world = self.wayroom_entrances[index]
+                original_index = self.wayroom_entrances.index(each_entry["level"])
+                self.wayroom_entrances[index] = each_entry["level"]
+                self.wayroom_entrances[original_index] = original_world
             
         #Random Garib Sorting Order
         if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
+            #Override the garib order
+            for each_level, each_placement in self.options.garib_order_overrides.items():
+                level_in_slot = self.garib_level_order[each_placement]
+                original_placement = -1
+                original_level = []
+                #BBB
+                for original_index, each_original in enumerate(self.garib_level_order):
+                    if each_original[0] == each_level:
+                        original_placement = original_index
+                        original_level = each_original
+                self.garib_level_order[original_placement] = level_in_slot
+                self.garib_level_order[each_placement] = original_level
         #Randomized Entrances, Garibs in Order
         elif self.options.garib_sorting == GaribSorting.option_in_order and self.options.entrance_randomizer:
             new_garib_order : list[list] = []
@@ -368,7 +383,7 @@ class GloverWorld(World):
                 self.starting_ball = self.random.choice(ball_options)
         #Powerball should not show up if you
         if not self.options.include_power_ball and self.starting_ball == "Power Ball":
-            raise ValueError("You cannot start with Power Ball while Include Power Ball is disabled!")
+            raise OptionError("You cannot start with Power Ball while Include Power Ball is disabled!")
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
@@ -424,9 +439,9 @@ class GloverWorld(World):
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
         #Override Checkpoints
-        #for each_map in self.options.checkpoint_override:
-        #    checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
-        #    self.spawn_checkpoint[checkpoint_entry] = self.options.checkpoint_override[each_map]
+        for each_map, checkpoint_number in self.options.checkpoint_overrides.items():
+            checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
+            self.spawn_checkpoint[checkpoint_entry] = checkpoint_number
 
     def create_regions(self):
         multiworld = self.multiworld
