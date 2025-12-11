@@ -71,8 +71,7 @@ def find_item_data(self, name : str) -> ItemData:
 	#Golden Garibs
 	if name == "Golden Garib":
 		out_data : ItemData = misc_table["Golden Garib"]
-		out_data.qty = self.options.golden_garib_count
-		return 
+		return ItemData(out_data.glid, self.options.golden_garib_count.value, out_data.type, out_data.default_location)
 
 	#Fallthrough
 	return ItemData()

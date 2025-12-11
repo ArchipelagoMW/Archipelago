@@ -275,47 +275,81 @@ class GloverWorld(World):
             return 6
         return -1
 
+    def set_highest_valid_checkpoints(self):
+        #Limit checkpoint options if everything must be accessable
+        if self.options.accessibility.value == 0 and self.options.checkpoint_checks != 1:
+            #Carnival 2 (Pre-Rollercoaster)
+            self.spawn_checkpoint[4] = 1
+            #Fear 3 (Post-Warp)
+            self.spawn_checkpoint[14] = 1, 2, 3
+            #Intended Locks
+            if self.options.difficulty_logic.value == 0:
+                #Prehistoric 1 (Icicles)
+                self.spawn_checkpoint[9] = 1
+                #Prehistoric 3 (Lava Platforms)
+                self.spawn_checkpoint[11] = 1, 2, 3
+            #Without Switch Items
+            if not self.options.switches_checks:
+                #Intended Locks
+                if self.options.difficulty_logic.value == 0:
+                    #Carnival 3 (Hands)
+                    self.spawn_checkpoint[5] = 3
+                    #Pirates 1 (Raise Ship)
+                    self.spawn_checkpoint[6] = 3
+                    #Prehistoric 2 (Lava Platforms)
+                    self.spawn_checkpoint[10] = 2
+                    #Fear 1 (Ball Gate)
+                    self.spawn_checkpoint[12] = 2
+                    #Space 3 (Glass Gate)
+                    self.spawn_checkpoint[17] = 3
+                #Easy/Intended Locks
+                if self.options.difficulty_logic.value <= 1:
+                    #Prehistoric 3 (Lava Platforms)
+                    self.spawn_checkpoint[11] = 2
+                    #Fear 2 (Lever Room)
+                    self.spawn_checkpoint[13] = 2
+
     def validate_options(self):
         #Level Name input validation
         for each_level, each_door in self.options.entrance_overrides.items():
             if not self.valid_override_level_name(each_level):
-                OptionError("\""+ each_level + "\" is not a valid level for Entrance Overrides!")
+                raise OptionError("\""+ each_level + "\" is not a valid level for Entrance Overrides!")
             if not self.valid_override_level_name(each_door):
-                OptionError("\""+ each_door + "\" is not a valid door for Entrance Overrides!")
+                raise OptionError("\""+ each_door + "\" is not a valid door for Entrance Overrides!")
         for each_level in list(self.options.garib_order_overrides.keys()):
             if not self.valid_override_level_name(each_level, False):
-                OptionError("\""+ each_level + "\" is not a valid level for Garib Order Overrides!")
+                raise OptionError("\""+ each_level + "\" is not a valid level for Garib Order Overrides!")
         garib_override_positions = list(self.options.garib_order_overrides.values())
         entrance_override_doors = list(self.options.entrance_overrides.values())
         
         #No duplicate override choices for Garib Order or World Order
         if len(garib_override_positions) != len(set(garib_override_positions)):
-            OptionError("Two garib overrides choose the same position! Make sure all values are unique.")
+            raise OptionError("Two garib overrides choose the same position! Make sure all values are unique.")
         if len(entrance_override_doors) != len(set(entrance_override_doors)):
-            OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
-        
+            raise OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
+
         #Checkpoint Overrides In-Bounds
         for target_level, set_checkpoint in self.options.checkpoint_overrides.items():
-            if not self.valid_override_level_name(target_level, False):
-                OptionError("\""+ target_level + "\" is not a valid level for Checkpoint Overrides!")
+            if not self.valid_override_level_name(target_level, False, False):
+                raise OptionError("\""+ target_level + "\" is not a valid level for Checkpoint Overrides!")
             world_index = self.world_from_string(target_level)
-            level_index = self.level_from_string(target_level)
+            level_index = self.level_from_string(target_level) - 1
             max_checkpoint_value = self.spawn_checkpoint[(world_index * 3) + level_index]
             if max_checkpoint_value < set_checkpoint or set_checkpoint < 1:
-                OptionError("Level " + target_level + " does not have a \"Checkpoint " + str(set_checkpoint) + "\"! Check your Checkpoint Overrides.")
+                raise OptionError("Level " + target_level + " does not have a \"Checkpoint " + str(set_checkpoint) + "\"! Check your Checkpoint Overrides.")
         
         #Golden Garibs Possible
-        total_golden_garibs = self.options.golden_garib_count
+        total_golden_garibs = self.options.golden_garib_count.value
         total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
-        if total_golden_garibs < self.options.required_golden_garibs:
-            OptionError("Must have enough golden garibs to get the required golden garib count!")
+        if total_golden_garibs < self.options.required_golden_garibs.value:
+            raise OptionError("Must have enough golden garibs to get the required golden garib count!")
     
-    def valid_override_level_name(self, in_level : str, allow_bosses : bool = True):
-        end_options = ["1", "2", "3", "!", "?"]
-        if not self.options.bonus_levels:
-            end_options.remove("?")
-        if not allow_bosses:
-            end_options.remove("!")
+    def valid_override_level_name(self, in_level : str, allow_bosses : bool = True, allow_bonuses : bool = True) -> bool:
+        end_options = ["1", "2", "3"]
+        if self.options.bonus_levels and allow_bonuses:
+            end_options.append("?")
+        if allow_bosses:
+            end_options.append("!")
         return in_level.endswith(tuple(end_options)) and in_level.startswith(tuple(["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"])) and len(in_level) == 4
    
     def percents_sum_100(self, percents_dict : dict) -> dict:
@@ -357,11 +391,11 @@ class GloverWorld(World):
             self.wayroom_entrances.insert(29, "Otw?")
         
         #Override randomized entrances here
-        for each_entry in self.options.entrance_overrides:
-            index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
+        for each_entry, each_door in self.options.entrance_overrides.items():
+            index = (self.world_from_string(each_door) * 5) + self.level_from_string(each_door) - 1
             original_world = self.wayroom_entrances[index]
-            original_index = self.wayroom_entrances.index(each_entry["level"])
-            self.wayroom_entrances[index] = each_entry["level"]
+            original_index = self.wayroom_entrances.index(each_entry)
+            self.wayroom_entrances[index] = each_entry
             self.wayroom_entrances[original_index] = original_world
 
     def setup_garib_order(self):
@@ -433,8 +467,10 @@ class GloverWorld(World):
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
 
     def generate_early(self):
+        #Set the valid spawning checkpoints
+        self.set_highest_valid_checkpoints()
         #Validate options
-        self.validate_options
+        self.validate_options()
         #Setup the Filler Table logic
         self.setup_filler_table()
         #Shuffle Checkpoints
@@ -455,52 +491,19 @@ class GloverWorld(World):
     def checkpoint_randomization(self):
         #Setup the spawning checkpoints
         if self.options.spawning_checkpoint_randomizer:
+            #Choose where you spawn from a list of options created
             spawning_options : list[list[int]] = []
             for each_index, each_item in enumerate(self.spawn_checkpoint):
                 listEntry : list[int] = list(range(1, each_item + 1))
                 spawning_options.append(listEntry)
-            #If everything must be accessable
-            if self.options.accessibility.value == 0 and self.options.checkpoint_checks != 1:
-                #Carnival 2 (Pre-Rollercoaster)
-                spawning_options[4] = [1]
-                #Fear 3 (Post-Warp)
-                spawning_options[14] = [1, 2, 3]
-                #Intended Locks
-                if self.options.difficulty_logic.value == 0:
-                    #Prehistoric 1 (Icicles)
-                    spawning_options[9] = [1]
-                    #Prehistoric 3 (Lava Platforms)
-                    spawning_options[11] = [1, 2, 3]
-                #Without Switch Items
-                if not self.options.switches_checks:
-                    #Intended Locks
-                    if self.options.difficulty_logic.value == 0:
-                        #Carnival 3 (Hands)
-                        spawning_options[5] = [1, 2, 3]
-                        #Pirates 1 (Raise Ship)
-                        spawning_options[6] = [1, 2, 3]
-                        #Prehistoric 2 (Lava Platforms)
-                        spawning_options[10] = [1, 2]
-                        #Fear 1 (Ball Gate)
-                        spawning_options[12] = [1, 2]
-                        #Space 3 (Glass Gate)
-                        spawning_options[17] = [1, 2, 3]
-                    #Easy/Intended Locks
-                    if self.options.difficulty_logic.value <= 1:
-                        #Prehistoric 3 (Lava Platforms)
-                        spawning_options[11] = [1, 2]
-                        #Fear 2 (Lever Room)
-                        spawning_options[13] = [1, 2]
-            #if self.options.spawning_checkpoint_randomizer.value == 2:
-            #    for each_index, each_entry in enumerate(spawning_options):
-            #        spawning_options[each_index] = [max(each_entry)]
             
+            #Choose at random
             for each_index, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
             
             #Override Checkpoints
             for each_map, checkpoint_number in self.options.checkpoint_overrides.items():
-                checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
+                checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map) - 1
                 self.spawn_checkpoint[checkpoint_entry] = checkpoint_number
         else:
             #By default, they're all Checkpoint 1
@@ -944,10 +947,12 @@ class GloverWorld(World):
             case 2:
                 menu : Region = multiworld.get_region("Menu", player)
                 victory_location : Location = Location(player, "Golden Garibs Victory", None, menu)
-                required_golden_garibs = self.options.required_golden_garibs.value
-                victory_location.place_locked_item(self.create_event(str(required_golden_garibs) + " Golden Garibs"))
-                set_rule(victory_location, lambda state, rgg = required_golden_garibs: state.has("Golden Garib", player, required_golden_garibs))
-                self.options.required_golden_garibs
+                menu.locations.append(victory_location)
+                rggs_to_win = self.options.required_golden_garibs.value
+                victory_condition = str(rggs_to_win) + " Golden Garibs"
+                victory_location.place_locked_item(self.create_event(victory_condition))
+                set_rule(victory_location, lambda state, rgg = rggs_to_win: state.has("Golden Garib", player, rgg))
+                print(victory_condition)
             case _:
                 victory_condition = "Endscreen"
         multiworld.completion_condition[player] = lambda state: state.has(victory_condition, player)
@@ -1026,7 +1031,7 @@ class GloverWorld(World):
         options = {}
         options["victory_condition"] = self.options.victory_condition.value
         options["required_crystals"] = self.options.required_crystals.value
-        options["required_golden_garibs"] = self.options.required_golden_garibs
+        options["required_golden_garibs"] = self.options.required_golden_garibs.value
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
         options["tag_link"] = self.options.tag_link.value

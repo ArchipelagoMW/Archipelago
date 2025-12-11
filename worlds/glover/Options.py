@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from schema import And, Schema
+from schema import And, Optional, Schema
 from Options import ExcludeLocations, OptionCounter, OptionDict, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
 
 level_prefixes = tuple(["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"])
@@ -115,8 +115,8 @@ class EntranceOverrides(OptionDict):
     Example [{"Atl1" : "FoF!"}, {"Atl?" : "Otw?"}]"""
     visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
     schema = Schema({
-        And(str, lambda level_name : level_name.startswith(level_prefixes)
-            and level_name.endswith(level_suffixes) and len(level_name) == 4)
+        Optional(And(str, lambda level_name : level_name.startswith(level_prefixes)
+            and level_name.endswith(level_suffixes) and len(level_name) == 4))
         :And(str, lambda door_name : door_name.startswith(level_prefixes)
             and door_name.endswith(level_suffixes) and len(door_name) == 4)
         })
