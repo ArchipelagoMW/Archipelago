@@ -1,7 +1,3 @@
-# fuzz testing
-fuzz.py
-fuzz_*
-
 .idea
 .vscode
 
