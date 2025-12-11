@@ -463,8 +463,8 @@ class Rac3Interface(GameInterface):
         self._write8(RAC3STATUS.HEALTH, self.health)
     
     def reset_death_count(self):
-        self.death_count = 0
-        self.last_death_count = -1
+        self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
+        self.last_death_count = self.death_count
 
     def add_cosmetics(self):
         self._write8(RAC3STATUS.SHIP_CONFIG, self.ship)
