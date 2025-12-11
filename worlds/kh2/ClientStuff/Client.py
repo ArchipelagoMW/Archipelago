@@ -27,15 +27,15 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    ClientCommand = 4,
     Deathlink = 5,
     SlotData = 6,
     BountyList = 7,
-    ReceiveAllItems = 8,
+    ReceiveItem = 10,
     RequestAllItems = 9,
-    ReceiveSingleItem = 10,
     Victory = 11,
     Handshake = 12,
+    NotificationType = 13,
+    NotificationMessage = 14,
     Closed = 20
     pass
 
@@ -318,9 +318,8 @@ class KH2Context(CommonContext):
         self.deathlink_toggle = False
         self.deathlink_blacklist = []
 
-    from .ReadAndWrite import kh2_read_longlong, kh2_read_int, kh2_read_string, kh2_read_byte, kh2_write_bytes, kh2_write_int, kh2_write_short, kh2_write_byte, kh2_read_short, kh2_return_base_address
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels
-    from .RecieveItems import displayPuzzlePieceTextinGame, displayInfoTextinGame, displayChestTextInGame, verifyItems, give_item, IsInShop, to_khscii
+    from .RecieveItems import verifyItems, IsInShop
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -588,11 +587,11 @@ class KH2Context(CommonContext):
                     totalLength = len(itemName) + len(playerName)
 
                     if receive_popup_type == "info":  # no restrictions on size here
-                        temp_length = f"Obtained {itemName} from {playerName}"
                         if totalLength > 90:
-                            self.queued_info_popup += [temp_length[:90]]  # slice it to be 90
+                            temp_length = f"Obtained {itemName} from {playerName}"
+                            self.socket.send(MessageType.NotificationMessage, [temp_length[:90]])
                         else:
-                            self.queued_info_popup += [temp_length]
+                            self.socket.send(MessageType.NotificationMessage,[f"Obtained {itemName} from {playerName}"])
                     else:  # either chest or puzzle. they are handled the same length wise
                         totalLength = len(itemName) + len(playerName)
                         while totalLength > 25:
@@ -608,10 +607,8 @@ class KH2Context(CommonContext):
                                     playerName = playerName[:-1]
                             totalLength = len(itemName) + len(playerName)
                         # from  =6. totalLength of the string cant be over 31 or game crash
-                        if receive_popup_type == "puzzle":  # sanitize ItemName and receiver name
-                            self.queued_puzzle_popup += [f"{itemName} from {playerName}"]
-                        else:
-                            self.queued_chest_popup += [f"{itemName} from {playerName}"]
+                        # sanitize ItemName and receiver name
+                        self.socket.send(MessageType.NotificationMessage, [f"{itemName} from {playerName}"]) # sanitize ItemName and receiver name
 
                 if receiverID != self.slot and senderID == self.slot:  #item is sent to other players
                     itemName = self.item_names.lookup_in_slot(itemId, receiverID)
@@ -620,9 +617,9 @@ class KH2Context(CommonContext):
                     if send_popup_type == "info":
                         if totalLength > 90:
                             temp_length = f"Sent {itemName} to {playerName}"
-                            self.queued_info_popup += [temp_length[:90]]  #slice it to be 90
+                            self.socket.send(MessageType.NotificationMessage, [temp_length[:90]])  #slice it to be 90
                         else:
-                            self.queued_info_popup += [f"Sent {itemName} to {playerName}"]
+                            self.socket.send(MessageType.NotificationMessage,[f"Sent {itemName} to {playerName}"])
                     else:  # else chest or puzzle. they are handled the same length wise
                         while totalLength > 27:
                             if send_truncate_first == "playername":
@@ -636,11 +633,7 @@ class KH2Context(CommonContext):
                                 else:
                                     playerName = playerName[:-1]
                             totalLength = len(itemName) + len(playerName)
-                        if send_popup_type == "puzzle":
-                            # to = 4 totalLength of the string cant be over 31 or game crash
-                            self.queued_puzzle_popup += [f"{itemName} to {playerName}"]
-                        else:
-                            self.queued_chest_popup += [f"{itemName} to {playerName}"]
+                        self.socket.send(MessageType.NotificationMessage,[f"{itemName} to {playerName}"])
 
     def connect_to_game(self):
         if "SoraAbilities" in self.kh2slotdata.keys():
@@ -741,13 +734,6 @@ async def kh2_watcher(ctx: KH2Context):
                     ctx.sending = list(await ctx.check_locations(ctx.sending))
                     message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                     await ctx.send_msgs(message)
-
-                #if ctx.queued_puzzle_popup:
-                #    await asyncio.create_task(ctx.displayPuzzlePieceTextinGame(ctx.queued_puzzle_popup[0]))  # send the num 1 index of whats in the queue
-                #if ctx.queued_info_popup:
-                #    await asyncio.create_task(ctx.displayInfoTextinGame(ctx.queued_info_popup[0]))
-                #if ctx.queued_chest_popup:
-                #    await asyncio.create_task(ctx.displayChestTextInGame(ctx.queued_chest_popup[0]))
             if ctx.disconnect_from_server:
                 ctx.disconnect_from_server = False
                 await ctx.disconnect()

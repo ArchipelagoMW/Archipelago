@@ -21,7 +21,7 @@ ProofofNonexistence = "Proof of Nonexistence"
 ProofofPeace        = "Proof of Peace"
 PromiseCharm        = "Promise Charm"
 NamineSketches      = "Namine Sketches"
-RoyalSummons           = "Royal Summons"
+RoyalSummons        = "Royal Summons"
 BattlefieldsofWar   = "Battlefields of War"
 SwordoftheAncestor  = "Sword of the Ancestor"
 BeastsClaw          = "Beast's Claw"
@@ -86,7 +86,7 @@ UltimaWeapon    = "Ultima Weapon"
 WinnersProof    = "Winner's Proof"
 Pureblood       = "Pureblood"
 
-# stafs
+# staffs
 Centurion2        = "Centurion+"
 MeteorStaff       = "Meteor Staff"
 NobodyLance       = "Nobody Lance"
@@ -102,8 +102,8 @@ VictoryBell       = "Victory Bell"
 LordsBroom        = "Lord's Broom"
 WisdomWand        = "Wisdom Wand"
 MagesStaff        = "Mage's Staff"
-# shelds
 
+# shields
 AkashicRecord     = "Akashic Record"
 FrozenPride2      = "Frozen Pride+"
 GenjiShield       = "Genji Shield"
@@ -120,7 +120,7 @@ Dreamcloud        = "Dreamcloud"
 KnightDefender    = "Knight Defender"
 KnightsShield     = "Knight's Shield"
 
-# accesrosies
+# accessories
 AbilityRing     = "Ability Ring"
 EngineersRing   = "Engineer's Ring"
 TechniciansRing = "Technician's Ring"
@@ -204,7 +204,7 @@ ArmorSlotUp      = "Armor Slot Up"
 AccessorySlotUp  = "Accessory Slot Up"
 ItemSlotUp       = "Item Slot Up"
 
-# support abilitys
+# support abilities
 Scan             = "Scan"
 AerialRecovery   = "Aerial Recovery"
 ComboMaster      = "Combo Master"
@@ -245,7 +245,7 @@ CombinationBoost = "Combination Boost"
 OnceMore         = "Once More"
 SecondChance     = "Second Chance"
 
-# action abilitys
+# action abilities
 Guard            = "Guard"
 UpperSlash       = "Upper Slash"
 HorizontalSlash  = "Horizontal Slash"
@@ -293,8 +293,8 @@ DonaldFire          = "Donald Fire"
 DonaldBlizzard      = "Donald Blizzard"
 DonaldThunder       = "Donald Thunder"
 DonaldCure          = "Donald Cure"
-Fantasia            = "Donald Fantasia"
-FlareForce          = "Donald Flare Force"
+Fantasia            = "Fantasia"
+FlareForce          = "Flare Force"
 DonaldMPRage        = "Donald MP Rage"
 DonaldJackpot       = "Donald Jackpot"
 DonaldLuckyLucky    = "Donald Lucky Lucky"
@@ -315,8 +315,8 @@ DonaldDraw          = "Donald Draw"
 GoofyTornado       = "Goofy Tornado"
 GoofyTurbo         = "Goofy Turbo"
 GoofyBash          = "Goofy Bash"
-TornadoFusion      = "Goofy Tornado Fusion"
-Teamwork           = "Goofy Teamwork"
+TornadoFusion      = "Tornado Fusion"
+Teamwork           = "Teamwork"
 GoofyDraw          = "Goofy Draw"
 GoofyJackpot       = "Goofy Jackpot"
 GoofyLuckyLucky    = "Goofy Lucky Lucky"
@@ -340,7 +340,6 @@ GoofyProtega       = "Goofy Protectga"
 Victory        = "Victory"
 LuckyEmblem    = "Lucky Emblem"
 Bounty         = "Bounty"
-# UniversalKey = "Universal Key"
 
 # Keyblade Slots
 FAKESlot = "FAKE (Slot)"

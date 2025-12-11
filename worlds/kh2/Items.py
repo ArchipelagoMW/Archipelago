@@ -6,19 +6,19 @@ from .Subclasses import ItemData
 
 # 0x130000
 Reports_Table = {
-    ItemName.SecretAnsemsReport1:  ItemData(1, 226, 0x36C4, 6),
-    ItemName.SecretAnsemsReport2:  ItemData(1, 227, 0x36C4, 7),
-    ItemName.SecretAnsemsReport3:  ItemData(1, 228, 0x36C5, 0),
-    ItemName.SecretAnsemsReport4:  ItemData(1, 229, 0x36C5, 1),
-    ItemName.SecretAnsemsReport5:  ItemData(1, 230, 0x36C5, 2),
-    ItemName.SecretAnsemsReport6:  ItemData(1, 231, 0x36C5, 3),
-    ItemName.SecretAnsemsReport7:  ItemData(1, 232, 0x36C5, 4),
-    ItemName.SecretAnsemsReport8:  ItemData(1, 233, 0x36C5, 5),
-    ItemName.SecretAnsemsReport9:  ItemData(1, 234, 0x36C5, 6),
-    ItemName.SecretAnsemsReport10: ItemData(1, 235, 0x36C5, 7),
-    ItemName.SecretAnsemsReport11: ItemData(1, 236, 0x36C6, 0),
-    ItemName.SecretAnsemsReport12: ItemData(1, 237, 0x36C6, 1),
-    ItemName.SecretAnsemsReport13: ItemData(1, 238, 0x36C6, 2),
+    ItemName.SecretAnsemsReport1:  ItemData(0, 226, 0x36C4, 6),
+    ItemName.SecretAnsemsReport2:  ItemData(0, 227, 0x36C4, 7),
+    ItemName.SecretAnsemsReport3:  ItemData(0, 228, 0x36C5, 0),
+    ItemName.SecretAnsemsReport4:  ItemData(0, 229, 0x36C5, 1),
+    ItemName.SecretAnsemsReport5:  ItemData(0, 230, 0x36C5, 2),
+    ItemName.SecretAnsemsReport6:  ItemData(0, 231, 0x36C5, 3),
+    ItemName.SecretAnsemsReport7:  ItemData(0, 232, 0x36C5, 4),
+    ItemName.SecretAnsemsReport8:  ItemData(0, 233, 0x36C5, 5),
+    ItemName.SecretAnsemsReport9:  ItemData(0, 234, 0x36C5, 6),
+    ItemName.SecretAnsemsReport10: ItemData(0, 235, 0x36C5, 7),
+    ItemName.SecretAnsemsReport11: ItemData(0, 236, 0x36C6, 0),
+    ItemName.SecretAnsemsReport12: ItemData(0, 237, 0x36C6, 1),
+    ItemName.SecretAnsemsReport13: ItemData(0, 238, 0x36C6, 2),
 }
 
 Progression_Table = {
@@ -235,13 +235,13 @@ SupportAbility_Table = {
     ItemName.MPHastega:        ItemData(1, 422, 0x1A6, ability=True),
     ItemName.Defender:         ItemData(2, 414, 0x19E, ability=True),
     ItemName.DamageControl:    ItemData(2, 542, 0x21E, ability=True),
-    ItemName.NoExperience:     ItemData(0, 404, 0x194, ability=True),  # quantity changed to 0 because the player starts with one always.
     ItemName.LightDarkness:    ItemData(1, 541, 0x21D, ability=True),
     ItemName.MagicLock:        ItemData(1, 403, 0x193, ability=True),
     ItemName.LeafBracer:       ItemData(1, 402, 0x192, ability=True),
     ItemName.CombinationBoost: ItemData(1, 400, 0x190, ability=True),
     ItemName.OnceMore:         ItemData(1, 416, 0x1A0, ability=True),
     ItemName.SecondChance:     ItemData(1, 415, 0x19F, ability=True),
+    #ItemName.NoExperience:    ItemData(0, 404, 0x194, ability=True),  # quantity changed to 0 because the player starts with one always.
 }
 ActionAbility_Table = {
     ItemName.Guard:            ItemData(1, 82,  0x052, ability=True),

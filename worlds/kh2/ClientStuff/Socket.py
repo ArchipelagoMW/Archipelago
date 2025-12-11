@@ -16,15 +16,15 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    ClientCommand = 4,
     Deathlink = 5,
     SlotData = 6,
     BountyList = 7,
-    ReceiveAllItems = 8,
+    ReceiveItem = 10,
     RequestAllItems = 9,
-    ReceiveSingleItem = 10,
     Victory = 11,
-    Handshake = 12,
+    Handshake  = 12,
+    NotificationType = 13,
+    NotificationMessage = 14,
     Closed = 20
     pass
 
@@ -141,35 +141,7 @@ class KH2Socket():
 
 
     def send_singleItem(self, msg: list):
-        self.send(MessageType.ReceiveSingleItem, msg)
-
-
-    def send_multipleItems(self, items, itemCnt):
-        print(f"Sending multiple items {len(items)}")
-        values = []
-
-        msgLimit = 3 #Need to cap how long each message can be to prevent data from being lost
-
-        currItemCount = 0
-        currMsg = 0
-
-        sendCnt = 0
-        for item in items:
-            if currItemCount == 0:
-                values.append([])
-            values[currMsg].append(item)
-            currItemCount += 1
-            sendCnt += 1
-            if currItemCount > msgLimit:
-                currItemCount = 0
-                currMsg = currMsg + 1
-
-
-        sendMsg = 0
-        for msg in values:
-            sendCnt -= 1
-            sendMsg += 1
-            self.send(MessageType.ReceiveAllItems, msg)
+        self.send(MessageType.ReceiveItem, msg)
 
     def send_slot_data(self, data):
         self.send(MessageType.SlotData, [data])
