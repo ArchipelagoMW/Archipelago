@@ -959,7 +959,7 @@ if "Timespinner" in network_data_package["games"]:
 
         timespinner_location_ids = {
             "Present": list(range(1337000, 1337085)),
-            "Past": list(range(1337086, 1337175)),
+            "Past": list(range(1337086, 1337157)) + list(range(1337159, 1337175)),
             "Ancient Pyramid": [
                 1337236,
                 1337246, 1337247, 1337248, 1337249]
