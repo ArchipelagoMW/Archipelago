@@ -1,0 +1,9 @@
+# See https://github.com/Eijebong/Archipelago-fuzzer for the tool this file goes with.
+# Typical usage (after copying in fuzz.py):
+#   python fuzz.py -r 100 -j 16 -g nine_sols -m worlds/nine_sols/fuzzer_meta.yaml
+
+Nine Sols:
+  # prevent "max < min" jade cost OptionErrors
+  # these options never impact items/locations/logic anyway so there's little value in fuzzing them
+  jade_cost_min: 1
+  jade_cost_max: 4
