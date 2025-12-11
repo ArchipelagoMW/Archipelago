@@ -165,6 +165,22 @@ network_data_package["games"][RuleBuilderWorld.game] = RuleBuilderWorld.get_data
             Or(Has("A"), False_()),
             Has.Resolved("A", player=1),
         ),
+        (
+            And(Has("A"), HasAll("B", "C"), HasAllCounts({"D": 2, "E": 3})),
+            HasAllCounts.Resolved((("A", 1), ("B", 1), ("C", 1), ("D", 2), ("E", 3)), player=1),
+        ),
+        (
+            And(Has("A"), HasAll("B", "C"), HasAllCounts({"D": 1, "E": 1})),
+            HasAll.Resolved(("A", "B", "C", "D", "E"), player=1),
+        ),
+        (
+            Or(Has("A"), HasAny("B", "C"), HasAnyCount({"D": 2, "E": 3})),
+            HasAnyCount.Resolved((("A", 1), ("B", 1), ("C", 1), ("D", 2), ("E", 3)), player=1),
+        ),
+        (
+            Or(Has("A"), HasAny("B", "C"), HasAnyCount({"D": 1, "E": 1})),
+            HasAny.Resolved(("A", "B", "C", "D", "E"), player=1),
+        ),
     )
 )
 class TestSimplify(unittest.TestCase):

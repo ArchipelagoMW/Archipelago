@@ -20,9 +20,6 @@ else:
 class RuleWorldMixin(World):
     """A World mixin that provides helpers for interacting with the rule builder"""
 
-    rules_by_hash: dict[int, "Rule.Resolved"]
-    """A mapping of hash values to resolved rules"""
-
     rule_item_dependencies: dict[str, set[int]]
     """A mapping of item name to set of rule ids"""
 
@@ -54,7 +51,6 @@ class RuleWorldMixin(World):
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super().__init__(multiworld, player)
-        self.rules_by_hash = {}
         self.rule_item_dependencies = defaultdict(set)
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
@@ -76,17 +72,7 @@ class RuleWorldMixin(World):
 
     def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
         """Returns a resolved rule registered with the caching system for this world"""
-        resolved_rule = rule.resolve(self)
-        resolved_rule = self.simplify_rule(resolved_rule)
-        return self.get_cached_rule(resolved_rule)
-
-    def get_cached_rule(self, resolved_rule: "Rule.Resolved") -> "Rule.Resolved":
-        """Returns a cached instance of a resolved rule based on the hash"""
-        rule_hash = hash(resolved_rule)
-        if rule_hash in self.rules_by_hash:
-            return self.rules_by_hash[rule_hash]
-        self.rules_by_hash[rule_hash] = resolved_rule
-        return resolved_rule
+        return rule.resolve(self)
 
     def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
         """Registers a rule's item, region, location, and entrance dependencies to this world instance"""
@@ -171,143 +157,6 @@ class RuleWorldMixin(World):
         self.register_rule_dependencies(resolved_rule)
         self.multiworld.completion_condition[self.player] = resolved_rule
         self.completion_rule = resolved_rule
-
-    def simplify_rule(self, rule: "Rule.Resolved") -> "Rule.Resolved":
-        """Simplify and optimize a resolved rule"""
-        if isinstance(rule, And.Resolved):
-            return self._simplify_and(rule)
-        if isinstance(rule, Or.Resolved):
-            return self._simplify_or(rule)
-        return rule
-
-    def _simplify_and(self, rule: "And.Resolved") -> "Rule.Resolved":
-        children_to_process = list(rule.children)
-        clauses: list[Rule.Resolved] = []
-        items: dict[str, int] = {}
-        true_rule: Rule.Resolved | None = None
-
-        while children_to_process:
-            child = self.simplify_rule(children_to_process.pop(0))
-            if child.always_false:
-                # false always wins
-                return child
-            if child.always_true:
-                # dedupe trues
-                true_rule = child
-                continue
-            if isinstance(child, And.Resolved):
-                children_to_process.extend(child.children)
-                continue
-
-            if isinstance(child, Has.Resolved):
-                if child.item_name not in items or items[child.item_name] < child.count:
-                    items[child.item_name] = child.count
-            elif isinstance(child, HasAll.Resolved):
-                for item in child.item_names:
-                    if item not in items:
-                        items[item] = 1
-            else:
-                clauses.append(child)
-
-        if not clauses and not items:
-            return true_rule or self.false_rule
-
-        has_cls = cast(type[Has[Self]], self.get_rule_cls("Has"))
-        has_all_cls = cast(type[HasAll[Self]], self.get_rule_cls("HasAll"))
-        has_all_items: list[str] = []
-        for item, count in items.items():
-            if count == 1:
-                has_all_items.append(item)
-            else:
-                clauses.append(
-                    self.get_cached_rule(
-                        has_cls.Resolved(item, count, player=rule.player, caching_enabled=self.rule_caching_enabled)
-                    )
-                )
-
-        if len(has_all_items) == 1:
-            clauses.append(
-                self.get_cached_rule(
-                    has_cls.Resolved(has_all_items[0], player=rule.player, caching_enabled=self.rule_caching_enabled)
-                )
-            )
-        elif len(has_all_items) > 1:
-            clauses.append(
-                self.get_cached_rule(
-                    has_all_cls.Resolved(
-                        tuple(has_all_items),
-                        player=rule.player,
-                        caching_enabled=self.rule_caching_enabled,
-                    )
-                )
-            )
-
-        if len(clauses) == 1:
-            return clauses[0]
-        return And.Resolved(tuple(clauses), player=rule.player, caching_enabled=self.rule_caching_enabled)
-
-    def _simplify_or(self, rule: "Or.Resolved") -> "Rule.Resolved":
-        children_to_process = list(rule.children)
-        clauses: list[Rule.Resolved] = []
-        items: dict[str, int] = {}
-
-        while children_to_process:
-            child = self.simplify_rule(children_to_process.pop(0))
-            if child.always_true:
-                # true always wins
-                return child
-            if child.always_false:
-                # falses can be ignored
-                continue
-            if isinstance(child, Or.Resolved):
-                children_to_process.extend(child.children)
-                continue
-
-            if isinstance(child, Has.Resolved):
-                if child.item_name not in items or child.count < items[child.item_name]:
-                    items[child.item_name] = child.count
-            elif isinstance(child, HasAny.Resolved):
-                for item in child.item_names:
-                    items[item] = 1
-            else:
-                clauses.append(child)
-
-        if not clauses and not items:
-            return self.false_rule
-
-        has_cls = cast(type[Has[Self]], self.get_rule_cls("Has"))
-        has_any_cls = cast(type[HasAny[Self]], self.get_rule_cls("HasAny"))
-        has_any_items: list[str] = []
-        for item, count in items.items():
-            if count == 1:
-                has_any_items.append(item)
-            else:
-                clauses.append(
-                    self.get_cached_rule(
-                        has_cls.Resolved(item, count, player=rule.player, caching_enabled=self.rule_caching_enabled)
-                    )
-                )
-
-        if len(has_any_items) == 1:
-            clauses.append(
-                self.get_cached_rule(
-                    has_cls.Resolved(has_any_items[0], player=rule.player, caching_enabled=self.rule_caching_enabled)
-                )
-            )
-        elif len(has_any_items) > 1:
-            clauses.append(
-                self.get_cached_rule(
-                    has_any_cls.Resolved(
-                        tuple(has_any_items),
-                        player=rule.player,
-                        caching_enabled=self.rule_caching_enabled,
-                    )
-                )
-            )
-
-        if len(clauses) == 1:
-            return clauses[0]
-        return Or.Resolved(tuple(clauses), player=rule.player, caching_enabled=self.rule_caching_enabled)
 
     @override
     def collect(self, state: CollectionState, item: Item) -> bool:
@@ -466,8 +315,11 @@ def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> Callable[..., in
 class CustomRuleRegister(type):
     """A metaclass to contain world custom rules and automatically convert resolved rules to frozen dataclasses"""
 
+    resolved_rules: ClassVar[dict[int, "Rule.Resolved"]] = {}
+    """A cached of resolved rules to turn each unique one into a singleton"""
+
     custom_rules: ClassVar[dict[str, dict[str, type["Rule[Any]"]]]] = {}
-    """A mapping of game name to mapping of rule name to rule class"""
+    """A mapping of game name to mapping of rule name to rule class to hold custom rules implemented by worlds"""
 
     rule_name: str = "Rule"
     """The string name of a rule, must be unique per game"""
@@ -487,6 +339,15 @@ class CustomRuleRegister(type):
             rule_name = rule_name[:-9]
         new_cls.rule_name = rule_name
         return dataclasses.dataclass(frozen=True)(new_cls)
+
+    @override
+    def __call__(cls, *args: Any, **kwds: Any) -> Any:
+        rule = super().__call__(*args, **kwds)
+        rule_hash = hash(rule)
+        if rule_hash in cls.resolved_rules:
+            return cls.resolved_rules[rule_hash]
+        cls.resolved_rules[rule_hash] = rule
+        return rule
 
     @classmethod
     def get_rule_cls(cls, game_name: str, rule_name: str) -> type["Rule[Any]"]:
@@ -804,6 +665,56 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 class And(NestedRule[TWorld], game="Archipelago"):
     """A rule that only returns true when all child rules evaluate as true"""
 
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        children_to_process = [world.resolve_rule(c) for c in self.children]
+        clauses: list[Rule.Resolved] = []
+        items: dict[str, int] = {}
+        true_rule: Rule.Resolved | None = None
+
+        while children_to_process:
+            child = children_to_process.pop(0)
+            if child.always_false:
+                # false always wins
+                return child
+            if child.always_true:
+                # dedupe trues
+                true_rule = child
+                continue
+            if isinstance(child, And.Resolved):
+                children_to_process.extend(child.children)
+                continue
+
+            if isinstance(child, Has.Resolved):
+                if child.item_name not in items or items[child.item_name] < child.count:
+                    items[child.item_name] = child.count
+            elif isinstance(child, HasAll.Resolved):
+                for item in child.item_names:
+                    if item not in items:
+                        items[item] = 1
+            elif isinstance(child, HasAllCounts.Resolved):
+                for item, count in child.item_counts:
+                    if item not in items or items[item] < count:
+                        items[item] = count
+            else:
+                clauses.append(child)
+
+        if not clauses and not items:
+            return true_rule or world.false_rule
+
+        if len(items) == 1:
+            item, count = next(iter(items.items()))
+            clauses.append(Has(item, count).resolve(world))
+        elif items and all(count == 1 for count in items.values()):
+            clauses.append(HasAll(*items).resolve(world))
+        elif items:
+            clauses.append(HasAllCounts(items).resolve(world))
+
+        if len(clauses) == 1:
+            return clauses[0]
+
+        return And.Resolved(tuple(clauses), player=world.player, caching_enabled=world.rule_caching_enabled)
+
     class Resolved(NestedRule.Resolved):
         @override
         def _evaluate(self, state: CollectionState) -> bool:
@@ -836,6 +747,53 @@ class And(NestedRule[TWorld], game="Archipelago"):
 @dataclasses.dataclass(init=False)
 class Or(NestedRule[TWorld], game="Archipelago"):
     """A rule that returns true when any child rule evaluates as true"""
+
+    @override
+    def _instantiate(self, world: TWorld) -> Rule.Resolved:
+        children_to_process = [world.resolve_rule(c) for c in self.children]
+        clauses: list[Rule.Resolved] = []
+        items: dict[str, int] = {}
+
+        while children_to_process:
+            child = children_to_process.pop(0)
+            if child.always_true:
+                # true always wins
+                return child
+            if child.always_false:
+                # falses can be ignored
+                continue
+            if isinstance(child, Or.Resolved):
+                children_to_process.extend(child.children)
+                continue
+
+            if isinstance(child, Has.Resolved):
+                if child.item_name not in items or child.count < items[child.item_name]:
+                    items[child.item_name] = child.count
+            elif isinstance(child, HasAny.Resolved):
+                for item in child.item_names:
+                    items[item] = 1
+            elif isinstance(child, HasAnyCount.Resolved):
+                for item, count in child.item_counts:
+                    if item not in items or items[item] < count:
+                        items[item] = count
+            else:
+                clauses.append(child)
+
+        if not clauses and not items:
+            return world.false_rule
+
+        if len(items) == 1:
+            item, count = next(iter(items.items()))
+            clauses.append(Has(item, count).resolve(world))
+        elif items and all(count == 1 for count in items.values()):
+            clauses.append(HasAny(*items).resolve(world))
+        elif items:
+            clauses.append(HasAnyCount(items).resolve(world))
+
+        if len(clauses) == 1:
+            return clauses[0]
+
+        return Or.Resolved(tuple(clauses), player=world.player, caching_enabled=world.rule_caching_enabled)
 
     class Resolved(NestedRule.Resolved):
         @override
