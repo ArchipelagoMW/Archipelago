@@ -2,6 +2,13 @@ from enum import IntEnum
 import asyncio
 import socket
 from CommonClient import logger
+from typing import TYPE_CHECKING
+
+# I don't know what is going on here, but it works.
+if TYPE_CHECKING:
+    from . import KH2Context
+else:
+    KH2Context = object
 
 class MessageType (IntEnum):
     Invalid = -1,
