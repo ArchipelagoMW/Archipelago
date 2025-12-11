@@ -164,7 +164,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     randoseed_parts.append(f"           Ob.easyflight = {_lua_bool(self.options.EasyFlightMode)}\n")
 
     # append itemmodel setting
-    randoseed_parts.append(f"           Ob.apItemModel = {self.options.OtherItemsModel}\n")
+    randoseed_parts.append(f"           Ob.apItemModel = {self.options.OtherItemsModel.value}\n")
 
     # append requireMC setting
     randoseed_parts.append(f"           Ob.requireMC = {_lua_bool(self.options.RequireMeatCircus)}\n")
