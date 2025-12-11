@@ -289,6 +289,8 @@ def run_gui() -> None:
         def __init__(self):
             self.title = f"{self.base_title} - Archipelago {Utils.__version__}"
             self.icon = r"data/icon.png"
+            self.title_row = None
+            self.title_label = None
             super().__init__()
 
         def build(self):
@@ -350,20 +352,69 @@ def run_gui() -> None:
 
             return self.container
 
+        def _create_title_row(self, title_text: str):
+            """Create or update the title row with Refresh button."""
+            from kivymd.uix.button import MDButton
+
+            # Create the row only once, then reuse it
+            if self.title_row is None:
+                self.title_row = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(50), spacing=dp(10))
+
+                self.title_label = MDLabel(
+                    text=f"[b]{title_text}[/b]",
+                    markup=True,
+                    font_style="Title",
+                    role="large",
+                    size_hint_x=1,
+                )
+                self.title_row.add_widget(self.title_label)
+
+                def on_refresh(btn):
+                    # Reload player yamls
+                    settings = get_settings()
+                    player_path = settings.generator.player_files_path
+                    if player_path and os.path.isdir(player_path):
+                        self.yamls_by_game = scan_player_yamls(player_path)
+                    else:
+                        self.yamls_by_game = {}
+
+                    # Refresh the current view
+                    if self.overview_btn.state == "down":
+                        self.show_overview()
+                    else:
+                        # Find which world is selected and refresh it
+                        for child in self.scrollbox.layout.children:
+                            if isinstance(child, WorldButton) and child.state == "down":
+                                self.show_world_details(child.world_data)
+                                break
+
+                refresh_text = MDButtonText(text="Refresh", pos_hint={"center_y": 0.5})
+                refresh_btn = MDButton(
+                    refresh_text,
+                    size_hint_x=None,
+                    width=dp(100),
+                    theme_width="Custom",
+                    radius=(dp(5),) * 4,
+                )
+                refresh_btn.bind(on_release=on_refresh)
+                self.title_row.add_widget(refresh_btn)
+            else:
+                # Just update the title text
+                self.title_label.text = f"[b]{title_text}[/b]"
+
+            # Remove from parent if it has one (so we can re-add it)
+            if self.title_row.parent:
+                self.title_row.parent.remove_widget(self.title_row)
+
+            return self.title_row
+
         def show_overview(self):
             """Display multiworld overview with all players and totals."""
             self.info_layout.clear_widgets()
 
-            # Title
-            title = MDLabel(
-                text="[b]Multiworld Overview[/b]",
-                markup=True,
-                font_style="Title",
-                role="large",
-                size_hint_y=None,
-                height=dp(40),
-            )
-            self.info_layout.add_widget(title)
+            # Title row with Refresh button
+            title_row = self._create_title_row("Multiworld Overview")
+            self.info_layout.add_widget(title_row)
 
             if not self.yamls_by_game:
                 no_configs = MDLabel(
@@ -432,11 +483,9 @@ def run_gui() -> None:
             self.info_layout.clear_widgets()
             game = world_data["game"]
 
-            # Title
-            title = MDLabel(
-                text=f"[b]{game}[/b]", markup=True, font_style="Title", role="large", size_hint_y=None, height=dp(40)
-            )
-            self.info_layout.add_widget(title)
+            # Title row with Refresh button
+            title_row = self._create_title_row(game)
+            self.info_layout.add_widget(title_row)
 
             # Version
             version_label = MDLabel(text=f"Version: {world_data['version']}", size_hint_y=None, height=dp(30))
