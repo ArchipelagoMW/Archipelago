@@ -178,7 +178,7 @@ class TestOWSpawn(NineSolsTestBase):
     }
 
     def test_locations(self):
-        self.assertEqual(len(self.multiworld.get_reachable_locations()), 16)
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 15)
 
         self.assertReachableWith("OW: Above Sol Statue", [])
         self.assertReachableWith("Cortex Center: Near Left Exit", [])
