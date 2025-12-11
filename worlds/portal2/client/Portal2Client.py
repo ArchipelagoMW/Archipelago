@@ -7,7 +7,7 @@ import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
 from NetUtils import ClientStatus
-import Utils
+from Utils import async_start, init_logging
 
 from ..mod_helpers.ItemHandling import handle_item
 from ..mod_helpers.MapMenu import Menu
@@ -15,7 +15,7 @@ from ..Locations import location_names_to_map_codes, map_codes_to_location_names
 from .. import Portal2World
 
 if __name__ == "__main__":
-    Utils.init_logging("Portal2Client", exception_logger="Portal2Client")
+    init_logging("Portal2Client", exception_logger="Portal2Client")
     
 logger = logging.getLogger("Portal2Client")
 
@@ -66,14 +66,14 @@ class Portal2Context(CommonContext):
 
     def alert_game_connection(self):
         if self.check_game_connection():
-            self.command_processor.output("Connection to Portal 2 is up and running")
+            self.command_processor.output(self.command_processor, "Connection to Portal 2 is up and running")
         else:
-            self.command_processor.output("Disconnected from Portal 2. Make sure the mod is open and the `-netconport 3000` launch option is set")
+            self.command_processor.output(self.command_processor, "Disconnected from Portal 2. Make sure the mod is open and the `-netconport 3000` launch option is set")
 
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
         return (f"{';'.join(self.item_remove_commands)};"
-                f"{";script AttachDeathTrigger()" if self.death_link_active else ""}\n")
+                f"{"script AttachDeathTrigger()" if self.death_link_active else ""}\n")
     
     def update_menu(self, finished_map: str = None):
         menu_file = Portal2World.settings.menu_file
@@ -179,7 +179,6 @@ class Portal2Context(CommonContext):
             logger.info(f"Map Joined {message.split(':', 1)[1]}")
             # append the whole command string
             command_string = self.create_level_begin_command()
-            print(command_string)
             self.command_queue.append(command_string)
 
         elif message.startswith("map_complete:"):
@@ -194,7 +193,7 @@ class Portal2Context(CommonContext):
         
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
-                self.send_death()
+                await self.send_death()
 
     async def handle_goal_completion(self):
         if self.finished_game:
@@ -204,7 +203,7 @@ class Portal2Context(CommonContext):
         await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
     def on_deathlink(self, data):
-        self.command_queue.append("kill")
+        self.command_queue.append("kill\n")
         return super().on_deathlink(data)
 
     def check_game_connection(self):
@@ -237,6 +236,7 @@ class Portal2Context(CommonContext):
     def handle_slot_data(self, slot_data: dict):
         if "death_link" in slot_data:
             self.death_link_active = slot_data["death_link"]
+            async_start(self.update_death_link(self.death_link_active), "set_deathlink")
 
         if "goal_map_code" in slot_data:
             self.goal_map_code = slot_data["goal_map_code"]

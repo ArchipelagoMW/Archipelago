@@ -107,7 +107,6 @@ class Portal2World(World):
             region_end.add_locations({map_name: self.location_name_to_id[map_name]}, Portal2Location)
             self.location_count += 1
             item_reqs = all_locations_table[map_name].required_items
-            print(map_name + " : " + str(item_reqs))
             region_start.connect(region_end, f"Beat {name}", lambda state, _item_reqs=item_reqs: state.has_all(_item_reqs, self.player))
 
             if last_region:
@@ -173,7 +172,7 @@ class Portal2World(World):
         generic_option_names = [option_name for option_name in PerGameCommonOptions.type_hints]
         excluded_option_names += generic_option_names
         included_option_names: list[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
-        slot_data = self.options.as_dict(*included_option_names)
+        slot_data = self.options.as_dict(*included_option_names, toggles_as_bools=True)
         slot_data.update({
             "goal_map_code": all_locations_table[self.goal_location].map_name,
             "location_name_to_id": self.location_name_to_id,
