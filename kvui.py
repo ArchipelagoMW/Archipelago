@@ -35,13 +35,16 @@ Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
+# Workaround for Kivy issue #9226.
+# caused by kivy by default using probesysfs,
+# which assumes all multi touch deviecs are touch screens. 
+# workaround provided by Snu of the kivy commmunity c:
 from kivy.utils import platform
-if platform == 'linux':
-    #Linux has some weirdness with the touchpad by default... remove it
-    options = Config.options('input')
+if platform == "linux":
+    options = Config.options("input")
     for option in options:
-        if Config.get('input', option) == 'probesysfs':
-            Config.remove_option('input', option)
+        if Config.get("input", option) == "probesysfs":
+            Config.remove_option("input", option)
 
 # Workaround for an issue where importing kivy.core.window before loading sounds
 # will hang the whole application on Linux once the first sound is loaded.
