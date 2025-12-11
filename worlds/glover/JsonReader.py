@@ -295,13 +295,13 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
             #The default checkpoint's always useable
             if default_checkpoint != checkpoint_number:
                 #Other ones need the checkpoint item
-                set_rule(entrance, lambda state : state.has(checkpoint_name, player))
-            else:
+                set_rule(entrance, lambda state, in_checkname = checkpoint_name, in_player = player : state.has(in_checkname, in_player))
+            #else:
                 #This solves one of the most mysterious bugs I've ever seen.
                 #Pushing your spawning checkpoint precollected allows you to
                 #Use checkpoints to warp back to areas that you haven't been able
                 #to reach before because they were one way. I don't know, man...
-                self.push_precollected(self.create_event(checkpoint_name))
+                #self.push_precollected(self.create_event(checkpoint_name))
 
     multiworld.regions.append(region)
     return RegionLevel(level_name, default_checkpoint, map_regions)
