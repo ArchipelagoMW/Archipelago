@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import Type, Any, List
+from typing import Any, List
 from typing import Dict
-from Options import Toggle, DefaultOnToggle, DeathLink, Choice, Range, Visibility, Option, OptionGroup
-from Options import PerGameCommonOptions, DeathLinkMixin, AssembleOptions, StartInventoryPool
+
+from Options import PerGameCommonOptions, StartInventoryPool
+from Options import Toggle, DefaultOnToggle, Choice, Range, OptionGroup
 
 
 def create_option_groups() -> List[OptionGroup]:

@@ -1,17 +1,17 @@
-from .options import CrystalProjectOptions
-from .constants.keys import *
-from .constants.key_items import *
-from .constants.mounts import *
-from .constants.teleport_stones import *
-from .constants.ap_regions import *
+from BaseClasses import CollectionState
 from .constants.display_regions import *
+from .constants.item_groups import *
 from .constants.jobs import SCHOLAR_JOB
+from .constants.key_items import *
+from .constants.keys import *
+from .constants.level_requirements import *
+from .constants.mounts import *
 from .constants.region_passes import *
 from .constants.scholar_abilities import REVERSE_POLARITY
-from .constants.item_groups import *
-from .constants.level_requirements import *
+from .constants.teleport_stones import *
 from .items import singleton_keys
-from BaseClasses import CollectionState
+from .options import CrystalProjectOptions
+
 
 class CrystalProjectLogic:
     player: int
@@ -47,8 +47,7 @@ class CrystalProjectLogic:
 
     def has_rental_quintar(self, state: CollectionState, rental_display_region_name: str) -> bool:
         #Using the display region for this check bc it's least likely to change and equivalent in function in this case
-        has_rental_quintar: bool = False
-        
+
         #If you have Owl Drum or Quintar Flute you're just good to go
         if self.has_horizontal_movement(state):
             has_rental_quintar = True

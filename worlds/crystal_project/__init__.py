@@ -10,19 +10,19 @@ from .constants.teleport_stones import *
 from .constants.item_groups import *
 from .constants.region_passes import *
 from .home_point_locations import get_home_points
-from .items import item_table, optional_scholar_abilities, get_random_starting_jobs, filler_items, \
+from .items import item_table, optional_scholar_abilities, filler_items, \
     get_item_names_per_category, progressive_equipment, non_progressive_equipment, get_starting_jobs, \
-    set_jobs_at_default_locations, default_starting_job_list, key_rings, dungeon_keys, singleton_keys, \
+    set_jobs_at_default_locations, key_rings, dungeon_keys, singleton_keys, \
     display_region_name_to_pass_dict, job_crystal_beginner_dictionary, job_crystal_advanced_dictionary, job_crystal_expert_dictionary, home_point_item_index_offset, ItemData
 from .locations import get_treasure_and_npc_locations, get_boss_locations, get_shop_locations, get_region_completion_locations, LocationData, get_location_names_per_category, \
     get_location_name_to_id, get_crystal_locations, home_point_location_index_offset
 from .presets import crystal_project_options_presets
 from .regions import init_ap_region_to_display_region_dictionary, init_areas, ap_region_to_display_region_dictionary, display_region_subregions_dictionary, \
     display_region_levels_dictionary
-from .options import CrystalProjectOptions, IncludedRegions, create_option_groups
+from .options import CrystalProjectOptions, create_option_groups
 from .rules import CrystalProjectLogic
 from .mod_helper import ModLocationData, get_modded_items, get_modded_locations, \
-    get_modded_shopsanity_locations, get_modded_bosses, build_condition_rule, update_item_classification, ModIncrementedIdData, get_mod_info, get_removed_locations
+    get_modded_shopsanity_locations, get_modded_bosses, build_condition_rule, update_item_classification, get_mod_info, get_removed_locations
 from typing import List, Set, Dict, Any
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, Tutorial, MultiWorld, CollectionState, ItemClassification
@@ -47,11 +47,11 @@ class CrystalProjectWorld(World):
     """Crystal Project is a mix of old school job based jRPG mixed with a ton of 3D platforming and exploration."""
     game = "Crystal Project"
     options_dataclass = CrystalProjectOptions
-    options: CrystalProjectOptions
+    options: CrystalProjectOptions  # pyright: ignore [reportIncompatibleVariableOverride]
     topology_present = True  # show path to required location checks in spoiler
 
     # Add the home points to the item_table so they don't require any special code after this
-    home_points = get_home_points(-1, options)
+    home_points = get_home_points(-1, None)
     for home_point in home_points:
         item_table[home_point.name] = ItemData(HOME_POINT, home_point.code + home_point_item_index_offset, ItemClassification.progression)
 
@@ -69,7 +69,7 @@ class CrystalProjectWorld(World):
     for modded_item in modded_items:
         if modded_item.name in item_name_to_id and item_name_to_id[modded_item.name] != modded_item.code:
             raise Exception(f"A modded item({modded_item.name}) with id {modded_item.code} tried to change the code of item_name_to_id and it can never change!")
-        item_name_to_id[modded_item.name] = modded_item.code
+        item_name_to_id[modded_item.name] = modded_item.code  # pyright: ignore [reportArgumentType]
         if 'Job' in modded_item.name:
             item_name_groups.setdefault(JOB, set()).add(modded_item.name)
             modded_job_count += 1
@@ -115,8 +115,8 @@ class CrystalProjectWorld(World):
         # implement .yaml-less Universal Tracker support
         if hasattr(self.multiworld, "generation_is_fake"):
             if hasattr(self.multiworld, "re_gen_passthrough"):
-                if "Crystal Project" in self.multiworld.re_gen_passthrough:
-                    slot_data = self.multiworld.re_gen_passthrough["Crystal Project"]
+                if "Crystal Project" in self.multiworld.re_gen_passthrough:  # pyright: ignore [reportAttributeAccessIssue]
+                    slot_data = self.multiworld.re_gen_passthrough["Crystal Project"]  # pyright: ignore [reportAttributeAccessIssue]
                     self.options.goal.value = slot_data["goal"]
                     self.options.clamshell_goal_quantity.value = slot_data["clamshellGoalQuantity"]
                     self.options.extra_clamshells_in_pool.value = slot_data["extraClamshellsInPool"]
@@ -215,7 +215,7 @@ class CrystalProjectWorld(World):
 
         #Regionsanity completion locations need to be added after all other locations so they can be removed if the region is empty (e.g. Neptune Shrine w/o Shopsanity)
         if self.options.regionsanity.value != self.options.regionsanity.option_disabled:
-            region_completions = get_region_completion_locations(self.player, self.options)
+            region_completions = get_region_completion_locations()
             for completion in region_completions:
                 display_region_empty = True
                 for location in locations:

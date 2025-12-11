@@ -1,6 +1,5 @@
 from Options import ProgressionBalancing
 from .options import *
-from .constants.key_items import *
 
 explorer_mode_options = {
     "progression_balancing":                    ProgressionBalancing.default,

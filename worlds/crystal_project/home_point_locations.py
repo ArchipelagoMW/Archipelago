@@ -1,16 +1,15 @@
 from typing import List, Optional
 
-from .constants.ap_regions import *
-from .constants.display_regions import *
 from .constants.home_points import *
 from .constants.keys import *
 from .locations import LocationData
 from .options import CrystalProjectOptions
 from .rules import CrystalProjectLogic
 
+
 #Remember if you update the AP Region a Home Point is in or its name, go change it in the Menu connections function in the region.py file
-def get_home_points(player: Optional[int], options: Optional[CrystalProjectOptions]) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+def get_home_points(player: int, options: Optional[CrystalProjectOptions]) -> List[LocationData]:
+    logic = CrystalProjectLogic(player, options)  # pyright: ignore [reportArgumentType]
     home_point_table: List[LocationData] = [
         LocationData(HOMEPOINT_AP_SPAWN_AP_REGION, HOMEPOINT_AP_SPAWN_NAME, 5003),
         LocationData(HOMEPOINT_OLD_NANS_WATERING_HOLE_AP_REGION, HOMEPOINT_OLD_NANS_WATERING_HOLE_NAME, 59),

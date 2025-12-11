@@ -5,7 +5,6 @@ from .rules import CrystalProjectLogic
 from .constants.jobs import *
 from .constants.keys import *
 from .constants.key_items import *
-from .constants.ap_regions import *
 from .constants.region_passes import *
 from .constants.display_regions import *
 from .constants.teleport_stones import *
@@ -35,7 +34,7 @@ def get_location_name_to_id() -> dict[str, int]:
     boss_name_to_id = {boss.name: boss.code for boss in get_boss_locations(-1, None)}
     shop_name_to_id = {shop.name: shop.code for shop in get_shop_locations(-1, None)}
     homepoint_name_to_id = {homepoint.name: homepoint.code + home_point_location_index_offset for homepoint in get_home_points(-1, None)}
-    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completion_locations(-1, None)}
+    region_completion_name_to_id = {region_completion.name: region_completion.code for region_completion in get_region_completion_locations()}
     location_name_to_id.update(crystal_name_to_id)
     location_name_to_id.update(boss_name_to_id)
     location_name_to_id.update(shop_name_to_id)
@@ -45,7 +44,7 @@ def get_location_name_to_id() -> dict[str, int]:
     return location_name_to_id
 
 def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+    logic = CrystalProjectLogic(player, options)  # pyright: ignore [reportArgumentType]
 
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -625,7 +624,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Ferry Ticket Agent forgot what Ferry Passes are but she found something in her desk", 940 + npc_index_offset, lambda state: logic.has_jobs(state, 11)), #(-166,93,56) Fixed Missable
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Three tokens makes a Pyramid Key something something triangles", 949 + npc_index_offset, lambda state: state.has(WEST_LOOKOUT_TOKEN, player) and state.has(CENTRAL_LOOKOUT_TOKEN, player) and state.has(NORTH_LOOKOUT_TOKEN, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - The One and Only Room 1 Key", 385 + npc_index_offset, lambda state: logic.can_earn_money(state, SARA_SARA_BAZAAR_AP_REGION)),
-        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset, lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or logic.options.regionsanity.value != options.regionsanity.option_extreme) and logic.is_area_in_level_range(state, POKO_POKO_ENEMY_LEVEL)), #Ferry Pass, if regionsanity extreme is enabled, you'll need the pass for the desert
+        LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Circle the eastern desert wall for Worried Moms Lost Son", 1196 + npc_index_offset, lambda state: (state.has(POKO_POKO_DESERT_PASS, player) or logic.options.regionsanity.value != logic.options.regionsanity.option_extreme) and logic.is_area_in_level_range(state, POKO_POKO_ENEMY_LEVEL)), #Ferry Pass, if regionsanity extreme is enabled, you'll need the pass for the desert
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Pelt this Fish Merchant with Rotten Salmon", 942 + npc_index_offset, lambda state: state.has(SPECIAL_ROTTEN_SALMON, player) and state.has(SPECIAL_FRESH_SALMON, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - No Shoudu Stew for you!", 1200 + npc_index_offset, lambda state: state.has(SPECIAL_SHOUDU_STEW, player)),
         LocationData(SARA_SARA_BAZAAR_AP_REGION, SARA_SARA_BAZAAR_DISPLAY_NAME + " NPC - Spilled booty Silver", 2905 + npc_index_offset, lambda state: logic.has_swimming(state)), #Dust
@@ -1405,7 +1404,7 @@ def get_treasure_and_npc_locations(player: int, options: CrystalProjectOptions |
 
 
 def get_crystal_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+    logic = CrystalProjectLogic(player, options)  # pyright: ignore [reportArgumentType]
     location_table: List[LocationData] = [
         # Zones (Beginner)
         LocationData(THE_PALE_GROTTO_AP_REGION, THE_PALE_GROTTO_DISPLAY_NAME + FENCER_JOB_CRYSTAL_LOCATION, 130 + crystal_index_offset),
@@ -1435,7 +1434,7 @@ def get_crystal_locations(player: int, options: CrystalProjectOptions | None) ->
     return location_table
 
 def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+    logic = CrystalProjectLogic(player, options)  # pyright: ignore [reportArgumentType]
     location_table: List[LocationData] = [
         #IDs here are specifically the spark IDs or NPC IDs for where you go to fight them from Crystal Edit
         #Summons
@@ -1496,7 +1495,7 @@ def get_boss_locations(player: int, options: CrystalProjectOptions | None) -> Li
     return location_table
 
 def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+    logic = CrystalProjectLogic(player, options)  # pyright: ignore [reportArgumentType]
 
     location_table: List[LocationData] = [
         #Zones (Beginner)
@@ -1940,8 +1939,7 @@ def get_shop_locations(player: int, options: CrystalProjectOptions | None) -> Li
     ]
     return location_table
 
-def get_region_completion_locations(player: int, options: CrystalProjectOptions) -> List[LocationData]:
-    logic = CrystalProjectLogic(player, options)
+def get_region_completion_locations() -> List[LocationData]:
     location_table: List[LocationData] = [
         LocationData(SPAWNING_MEADOWS_AP_REGION, SPAWNING_MEADOWS_DISPLAY_NAME + " Region Completion", 6001 + regionsanity_index_offset, regionsanity=True),
         LocationData(DELENDE_PLAINS_AP_REGION, DELENDE_DISPLAY_NAME + " Region Completion", 6002 + regionsanity_index_offset, regionsanity=True),
@@ -2024,7 +2022,7 @@ def get_location_names_per_category() -> Dict[str, Set[str]]:
     for location in get_home_points(-1, None):
         categories.setdefault("Homepoints", set()).add(location.name)
 
-    for location in get_region_completion_locations(-1, None):
+    for location in get_region_completion_locations():
         categories.setdefault("Region Completions", set()).add(location.name)
 
     return categories

@@ -6,7 +6,6 @@ from .items import display_region_name_to_pass_dict
 from .rules import CrystalProjectLogic
 from .constants.keys import *
 from .constants.key_items import *
-from .constants.ap_regions import *
 from .constants.display_regions import *
 from .constants.home_points import *
 from .constants.level_requirements import *
@@ -177,14 +176,12 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     player = world.player
     logic = CrystalProjectLogic(player, options)
 
-    rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state: True
-
     for display_region in display_region_levels_dictionary:
         if world.options.regionsanity.value != world.options.regionsanity.option_disabled and display_region != MODDED_ZONE_AP_REGION and display_region != MENU_AP_REGION:
             rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0])
                                                                                                       and state.has(display_region_name_to_pass_dict[lambda_region], player))
 
-            rules_on_display_regions[MODDED_ZONE_AP_REGION] = combine_callables(rules_on_display_regions[MODDED_ZONE_AP_REGION], rules_on_display_regions[display_region])
+            rules_on_display_regions[MODDED_ZONE_AP_REGION] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0]))
         else:
             rules_on_display_regions[display_region] = lambda state, lambda_region = display_region: (logic.is_area_in_level_range(state, display_region_levels_dictionary[lambda_region][0]))
 
@@ -1026,7 +1023,7 @@ def create_display_region(world: "CrystalProjectWorld", player: int, locations_p
             locations_in_display_region: List[Location] = []
             for ap_region_name in display_region_subregions_dictionary[display_region_name]:
                 for location in world.get_locations():
-                    if location.parent_region.name == ap_region_name and location != region_completion_location:
+                    if location.parent_region.name == ap_region_name and location != region_completion_location:  # pyright: ignore [reportOptionalMemberAccess]
                         locations_in_display_region.append(location)
 
             region_completion_location.access_rule = lambda state: can_reach_all_locations(state, locations_in_display_region)
@@ -1066,7 +1063,8 @@ def fancy_add_exits(self: "CrystalProjectWorld", region: str, exits: List[str],
         if rules is None:
             rules = {}
         if destination_ap_region in rules:
-            rules[destination_ap_region] = combine_callables(rules[destination_ap_region], rules_on_display_regions[destination_display_region])
+            if destination_display_region in rules_on_display_regions:
+                rules[destination_ap_region] = combine_callables(rules[destination_ap_region], rules_on_display_regions[destination_display_region])
         else:
             rules[destination_ap_region] = rules_on_display_regions[destination_display_region]
 
@@ -1141,5 +1139,5 @@ def connect_menu_region(world: "CrystalProjectWorld", options: CrystalProjectOpt
                      THE_OLD_WORLD_AP_REGION: lambda state: logic.old_world_requirements(state),
                      THE_NEW_WORLD_AP_REGION: lambda state: (state.has(NEW_WORLD_STONE, player) or state.has(HOMEPOINT_ASTLEYS_SHRINE_NAME, player) or state.has(HOMEPOINT_ASTLEYS_KEEP_NAME, player)),
                      DISCIPLINE_HOLLOW_AP_REGION: lambda state: state.has(HOMEPOINT_DISCIPLINE_HOLLOW_NAME, player),
-                     }),
+                     })
     world.multiworld.register_indirect_condition(world.get_region(THE_DEPTHS_AP_REGION), world.get_entrance(MENU_AP_REGION + " -> " + THE_OLD_WORLD_AP_REGION))

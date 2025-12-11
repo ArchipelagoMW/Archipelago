@@ -1,7 +1,8 @@
 from typing import List
-from .locations import LocationData, npc_index_offset
-from .constants.ap_regions import *
+
 from .constants.display_regions import *
+from .locations import LocationData, npc_index_offset
+
 
 def get_unused_locations() -> List[LocationData]:
     location_table: List[LocationData] = [
