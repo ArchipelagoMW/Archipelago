@@ -423,13 +423,14 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
     fancy_add_exits(world, BEATSMITH_DISCO_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION])
     #Capital Sequoia end
     #Jojo Sewers section start
-    fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, MOAT_SHALLOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, CAPITAL_JAIL_AP_REGION, QUINTAR_NEST_AP_REGION],
+    fancy_add_exits(world, JOJO_SEWERS_AP_REGION, [CAPITAL_SEQUOIA_AP_REGION, MOAT_SHALLOWS_AP_REGION, CAPITAL_MOAT_AP_REGION, OMINOUS_RED_SEWERS_AP_REGION, SEWERS_SECRET_PASSWORD_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION, THE_PALE_GROTTO_AP_REGION, QUINTAR_NEST_AP_REGION],
                     #Swimming connection to Sewers to Boomer Society bypasses the Secret Password region
                     {CAPITAL_MOAT_AP_REGION: lambda state: logic.has_swimming(state),
+                     OMINOUS_RED_SEWERS_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state),
                      SEWERS_TO_BOOMER_SOCIETY_AP_REGION: lambda state: logic.has_swimming(state),
-                     CAPITAL_JAIL_AP_REGION: lambda state: logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state),
                      THE_PALE_GROTTO_AP_REGION: lambda state: logic.has_swimming(state),
                      QUINTAR_NEST_AP_REGION: lambda state: (logic.has_rental_quintar(state, ROLLING_QUINTAR_FIELDS_DISPLAY_NAME) or logic.has_swimming(state))})
+    fancy_add_exits(world, OMINOUS_RED_SEWERS_AP_REGION, [JOJO_SEWERS_AP_REGION, CAPITAL_JAIL_AP_REGION])
     #A Jojo Sewers <-> Sewers to Boomer Society connector; untraversable w/o a region pass in Regionsanity
     fancy_add_exits(world, SEWERS_SECRET_PASSWORD_AP_REGION, [JOJO_SEWERS_AP_REGION, SEWERS_TO_BOOMER_SOCIETY_AP_REGION],
                     {JOJO_SEWERS_AP_REGION: lambda state: state.has(JOJO_SEWERS_PASS, player) or options.regionsanity.value == options.regionsanity.option_disabled,
@@ -470,7 +471,7 @@ def init_areas(world: "CrystalProjectWorld", locations: List[LocationData], opti
                      QUINTAR_RESERVE_AP_REGION: lambda state: logic.has_vertical_movement(state)})
     #Quintar Sanctum end
     #Capital Jail start
-    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [JOJO_SEWERS_AP_REGION, JAIL_SOUTH_WING_AP_REGION, JAIL_DARK_WING_AP_REGION],
+    fancy_add_exits(world, CAPITAL_JAIL_AP_REGION, [OMINOUS_RED_SEWERS_AP_REGION, JAIL_SOUTH_WING_AP_REGION, JAIL_DARK_WING_AP_REGION],
                     {JAIL_SOUTH_WING_AP_REGION: lambda state: logic.has_key(state, SOUTH_WING_KEY),
                      JAIL_DARK_WING_AP_REGION: lambda state: logic.has_key(state, DARK_WING_KEY)})
     fancy_add_exits(world, JAIL_SOUTH_WING_AP_REGION, [CAPITAL_JAIL_AP_REGION, JAIL_SOUTH_WING_RUBBLE_AP_REGION],
