@@ -300,7 +300,7 @@ async def pcsx2_sync_task(ctx: Rac3Context):
                 logger.error(format_exc())
             # await sleep(3)
 
-        await sleep(1)
+        await sleep(0.5)
     logger.info(f"{RAC3OPTION.GAME_TITLE_FULL} Client Shutdown")
 
 
@@ -334,6 +334,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             for loc in ctx.locations_checked:
                 ctx.game_interface.collect_location(loc)
             ctx.game_interface.fix_health()
+            ctx.game_interface.reset_death_count()
             logger.info("Locations collected!")
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
