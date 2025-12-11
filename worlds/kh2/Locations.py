@@ -747,8 +747,6 @@ Donald_Checks = {
     LocationName.WisdomWand:             LocationData(92, "Keyblade", "Donald"),
     LocationName.Centurion2:             LocationData(151, "Keyblade", "Donald"),
     LocationName.DonaldAbuEscort:        LocationData(42, "Get Bonus", "Donald", 2),
-    # LocationName.DonaldStarting1:        LocationData(2, "Critical", "Donald"),
-    # LocationName.DonaldStarting2:        LocationData(2, "Critical", "Donald"),
 }
 
 Goofy_Checks = {
@@ -784,8 +782,6 @@ Goofy_Checks = {
     LocationName.OgreShield:              LocationData(102, "Keyblade", "Goofy"),
     LocationName.SaveTheKing2:            LocationData(147, "Keyblade", "Goofy"),
     LocationName.UltimateMushroom:        LocationData(163, "Keyblade", "Goofy"),
-    # LocationName.GoofyStarting1:          LocationData(3, "Critical", "Goofy"),
-    # LocationName.GoofyStarting2:          LocationData(3, "Critical", "Goofy"),
 }
 
 Atlantica_Checks = {
@@ -798,7 +794,6 @@ Atlantica_Checks = {
 event_location_to_item = {
     LocationName.HostileProgramEventLocation:    ItemName.HostileProgramEvent,
     LocationName.McpEventLocation:               ItemName.McpEvent,
-    # LocationName.ASLarxeneEventLocation:             ItemName.ASLarxeneEvent,
     LocationName.DataLarxeneEventLocation:       ItemName.DataLarxeneEvent,
     LocationName.BarbosaEventLocation:           ItemName.BarbosaEvent,
     LocationName.GrimReaper1EventLocation:       ItemName.GrimReaper1Event,
@@ -811,16 +806,13 @@ event_location_to_item = {
     LocationName.OcPainAndPanicCupEventLocation: ItemName.OcPainAndPanicCupEvent,
     LocationName.OcCerberusCupEventLocation:     ItemName.OcCerberusCupEvent,
     LocationName.HadesEventLocation:             ItemName.HadesEvent,
-    # LocationName.ASZexionEventLocation:              ItemName.ASZexionEvent,
     LocationName.DataZexionEventLocation:        ItemName.DataZexionEvent,
     LocationName.Oc2TitanCupEventLocation:       ItemName.Oc2TitanCupEvent,
     LocationName.Oc2GofCupEventLocation:         ItemName.Oc2GofCupEvent,
-    # LocationName.Oc2CupsEventLocation:               ItemName.Oc2CupsEventLocation,
     LocationName.HadesCupEventLocations:         ItemName.HadesCupEvents,
     LocationName.PrisonKeeperEventLocation:      ItemName.PrisonKeeperEvent,
     LocationName.OogieBoogieEventLocation:       ItemName.OogieBoogieEvent,
     LocationName.ExperimentEventLocation:        ItemName.ExperimentEvent,
-    # LocationName.ASVexenEventLocation:               ItemName.ASVexenEvent,
     LocationName.DataVexenEventLocation:         ItemName.DataVexenEvent,
     LocationName.ShanYuEventLocation:            ItemName.ShanYuEvent,
     LocationName.AnsemRikuEventLocation:         ItemName.AnsemRikuEvent,
@@ -833,7 +825,6 @@ event_location_to_item = {
     LocationName.XemnasEventLocation:            ItemName.XemnasEvent,
     LocationName.ArmoredXemnasEventLocation:     ItemName.ArmoredXemnasEvent,
     LocationName.ArmoredXemnas2EventLocation:    ItemName.ArmoredXemnas2Event,
-    # LocationName.FinalXemnasEventLocation:           ItemName.FinalXemnasEvent,
     LocationName.DataXemnasEventLocation:        ItemName.DataXemnasEvent,
     LocationName.ThresholderEventLocation:       ItemName.ThresholderEvent,
     LocationName.BeastEventLocation:             ItemName.BeastEvent,
@@ -842,7 +833,6 @@ event_location_to_item = {
     LocationName.DataXaldinEventLocation:        ItemName.DataXaldinEvent,
     LocationName.TwinLordsEventLocation:         ItemName.TwinLordsEvent,
     LocationName.GenieJafarEventLocation:        ItemName.GenieJafarEvent,
-    # LocationName.ASLexaeusEventLocation:             ItemName.ASLexaeusEvent,
     LocationName.DataLexaeusEventLocation:       ItemName.DataLexaeusEvent,
     LocationName.ScarEventLocation:              ItemName.ScarEvent,
     LocationName.GroundShakerEventLocation:      ItemName.GroundShakerEvent,
@@ -857,7 +847,6 @@ event_location_to_item = {
     LocationName.TransportEventLocation:         ItemName.TransportEvent,
     LocationName.OldPeteEventLocation:           ItemName.OldPeteEvent,
     LocationName.FuturePeteEventLocation:        ItemName.FuturePeteEvent,
-    # LocationName.ASMarluxiaEventLocation:            ItemName.ASMarluxiaEvent,
     LocationName.DataMarluxiaEventLocation:      ItemName.DataMarluxiaEvent,
     LocationName.TerraEventLocation:             ItemName.TerraEvent,
     LocationName.TwilightThornEventLocation:     ItemName.TwilightThornEvent,
