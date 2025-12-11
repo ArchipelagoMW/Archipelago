@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import ExcludeLocations, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin
+from Options import ExcludeLocations, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
 
 class VictoryCondition(Choice):
     """The condition needed to beat Glover.
@@ -76,6 +76,7 @@ class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
     """
     display_name = "Portalsanity"
+    visibility = Visibility.none
 
 class SpawningCheckpointRandomizer(Toggle):
     """Spawning checkpoints are randomized. Default off.
@@ -89,7 +90,7 @@ class EnableBonuses(DefaultOnToggle):
 
 class GloverExcludeLocations(ExcludeLocations):
     """Prevent these locations from having important item."""
-    default = frozenset({"Atlantis_Bonus"})
+    default = frozenset({"Atl? Goal"})
 
 class TagLink(Toggle):
     """When you transform the ball, everyone who enabled swap link changes character or the ball. Of course, the reverse is true too. Default off.
