@@ -81,14 +81,13 @@ class EntranceRandomizer(DefaultOnToggle):
     visibility = Visibility.simple_ui
     display_name = "Entrance Randomizer"
 
-class EntranceOverrides(OptionDict):
-    """The postions of levels when Spawn Randomizer is on.
-    Structured {"Level" : "Door to Place"}
-    Example [{"Atl3" : "Crn1"}, {"FoF2" : "Otw2"}] """
-    visibility = Visibility.complex_ui
-    schema = Schema([{"level" : str, "hub" : str}])
-    default = []
-    display_name = "Entrance Overrides"
+#class EntranceOverrides(OptionCounter):
+#    """The postions of levels when Spawn Randomizer is on.
+#    Structured {"Level" : "Door to Place"}
+#    Example [{"Atl3" : 0}, {"FoF2" : 7}] """
+#    visibility = Visibility.complex_ui
+#    default = {}
+#    display_name = "Entrance Overrides"
 
 class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
@@ -97,25 +96,21 @@ class Portalsanity(Toggle):
     display_name = "Portalsanity"
     visibility = Visibility.none
 
-class SpawningCheckpointRandomizer(Choice):
+class SpawningCheckpointRandomizer(Toggle):
     """Spawning checkpoints are randomized. Default off.
     """
     visibility = Visibility.simple_ui
-    option_off = 0
-    option_random = 1
-    option_reverse_glover = 2
-    default = 0
     display_name = "Spawn Randomizer"
 
-class CheckpointOverrides(OptionCounter):
-    """The postions of checkpoints when Spawn Randomizer is on.
-    Structured World Name[Level Number] : [Checkpoint Number]
-    Example "Atl3" : 2"""
-    visibility = Visibility.complex_ui
-    min = 1
-    max = 5
-    default = {}
-    display_name = "Checkpoint Overrides"
+#class CheckpointOverrides(OptionCounter):
+#    """The postions of checkpoints when Spawn Randomizer is on.
+#    Structured World Name[Level Number] : [Checkpoint Number]
+#    Example "Atl3" : 2"""
+#    visibility = Visibility.complex_ui
+#    min = 1
+#    max = 5
+#    default = {}
+#    display_name = "Checkpoint Overrides"
 
 class EnableBonuses(DefaultOnToggle):
     """Makes Bonus Levels contain checks. Default on.
@@ -390,10 +385,10 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     garib_logic : GaribLogic
     garib_sorting : GaribSorting
     entrance_randomizer : EntranceRandomizer
-    entrance_overrides : EntranceOverrides
+    #entrance_overrides : EntranceOverrides
     portalsanity : Portalsanity
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
-    checkpoint_override : CheckpointOverrides
+    #checkpoint_override : CheckpointOverrides
     bonus_levels : EnableBonuses
     tag_link : TagLink
     trap_link : TrapLink

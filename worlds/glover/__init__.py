@@ -305,12 +305,12 @@ class GloverWorld(World):
                 self.wayroom_entrances.insert(19, "Pht?")
                 self.wayroom_entrances.insert(24, "FoF?")
                 self.wayroom_entrances.insert(29, "Otw?")
-        for each_entry in self.options.entrance_overrides:
-            index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
-            original_world = self.wayroom_entrances[index]
-            original_index = self.wayroom_entrances.index(each_entry["level"])
-            self.wayroom_entrances[index] = each_entry["level"]
-            self.wayroom_entrances[original_index] = original_world
+        #for each_entry in self.options.entrance_overrides:
+        #    index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
+        #    original_world = self.wayroom_entrances[index]
+        #    original_index = self.wayroom_entrances.index(each_entry["level"])
+        #    self.wayroom_entrances[index] = each_entry["level"]
+        #    self.wayroom_entrances[original_index] = original_world
             
         #Random Garib Sorting Order
         if self.options.garib_sorting == GaribSorting.option_random_order:
@@ -413,10 +413,9 @@ class GloverWorld(World):
                         spawning_options[11] = [1, 2]
                         #Fear 2 (Lever Room)
                         spawning_options[13] = [1, 2]
-            print(spawning_options)
-            for each_index, each_entry in enumerate(spawning_options):
-                spawning_options[each_index] = [max(each_entry)]
-            print(spawning_options)
+            #if self.options.spawning_checkpoint_randomizer.value == 2:
+            #    for each_index, each_entry in enumerate(spawning_options):
+            #        spawning_options[each_index] = [max(each_entry)]
             
             for each_index, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
@@ -425,9 +424,9 @@ class GloverWorld(World):
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
         #Override Checkpoints
-        for each_map in self.options.checkpoint_override:
-            checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
-            self.spawn_checkpoint[checkpoint_entry] = self.options.checkpoint_override[each_map]
+        #for each_map in self.options.checkpoint_override:
+        #    checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
+        #    self.spawn_checkpoint[checkpoint_entry] = self.options.checkpoint_override[each_map]
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -963,7 +962,6 @@ class GloverWorld(World):
         options["portalsanity"] = self.options.portalsanity.value
         options["randomized_spawns"] = self.options.spawning_checkpoint_randomizer.value
         options["bonus_levels"] = self.options.bonus_levels.value
-        #options["atlantis_bonus"] = self.options.atlantis_bonus.value
         options["randomize_jump"] = self.options.randomize_jump.value
         options["include_power_ball"] = self.options.include_power_ball.value
         options["checkpoint_checks"] = self.options.checkpoint_checks.value

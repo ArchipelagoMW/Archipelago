@@ -13374,7 +13374,7 @@ function process_slot(block)
     end
     if block['slot_randomized_spawns'] ~= nil and block['slot_randomized_spawns'] ~= 0
     then
-        GVR:setRandomizeCheckpoint(block['slot_randomized_spawns'])
+        GVR:setRandomizeCheckpoint(1)
     end
 	if block['checkedLocations'] ~= nil then
 		flagCheckedLocations(block['checkedLocations'])
