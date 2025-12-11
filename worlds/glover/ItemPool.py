@@ -68,6 +68,12 @@ def find_item_data(self, name : str) -> ItemData:
 	if name in trap_table:
 		return trap_table[name]
 	
+	#Golden Garibs
+	if name == "Golden Garib":
+		out_data : ItemData = misc_table["Golden Garib"]
+		out_data.qty = self.options.golden_garib_count
+		return 
+
 	#Fallthrough
 	return ItemData()
 

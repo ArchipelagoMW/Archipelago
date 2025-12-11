@@ -912,6 +912,9 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                 crystal_address = str(int(0x79A) + int(ctx.slot_data["required_crystals"]) - 1)
                 if crystal_address in ball_return_list:
                     won_game = ball_return_list[crystal_address] == True
+            case 2:
+                if "Golden Garib" in ctx.tracker.items:
+                    won_game = ctx.tracker.items["Golden Garib"] > ctx.slot_data["required_golden_garibs"]
         if won_game and not ctx.finished_game:
             await ctx.send_msgs([{
                 "cmd": "StatusUpdate",

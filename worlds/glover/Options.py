@@ -125,6 +125,7 @@ class EntranceOverrides(OptionDict):
 
 class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
+    !! UNIMPLIMENTED !!
     """
     visibility = Visibility.spoiler
     display_name = "Portalsanity"
@@ -401,9 +402,10 @@ class TrapCameraRotateWeight(Range):
     default = 15
 
 class TrapTipWeight(Range):
-    """What percentage of traps are Tips. Default is 30.
+    """What percentage of traps are Tips.
+    !! UNIMPLIMENTED !!
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.spoiler
     display_name = "Tip Trap Weight"
     range_start = 0
     range_end = 100

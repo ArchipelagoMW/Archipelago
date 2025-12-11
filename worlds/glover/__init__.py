@@ -282,6 +282,10 @@ class GloverWorld(World):
             OptionError("Two garib overrides choose the same position! Make sure all values are unique.")
         if len(entrance_override_doors) != len(set(entrance_override_doors)):
             OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
+        total_golden_garibs = self.options.golden_garib_count
+        total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
+        if total_golden_garibs < self.options.required_golden_garibs:
+            OptionError("Must have enough golden garibs to get the required golden garib count!")
 
     def generate_early(self):
         #Validate options
@@ -900,6 +904,13 @@ class GloverWorld(World):
                 victory_condition = str(self.options.required_crystals.value) + " Balls Returned"
                 victory_location : Location = self.returning_crystal(castle_cave, self.options.required_crystals.value, "G")
                 victory_location.place_locked_item(self.create_event(victory_condition))
+            case 2:
+                menu : Region = multiworld.get_region("Menu", player)
+                victory_location : Location = Location(player, "Golden Garibs Victory", None, menu)
+                required_golden_garibs = self.options.required_golden_garibs.value
+                victory_location.place_locked_item(self.create_event(str(required_golden_garibs) + " Golden Garibs"))
+                set_rule(victory_location, lambda state, rgg = required_golden_garibs: state.has("Golden Garib", player, required_golden_garibs))
+                self.options.required_golden_garibs
             case _:
                 victory_condition = "Endscreen"
         multiworld.completion_condition[player] = lambda state: state.has(victory_condition, player)
@@ -978,6 +989,7 @@ class GloverWorld(World):
         options = {}
         options["victory_condition"] = self.options.victory_condition.value
         options["required_crystals"] = self.options.required_crystals.value
+        options["required_golden_garibs"] = self.options.required_golden_garibs
         options["difficulty_logic"] = self.options.difficulty_logic.value
         options["death_link"] = self.options.death_link.value
         options["tag_link"] = self.options.tag_link.value
