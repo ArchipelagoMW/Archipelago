@@ -711,6 +711,12 @@ class Rac3Interface(GameInterface):
             logger.debug(f'{self.player_type} has Respawned')
 
     def pause_check(self):
+        if self.planet not in RAC3_REGION_DATA_TABLE.keys():
+            # Unknown planet, assume paused to be safe
+            self.pause_menu = True
+            self.pause_state = True
+            return
+        
         pause_address = RAC3_REGION_DATA_TABLE[self.planet].PAUSE_ADDRESS
         self.pause_menu = bool(self._read8(pause_address)) if pause_address else False
         self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE))
@@ -718,7 +724,7 @@ class Rac3Interface(GameInterface):
             case RAC3REGION.QWARKS_HIDEOUT:
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x40))
             case (RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA |
-                  RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
+                    RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x50))
 
     def unpause_game(self):
