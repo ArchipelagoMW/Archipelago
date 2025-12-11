@@ -23,10 +23,7 @@ class Portal2CommandProcessor(ClientCommandProcessor):
 
     def _cmd_checkcon(self):
         """Responds with the status of the client's connection to the Portal 2 mod"""
-        if self.ctx.check_game_connection():
-            self.output("Connection to Portal 2 is up and running")
-        else:
-            self.output("Disconnected from Portal 2. Make sure the mod is open and the -netconport launch option is set")
+        self.ctx.alert_game_connection()
 
     def _cmd_command(self, *command):
         """Sends a command to the game. Should not be used unless you get softlocked"""
@@ -66,6 +63,12 @@ class Portal2Context(CommonContext):
     location_name_to_id: dict[str, int] = None
 
     menu: Menu = None
+
+    def alert_game_connection(self):
+        if self.check_game_connection():
+            self.command_processor.output("Connection to Portal 2 is up and running")
+        else:
+            self.command_processor.output("Disconnected from Portal 2. Make sure the mod is open and the `-netconport 3000` launch option is set")
 
     def create_level_begin_command(self):
         '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
@@ -181,9 +184,8 @@ class Portal2Context(CommonContext):
 
         elif message.startswith("map_complete:"):
             done_map = message.split(':', 1)[1]
-            if done_map == self.goal_map_code and not self.finished_game:
-                self.finished_game = True
-                await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            if done_map == self.goal_map_code:
+                await self.handle_goal_completion()
             logger.info("Check made: " + done_map)
             map_id = self.map_code_to_location_id(done_map)
             if map_id:
@@ -193,6 +195,13 @@ class Portal2Context(CommonContext):
         elif message.startswith("send_deathlink"):
             if self.death_link_active and time.time() - self.last_death_link > 10:
                 self.send_death()
+
+    async def handle_goal_completion(self):
+        if self.finished_game:
+            return
+        
+        self.finished_game = True
+        await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
     def on_deathlink(self, data):
         self.command_queue.append("kill")
@@ -260,6 +269,7 @@ class Portal2Context(CommonContext):
 
         if cmd == "Connected":
             self.handle_slot_data(args["slot_data"])
+            self.alert_game_connection()
 
     def update_item_remove_commands(self):
         temp_commands = []
