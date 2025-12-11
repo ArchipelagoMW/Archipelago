@@ -276,60 +276,95 @@ class GloverWorld(World):
         return -1
 
     def validate_options(self):
+        #Level Name input validation
+        for each_level, each_door in self.options.entrance_overrides.items():
+            if not self.valid_override_level_name(each_level):
+                OptionError("\""+ each_level + "\" is not a valid level for Entrance Overrides!")
+            if not self.valid_override_level_name(each_door):
+                OptionError("\""+ each_door + "\" is not a valid door for Entrance Overrides!")
+        for each_level in list(self.options.garib_order_overrides.keys()):
+            if not self.valid_override_level_name(each_level, False):
+                OptionError("\""+ each_level + "\" is not a valid level for Garib Order Overrides!")
         garib_override_positions = list(self.options.garib_order_overrides.values())
         entrance_override_doors = list(self.options.entrance_overrides.values())
+        
+        #No duplicate override choices for Garib Order or World Order
         if len(garib_override_positions) != len(set(garib_override_positions)):
             OptionError("Two garib overrides choose the same position! Make sure all values are unique.")
         if len(entrance_override_doors) != len(set(entrance_override_doors)):
             OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
+        
+        #Checkpoint Overrides In-Bounds
+        for target_level, set_checkpoint in self.options.checkpoint_overrides.items():
+            if not self.valid_override_level_name(target_level, False):
+                OptionError("\""+ target_level + "\" is not a valid level for Checkpoint Overrides!")
+            world_index = self.world_from_string(target_level)
+            level_index = self.level_from_string(target_level)
+            max_checkpoint_value = self.spawn_checkpoint[(world_index * 3) + level_index]
+            if max_checkpoint_value < set_checkpoint or set_checkpoint < 1:
+                OptionError("Level " + target_level + " does not have a \"Checkpoint " + str(set_checkpoint) + "\"! Check your Checkpoint Overrides.")
+        
+        #Golden Garibs Possible
         total_golden_garibs = self.options.golden_garib_count
         total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
         if total_golden_garibs < self.options.required_golden_garibs:
             OptionError("Must have enough golden garibs to get the required golden garib count!")
+    
+    def valid_override_level_name(self, in_level : str, allow_bosses : bool = True):
+        end_options = ["1", "2", "3", "!", "?"]
+        if not self.options.bonus_levels:
+            end_options.remove("?")
+        if not allow_bosses:
+            end_options.remove("!")
+        return in_level.endswith(tuple(end_options)) and in_level.startswith(tuple(["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"])) and len(in_level) == 4
+   
+    def percents_sum_100(self, percents_dict : dict) -> dict:
+        sum : float = 0
+        for all_percentages in percents_dict.values():
+            sum += all_percentages
+        if math.isclose(sum, 1):
+            return percents_dict
+        if math.isclose(sum, 0):
+            raise OptionError("All weight entries are 0! Check your Filler or Trap weights!")
+        for all_entries, all_percentages in percents_dict.items():
+            percents_dict[all_entries] /= sum
+        return percents_dict
+    
+    def entrance_randomization(self):
+        #While only certain levels exist, randomize only those.
+        randomizable_existing_levels = self.existing_levels.copy()
+        randomizable_existing_levels.remove("Training")
+        shuffled_existing_levels = randomizable_existing_levels.copy()
+        self.random.shuffle(shuffled_existing_levels)
+        originalEntries = self.wayroom_entrances.copy()
+        for level_index, level_name in enumerate(randomizable_existing_levels):
+            replaced_index = originalEntries.index(level_name)
+            self.wayroom_entrances[replaced_index] = shuffled_existing_levels[level_index]
+        
+        #Remove bonus levels by placing them in vanilla spots
+        if not self.options.bonus_levels:
+            self.wayroom_entrances.remove("Atl?")
+            self.wayroom_entrances.remove("Crn?")
+            self.wayroom_entrances.remove("Prt?")
+            self.wayroom_entrances.remove("Pht?")
+            self.wayroom_entrances.remove("FoF?")
+            self.wayroom_entrances.remove("Otw?")
+            self.wayroom_entrances.insert(4, "Atl?")
+            self.wayroom_entrances.insert(9, "Crn?")
+            self.wayroom_entrances.insert(14, "Prt?")
+            self.wayroom_entrances.insert(19, "Pht?")
+            self.wayroom_entrances.insert(24, "FoF?")
+            self.wayroom_entrances.insert(29, "Otw?")
+        
+        #Override randomized entrances here
+        for each_entry in self.options.entrance_overrides:
+            index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
+            original_world = self.wayroom_entrances[index]
+            original_index = self.wayroom_entrances.index(each_entry["level"])
+            self.wayroom_entrances[index] = each_entry["level"]
+            self.wayroom_entrances[original_index] = original_world
 
-    def generate_early(self):
-        #Validate options
-        self.validate_options
-        #Shuffle Checkpoints
-        self.checkpoint_randomization()
-        #Level entry randomization
-        if self.options.entrance_randomizer:
-            #When all levels exist, you can just shuffle this
-            #self.random.shuffle(self.wayroom_entrances)
-
-            #While only certain levels exist, randomize only those.
-            randomizable_existing_levels = self.existing_levels.copy()
-            randomizable_existing_levels.remove("Training")
-            shuffled_existing_levels = randomizable_existing_levels.copy()
-            self.random.shuffle(shuffled_existing_levels)
-            originalEntries = self.wayroom_entrances.copy()
-            for level_index, level_name in enumerate(randomizable_existing_levels):
-                replaced_index = originalEntries.index(level_name)
-                self.wayroom_entrances[replaced_index] = shuffled_existing_levels[level_index]
-
-            #self.random.shuffle(self.overworld_entrances)
-            if not self.options.bonus_levels:
-                self.wayroom_entrances.remove("Atl?")
-                self.wayroom_entrances.remove("Crn?")
-                self.wayroom_entrances.remove("Prt?")
-                self.wayroom_entrances.remove("Pht?")
-                self.wayroom_entrances.remove("FoF?")
-                self.wayroom_entrances.remove("Otw?")
-                self.wayroom_entrances.insert(4, "Atl?")
-                self.wayroom_entrances.insert(9, "Crn?")
-                self.wayroom_entrances.insert(14, "Prt?")
-                self.wayroom_entrances.insert(19, "Pht?")
-                self.wayroom_entrances.insert(24, "FoF?")
-                self.wayroom_entrances.insert(29, "Otw?")
-            
-            #Override randomized entrances here
-            for each_entry in self.options.entrance_overrides:
-                index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
-                original_world = self.wayroom_entrances[index]
-                original_index = self.wayroom_entrances.index(each_entry["level"])
-                self.wayroom_entrances[index] = each_entry["level"]
-                self.wayroom_entrances[original_index] = original_world
-            
+    def setup_garib_order(self):
         #Random Garib Sorting Order
         if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
@@ -338,7 +373,7 @@ class GloverWorld(World):
                 level_in_slot = self.garib_level_order[each_placement]
                 original_placement = -1
                 original_level = []
-                #BBB
+                #Swap the randomized position with the overwriten one
                 for original_index, each_original in enumerate(self.garib_level_order):
                     if each_original[0] == each_level:
                         original_placement = original_index
@@ -354,7 +389,7 @@ class GloverWorld(World):
                     if each_entry[0] == level_name:
                         new_garib_order.append(each_entry)
             self.garib_level_order = new_garib_order
-        
+
         #Bonus level garibs all go at the end if they're disabled
         if not self.options.bonus_levels:
             self.garib_level_order.remove(["Atl?", 25])
@@ -363,7 +398,6 @@ class GloverWorld(World):
             self.garib_level_order.remove(["Pht?", 60])
             self.garib_level_order.remove(["FoF?", 56])
             self.garib_level_order.remove(["Otw?", 50])
-
             self.garib_level_order.append(["Atl?", 25])
             self.garib_level_order.append(["Crn?", 20])
             self.garib_level_order.append(["Prt?", 50])
@@ -371,7 +405,7 @@ class GloverWorld(World):
             self.garib_level_order.append(["FoF?", 56])
             self.garib_level_order.append(["Otw?", 50])
 
-        #Set the starting ball
+    def give_starting_ball(self):
         match self.options.starting_ball:
             case StartingBall.option_rubber_ball:
                 self.starting_ball = "Rubber Ball"
@@ -397,8 +431,25 @@ class GloverWorld(World):
 	            "Power Ball"]
                 self.starting_ball = self.random.choice(ball_options)
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
+
+    def generate_early(self):
+        #Validate options
+        self.validate_options
+        #Setup the Filler Table logic
+        self.setup_filler_table()
+        #Shuffle Checkpoints
+        self.checkpoint_randomization()
+        #Level entry randomization
+        if self.options.entrance_randomizer:
+            self.entrance_randomization()
+        #Set the garib order if the settings allow it
+        self.setup_garib_order()
+        #Set the starting ball
+        self.give_starting_ball()
+        #Jump randomization is so easy it can just be done here
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
+        #Create fake items
         self.fake_item_names = create_trap_name_table(self)
 
     def checkpoint_randomization(self):
@@ -519,18 +570,6 @@ class GloverWorld(World):
     def percent_of(self, percent : int) -> float:
         return (float(percent) / 100.0)
 
-    def percents_sum_100(self, percents_dict : dict) -> dict:
-        sum : float = 0
-        for all_percentages in percents_dict.values():
-            sum += all_percentages
-        if math.isclose(sum, 1):
-            return percents_dict
-        if math.isclose(sum, 0):
-            raise ValueError("All weight entries are 0!")
-        for all_entries, all_percentages in percents_dict.items():
-            percents_dict[all_entries] /= sum
-        return percents_dict
-
     def create_items(self) -> None:
         #Garib Logic
         garib_items = []
@@ -593,8 +632,6 @@ class GloverWorld(World):
             for _ in range(find_item_data(self, each_item).qty):
                 self.multiworld.itempool.append(self.create_item(each_item))
                 core_item_count += 1
-        #Setup the filler table logic
-        self.setup_filler_table()
 
         #Calculate the total number of filler items needed to fill the missing locations
         total_locations : int = len(self.multiworld.get_unfilled_locations(self.player))
