@@ -14,7 +14,7 @@ class VictoryCondition(Choice):
     display_name = "Victory Condition"
     option_endscreen = 0
     option_crystal_count = 1
-    #option_hard_tricks = 2
+    option_golden_garibs = 2
 
 class RequiredCrystals(Range):
     """The number of crystals needed to beat Glover while Victory Condition is Crystal Count. Default 4."""
@@ -24,6 +24,21 @@ class RequiredCrystals(Range):
     range_end = 7
     default = 4
 
+class GoldenGaribCount(Range):
+    """The number of Golden Garibs in the world pool while Victory Condition is Golden Garibs. Default 12."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Golden Garib Count"
+    range_start = 1
+    range_end = 100
+    default = 12
+
+class GoldenGaribRequirement(Range):
+    """The number of Golden Garibs required to win while Victory Condition is Golden Garibs. Default 6."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Golden Garibs Requirement"
+    range_start = 1
+    range_end = 100
+    default = 6
 
 class DifficultyLogic(Choice):
     """What tricks are allowed. Default Intended.
@@ -398,6 +413,8 @@ class TrapTipWeight(Range):
 class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     victory_condition : VictoryCondition
     required_crystals : RequiredCrystals
+    golden_garib_count : GoldenGaribCount
+    required_golden_garibs : GoldenGaribRequirement
     difficulty_logic : DifficultyLogic
     starting_ball : StartingBall
     garib_logic : GaribLogic

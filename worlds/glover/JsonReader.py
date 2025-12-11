@@ -310,7 +310,7 @@ def create_access_method(self, info : dict, level_name : str) -> AccessMethod:#
         if each_key.startswith("ck"):
             required_moves.append(level_name + " " + each_result)
     #Remove Power Ball methods
-    if "Power Ball" in required_moves and not self.options.include_power_ball:
+    if "Power Ball" in required_moves and (not self.options.include_power_ball and self.starting_ball != "Power Ball"):
         return None
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
     if "Not Bowling" in required_moves and "Not Crystal" in required_moves:

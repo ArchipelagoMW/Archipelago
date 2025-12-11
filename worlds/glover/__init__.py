@@ -275,7 +275,18 @@ class GloverWorld(World):
             return 6
         return -1
 
+    def validate_options(self):
+        garib_override_positions = list(self.options.garib_order_overrides.values())
+        entrance_override_doors = list(self.options.entrance_overrides.values())
+        if len(garib_override_positions) != len(set(garib_override_positions)):
+            OptionError("Two garib overrides choose the same position! Make sure all values are unique.")
+        if len(entrance_override_doors) != len(set(entrance_override_doors)):
+            OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
+
     def generate_early(self):
+        #Validate options
+        self.validate_options
+        #Shuffle Checkpoints
         self.checkpoint_randomization()
         #Level entry randomization
         if self.options.entrance_randomizer:
@@ -381,9 +392,6 @@ class GloverWorld(World):
 	            "Crystal",
 	            "Power Ball"]
                 self.starting_ball = self.random.choice(ball_options)
-        #Powerball should not show up if you
-        if not self.options.include_power_ball and self.starting_ball == "Power Ball":
-            raise OptionError("You cannot start with Power Ball while Include Power Ball is disabled!")
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
@@ -434,14 +442,15 @@ class GloverWorld(World):
             
             for each_index, each_item in enumerate(self.spawn_checkpoint):
                 self.spawn_checkpoint[each_index] = self.random.choice(spawning_options[each_index])
+            
+            #Override Checkpoints
+            for each_map, checkpoint_number in self.options.checkpoint_overrides.items():
+                checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
+                self.spawn_checkpoint[checkpoint_entry] = checkpoint_number
         else:
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
-        #Override Checkpoints
-        for each_map, checkpoint_number in self.options.checkpoint_overrides.items():
-            checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
-            self.spawn_checkpoint[checkpoint_entry] = checkpoint_number
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -556,7 +565,7 @@ class GloverWorld(World):
 
         #Abilities
         ability_items = list(ability_table.keys())
-        if not self.options.include_power_ball:
+        if not self.options.include_power_ball and self.starting_ball != "Power Ball":
             ability_items.remove("Power Ball")
         if not self.options.randomize_jump:
             ability_items.remove("Jump")
@@ -564,7 +573,10 @@ class GloverWorld(World):
         #You don't need the item pool to contain your starting item
         ability_items.remove(self.starting_ball)
         
-        #self.multiworld
+        #Golden Garibs
+        if self.options.victory_condition.value == 2:
+            ability_items.append("Golden Garib")
+
         #Apply all core items
         all_core_items = []
         all_core_items.extend(garib_items)

@@ -73,6 +73,10 @@ def find_item_data(self, name : str) -> ItemData:
 
 BASE_ID = 6500000
 
+misc_table = {
+	"Golden Garib" :							ItemData(BASE_ID + 99999, -1, "Proguseful", None)
+	}
+
 portalsanity_table = {
 	"AtlH 1 Star" : 						ItemData(BASE_ID + 0, 1, "Progression", "Atl1: All Garibs"),
 	"AtlH 2 Gate" : 						ItemData(BASE_ID + 1, 1, "Progression", "Atl1: Goal"),
@@ -561,7 +565,8 @@ all_items = {
 	**world_garib_table, 
 	**garibsanity_world_table,
 	**{"Garib" : garbinsanity},
-	**decoupled_garib_table
+	**decoupled_garib_table,
+	**misc_table
 }
 
 def generate_item_name_to_id(world_prefixes : list[str], level_prefixes : list[str]) -> dict:
@@ -709,6 +714,10 @@ def create_trap_name_table(self) -> list[str]:
 		"Not a Tip Trap"
 	]
 	
+	#Fake goal items
+	if self.options.victory_condition.value != 2:
+		trap_name_table.append("Golden Garib")
+
 	#Fake portal entries
 	if self.options.portalsanity:
 		for each_prefix in self.level_prefixes:
