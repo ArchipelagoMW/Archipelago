@@ -1,0 +1,30 @@
+ContainerLayout:
+    md_bg_color: app.theme_cls.backgroundColor
+
+    MainLayout:
+        id: main
+        cols: 3
+        padding: 3, 5, 0, 3
+        spacing: "2dp"
+
+        ScrollBox:
+            id: scrollbox
+            size_hint_x: None
+            width: "220dp"
+
+        MDDivider:
+            orientation: "vertical"
+            width: "4dp"
+
+        MDScrollView:
+            MDBoxLayout:
+                id: info_layout
+                orientation: "vertical"
+                padding: ["20dp", "20dp", "20dp", "10dp"]
+                spacing: "5dp"
+                adaptive_height: True
+
+                MDLabel:
+                    text: "Select a world from the list to view details."
+                    size_hint_y: None
+                    height: "40dp"
