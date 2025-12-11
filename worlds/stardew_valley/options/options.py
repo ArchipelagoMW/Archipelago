@@ -578,7 +578,7 @@ class Cooksanity(Choice):
 
 class Chefsanity(OptionSet):
     """Locations for learning cooking recipes? Omitted categories are learned normally
-    Queen of Sauce: Every Queen of Sauce episode is a check, all Queen of Sauce recipes are items
+    Queen of Sauce: Every Queen of Sauce episode is a check
     Purchases: Every purchasable recipe is a check
     Friendship: Recipes obtained from friendship are checks
     Skills: Recipes obtained from skills are checks
