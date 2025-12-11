@@ -42,7 +42,18 @@ class EasyMillaRace(Toggle):
 class EasyFlightMode(Toggle):
     """Replicate the Levitation Flight Glitch by simply holding down float in the air. No more button mashing.
     WARNING: Makes getting locations out of logic VERY easy."""
-    display_name = "Easy Flight Mode"   
+    display_name = "Easy Flight Mode"  
+
+
+class OtherItemsModel(Choice): 
+    """Choose what your Archipelago items for other games look like inside Psychonauts
+    Archipelago: The standard Archipelago symbol.
+
+    Classic: The original PsychoRando model for Archipelago items, Bunnies!"""
+    display_name = "Archipelago Item Model"
+    option_archipelago = 0
+    option_classic = 1
+    default = 0
 
 
 class EnemyDamageMultiplier(Range):
@@ -106,9 +117,11 @@ class MentalCobwebShuffle(Toggle):
     Raz's inventory, so the loom in Ford's Sanctuary will have no use."""
     display_name = "Mental Cobweb Shuffle"
 
+
 class RankSanity(Toggle):
     """Add Rank Rewards to EVERY Rank Up, instead of the traditional Five Ranks Up."""
     display_name = "Rank Sanity"
+
 
 @dataclass
 class PsychonautsOptions(PerGameCommonOptions):
@@ -119,6 +132,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     LootboxVaults: LootboxVaults
     EasyMillaRace: EasyMillaRace
     EasyFlightMode: EasyFlightMode
+    OtherItemsModel: OtherItemsModel
     EnemyDamageMultiplier: EnemyDamageMultiplier
     InstantDeathMode: InstantDeathMode
     Goal: Goal
