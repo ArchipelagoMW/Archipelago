@@ -859,6 +859,7 @@ class Rac3Interface(GameInterface):
                         self._write8(RAC3STATUS.ACTION + 0x18, 0x9E)  # This address helps the death animation trigger
                         logger.debug(f'player is qwark, qwark must die dramatically')
             logger.debug(f'player successfully killed')
+            self.last_death_count += 1  # Force death count increase to prevent a death link after free fall
             return True
         else:
             logger.debug(f'player unable to be killed')
