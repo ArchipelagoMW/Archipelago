@@ -1,10 +1,13 @@
 from dataclasses import dataclass
-from Options import ExcludeLocations, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
+
+from schema import Schema
+from Options import ExcludeLocations, OptionCounter, OptionDict, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
 
 class VictoryCondition(Choice):
     """The condition needed to beat Glover.
     Endscreen: Get to the endscreen.
     Crystal Count: Get the number of crystals required."""
+    visibility = Visibility.simple_ui
     display_name = "Victory Condition"
     option_endscreen = 0
     option_crystal_count = 1
@@ -12,6 +15,7 @@ class VictoryCondition(Choice):
 
 class RequiredCrystals(Range):
     """The number of crystals needed to beat Glover while Victory Condition is Crystal Count. Default 4."""
+    visibility = Visibility.simple_ui
     display_name = "Required Crystals"
     range_start = 2
     range_end = 7
@@ -24,6 +28,7 @@ class DifficultyLogic(Choice):
     Easy Tricks: Jumping through the garib completion marks is expected. Things that are hard to do that don't require glitches, and minor skips are allowed.
     Hard Tricks: Any glitches and clips are expected.
     """
+    visibility = Visibility.simple_ui
     display_name = "Logic Difficulty"
     option_intended = 0
     option_easy_tricks = 1
@@ -33,6 +38,7 @@ class StartingBall(Choice):
     """Set the ball you start with. Default Crystal.
     Any Random and Power Ball require Power Ball Transformation to be enabled.
     """
+    visibility = Visibility.simple_ui
     display_name = "Starting Ball"
     option_rubber_ball = 0
     option_bowling_ball = 1
@@ -49,6 +55,7 @@ class GaribLogic(Choice):
     Garib Groups: Each group of garibs in a level is a check. You are sent bundles of garibs.
     Garibsanity: Each garib is a check. You can be sent individual garibs.
     """
+    visibility = Visibility.simple_ui
     display_name = "Garib Logic"
     option_level_garibs = 0
     option_garib_groups = 1
@@ -61,6 +68,7 @@ class GaribSorting(Choice):
     In Order: Garibs are sent to levels in world order.
     Random: Garibs are sent to levels in a random order.
     """
+    visibility = Visibility.simple_ui
     display_name = "Garib Sorting"
     option_by_level = 0
     option_in_order = 1
@@ -70,23 +78,50 @@ class GaribSorting(Choice):
 class EntranceRandomizer(DefaultOnToggle):
     """Loading zones are randomized. Default on.
     """
+    visibility = Visibility.simple_ui
     display_name = "Entrance Randomizer"
+
+class EntranceOverrides(OptionDict):
+    """The postions of levels when Spawn Randomizer is on.
+    Structured {"Level" : "Door to Place"}
+    Example [{"Atl3" : "Crn1"}, {"FoF2" : "Otw2"}] """
+    visibility = Visibility.complex_ui
+    schema = Schema([{"level" : str, "hub" : str}])
+    default = []
+    display_name = "Entrance Overrides"
 
 class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
     """
+    visibility = Visibility.simple_ui
     display_name = "Portalsanity"
     visibility = Visibility.none
 
-class SpawningCheckpointRandomizer(Toggle):
+class SpawningCheckpointRandomizer(Choice):
     """Spawning checkpoints are randomized. Default off.
     """
+    visibility = Visibility.simple_ui
+    option_off = 0
+    option_random = 1
+    option_reverse_glover = 2
+    default = 0
     display_name = "Spawn Randomizer"
+
+class CheckpointOverrides(OptionCounter):
+    """The postions of checkpoints when Spawn Randomizer is on.
+    Structured World Name[Level Number] : [Checkpoint Number]
+    Example "Atl3" : 2"""
+    visibility = Visibility.complex_ui
+    min = 1
+    max = 5
+    default = {}
+    display_name = "Checkpoint Overrides"
 
 class EnableBonuses(DefaultOnToggle):
     """Makes Bonus Levels contain checks. Default on.
     """
     display_name = "Include Bonus Levels"
+    visibility = Visibility.simple_ui
 
 class GloverExcludeLocations(ExcludeLocations):
     """Prevent these locations from having important item."""
@@ -95,57 +130,68 @@ class GloverExcludeLocations(ExcludeLocations):
 class TagLink(Toggle):
     """When you transform the ball, everyone who enabled swap link changes character or the ball. Of course, the reverse is true too. Default off.
     """
+    visibility = Visibility.simple_ui
     display_name = "Tag Link"
 
 class TrapLink(Toggle):
     """When you get a trap, sends a similar trap to everyone else with trap link enabled. Of course, the reverse is true too. Default off.
     """
+    visibility = Visibility.simple_ui
     display_name = "Trap Link"
 
 
 class RandomizeJump(Toggle):
     """Start without jump. Default off.
     """
+    visibility = Visibility.simple_ui
     display_name = "Randomize Jump"
 
 class IncludePowerBall(Toggle):
     """Adds the Power Ball to the items. Default off.
     """
-    display_name = "Randomize Jump"
+    visibility = Visibility.simple_ui
+    display_name = "Randomize Power Ball"
 
 class CheckpointsChecks(Toggle):
     """Checkpoints are checks and items. Default off.
     """
+    visibility = Visibility.simple_ui
     display_name = "Randomize Checkpoints"
 
 class SwitchesChecks(DefaultOnToggle):
     """Switches are checks and level events are items. Default on.
     """
+    visibility = Visibility.simple_ui
     display_name = "Randomize Switches"
 
 class MrTipChecks(DefaultOnToggle):
     """Mr. Tips are checks. Default on.
     """
+    visibility = Visibility.simple_ui
     display_name = "Mr. Tip Checks"
 
 class Enemysanity(Toggle):
     """Enemies that can normally be defeated are checks.
     """
+    visibility = Visibility.simple_ui
     display_name = "Enemysanity"
 
 class Insectity(Toggle):
     """Defeating insects are checks.
     """
+    visibility = Visibility.simple_ui
     display_name = "Insectity"
 
 class EasyBallWalk(Toggle):
     """Forces the game to de-invert ball controls.
     """
+    visibility = Visibility.simple_ui
     display_name = "Easy Ball Walk"
 
 class MrHints(Choice):
     """Mr. Tips give AP hints. Default 1.
     """
+    visibility = Visibility.simple_ui
     display_name = "Mr. Tip Hints"
     option_off = 0
     option_balanced = 1
@@ -159,6 +205,7 @@ class MrHints(Choice):
 class ChickenHints(Choice):
     """Cheat Chicken gives AP hints. Default 3.
     """
+    visibility = Visibility.simple_ui
     display_name = "Cheat Chicken Hints"
     option_off = 0
     option_balanced = 1
@@ -172,6 +219,7 @@ class ChickenHints(Choice):
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
     """
+    visibility = Visibility.complex_ui
     display_name = "Bonus Garib"
     range_start = 1
     range_end = 20
@@ -181,6 +229,7 @@ class ExtraGaribsValue(Range):
 class FillerExtraGaribsWeight(Range):
     """What percentage of filler items are Extra Garibs. Default is 0.
     """
+    visibility = Visibility.complex_ui
     display_name = "Extra Garibs Weight"
     range_start = 0
     range_end = 100
@@ -189,6 +238,7 @@ class FillerExtraGaribsWeight(Range):
 class FillerChickenSoundWeight(Range):
     """What percentage of filler items are nothing. Default is 10.
     """
+    visibility = Visibility.complex_ui
     display_name = "Chicken Sound (Nothing) Weight"
     range_start = 0
     range_end = 100
@@ -197,6 +247,7 @@ class FillerChickenSoundWeight(Range):
 class FillerLifeWeight(Range):
     """What percentage of filler items are Extra Lives. Default is 50.
     """
+    visibility = Visibility.complex_ui
     display_name = "Life Weight"
     range_start = 0
     range_end = 100
@@ -205,6 +256,7 @@ class FillerLifeWeight(Range):
 class FillerBoomerangBallWeight(Range):
     """What percentage of filler items are Boomerang Balls. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Boomerang Ball Weight"
     range_start = 0
     range_end = 100
@@ -213,6 +265,7 @@ class FillerBoomerangBallWeight(Range):
 class FillerBeachballWeight(Range):
     """What percentage of filler items are Beach Balls. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Beach Ball Weight"
     range_start = 0
     range_end = 100
@@ -221,6 +274,7 @@ class FillerBeachballWeight(Range):
 class FillerHerculesPotionWeight(Range):
     """What percentage of filler items are Hercules Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Hercules Potion Weight"
     range_start = 0
     range_end = 100
@@ -229,6 +283,7 @@ class FillerHerculesPotionWeight(Range):
 class FillerHelicopterPotionWeight(Range):
     """What percentage of filler items are Helicopter Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Helicopter Potion Weight"
     range_start = 0
     range_end = 100
@@ -237,6 +292,7 @@ class FillerHelicopterPotionWeight(Range):
 class FillerSpeedPotionWeight(Range):
     """What percentage of filler items are Speed Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Speed Potion Weight"
     range_start = 0
     range_end = 100
@@ -245,6 +301,7 @@ class FillerSpeedPotionWeight(Range):
 class FillerFrogPotionWeight(Range):
     """What percentage of filler items are Frog Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Frog Potion Weight"
     range_start = 0
     range_end = 100
@@ -253,6 +310,7 @@ class FillerFrogPotionWeight(Range):
 class FillerDeathPotionWeight(Range):
     """What percentage of filler items are Death Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Death Potion Weight"
     range_start = 0
     range_end = 100
@@ -261,6 +319,7 @@ class FillerDeathPotionWeight(Range):
 class FillerStickyPotionWeight(Range):
     """What percentage of filler items are Sticky Potions. Default is 5.
     """
+    visibility = Visibility.complex_ui
     display_name = "Sticky Potion Weight"
     range_start = 0
     range_end = 100
@@ -271,6 +330,7 @@ class FillerStickyPotionWeight(Range):
 class TrapPercentage(Range):
     """What percentage of checks that would be filler are replaced with traps. Default is 20.
     """
+    visibility = Visibility.complex_ui
     display_name = "Trap Weight"
     range_start = 0
     range_end = 100
@@ -279,6 +339,7 @@ class TrapPercentage(Range):
 class TrapFrogWeight(Range):
     """What percentage of traps are Frog Traps. Default is 20.
     """
+    visibility = Visibility.complex_ui
     display_name = "Frog Trap Weight"
     range_start = 0
     range_end = 100
@@ -287,6 +348,7 @@ class TrapFrogWeight(Range):
 class TrapCursedBallWeight(Range):
     """What percentage of traps are Cursed Ball. Default is 20.
     """
+    visibility = Visibility.complex_ui
     display_name = "Cursed Ball Trap Weight"
     range_start = 0
     range_end = 100
@@ -295,6 +357,7 @@ class TrapCursedBallWeight(Range):
 class TrapBecomesCrystalWeight(Range):
     """What percentage of traps are Crystal Transformations. Default is 15.
     """
+    visibility = Visibility.complex_ui
     display_name = "Instant Crystal Trap Weight"
     range_start = 0
     range_end = 100
@@ -303,6 +366,7 @@ class TrapBecomesCrystalWeight(Range):
 class TrapCameraRotateWeight(Range):
     """What percentage of traps are Camera Tilts. Default is 15.
     """
+    visibility = Visibility.complex_ui
     display_name = "Camera Tilt Trap Weight"
     range_start = 0
     range_end = 100
@@ -311,6 +375,7 @@ class TrapCameraRotateWeight(Range):
 class TrapTipWeight(Range):
     """What percentage of traps are Tips. Default is 30.
     """
+    visibility = Visibility.complex_ui
     display_name = "Tip Trap Weight"
     range_start = 0
     range_end = 100
@@ -325,8 +390,10 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     garib_logic : GaribLogic
     garib_sorting : GaribSorting
     entrance_randomizer : EntranceRandomizer
+    entrance_overrides : EntranceOverrides
     portalsanity : Portalsanity
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
+    checkpoint_override : CheckpointOverrides
     bonus_levels : EnableBonuses
     tag_link : TagLink
     trap_link : TrapLink

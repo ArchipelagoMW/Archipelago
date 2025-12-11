@@ -305,7 +305,13 @@ class GloverWorld(World):
                 self.wayroom_entrances.insert(19, "Pht?")
                 self.wayroom_entrances.insert(24, "FoF?")
                 self.wayroom_entrances.insert(29, "Otw?")
-        
+        for each_entry in self.options.entrance_overrides:
+            index = (self.world_from_string(each_entry["hub"]) * 5) + self.level_from_string(each_entry["hub"])
+            original_world = self.wayroom_entrances[index]
+            original_index = self.wayroom_entrances.index(each_entry["level"])
+            self.wayroom_entrances[index] = each_entry["level"]
+            self.wayroom_entrances[original_index] = original_world
+            
         #Random Garib Sorting Order
         if self.options.garib_sorting == GaribSorting.option_random_order:
             self.random.shuffle(self.garib_level_order)
@@ -418,6 +424,10 @@ class GloverWorld(World):
             #By default, they're all Checkpoint 1
             for each_item in range(len(self.spawn_checkpoint)):
                 self.spawn_checkpoint[each_item] = 1
+        #Override Checkpoints
+        for each_map in self.options.checkpoint_override:
+            checkpoint_entry = (self.world_from_string(each_map) * 3) + self.level_from_string(each_map)
+            self.spawn_checkpoint[checkpoint_entry] = self.options.checkpoint_override[each_map]
 
     def create_regions(self):
         multiworld = self.multiworld
@@ -626,7 +636,7 @@ class GloverWorld(World):
                 #First, get the current actual item percentage
                 each_percent = self.filler_item_counts[each_item] / self.total_filler
                 #The offset is the target percentage minus the current percentage
-                percentage_offsets[each_item] = self.filler_item_counts[each_item] - each_percent
+                percentage_offsets[each_item] = self.filler_percent_table[each_item] - each_percent
             output = max(percentage_offsets, key=percentage_offsets.get)
 
         #Return the next expected item
