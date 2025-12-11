@@ -1053,8 +1053,8 @@ def create_location(player: int, location_data: LocationData, region: Region) ->
 def combine_callables(callable1: Callable[[CollectionState], bool], callable2: Callable[[CollectionState], bool]) -> Callable[[CollectionState], bool]:
     return lambda state, a=callable1, b=callable2: a(state) and b(state)
 
-def fancy_add_exits(self, region: str, exits: List[str],
-                    rules: Dict[str, Callable[[CollectionState], bool]] | None = None):
+def fancy_add_exits(self: "CrystalProjectWorld", region: str, exits: List[str],
+                    rules: Dict[str, Callable[[CollectionState], bool]] | None = None) -> None:
     if rules is not None:
         for region_rule in rules:
             if not region_rule in exits:
