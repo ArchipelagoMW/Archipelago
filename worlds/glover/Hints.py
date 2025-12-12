@@ -79,15 +79,17 @@ def create_hint_lookup(self, hint_locations : list[str], valid_items : list[Item
 
 def generate_hint_text(self, vague_hint : bool, in_location : Location, in_item : Item, vauge_prefix : str) -> str:
     hint_text = in_location.hint_text
-    locations_owner = self.multiworld.player_name[in_location.player] + "'s"
+    locations_owner = self.multiworld.player_name[in_location.player] + "s"
     if in_location.player == self.player:
         locations_owner = "your"
+    item_owner = self.multiworld.player_name[in_item.player]
     if in_item.player == self.player:
         item_owner = "you"
-    item_owner = self.multiworld.player_name[in_item.player]
     if vague_hint:
         hint_text = hint_text.removeprefix("at ")
         item_class = " " + str(in_item.classification.value) + " "
+        if in_location.player == self.player:
+            locations_owner = locations_owner.title()
         match in_item.classification.value:
             #Filler
             case 0:
@@ -113,15 +115,15 @@ def generate_hint_text(self, vague_hint : bool, in_location : Location, in_item 
             
             case 17:
                 item_class = " is good for "
-        return vauge_prefix + locations_owner.title() + " " + hint_text + item_class + item_owner
-    item_owner += "'s"
+        return vauge_prefix + locations_owner + " " + hint_text + item_class + item_owner
+    item_owner += "s"
     if in_item.player == self.player:
-        item_owner += "r"
+        item_owner = "Your"
     item_name = in_item.hint_text
-    world_specification = " in " + locations_owner + " world "
+    world_specification = "in " + locations_owner + " world "
     if in_location.player == in_item.player:
         world_specification = ""
-    return item_owner.title() + " " + item_name + " is" + world_specification + hint_text
+    return item_owner + " " + item_name + " is " + world_specification + hint_text
 
 def location_to_hint_info(self, in_location : Location) -> dict[str:str]:
     hint : dict[str:str] = {
@@ -168,9 +170,5 @@ def get_valid_items(self, item_classes : list[ItemClassification] | None) -> lis
         #Only items from the catagory are valid choices
         if (not each_item.classification in item_classes) and item_classes != []:
             continue
-        #Only items that are in your game [If feature implimented, may change]
-        #if each_item.location is not NoneType:
-        #    if each_item.location.player != self.player:
-        #        continue
         valid_items.append(each_item)
     return valid_items

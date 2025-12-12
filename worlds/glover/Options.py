@@ -409,7 +409,7 @@ class TrapTipWeight(Range):
     display_name = "Tip Trap Weight"
     range_start = 0
     range_end = 100
-    default = 30
+    default = 0
 
 @dataclass
 class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
