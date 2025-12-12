@@ -5,8 +5,8 @@ from typing import Any, NamedTuple
 
 from BaseClasses import CollectionState, Location, Region
 from Utils import restricted_loads
-from worlds.generic.Rules import set_rule
-from .options import FirstRootNode, NineSolsGameOptions, LogicDifficulty
+from worlds.generic.Rules import CollectionRule, set_rule
+from .options import FirstRootNode, LogicDifficulty, NineSolsGameOptions
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -182,20 +182,16 @@ def create_regions(world: "NineSolsWorld") -> None:
 
         exit_connections = [cd for cd in connections_to_create if cd["from"] == region_name]
         for connection in exit_connections:
-            all_requires = get_all_requires(connection, world)
-            rule = lambda state, r=all_requires: eval_rule(state, p, options, r) if len(all_requires) > 0 else None  # noqa
+            [rule, indirect_region_names] = get_combined_access_rule(connection, world)
             entrance = region.connect(mw.get_region(connection["to"], p), None, rule)
-            indirect_region_names = regions_referenced_by_rule(all_requires)
             for indirect_region_name in indirect_region_names:
                 mw.register_indirect_condition(mw.get_region(indirect_region_name, p), entrance)
 
     # add access rules to the created locations
     for ld in locations_data:
         if ld["name"] in locations_to_create:
-            all_requires = get_all_requires(ld, world)
-            if len(all_requires) > 0:
-                set_rule(mw.get_location(ld["name"], p),
-                         lambda state, r=all_requires: eval_rule(state, p, options, r))  # noqa
+            [rule, _] = get_combined_access_rule(ld, world)
+            set_rule(mw.get_location(ld["name"], p), rule)
 
     world.origin_region_name = "FSP - Root Node"
     if options.first_root_node == FirstRootNode.option_apeman_facility_monitoring:
@@ -239,7 +235,7 @@ def create_regions(world: "NineSolsWorld") -> None:
 
 
 # `logic` can be a location or a connection
-def get_all_requires(logic: Any, world: "NineSolsWorld") -> list[Any]:
+def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> [CollectionRule, list[str]]:
     vanilla_requires = logic["requires"] if "requires" in logic else None
     # TODO: replace this hack with a generic "requires": { "option": ... } syntax
     if (
@@ -266,8 +262,17 @@ def get_all_requires(logic: Any, world: "NineSolsWorld") -> list[Any]:
         elif world.using_ut and world.options.logic_difficulty == LogicDifficulty.option_medium:
             ls_requires = [{"item": world.glitches_item_name}] + logic["ls_requires"]
 
-    all_requires = [{"anyOf": [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]}]
-    return all_requires
+    all_requires_levels = [x for x in [vanilla_requires, medium_requires, ls_requires] if x is not None]
+    if len(all_requires_levels) == 0:
+        return [lambda state: False, []]
+    elif all(len(r) == 0 for r in all_requires_levels):
+        return [lambda state: True, []]
+    else:
+        requires = all_requires_levels[0] if len(all_requires_levels) == 1 else [{"anyOf": all_requires_levels}]
+        return [
+            lambda state, r=requires: eval_rule(state, world.player, world.options, r),  # noqa
+            regions_referenced_by_rule(requires)
+        ]
 
 
 # In the .jsonc files we use, a location or region connection's "access rule" is defined
