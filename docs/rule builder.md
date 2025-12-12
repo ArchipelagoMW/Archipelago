@@ -13,19 +13,20 @@ This document describes the API provided for the rule builder. Using this API pr
 The rule builder consists of 3 main parts:
 
 1. The rules, which are classes that inherit from `rule_builder.Rule`. These are what you write for your laogic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
-1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances.
-1. The rule builder world mixin class `RuleWorldMixin`, which is a class your world should inherit. It adds a number of helper functions related to assigning and resolving rules.
+1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable
+1. The optional rule builder world mixin class `RuleWorldMixin`, which is a class your world can inherit. It adds a number of helper functions related to assigning and resolving rules.
 
 ## Usage
 
-The rule builder provides a `RuleWorldMixin` for your `World` class that provides some helpers for you.
+For the most part the only difference in usage is instead of writing lambdas for your logic, you write static Rule objects. You then must use `world.set_rule` to assign the rule to a location or entrance.
 
 ```python
-class MyWorld(RuleWorldMixin, World):
-    game = "My Game"
+# In your world's create_regions method
+location = MyWorldLocation(...)
+self.set_rule(location, Has("A Big Gun"))
 ```
 
-The rule builder comes with a few rules by default:
+The rule builder comes with a number of rules by default:
 
 - `True_`: Always returns true
 - `False_`: Always returns false
@@ -54,13 +55,13 @@ rule = Has("Movement ability") | HasAll("Key 1", "Key 2")
 
 ### Assigning rules
 
-When assigning the rule you must use the `set_rule` helper added by the rule mixin to correctly resolve and register the rule.
+When assigning the rule you must use the `set_rule` helper to correctly resolve and register the rule.
 
 ```python
 self.set_rule(location_or_entrance, rule)
 ```
 
-There is also a `create_entrance` helper that will resolve the rule, check if it's `False`, and if not create the entrance and set the rule. This allows you to skip creating entrances that will never be valid.
+There is also a `create_entrance` helper that will resolve the rule, check if it's `False`, and if not create the entrance and set the rule. This allows you to skip creating entrances that will never be valid. You can also specify `force_creation=True` if you would like to create the entrance even if the rule is `False`.
 
 ```python
 self.create_entrance(from_region, to_region, rule)
@@ -73,8 +74,6 @@ You can also set a rule for your world's completion condition:
 ```python
 self.set_completion_rule(rule)
 ```
-
-If your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
 
 ### Restricting options
 
@@ -130,18 +129,20 @@ easy_filter = [OptionFilter(Difficulty, Difficulty.option_easy)]
 common_rule_only_on_easy = common_rule << easy_filter
 ```
 
-### Disabling caching
+### Enabling caching
 
-If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You can disable the caching system entirely by setting the `rule_caching_enabled` class property to `False` on your world:
+The rule builder provides a `RuleWorldMixin` for your `World` class that enables caching on your rules.
 
 ```python
 class MyWorld(RuleWorldMixin, World):
-    rule_caching_enabled = False
+    game = "My Game"
 ```
 
-You'll have to benchmark your own world to see if it should be disabled or not.
+If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You'll have to benchmark your own world to see if it should be disabled or not.
 
-### Item name mapping
+If you enabled caching and your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
+
+## Item name mapping
 
 If you have multiple real items that map to a single logic item, add a `item_mapping` class dict to your world that maps actual item names to real item names so the cache system knows what to invalidate.
 
@@ -251,14 +252,14 @@ The default `CanReachEntrance` rule defines this function already.
 
 ### Cache control
 
-By default your custom rule will work through the cache system as any other rule. There are two class attributes on the `Resolved` class you can override to change this behaviour.
+By default your custom rule will work through the cache system as any other rule if caching is enabled. There are two class attributes on the `Resolved` class you can override to change this behaviour.
 
 - `force_recalculate`: Setting this to `True` will cause your custom rule to skip going through the caching system and always recalculate when being evaluated. When a rule with this flag enabled is composed with `And` or `Or` it will cause any parent rules to always force recalculate as well. Use this flag when it's difficult to determine when your rule should be marked as stale.
 - `skip_cache`: Setting this to `True` will also cause your custom rule to skip going through the caching system when being evaluated. However, it will **not** affect any other rules when composed with `And` or `Or`, so it must still define its `*_dependencies` functions as required. Use this flag when the evaluation of this rule is trivial and the overhead of the caching system will slow it down.
 
 ### Caveats
 
-- Ensure you are passing `caching_enabled=world.rule_caching_enabled` in your `_instantiate` function when creating resolved rule instances.
+- Ensure you are passing `caching_enabled=world.rule_caching_enabled` in your `_instantiate` function when creating resolved rule instances if your world has caching enabled.
 - Resolved rules are forced to be frozen dataclasses. They and all their attributes must be immutable and hashable.
 - If your rule creates child rules ensure they are being resolved through the world rather than creating `Resolved` instances directly so they get registered with the world's caching system.
 
@@ -422,7 +423,6 @@ These are properties and helpers that are available to you in your world.
 
 #### Properties
 
-- `completion_rule: Rule.Resolved | None`: The resolved rule used for the completion condition of this world as set by `set_completion_rule`
 - `item_mapping: dict[str, str]`: A mapping of actual item name to logical item name
 - `rule_caching_enabled: bool`: A boolean value to enable or disable rule caching for this world
 
@@ -431,8 +431,8 @@ These are properties and helpers that are available to you in your world.
 - `rule_from_dict(data)`: Create a rule instance from a deserialized dict representation
 - `register_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies
 - `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
-- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()`
 - `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
+- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None, force_creation: bool = False)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()` unless force_creation is `True`
 
 ### Rule API
 

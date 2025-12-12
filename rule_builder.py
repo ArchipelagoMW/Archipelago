@@ -388,7 +388,7 @@ class Rule(Generic[TWorld]):
         player: int
         """The player this rule is for"""
 
-        caching_enabled: bool = dataclasses.field(repr=False, default=True, kw_only=True)
+        caching_enabled: bool = dataclasses.field(repr=False, default=False, kw_only=True)
         """If the world this rule is for has caching enabled"""
 
         force_recalculate: ClassVar[bool] = False
