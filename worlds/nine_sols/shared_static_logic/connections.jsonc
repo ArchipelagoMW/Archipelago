@@ -842,13 +842,16 @@
         ] } ],
         "medium_requires": [] // T-dash
     },
-    { "from": "FU - Broken Shanhai", "to": "FU - Middle Right Exit", "requires": [
-        { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
-        { "anyOf": [
-            { "item": "Tai-Chi Kick" }, // kinda tight, may revisit
-            [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
-        ] }
-    ] },
+    {
+        "from": "FU - Broken Shanhai", "to": "FU - Middle Right Exit",
+        "requires": [
+            { "anyOf": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] },
+            { "anyOf": [
+                { "item": "Tai-Chi Kick" }, // kinda tight, may revisit
+                [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
+            ] }
+        ] // T-dash isn't an option here because you likely already spent it reaching FU-BS
+    },
     // we skip the BS <- MRE connection because MRE -> MI -> BS has weaker requirements (unless we want a precise TCK-only jump)
     {
         "from": "FU - Middle Right Exit", "to": "FU - Main Intersection",
