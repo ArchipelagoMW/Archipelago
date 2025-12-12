@@ -55,8 +55,8 @@ class RuleWorldMixin(World):
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
         self.rule_entrance_dependencies = defaultdict(set)
-        self.true_rule = self.resolve_rule(True_())
-        self.false_rule = self.resolve_rule(False_())
+        self.true_rule = True_().resolve(self)
+        self.false_rule = False_().resolve(self)
 
     @classmethod
     def get_rule_cls(cls, name: str) -> type["Rule[Self]"]:
@@ -69,10 +69,6 @@ class RuleWorldMixin(World):
         name = data.get("rule", "")
         rule_class = cls.get_rule_cls(name)
         return rule_class.from_dict(data, cls)
-
-    def resolve_rule(self, rule: "Rule[Self]") -> "Rule.Resolved":
-        """Returns a resolved rule registered with the caching system for this world"""
-        return rule.resolve(self)
 
     def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
         """Registers a rule's item, region, location, and entrance dependencies to this world instance"""
@@ -123,7 +119,7 @@ class RuleWorldMixin(World):
 
     def set_rule(self, spot: Location | Entrance, rule: "Rule[Self]") -> None:
         """Resolve and set a rule on a location or entrance"""
-        resolved_rule = self.resolve_rule(rule)
+        resolved_rule = rule.resolve(self)
         self.register_rule_dependencies(resolved_rule)
         spot.access_rule = resolved_rule
         if self.explicit_indirect_conditions and isinstance(spot, Entrance):
@@ -135,12 +131,14 @@ class RuleWorldMixin(World):
         to_region: Region,
         rule: "Rule[Self] | None" = None,
         name: str | None = None,
+        force_creation: bool = False,
     ) -> Entrance | None:
-        """Try to create an entrance between regions with the given rule, skipping it if the rule resolves to False"""
+        """Try to create an entrance between regions with the given rule,
+        skipping it if the rule resolves to False (unless force_creation is True)"""
         resolved_rule = None
         if rule is not None:
-            resolved_rule = self.resolve_rule(rule)
-            if resolved_rule.always_false:
+            resolved_rule = rule.resolve(self)
+            if resolved_rule.always_false and not force_creation:
                 return None
             self.register_rule_dependencies(resolved_rule)
 
@@ -153,7 +151,7 @@ class RuleWorldMixin(World):
 
     def set_completion_rule(self, rule: "Rule[Self]") -> None:
         """Set the completion rule for this world"""
-        resolved_rule = self.resolve_rule(rule)
+        resolved_rule = rule.resolve(self)
         self.register_rule_dependencies(resolved_rule)
         self.multiworld.completion_condition[self.player] = resolved_rule
         self.completion_rule = resolved_rule
@@ -582,7 +580,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        children = [world.resolve_rule(c) for c in self.children]
+        children = [c.resolve(world) for c in self.children]
         return self.Resolved(tuple(children), player=world.player, caching_enabled=world.rule_caching_enabled)
 
     @override
@@ -667,7 +665,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        children_to_process = [world.resolve_rule(c) for c in self.children]
+        children_to_process = [c.resolve(world) for c in self.children]
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
         true_rule: Rule.Resolved | None = None
@@ -750,7 +748,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        children_to_process = [world.resolve_rule(c) for c in self.children]
+        children_to_process = [c.resolve(world) for c in self.children]
         clauses: list[Rule.Resolved] = []
         items: dict[str, int] = {}
 
@@ -834,7 +832,7 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         return self.Resolved(
-            world.resolve_rule(self.child),
+            self.child.resolve(world),
             player=world.player,
             caching_enabled=world.rule_caching_enabled,
         )
@@ -920,7 +918,7 @@ class Filtered(WrapperRule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return world.resolve_rule(self.child)
+        return self.child.resolve(world)
 
 
 @dataclasses.dataclass()
