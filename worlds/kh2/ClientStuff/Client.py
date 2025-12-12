@@ -60,6 +60,7 @@ class KH2Context(CommonContext):
         self.all_weapon_location_id = None
         self.sora_ability_to_slot = dict()
         self.kh2connectionconfirmed = False
+        self.kh2connectionsearching = False
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
         self.kh2_seed_save = None
@@ -525,7 +526,7 @@ class KH2Context(CommonContext):
                             self.number_of_abilities_sent[name] += 1
                         if name not in self.master_growth:
                             if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
-                                if "Doanld" in name:
+                                if "Donald" in name:
                                     msg_to_send = [str(item_to_send.kh2id), "Donald", str(index)]
                                     converted_items.append(msg_to_send)
                                     self.received_items_IDs.append(msg_to_send)
@@ -710,7 +711,9 @@ async def kh2_watcher(ctx: KH2Context):
         try:
             #Check for game connection
             if not ctx.kh2connected:
-                #logger.info("Searching for KH2 Game Client...Please load your save file before Connecting.")
+                if not ctx.kh2connectionsearching:
+                    logger.info("Searching for KH2 Game Client...")
+                    ctx.kh2connectionsearching = True
                 if ctx.socket.isConnected:
                     logger.info(f"KH2 Game Client Found")
                     ctx.kh2connected = True
@@ -740,6 +743,7 @@ async def kh2_watcher(ctx: KH2Context):
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
+                ctx.kh2connectionsearching = False
             logger.info(e)
             logger.info("line 940")
         await asyncio.sleep(0.5)
