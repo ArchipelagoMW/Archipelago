@@ -97,12 +97,15 @@
         "medium_requires": [ { "item": "Grapple" } ] // T-dash from the grapple platform (move camera to keep box spawned)
     },
     {
-        "from": "AFE - Below Root Node", "to": "AFE - Statue Chest",
-        "requires": [ { "anyOf": [ // climb up from the ground as intended
+        "from": "AFE - Below Root Node", "to": "AFE - Statue Chest", // climb up from the ground as intended
+        "requires": [ { "anyOf": [
             { "item": "Grapple" },
             { "item": "Cloud Leap" }
-        ] } ],
-        "medium_requires": [ { "anyOf": [ // use the moving box as our starting point instead
+        ] } ]
+    },
+    {
+        "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Statue Chest", // use the moving box as our starting point instead
+        "medium_requires": [ { "anyOf": [
             { "item": "Trick - Bow Hover" },
             { "item": "Air Dash" } // and T-dash
         ] } ],
