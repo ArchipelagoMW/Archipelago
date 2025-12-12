@@ -49,7 +49,7 @@
     },
     {
         "address": 206, "name": "AF (Elevator): Over Electrified Floor",
-        "region": "AFE - Below Root Node", "requires": []
+        "region": "AFE - Moving Boxes Below Root Node", "requires": []
     },
 
     // Apeman Facility (Depths)

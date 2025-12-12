@@ -61,7 +61,7 @@
         { "item": "Cloud Leap" }
     ] },
     {
-        "from": "AFE - Baichang Arena", "to": "AFE - Below Root Node",
+        "from": "AFE - Baichang Arena", "to": "AFE - Moving Boxes Below Root Node",
         "requires": [ { "anyOf": [
             { "item": "Tai-Chi Kick" },
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
@@ -76,31 +76,25 @@
         ]
     },
     {
-        "from": "AFE - Below Root Node", "to": "AFE - Baichang Arena",
+        "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Baichang Arena",
         "requires": [ { "anyOf": [
-            [ { "item": "Tai-Chi Kick" }, { "item": "Ledge Grab" } ], // in this direction we need LG to get onto the box
+            { "item": "Tai-Chi Kick" },
             [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ]
         ] } ],
         "medium_requires": [ { "anyOf": [
-            { "item": "Cloud Leap" }, // to get onto the first box, then CL again and T-dash across the long gap
-            [
-                { "anyOf": [ // to get onto the first box
-                    { "item": "Ledge Grab" }, // the normal way
-                    { "item": "Grapple" } // T-dash from the grapple platform (move camera to keep box spawned)
-                ] },
-                { "item": "Air Dash" } // and T-dash to cross the long gap
-            ],
-            [
-                { "item": "Trick - Bow Hover" },
-                { "anyOf": [
-                    { "item": "Grapple" }, // bow hover from grapple platform above statue
-                    { "item": "Ledge Grab" } // bow hover from the first moving box
-                ] } // swift runner doesn't help in this direction, since the long gap starts from a rope
-            ]
-        ] } ], // T-dash can't help get onto the first box; from grapple platform it won't move toward you
+            { "item": "Trick - Bow Hover" },
+            { "item": "Cloud Leap" }, // and T-dash
+            { "item": "Air Dash" } // and T-dash
+        ] } ],
         "ls_requires": [
             { "item": "Ledge Grab" } // T-dash setup from 2nd box to chest platform, parry hover the rest
         ]
+    },
+    { "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Below Root Node" }, // just drop down
+    {
+        "from": "AFE - Below Root Node", "to": "AFE - Moving Boxes Below Root Node",
+        "requires": [ { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } ],
+        "medium_requires": [ { "item": "Grapple" } ] // T-dash from the grapple platform (move camera to keep box spawned)
     },
     {
         "from": "AFE - Below Root Node", "to": "AFE - Statue Chest",
