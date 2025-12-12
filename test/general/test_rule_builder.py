@@ -190,6 +190,7 @@ class TestSimplify(unittest.TestCase):
         multiworld = setup_solo_multiworld(RuleBuilderWorld, steps=("generate_early",), seed=0)
         world = multiworld.worlds[1]
         assert isinstance(world, RuleBuilderWorld)
+        world.rule_caching_enabled = False  # pyright: ignore[reportAttributeAccessIssue]
         rule, expected = self.rules
         resolved_rule = rule.resolve(world)
         self.assertEqual(resolved_rule, expected, f"\n{resolved_rule}\n{expected}")
