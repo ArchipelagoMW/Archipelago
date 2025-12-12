@@ -16,15 +16,16 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    Deathlink = 5,
-    SlotData = 6,
-    BountyList = 7,
+    SlotData = 4,
+    BountyList = 5,
+    Deathlink = 6,
+    NotificationType = 7,
+    NotificationSendMessage = 8,
+    NotificationReceiveMessage = 9,
     ReceiveItem = 10,
-    RequestAllItems = 9,
-    Victory = 11,
+    RequestAllItems = 11,
     Handshake  = 12,
-    NotificationType = 13,
-    NotificationMessage = 14,
+    Victory = 19,
     Closed = 20
     pass
 
@@ -146,7 +147,7 @@ class KH2Socket():
             print("Responded to Handshake")
 
 
-    def send_singleItem(self, msg: list):
+    def send_Item(self, msg: list):
         self.send(MessageType.ReceiveItem, msg)
 
     def send_slot_data(self, data):

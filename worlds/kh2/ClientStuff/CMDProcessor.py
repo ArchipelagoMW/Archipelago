@@ -26,7 +26,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if notification_type in {"puzzle", "info", "chest", "none"}:
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
-            self.ctx.socket.send(13,["receive", notification_type])
+            self.ctx.socket.send(9,["receive", notification_type])
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
         else:
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest, None")
@@ -42,7 +42,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if notification_type in {"puzzle", "info", "chest", "none"}:
             temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
-            self.ctx.socket.send(13,["send", notification_type])
+            self.ctx.socket.send(8,["send", notification_type])
             # doing it in this order to make sure it actually changes
             self.output(f"Changed send notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
         else:
@@ -77,7 +77,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         else:
             self.ctx.deathlink_toggle = True
             self.output(f"Death Link turned on")
-        self.ctx.socket.send(5,[str(self.ctx.deathlink_toggle)])
+        self.ctx.socket.send(6,[str(self.ctx.deathlink_toggle)])
 
     def _cmd_add_to_blacklist(self, player_name: str = ""):
         """Adds player to deathlink blacklist"""
@@ -91,7 +91,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
 
     #def _cmd_kill(self):
     #    """Test deathlink"""
-    #    self.ctx.socket.send(5,())
+    #    self.ctx.socket.send(6,())
 
     #def _cmd_chest(self,itemid:int):
     #    from .RecieveItems import to_khscii

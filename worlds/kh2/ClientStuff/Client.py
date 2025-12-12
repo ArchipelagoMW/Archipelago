@@ -27,15 +27,16 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    Deathlink = 5,
-    SlotData = 6,
-    BountyList = 7,
+    SlotData = 4,
+    BountyList = 5,
+    Deathlink = 6,
+    NotificationType = 7,
+    NotificationSendMessage = 8,
+    NotificationReceiveMessage = 9,
     ReceiveItem = 10,
-    RequestAllItems = 9,
-    Victory = 11,
+    RequestAllItems = 11,
     Handshake = 12,
-    NotificationType = 13,
-    NotificationMessage = 14,
+    Victory = 19,
     Closed = 20
     pass
 
@@ -559,7 +560,7 @@ class KH2Context(CommonContext):
                         asyncio.sleep(0.5)
                     while len(converted_items) >= 1:
                         print(converted_items[0])
-                        self.socket.send_singleItem(converted_items[0])
+                        self.socket.send_Item(converted_items[0])
                         converted_items.pop(0)
 
         if cmd == "RoomUpdate":
@@ -700,7 +701,7 @@ class KH2Context(CommonContext):
     def get_items(self):
         """Resend all items upon client request"""
         for item in self.received_items_IDs:
-             self.socket.send_singleItem(item)
+             self.socket.send_Item(item)
 
         global slot_data_sent
         if not slot_data_sent and self.kh2connectionconfirmed:
