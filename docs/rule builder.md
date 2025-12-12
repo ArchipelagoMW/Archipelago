@@ -1,6 +1,6 @@
 # Rule Builder
 
-This document describes the API provided for the rule builder. Using this API prvoides you with with a simple interface to define rules and the following advantages:
+This document describes the API provided for the rule builder. Using this API provides you with with a simple interface to define rules and the following advantages:
 
 - Rule classes that avoid all the common pitfalls
 - Logic optimization
@@ -12,7 +12,7 @@ This document describes the API provided for the rule builder. Using this API pr
 
 The rule builder consists of 3 main parts:
 
-1. The rules, which are classes that inherit from `rule_builder.Rule`. These are what you write for your laogic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
+1. The rules, which are classes that inherit from `rule_builder.Rule`. These are what you write for your logic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
 1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable logic explanations.
 1. The optional rule builder world mixin class `CachedRuleBuilderMixin`, which is a class your world can inherit. It adds a number of helper functions related to assigning and resolving rules.
 
@@ -77,7 +77,7 @@ self.set_completion_rule(rule)
 
 ### Restricting options
 
-Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` arguemnt.
+Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` argument.
 
 The following operators are allowed:
 
@@ -89,7 +89,7 @@ The following operators are allowed:
 - `le`: `<=`
 - `contains`: `in`
 
-To check if the player can reach a switch, or if they've receieved the switch item if switches are randomized:
+To check if the player can reach a switch, or if they've received the switch item if switches are randomized:
 
 ```python
 rule = (
@@ -146,7 +146,7 @@ If you enabled caching and your rules use `CanReachLocation`, `CanReachEntrance`
 
 If you have multiple real items that map to a single logic item, add a `item_mapping` class dict to your world that maps actual item names to real item names so the cache system knows what to invalidate.
 
-For example, if you have multiple `Currecy x<num>` items on locations, but your rules only check a singlular logical `Currency` item, eg `Has("Currency", 1000)`, you'll want to map each numerical currency item to the single logical `Currency`.
+For example, if you have multiple `Currency x<num>` items on locations, but your rules only check a singular logical `Currency` item, eg `Has("Currency", 1000)`, you'll want to map each numerical currency item to the single logical `Currency`.
 
 ```python
 class MyWorld(CachedRuleBuilderMixin, World):
@@ -252,7 +252,7 @@ The default `CanReachEntrance` rule defines this function already.
 
 ### Cache control
 
-By default your custom rule will work through the cache system as any other rule if caching is enabled. There are two class attributes on the `Resolved` class you can override to change this behaviour.
+By default your custom rule will work through the cache system as any other rule if caching is enabled. There are two class attributes on the `Resolved` class you can override to change this behavior.
 
 - `force_recalculate`: Setting this to `True` will cause your custom rule to skip going through the caching system and always recalculate when being evaluated. When a rule with this flag enabled is composed with `And` or `Or` it will cause any parent rules to always force recalculate as well. Use this flag when it's difficult to determine when your rule should be marked as stale.
 - `skip_cache`: Setting this to `True` will also cause your custom rule to skip going through the caching system when being evaluated. However, it will **not** affect any other rules when composed with `And` or `Or`, so it must still define its `*_dependencies` functions as required. Use this flag when the evaluation of this rule is trivial and the overhead of the caching system will slow it down.
@@ -432,7 +432,7 @@ These are properties and helpers that are available to you in your world.
 - `register_dependencies()`: Register all rules that depend on location or entrance access with the inherited dependencies
 - `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
 - `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
-- `create_entrance(from_region: Region, to_rengion: Region, rule: Rule | None, name: str | None = None, force_creation: bool = False)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()` unless force_creation is `True`
+- `create_entrance(from_region: Region, to_region: Region, rule: Rule | None, name: str | None = None, force_creation: bool = False)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()` unless force_creation is `True`
 
 ### Rule API
 
