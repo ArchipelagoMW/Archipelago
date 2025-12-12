@@ -6221,5 +6221,13 @@
         "condition": {"Lost Gestral": 9},
         "original_item": "",
         "type": "Lost Gestral reward"
+    },
+    {
+        "name": "Verso's Drafts: Item 1",
+        "internal_name": "",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
     }
 ]

@@ -452,5 +452,12 @@
     "from": "WM: First Continent North",
     "to": "Red Woods",
     "condition": {}
+  },
+  {
+    "from": "WM: Sky",
+    "to": "Verso's Drafts",
+    "condition": {
+      "Painted Power": 1
+    }
   }
 ]

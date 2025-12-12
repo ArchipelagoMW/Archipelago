@@ -1160,5 +1160,12 @@
         "locations": [
             "Sunless Cliffs: Bald Mime"
         ]
+    },
+    {
+        "region_name": "Verso's Drafts",
+        "level": 29,
+        "locations": [
+            "Verso's Drafts: Item 1"
+        ]
     }
 ]
