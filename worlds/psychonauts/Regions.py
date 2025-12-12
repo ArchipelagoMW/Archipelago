@@ -752,16 +752,16 @@ def create_figments_60_locations(multiworld: MultiWorld, player: int):
 
 def create_figments_80_locations(multiworld: MultiWorld, player: int):
     # Adds locations to each mind for finding 80 percent of figments
-    _add_locations_to_existing_region(multiworld, player, RegionName.BBA1, {LocationName.BBFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.SACU, {LocationName.SAFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BBA2Duster, {LocationName.BBFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.SACULev, {LocationName.SAFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.THMS, {LocationName.THFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.MCTC, {LocationName.MCFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.NIBA, {LocationName.NIFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.LOMAShield, {LocationName.LOFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLevPyro, {LocationName.WWFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVESBoss, {LocationName.BVFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments80})
 
 
 def create_figments_100_locations(multiworld: MultiWorld, player: int):
