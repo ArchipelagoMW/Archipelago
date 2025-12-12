@@ -1,5 +1,4 @@
-
-from worlds.glover import GloverWorld
+#from worlds.glover import GloverWorld
 
 #Advice that you can actually use in the Glover Archipelago.
 actual_advice = [
@@ -70,9 +69,7 @@ references = [
 
 #World specific hints
 world_tables = {
-    "Adventure" : [
-        ""
-    ],
+    "Adventure" : [],
     "A Hat in Time" : [
         "Peck!",
         "Could you use yarn to make more Glovers?",
@@ -81,8 +78,7 @@ world_tables = {
     "A Link to the Past" : [
         "Wait for opertune times to buy spells from shops using Rupees.",
         "Crystals are important for A Link to the Past too.",
-        "Traps in A Link to the Past are disguised.",
-        "A Link to the Past also smashes pots."
+        "Traps in A Link to the Past are disguised."
     ],
     "APQuest" : [
         "Hearts are important to APQuest too."
@@ -90,9 +86,12 @@ world_tables = {
     "Sudoku" : [
         "Harder Sudoku Puzzles are likely to reveal Garibs."
     ],
-    "Aquaria" : [
-        "Glover 2's intro focused on gathering ingredients.",
-        "Aquaria also focuses on smashing crates and urns."
+    "Banjo-Tooie" : [
+        "The Wizard used to have a wife until she was obsessed with bears and birds.",
+        "Colourful magical creatures used to live here. The Wizard used their magic to brew wild potions.",
+        "EEKUM BOOKUM.",
+        "JINJO!!!",
+        "The Wizard enjoys racing with a strange winged creature. Thank the clouds she's trapped in the mines."
     ],
     "Blasphemous" : [
         "Be ready when Blasphemous players are near shops.",
@@ -157,12 +156,8 @@ world_tables = {
         "Wait for opertune times to buy spells from shops using Coins.",
         "DLCQuest also bundles their main collectable."
     ],
-    "DOOM 1993" : [
-        ""
-    ],
-    "DOOM II" : [
-        ""
-    ],
+    "DOOM 1993" : [],
+    "DOOM II" : [],
     "Factorio" : [
         "Work together with Factorio players to unlock spells at opertune times."
     ],
@@ -187,9 +182,8 @@ world_tables = {
         "Corvus should not use the wizards crystals as ammo."
     ],
     "Hollow Knight" : [
-        "Hollow Knight also takes place in a fallen kingdom.",
+        "Shaw!",
         "Wait for opertune times to buy spells from shops using Geo.",
-        "Hollow Knight also cares about spells.",
         "Even if you could, I would not dribble the Arcane Egg.",
         "Get The Knight's nails far away from the rubber ball."
     ],
@@ -217,9 +211,10 @@ jokes = [
     "Pickle?"
 ]
 
-def generate_tip_table(self : GloverWorld):
+def generate_tip_table(self):
     tip_table : list = []
     tip_table.extend(actual_advice)
+    tip_table.extend(jokes)
 
     #Saying hi
     for player_name in list(self.multiworld.player_name.values()):

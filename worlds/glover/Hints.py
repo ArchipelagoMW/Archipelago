@@ -120,7 +120,7 @@ def generate_hint_text(self, vague_hint : bool, in_location : Location, in_item 
     if in_item.player == self.player:
         item_owner = "Your"
     item_name = in_item.hint_text
-    world_specification = "in " + locations_owner + " world "
+    world_specification = locations_owner + " "
     if in_location.player == in_item.player:
         world_specification = ""
     return item_owner + " " + item_name + " is " + world_specification + hint_text

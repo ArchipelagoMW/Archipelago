@@ -219,6 +219,7 @@ class EasyBallWalk(Toggle):
 
 class MrHints(Choice):
     """Mr. Tips give AP hints. Default 1.
+    Catagory only will tell you a vauge hint in regards to the quality, but not the item.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Mr. Tip Hints"
@@ -230,6 +231,26 @@ class MrHints(Choice):
     option_useful = 5
     option_progression = 6
     default = 1
+
+
+class MrTipTextDisplay(Choice):
+    """Sets the text of Mr. Tip Textboxes. Default Hints and Custom.
+    Off: Ingame Mr. Tips do not display text.
+    Hints and Custom: Displays hint text until there are no more hints, and then falls back to custom.
+    Custom Only: Only displays custom text. Multiworld hints can still be given.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Mr. Tip Text Display"
+    option_off = 0
+    option_hints_and_custom = 1
+    option_custom_only = 2
+    default = 1
+
+class MrTipScouts(DefaultOnToggle):
+    """Makes Mr. Tip's hints show up as multiworld hints.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Mr. Hint Scouts"
 
 class ChickenHints(Choice):
     """Cheat Chicken gives AP hints. Default 3.
@@ -444,6 +465,8 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     mr_hints : MrHints
     chicken_hints : ChickenHints
     extra_garibs_value : ExtraGaribsValue
+    mr_tip_text_display : MrTipTextDisplay
+    mr_hints_scouts : MrTipScouts
 
     filler_extra_garibs_weight : FillerExtraGaribsWeight
     filler_chicken_sound_weight : FillerChickenSoundWeight

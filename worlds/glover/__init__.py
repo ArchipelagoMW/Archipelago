@@ -4,6 +4,8 @@ from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
 from Options import OptionError
+from .MrTipText import generate_tip_table
+from .TrapText import create_trap_name_table, select_trap_item_name
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
@@ -11,7 +13,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import construct_blank_world_garibs, create_trap_name_table, generate_item_name_to_id, generate_item_name_groups, find_item_data, select_trap_item_name, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
+from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
 from Utils import local_path, visualize_regions
 from .Hints import create_hints
 
@@ -480,10 +482,6 @@ class GloverWorld(World):
             self.entrance_randomization()
         #Set the garib order if the settings allow it
         self.setup_garib_order()
-        
-        print(self.garib_level_order)
-        print(self.spawn_checkpoint)
-        print(self.wayroom_entrances)
         #Set the starting ball
         self.give_starting_ball()
         #Jump randomization is so easy it can just be done here
@@ -491,6 +489,8 @@ class GloverWorld(World):
             self.multiworld.push_precollected(self.create_item("Jump"))
         #Create fake items
         self.fake_item_names = create_trap_name_table(self)
+        #Create the Mr. Tip Table
+        self.mr_tip_table : list[str] = generate_tip_table()
 
     def checkpoint_randomization(self):
         #Setup the spawning checkpoints
@@ -1056,6 +1056,7 @@ class GloverWorld(World):
         options["insectity"] = self.options.insectity.value
         options["easy_ball_walk"] = self.options.easy_ball_walk.value
         options["mr_hints"] = self.options.mr_hints.value
+        options["mr_hints_scouts"] = self.options.mr_hints_scouts.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
 
@@ -1068,19 +1069,23 @@ class GloverWorld(World):
         hint_groups = create_hints(self)
         self.mr_hints = hint_groups[0]
         self.chicken_hints = hint_groups[1]
-        self.mr_tip_text = hint_groups[2]
+        #Mr. Tip Hint Display Text
+        if self.options.mr_tip_text_display.value == 1:
+            self.mr_tip_text = hint_groups[2]
         if self.options.chicken_hints.value == 2:
             self.vague_chicken_text = hint_groups[3]
         else:
             self.vague_chicken_text = {}
 
     def generate_tip_text(self):
-        for each_tip in self.tip_locations:
-            tip_address = str(self.multiworld.get_location(each_tip, self.player).address)
-            if tip_address in self.mr_tip_text:
-                continue
-            #Create unique tip text
-            self.mr_tip_text[tip_address] = "SMG WAS HERE"
+        #Mr. Tip Custom Text
+        if self.options.mr_tip_text_display.value != 0:
+            for each_tip in self.tip_locations:
+                tip_address = str(self.multiworld.get_location(each_tip, self.player).address)
+                if tip_address in self.mr_tip_text:
+                    continue
+                #Create unique tip text
+                self.mr_tip_text[tip_address] = self.random.choice(self.mr_tip_table)
 
     def lua_world_name(self, original_name):
         lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]

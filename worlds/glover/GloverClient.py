@@ -820,8 +820,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                     locs1.append(int(locationId))
                     #Mr. Tip Hints
                     hint = tip_hints.get(str(locationId), None)
-                    #If the hint should render
-                    if not hint == None and tip_hints_type != 0:
+                    #If the hint should render in the multiworld
+                    if not hint == None and tip_hints_type != 0 and ctx.slot_data["mr_hints_scouts"]:
                         #And you are aware of the player
                         if ctx.slot_concerns_self(hint["player_id"]):
                             id = hint['location_id']
