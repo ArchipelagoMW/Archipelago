@@ -284,106 +284,106 @@ def set_rules(world: "RaC3World"):
         RAC3VENDOR.AQUATOS_PLASMA_COIL: lambda state: state.can_reach(RAC3REGION.KOROS, player=world.player),
         RAC3TBOLT.SEWER_PIPE: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
         RAC3TBOLT.SEWER_SWING: lambda state: state.has_all([RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS], world.player),
-        # RAC3SEWER.TRADE_1
-        # RAC3SEWER.TRADE_2
-        # RAC3SEWER.TRADE_3
-        # RAC3SEWER.TRADE_4
-        # RAC3SEWER.TRADE_5
-        # RAC3SEWER.TRADE_6
-        # RAC3SEWER.TRADE_7
-        # RAC3SEWER.TRADE_8
-        # RAC3SEWER.TRADE_9
-        # RAC3SEWER.TRADE_10
-        # RAC3SEWER.TRADE_11
-        # RAC3SEWER.TRADE_12
-        # RAC3SEWER.TRADE_13
-        # RAC3SEWER.TRADE_14
-        # RAC3SEWER.TRADE_15
-        # RAC3SEWER.TRADE_16
-        # RAC3SEWER.TRADE_17
-        # RAC3SEWER.TRADE_18
-        # RAC3SEWER.TRADE_19
-        # RAC3SEWER.TRADE_20
-        # RAC3SEWER.TRADE_21
-        # RAC3SEWER.TRADE_22
-        # RAC3SEWER.TRADE_23
-        # RAC3SEWER.TRADE_24
-        # RAC3SEWER.TRADE_25
-        # RAC3SEWER.TRADE_26
-        # RAC3SEWER.TRADE_27
-        # RAC3SEWER.TRADE_28
-        # RAC3SEWER.TRADE_29
-        # RAC3SEWER.TRADE_30
-        # RAC3SEWER.TRADE_31
-        # RAC3SEWER.TRADE_32
-        # RAC3SEWER.TRADE_33
-        # RAC3SEWER.TRADE_34
-        # RAC3SEWER.TRADE_35
-        # RAC3SEWER.TRADE_36
-        # RAC3SEWER.TRADE_37
-        # RAC3SEWER.TRADE_38
-        # RAC3SEWER.TRADE_39
-        # RAC3SEWER.TRADE_40
-        # RAC3SEWER.TRADE_41
-        # RAC3SEWER.TRADE_42
-        # RAC3SEWER.TRADE_43
-        # RAC3SEWER.TRADE_44
-        # RAC3SEWER.TRADE_45
-        # RAC3SEWER.TRADE_46
-        # RAC3SEWER.TRADE_47
-        # RAC3SEWER.TRADE_48
-        # RAC3SEWER.TRADE_49
-        # RAC3SEWER.TRADE_50
-        RAC3SEWER.TRADE_51: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_52: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_53: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_54: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_55: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_56: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_57: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_58: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_59: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_60: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_61: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_62: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_63: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_64: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_65: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_66: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_67: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_68: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_69: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_70: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_71: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_72: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_73: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_74: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_75: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_76: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_77: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_78: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_79: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_80: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_81: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_82: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_83: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_84: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_85: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_86: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_87: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_88: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_89: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_90: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_91: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_92: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_93: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_94: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_95: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_96: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_97: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_98: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SEWER.TRADE_99: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
-        RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player),
+        # RAC3SEWER.TRADE_1: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_2: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_3: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_4: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_5: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_6: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_7: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_8: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_9: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_10: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_11: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_12: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_13: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_14: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_15: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_16: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_17: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_18: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_19: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        # RAC3SEWER.TRADE_20: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_21: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_22: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_23: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_24: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_25: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_26: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_27: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_28: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_29: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_30: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_31: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_32: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_33: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_34: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_35: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_36: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_37: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_38: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_39: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_40: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_41: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_42: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_43: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_44: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_45: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_46: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_47: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_48: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_49: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_50: lambda state: state.has(RAC3ITEM.MAP_O_MATIC, world.player),
+        RAC3SEWER.TRADE_51: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_52: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_53: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_54: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_55: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_56: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_57: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_58: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_59: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_60: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_61: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_62: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_63: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_64: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_65: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_66: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_67: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_68: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_69: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_70: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_71: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_72: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_73: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_74: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_75: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_76: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_77: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_78: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_79: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_80: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_81: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_82: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_83: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_84: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_85: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_86: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_87: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_88: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_89: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_90: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_91: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_92: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_93: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_94: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_95: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_96: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_97: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_98: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SEWER.TRADE_99: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
 
         # RAC3VENDOR.TYHRRANOSIS_ANNIHILATOR
         # RAC3VENDOR.TYHRRANOSIS_SHIELD_GLOVE

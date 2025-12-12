@@ -175,7 +175,7 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.HELI_PACK: RAC3ITEMDATA.construct_gadget(0x02, ItemClassification.useful),
     RAC3ITEM.THRUSTER_PACK: RAC3ITEMDATA.construct_gadget(0x03, ItemClassification.useful),
     RAC3ITEM.HYDRO_PACK: RAC3ITEMDATA.construct_unused(0x04),  # Unused
-    RAC3ITEM.MAP_O_MATIC: RAC3ITEMDATA.construct_gadget(0x05, ItemClassification.useful),
+    RAC3ITEM.MAP_O_MATIC: RAC3ITEMDATA.construct_gadget(0x05, ItemClassification.progression_deprioritized),
     RAC3ITEM.COMMANDO_SUIT: RAC3ITEMDATA.construct_unused(0x06),  # Unused
     RAC3ITEM.BOLT_GRABBER: RAC3ITEMDATA.construct_gadget(0x07, ItemClassification.useful),
     RAC3ITEM.LEVITATOR: RAC3ITEMDATA.construct_unused(0x08),  # Unused
