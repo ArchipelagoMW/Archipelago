@@ -1,9 +1,6 @@
 from dataclasses import dataclass
 from Options import Choice, OptionGroup, Range, Toggle, DeathLink, PerGameCommonOptions
-
-portal2_option_presets = {
-    
-}
+from .ItemNames import *
 
 class CutsceneSanity(Toggle):
     """
@@ -30,6 +27,23 @@ class BaseTrapWeight(Choice):
     option_high = 4
     default = 2
 
+class MotionBlurTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes it a little hard to see
+    """
+    display_name = motion_blur_trap
+
+class FizzlePortalTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes it a little hard to see
+    """
+    display_name = fizzle_portal_trap
+
+class ButterFingersTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes it a little hard to see
+    """
+    display_name = butter_fingers_trap
 
 
 # class StoryAchievementSanity(Toggle):
@@ -49,9 +63,19 @@ portal2_option_groups = [
         CutsceneSanity
     ]),
     OptionGroup("Trap Options", [
-        TrapFillPercentage
+        TrapFillPercentage,
+        MotionBlurTrapWeight,
+        FizzlePortalTrapWeight,
+        ButterFingersTrapWeight
     ])
 ]
+
+portal2_option_presets = {
+    "default": {
+        "death_link": False,
+        "cutscenesanity": True,
+    }
+}
 
 @dataclass
 class Portal2Options(PerGameCommonOptions):
@@ -60,3 +84,9 @@ class Portal2Options(PerGameCommonOptions):
     cutscenesanity: CutsceneSanity
     # storyachievementsanity: StoryAchievementSanity
     # monitorsanity: MonitorSanity
+
+    trap_fill_percentage: TrapFillPercentage
+    motion_blur_trap_weight: MotionBlurTrapWeight
+    fizzle_portal_trap_weight: FizzlePortalTrapWeight
+    butter_fingers_trap_weight: ButterFingersTrapWeight
+    

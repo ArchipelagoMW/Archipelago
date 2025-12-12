@@ -2,5 +2,5 @@
     "game": "Portal 2",
 	"authors": [ "Dyroha" ],
     "minimum_ap_version": "0.6.3",
-    "world_version": "0.2"
+    "world_version": "0.2.0"
 }

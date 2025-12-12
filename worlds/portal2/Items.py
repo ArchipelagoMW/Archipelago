@@ -80,6 +80,8 @@ junk_items_table: dict[str, Portal2ItemData] = {
     slice_of_cake: Portal2ItemData(classification = ItemClassification.filler)
 }
 
+trap_items = [motion_blur_trap, fizzle_portal_trap, butter_fingers_trap]
+
 trap_items_table: dict[str, Portal2ItemData] = {
     motion_blur_trap: Portal2ItemData(classification = ItemClassification.trap),
     fizzle_portal_trap: Portal2ItemData(classification = ItemClassification.trap),

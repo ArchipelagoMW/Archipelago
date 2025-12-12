@@ -2,10 +2,9 @@ from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 import settings
 from .Options import CutsceneSanity, Portal2Options, portal2_option_groups, portal2_option_presets
-from .Items import Portal2Item, game_item_table, item_table, junk_items
+from .Items import Portal2Item, game_item_table, item_table, junk_items, trap_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import set_rule
 from entrance_rando import *
 from .ItemNames import portal_gun_2
 
@@ -20,7 +19,7 @@ class Portal2Settings(settings.Group):
 
     menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath("C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt")
 
-class CelesteOpenWebWorld(WebWorld):
+class Portal2WebWorld(WebWorld):
     game = "Portal 2"
     theme = "partyTime"
 
@@ -45,6 +44,7 @@ class Portal2World(World):
     options: Portal2Options  # typing hints for option results
     settings: Portal2Settings
     topology_present = True  # show path to required location checks in spoiler
+    web = Portal2WebWorld()
 
     BASE_ID = 98275000
 
@@ -178,8 +178,20 @@ class Portal2World(World):
         for item, _ in game_item_table.items():
             self.multiworld.itempool.append(self.create_item(item))
 
+        fill_count = self.location_count - self.item_count
+        trap_percentage = self.options.trap_fill_percentage.value
+        trap_fill_number = round(trap_percentage/100 * fill_count)
+        trap_weights = [self.options.motion_blur_trap_weight.value, 
+                        self.options.fizzle_portal_trap_weight.value, 
+                        self.options.butter_fingers_trap_weight.value] # in the same order as the traps appear in trap_items list
+
+        traps = self.random.choices(trap_items, weights=trap_weights, k=trap_fill_number)
+        for t in traps:
+            self.multiworld.itempool.append(self.create_item(t))
+
+        # Fill remaining with filler item
         filler_name = self.get_filler_item_name()
-        while self.item_count < self.location_count:
+        for _ in range(fill_count - trap_fill_number):
             self.multiworld.itempool.append(self.create_item(filler_name))
     
     def fill_slot_data(self):
