@@ -71,15 +71,20 @@ class KH2Socket():
             self.isConnected = False
 
     async def listen(self):
+        buffer = ""
         while not self.closing:
             try:
                 message = await self.loop.sock_recv(self.client_socket, 1024)
                 if not message:
                     raise ConnectionResetError("Client disconnected")
-                msgStr = message.decode("utf-8").replace("\n", "")
-                values = msgStr.split(";")
-                print("Received message: "+msgStr)
-                self.handle_message(values)
+
+                buffer += message.decode("utf-8")
+
+                while "\n" in buffer:
+                    msgStr, buffer = buffer.split("\n", 1)
+                    values = msgStr.split(";")
+                    print("Received message: "+msgStr)
+                    self.handle_message(values)
             except (ConnectionResetError, OSError) as e:
                 if not self.closing:
                     logger.info("Connection to game lost, reconnecting...")
@@ -113,23 +118,24 @@ class KH2Socket():
         if msgType == MessageType.WorldLocationChecked:
             self.client.world_locations_checked.append(message[1])
 
-        elif (msgType == MessageType.LevelChecked):
+        elif msgType == MessageType.LevelChecked:
             self.client.sora_form_levels[message[2]] = int(message[1])
 
-        elif (msgType == MessageType.KeybladeChecked):
+        elif msgType == MessageType.KeybladeChecked:
             self.client.keyblade_ability_checked.append(message[1])
 
-        elif (msgType == MessageType.SlotData):
+        elif msgType == MessageType.SlotData:
             self.client.current_world_int = int(message[1])
 
-        elif (msgType == MessageType.Deathlink):
+        elif msgType == MessageType.Deathlink:
             self.client.Room = int(message[1])
             self.client.Event = int(message[2])
             self.client.World = int(message[3])
             self.client.SoraDied = True
 
-        elif (msgType == MessageType.Victory):
+        elif msgType == MessageType.Victory:
             self.client.kh2_finished_game = True
+            self.send(MessageType.Victory, ())
 
         elif msgType == MessageType.RequestAllItems:
             self.client.get_items()
