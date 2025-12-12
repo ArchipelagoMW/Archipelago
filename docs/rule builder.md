@@ -13,7 +13,7 @@ This document describes the API provided for the rule builder. Using this API pr
 The rule builder consists of 3 main parts:
 
 1. The rules, which are classes that inherit from `rule_builder.Rule`. These are what you write for your laogic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
-1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable
+1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable logic explanations.
 1. The optional rule builder world mixin class `RuleWorldMixin`, which is a class your world can inherit. It adds a number of helper functions related to assigning and resolving rules.
 
 ## Usage
