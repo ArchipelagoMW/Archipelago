@@ -12074,7 +12074,7 @@ function GLOVERHACK:setInverseBall(binvert)
 	mainmemory.writebyte(self.inverse + GLOVERHACK:getSettingPointer(), binvert);
 end
 
-function GLOVERHACK:setTipHints(mrhints)
+function GLOVERHACK:setCustomTipText(mrhints)
 	mainmemory.writebyte(self.tip_hints + GLOVERHACK:getSettingPointer(), mrhints);
 end
 
@@ -13368,9 +13368,9 @@ function process_slot(block)
 	then
 		GVR:setInverseBall(block['slot_easy_ball_walk'])
 	end
-    if block['slot_mr_hints'] ~= nil and block['slot_mr_hints'] ~= 0
+    if block['slot_mr_tip_text_display'] ~= nil and block['slot_mr_tip_text_display'] ~= 0
     then
-        GVR:setTipHints(1)
+        GVR:setCustomTipText(1)
     end
 	if block['slot_mr_tips_text'] ~= nil
 	then

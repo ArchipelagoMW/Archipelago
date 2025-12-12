@@ -1057,6 +1057,7 @@ class GloverWorld(World):
         options["easy_ball_walk"] = self.options.easy_ball_walk.value
         options["mr_hints"] = self.options.mr_hints.value
         options["mr_hints_scouts"] = self.options.mr_hints_scouts.value
+        options["mr_tip_text_display"] = self.options.mr_tip_text_display.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
 

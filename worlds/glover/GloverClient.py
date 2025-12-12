@@ -654,7 +654,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_easy_ball_walk": ctx.slot_data["easy_ball_walk"],
             "slot_checkpoint_checks": ctx.slot_data["checkpoint_checks"],
             "slot_randomized_spawns": ctx.slot_data["randomized_spawns"],
-            "slot_mr_hints":ctx.slot_data["mr_hints"],
+            "slot_mr_tip_text_display":ctx.slot_data["mr_tip_text_display"],
             "slot_mr_tips_text":ctx.slot_data["mr_tips_text"],
             "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
