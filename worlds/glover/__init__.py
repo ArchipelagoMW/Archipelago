@@ -131,7 +131,7 @@ class GloverWorld(World):
             state.add_item(name + " " + str(progressive_count), self.player)
         #Garib counting
         if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
-            if name.endswith("Garib") or name.endswith("Garibs"):
+            if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.add_item("Total Garibs", self.player, garibs_number)
@@ -153,7 +153,7 @@ class GloverWorld(World):
             state.remove_item(name + " " + str(progressive_count), self.player)
         #Garib counting
         if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
-            if name.endswith("Garib") or name.endswith("Garibs"):
+            if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.remove_item("Total Garibs", self.player, garibs_number)
@@ -480,6 +480,10 @@ class GloverWorld(World):
             self.entrance_randomization()
         #Set the garib order if the settings allow it
         self.setup_garib_order()
+        
+        print(self.garib_level_order)
+        print(self.spawn_checkpoint)
+        print(self.wayroom_entrances)
         #Set the starting ball
         self.give_starting_ball()
         #Jump randomization is so easy it can just be done here
