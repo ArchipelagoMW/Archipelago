@@ -1,10 +1,10 @@
-from BaseClasses import ItemClassification, MultiWorld, Region
+from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 import settings
-from .Options import CutsceneSanity, Portal2Options
-from .Items import Portal2Item, Portal2ItemData, item_table, junk_items
+from .Options import CutsceneSanity, Portal2Options, portal2_option_groups, portal2_option_presets
+from .Items import Portal2Item, game_item_table, item_table, junk_items
 from .Locations import Portal2Location, map_complete_table, cutscene_completion_table, all_locations_table
-from worlds.AutoWorld import World
+from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import set_rule
 from entrance_rando import *
 from .ItemNames import portal_gun_2
@@ -19,6 +19,24 @@ class Portal2Settings(settings.Group):
         description = "Portal 2 extras.txt file inside the mod"
 
     menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath("C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt")
+
+class CelesteOpenWebWorld(WebWorld):
+    game = "Portal 2"
+    theme = "partyTime"
+
+    setup_en = Tutorial(
+        tutorial_name="Setup Guide",
+        description="A guide to playing Portal 2 in Archipelago.",
+        language="English",
+        file_name="setup_en.md",
+        link="setup/en",
+        authors=["Dyroha"]
+    )
+
+    tutorials = [setup_en]
+
+    option_groups = portal2_option_groups
+    option_presets = portal2_option_presets
 
 class Portal2World(World):
     """Portal 2 is a first person puzzle adventure where you shoot solve test chambers using portal mechanics and other map specific items"""
@@ -157,9 +175,8 @@ class Portal2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_items(self):
-        for item, info in item_table.items():
-            if info.classification != ItemClassification.filler:
-                self.multiworld.itempool.append(self.create_item(item))
+        for item, info in game_item_table.items():
+            self.multiworld.itempool.append(self.create_item(item))
 
         filler_name = self.get_filler_item_name()
         while self.item_count < self.location_count:
