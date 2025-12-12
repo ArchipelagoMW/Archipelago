@@ -206,6 +206,7 @@ class Rac3Interface(GameInterface):
     player_type: str = RAC3PLAYERTYPE.RATCHET
     vehicle: int = 0
     action: int = 0  # Todo: Player Action
+    prev_action: int = 0
     pause_menu: bool = False
     pause_state: bool = False
     inputs: int = RAC3INPUT.NOTHING
@@ -215,6 +216,7 @@ class Rac3Interface(GameInterface):
     last_death_count: int = 0
     last_death_state: int = 0
     has_died: bool = False
+    inside_hacker_puzzle: bool = False
 
     # Called at once when client started
     def init(self):
@@ -237,9 +239,11 @@ class Rac3Interface(GameInterface):
         self.player_type = PLAYER_TYPE_TO_NAME[self._read8(RAC3STATUS.PLAYER_TYPE)]
         self.vehicle = self._read32(RAC3STATUS.VEHICLE_POINTER)
         self.action = self._read8(RAC3STATUS.ACTION)
+        self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = self._read16(RAC3STATUS.READ_INPUT)
         self.health = self._read8(RAC3STATUS.HEALTH)
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
+        self.inside_hacker_puzzle = self._read8(RAC3STATUS.INSIDE_HACKER_PUZZLE_OR_ARMOR_VENDOR) != 0
 
         self.pause_check()
         if self.self_respawning:
@@ -787,8 +791,9 @@ class Rac3Interface(GameInterface):
         return True, f"{self.player_type} is Alive"
 
     def kill_player(self) -> bool:
-        if not self.pause_state:
+        if not self.pause_state and not self.inside_hacker_puzzle:
             self._write8(RAC3STATUS.HEALTH, 0)
+            self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
             # death = choice(list(DEATH_FROM_ACTION.keys()))
             if self.vehicle != 0:
                 health_addr = self._read32(self._read32(self.vehicle + 0x68))
@@ -801,36 +806,37 @@ class Rac3Interface(GameInterface):
             else:
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
-                        pass
+                        if self.action not in DEATH_FROM_ACTION.keys() and self.vehicle == 0:
+                            self._write8(RAC3STATUS.ACTION, 0x16) # update ratchet state to cancel free fall and other problematic states
+
                         # self._write8(RAC3STATUS.ACTION, death)
                         # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x42)
-                        self._write8(RAC3STATUS.ACTION + 0xC, 0x42)  # Past state
-                        self._write8(RAC3STATUS.ACTION + 0x18, 0x42)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.PREV_ACTION, 0x42)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x42)  # This address helps the death animation trigger
                         logger.debug(f'player is clank, clank must die dramatically')
                     case RAC3PLAYERTYPE.GIANT:
                         # Giant Clank punched state (updates state to trigger death animation once at 0 health)
                         self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
                         self._write8(RAC3STATUS.ACTION, 0x5D)
-                        self._write8(RAC3STATUS.ACTION + 0xC, 0x5D)  # Past state
-                        self._write8(RAC3STATUS.ACTION + 0x18, 0x5D)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.PREV_ACTION, 0x5D)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x5D)  # This address helps the death animation trigger
                         logger.debug(f'player is giant clank, giant clank must die dramatically')
                     case RAC3PLAYERTYPE.TYHRRANOID:
                         # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x55)
-                        self._write8(RAC3STATUS.ACTION + 0xC, 0x55)  # Past state
-                        self._write8(RAC3STATUS.ACTION + 0x18, 0x55)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.PREV_ACTION, 0x55)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x55)  # This address helps the death animation trigger
                         logger.debug(f'player is tyhrranoid, tyhrranoid must be squished')
                     case RAC3PLAYERTYPE.QWARK:
                         # Qwark taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x9E)
-                        self._write8(RAC3STATUS.ACTION + 0xC, 0x9E)  # Past state
-                        self._write8(RAC3STATUS.ACTION + 0x18, 0x9E)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.PREV_ACTION, 0x9E)  # Past state
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x9E)  # This address helps the death animation trigger
                         logger.debug(f'player is qwark, qwark must die dramatically')
             logger.debug(f'player successfully killed')
-            self.last_death_count += 1  # Force death count increase to prevent a death link after free fall
             return True
         else:
             logger.debug(f'player unable to be killed')
