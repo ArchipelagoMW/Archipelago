@@ -21,7 +21,7 @@ else:
     TWorld = TypeVar("TWorld", contravariant=True)  # noqa: PLC0105
 
 
-class RuleWorldMixin(World):
+class CachedRuleBuilderMixin(World):
     """A World mixin that provides helpers for interacting with the rule builder"""
 
     rule_item_dependencies: dict[str, set[int]]

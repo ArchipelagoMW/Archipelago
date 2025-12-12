@@ -9,6 +9,7 @@ from NetUtils import JSONMessagePart
 from Options import Choice, PerGameCommonOptions, Toggle
 from rule_builder import (
     And,
+    CachedRuleBuilderMixin,
     CanReachEntrance,
     CanReachLocation,
     CanReachRegion,
@@ -26,7 +27,6 @@ from rule_builder import (
     OptionFilter,
     Or,
     Rule,
-    RuleWorldMixin,
     True_,
 )
 from test.general import setup_solo_multiworld
@@ -68,7 +68,7 @@ class RuleBuilderWebWorld(WebWorld):
     tutorials = []  # noqa: RUF012
 
 
-class RuleBuilderWorld(RuleWorldMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
+class RuleBuilderWorld(CachedRuleBuilderMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
     game = GAME
     web = RuleBuilderWebWorld()
     item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}
