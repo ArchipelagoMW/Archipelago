@@ -194,8 +194,9 @@ class Rac3Interface(GameInterface):
     UnlockItem: dict[str, UnlockData] = None
     boltAndXPMultiplier: int = None
     boltAndXPMultiplierValue: int = None
-    respawning: bool = False
-    reloading: bool = False
+    self_respawning: bool = False
+    reloading_handled: bool = False
+    is_reloading: int = 0
     ship: int = 0
     ship_skin: int = 0
     skin: int = 0
@@ -211,8 +212,9 @@ class Rac3Interface(GameInterface):
     health: int = 10
     ryno: bool = False
     death_count: int = 0
-    last_death_count: int = -1 # Initialize to -1 to overwrite with actual death count on first check
+    last_death_count: int = 0
     last_death_state: int = 0
+    has_died: bool = False
 
     # Called at once when client started
     def init(self):
@@ -237,12 +239,12 @@ class Rac3Interface(GameInterface):
         self.action = self._read8(RAC3STATUS.ACTION)
         self.inputs = self._read16(RAC3STATUS.READ_INPUT)
         self.health = self._read8(RAC3STATUS.HEALTH)
-        
+        self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
+
         self.pause_check()
-        self.death_check()
-        if self.respawning:
-            if not self._read8(RAC3STATUS.FORCE_RELOAD):
-                self.respawning = False
+        if self.self_respawning:
+            if not self.is_reloading:
+                self.self_respawning = False
 
     # Called in periodically
     def late_update(self):
@@ -254,7 +256,6 @@ class Rac3Interface(GameInterface):
         self.armor_cycler()
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
-        self.death_cycler()
         # Proc Options
         self.multiplier_cycler()
         if self.weaponLevelLockFlag:
@@ -461,7 +462,7 @@ class Rac3Interface(GameInterface):
 
     def fix_health(self):
         self._write8(RAC3STATUS.HEALTH, self.health)
-    
+
     def reset_death_count(self):
         self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
         self.last_death_count = self.death_count
@@ -693,22 +694,23 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
-    
-    def death_cycler(self):
-        self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
-        if self.last_death_count == -1: # First time initialization to sync with actual death count
-            self.last_death_count = self.death_count
 
-    def death_check(self):
-        is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
-        if is_reloading and not self.reloading:
+    def reload_check(self):
+        """Detects if the game is currently being reloaded, and updates death data"""
+        if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
-            self.reloading = True
-            logger.debug(f'{self.player_type} is Respawning')
-        if not is_reloading and self.reloading:
-            self.reloading = False
-            self.last_death_count = self._read32(RAC3STATUS.DEATH_COUNT)
-            logger.debug(f'{self.player_type} has Respawned')
+            self.reloading_handled = True
+            logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state}, death count: {
+            self.last_death_count}')
+        if not self.is_reloading and self.reloading_handled:
+            self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
+            self.has_died = self.death_count > self.last_death_count
+            self.last_death_count = self.death_count
+            self.reloading_handled = False
+            logger.debug(f'{self.player_type} has Respawned, death count: {self.death_count}, has died?'
+                         f' {self.has_died}')
+        else:
+            self.has_died = False
 
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
@@ -716,7 +718,7 @@ class Rac3Interface(GameInterface):
             self.pause_menu = True
             self.pause_state = True
             return
-        
+
         pause_address = RAC3_REGION_DATA_TABLE[self.planet].PAUSE_ADDRESS
         self.pause_menu = bool(self._read8(pause_address)) if pause_address else False
         self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE))
@@ -724,7 +726,7 @@ class Rac3Interface(GameInterface):
             case RAC3REGION.QWARKS_HIDEOUT:
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x40))
             case (RAC3REGION.BLACKWATER_CITY | RAC3REGION.ARIDIA |
-                    RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
+                  RAC3REGION.METROPOLIS_RANGERS | RAC3REGION.TYHRRANOSIS_RANGERS):
                 self.pause_state = bool(self._read8(RAC3STATUS.PAUSE_STATE + 0x50))
 
     def unpause_game(self):
@@ -766,73 +768,42 @@ class Rac3Interface(GameInterface):
                 return True
 
     def force_respawn(self):
-        self.respawning = True
+        self.self_respawning = True
         self._write8(RAC3STATUS.FORCE_RELOAD, 1)
 
     def teleport_to_coords(self):
         self._write_bytes(RAC3STATUS.RATCHET_X, self._read_bytes(RAC3STATUS.ENTRANCE_X, 28))
 
     def alive(self) -> tuple[bool, str]:
-        if self.death_count > self.last_death_count:
+        if self.has_died:
             self.last_death_count = self.death_count
             logger.debug(f'Death Detected! (death count increased)')
             is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
-            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Died') if not is_clank else CLANK_DEATH_FROM_ACTION.get(
-                self.last_death_state, 'Died')
+            death = DEATH_FROM_ACTION.get(self.last_death_state, 'Died') if not is_clank else (
+                CLANK_DEATH_FROM_ACTION.get(self.last_death_state, 'Died'))
             return False, f"{self.player_type} {death}"
 
         logger.debug(f'{self.player_type} is Alive')
         return True, f"{self.player_type} is Alive"
-    
-        # Original health and action based death detection (unreliable when quitting a challenge)
-        # if not self.action:
-        #     return True, "alive"
-        
-        # is_dead = (self.health == 0
-        #            or (self.player_type == RAC3PLAYERTYPE.GIANT and self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) == 0))
-        # is_clank = self.player_type == RAC3PLAYERTYPE.CLANK
-        # death = DEATH_FROM_ACTION.get(self.action, False) if not is_clank else CLANK_DEATH_FROM_ACTION.get(self.action,
-        #                                                                                                    False)
-        # in_nefarious_base = self.planet == RAC3REGION.AQUATOS_BASE
-
-        # if is_dead:
-        #     logger.debug(f'Death Detected! (0 health)')
-        #     return False, f"{self.player_type} {'Ran out of nanotech' if not death else death}"
-
-        # if self.action == 0x31 and self.vehicle:  # Eaten or in vehicle
-        #     death = False
-        
-        # if self.vehicle:
-        #     vehicle_blown_up = self._read8(self.vehicle + 0xBC) == 0xA  # 0xA: vehicle blown up, waiting for respawn
-        #     if vehicle_blown_up:
-        #         death = 'Stayed in a blowing up vehicle'
-
-        # # Special case for Nefarious's Base pitfall which doesn't set action state to death
-        # if in_nefarious_base and is_clank:
-        #     if not self.respawning and self._read8(RAC3STATUS.FORCE_RELOAD):
-        #         death = 'Fell to their doom in Nefarious\'s Base'
-
-        # if death:
-        #     logger.debug(f'Death Detected! ({death})')
-        #     return False, f"{self.player_type} {death}"
 
     def kill_player(self) -> bool:
         if not self.pause_state:
             self._write8(RAC3STATUS.HEALTH, 0)
-            death = choice(list(DEATH_FROM_ACTION.keys()))
+            # death = choice(list(DEATH_FROM_ACTION.keys()))
             if self.vehicle != 0:
                 health_addr = self._read32(self._read32(self.vehicle + 0x68))
                 vehicle_blow_up_addr = self.vehicle + 0xBC
                 self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
                 self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
-                #self._write8(RAC3STATUS.ACTION, death)
+                # self._write8(RAC3STATUS.ACTION, death)
                 logger.debug(f'player in vehicle, killing vehicle too')
-                logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
+                # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
             else:
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
-                        #self._write8(RAC3STATUS.ACTION, death)
-                        logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
+                        pass
+                        # self._write8(RAC3STATUS.ACTION, death)
+                        # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
                     case RAC3PLAYERTYPE.CLANK:
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x42)

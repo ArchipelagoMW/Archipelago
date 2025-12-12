@@ -99,7 +99,7 @@ async def handle_deathlink(ctx: 'Context') -> None:
     """Receive and send deathlink"""
     if not ctx.death_link:
         return
-
+    ctx.game_interface.reload_check()
     if time() - ctx.last_death_link > 10:
         alive, message = ctx.game_interface.alive()
         if alive:
@@ -117,6 +117,8 @@ async def handle_deathlink(ctx: 'Context') -> None:
 
 async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
     """Check if the player should respawn"""
+    if ctx.game_interface.is_reloading:
+        return False
     if ctx.death_link and ctx.game_interface.action not in {0, 1, 2, 3, 4, 0x13, 0x1D, 0x2E, 0x32, 0x33, 0x34, 0x37,
                                                               0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
                                                               0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:

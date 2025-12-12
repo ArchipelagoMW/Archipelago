@@ -138,7 +138,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            if handle_respawn(self.ctx, True):
+            if create_task(handle_respawn(self.ctx, True)):
                 self.output(f'Player respawned on {self.ctx.current_planet}')
             else:
                 self.output(f'Player cannot respawn right now')
