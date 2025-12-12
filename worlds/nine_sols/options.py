@@ -187,8 +187,7 @@ class ShuffleLedgeGrab(Toggle):
 
     If your first_root_node is yinglong_canal, then Ledge Grab will be placed early.
 
-    This is more impactful than it might sound because of 'ledge storage' glitches.
-    See logic_level (whenever I implement that)."""
+    This is more impactful than it might sound because of 'ledge storage' glitches. See logic_difficulty."""
     display_name = "Shuffle Ledge Grab"
 
 
