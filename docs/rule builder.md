@@ -423,8 +423,6 @@ These are properties and helpers that are available to you in your world.
 #### Properties
 
 - `completion_rule: Rule.Resolved | None`: The resolved rule used for the completion condition of this world as set by `set_completion_rule`
-- `true_rule: Rule.Resolved`: A pre-resolved rule for this player that is equal to `True_()`
-- `false_rule: Rule.Resolved`: A pre-resolved rule for this player that is equal to `False_()`
 - `item_mapping: dict[str, str]`: A mapping of actual item name to logical item name
 - `rule_caching_enabled: bool`: A boolean value to enable or disable rule caching for this world
 

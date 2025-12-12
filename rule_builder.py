@@ -35,12 +35,6 @@ class RuleWorldMixin(World):
     completion_rule: "Rule.Resolved | None" = None
     """The resolved rule used for the completion condition of this world"""
 
-    true_rule: "Rule.Resolved"
-    """A pre-initialized rule for this world that always returns True"""
-
-    false_rule: "Rule.Resolved"
-    """A pre-initialized rule for this world that always returns False"""
-
     item_mapping: ClassVar[dict[str, str]] = {}
     """A mapping of actual item name to logical item name.
     Useful when there are multiple versions of a collected item but the logic only uses one. For example:
@@ -55,8 +49,6 @@ class RuleWorldMixin(World):
         self.rule_region_dependencies = defaultdict(set)
         self.rule_location_dependencies = defaultdict(set)
         self.rule_entrance_dependencies = defaultdict(set)
-        self.true_rule = True_().resolve(self)
-        self.false_rule = False_().resolve(self)
 
     @classmethod
     def get_rule_cls(cls, name: str) -> type["Rule[Self]"]:
@@ -378,7 +370,7 @@ class Rule(Generic[TWorld]):
         """Resolve a rule with the given world"""
         for option_filter in self.options:
             if not option_filter.check(world.options):
-                return world.false_rule
+                return False_().resolve(world)
         return self._instantiate(world)
 
     def to_dict(self) -> dict[str, Any]:
@@ -698,7 +690,7 @@ class And(NestedRule[TWorld], game="Archipelago"):
                 clauses.append(child)
 
         if not clauses and not items:
-            return true_rule or world.false_rule
+            return true_rule or False_().resolve(world)
 
         if len(items) == 1:
             item, count = next(iter(items.items()))
@@ -778,7 +770,7 @@ class Or(NestedRule[TWorld], game="Archipelago"):
                 clauses.append(child)
 
         if not clauses and not items:
-            return world.false_rule
+            return False_().resolve(world)
 
         if len(items) == 1:
             item, count = next(iter(items.items()))
@@ -1003,7 +995,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_names) == 0:
             # match state.has_all
-            return world.true_rule
+            return True_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
@@ -1112,7 +1104,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_names) == 0:
             # match state.has_any
-            return world.false_rule
+            return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
@@ -1217,7 +1209,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_counts) == 0:
             # match state.has_all_counts
-            return world.true_rule
+            return True_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
@@ -1322,7 +1314,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_counts) == 0:
             # match state.has_any_count
-            return world.false_rule
+            return False_().resolve(world)
         if len(self.item_counts) == 1:
             item = next(iter(self.item_counts))
             return Has(item, self.item_counts[item]).resolve(world)
@@ -1435,7 +1427,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_names) == 0:
             # match state.has_from_list
-            return world.false_rule
+            return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0], self.count).resolve(world)
         return self.Resolved(
@@ -1563,7 +1555,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         if len(self.item_names) == 0 or len(self.item_names) < self.count:
             # match state.has_from_list_unique
-            return world.false_rule
+            return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
         return self.Resolved(
