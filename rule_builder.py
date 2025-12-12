@@ -7,14 +7,18 @@ from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, Never, Self, 
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
-from BaseClasses import CollectionState, Entrance, Item, Location, MultiWorld, Region
+from BaseClasses import CollectionState, Item, MultiWorld, Region
 from NetUtils import JSONMessagePart
 from Options import CommonOptions, Option
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
+
+    TWorld = TypeVar("TWorld", bound=World, contravariant=True, default=World)  # noqa: PLC0105
 else:
     World = object
+
+    TWorld = TypeVar("TWorld", contravariant=True)  # noqa: PLC0105
 
 
 class RuleWorldMixin(World):
@@ -32,9 +36,6 @@ class RuleWorldMixin(World):
     rule_entrance_dependencies: dict[str, set[int]]
     """A mapping of entrance name to set of rule ids"""
 
-    completion_rule: "Rule.Resolved | None" = None
-    """The resolved rule used for the completion condition of this world"""
-
     item_mapping: ClassVar[dict[str, str]] = {}
     """A mapping of actual item name to logical item name.
     Useful when there are multiple versions of a collected item but the logic only uses one. For example:
@@ -50,20 +51,8 @@ class RuleWorldMixin(World):
         self.rule_location_dependencies = defaultdict(set)
         self.rule_entrance_dependencies = defaultdict(set)
 
-    @classmethod
-    def get_rule_cls(cls, name: str) -> type["Rule[Self]"]:
-        """Returns the world-registered or default rule with the given name"""
-        return CustomRuleRegister.get_rule_cls(cls.game, name)
-
-    @classmethod
-    def rule_from_dict(cls, data: Mapping[str, Any]) -> "Rule[Self]":
-        """Create a rule instance from a serialized dict representation"""
-        name = data.get("rule", "")
-        rule_class = cls.get_rule_cls(name)
-        return rule_class.from_dict(data, cls)
-
+    @override
     def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
-        """Registers a rule's item, region, location, and entrance dependencies to this world instance"""
         if not self.rule_caching_enabled:
             return
         for item_name, rule_ids in resolved_rule.item_dependencies().items():
@@ -74,11 +63,6 @@ class RuleWorldMixin(World):
             self.rule_location_dependencies[location_name] |= rule_ids
         for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
             self.rule_entrance_dependencies[entrance_name] |= rule_ids
-
-    def register_rule_connections(self, resolved_rule: "Rule.Resolved", entrance: Entrance) -> None:
-        """Register indirect connections for this entrance based on the rule's dependencies"""
-        for indirect_region in resolved_rule.region_dependencies().keys():
-            self.multiworld.register_indirect_condition(self.get_region(indirect_region), entrance)
 
     def register_dependencies(self) -> None:
         """Register all rules that depend on locations or entrances with their dependencies"""
@@ -108,45 +92,6 @@ class RuleWorldMixin(World):
                 self.rule_item_dependencies[item_name] |= rule_ids
             for region_name in entrance.access_rule.region_dependencies():
                 self.rule_region_dependencies[region_name] |= rule_ids
-
-    def set_rule(self, spot: Location | Entrance, rule: "Rule[Self]") -> None:
-        """Resolve and set a rule on a location or entrance"""
-        resolved_rule = rule.resolve(self)
-        self.register_rule_dependencies(resolved_rule)
-        spot.access_rule = resolved_rule
-        if self.explicit_indirect_conditions and isinstance(spot, Entrance):
-            self.register_rule_connections(resolved_rule, spot)
-
-    def create_entrance(
-        self,
-        from_region: Region,
-        to_region: Region,
-        rule: "Rule[Self] | None" = None,
-        name: str | None = None,
-        force_creation: bool = False,
-    ) -> Entrance | None:
-        """Try to create an entrance between regions with the given rule,
-        skipping it if the rule resolves to False (unless force_creation is True)"""
-        resolved_rule = None
-        if rule is not None:
-            resolved_rule = rule.resolve(self)
-            if resolved_rule.always_false and not force_creation:
-                return None
-            self.register_rule_dependencies(resolved_rule)
-
-        entrance = from_region.connect(to_region, name)
-        if resolved_rule:
-            entrance.access_rule = resolved_rule
-        if resolved_rule is not None:
-            self.register_rule_connections(resolved_rule, entrance)
-        return entrance
-
-    def set_completion_rule(self, rule: "Rule[Self]") -> None:
-        """Set the completion rule for this world"""
-        resolved_rule = rule.resolve(self)
-        self.register_rule_dependencies(resolved_rule)
-        self.multiworld.completion_condition[self.player] = resolved_rule
-        self.completion_rule = resolved_rule
 
     @override
     def collect(self, state: CollectionState, item: Item) -> bool:
@@ -202,8 +147,6 @@ class RuleWorldMixin(World):
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)
 
-
-TWorld = TypeVar("TWorld", bound=RuleWorldMixin, contravariant=True, default=RuleWorldMixin)  # noqa: PLC0105
 
 Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
 
@@ -385,7 +328,7 @@ class Rule(Generic[TWorld]):
         }
 
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         """Returns a new instance of this rule from a serialized dict representation"""
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(**data.get("args", {}), options=options)
@@ -584,7 +527,7 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         children = [world_cls.rule_from_dict(c) for c in data.get("children", ())]
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
         return cls(*children, options=options)
@@ -838,7 +781,7 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         child = data.get("child")
         if child is None:
             raise ValueError("Child rule cannot be None")
@@ -1002,7 +945,7 @@ class HasAll(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1111,7 +1054,7 @@ class HasAny(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1439,7 +1382,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -1567,7 +1510,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
 
     @override
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[RuleWorldMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         args = {**data.get("args", {})}
         item_names = args.pop("item_names", ())
         options = OptionFilter.multiple_from_dict(data.get("options", ()))
@@ -2011,7 +1954,7 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
 
 
 DEFAULT_RULES = {
-    rule_name: cast(type[Rule[RuleWorldMixin]], rule_class)
+    rule_name: cast(type[Rule[World]], rule_class)
     for rule_name, rule_class in locals().items()
     if isinstance(rule_class, type) and issubclass(rule_class, Rule) and rule_class is not Rule
 }

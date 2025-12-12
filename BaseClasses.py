@@ -8,10 +8,10 @@ import secrets
 import warnings
 from argparse import Namespace
 from collections import Counter, deque, defaultdict
-from collections.abc import Collection, MutableSequence
+from collections.abc import Callable, Collection, Iterable, Iterator, Mapping, MutableSequence, Set
 from enum import IntEnum, IntFlag
-from typing import (AbstractSet, Any, Callable, ClassVar, Dict, Iterable, Iterator, List, Literal, Mapping, NamedTuple,
-                    Optional, Protocol, Set, Tuple, Union, TYPE_CHECKING, Literal, overload)
+from typing import (AbstractSet, Any, ClassVar, Dict, List, Literal, NamedTuple,
+                    Optional, Protocol, Tuple, Union, TYPE_CHECKING, overload)
 import dataclasses
 
 from typing_extensions import NotRequired, TypedDict
@@ -85,7 +85,7 @@ class MultiWorld():
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
-    completion_condition: Dict[int, Callable[[CollectionState], bool]]
+    completion_condition: Dict[int, AccessRule]
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
@@ -1175,13 +1175,17 @@ class CollectionState():
             self.prog_items[player][item] = count
 
 
+AccessRule = Callable[[CollectionState], bool]
+DEFAULT_ACCESS_RULE: AccessRule = staticmethod(lambda state: True)
+
+
 class EntranceType(IntEnum):
     ONE_WAY = 1
     TWO_WAY = 2
 
 
 class Entrance:
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    access_rule: AccessRule = DEFAULT_ACCESS_RULE
     hide_path: bool = False
     player: int
     name: str
@@ -1368,7 +1372,7 @@ class Region:
         self,
         location_name: str,
         item_name: str | None = None,
-        rule: Callable[[CollectionState], bool] | None = None,
+        rule: AccessRule | None = None,
         location_type: type[Location] | None = None,
         item_type: type[Item] | None = None,
         show_in_spoiler: bool = True,
@@ -1407,7 +1411,7 @@ class Region:
         return event_item
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[Callable[[CollectionState], bool]] = None) -> Entrance:
+                rule: Optional[AccessRule] = None) -> Entrance:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -1441,7 +1445,7 @@ class Region:
         return entrance
 
     def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
-                  rules: Mapping[str, Callable[[CollectionState], bool]] | None = None) -> List[Entrance]:
+                  rules: Mapping[str, AccessRule] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1480,7 +1484,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
+    access_rule: AccessRule = DEFAULT_ACCESS_RULE
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
@@ -1557,7 +1561,7 @@ class ItemClassification(IntFlag):
     skip_balancing = 0b01000
     """ should technically never occur on its own
     Item that is logically relevant, but progression balancing should not touch.
-    
+
     Possible reasons for why an item should not be pulled ahead by progression balancing:
     1. This item is quite insignificant, so pulling it earlier doesn't help (currency/etc.)
     2. It is important for the player experience that this item is evenly distributed in the seed (e.g. goal items) """
@@ -1565,13 +1569,13 @@ class ItemClassification(IntFlag):
     deprioritized = 0b10000
     """ Should technically never occur on its own.
     Will not be considered for priority locations,
-    unless Priority Locations Fill runs out of regular progression items before filling all priority locations. 
-    
+    unless Priority Locations Fill runs out of regular progression items before filling all priority locations.
+
     Should be used for items that would feel bad for the player to find on a priority location.
     Usually, these are items that are plentiful or insignificant. """
 
     progression_deprioritized_skip_balancing = 0b11001
-    """ Since a common case of both skip_balancing and deprioritized is "insignificant progression", 
+    """ Since a common case of both skip_balancing and deprioritized is "insignificant progression",
     these items often want both flags. """
 
     progression_skip_balancing = 0b01001  # only progression gets balanced
