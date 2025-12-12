@@ -19,7 +19,7 @@ portal_2_base_id = 98275000
 offset_index = 0
     
 class Portal2ItemData:
-    def __init__(self, in_game_name: str, variant: str = None, tags: ItemTag = None, classification: ItemClassification = ItemClassification.progression):
+    def __init__(self, in_game_name: str = "", variant: str = None, tags: ItemTag = None, classification: ItemClassification = ItemClassification.progression):
         self.in_game_name = in_game_name
         self.variant = variant
         self.tags = tags
@@ -32,7 +32,7 @@ class Portal2ItemData:
 class Portal2Item(Item):
     game: str = "Portal 2"
 
-item_table: dict[str, Portal2ItemData] = {
+game_item_table: dict[str, Portal2ItemData] = {
     # Portal Guns
     portal_gun_2: Portal2ItemData("weapon_portalgun", "CanFirePortal2", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression | ItemClassification.useful),
     potatos: Portal2ItemData("weapon_portalgun", "potato", ItemTag.WEAPON | ItemTag.DISABLE, ItemClassification.progression), # Currently no logic set for this in game or in generation
@@ -67,13 +67,25 @@ item_table: dict[str, Portal2ItemData] = {
     # Goal Items
     adventure_core: Portal2ItemData("npc_personality_core", "@core02", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
     space_core: Portal2ItemData("npc_personality_core", "@core01", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
-    fact_core: Portal2ItemData("npc_personality_core", "@core03", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing),
-
-    moon_dust: Portal2ItemData("", None, None, ItemClassification.filler),
-    lemon: Portal2ItemData("", None, None, ItemClassification.filler),
-    slice_of_cake: Portal2ItemData("", None, None, ItemClassification.filler),
+    fact_core: Portal2ItemData("npc_personality_core", "@core03", ItemTag.CORE | ItemTag.DELETE, ItemClassification.progression_skip_balancing)
     
 }
 
 # Junk items
 junk_items = [moon_dust, lemon, slice_of_cake]
+
+junk_items_table: dict[str, Portal2ItemData] = {
+    moon_dust: Portal2ItemData(classification = ItemClassification.filler),
+    lemon: Portal2ItemData(classification = ItemClassification.filler),
+    slice_of_cake: Portal2ItemData(classification = ItemClassification.filler)
+}
+
+trap_items_table: dict[str, Portal2ItemData] = {
+    motion_blur_trap: Portal2ItemData(classification = ItemClassification.trap),
+    fizzle_portal_trap: Portal2ItemData(classification = ItemClassification.trap),
+    butter_fingers_trap: Portal2ItemData(classification = ItemClassification.trap),
+}
+
+item_table: dict[str, Portal2ItemData] = game_item_table.copy() # Shallow copy okay as we aren't changing any data
+item_table.update(junk_items_table)
+item_table.update(trap_items_table)

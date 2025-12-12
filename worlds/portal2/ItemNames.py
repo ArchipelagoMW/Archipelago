@@ -1,4 +1,4 @@
-
+# game items
 portal_gun_1 = "Portal Gun"
 portal_gun_2 = "Upgraded Portal Gun"
 potatos = "PotatOS"
@@ -24,6 +24,14 @@ turrets = "Turrets"
 adventure_core = "Adventure Core"
 space_core = "Space Core"
 fact_core = "Fact Core"
+
+# junk items
 moon_dust = "Moon Dust"
 lemon = "Lemon"
 slice_of_cake = "Slice of Cake"
+
+# trap items
+motion_blur_trap = "Motion Blur Trap" # Adds blur effect to screen for 20 seconds
+fizzle_portal_trap = "Fizzle Portal Trap" # Instantly Fizzles all places portals
+butter_fingers_trap = "Butter Fingers Trap" # Persistently drops held items for 30 seconds
+

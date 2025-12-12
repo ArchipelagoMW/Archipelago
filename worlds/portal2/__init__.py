@@ -175,7 +175,7 @@ class Portal2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
     def create_items(self):
-        for item, info in game_item_table.items():
+        for item, _ in game_item_table.items():
             self.multiworld.itempool.append(self.create_item(item))
 
         filler_name = self.get_filler_item_name()
