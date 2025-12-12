@@ -734,7 +734,8 @@ pelican_town = ContentPack(
         Hats.bucket_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.hat.has_bucket_hat),),
 
         Hats.leprechaun_hat: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.forest,), seasons=(Season.spring,), ),),
-        Hats.mushroom_cap: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.farm,), seasons=(Season.fall,), ),),
+        Hats.mushroom_cap: (Tag(ItemTag.HAT), ForagingSource(regions=(Region.farm,), seasons=(Season.fall,),
+                                                             other_requirements=(ToolRequirement(Tool.axe),),),),
 
         Hats.raccoon_hat: (Tag(ItemTag.HAT), CustomRuleSource(create_rule=lambda logic: logic.quest.has_raccoon_shop(3) &
                                                                                         logic.region.can_reach(LogicRegion.raccoon_shop_3)),),
