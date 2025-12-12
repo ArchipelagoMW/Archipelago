@@ -1673,7 +1673,9 @@
     // (...except carrying qi all the way up here from outside ST lol)
     { "from": "ST - Upper Checkpoint Platform", "to": "ST - Lower Checkpoint Platform", "requires": [] }, // fall
     { "from": "ST - Upper Checkpoint Platform", "to": "ST - Stowaway", "requires": [
-        { "item": "Cloud Leap" }, { "item": "Wall Climb" }
+        { "item": "Cloud Leap" },
+        { "item": "Wall Climb" },
+        { "anyOf": [{ "item": "Air Dash" }, { "item": "Ledge Grab" }] }
     ] },
     { "from": "ST - Stowaway", "to": "ST - Upper Checkpoint Platform", "requires": [] }, // fall
     {
