@@ -9194,6 +9194,17 @@ async def apply_level_fixes(ctx: NO100FContext):
     size = dolphin_memory_engine.read_word(SCENE_OBJ_LIST_SIZE_ADDR)
 
     dolphin_memory_engine.write_word(MAP_ADDR, 0x1)  # Force the Map Into Inventory
+
+    if scene == b'O001':
+        upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
+        if not upgrades & 2 ** 11:  # Player does not have the helmet, block entry to Black Knight
+            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Disabled
+            _set_trigger_state(ctx, fix_ptr, 0x1e)
+        else:
+            fix_ptr = _find_obj_in_obj_table(0xDEE3B081, ptr, size)  # O008 Loading Trigger Enabled
+            _set_trigger_state(ctx, fix_ptr, 0x1d)
+
+
     if scene == b'I001':
         upgrades = dolphin_memory_engine.read_word(UPGRADE_INVENTORY_ADDR)
         if not upgrades & 2 ** 13:  # Player does not have the shovel, give them a fake

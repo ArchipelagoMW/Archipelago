@@ -21,11 +21,14 @@ from .Rules import set_rules
 from .names import ItemNames, ConnectionNames
 
 
-def run_client():
+def run_client(ap_url=None):
     print('running Scooby-Doo! NO100F client')
     from worlds.no100f.NO100FClient import main  # lazy import
     file_types = (('NO100F Patch File', ('.apno100f',)), ('NGC iso', ('.gcm',)),)
-    kwargs = {'patch_file': Utils.open_filename("Select .apno100f", file_types)}
+    if ap_url:
+        kwargs = {'patch_file': ap_url}
+    else:
+        kwargs = {'patch_file': Utils.open_filename("Select .apno100f", file_types)}
     p = Process(target=main, kwargs=kwargs)
     p.start()
 
@@ -35,6 +38,7 @@ components.append(
               func=run_client,
               component_type=Type.CLIENT,
               file_identifier=SuffixIdentifier('.apno100f'),
+              cli=True,
               icon="Scooby-Doo! Night of 100 Frights",
               )
 )
@@ -197,7 +201,7 @@ def validate_hash(file_name: str = ""):
         base_rom_bytes = bytes(file.read())
     basemd5 = hashlib.md5()
     basemd5.update(base_rom_bytes)
-    return NO100FContainer == basemd5.hexdigest()
+    return NO100F_HASH == basemd5.hexdigest()
 
 
 class NO100FWeb(WebWorld):
