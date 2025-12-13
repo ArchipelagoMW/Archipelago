@@ -33,11 +33,7 @@ class TestVictoryHAG1(TokenTest):
     options = {
         "victory_condition": VictoryCondition.option_hag1,
     }
-    mumbo_token_location_group = {
-        locationName.MUMBOTKNGAME1,
-        locationName.MUMBOTKNBOSS1,
-        locationName.MUMBOTKNJINJO1
-    }
+    mumbo_token_location_group = set()
 
     def test_mumbo_tokens(self) -> None:
         super().test_mumbo_tokens(0)

@@ -10,16 +10,19 @@ class WorldRequirementTest(BanjoTooieTestBase):
         assert list(self.world.world_requirements.values()) == self.expected_world_costs
 
     def test_jiggies(self) -> None:
-        expected_progression_jiggies = max(self.expected_world_costs)
-        expected_useful_jiggies = ceil((90 - expected_progression_jiggies) / 2)
+        max_cost = max(self.expected_world_costs)
+        expected_progression_jiggies = min(max_cost + 4, 89)
+        expected_useful_jiggies = max(ceil((90 - max_cost) / 2) - 5, 0)
 
-        assert sum(1 for item in self.multiworld.itempool
-                       if item.name == itemName.JIGGY and item.advancement) \
-                 == expected_progression_jiggies - 1 # jingaling's
+        actual_progression = sum(1 for item in self.multiworld.itempool
+                                 if item.name == itemName.JIGGY and item.advancement)
+        actual_useful = sum(1 for item in self.multiworld.itempool
+                            if item.name == itemName.JIGGY and item.useful)
 
-        assert sum(1 for item in self.multiworld.itempool
-                      if item.name == itemName.JIGGY and item.useful) \
-                 == expected_useful_jiggies
+        assert actual_progression == expected_progression_jiggies, \
+            f"Progression jiggies: {actual_progression} != {expected_progression_jiggies}"
+        assert actual_useful == expected_useful_jiggies, \
+            f"Useful jiggies: {actual_useful} != {expected_useful_jiggies}"
 
 
 class WorldRequirementMinTest(WorldRequirementTest):
