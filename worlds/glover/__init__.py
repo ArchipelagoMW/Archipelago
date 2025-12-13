@@ -366,7 +366,7 @@ class GloverWorld(World):
             percents_dict[all_entries] /= sum
         return percents_dict
     
-    def entrance_randomization(self):
+    def setup_entrance_randomization(self):
         #While only certain levels exist, randomize only those.
         randomizable_existing_levels = self.existing_levels.copy()
         randomizable_existing_levels.remove("Training")
@@ -479,7 +479,7 @@ class GloverWorld(World):
         self.checkpoint_randomization()
         #Level entry randomization
         if self.options.entrance_randomizer:
-            self.entrance_randomization()
+            self.setup_entrance_randomization()
         #Set the garib order if the settings allow it
         self.setup_garib_order()
         #Set the starting ball
@@ -937,6 +937,40 @@ class GloverWorld(World):
                 if crystal_location != None:
                     crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
 
+    def extend_hint_information(self, hint_data : Dict[int, Dict[int, str]]):
+        player = self.player
+        if not self.options.entrance_randomizer:
+            return
+        #Go over the randomizable regions
+        for vanilla_index, level_region_name in enumerate(self.existing_levels):
+            #If it's in a vanilla position, don't flag the location as unique
+            randomized_index = self.wayroom_entrances.index(level_region_name)
+            if vanilla_index == randomized_index:
+                continue
+            entrance_name : str = self.existing_levels[randomized_index]
+            #Get the current level region
+            level_region : Region = self.get_region(level_region_name)
+            for each_region in self.recursive_region_search([level_region]):
+                for each_location in each_region.locations:
+                    each_address = each_location.address
+                    #Don't consider event locations, since they aren't hinted
+                    if each_address == None:
+                        continue
+                    #If there's hint data about this location
+                    if each_address in hint_data[player]:
+                        #Set it to the randomized value
+                        hint_data[player][each_address] = entrance_name
+
+    #Get all regions contected to the exits of this region
+    def recursive_region_search(self, known_regions : list[Region]) -> list[Region]:
+        for each_region in known_regions:
+            for each_exit in each_region.exits:
+                #Stop Two-Way refrences from looping forever
+                if not each_exit.connected_region in known_regions:
+                    known_regions.append(each_exit.connected_region)
+                    known_regions = self.recursive_region_search(known_regions)
+        return known_regions
+
     #Puts the victory location
     def setup_victory(self):
         multiworld = self.multiworld
@@ -1001,7 +1035,6 @@ class GloverWorld(World):
                 goal_item = self.create_event(wayroom_name + " Bonus Complete")
                 all_garibs_item  = self.create_event(wayroom_name + " Bonus Star")
         #What kind of level is this?
-        
         if connecting_level_name in self.existing_levels:
             goal_or_boss : str = ": Goal"
             if connecting_level_name.endswith('!'):
