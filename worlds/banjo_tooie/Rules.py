@@ -32,36 +32,36 @@ class BanjoTooieRules:
 
         if self.world.options.skip_puzzles:
             self.access_rules = {
-                locationName.W1: lambda state: self.set_world_requirement(state, 1230944),
-                locationName.W2: lambda state: self.set_world_requirement(state, 1230945),
-                locationName.W3: lambda state: self.set_world_requirement(state, 1230946),
-                locationName.W4: lambda state: self.set_world_requirement(state, 1230947),
-                locationName.W5: lambda state: self.set_world_requirement(state, 1230948),
-                locationName.W6: lambda state: self.set_world_requirement(state, 1230949),
-                locationName.W7: lambda state: self.set_world_requirement(state, 1230950),
-                locationName.W8: lambda state: self.set_world_requirement(state, 1230951),
-                locationName.W9: lambda state: self.set_world_requirement(state, 1230952)
+                locationName.W1: self.world_1_unlocked,
+                locationName.W2: self.world_2_unlocked,
+                locationName.W3: self.world_3_unlocked,
+                locationName.W4: self.world_4_unlocked,
+                locationName.W5: self.world_5_unlocked,
+                locationName.W6: self.world_6_unlocked,
+                locationName.W7: self.world_7_unlocked,
+                locationName.W8: self.world_8_unlocked,
+                locationName.W9: self.world_9_unlocked
             }
 
         if self.world.options.victory_condition == VictoryCondition.option_minigame_hunt\
             or self.world.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
 
             self.gametoken_rules = {
-                locationName.MUMBOTKNGAME1: lambda state: self.jiggy_mayahem_kickball(state),
-                locationName.MUMBOTKNGAME2: lambda state: self.jiggy_ordnance_storage(state),
-                locationName.MUMBOTKNGAME3: lambda state: self.jiggy_hoop_hurry(state),
-                locationName.MUMBOTKNGAME4: lambda state: self.jiggy_dodgem(state),
-                locationName.MUMBOTKNGAME5: lambda state: self.jiggy_peril(state),
-                locationName.MUMBOTKNGAME6: lambda state: self.jiggy_balloon_burst(state),
-                locationName.MUMBOTKNGAME7: lambda state: self.jiggy_sub_challenge(state),
-                locationName.MUMBOTKNGAME8: lambda state: self.jiggy_chompa(state),
-                locationName.MUMBOTKNGAME9: lambda state: self.jiggy_clinkers(state),
-                locationName.MUMBOTKNGAME10: lambda state: self.jiggy_twinkly(state),
-                locationName.MUMBOTKNGAME11: lambda state: self.jiggy_hfp_kickball(state),
-                locationName.MUMBOTKNGAME12: lambda state: self.jiggy_pot_of_gold(state),
-                locationName.MUMBOTKNGAME13: lambda state: state.has(itemName.HUMBACC, self.player),
-                locationName.MUMBOTKNGAME14: lambda state: self.jiggy_trash_can(state),
-                locationName.MUMBOTKNGAME15: lambda state: self.canary_mary_free(state) and state.can_reach_region(regionName.GM, self.player),
+                locationName.MUMBOTKNGAME1: self.jiggy_mayahem_kickball,
+                locationName.MUMBOTKNGAME2: self.jiggy_ordnance_storage,
+                locationName.MUMBOTKNGAME3: self.jiggy_hoop_hurry,
+                locationName.MUMBOTKNGAME4: self.jiggy_dodgem,
+                locationName.MUMBOTKNGAME5: self.jiggy_peril,
+                locationName.MUMBOTKNGAME6: self.jiggy_balloon_burst,
+                locationName.MUMBOTKNGAME7: self.jiggy_sub_challenge,
+                locationName.MUMBOTKNGAME8: self.jiggy_chompa,
+                locationName.MUMBOTKNGAME9: self.jiggy_clinkers,
+                locationName.MUMBOTKNGAME10: self.jiggy_twinkly,
+                locationName.MUMBOTKNGAME11: self.jiggy_hfp_kickball,
+                locationName.MUMBOTKNGAME12: self.jiggy_pot_of_gold,
+                locationName.MUMBOTKNGAME13: self.jiggy_zubbas,
+                locationName.MUMBOTKNGAME14: self.jiggy_trash_can,
+                locationName.MUMBOTKNGAME15: self.jiggy_cc_canary_mary,
 
             }
 
@@ -69,884 +69,881 @@ class BanjoTooieRules:
             or self.world.options.victory_condition == VictoryCondition.option_wonderwing_challenge\
             or self.world.options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1:
             self.bosstoken_rules = {
-                locationName.MUMBOTKNBOSS1: lambda state: self.jiggy_targitzan(state),
-                locationName.MUMBOTKNBOSS2: lambda state: self.can_beat_king_coal(state),
-                locationName.MUMBOTKNBOSS3: lambda state: self.jiggy_patches(state),
-                locationName.MUMBOTKNBOSS4: lambda state: self.jiggy_lord_woo(state),
-                locationName.MUMBOTKNBOSS5: lambda state: self.can_beat_terry(state),
-                locationName.MUMBOTKNBOSS6: lambda state: self.can_beat_weldar(state),
-                locationName.MUMBOTKNBOSS7: lambda state: self.jiggy_dragons_bros(state),
-                locationName.MUMBOTKNBOSS8: lambda state: self.jiggy_mingy(state),
+                locationName.MUMBOTKNBOSS1: self.jiggy_targitzan,
+                locationName.MUMBOTKNBOSS2: self.can_beat_king_coal,
+                locationName.MUMBOTKNBOSS3: self.jiggy_patches,
+                locationName.MUMBOTKNBOSS4: self.jiggy_lord_woo,
+                locationName.MUMBOTKNBOSS5: self.can_beat_terry,
+                locationName.MUMBOTKNBOSS6: self.can_beat_weldar,
+                locationName.MUMBOTKNBOSS7: self.jiggy_dragons_bros,
+                locationName.MUMBOTKNBOSS8: self.jiggy_mingy,
             }
 
         if self.world.options.victory_condition == VictoryCondition.option_jinjo_family_rescue\
             or self.world.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
             self.jinjotoken_rules = {
-                locationName.MUMBOTKNJINJO1: lambda state: state.has(itemName.WJINJO, self.player, 1),
-                locationName.MUMBOTKNJINJO2: lambda state: state.has(itemName.OJINJO, self.player, 2),
-                locationName.MUMBOTKNJINJO3: lambda state: state.has(itemName.YJINJO, self.player, 3),
-                locationName.MUMBOTKNJINJO4: lambda state: state.has(itemName.BRJINJO, self.player, 4),
-                locationName.MUMBOTKNJINJO5: lambda state: state.has(itemName.GJINJO, self.player, 5),
-                locationName.MUMBOTKNJINJO6: lambda state: state.has(itemName.RJINJO, self.player, 6),
-                locationName.MUMBOTKNJINJO7: lambda state: state.has(itemName.BLJINJO, self.player, 7),
-                locationName.MUMBOTKNJINJO8: lambda state: state.has(itemName.PJINJO, self.player, 8),
-                locationName.MUMBOTKNJINJO9: lambda state: state.has(itemName.BKJINJO, self.player, 9),
+                locationName.MUMBOTKNJINJO1: self.jiggy_white_jinjo_family,
+                locationName.MUMBOTKNJINJO2: self.jiggy_orange_jinjo_family,
+                locationName.MUMBOTKNJINJO3: self.jiggy_yellow_jinjo_family,
+                locationName.MUMBOTKNJINJO4: self.jiggy_brown_jinjo_family,
+                locationName.MUMBOTKNJINJO5: self.jiggy_green_jinjo_family,
+                locationName.MUMBOTKNJINJO6: self.jiggy_red_jinjo_family,
+                locationName.MUMBOTKNJINJO7: self.jiggy_blue_jinjo_family,
+                locationName.MUMBOTKNJINJO8: self.jiggy_purple_jinjo_family,
+                locationName.MUMBOTKNJINJO9: self.jiggy_black_jinjo_family,
             }
 
         if self.world.options.cheato_rewards:
             self.cheato_rewards_rules = {
-                locationName.CHEATOR1: lambda state: self.reach_cheato(state, 5),
-                locationName.CHEATOR2: lambda state: self.reach_cheato(state, 10),
-                locationName.CHEATOR3: lambda state: self.reach_cheato(state, 15),
-                locationName.CHEATOR4: lambda state: self.reach_cheato(state, 20),
-                locationName.CHEATOR5: lambda state: self.reach_cheato(state, 25),
+                locationName.CHEATOR1: self.cheato_reward_1,
+                locationName.CHEATOR2: self.cheato_reward_2,
+                locationName.CHEATOR3: self.cheato_reward_3,
+                locationName.CHEATOR4: self.cheato_reward_4,
+                locationName.CHEATOR5: self.cheato_reward_5,
             }
 
         if self.world.options.honeyb_rewards:
             self.honeyb_rewards_rules = {
-                locationName.HONEYBR1: lambda state: state.has(itemName.HONEY, self.player, 1) and self.can_reach_honey_b(state),
-                locationName.HONEYBR2: lambda state: state.has(itemName.HONEY, self.player, 4) and self.can_reach_honey_b(state),
-                locationName.HONEYBR3: lambda state: state.has(itemName.HONEY, self.player, 9) and self.can_reach_honey_b(state),
-                locationName.HONEYBR4: lambda state: state.has(itemName.HONEY, self.player, 16) and self.can_reach_honey_b(state),
-                locationName.HONEYBR5: lambda state: state.has(itemName.HONEY, self.player, 25) and self.can_reach_honey_b(state),
+                locationName.HONEYBR1: self.honey_b_reward_1,
+                locationName.HONEYBR2: self.honey_b_reward_2,
+                locationName.HONEYBR3: self.honey_b_reward_3,
+                locationName.HONEYBR4: self.honey_b_reward_4,
+                locationName.HONEYBR5: self.honey_b_reward_5,
             }
 
 
 
         self.train_rules = {
-            locationName.CHUFFY: lambda state: self.can_beat_king_coal(state),
-            locationName.TRAINSWIH: lambda state: self.grip_grab(state) and self.flap_flip(state),
-            locationName.TRAINSWHP2: lambda state: self.humbaHFP(state),
-            locationName.TRAINSWHP1: lambda state: self.tswitch_lavaside(state),
-            locationName.TRAINSWWW: lambda state: self.tswitch_ww(state),
-            locationName.TRAINSWTD: lambda state: self.tswitch_tdl(state),
-            #locationName.TRAINSWGI: lambda state: self.tswitch_gi(state),
+            locationName.CHUFFY: self.can_beat_king_coal,
+            locationName.TRAINSWIH: self.train_switch_ioh,
+            locationName.TRAINSWHP2: self.humbaHFP,
+            locationName.TRAINSWHP1: self.tswitch_lavaside,
+            locationName.TRAINSWWW: self.tswitch_ww,
+            locationName.TRAINSWTD: self.tswitch_tdl,
+            #locationName.TRAINSWGI: self.tswitch_gi,
         }
 
         self.jiggy_chunks_rules = {
-            locationName.CHUNK1: lambda state: self.jiggy_crushing_shed(state),
-            locationName.CHUNK2: lambda state: self.jiggy_crushing_shed(state),
-            locationName.CHUNK3: lambda state: self.jiggy_crushing_shed(state),
+            locationName.CHUNK1: self.jiggy_crushing_shed,
+            locationName.CHUNK2: self.jiggy_crushing_shed,
+            locationName.CHUNK3: self.jiggy_crushing_shed,
         }
 
         self.scrit_scrat_scrut_rules = {
-            locationName.SCRUT: lambda state: self.scrut(state),
-            locationName.SCRAT: lambda state: self.scrat(state),
-            locationName.SCRIT: lambda state: self.scrit(state)
+            locationName.SCRUT: self.scrut,
+            locationName.SCRAT: self.scrat,
+            locationName.SCRIT: self.scrit
         }
 
         self.boggy_kids_rules = {
-            locationName.MOGGY: lambda state: self.moggy(state),
-            locationName.SOGGY: lambda state: self.soggy(state),
-            locationName.GROGGY: lambda state: self.groggy(state)
+            locationName.MOGGY: self.moggy,
+            locationName.SOGGY: self.soggy,
+            locationName.GROGGY: self.groggy
         }
 
         self.alien_kids_rules = {
-            locationName.ALPHETTE: lambda state: self.alphette(state),
-            locationName.BETETTE: lambda state: self.betette(state),
-            locationName.GAMETTE: lambda state: self.gamette(state)
+            locationName.ALPHETTE: self.alphette,
+            locationName.BETETTE: self.betette,
+            locationName.GAMETTE: self.gamette
         }
 
         self.skivvy_rules = {
-            locationName.SKIVOU: lambda state: self.skivvy_outside(state),
-            locationName.SKIVWQ: lambda state: self.skivvy_worker_quarters(state),
-            locationName.SKIVF1: lambda state: self.skivvy_floor_1(state),
-            locationName.SKIVF2: lambda state: self.skivvy_floor_2(state),
-            locationName.SKIVF3: lambda state: self.skivvy_floor_3(state),
-            locationName.SKIVF5: lambda state: self.skivvy_floor_5(state),
+            locationName.SKIVOU: self.skivvy_outside,
+            locationName.SKIVWQ: self.skivvy_worker_quarters,
+            locationName.SKIVF1: self.skivvy_floor_1,
+            locationName.SKIVF2: self.skivvy_floor_2,
+            locationName.SKIVF3: self.skivvy_floor_3,
+            locationName.SKIVF5: self.skivvy_floor_5,
         }
 
         self.mr_fit_rules = {
-            locationName.FITHJ: lambda state: self.mr_fit_high_jump(state),
-            locationName.FITSR: lambda state: self.mr_fit_sack_race(state),
+            locationName.FITHJ: self.mr_fit_high_jump,
+            locationName.FITSR: self.mr_fit_sack_race,
         }
 
         self.jiggy_rules = {
-            locationName.JIGGYMT1: lambda state: self.jiggy_targitzan(state),
-            locationName.JIGGYMT2: lambda state: self.jiggy_sschamber(state),
-            locationName.JIGGYMT3: lambda state: self.jiggy_mayahem_kickball(state),
-            locationName.JIGGYMT4: lambda state: self.jiggy_bovina(state),
-            locationName.JIGGYMT5: lambda state: self.jiggy_treasure_chamber(state),
-            locationName.JIGGYMT6: lambda state: self.jiggy_golden_goliath(state),
-            locationName.JIGGYMT7: lambda state: self.jiggy_prison_quicksand(state),
-            locationName.JIGGYMT8: lambda state: self.jiggy_pillars(state),
-            locationName.JIGGYMT9: lambda state: self.jiggy_top(state),
-            locationName.JIGGYMT10: lambda state: self.jiggy_ssslumber(state),
+            locationName.JIGGYMT1: self.jiggy_targitzan,
+            locationName.JIGGYMT2: self.jiggy_sschamber,
+            locationName.JIGGYMT3: self.jiggy_mayahem_kickball,
+            locationName.JIGGYMT4: self.jiggy_bovina,
+            locationName.JIGGYMT5: self.jiggy_treasure_chamber,
+            locationName.JIGGYMT6: self.jiggy_golden_goliath,
+            locationName.JIGGYMT7: self.jiggy_prison_quicksand,
+            locationName.JIGGYMT8: self.jiggy_pillars,
+            locationName.JIGGYMT9: self.jiggy_top,
+            locationName.JIGGYMT10: self.jiggy_ssslumber,
 
-            locationName.JIGGYGM1: lambda state: self.can_beat_king_coal(state),
-            locationName.JIGGYGM2: lambda state: self.canary_mary_free(state),
-            locationName.JIGGYGM3: lambda state: self.jiggy_generator_cavern(state),
-            locationName.JIGGYGM4: lambda state: self.jiggy_waterfall_cavern(state),
-            locationName.JIGGYGM5: lambda state: self.jiggy_ordnance_storage(state),
-            locationName.JIGGYGM6: lambda state: self.dilberta_free(state),
-            locationName.JIGGYGM7: lambda state: self.jiggy_crushing_shed(state),
-            locationName.JIGGYGM8: lambda state: self.jiggy_waterfall(state),
-            locationName.JIGGYGM9: lambda state: self.jiggy_power_hut(state),
-            locationName.JIGGYGM10: lambda state: self.jiggy_flooded_caves(state),
+            locationName.JIGGYGM1: self.can_beat_king_coal,
+            locationName.JIGGYGM2: self.canary_mary_free,
+            locationName.JIGGYGM3: self.jiggy_generator_cavern,
+            locationName.JIGGYGM4: self.jiggy_waterfall_cavern,
+            locationName.JIGGYGM5: self.jiggy_ordnance_storage,
+            locationName.JIGGYGM6: self.dilberta_free,
+            locationName.JIGGYGM7: self.jiggy_crushing_shed,
+            locationName.JIGGYGM8: self.jiggy_waterfall,
+            locationName.JIGGYGM9: self.jiggy_power_hut,
+            locationName.JIGGYGM10: self.jiggy_flooded_caves,
 
-            locationName.JIGGYWW1: lambda state: self.jiggy_hoop_hurry(state),
-            locationName.JIGGYWW2: lambda state: self.jiggy_dodgem(state),
-            locationName.JIGGYWW3: lambda state: self.jiggy_patches(state),
-            locationName.JIGGYWW4: lambda state: self.jiggy_peril(state),
-            locationName.JIGGYWW5: lambda state: self.jiggy_balloon_burst(state),
-            locationName.JIGGYWW6: lambda state: self.jiggy_dive_of_death(state),
-            locationName.JIGGYWW7: lambda state: self.jiggy_mrs_boggy(state),
-            locationName.JIGGYWW8: lambda state: self.jiggy_star_spinner(state),
-            locationName.JIGGYWW9: lambda state: self.jiggy_inferno(state),
-            locationName.JIGGYWW10: lambda state: self.jiggy_cactus(state),
+            locationName.JIGGYWW1: self.jiggy_hoop_hurry,
+            locationName.JIGGYWW2: self.jiggy_dodgem,
+            locationName.JIGGYWW3: self.jiggy_patches,
+            locationName.JIGGYWW4: self.jiggy_peril,
+            locationName.JIGGYWW5: self.jiggy_balloon_burst,
+            locationName.JIGGYWW6: self.jiggy_dive_of_death,
+            locationName.JIGGYWW7: self.jiggy_mrs_boggy,
+            locationName.JIGGYWW8: self.jiggy_star_spinner,
+            locationName.JIGGYWW9: self.jiggy_inferno,
+            locationName.JIGGYWW10: self.jiggy_cactus,
 
-            locationName.JIGGYJR1: lambda state: self.jiggy_sub_challenge(state),
-            locationName.JIGGYJR2: lambda state: self.jiggy_tiptup(state),
-            locationName.JIGGYJR3: lambda state: self.jiggy_bacon(state),
-            locationName.JIGGYJR4: lambda state: self.jiggy_pig_pool(state),
-            locationName.JIGGYJR5: lambda state: self.jiggy_smuggler(state),
-            locationName.JIGGYJR6: lambda state: self.jiggy_merry_maggie(state),
-            locationName.JIGGYJR7: lambda state: self.jiggy_lord_woo(state),
-            locationName.JIGGYJR8: lambda state: self.jiggy_see_mee(state),
-            locationName.JIGGYJR9: lambda state: self.jiggy_pawno(state),
-            locationName.JIGGYJR10: lambda state: self.jiggy_ufo(state),
+            locationName.JIGGYJR1: self.jiggy_sub_challenge,
+            locationName.JIGGYJR2: self.jiggy_tiptup,
+            locationName.JIGGYJR3: self.jiggy_bacon,
+            locationName.JIGGYJR4: self.jiggy_pig_pool,
+            locationName.JIGGYJR5: self.jiggy_smuggler,
+            locationName.JIGGYJR6: self.jiggy_merry_maggie,
+            locationName.JIGGYJR7: self.jiggy_lord_woo,
+            locationName.JIGGYJR8: self.jiggy_see_mee,
+            locationName.JIGGYJR9: self.jiggy_pawno,
+            locationName.JIGGYJR10: self.jiggy_ufo,
 
-            locationName.JIGGYTD1: lambda state: self.jiggy_terry_nest(state),
-            locationName.JIGGYTD2: lambda state: self.jiggy_dippy(state),
-            locationName.JIGGYTD3: lambda state: self.jiggy_scrotty(state),
-            locationName.JIGGYTD4: lambda state: self.can_beat_terry(state),
-            locationName.JIGGYTD5: lambda state: self.jiggy_oogle_boogle(state),
-            locationName.JIGGYTD6: lambda state: self.jiggy_chompa(state),
-            locationName.JIGGYTD7: lambda state: self.jiggy_terry_kids(state),
-            locationName.JIGGYTD8: lambda state: self.jiggy_stomping_plains(state),
-            locationName.JIGGYTD9: lambda state: self.jiggy_rocknuts(state),
-            locationName.JIGGYTD10: lambda state: self.jiggy_roar_cage(state),
+            locationName.JIGGYTD1: self.jiggy_terry_nest,
+            locationName.JIGGYTD2: self.jiggy_dippy,
+            locationName.JIGGYTD3: self.jiggy_scrotty,
+            locationName.JIGGYTD4: self.can_beat_terry,
+            locationName.JIGGYTD5: self.jiggy_oogle_boogle,
+            locationName.JIGGYTD6: self.jiggy_chompa,
+            locationName.JIGGYTD7: self.jiggy_terry_kids,
+            locationName.JIGGYTD8: self.jiggy_stomping_plains,
+            locationName.JIGGYTD9: self.jiggy_rocknuts,
+            locationName.JIGGYTD10: self.jiggy_roar_cage,
 
-            locationName.JIGGYGI1: lambda state: self.jiggy_underwater_waste_disposal(state),
-            locationName.JIGGYGI2: lambda state: self.jiggy_weldar(state),
-            locationName.JIGGYGI3: lambda state: self.jiggy_clinkers(state),
-            locationName.JIGGYGI4: lambda state: self.jiggy_skivvy(state),
-            locationName.JIGGYGI5: lambda state: self.jiggy_floor5(state),
-            locationName.JIGGYGI6: lambda state: self.jiggy_quality_control(state),
-            locationName.JIGGYGI7: lambda state: self.jiggy_guarded(state),
-            locationName.JIGGYGI8: lambda state: self.jiggy_trash_compactor(state),
-            locationName.JIGGYGI9: lambda state: self.jiggy_twinkly(state),
-            locationName.JIGGYGI10: lambda state: self.jiggy_waste_disposal_box(state),
+            locationName.JIGGYGI1: self.jiggy_underwater_waste_disposal,
+            locationName.JIGGYGI2: self.jiggy_weldar,
+            locationName.JIGGYGI3: self.jiggy_clinkers,
+            locationName.JIGGYGI4: self.jiggy_skivvy,
+            locationName.JIGGYGI5: self.jiggy_floor5,
+            locationName.JIGGYGI6: self.jiggy_quality_control,
+            locationName.JIGGYGI7: self.jiggy_guarded,
+            locationName.JIGGYGI8: self.jiggy_trash_compactor,
+            locationName.JIGGYGI9: self.jiggy_twinkly,
+            locationName.JIGGYGI10: self.jiggy_waste_disposal_box,
 
-            locationName.JIGGYHP1: lambda state: self.jiggy_dragons_bros(state),
-            locationName.JIGGYHP2: lambda state: self.jiggy_volcano(state),
-            locationName.JIGGYHP3: lambda state: self.jiggy_sabreman(state),
-            locationName.JIGGYHP4: lambda state: self.jiggy_boggy(state),
-            locationName.JIGGYHP5: lambda state: self.jiggy_icy_side_station(state),
-            locationName.JIGGYHP6: lambda state: self.jiggy_oil_drill(state),
-            locationName.JIGGYHP7: lambda state: self.jiggy_hfp_stomping(state),
-            locationName.JIGGYHP8: lambda state: self.jiggy_hfp_kickball(state),
-            locationName.JIGGYHP9: lambda state: self.jiggy_aliens(state),
-            locationName.JIGGYHP10: lambda state: self.jiggy_colosseum_split(state),
+            locationName.JIGGYHP1: self.jiggy_dragons_bros,
+            locationName.JIGGYHP2: self.jiggy_volcano,
+            locationName.JIGGYHP3: self.jiggy_sabreman,
+            locationName.JIGGYHP4: self.jiggy_boggy,
+            locationName.JIGGYHP5: self.jiggy_icy_side_station,
+            locationName.JIGGYHP6: self.jiggy_oil_drill,
+            locationName.JIGGYHP7: self.jiggy_hfp_stomping,
+            locationName.JIGGYHP8: self.jiggy_hfp_kickball,
+            locationName.JIGGYHP9: self.jiggy_aliens,
+            locationName.JIGGYHP10: self.jiggy_colosseum_split,
 
-            locationName.JIGGYCC1: lambda state: self.jiggy_mingy(state),
-            locationName.JIGGYCC2: lambda state: self.jiggy_mr_fit(state),
-            locationName.JIGGYCC3: lambda state: self.jiggy_pot_of_gold(state),
-            locationName.JIGGYCC4: lambda state: self.canary_mary_free(state) and state.can_reach_region(regionName.GM, self.player),
-            locationName.JIGGYCC5: lambda state: state.has(itemName.HUMBACC, self.player),
-            locationName.JIGGYCC6: lambda state: state.has(itemName.HUMBACC, self.player),
-            locationName.JIGGYCC7: lambda state: self.jiggy_cheese(state),
-            locationName.JIGGYCC8: lambda state: self.jiggy_trash_can(state),
-            locationName.JIGGYCC9: lambda state: self.jiggy_superstash(state),
-            locationName.JIGGYCC10: lambda state: self.shack_pack(state) and self.climb(state),
+            locationName.JIGGYCC1: self.jiggy_mingy,
+            locationName.JIGGYCC2: self.jiggy_mr_fit,
+            locationName.JIGGYCC3: self.jiggy_pot_of_gold,
+            locationName.JIGGYCC4: self.jiggy_cc_canary_mary,
+            locationName.JIGGYCC5: self.jiggy_zubbas,
+            locationName.JIGGYCC6: self.jiggy_jiggium_plant,
+            locationName.JIGGYCC7: self.jiggy_cheese,
+            locationName.JIGGYCC8: self.jiggy_trash_can,
+            locationName.JIGGYCC9: self.jiggy_superstash,
+            locationName.JIGGYCC10: self.jiggy_jelly_castle,
 
-            locationName.JIGGYIH1: lambda state: state.has(itemName.WJINJO, self.player, 1),
-            locationName.JIGGYIH2: lambda state: state.has(itemName.OJINJO, self.player, 2),
-            locationName.JIGGYIH3: lambda state: state.has(itemName.YJINJO, self.player, 3),
-            locationName.JIGGYIH4: lambda state: state.has(itemName.BRJINJO, self.player, 4),
-            locationName.JIGGYIH5: lambda state: state.has(itemName.GJINJO, self.player, 5),
-            locationName.JIGGYIH6: lambda state: state.has(itemName.RJINJO, self.player, 6),
-            locationName.JIGGYIH7: lambda state: state.has(itemName.BLJINJO, self.player, 7),
-            locationName.JIGGYIH8: lambda state: state.has(itemName.PJINJO, self.player, 8),
-            locationName.JIGGYIH9: lambda state: state.has(itemName.BKJINJO, self.player, 9),
+            locationName.JIGGYIH1: self.jiggy_white_jinjo_family,
+            locationName.JIGGYIH2: self.jiggy_orange_jinjo_family,
+            locationName.JIGGYIH3: self.jiggy_yellow_jinjo_family,
+            locationName.JIGGYIH4: self.jiggy_brown_jinjo_family,
+            locationName.JIGGYIH5: self.jiggy_green_jinjo_family,
+            locationName.JIGGYIH6: self.jiggy_red_jinjo_family,
+            locationName.JIGGYIH7: self.jiggy_blue_jinjo_family,
+            locationName.JIGGYIH8: self.jiggy_purple_jinjo_family,
+            locationName.JIGGYIH9: self.jiggy_black_jinjo_family,
 
         }
         self.cheato_rules = {
-            locationName.CHEATOMT1: lambda state: self.cheato_snakehead(state),
-            locationName.CHEATOMT2: lambda state: self.cheato_prison(state),
-            locationName.CHEATOMT3: lambda state: self.cheato_jade_snake_grove(state),
+            locationName.CHEATOMT1: self.cheato_snakehead,
+            locationName.CHEATOMT2: self.cheato_prison,
+            locationName.CHEATOMT3: self.cheato_jade_snake_grove,
 
-            locationName.CHEATOGM1: lambda state: self.canary_mary_free(state),
-            locationName.CHEATOGM2: lambda state: self.cheato_gm_entrance(state),
-            locationName.CHEATOGM3: lambda state: self.cheato_water_storage(state),
+            locationName.CHEATOGM1: self.canary_mary_free,
+            locationName.CHEATOGM2: self.cheato_gm_entrance,
+            locationName.CHEATOGM3: self.cheato_water_storage,
 
-            locationName.CHEATOWW1: lambda state: self.cheato_haunted_cavern(state),
-            locationName.CHEATOWW2: lambda state: self.cheato_inferno(state),
-            locationName.CHEATOWW3: lambda state: self.cheato_saucer_of_peril(state),
+            locationName.CHEATOWW1: self.cheato_haunted_cavern,
+            locationName.CHEATOWW2: self.cheato_inferno,
+            locationName.CHEATOWW3: self.cheato_saucer_of_peril,
 
-            locationName.CHEATOJR1: lambda state: self.cheato_pawno(state),
-            locationName.CHEATOJR2: lambda state: self.cheato_seemee(state),
-            locationName.CHEATOJR3: lambda state: self.cheato_ancient_swimming_baths(state),
+            locationName.CHEATOJR1: self.cheato_pawno,
+            locationName.CHEATOJR2: self.cheato_seemee,
+            locationName.CHEATOJR3: self.cheato_ancient_swimming_baths,
 
-            locationName.CHEATOTL1: lambda state: self.cheato_dippy_pool(state),
-            locationName.CHEATOTL2: lambda state: self.cheato_trex(state),
-            locationName.CHEATOTL3: lambda state: self.cheato_tdlboulder(state),
+            locationName.CHEATOTL1: self.cheato_dippy_pool,
+            locationName.CHEATOTL2: self.cheato_trex,
+            locationName.CHEATOTL3: self.cheato_tdlboulder,
 
-            locationName.CHEATOGI1: lambda state: self.cheato_loggo(state),
-            locationName.CHEATOGI2: lambda state: self.cheato_window(state),
-            locationName.CHEATOGI3: lambda state: self.can_beat_weldar(state),
+            locationName.CHEATOGI1: self.cheato_loggo,
+            locationName.CHEATOGI2: self.cheato_window,
+            locationName.CHEATOGI3: self.can_beat_weldar,
 
-            locationName.CHEATOHP1: lambda state: self.cheato_colosseum(state),
-            locationName.CHEATOHP2: lambda state: self.cheato_icicle_grotto(state),
-            locationName.CHEATOHP3: lambda state: self.cheato_icy_pillar(state),
+            locationName.CHEATOHP1: self.cheato_colosseum,
+            locationName.CHEATOHP2: self.cheato_icicle_grotto,
+            locationName.CHEATOHP3: self.cheato_icy_pillar,
 
-            locationName.CHEATOCC1: lambda state: self.canary_mary_free(state) and state.can_reach_region(regionName.GM, self.player),
-            locationName.CHEATOCC2: lambda state: self.cheato_potgold(state),
-            locationName.CHEATOCC3: lambda state: state.has(itemName.HUMBACC, self.player),
+            locationName.CHEATOCC1: self.cheato_canary_mary,
+            locationName.CHEATOCC2: self.cheato_potgold,
+            locationName.CHEATOCC3: self.cheato_zubbas,
 
-            locationName.CHEATOSM1: lambda state: self.cheato_spiral(state)
+            locationName.CHEATOSM1: self.cheato_spiral
         }
         self.honey_rules = {
-            locationName.HONEYCMT1: lambda state: self.honeycomb_mt_entrance(state),
-            locationName.HONEYCMT2: lambda state: self.honeycomb_bovina(state),
-            locationName.HONEYCMT3: lambda state: self.honeycomb_treasure_chamber(state),
+            locationName.HONEYCMT1: self.honeycomb_mt_entrance,
+            locationName.HONEYCMT2: self.honeycomb_bovina,
+            locationName.HONEYCMT3: self.honeycomb_treasure_chamber,
 
-            locationName.HONEYCGM1: lambda state: self.ggm_boulders(state),
-            locationName.HONEYCGM2: lambda state: self.honeycomb_prospector(state),
-            locationName.HONEYCGM3: lambda state: self.honeycomb_gm_station(state),
+            locationName.HONEYCGM1: self.ggm_boulders,
+            locationName.HONEYCGM2: self.honeycomb_prospector,
+            locationName.HONEYCGM3: self.honeycomb_gm_station,
 
-            locationName.HONEYCWW1: lambda state: self.honeycomb_space_zone(state),
-            locationName.HONEYCWW3: lambda state: self.honeycomb_crazy_castle(state),
+            locationName.HONEYCWW1: self.honeycomb_space_zone,
+            locationName.HONEYCWW3: self.honeycomb_crazy_castle,
 
-            locationName.HONEYCJR1: lambda state: self.honeycomb_seemee(state),
-            locationName.HONEYCJR3: lambda state: self.honeycomb_jrl_pipes(state),
+            locationName.HONEYCJR1: self.honeycomb_seemee,
+            locationName.HONEYCJR3: self.honeycomb_jrl_pipes,
 
-            locationName.HONEYCTL1: lambda state: self.honeycomb_lakeside(state),
-            locationName.HONEYCTL2: lambda state: self.honeycomb_styracosaurus(state),
-            locationName.HONEYCTL3: lambda state: self.honeycomb_river(state),
+            locationName.HONEYCTL1: self.honeycomb_lakeside,
+            locationName.HONEYCTL2: self.honeycomb_styracosaurus,
+            locationName.HONEYCTL3: self.honeycomb_river,
 
-            locationName.HONEYCGI1: lambda state: self.honeycomb_floor3(state),
-            locationName.HONEYCGI2: lambda state: self.honeycomb_gi_station(state),
+            locationName.HONEYCGI1: self.honeycomb_floor3,
+            locationName.HONEYCGI2: self.honeycomb_gi_station,
 
-            locationName.HONEYCHP1: lambda state: self.honeycomb_volcano(state),
-            locationName.HONEYCHP2: lambda state: self.honeycomb_hfp_station(state),
-            locationName.HONEYCHP3: lambda state: self.honeycomb_lava_side(state),
+            locationName.HONEYCHP1: self.honeycomb_volcano,
+            locationName.HONEYCHP2: self.honeycomb_hfp_station,
+            locationName.HONEYCHP3: self.honeycomb_lava_side,
 
-            locationName.HONEYCCC1: lambda state: self.bill_drill(state),
-            locationName.HONEYCCC2: lambda state: self.honeycomb_trash(state),
-            locationName.HONEYCCC3: lambda state: self.honeycomb_pot(state),
+            locationName.HONEYCCC1: self.bill_drill,
+            locationName.HONEYCCC2: self.honeycomb_trash,
+            locationName.HONEYCCC3: self.honeycomb_pot,
 
-            locationName.HONEYCIH1: lambda state: self.plateau_top(state)
+            locationName.HONEYCIH1: self.plateau_top
 
         }
         self.glowbo_rules = {
-            locationName.GLOWBOGM1: lambda state: self.glowbo_entrance_ggm(state),
+            locationName.GLOWBOGM1: self.glowbo_entrance_ggm,
 
-            locationName.GLOWBOWW2: lambda state: self.glowbo_wigwam(state),
+            locationName.GLOWBOWW2: self.glowbo_wigwam,
 
-            locationName.GLOWBOJR1: lambda state: self.pawno_shelves(state),
-            locationName.GLOWBOJR2: lambda state: self.glowbo_underwigwam(state),
+            locationName.GLOWBOJR1: self.pawno_shelves,
+            locationName.GLOWBOJR2: self.glowbo_underwigwam,
 
-            locationName.GLOWBOTL1: lambda state: self.glowbo_tdl(state),
-            locationName.GLOWBOTL2: lambda state: self.glowbo_tdl_mumbo(state),
+            locationName.GLOWBOTL1: self.glowbo_tdl,
+            locationName.GLOWBOTL2: self.glowbo_tdl_mumbo,
 
-            locationName.GLOWBOGI2: lambda state: self.glowbo_floor_3(state),
+            locationName.GLOWBOGI2: self.glowbo_floor_3,
 
-            locationName.GLOWBOHP2: lambda state: self.glowbo_icy_side(state),
+            locationName.GLOWBOHP2: self.glowbo_icy_side,
 
-            locationName.GLOWBOCC1: lambda state: self.ccl_glowbo_pool(state),
-            locationName.GLOWBOCC2: lambda state: self.glowbo_cavern(state),
+            locationName.GLOWBOCC1: self.ccl_glowbo_pool,
+            locationName.GLOWBOCC2: self.glowbo_cavern,
 
-            locationName.GLOWBOIH1: lambda state: self.glowbo_cliff(state),
-            locationName.GLOWBOMEG: lambda state: self.mega_glowbo(state)
+            locationName.GLOWBOIH1: self.glowbo_cliff,
+            locationName.GLOWBOMEG: self.mega_glowbo
 
         }
         self.doubloon_rules = {
             #Alcove
-            locationName.JRLDB22:   lambda state: self.doubloon_ledge(state),
-            locationName.JRLDB23:   lambda state: self.doubloon_ledge(state),
-            locationName.JRLDB24:   lambda state: self.doubloon_ledge(state),
+            locationName.JRLDB22:   self.doubloon_ledge,
+            locationName.JRLDB23:   self.doubloon_ledge,
+            locationName.JRLDB24:   self.doubloon_ledge,
             #Underground
-            locationName.JRLDB19:   lambda state: self.doubloon_dirtpatch(state),
-            locationName.JRLDB20:   lambda state: self.doubloon_dirtpatch(state),
-            locationName.JRLDB21:   lambda state: self.doubloon_dirtpatch(state),
+            locationName.JRLDB19:   self.doubloon_dirtpatch,
+            locationName.JRLDB20:   self.doubloon_dirtpatch,
+            locationName.JRLDB21:   self.doubloon_dirtpatch,
             #Underwater
-            locationName.JRLDB11:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB12:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB13:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB14:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB27:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB28:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB29:   lambda state: self.doubloon_water(state),
-            locationName.JRLDB30:   lambda state: self.doubloon_water(state),
+            locationName.JRLDB11:   self.doubloon_water,
+            locationName.JRLDB12:   self.doubloon_water,
+            locationName.JRLDB13:   self.doubloon_water,
+            locationName.JRLDB14:   self.doubloon_water,
+            locationName.JRLDB27:   self.doubloon_water,
+            locationName.JRLDB28:   self.doubloon_water,
+            locationName.JRLDB29:   self.doubloon_water,
+            locationName.JRLDB30:   self.doubloon_water,
 
         }
         self.treble_clef_rules = {
-            locationName.TREBLEJV:  lambda state: self.treble_jv(state),
-            locationName.TREBLEGM:  lambda state: self.treble_gm(state),
-            locationName.TREBLEWW:  lambda state: self.treble_ww(state),
-            locationName.TREBLEJR:  lambda state: self.treble_jrl(state),
-            locationName.TREBLETL:  lambda state: self.treble_tdl(state),
-            locationName.TREBLEGI:  lambda state: self.treble_gi(state),
-            locationName.TREBLEHP:  lambda state: self.treble_hfp(state),
-            locationName.TREBLECC:  lambda state: self.treble_ccl(state),
+            locationName.TREBLEJV:  self.treble_jv,
+            locationName.TREBLEGM:  self.treble_gm,
+            locationName.TREBLEWW:  self.treble_ww,
+            locationName.TREBLEJR:  self.treble_jrl,
+            locationName.TREBLETL:  self.treble_tdl,
+            locationName.TREBLEGI:  self.treble_gi,
+            locationName.TREBLEHP:  self.treble_hfp,
+            locationName.TREBLECC:  self.treble_ccl,
         }
 
         self.silo_rules = {
             ## Faster swimming and double air rules are here ##
-            locationName.ROYSTEN1: lambda state: self.bill_drill(state),
-            locationName.ROYSTEN2: lambda state: self.bill_drill(state),
+            locationName.ROYSTEN1: self.bill_drill,
+            locationName.ROYSTEN2: self.bill_drill,
 
-            locationName.EGGAIM: lambda state: self.check_notes(state, locationName.EGGAIM),
-            locationName.BBLASTER: lambda state: self.check_notes(state, locationName.BBLASTER),
-            locationName.GGRAB: lambda state: self.check_notes(state, locationName.GGRAB),
+            locationName.EGGAIM: self.silo_egg_aim,
+            locationName.BBLASTER: self.silo_breegull_blaster,
+            locationName.GGRAB: self.silo_grip_grab,
 
-            locationName.BDRILL: lambda state: self.silo_bill_drill(state),
-            locationName.BBAYONET: lambda state: self.ggm_boulders(state) and self.check_notes(state, locationName.BBAYONET),
+            locationName.BDRILL: self.silo_bill_drill,
+            locationName.BBAYONET: self.silo_beak_bayonet,
 
-            locationName.AIREAIM: lambda state: self.check_notes(state, locationName.AIREAIM),
-            locationName.SPLITUP: lambda state: self.check_notes(state, locationName.SPLITUP),
-            locationName.PACKWH: lambda state: self.split_up(state) and self.check_notes(state, locationName.PACKWH),
+            locationName.AIREAIM: self.silo_airborne_egg_aiming,
+            locationName.SPLITUP: self.silo_split_up,
+            locationName.PACKWH: self.silo_pack_whack,
 
-            locationName.AUQAIM: lambda state: (self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28)) and
-                                               self.check_notes(state, locationName.AUQAIM),
-            locationName.TTORP: lambda state:  self.can_access_talon_torpedo_silo(state) and
-                                               self.check_notes(state, locationName.TTORP),
-            locationName.WWHACK: lambda state: (self.has_explosives(state)) and self.split_up(state) and
-                                               self.check_notes(state, locationName.WWHACK),
+            locationName.AUQAIM: self.silo_sub_aqua_egg_aiming,
+            locationName.TTORP: self.silo_talon_torpedo,
+            locationName.WWHACK: self.silo_wing_whack,
 
-            locationName.SPRINGB: lambda state: self.check_notes(state, locationName.SPRINGB) and self.silo_spring(state),
-            locationName.TAXPACK: lambda state: self.can_access_taxi_pack_silo(state) and self.check_notes(state, locationName.TAXPACK),
-            locationName.HATCH: lambda state:   self.split_up(state) and self.check_notes(state, locationName.HATCH),
+            locationName.SPRINGB: self.silo_springy_step_shoes,
+            locationName.TAXPACK: self.silo_taxi_pack,
+            locationName.HATCH: self.silo_hatch,
 
-            locationName.SNPACK: lambda state:  self.silo_snooze(state),
-            locationName.LSPRING: lambda state: self.check_notes(state, locationName.LSPRING) and self.split_up(state),
-            locationName.CLAWBTS: lambda state: self.check_notes(state, locationName.CLAWBTS),
+            locationName.SNPACK: self.silo_snooze,
+            locationName.LSPRING: self.silo_leg_spring,
+            locationName.CLAWBTS: self.silo_claw_clamber_boots,
 
-            locationName.SHPACK: lambda state: self.split_up(state) and self.check_notes(state, locationName.SHPACK),
-            locationName.GLIDE: lambda state: self.can_access_glide_silo(state) and self.check_notes(state, locationName.GLIDE),
+            locationName.SHPACK: self.silo_shack_pack,
+            locationName.GLIDE: self.silo_glide,
 
-            locationName.SAPACK: lambda state: self.can_access_sack_pack_silo(state) and self.check_notes(state, locationName.SAPACK),
+            locationName.SAPACK: self.silo_sack_pack,
 
-            locationName.FEGGS: lambda state: self.check_notes(state, locationName.FEGGS),
-            locationName.GEGGS: lambda state: self.check_notes(state, locationName.GEGGS),
-            locationName.IEGGS: lambda state: self.check_notes(state, locationName.IEGGS),
-            locationName.CEGGS: lambda state: self.check_notes(state, locationName.CEGGS)
+            locationName.FEGGS: self.silo_fire_eggs,
+            locationName.GEGGS: self.silo_grenade_eggs,
+            locationName.IEGGS: self.silo_ice_eggs,
+            locationName.CEGGS: self.silo_clockwork_eggs
         }
 
         self.jinjo_rules = {
-            locationName.JINJOIH5: lambda state: self.talon_torpedo(state) and self.dive(state),
-            locationName.JINJOIH4: lambda state: self.jinjo_plateau(state),
-            locationName.JINJOIH3: lambda state: self.jinjo_clifftop(state),
-            locationName.JINJOIH2: lambda state: self.jinjo_wasteland(state),
+            locationName.JINJOIH5: self.jinjo_spiral_mountain,
+            locationName.JINJOIH4: self.jinjo_plateau,
+            locationName.JINJOIH3: self.jinjo_clifftop,
+            locationName.JINJOIH2: self.jinjo_wasteland,
 
-            locationName.JINJOMT1: lambda state: self.jinjo_jadesnakegrove(state),
-            locationName.JINJOMT2: lambda state: self.jinjo_stadium(state),
-            locationName.JINJOMT4: lambda state: self.jinjo_pool(state),
+            locationName.JINJOMT1: self.jinjo_jadesnakegrove,
+            locationName.JINJOMT2: self.jinjo_stadium,
+            locationName.JINJOMT4: self.jinjo_pool,
 
             #Water Storage Jinjo always true because it's in the GMWSJT area
-            locationName.JINJOGM2: lambda state: self.jinjo_jail(state),
-            locationName.JINJOGM4: lambda state: self.jinjo_boulder(state),
+            locationName.JINJOGM2: self.jinjo_jail,
+            locationName.JINJOGM4: self.jinjo_boulder,
 
-            locationName.JINJOWW1: lambda state: self.jinjo_tent(state),
-            locationName.JINJOWW2: lambda state: self.jinjo_cave_of_horrors(state),
-            locationName.JINJOWW3: lambda state: self.jinjo_van_door(state),
-            locationName.JINJOWW4: lambda state: self.jinjo_dodgem(state),
-            locationName.JINJOWW5: lambda state: self.jinjo_cactus(state),
+            locationName.JINJOWW1: self.jinjo_tent,
+            locationName.JINJOWW2: self.jinjo_cave_of_horrors,
+            locationName.JINJOWW3: self.jinjo_van_door,
+            locationName.JINJOWW4: self.jinjo_dodgem,
+            locationName.JINJOWW5: self.jinjo_cactus,
 
-            locationName.JINJOJR1: lambda state: self.jinjo_alcove(state),
-            locationName.JINJOJR2: lambda state: self.jinjo_blubber(state),
-            locationName.JINJOJR3: lambda state: self.jinjo_big_fish(state),
-            locationName.JINJOJR4: lambda state: self.jinjo_seaweed_sanctum(state),
-            locationName.JINJOJR5: lambda state: self.jinjo_sunken_ship(state),
+            locationName.JINJOJR1: self.jinjo_alcove,
+            locationName.JINJOJR2: self.jinjo_blubber,
+            locationName.JINJOJR3: self.jinjo_big_fish,
+            locationName.JINJOJR4: self.jinjo_seaweed_sanctum,
+            locationName.JINJOJR5: self.jinjo_sunken_ship,
 
-            locationName.JINJOTL2: lambda state: self.jinjo_tdl_entrance(state),
-            locationName.JINJOTL1: lambda state: self.talon_torpedo(state) and self.dive(state),
-            locationName.JINJOTL3: lambda state: self.clockwork_eggs(state),
-            locationName.JINJOTL4: lambda state: self.jinjo_big_t_rex(state),
-            locationName.JINJOTL5: lambda state: self.jinjo_stomping_plains(state),
+            locationName.JINJOTL2: self.jinjo_tdl_entrance,
+            locationName.JINJOTL1: self.jinjo_talon_torpedo,
+            locationName.JINJOTL3: self.clockwork_eggs,
+            locationName.JINJOTL4: self.jinjo_big_t_rex,
+            locationName.JINJOTL5: self.jinjo_stomping_plains,
 
-            locationName.JINJOGI2: lambda state: self.jinjo_legspring(state),
-            locationName.JINJOGI3: lambda state: self.jinjo_waste_disposal(state),
-            locationName.JINJOGI4: lambda state: self.jinjo_boiler(state),
-            locationName.JINJOGI5: lambda state: self.jinjo_gi_outside(state),
+            locationName.JINJOGI2: self.jinjo_legspring,
+            locationName.JINJOGI3: self.jinjo_waste_disposal,
+            locationName.JINJOGI4: self.jinjo_boiler,
+            locationName.JINJOGI5: self.jinjo_gi_outside,
 
-            locationName.JINJOHP1: lambda state: self.jinjo_hot_waterfall(state),
-            locationName.JINJOHP2: lambda state: self.jinjo_hot_pool(state),
-            locationName.JINJOHP3: lambda state: self.jinjo_wind_tunnel(state),
-            locationName.JINJOHP4: lambda state: self.jinjo_icicle_grotto(state),
-            locationName.JINJOHP5: lambda state: self.jinjo_mildred(state),
+            locationName.JINJOHP1: self.jinjo_hot_waterfall,
+            locationName.JINJOHP2: self.jinjo_hot_pool,
+            locationName.JINJOHP3: self.jinjo_wind_tunnel,
+            locationName.JINJOHP4: self.jinjo_icicle_grotto,
+            locationName.JINJOHP5: self.jinjo_mildred,
 
-            locationName.JINJOCC1: lambda state: self.jinjo_trash_can(state),
-            locationName.JINJOCC2: lambda state: self.jinjo_cheese(state),
-            locationName.JINJOCC3: lambda state: self.jinjo_central(state),
-            locationName.JINJOCC5: lambda state: self.jinjo_humba_ccl(state),
+            locationName.JINJOCC1: self.jinjo_trash_can,
+            locationName.JINJOCC2: self.jinjo_cheese,
+            locationName.JINJOCC3: self.jinjo_central,
+            locationName.JINJOCC5: self.jinjo_humba_ccl,
         }
 
         self.notes_rules = {
-            locationName.NOTEIH1:  lambda state: self.notes_plateau_sign(state),
-            locationName.NOTEIH2:  lambda state: self.notes_plateau_sign(state),
-            locationName.NOTEIH3:  lambda state: self.plateau_top(state),
-            locationName.NOTEIH4:  lambda state: self.plateau_top(state),
-            locationName.NOTEIH13:  lambda state: self.notes_bottom_clockwork(state),
-            locationName.NOTEIH14:  lambda state: self.notes_top_clockwork(state),
+            locationName.NOTEIH1:  self.notes_plateau_sign,
+            locationName.NOTEIH2:  self.notes_plateau_sign,
+            locationName.NOTEIH3:  self.plateau_top,
+            locationName.NOTEIH4:  self.plateau_top,
+            locationName.NOTEIH13:  self.notes_bottom_clockwork,
+            locationName.NOTEIH14:  self.notes_top_clockwork,
 
-            locationName.NOTEGGM1:  lambda state: self.notes_green_pile(state),
-            locationName.NOTEGGM2:  lambda state: self.notes_green_pile(state),
-            locationName.NOTEGGM3:  lambda state: self.notes_green_pile(state),
-            locationName.NOTEGGM4:  lambda state: self.notes_green_pile(state),
-            locationName.NOTEGGM5: lambda state: self.notes_prospector_easy(state),
-            locationName.NOTEGGM6: lambda state: self.notes_prospector_easy(state),
-            locationName.NOTEGGM7: lambda state: self.notes_prospector_hard(state),
-            locationName.NOTEGGM8: lambda state: self.notes_prospector_easy(state),
-            locationName.NOTEGGM9: lambda state: self.notes_prospector_easy(state),
-            locationName.NOTEGGM10: lambda state: self.notes_gm_mumbo_easy(state),
-            locationName.NOTEGGM11: lambda state: self.notes_gm_mumbo_hard(state),
-            locationName.NOTEGGM12: lambda state: self.notes_gm_mumbo_hard(state),
-            locationName.NOTEGGM13: lambda state: self.notes_easy_fuel_depot(state),
-            locationName.NOTEGGM14: lambda state: self.notes_hard_fuel_depot(state),
-            locationName.NOTEGGM15: lambda state: self.notes_easy_fuel_depot(state),
-            locationName.NOTEGGM16: lambda state: self.notes_easy_fuel_depot(state),
+            locationName.NOTEGGM1:  self.notes_green_pile,
+            locationName.NOTEGGM2:  self.notes_green_pile,
+            locationName.NOTEGGM3:  self.notes_green_pile,
+            locationName.NOTEGGM4:  self.notes_green_pile,
+            locationName.NOTEGGM5: self.notes_prospector_easy,
+            locationName.NOTEGGM6: self.notes_prospector_easy,
+            locationName.NOTEGGM7: self.notes_prospector_hard,
+            locationName.NOTEGGM8: self.notes_prospector_easy,
+            locationName.NOTEGGM9: self.notes_prospector_easy,
+            locationName.NOTEGGM10: self.notes_gm_mumbo_easy,
+            locationName.NOTEGGM11: self.notes_gm_mumbo_hard,
+            locationName.NOTEGGM12: self.notes_gm_mumbo_hard,
+            locationName.NOTEGGM13: self.notes_easy_fuel_depot,
+            locationName.NOTEGGM14: self.notes_hard_fuel_depot,
+            locationName.NOTEGGM15: self.notes_easy_fuel_depot,
+            locationName.NOTEGGM16: self.notes_easy_fuel_depot,
 
 
-            locationName.NOTEWW9:   lambda state: self.notes_ww_area51_left(state),
-            locationName.NOTEWW10:  lambda state: self.notes_ww_area51_right(state),
-            locationName.NOTEWW13:  lambda state: self.notes_dive_of_death(state),
-            locationName.NOTEWW14:  lambda state: self.notes_dive_of_death(state),
+            locationName.NOTEWW9:   self.notes_ww_area51_left,
+            locationName.NOTEWW10:  self.notes_ww_area51_right,
+            locationName.NOTEWW13:  self.notes_dive_of_death,
+            locationName.NOTEWW14:  self.notes_dive_of_death,
 
-            locationName.NOTEJRL4:  lambda state: self.notes_jrl_blubs(state),
-            locationName.NOTEJRL5:  lambda state: self.notes_jrl_blubs(state),
-            locationName.NOTEJRL6:  lambda state: self.notes_jrl_eels(state),
-            locationName.NOTEJRL7:  lambda state: self.notes_jrl_eels(state),
-            locationName.NOTEJRL11:  lambda state: self.pawno_shelves(state),
-            locationName.NOTEJRL12:  lambda state: self.pawno_shelves(state),
-            locationName.NOTEJRL13:  lambda state: self.pawno_shelves(state),
-            locationName.NOTEJRL14:  lambda state: self.notes_jolly(state),
-            locationName.NOTEJRL15:  lambda state: self.notes_jolly(state),
-            locationName.NOTEJRL16:  lambda state: self.notes_jolly(state),
+            locationName.NOTEJRL4:  self.notes_jrl_blubs,
+            locationName.NOTEJRL5:  self.notes_jrl_blubs,
+            locationName.NOTEJRL6:  self.notes_jrl_eels,
+            locationName.NOTEJRL7:  self.notes_jrl_eels,
+            locationName.NOTEJRL11:  self.pawno_shelves,
+            locationName.NOTEJRL12:  self.pawno_shelves,
+            locationName.NOTEJRL13:  self.pawno_shelves,
+            locationName.NOTEJRL14:  self.notes_jolly,
+            locationName.NOTEJRL15:  self.notes_jolly,
+            locationName.NOTEJRL16:  self.notes_jolly,
 
-            locationName.NOTETDL1:  lambda state: self.notes_tdl_station_right(state),
-            locationName.NOTETDL10:  lambda state: self.notes_roar_cage(state),
-            locationName.NOTETDL11:  lambda state: self.notes_roar_cage(state),
-            locationName.NOTETDL12:  lambda state: self.notes_roar_cage(state),
-            locationName.NOTETDL13:  lambda state: self.notes_river_passage(state),
-            locationName.NOTETDL14:  lambda state: self.notes_river_passage(state),
-            locationName.NOTETDL15:  lambda state: self.notes_river_passage(state),
-            locationName.NOTETDL16:  lambda state: self.notes_river_passage(state),
+            locationName.NOTETDL1:  self.notes_tdl_station_right,
+            locationName.NOTETDL10:  self.notes_roar_cage,
+            locationName.NOTETDL11:  self.notes_roar_cage,
+            locationName.NOTETDL12:  self.notes_roar_cage,
+            locationName.NOTETDL13:  self.notes_river_passage,
+            locationName.NOTETDL14:  self.notes_river_passage,
+            locationName.NOTETDL15:  self.notes_river_passage,
+            locationName.NOTETDL16:  self.notes_river_passage,
 
-            locationName.NOTEGI1:   lambda state: self.notes_gi_train_station_hard(state),
-            locationName.NOTEGI2:   lambda state: self.notes_gi_train_station_easy(state),
-            locationName.NOTEGI3:   lambda state: self.notes_gi_train_station_easy(state),
-            locationName.NOTEGI4:   lambda state: self.notes_gi_floor1(state),
-            locationName.NOTEGI5:   lambda state: self.notes_gi_floor1(state),
-            locationName.NOTEGI6:   lambda state: self.notes_leg_spring(state),
-            locationName.NOTEGI7:   lambda state: self.notes_leg_spring(state),
-            locationName.NOTEGI8:   lambda state: self.notes_leg_spring(state),
-            locationName.NOTEGI9:   lambda state: self.notes_short_stack(state),
-            locationName.NOTEGI11:  lambda state: self.notes_waste_disposal(state),
-            locationName.NOTEGI12:  lambda state: self.notes_waste_disposal(state),
-            locationName.NOTEGI13:  lambda state: self.notes_aircon_hard(state),
-            locationName.NOTEGI15:  lambda state: self.notes_floor_3(state),
-            locationName.NOTEGI16:  lambda state: self.notes_floor_3(state),
+            locationName.NOTEGI1:   self.notes_gi_train_station_hard,
+            locationName.NOTEGI2:   self.notes_gi_train_station_easy,
+            locationName.NOTEGI3:   self.notes_gi_train_station_easy,
+            locationName.NOTEGI4:   self.notes_gi_floor1,
+            locationName.NOTEGI5:   self.notes_gi_floor1,
+            locationName.NOTEGI6:   self.notes_leg_spring,
+            locationName.NOTEGI7:   self.notes_leg_spring,
+            locationName.NOTEGI8:   self.notes_leg_spring,
+            locationName.NOTEGI9:   self.notes_short_stack,
+            locationName.NOTEGI11:  self.notes_waste_disposal,
+            locationName.NOTEGI12:  self.notes_waste_disposal,
+            locationName.NOTEGI13:  self.notes_aircon_hard,
+            locationName.NOTEGI15:  self.notes_floor_3,
+            locationName.NOTEGI16:  self.notes_floor_3,
 
-            locationName.NOTEHFP1:  lambda state: self.hfp_top(state),
-            locationName.NOTEHFP2:  lambda state: self.hfp_top(state),
-            locationName.NOTEHFP5:  lambda state: self.hfp_top(state),
-            locationName.NOTEHFP6:  lambda state: self.hfp_top(state),
-            locationName.NOTEHFP7:  lambda state: self.notes_ladder(state),
-            locationName.NOTEHFP8:  lambda state: self.notes_ladder(state),
-            locationName.NOTEHFP9:  lambda state: self.notes_oil_drill(state),
-            locationName.NOTEHFP10:  lambda state: self.notes_oil_drill(state),
-            locationName.NOTEHFP11:  lambda state: self.notes_upper_icy_side(state),
-            locationName.NOTEHFP12:  lambda state: self.notes_upper_icy_side(state),
-            locationName.NOTEHFP13:  lambda state: self.notes_boggy(state),
-            locationName.NOTEHFP14:  lambda state: self.notes_boggy(state),
-            locationName.NOTEHFP15:  lambda state: self.notes_lower_icy_side(state),
-            locationName.NOTEHFP16:  lambda state: self.notes_lower_icy_side(state),
+            locationName.NOTEHFP1:  self.hfp_top,
+            locationName.NOTEHFP2:  self.hfp_top,
+            locationName.NOTEHFP5:  self.hfp_top,
+            locationName.NOTEHFP6:  self.hfp_top,
+            locationName.NOTEHFP7:  self.notes_ladder,
+            locationName.NOTEHFP8:  self.notes_ladder,
+            locationName.NOTEHFP9:  self.notes_oil_drill,
+            locationName.NOTEHFP10:  self.notes_oil_drill,
+            locationName.NOTEHFP11:  self.notes_upper_icy_side,
+            locationName.NOTEHFP12:  self.notes_upper_icy_side,
+            locationName.NOTEHFP13:  self.notes_boggy,
+            locationName.NOTEHFP14:  self.notes_boggy,
+            locationName.NOTEHFP15:  self.notes_lower_icy_side,
+            locationName.NOTEHFP16:  self.notes_lower_icy_side,
 
-            locationName.NOTECCL2: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL3: lambda state: self.notes_ccl_silo(state),
-            locationName.NOTECCL4: lambda state: self.notes_ccl_silo(state),
-            locationName.NOTECCL5: lambda state: self.notes_cheese(state),
-            locationName.NOTECCL6: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL7: lambda state: self.notes_dippy(state),
-            locationName.NOTECCL8: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL9: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL10: lambda state: self.notes_sack_race(state),
-            locationName.NOTECCL11: lambda state: self.notes_ccl_high(state),
-            locationName.NOTECCL12: lambda state: self.notes_ccl_high(state),
-            locationName.NOTECCL13: lambda state: self.ccl_glowbo_pool(state),
-            locationName.NOTECCL14: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL15: lambda state: self.notes_ccl_low(state),
-            locationName.NOTECCL16: lambda state: self.notes_ccl_low(state),
+            locationName.NOTECCL2: self.notes_ccl_low,
+            locationName.NOTECCL3: self.notes_ccl_silo,
+            locationName.NOTECCL4: self.notes_ccl_silo,
+            locationName.NOTECCL5: self.notes_cheese,
+            locationName.NOTECCL6: self.notes_ccl_low,
+            locationName.NOTECCL7: self.notes_dippy,
+            locationName.NOTECCL8: self.notes_ccl_low,
+            locationName.NOTECCL9: self.notes_ccl_low,
+            locationName.NOTECCL10: self.notes_sack_race,
+            locationName.NOTECCL11: self.notes_ccl_high,
+            locationName.NOTECCL12: self.notes_ccl_high,
+            locationName.NOTECCL13: self.ccl_glowbo_pool,
+            locationName.NOTECCL14: self.notes_ccl_low,
+            locationName.NOTECCL15: self.notes_ccl_low,
+            locationName.NOTECCL16: self.notes_ccl_low,
         }
 
         self.stopnswap_rules = {
-            locationName.IKEY:      lambda state: self.ice_key(state),
-            locationName.PMEGG:     lambda state: self.pink_mystery_egg(state),
-            locationName.PMEGGH:    lambda state: state.has(itemName.PMEGG, self.player),
-            locationName.BMEGG:     lambda state: self.blue_mystery_egg(state),
-            locationName.BMEGGH:    lambda state: state.has(itemName.BMEGG, self.player),
-            locationName.YMEGGH:    lambda state: (self.has_explosives(state) or self.bill_drill(state)) and self.hatch(state)
+            locationName.IKEY:      self.ice_key,
+            locationName.PMEGG:     self.pink_mystery_egg,
+            locationName.PMEGGH:    self.pink_egg_hatched,
+            locationName.BMEGG:     self.blue_mystery_egg,
+            locationName.BMEGGH:    self.blue_egg_hatched,
+            locationName.YMEGGH:    self.yellow_egg_hatched
         }
 
         self.nest_rules = {
-            locationName.NESTSM4:    lambda state: self.nest_lair_top(state),
-            locationName.NESTSM5:    lambda state: self.nest_lair_top(state),
-            locationName.NESTSM6:    lambda state: self.nest_lair_top(state),
+            locationName.NESTSM4:    self.nest_lair_top,
+            locationName.NESTSM5:    self.nest_lair_top,
+            locationName.NESTSM6:    self.nest_lair_top,
 
-            locationName.NESTSM22:    lambda state: self.nest_sm_waterfall_top(state),
-            locationName.NESTSM23:    lambda state: self.nest_sm_waterfall_platform(state),
-            locationName.NESTSM24:    lambda state: self.nest_sm_waterfall_platform(state),
+            locationName.NESTSM22:    self.nest_sm_waterfall_top,
+            locationName.NESTSM23:    self.nest_sm_waterfall_platform,
+            locationName.NESTSM24:    self.nest_sm_waterfall_platform,
 
 
-            locationName.NESTIH16:    lambda state: self.nest_bottles_house(state),
-            locationName.NESTIH17:    lambda state: self.nest_bottles_house(state),
+            locationName.NESTIH16:    self.nest_bottles_house,
+            locationName.NESTIH17:    self.nest_bottles_house,
 
-            locationName.NESTIH32:    lambda state: self.nest_pl_dirt_pile(state),
-            locationName.NESTIH33:    lambda state: self.nest_pl_dirt_pile(state),
+            locationName.NESTIH32:    self.nest_pl_dirt_pile,
+            locationName.NESTIH33:    self.nest_pl_dirt_pile,
 
-            locationName.NESTIH43:    lambda state: self.nest_cliff_top_hard(state),
+            locationName.NESTIH43:    self.nest_cliff_top_hard,
 
-            locationName.NESTIH56:    lambda state: self.nest_another_digger_tunnel(state),
-            locationName.NESTIH57:    lambda state: self.nest_another_digger_tunnel(state),
+            locationName.NESTIH56:    self.nest_another_digger_tunnel,
+            locationName.NESTIH57:    self.nest_another_digger_tunnel,
 
-            locationName.NESTIH58:    lambda state: self.nest_quagmire_medium(state),
-            locationName.NESTIH59:    lambda state: self.nest_quagmire_easy(state),
-            locationName.NESTIH60:    lambda state: self.nest_quagmire_hard(state),
+            locationName.NESTIH58:    self.nest_quagmire_medium,
+            locationName.NESTIH59:    self.nest_quagmire_easy,
+            locationName.NESTIH60:    self.nest_quagmire_hard,
 
-            locationName.NESTMT11:    lambda state: self.nest_mt_stadium(state),
-            locationName.NESTMT12:    lambda state: self.nest_mt_stadium(state),
+            locationName.NESTMT11:    self.nest_mt_stadium,
+            locationName.NESTMT12:    self.nest_mt_stadium,
 
-            locationName.NESTMT15:    lambda state: self.nest_pillars(state),
-            locationName.NESTMT16:    lambda state: self.nest_pillars(state),
-            locationName.NESTMT17:    lambda state: self.nest_pillars(state),
-            locationName.NESTMT18:    lambda state: self.nest_mt_cell_right(state),
-            locationName.NESTMT21:    lambda state: self.nest_mt_cell_left(state),
+            locationName.NESTMT15:    self.nest_pillars,
+            locationName.NESTMT16:    self.nest_pillars,
+            locationName.NESTMT17:    self.nest_pillars,
+            locationName.NESTMT18:    self.nest_mt_cell_right,
+            locationName.NESTMT21:    self.nest_mt_cell_left,
 
-            locationName.NESTMT22: lambda state: self.nest_code_chamber(state),
+            locationName.NESTMT22: self.nest_code_chamber,
 
-            locationName.NESTGM3:    lambda state: self.nest_bill_drill(state),
-            locationName.NESTGM4:    lambda state: self.nest_bill_drill(state),
+            locationName.NESTGM3:    self.nest_bill_drill,
+            locationName.NESTGM4:    self.nest_bill_drill,
 
-            locationName.NESTGM13:    lambda state: self.nest_flooded_caves(state),
-            locationName.NESTGM14:    lambda state: self.nest_flooded_caves(state),
+            locationName.NESTGM13:    self.nest_flooded_caves,
+            locationName.NESTGM14:    self.nest_flooded_caves,
 
-            locationName.NESTGM16:    lambda state: self.nest_outside_power_hut(state),
-            locationName.NESTGM17:    lambda state: self.nest_outside_power_hut(state),
-            locationName.NESTGM18:    lambda state: self.ggm_boulders(state),
-            locationName.NESTGM19:    lambda state: self.ggm_boulders(state),
+            locationName.NESTGM16:    self.nest_outside_power_hut,
+            locationName.NESTGM17:    self.nest_outside_power_hut,
+            locationName.NESTGM18:    self.ggm_boulders,
+            locationName.NESTGM19:    self.ggm_boulders,
 
-            locationName.NESTGM21:    lambda state: self.ggm_boulders(state),
+            locationName.NESTGM21:    self.ggm_boulders,
 
-            locationName.NESTGM26:    lambda state: self.notes_prospector_hard(state),
+            locationName.NESTGM26:    self.notes_prospector_hard,
 
-            locationName.NESTGM27:    lambda state: self.nest_ggm_mumbo(state),
-            locationName.NESTGM28:    lambda state: self.nest_ggm_mumbo(state),
-            locationName.NESTGM29:    lambda state: self.nest_ggm_mumbo(state),
+            locationName.NESTGM27:    self.nest_ggm_mumbo,
+            locationName.NESTGM28:    self.nest_ggm_mumbo,
+            locationName.NESTGM29:    self.nest_ggm_mumbo,
 
-            locationName.NESTGM30:    lambda state: self.nest_toxic_gas_cave(state),
-            locationName.NESTGM31:    lambda state: self.nest_toxic_gas_cave(state),
+            locationName.NESTGM30:    self.nest_toxic_gas_cave,
+            locationName.NESTGM31:    self.nest_toxic_gas_cave,
 
-            locationName.NESTGM32:    lambda state: self.nest_canary_high(state),
-            locationName.NESTGM33:    lambda state: self.nest_canary_low(state),
-            locationName.NESTGM34:    lambda state: self.nest_canary_low(state),
-            locationName.NESTGM35:    lambda state: self.nest_canary_low(state),
+            locationName.NESTGM32:    self.nest_canary_high,
+            locationName.NESTGM33:    self.nest_canary_low,
+            locationName.NESTGM34:    self.nest_canary_low,
+            locationName.NESTGM35:    self.nest_canary_low,
 
-            locationName.NESTGM36:    lambda state: self.ggm_boulders(state),
-            locationName.NESTGM37:    lambda state: self.ggm_boulders(state),
-            locationName.NESTGM38:    lambda state: self.ggm_boulders(state),
+            locationName.NESTGM36:    self.ggm_boulders,
+            locationName.NESTGM37:    self.ggm_boulders,
+            locationName.NESTGM38:    self.ggm_boulders,
 
 
-            locationName.NESTWW15:    lambda state: self.nest_pump_room(state),
-            locationName.NESTWW16:    lambda state: self.nest_pump_room(state),
+            locationName.NESTWW15:    self.nest_pump_room,
+            locationName.NESTWW16:    self.nest_pump_room,
 
-            locationName.NESTJR3:    lambda state: self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28),
-            locationName.NESTJR4:    lambda state: self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28),
-            locationName.NESTJR5:    lambda state: self.nest_jolly_gunpowder(state),
-            locationName.NESTJR6:    lambda state: self.nest_jolly_gunpowder(state),
+            locationName.NESTJR3:    self.nest_jr_sub_aqua_1,
+            locationName.NESTJR4:    self.nest_jr_sub_aqua_2,
+            locationName.NESTJR5:    self.nest_jolly_gunpowder,
+            locationName.NESTJR6:    self.nest_jolly_gunpowder,
 
-            locationName.NESTJR10:    lambda state: self.nest_seaweed_bottom(state),
-            locationName.NESTJR11:    lambda state: self.nest_seaweed_others(state),
-            locationName.NESTJR12:    lambda state: self.nest_seaweed_top(state),
-            locationName.NESTJR13:    lambda state: self.nest_seaweed_others(state),
+            locationName.NESTJR10:    self.nest_seaweed_bottom,
+            locationName.NESTJR11:    self.nest_seaweed_others,
+            locationName.NESTJR12:    self.nest_seaweed_top,
+            locationName.NESTJR13:    self.nest_seaweed_others,
 
-            locationName.NESTJR14:    lambda state: self.jiggy_merry_maggie(state),
-            locationName.NESTJR15:    lambda state: self.jiggy_merry_maggie(state),
+            locationName.NESTJR14:    self.jiggy_merry_maggie,
+            locationName.NESTJR15:    self.jiggy_merry_maggie,
 
-            locationName.NESTJR16:    lambda state: self.nest_bacon(state),
-            locationName.NESTJR17:    lambda state: self.nest_bacon(state),
-            locationName.NESTJR18:    lambda state: self.nest_bacon(state),
-            locationName.NESTJR19:    lambda state: self.nest_bacon(state),
+            locationName.NESTJR16:    self.nest_bacon,
+            locationName.NESTJR17:    self.nest_bacon,
+            locationName.NESTJR18:    self.nest_bacon,
+            locationName.NESTJR19:    self.nest_bacon,
 
-            locationName.NESTJR20:    lambda state: self.nest_lord_woo(state),
-            locationName.NESTJR21:    lambda state: self.nest_lord_woo(state),
-            locationName.NESTJR22:    lambda state: self.nest_lord_woo(state),
-            locationName.NESTJR23:    lambda state: self.nest_lord_woo(state),
+            locationName.NESTJR20:    self.nest_lord_woo,
+            locationName.NESTJR21:    self.nest_lord_woo,
+            locationName.NESTJR22:    self.nest_lord_woo,
+            locationName.NESTJR23:    self.nest_lord_woo,
 
-            locationName.NESTJR27:    lambda state: self.notes_jrl_blubs(state),
+            locationName.NESTJR27:    self.notes_jrl_blubs,
 
-            locationName.NESTJR33:    lambda state: self.talon_torpedo(state),
+            locationName.NESTJR33:    self.talon_torpedo,
 
-            locationName.NESTJR37:    lambda state: self.nest_big_fish_cavern(state),
-            locationName.NESTJR38:    lambda state: self.nest_big_fish_cavern(state),
-            locationName.NESTJR39:    lambda state: self.talon_torpedo(state),
-            locationName.NESTJR40:    lambda state: self.talon_torpedo(state),
-
-
-            locationName.NESTTL4:    lambda state: self.nest_tdl_waterfall_alcove(state),
-            locationName.NESTTL5:    lambda state: self.nest_tdl_waterfall_alcove(state),
-
-            locationName.NESTTL12:    lambda state: self.nest_tdl_wall_with_holes(state),
-            locationName.NESTTL13:    lambda state: self.nest_tdl_wall_with_holes(state),
-            locationName.NESTTL14:    lambda state: self.nest_tdl_wall_with_holes(state),
-            locationName.NESTTL15:    lambda state: self.nest_tdl_wall_with_holes(state),
-            locationName.NESTTL18:    lambda state: self.nest_river_passage_entrance(state),
-
-            locationName.NESTTL23:    lambda state: self.enter_tdl_train_station(state),
-            locationName.NESTTL24:    lambda state: self.enter_tdl_train_station(state),
-            locationName.NESTTL25:    lambda state: self.enter_tdl_train_station(state),
-            locationName.NESTTL26:    lambda state: self.enter_tdl_train_station(state),
-
-            locationName.NESTTL27:    lambda state: self.access_oogle_boogle(state),
-            locationName.NESTTL28:    lambda state: self.access_oogle_boogle(state),
-            locationName.NESTTL29:    lambda state: self.access_oogle_boogle(state),
-            locationName.NESTTL30:    lambda state: self.access_oogle_boogle(state),
-
-            locationName.NESTTL31:    lambda state: self.nest_mountain_flight_pad(state),
-            locationName.NESTTL32:    lambda state: self.nest_mountain_flight_pad(state),
-            locationName.NESTTL33:    lambda state: self.nest_mountain_underwater(state),
-            locationName.NESTTL34:    lambda state: self.nest_mountain_underwater(state),
-
-            locationName.NESTTL35:    lambda state: self.nest_river_passage(state),
-
-            locationName.NESTTL42:    lambda state: self.nest_unga_egg(state),
-            locationName.NESTTL43:    lambda state: self.nest_unga_egg(state),
-            locationName.NESTTL44:    lambda state: self.nest_unga_egg(state),
-
-
-            locationName.NESTTL45:    lambda state: self.nest_stomping_plains_footprint(state),
-            locationName.NESTTL47:    lambda state: self.nest_stomping_plains_footprint(state),
-            locationName.NESTTL48:    lambda state: self.nest_stomping_plains_footprint(state),
-            locationName.NESTTL49:    lambda state: self.nest_stomping_plains_footprint(state),
-            locationName.NESTTL50:    lambda state: self.nest_stomping_plains_footprint(state),
-            locationName.NESTTL51:    lambda state: self.nest_stomping_plains_footprint(state),
-
-
-            locationName.NESTGI4:    lambda state: self.nest_gi_outside_right(state),
-            locationName.NESTGI5:    lambda state: self.nest_gi_outside_left(state),
-
-            locationName.NESTGI6:    lambda state: self.nest_gi_floor1_top_pipe(state),
-            locationName.NESTGI7:    lambda state: self.nest_gi_floor1_high_pipe(state),
-            locationName.NESTGI8:    lambda state: self.nest_gi_outside_waste_disposal(state),
-            locationName.NESTGI9:    lambda state: self.nest_gi_outside_waste_disposal(state),
-            locationName.NESTGI10:    lambda state: self.nest_gi_floor1_high_pipe(state),
-            locationName.NESTGI11:    lambda state: self.nest_outside_trash_compactor(state),
-
-            locationName.NESTGI13:    lambda state: self.nest_gi_train_station_small_box(state),
-            locationName.NESTGI14:    lambda state: self.nest_gi_train_station_medium_box(state),
-
-            locationName.NESTGI17:    lambda state: self.nest_trash_compactor(state),
-            locationName.NESTGI18:    lambda state: self.nest_trash_compactor(state),
-
-            locationName.NESTGI19:    lambda state: self.nest_elevator_shaft_floor2(state),
-            locationName.NESTGI20:    lambda state: self.nest_elevator_shaft_floor3(state),
-            locationName.NESTGI21:    lambda state: self.nest_elevator_shaft_floor4(state),
-
-            locationName.NESTGI23:    lambda state: self.nest_funny_platform(state),
-            locationName.NESTGI26:    lambda state: self.cheato_window(state),
-            locationName.NESTGI27:    lambda state: self.nest_funny_platform(state),
-            locationName.NESTGI28:    lambda state: self.nest_funny_platform(state),
-            locationName.NESTGI29:    lambda state: self.nest_funny_platform(state),
-            locationName.NESTGI30:    lambda state: self.nest_funny_platform(state),
-            locationName.NESTGI31:    lambda state: self.egg_aim(state) or self.airborne_egg_aiming(state) or self.beak_bomb(state),
-
-            locationName.NESTGI33:    lambda state: self.nest_magnet(state),
-            locationName.NESTGI34:    lambda state: self.nest_magnet(state),
-
-            locationName.NESTGI35:    lambda state: self.nest_floor3_high_box(state),
-            locationName.NESTGI36:    lambda state: self.nest_floor3_under_notes_boxes(state),
-            locationName.NESTGI37:    lambda state: self.nest_floor3_shortcut(state),
-            locationName.NESTGI38:    lambda state: self.nest_floor3_corner_box(state),
-            locationName.NESTGI39:    lambda state: self.nest_floor3_feather(state),
-            locationName.NESTGI40:    lambda state: self.nest_floor3_feather(state),
-
-            locationName.NESTGI43:    lambda state: self.nest_floor4_front(state),
-            locationName.NESTGI44:    lambda state: self.nest_floor4_front(state),
-            locationName.NESTGI45:    lambda state: self.nest_floor4_front(state),
-            locationName.NESTGI46:    lambda state: self.nest_floor4_front(state),
-            locationName.NESTGI49:    lambda state: self.nest_outside_QC(state),
-
-            locationName.NESTGI50:    lambda state: self.nest_quality_control(state),
-            locationName.NESTGI51:    lambda state: self.nest_quality_control(state),
-            locationName.NESTGI52:    lambda state: self.nest_quality_control(state),
-
-            locationName.NESTGI53:    lambda state: self.nest_floor5_small_stack(state),
-
-            locationName.NESTGI56:    lambda state: self.nest_outside_repair_depot(state),
-            locationName.NESTGI57:    lambda state: self.nest_egg_fan_easy(state),
-            locationName.NESTGI58:    lambda state: self.nest_egg_fan_easy(state),
-            locationName.NESTGI59:    lambda state: self.nest_egg_fan_hard(state),
-            locationName.NESTGI60:    lambda state: self.nest_outside_repair_depot(state),
-
-            locationName.NESTGI61:    lambda state: self.can_beat_weldar(state),
-            locationName.NESTGI62:    lambda state: self.can_beat_weldar(state),
-
-            locationName.NESTGI63:    lambda state: self.nest_waste_disposal_water_pump(state),
-            locationName.NESTGI64:    lambda state: self.jinjo_waste_disposal(state),
-            locationName.NESTGI65:    lambda state: self.jinjo_waste_disposal(state),
-            locationName.NESTGI66:    lambda state: self.nest_waste_disposal_water_pump(state),
-
-            locationName.NESTGI67:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI68:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI69:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI70:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI71:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI72:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI73:    lambda state: self.jiggy_clinkers(state),
-            locationName.NESTGI74:    lambda state: self.jiggy_clinkers(state),
-
-            locationName.NESTGI75:    lambda state: self.nest_clinkers_lobby(state),
-            locationName.NESTGI76:    lambda state: self.nest_clinkers_lobby(state),
-            locationName.NESTGI77:    lambda state: self.nest_clinkers_lobby(state),
-            locationName.NESTGI78:    lambda state: self.nest_clinkers_lobby(state),
-
-
-            locationName.NESTHP1:    lambda state: self.tswitch_lavaside(state),
-            locationName.NESTHP9:    lambda state: self.nest_hfp_entrance_shelter(state),
-            locationName.NESTHP10:    lambda state: self.hfp_top(state),
-            locationName.NESTHP11:    lambda state: self.hfp_top(state),
-
-            locationName.NESTHP12:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP13:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP14:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP15:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP16:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP17:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP18:    lambda state: self.nest_ice_cube(state),
-
-            locationName.NESTHP19:    lambda state: self.hfp_top(state),
-            locationName.NESTHP20:    lambda state: self.hfp_top(state),
-
-            locationName.NESTHP21:    lambda state: self.nest_icy_side_train_station_easy(state),
-            locationName.NESTHP22:    lambda state: self.nest_icy_side_train_station_hard(state),
-
-            locationName.NESTHP23:    lambda state: self.flight_pad(state) and self.ice_eggs_item(state),
-
-            locationName.NESTHP24:    lambda state: self.nest_chilly_willy(state),
-
-            locationName.NESTHP25:    lambda state: self.nest_hfp_kickball_egg(state),
-            locationName.NESTHP26:    lambda state: self.nest_hfp_kickball_egg(state),
-            locationName.NESTHP27:    lambda state: self.nest_hfp_kickball_egg(state),
-            locationName.NESTHP28:    lambda state: self.nest_hfp_kickball_egg(state),
-            locationName.NESTHP29:    lambda state: self.nest_hfp_kickball_feather(state),
-            locationName.NESTHP30:    lambda state: self.nest_hfp_kickball_feather(state),
-
-            locationName.NESTHP31:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP32:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP33:    lambda state: self.nest_ice_cube(state),
-            locationName.NESTHP34:    lambda state: self.nest_hfp_spring_pad(state),
-            locationName.NESTHP35:    lambda state: self.nest_icicle_grotto_top(state),
-            locationName.NESTHP36:    lambda state: self.nest_icicle_grotto_top(state),
-
-            locationName.NESTHP39:    lambda state: self.hfp_top(state),
-            locationName.NESTHP40:    lambda state: self.hfp_top(state),
-
-
-            locationName.NESTCC1:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC2:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC3:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC4:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC8:    lambda state: self.nest_jelly_castle(state),
-            locationName.NESTCC9:    lambda state: self.nest_jelly_castle(state),
-            locationName.NESTCC10:    lambda state: self.nest_jelly_castle(state),
-            locationName.NESTCC11:    lambda state: self.nest_jelly_castle(state),
-            locationName.NESTCC12:    lambda state: self.nest_ccl_dippy(state),
-            locationName.NESTCC13:    lambda state: self.nest_ccl_dippy(state),
-            locationName.NESTCC14:    lambda state: self.nest_ccl_dippy(state),
-            locationName.NESTCC15:    lambda state: self.nest_ccl_dippy(state),
-            locationName.NESTCC16:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC17:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC18:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC19:    lambda state: self.nest_ccl_flight(state),
-
-            locationName.NESTCC25:    lambda state: self.nest_outside_trash_can(state),
-            locationName.NESTCC26:    lambda state: self.nest_outside_trash_can(state),
-            locationName.NESTCC27:    lambda state: self.nest_outside_trash_can(state),
-            locationName.NESTCC28:    lambda state: self.nest_outside_trash_can(state),
-
-            locationName.NESTCC34:    lambda state: self.bill_drill(state),
-            locationName.NESTCC35:    lambda state: self.bill_drill(state),
-
-            locationName.NESTCC36:    lambda state: self.nest_inside_trash_can(state),
-            locationName.NESTCC37:    lambda state: self.nest_inside_trash_can(state),
-
-            locationName.NESTCC38:    lambda state: self.flight_pad(state),
-            locationName.NESTCC39:    lambda state: self.flight_pad(state),
-
-            locationName.NESTCC42:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC43:    lambda state: self.nest_ccl_flight(state),
-            locationName.NESTCC44:    lambda state: self.nest_near_superstash(state),
-            locationName.NESTCC45:    lambda state: self.nest_near_superstash(state),
-
-            locationName.NESTCC47:    lambda state: self.nest_pot_of_gold(state),
-            locationName.NESTCC48:    lambda state: self.nest_pot_of_gold(state),
+            locationName.NESTJR37:    self.nest_big_fish_cavern,
+            locationName.NESTJR38:    self.nest_big_fish_cavern,
+            locationName.NESTJR39:    self.talon_torpedo,
+            locationName.NESTJR40:    self.talon_torpedo,
+
+
+            locationName.NESTTL4:    self.nest_tdl_waterfall_alcove,
+            locationName.NESTTL5:    self.nest_tdl_waterfall_alcove,
+
+            locationName.NESTTL12:    self.nest_tdl_wall_with_holes,
+            locationName.NESTTL13:    self.nest_tdl_wall_with_holes,
+            locationName.NESTTL14:    self.nest_tdl_wall_with_holes,
+            locationName.NESTTL15:    self.nest_tdl_wall_with_holes,
+            locationName.NESTTL18:    self.nest_river_passage_entrance,
+
+            locationName.NESTTL23:    self.enter_tdl_train_station,
+            locationName.NESTTL24:    self.enter_tdl_train_station,
+            locationName.NESTTL25:    self.enter_tdl_train_station,
+            locationName.NESTTL26:    self.enter_tdl_train_station,
+
+            locationName.NESTTL27:    self.access_oogle_boogle,
+            locationName.NESTTL28:    self.access_oogle_boogle,
+            locationName.NESTTL29:    self.access_oogle_boogle,
+            locationName.NESTTL30:    self.access_oogle_boogle,
+
+            locationName.NESTTL31:    self.nest_mountain_flight_pad,
+            locationName.NESTTL32:    self.nest_mountain_flight_pad,
+            locationName.NESTTL33:    self.nest_mountain_underwater,
+            locationName.NESTTL34:    self.nest_mountain_underwater,
+
+            locationName.NESTTL35:    self.nest_river_passage,
+
+            locationName.NESTTL42:    self.nest_unga_egg,
+            locationName.NESTTL43:    self.nest_unga_egg,
+            locationName.NESTTL44:    self.nest_unga_egg,
+
+
+            locationName.NESTTL45:    self.nest_stomping_plains_footprint,
+            locationName.NESTTL47:    self.nest_stomping_plains_footprint,
+            locationName.NESTTL48:    self.nest_stomping_plains_footprint,
+            locationName.NESTTL49:    self.nest_stomping_plains_footprint,
+            locationName.NESTTL50:    self.nest_stomping_plains_footprint,
+            locationName.NESTTL51:    self.nest_stomping_plains_footprint,
+
+
+            locationName.NESTGI4:    self.nest_gi_outside_right,
+            locationName.NESTGI5:    self.nest_gi_outside_left,
+
+            locationName.NESTGI6:    self.nest_gi_floor1_top_pipe,
+            locationName.NESTGI7:    self.nest_gi_floor1_high_pipe,
+            locationName.NESTGI8:    self.nest_gi_outside_waste_disposal,
+            locationName.NESTGI9:    self.nest_gi_outside_waste_disposal,
+            locationName.NESTGI10:    self.nest_gi_floor1_high_pipe,
+            locationName.NESTGI11:    self.nest_outside_trash_compactor,
+
+            locationName.NESTGI13:    self.nest_gi_train_station_small_box,
+            locationName.NESTGI14:    self.nest_gi_train_station_medium_box,
+
+            locationName.NESTGI17:    self.nest_trash_compactor,
+            locationName.NESTGI18:    self.nest_trash_compactor,
+
+            locationName.NESTGI19:    self.nest_elevator_shaft_floor2,
+            locationName.NESTGI20:    self.nest_elevator_shaft_floor3,
+            locationName.NESTGI21:    self.nest_elevator_shaft_floor4,
+
+            locationName.NESTGI23:    self.nest_funny_platform,
+            locationName.NESTGI26:    self.cheato_window,
+            locationName.NESTGI27:    self.nest_funny_platform,
+            locationName.NESTGI28:    self.nest_funny_platform,
+            locationName.NESTGI29:    self.nest_funny_platform,
+            locationName.NESTGI30:    self.nest_funny_platform,
+            locationName.NESTGI31:    self.nest_gi_unscrewable_platform,
+
+            locationName.NESTGI33:    self.nest_magnet,
+            locationName.NESTGI34:    self.nest_magnet,
+
+            locationName.NESTGI35:    self.nest_floor3_high_box,
+            locationName.NESTGI36:    self.nest_floor3_under_notes_boxes,
+            locationName.NESTGI37:    self.nest_floor3_shortcut,
+            locationName.NESTGI38:    self.nest_floor3_corner_box,
+            locationName.NESTGI39:    self.nest_floor3_feather,
+            locationName.NESTGI40:    self.nest_floor3_feather,
+
+            locationName.NESTGI43:    self.nest_floor4_front,
+            locationName.NESTGI44:    self.nest_floor4_front,
+            locationName.NESTGI45:    self.nest_floor4_front,
+            locationName.NESTGI46:    self.nest_floor4_front,
+            locationName.NESTGI49:    self.nest_outside_QC,
+
+            locationName.NESTGI50:    self.nest_quality_control,
+            locationName.NESTGI51:    self.nest_quality_control,
+            locationName.NESTGI52:    self.nest_quality_control,
+
+            locationName.NESTGI53:    self.nest_floor5_small_stack,
+
+            locationName.NESTGI56:    self.nest_outside_repair_depot,
+            locationName.NESTGI57:    self.nest_egg_fan_easy,
+            locationName.NESTGI58:    self.nest_egg_fan_easy,
+            locationName.NESTGI59:    self.nest_egg_fan_hard,
+            locationName.NESTGI60:    self.nest_outside_repair_depot,
+
+            locationName.NESTGI61:    self.can_beat_weldar,
+            locationName.NESTGI62:    self.can_beat_weldar,
+
+            locationName.NESTGI63:    self.nest_waste_disposal_water_pump,
+            locationName.NESTGI64:    self.jinjo_waste_disposal,
+            locationName.NESTGI65:    self.jinjo_waste_disposal,
+            locationName.NESTGI66:    self.nest_waste_disposal_water_pump,
+
+            locationName.NESTGI67:    self.jiggy_clinkers,
+            locationName.NESTGI68:    self.jiggy_clinkers,
+            locationName.NESTGI69:    self.jiggy_clinkers,
+            locationName.NESTGI70:    self.jiggy_clinkers,
+            locationName.NESTGI71:    self.jiggy_clinkers,
+            locationName.NESTGI72:    self.jiggy_clinkers,
+            locationName.NESTGI73:    self.jiggy_clinkers,
+            locationName.NESTGI74:    self.jiggy_clinkers,
+
+            locationName.NESTGI75:    self.nest_clinkers_lobby,
+            locationName.NESTGI76:    self.nest_clinkers_lobby,
+            locationName.NESTGI77:    self.nest_clinkers_lobby,
+            locationName.NESTGI78:    self.nest_clinkers_lobby,
+
+
+            locationName.NESTHP1:    self.tswitch_lavaside,
+            locationName.NESTHP9:    self.nest_hfp_entrance_shelter,
+            locationName.NESTHP10:    self.hfp_top,
+            locationName.NESTHP11:    self.hfp_top,
+
+            locationName.NESTHP12:    self.nest_ice_cube,
+            locationName.NESTHP13:    self.nest_ice_cube,
+            locationName.NESTHP14:    self.nest_ice_cube,
+            locationName.NESTHP15:    self.nest_ice_cube,
+            locationName.NESTHP16:    self.nest_ice_cube,
+            locationName.NESTHP17:    self.nest_ice_cube,
+            locationName.NESTHP18:    self.nest_ice_cube,
+
+            locationName.NESTHP19:    self.hfp_top,
+            locationName.NESTHP20:    self.hfp_top,
+
+            locationName.NESTHP21:    self.nest_icy_side_train_station_easy,
+            locationName.NESTHP22:    self.nest_icy_side_train_station_hard,
+
+            locationName.NESTHP23:    self.nest_chilli_billi_crater,
+
+            locationName.NESTHP24:    self.nest_chilly_willy,
+
+            locationName.NESTHP25:    self.nest_hfp_kickball_egg,
+            locationName.NESTHP26:    self.nest_hfp_kickball_egg,
+            locationName.NESTHP27:    self.nest_hfp_kickball_egg,
+            locationName.NESTHP28:    self.nest_hfp_kickball_egg,
+            locationName.NESTHP29:    self.nest_hfp_kickball_feather,
+            locationName.NESTHP30:    self.nest_hfp_kickball_feather,
+
+            locationName.NESTHP31:    self.nest_ice_cube,
+            locationName.NESTHP32:    self.nest_ice_cube,
+            locationName.NESTHP33:    self.nest_ice_cube,
+            locationName.NESTHP34:    self.nest_hfp_spring_pad,
+            locationName.NESTHP35:    self.nest_icicle_grotto_top,
+            locationName.NESTHP36:    self.nest_icicle_grotto_top,
+
+            locationName.NESTHP39:    self.hfp_top,
+            locationName.NESTHP40:    self.hfp_top,
+
+
+            locationName.NESTCC1:    self.nest_ccl_flight,
+            locationName.NESTCC2:    self.nest_ccl_flight,
+            locationName.NESTCC3:    self.nest_ccl_flight,
+            locationName.NESTCC4:    self.nest_ccl_flight,
+            locationName.NESTCC8:    self.nest_jelly_castle,
+            locationName.NESTCC9:    self.nest_jelly_castle,
+            locationName.NESTCC10:    self.nest_jelly_castle,
+            locationName.NESTCC11:    self.nest_jelly_castle,
+            locationName.NESTCC12:    self.nest_ccl_dippy,
+            locationName.NESTCC13:    self.nest_ccl_dippy,
+            locationName.NESTCC14:    self.nest_ccl_dippy,
+            locationName.NESTCC15:    self.nest_ccl_dippy,
+            locationName.NESTCC16:    self.nest_ccl_flight,
+            locationName.NESTCC17:    self.nest_ccl_flight,
+            locationName.NESTCC18:    self.nest_ccl_flight,
+            locationName.NESTCC19:    self.nest_ccl_flight,
+
+            locationName.NESTCC25:    self.nest_outside_trash_can,
+            locationName.NESTCC26:    self.nest_outside_trash_can,
+            locationName.NESTCC27:    self.nest_outside_trash_can,
+            locationName.NESTCC28:    self.nest_outside_trash_can,
+
+            locationName.NESTCC34:    self.bill_drill,
+            locationName.NESTCC35:    self.bill_drill,
+
+            locationName.NESTCC36:    self.nest_inside_trash_can,
+            locationName.NESTCC37:    self.nest_inside_trash_can,
+
+            locationName.NESTCC38:    self.flight_pad,
+            locationName.NESTCC39:    self.flight_pad,
+
+            locationName.NESTCC42:    self.nest_ccl_flight,
+            locationName.NESTCC43:    self.nest_ccl_flight,
+            locationName.NESTCC44:    self.nest_near_superstash,
+            locationName.NESTCC45:    self.nest_near_superstash,
+
+            locationName.NESTCC47:    self.nest_pot_of_gold,
+            locationName.NESTCC48:    self.nest_pot_of_gold,
         }
 
         self.signpost_rules = {
-            locationName.SIGNIH3: lambda state: self.signpost_jiggywiggy_back(state),
-            locationName.SIGNIH4: lambda state: self.signpost_jiggywiggy_back(state),
-            locationName.SIGNIH5: lambda state: self.signpost_jiggywiggy_back(state),
+            locationName.SIGNIH3: self.signpost_jiggywiggy_back,
+            locationName.SIGNIH4: self.signpost_jiggywiggy_back,
+            locationName.SIGNIH5: self.signpost_jiggywiggy_back,
 
-            locationName.SIGNMT3: lambda state: self.signpost_pillars(state),
+            locationName.SIGNMT3: self.signpost_pillars,
 
-            locationName.SIGNMT7: lambda state: self.signpost_code_chamber(state),
+            locationName.SIGNMT7: self.signpost_code_chamber,
 
-            locationName.SIGNGM1: lambda state: self.signpost_gloomy_cavern(state),
-            locationName.SIGNGM4: lambda state: self.signpost_chuffy(state),
+            locationName.SIGNGM1: self.signpost_gloomy_cavern,
+            locationName.SIGNGM4: self.signpost_chuffy,
 
-            locationName.SIGNWW6: lambda state: self.signpost_pump_master(state),
-            locationName.SIGNWW7: lambda state: self.signpost_gobi(state),
+            locationName.SIGNWW6: self.signpost_pump_master,
+            locationName.SIGNWW7: self.signpost_gobi,
 
-            locationName.SIGNJR3: lambda state: self.signpost_smugglers(state),
-            locationName.SIGNJR4: lambda state: self.signpost_jrl_pipes(state),
+            locationName.SIGNJR3: self.signpost_smugglers,
+            locationName.SIGNJR4: self.signpost_jrl_pipes,
 
-            locationName.SIGNTL1: lambda state: self.notes_roar_cage(state),
-            locationName.SIGNTL2: lambda state: self.signpost_trex(state),
-            locationName.SIGNTL3: lambda state: self.signpost_mountain_top(state),
-            locationName.SIGNTL4: lambda state: self.signpost_river_passage(state),
+            locationName.SIGNTL1: self.notes_roar_cage,
+            locationName.SIGNTL2: self.signpost_trex,
+            locationName.SIGNTL3: self.signpost_mountain_top,
+            locationName.SIGNTL4: self.signpost_river_passage,
 
-            locationName.SIGNGI1: lambda state: self.signpost_gi_outside(state),
-            locationName.SIGNGI3: lambda state: self.signpost_elevator_shaft(state),
-            locationName.SIGNGI4: lambda state: self.signpost_elevator_shaft(state),
+            locationName.SIGNGI1: self.signpost_gi_outside,
+            locationName.SIGNGI3: self.signpost_elevator_shaft,
+            locationName.SIGNGI4: self.signpost_elevator_shaft,
 
-            locationName.SIGNHP2: lambda state: self.hfp_top(state),
-            locationName.SIGNHP3: lambda state: self.jiggy_volcano(state),
-            locationName.SIGNHP4: lambda state: self.jiggy_volcano(state),
-            locationName.SIGNHP5: lambda state: self.jiggy_volcano(state),
+            locationName.SIGNHP2: self.hfp_top,
+            locationName.SIGNHP3: self.jiggy_volcano,
+            locationName.SIGNHP4: self.jiggy_volcano,
+            locationName.SIGNHP5: self.jiggy_volcano,
 
-            locationName.SIGNCC1: lambda state: self.signpost_ccl_underwater(state),
-            locationName.SIGNCC2: lambda state: self.can_access_sack_pack_silo(state),
-            locationName.SIGNCC3: lambda state: self.signpost_pool_rim(state),
+            locationName.SIGNCC1: self.signpost_ccl_underwater,
+            locationName.SIGNCC2: self.can_access_sack_pack_silo,
+            locationName.SIGNCC3: self.signpost_pool_rim,
         }
 
         self.warp_pad_rules = {
-            locationName.WARPGM2: lambda state: self.warp_pad_ggm_mumbo(state),
-            locationName.WARPGM3: lambda state: self.warp_pad_ggm_wumba(state),
-            locationName.WARPWW4: lambda state: self.warp_pad_ww_wumba(state),
-            locationName.WARPTL3: lambda state: self.warp_pad_tdl_mumbo(state),
-            locationName.WARPTL4: lambda state: self.warp_pad_tdl_wumba(state),
-            locationName.WARPGI1: lambda state: self.warp_pad_floor_1(state),
-            locationName.WARPGI4: lambda state: self.warp_pad_floor_4(state),
-            locationName.WARPHP2: lambda state: self.hfp_top(state),
-            locationName.WARPHP3: lambda state: self.hfp_top(state),
-            locationName.WARPHP4: lambda state: self.hfp_top(state),
-            locationName.WARPHP5: lambda state: self.warp_pad_icicle_grotto(state),
-            locationName.WARPCK2: lambda state: self.warp_pad_ck_top(state),
+            locationName.WARPGM2: self.warp_pad_ggm_mumbo,
+            locationName.WARPGM3: self.warp_pad_ggm_wumba,
+            locationName.WARPWW4: self.warp_pad_ww_wumba,
+            locationName.WARPTL3: self.warp_pad_tdl_mumbo,
+            locationName.WARPTL4: self.warp_pad_tdl_wumba,
+            locationName.WARPGI1: self.warp_pad_floor_1,
+            locationName.WARPGI4: self.warp_pad_floor_4,
+            locationName.WARPHP2: self.hfp_top,
+            locationName.WARPHP3: self.hfp_top,
+            locationName.WARPHP4: self.hfp_top,
+            locationName.WARPHP5: self.warp_pad_icicle_grotto,
+            locationName.WARPCK2: self.warp_pad_ck_top,
         }
 
         if self.world.options.randomize_tickets:
             self.big_top_tickets_rules = {
-                locationName.BTTICK1: lambda state: self.can_kill_fruity(state),
-                locationName.BTTICK2: lambda state: self.can_kill_fruity(state),
-                locationName.BTTICK3: lambda state: self.can_kill_fruity(state),
-                locationName.BTTICK4: lambda state: self.can_kill_fruity(state),
+                locationName.BTTICK1: self.can_kill_fruity,
+                locationName.BTTICK2: self.can_kill_fruity,
+                locationName.BTTICK3: self.can_kill_fruity,
+                locationName.BTTICK4: self.can_kill_fruity,
             }
 
         if self.world.options.randomize_beans:
             self.beans_rules = {
-                locationName.BEANCC1: lambda state: self.bill_drill(state),
-                locationName.BEANCC2: lambda state: self.bill_drill(state)
+                locationName.BEANCC1: self.bill_drill,
+                locationName.BEANCC2: self.bill_drill
             }
 
     def has_green_relics(self, state: CollectionState, amt) -> bool:
@@ -9818,6 +9815,222 @@ class BanjoTooieRules:
             logic = self.tall_jump(state) or self.leg_spring(state) or self.glide(state)
         return logic
 
+    def world_1_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230944)
+
+    def world_2_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230945)
+
+    def world_3_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230946)
+
+    def world_4_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230947)
+
+    def world_5_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230948)
+
+    def world_6_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230949)
+
+    def world_7_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230950)
+
+    def world_8_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230951)
+
+    def world_9_unlocked(self, state: CollectionState) -> bool:
+        return self.set_world_requirement(state, 1230952)
+
+    def cheato_reward_1(self, state: CollectionState) -> bool:
+        return self.reach_cheato(state, 5)
+
+    def cheato_reward_2(self, state: CollectionState) -> bool:
+        return self.reach_cheato(state, 10)
+
+    def cheato_reward_3(self, state: CollectionState) -> bool:
+        return self.reach_cheato(state, 15)
+
+    def cheato_reward_4(self, state: CollectionState) -> bool:
+        return self.reach_cheato(state, 20)
+
+    def cheato_reward_5(self, state: CollectionState) -> bool:
+        return self.reach_cheato(state, 25)
+
+    def silo_egg_aim(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.EGGAIM)
+
+    def silo_breegull_blaster(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.BBLASTER)
+
+    def silo_grip_grab(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.GGRAB)
+
+    def silo_airborne_egg_aiming(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.AIREAIM)
+
+    def silo_split_up(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.SPLITUP)
+
+    def silo_claw_clamber_boots(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.CLAWBTS)
+
+    def silo_fire_eggs(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.FEGGS)
+
+    def silo_grenade_eggs(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.GEGGS)
+
+    def silo_ice_eggs(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.IEGGS)
+
+    def silo_clockwork_eggs(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.CEGGS)
+
+    def jiggy_zubbas(self, state: CollectionState) -> bool:
+        return state.has(itemName.HUMBACC, self.player)
+
+    def jiggy_jiggium_plant(self, state: CollectionState) -> bool:
+        return state.has(itemName.HUMBACC, self.player)
+
+    def cheato_zubbas(self, state: CollectionState) -> bool:
+        return self.jiggy_zubbas(state)
+
+    def jiggy_white_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.WJINJO, self.player, 1)
+
+    def jiggy_orange_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.OJINJO, self.player, 2)
+
+    def jiggy_yellow_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.YJINJO, self.player, 3)
+
+    def jiggy_brown_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.BRJINJO, self.player, 4)
+
+    def jiggy_green_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.GJINJO, self.player, 5)
+
+    def jiggy_red_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.RJINJO, self.player, 6)
+
+    def jiggy_blue_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.BLJINJO, self.player, 7)
+
+    def jiggy_purple_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.PJINJO, self.player, 8)
+
+    def jiggy_black_jinjo_family(self, state: CollectionState) -> bool:
+        return state.has(itemName.BKJINJO, self.player, 9)
+
+    def jiggy_cc_canary_mary(self, state: CollectionState) -> bool:
+        return self.canary_mary_free(state) and state.can_reach_region(regionName.GM, self.player)
+
+    def cheato_canary_mary(self, state: CollectionState) -> bool:
+        return self.jiggy_cc_canary_mary(state)
+
+    def honey_b_reward_1(self, state: CollectionState) -> bool:
+        return state.has(itemName.HONEY, self.player, 1) and self.can_reach_honey_b(state)
+
+    def honey_b_reward_2(self, state: CollectionState) -> bool:
+        return state.has(itemName.HONEY, self.player, 4) and self.can_reach_honey_b(state)
+
+    def honey_b_reward_3(self, state: CollectionState) -> bool:
+        return state.has(itemName.HONEY, self.player, 9) and self.can_reach_honey_b(state)
+
+    def honey_b_reward_4(self, state: CollectionState) -> bool:
+        return state.has(itemName.HONEY, self.player, 16) and self.can_reach_honey_b(state)
+
+    def honey_b_reward_5(self, state: CollectionState) -> bool:
+        return state.has(itemName.HONEY, self.player, 25) and self.can_reach_honey_b(state)
+
+    def train_switch_ioh(self, state: CollectionState) -> bool:
+        return self.grip_grab(state) and self.flap_flip(state)
+
+    def jiggy_jelly_castle(self, state: CollectionState) -> bool:
+        return self.shack_pack(state) and self.climb(state)
+
+    def silo_beak_bayonet(self, state: CollectionState) -> bool:
+        return self.ggm_boulders(state) and self.check_notes(state, locationName.BBAYONET)
+
+    def silo_pack_whack(self, state: CollectionState) -> bool:
+        return self.split_up(state) and self.check_notes(state, locationName.PACKWH)
+
+    def silo_springy_step_shoes(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.SPRINGB) and self.silo_spring(state)
+
+    def silo_taxi_pack(self, state: CollectionState) -> bool:
+        return self.can_access_taxi_pack_silo(state) and self.check_notes(state, locationName.TAXPACK)
+
+    def silo_hatch(self, state: CollectionState) -> bool:
+        return self.split_up(state) and self.check_notes(state, locationName.HATCH)
+
+    def silo_leg_spring(self, state: CollectionState) -> bool:
+        return self.check_notes(state, locationName.LSPRING) and self.split_up(state)
+
+    def silo_shack_pack(self, state: CollectionState) -> bool:
+        return self.split_up(state) and self.check_notes(state, locationName.SHPACK)
+
+    def silo_glide(self, state: CollectionState) -> bool:
+        return self.can_access_glide_silo(state) and self.check_notes(state, locationName.GLIDE)
+
+    def silo_sack_pack(self, state: CollectionState) -> bool:
+        return self.can_access_sack_pack_silo(state) and self.check_notes(state, locationName.SAPACK)
+
+    def jinjo_spiral_mountain(self, state: CollectionState) -> bool:
+        return self.talon_torpedo(state) and self.dive(state)
+
+    def jinjo_talon_torpedo(self, state: CollectionState) -> bool:
+        return self.talon_torpedo(state) and self.dive(state)
+
+    def silo_sub_aqua_egg_aiming(self, state: CollectionState) -> bool:
+        return (self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28)) and self.check_notes(state, locationName.AUQAIM)
+
+    def silo_talon_torpedo(self, state: CollectionState) -> bool:
+        return self.can_access_talon_torpedo_silo(state) and self.check_notes(state, locationName.TTORP)
+
+    def silo_wing_whack(self, state: CollectionState) -> bool:
+        return (self.has_explosives(state)) and self.split_up(state) and self.check_notes(state, locationName.WWHACK)
+
+    def pink_egg_hatched(self, state: CollectionState) -> bool:
+        return state.has(itemName.PMEGG, self.player)
+
+    def blue_egg_hatched(self, state: CollectionState) -> bool:
+        return state.has(itemName.BMEGG, self.player)
+
+    def yellow_egg_hatched(self, state: CollectionState) -> bool:
+        return (self.has_explosives(state) or self.bill_drill(state)) and self.hatch(state)
+
+    def nest_jr_sub_aqua_1(self, state: CollectionState) -> bool:
+        return self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28)
+
+    def nest_jr_sub_aqua_2(self, state: CollectionState) -> bool:
+        return self.has_explosives(state) or state.has(itemName.DOUBLOON, self.player, 28)
+
+    def nest_gi_unscrewable_platform(self, state: CollectionState) -> bool:
+        return self.egg_aim(state) or self.airborne_egg_aiming(state) or self.beak_bomb(state)
+
+    def nest_chilli_billi_crater(self, state: CollectionState) -> bool:
+        return self.flight_pad(state) and self.ice_eggs_item(state)
+
+    def victory_minigame_hunt(self, state: CollectionState) -> bool:
+        return state.has(itemName.MUMBOTOKEN, self.player, self.world.options.minigame_hunt_length)
+
+    def victory_boss_hunt(self, state: CollectionState) -> bool:
+        return state.has(itemName.MUMBOTOKEN, self.player, self.world.options.boss_hunt_length)
+
+    def victory_jinjo_rescue(self, state: CollectionState) -> bool:
+        return state.has(itemName.MUMBOTOKEN, self.player, self.world.options.jinjo_family_rescue_length)
+
+    def victory_wonderwing(self, state: CollectionState) -> bool:
+        return state.has(itemName.MUMBOTOKEN, self.player, 32) and self.check_hag1_options(state)
+
+    def victory_token_hunt(self, state: CollectionState) -> bool:
+        return state.has(itemName.MUMBOTOKEN, self.player, self.world.options.token_hunt_length)
+
+    def victory_hag1(self, state: CollectionState) -> bool:
+        return state.has("Kick Around", self.player)
+
     def set_rules(self) -> None:
 
         for location, rules in self.jiggy_rules.items():
@@ -9883,7 +10096,7 @@ class BanjoTooieRules:
                 access = self.world.multiworld.get_location(location, self.player)
                 set_rule(access, rules)
 
-        set_rule(self.world.multiworld.get_location(locationName.ROARDINO, self.player), lambda state: self.bargasaurus_roar(state))
+        set_rule(self.world.multiworld.get_location(locationName.ROARDINO, self.player), self.bargasaurus_roar)
 
 
         if self.world.options.cheato_rewards:
@@ -9935,17 +10148,17 @@ class BanjoTooieRules:
             for location, rules in self.gametoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
                 set_rule(tokens, rules)
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, self.world.options.minigame_hunt_length)
+            self.world.multiworld.completion_condition[self.player] = self.victory_minigame_hunt
         elif self.world.options.victory_condition == VictoryCondition.option_boss_hunt:
             for location, rules in self.bosstoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
                 set_rule(tokens, rules)
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, self.world.options.boss_hunt_length)
+            self.world.multiworld.completion_condition[self.player] = self.victory_boss_hunt
         elif self.world.options.victory_condition == VictoryCondition.option_jinjo_family_rescue:
             for location, rules in self.jinjotoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
                 set_rule(tokens, rules)
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, self.world.options.jinjo_family_rescue_length)
+            self.world.multiworld.completion_condition[self.player] = self.victory_jinjo_rescue
         elif self.world.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
             for location, rules in self.bosstoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
@@ -9956,14 +10169,13 @@ class BanjoTooieRules:
             for location, rules in self.jinjotoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
                 set_rule(tokens, rules)
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, 32) \
-            and self.check_hag1_options(state)
+            self.world.multiworld.completion_condition[self.player] = self.victory_wonderwing
         elif self.world.options.victory_condition == VictoryCondition.option_token_hunt:
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has(itemName.MUMBOTOKEN, self.player, self.world.options.token_hunt_length)
+            self.world.multiworld.completion_condition[self.player] = self.victory_token_hunt
         elif self.world.options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1:
             for location, rules in self.bosstoken_rules.items():
                 tokens = self.world.multiworld.get_location(location, self.player)
                 set_rule(tokens, rules)
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has("Kick Around", self.player)
+            self.world.multiworld.completion_condition[self.player] = self.victory_hag1
         else:
-            self.world.multiworld.completion_condition[self.player] = lambda state: state.has("Kick Around", self.player)
+            self.world.multiworld.completion_condition[self.player] = self.victory_hag1
