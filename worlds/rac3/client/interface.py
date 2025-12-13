@@ -243,7 +243,7 @@ class Rac3Interface(GameInterface):
         self.inputs = self._read16(RAC3STATUS.READ_INPUT)
         self.health = self._read8(RAC3STATUS.HEALTH)
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
-        self.inside_hacker_puzzle = self._read8(RAC3STATUS.INSIDE_HACKER_PUZZLE_OR_ARMOR_VENDOR) != 0
+        self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == 0x14 # The Hacker
 
         self.pause_check()
         if self.self_respawning:
