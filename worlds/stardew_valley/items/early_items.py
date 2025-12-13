@@ -1,15 +1,17 @@
 from random import Random
 
-from . import options as stardew_options
-from .content import StardewContent
-from .strings.ap_names.ap_weapon_names import APWeapon
-from .strings.ap_names.transport_names import Transportation
-from .strings.building_names import Building
-from .strings.region_names import Region
-from .strings.season_names import Season
-from .strings.skill_names import Skill
-from .strings.tv_channel_names import Channel
-from .strings.wallet_item_names import Wallet
+from .. import options as stardew_options
+from ..content import StardewContent
+from ..content.vanilla.ginger_island import ginger_island_content_pack
+from ..strings.ap_names.ap_option_names import ChefsanityOptionName, StartWithoutOptionName
+from ..strings.ap_names.ap_weapon_names import APWeapon
+from ..strings.ap_names.transport_names import Transportation
+from ..strings.building_names import Building
+from ..strings.region_names import Region
+from ..strings.season_names import Season
+from ..strings.skill_names import Skill
+from ..strings.tv_channel_names import Channel
+from ..strings.wallet_item_names import Wallet
 
 early_candidate_rate = 4
 always_early_candidates = [Region.greenhouse, Transportation.desert_obelisk, Wallet.rusty_key]
@@ -47,7 +49,7 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     if options.special_order_locations & stardew_options.SpecialOrderLocations.option_board:
         early_candidates.append("Special Order Board")
 
-    if options.cooksanity != stardew_options.Cooksanity.option_none or options.chefsanity & stardew_options.Chefsanity.option_queen_of_sauce:
+    if options.cooksanity != stardew_options.Cooksanity.option_none or ChefsanityOptionName.queen_of_sauce in options.chefsanity:
         early_candidates.append(Channel.queen_of_sauce)
 
     if options.craftsanity != stardew_options.Craftsanity.option_none:
@@ -58,8 +60,9 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
     else:
         early_candidates.append(APWeapon.sword)
 
-    if options.exclude_ginger_island == stardew_options.ExcludeGingerIsland.option_false:
+    if content.is_enabled(ginger_island_content_pack):
         early_candidates.append(Transportation.island_obelisk)
+        early_candidates.append(Transportation.boat_repair)
 
         if options.walnutsanity.value:
             early_candidates.append("Island North Turtle")
@@ -67,6 +70,14 @@ def setup_early_items(multiworld, options: stardew_options.StardewValleyOptions,
 
     if options.museumsanity != stardew_options.Museumsanity.option_none or options.shipsanity >= stardew_options.Shipsanity.option_full_shipment:
         early_candidates.append(Wallet.metal_detector)
+
+    if StartWithoutOptionName.landslide in options.start_without:
+        early_candidates.append("Landslide Removed")
+
+    if StartWithoutOptionName.community_center in options.start_without:
+        early_candidates.append("Forest Magic")
+        early_candidates.append("Community Center Key")
+        early_candidates.append("Wizard Invitation")
 
     early_forced.extend(random.sample(early_candidates, len(early_candidates) // early_candidate_rate))
 

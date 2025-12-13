@@ -1,21 +1,23 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Tuple, Optional
 
-from .game_item import Source
+from .game_item import Source, Requirement
+from ..strings.currency_names import Currency
 from ..strings.season_names import Season
 
-ItemPrice = Tuple[int, str]
+ItemPrice = tuple[int, str]
 
 
 @dataclass(frozen=True, kw_only=True)
 class ShopSource(Source):
     shop_region: str
-    money_price: Optional[int] = None
-    items_price: Optional[Tuple[ItemPrice, ...]] = None
-    seasons: Tuple[str, ...] = Season.all
+    price: int | None = None
+    items_price: tuple[ItemPrice, ...] | None = None
+    seasons: tuple[str, ...] = Season.all
+    currency: str = Currency.money
 
     def __post_init__(self):
-        assert self.money_price is not None or self.items_price is not None, "At least money price or items price need to be defined."
+        assert self.price is not None or self.items_price is not None, "At least money price or items price need to be defined."
         assert self.items_price is None or all(isinstance(p, tuple) for p in self.items_price), "Items price should be a tuple."
 
 
@@ -37,3 +39,13 @@ class PrizeMachineSource(Source):
 @dataclass(frozen=True, kw_only=True)
 class FishingTreasureChestSource(Source):
     amount: int
+
+
+@dataclass(frozen=True, kw_only=True)
+class HatMouseSource(Source):
+    price: int | None = None
+    unlock_requirements: tuple[Requirement, ...] | None = None
+
+    @property
+    def all_requirements(self) -> Iterable[Requirement]:
+        return self.other_requirements + (self.unlock_requirements or ())
