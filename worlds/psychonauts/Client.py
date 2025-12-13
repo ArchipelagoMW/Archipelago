@@ -408,12 +408,11 @@ async def game_watcher(ctx: PsychonautsContext):
                 current_level_name = f.read(4)
                 if ctx.current_level_name != current_level_name:
                     ctx.current_level_name = current_level_name
-                    # Send a Bounced message to all trackers connected to the current slot
+                    # Send a Bounced message to all clients connected to the current slot (intended for trackers only)
                     data_to_send = {"psychonauts_level_name": current_level_name}
                     message = {
                         "cmd": "Bounce",
                         "slots": [ctx.slot],
-                        "tags": ["Tracker"],
                         "data": data_to_send,
                     }
                     await ctx.send_msgs([message])
