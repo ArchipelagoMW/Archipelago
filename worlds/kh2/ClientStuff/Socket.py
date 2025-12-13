@@ -27,7 +27,6 @@ class MessageType (IntEnum):
     Handshake  = 12,
     Victory = 19,
     Closed = 20
-    pass
 
 class KH2Socket():
     def __init__(self, client, host: str = "127.0.0.1", port:int = 13713):

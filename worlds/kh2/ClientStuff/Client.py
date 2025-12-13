@@ -38,7 +38,6 @@ class MessageType (IntEnum):
     Handshake = 12,
     Victory = 19,
     Closed = 20
-    pass
 
 class KH2Context(CommonContext):
     command_processor = KH2CommandProcessor
