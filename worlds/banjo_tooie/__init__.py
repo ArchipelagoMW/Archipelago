@@ -738,7 +738,7 @@ class BanjoTooieWorld(World):
         return rules.set_rules()
 
     def pre_fill_me(self) -> None:
-        def prefill_locations_with_item(self, item_name: str, locations: list[str]) -> None:
+        def prefill_locations_with_item(item_name: str, locations: list[str]) -> None:
             for location_name in locations:
                 self.get_location(location_name).place_locked_item(self.create_item(item_name))
 
