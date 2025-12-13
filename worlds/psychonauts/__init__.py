@@ -12,6 +12,8 @@ from .Items import (
     ITEM_DICTIONARY,
     MINDS,
     BRAIN_JARS,
+    BAGGAGE,
+    BAGGAGE_TAGS,
     LOCAL_SET,
     PROGRESSION_SET,
     USEFUL_SET,
@@ -110,6 +112,13 @@ class PSYWorld(World):
         if goal == Goal.option_brain_hunt:
             item_classifications[ItemName.Cake] = ItemClassification.filler
 
+        # Set Baggage and Baggage Tags to Progression if Progessive Baggage enabled
+        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
+            for name in BAGGAGE:
+                item_classifications[name] = ItemClassification.progression
+            for name in BAGGAGE_TAGS:
+                item_classifications[name] = ItemClassification.progression
+
     def create_item(self, name: str) -> Item:
         """
         Returns created PSYItem
@@ -179,11 +188,19 @@ class PSYWorld(World):
         item_counts[ItemName.PsiCard] += extra_rank_count
 
     @staticmethod
-    def _add_figment_percentage_items(item_counts: Dict[str, int]):
+    def _add_figment_percentage_items(item_counts: Dict[str, int], maxpercent: int):
         # Add PSI Cards to the pool to fill figment percentage checks
-        # Can be called multiple times for each 20 percent threshold
-        percentage_count = 10
+        # Multiplied by the FigmentPercentageChecks option value
+        percentage_count = maxpercent*10
         item_counts[ItemName.PsiCard] += percentage_count
+
+    @staticmethod
+    def _add_progressive_baggage_items(item_counts: Dict[str, int], maxvalue: int):
+        # Add PSI Cards to the pool to fill progressive baggage checks
+        # Multiplied by the MaximumProgressiveBaggage option value
+        baggage_count = maxvalue*5
+        item_counts[ItemName.PsiCard] += baggage_count
+
 
     def create_items(self):
         """
@@ -223,22 +240,15 @@ class PSYWorld(World):
             self._add_rank_sanity_items(adjusted_item_counts)
 
         # Add items for FigmentPercentageChecks
-        # Call this each time to add 10 items to the pool for every 20 percent required
-        # 20 Percent
+        # add 10 items to the pool for every 20 percent required, maximum 50
         if self.options.FigmentPercentageChecks.value >= 1:
-            self._add_figment_percentage_items(adjusted_item_counts)
-        # 40 Percent
-        if self.options.FigmentPercentageChecks.value >= 2:
-            self._add_figment_percentage_items(adjusted_item_counts)
-        # 60 Percent
-        if self.options.FigmentPercentageChecks.value >= 3:
-            self._add_figment_percentage_items(adjusted_item_counts)
-        # 80 Percent
-        if self.options.FigmentPercentageChecks.value >= 4:
-            self._add_figment_percentage_items(adjusted_item_counts)
-        # 100 Percent
-        if self.options.FigmentPercentageChecks.value >= 5:
-            self._add_figment_percentage_items(adjusted_item_counts)   
+            self._add_figment_percentage_items(adjusted_item_counts, self.options.FigmentPercentageChecks.value)
+
+        # Add items for MaximumProgressiveBaggage
+        # Passes the value for MaximumProgressiveBaggage Option, adds value multiplied by 5
+        # Maximum 50
+        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
+            self._add_progressive_baggage_items(adjusted_item_counts, self.options.MaximumProgressiveBaggage.value)
 
         # Create the initial item pool.
         item_pool = list(map(self.create_item, repeated_item_names_gen(ITEM_DICTIONARY, adjusted_item_counts)))
@@ -282,6 +292,8 @@ class PSYWorld(World):
             Regions.create_figments_80_locations(self.multiworld, self.player)
         if self.options.FigmentPercentageChecks.value == 5:
             Regions.create_figments_100_locations(self.multiworld, self.player)
+        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
+            Regions.create_progressive_baggage_locations(self.multiworld, self.player, self.options.MaximumProgressiveBaggage.value)
         if self.options.DeepArrowheadShuffle:
             Regions.create_deep_arrowhead_locations(self.multiworld, self.player)
         if self.options.MentalCobwebShuffle:

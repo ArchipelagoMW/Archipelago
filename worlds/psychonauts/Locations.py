@@ -845,6 +845,81 @@ FIGMENT_LOCATIONS: Dict[str, int] = {
     **MC_FIGMENT_CHECKS,
 }
 
+# Progressive Baggage Locations
+# Five Baggage types, Ten locations each
+PROG_SUITCASE_CHECKS: Dict[str, int] = {
+    LocationName.SuitcaseProgressive1: 756,
+    LocationName.SuitcaseProgressive2: 757,
+    LocationName.SuitcaseProgressive3: 758,
+    LocationName.SuitcaseProgressive4: 759,
+    LocationName.SuitcaseProgressive5: 760,
+    LocationName.SuitcaseProgressive6: 761,
+    LocationName.SuitcaseProgressive7: 762,
+    LocationName.SuitcaseProgressive8: 763,
+    LocationName.SuitcaseProgressive9: 764,
+    LocationName.SuitcaseProgressive10: 765,    
+}
+
+PROG_PURSE_CHECKS: Dict[str, int] = {
+    LocationName.PurseProgressive1: 766,
+    LocationName.PurseProgressive2: 767,
+    LocationName.PurseProgressive3: 768,
+    LocationName.PurseProgressive4: 769,
+    LocationName.PurseProgressive5: 770,
+    LocationName.PurseProgressive6: 771,
+    LocationName.PurseProgressive7: 772,
+    LocationName.PurseProgressive8: 773,
+    LocationName.PurseProgressive9: 774,
+    LocationName.PurseProgressive10: 775,    
+}
+
+PROG_HATBOX_CHECKS: Dict[str, int] = {
+    LocationName.HatboxProgressive1: 776,
+    LocationName.HatboxProgressive2: 777,
+    LocationName.HatboxProgressive3: 778,
+    LocationName.HatboxProgressive4: 779,
+    LocationName.HatboxProgressive5: 780,
+    LocationName.HatboxProgressive6: 781,
+    LocationName.HatboxProgressive7: 782,
+    LocationName.HatboxProgressive8: 783,
+    LocationName.HatboxProgressive9: 784,
+    LocationName.HatboxProgressive10: 785,    
+}
+
+PROG_STEAMERTRUNK_CHECKS: Dict[str, int] = {
+    LocationName.SteamertrunkProgressive1: 786,
+    LocationName.SteamertrunkProgressive2: 787,
+    LocationName.SteamertrunkProgressive3: 788,
+    LocationName.SteamertrunkProgressive4: 789,
+    LocationName.SteamertrunkProgressive5: 790,
+    LocationName.SteamertrunkProgressive6: 791,
+    LocationName.SteamertrunkProgressive7: 792,
+    LocationName.SteamertrunkProgressive8: 793,
+    LocationName.SteamertrunkProgressive9: 794,
+    LocationName.SteamertrunkProgressive10: 795,    
+}
+
+PROG_DUFFLEBAG_CHECKS: Dict[str, int] = {
+    LocationName.DufflebagProgressive1: 796,
+    LocationName.DufflebagProgressive2: 797,
+    LocationName.DufflebagProgressive3: 798,
+    LocationName.DufflebagProgressive4: 799,
+    LocationName.DufflebagProgressive5: 800,
+    LocationName.DufflebagProgressive6: 801,
+    LocationName.DufflebagProgressive7: 802,
+    LocationName.DufflebagProgressive8: 803,
+    LocationName.DufflebagProgressive9: 804,
+    LocationName.DufflebagProgressive10: 805,    
+}
+
+PROG_BAGGAGE_LOCATIONS: Dict[str, int] = {
+    **PROG_SUITCASE_CHECKS,
+    **PROG_PURSE_CHECKS,
+    **PROG_HATBOX_CHECKS,
+    **PROG_STEAMERTRUNK_CHECKS,
+    **PROG_DUFFLEBAG_CHECKS,
+}
+
 # Includes locations that may not be enabled.
 ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **CA_CHECKS,
@@ -863,6 +938,7 @@ ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **MENTAL_COBWEB_LOCATIONS,
     **RANK_LOCATIONS,
     **FIGMENT_LOCATIONS,
+    **PROG_BAGGAGE_LOCATIONS,
 }
 
 ALL_LOCATIONS: Dict[str, int] = {
@@ -877,6 +953,8 @@ _FULLY_REMOTE_LOCATION_IDS: Set[int] = {
     *DEEP_ARROWHEAD_LOCATIONS.values(),
     *MENTAL_COBWEB_LOCATIONS.values(),
     *RANK_LOCATIONS.values(),
+    *FIGMENT_LOCATIONS.values(),
+    *PROG_BAGGAGE_LOCATIONS.values(),
 }
 # IDs of locations that place items into the game world, and are therefore used in PsychoSeed generation.
 PSYCHOSEED_LOCATION_IDS: Set[int] = set(ALL_FILLABLE_LOCATIONS.values())

@@ -158,7 +158,8 @@ PSYCHORANDO_ITEM_TABLE: Dict[str, int] = {
     # 54 are added for Cobweb Shuffle
     # 80 are added for Rank Sanity
     # 50 are added for Figment Percentage Checks
-    ItemName.PsiCard: 110 + 54 + 80 + 50,
+    # 50 are added for Progressive Baggage Checks
+    ItemName.PsiCard: 110 + 54 + 80 + 50 + 50,
 
     # AP Placeholders, 318 total.
     # These have no corresponding AP item and are assumed to always be last in PsychoRando's item order.

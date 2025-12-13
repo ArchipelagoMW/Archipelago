@@ -591,6 +591,67 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
         LocationName.TunnelOfLoveRailDufflebagTag,
         LocationName.NextToTheFatLadyDufflebag,
     ],
+
+    # Progressive Baggage Regions, Start empty and added by Rules.py
+    # Suitcases
+    RegionName.SUITCASEREGION1: [],
+    RegionName.SUITCASEREGION2: [],
+    RegionName.SUITCASEREGION3: [],
+    RegionName.SUITCASEREGION4: [],
+    RegionName.SUITCASEREGION5: [],
+    RegionName.SUITCASEREGION6: [],
+    RegionName.SUITCASEREGION7: [],
+    RegionName.SUITCASEREGION8: [],
+    RegionName.SUITCASEREGION9: [],
+    RegionName.SUITCASEREGION10: [],
+
+    # Purses
+    RegionName.PURSEREGION1: [],
+    RegionName.PURSEREGION2: [],
+    RegionName.PURSEREGION3: [],
+    RegionName.PURSEREGION4: [],
+    RegionName.PURSEREGION5: [],
+    RegionName.PURSEREGION6: [],
+    RegionName.PURSEREGION7: [],
+    RegionName.PURSEREGION8: [],
+    RegionName.PURSEREGION9: [],
+    RegionName.PURSEREGION10: [],
+
+    # Hatboxes
+    RegionName.HATBOXREGION1: [],
+    RegionName.HATBOXREGION2: [],
+    RegionName.HATBOXREGION3: [],
+    RegionName.HATBOXREGION4: [],
+    RegionName.HATBOXREGION5: [],
+    RegionName.HATBOXREGION6: [],
+    RegionName.HATBOXREGION7: [],
+    RegionName.HATBOXREGION8: [],
+    RegionName.HATBOXREGION9: [],
+    RegionName.HATBOXREGION10: [],
+
+    # Steamertrunks
+    RegionName.STEAMERTRUNKREGION1: [],
+    RegionName.STEAMERTRUNKREGION2: [],
+    RegionName.STEAMERTRUNKREGION3: [],
+    RegionName.STEAMERTRUNKREGION4: [],
+    RegionName.STEAMERTRUNKREGION5: [],
+    RegionName.STEAMERTRUNKREGION6: [],
+    RegionName.STEAMERTRUNKREGION7: [],
+    RegionName.STEAMERTRUNKREGION8: [],
+    RegionName.STEAMERTRUNKREGION9: [],
+    RegionName.STEAMERTRUNKREGION10: [],
+
+    # Dufflebags
+    RegionName.DUFFLEBAGREGION1: [],
+    RegionName.DUFFLEBAGREGION2: [],
+    RegionName.DUFFLEBAGREGION3: [],
+    RegionName.DUFFLEBAGREGION4: [],
+    RegionName.DUFFLEBAGREGION5: [],
+    RegionName.DUFFLEBAGREGION6: [],
+    RegionName.DUFFLEBAGREGION7: [],
+    RegionName.DUFFLEBAGREGION8: [],
+    RegionName.DUFFLEBAGREGION9: [],
+    RegionName.DUFFLEBAGREGION10: [],
 }
 
 
@@ -778,6 +839,31 @@ def create_figments_100_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments100})
 
 
+def create_progressive_baggage_locations(multiworld: MultiWorld, player: int, value: int):
+    # loop to pair the Progressive Baggage regions with their matching location
+    # value is given by Options, the maximum baggage locations per baggage type
+    for i in range(1, value+1):
+        suitcaseregion = getattr(RegionName, f"SUITCASEREGION{i}")
+        suitcaselocation = getattr(LocationName, f"SuitcaseProgressive{i}")
+        _add_locations_to_existing_region(multiworld, player, suitcaseregion, {suitcaselocation})
+
+        purseregion = getattr(RegionName, f"PURSEREGION{i}")
+        purselocation = getattr(LocationName, f"PurseProgressive{i}")
+        _add_locations_to_existing_region(multiworld, player, purseregion, {purselocation})
+
+        hatboxregion = getattr(RegionName, f"HATBOXREGION{i}")
+        hatboxlocation = getattr(LocationName, f"HatboxProgressive{i}")
+        _add_locations_to_existing_region(multiworld, player, hatboxregion, {hatboxlocation})
+
+        steamertrunkregion = getattr(RegionName, f"STEAMERTRUNKREGION{i}")
+        steamertrunklocation = getattr(LocationName, f"SteamertrunkProgressive{i}")
+        _add_locations_to_existing_region(multiworld, player, steamertrunkregion, {steamertrunklocation})
+
+        dufflebagregion = getattr(RegionName, f"DUFFLEBAGREGION{i}")
+        dufflebaglocation = getattr(LocationName, f"DufflebagProgressive{i}")
+        _add_locations_to_existing_region(multiworld, player, dufflebagregion, {dufflebaglocation})
+
+
 def create_psyregions(multiworld: MultiWorld, player: int):
     # Create all default regions.
     for region_name, location_names in DEFAULT_REGIONS.items():
@@ -816,7 +902,14 @@ def connect_regions(multiworld: MultiWorld, player: int):
             # the player's inventory.
             RegionName.CAJA,
             RegionName.CAJABrains,
+            # Rewards are earned from Ranking up, regions broken into ranges
             RegionName.RANK2to20,
+            # Progressive Baggage Locations all start at 1
+            RegionName.SUITCASEREGION1,
+            RegionName.PURSEREGION1,
+            RegionName.HATBOXREGION1,
+            RegionName.STEAMERTRUNKREGION1,
+            RegionName.DUFFLEBAGREGION1,
             # The remaining regions are the first region into each mind, accessed from the Collective Unconscious.
             RegionName.BBA1,
             RegionName.SACU,
@@ -834,6 +927,57 @@ def connect_regions(multiworld: MultiWorld, player: int):
         RegionName.RANK21to40: {RegionName.RANK41to60},
         RegionName.RANK41to60: {RegionName.RANK61to80},
         RegionName.RANK61to80: {RegionName.RANK81to101},
+
+        # Progressive Baggage regions connect to each other in sequence, for each type
+        RegionName.SUITCASEREGION1: {RegionName.SUITCASEREGION2},
+        RegionName.SUITCASEREGION2: {RegionName.SUITCASEREGION3},
+        RegionName.SUITCASEREGION3: {RegionName.SUITCASEREGION4},
+        RegionName.SUITCASEREGION4: {RegionName.SUITCASEREGION5},
+        RegionName.SUITCASEREGION5: {RegionName.SUITCASEREGION6},
+        RegionName.SUITCASEREGION6: {RegionName.SUITCASEREGION7},
+        RegionName.SUITCASEREGION7: {RegionName.SUITCASEREGION8},
+        RegionName.SUITCASEREGION8: {RegionName.SUITCASEREGION9},
+        RegionName.SUITCASEREGION9: {RegionName.SUITCASEREGION10},
+
+        RegionName.PURSEREGION1: {RegionName.PURSEREGION2},
+        RegionName.PURSEREGION2: {RegionName.PURSEREGION3},
+        RegionName.PURSEREGION3: {RegionName.PURSEREGION4},
+        RegionName.PURSEREGION4: {RegionName.PURSEREGION5},
+        RegionName.PURSEREGION5: {RegionName.PURSEREGION6},
+        RegionName.PURSEREGION6: {RegionName.PURSEREGION7},
+        RegionName.PURSEREGION7: {RegionName.PURSEREGION8},
+        RegionName.PURSEREGION8: {RegionName.PURSEREGION9},
+        RegionName.PURSEREGION9: {RegionName.PURSEREGION10},
+
+        RegionName.HATBOXREGION1: {RegionName.HATBOXREGION2},
+        RegionName.HATBOXREGION2: {RegionName.HATBOXREGION3},
+        RegionName.HATBOXREGION3: {RegionName.HATBOXREGION4},
+        RegionName.HATBOXREGION4: {RegionName.HATBOXREGION5},
+        RegionName.HATBOXREGION5: {RegionName.HATBOXREGION6},
+        RegionName.HATBOXREGION6: {RegionName.HATBOXREGION7},
+        RegionName.HATBOXREGION7: {RegionName.HATBOXREGION8},
+        RegionName.HATBOXREGION8: {RegionName.HATBOXREGION9},
+        RegionName.HATBOXREGION9: {RegionName.HATBOXREGION10},
+
+        RegionName.STEAMERTRUNKREGION1: {RegionName.STEAMERTRUNKREGION2},
+        RegionName.STEAMERTRUNKREGION2: {RegionName.STEAMERTRUNKREGION3},
+        RegionName.STEAMERTRUNKREGION3: {RegionName.STEAMERTRUNKREGION4},
+        RegionName.STEAMERTRUNKREGION4: {RegionName.STEAMERTRUNKREGION5},
+        RegionName.STEAMERTRUNKREGION5: {RegionName.STEAMERTRUNKREGION6},
+        RegionName.STEAMERTRUNKREGION6: {RegionName.STEAMERTRUNKREGION7},
+        RegionName.STEAMERTRUNKREGION7: {RegionName.STEAMERTRUNKREGION8},
+        RegionName.STEAMERTRUNKREGION8: {RegionName.STEAMERTRUNKREGION9},
+        RegionName.STEAMERTRUNKREGION9: {RegionName.STEAMERTRUNKREGION10},
+
+        RegionName.DUFFLEBAGREGION1: {RegionName.DUFFLEBAGREGION2},
+        RegionName.DUFFLEBAGREGION2: {RegionName.DUFFLEBAGREGION3},
+        RegionName.DUFFLEBAGREGION3: {RegionName.DUFFLEBAGREGION4},
+        RegionName.DUFFLEBAGREGION4: {RegionName.DUFFLEBAGREGION5},
+        RegionName.DUFFLEBAGREGION5: {RegionName.DUFFLEBAGREGION6},
+        RegionName.DUFFLEBAGREGION6: {RegionName.DUFFLEBAGREGION7},
+        RegionName.DUFFLEBAGREGION7: {RegionName.DUFFLEBAGREGION8},
+        RegionName.DUFFLEBAGREGION8: {RegionName.DUFFLEBAGREGION9},
+        RegionName.DUFFLEBAGREGION9: {RegionName.DUFFLEBAGREGION10},
 
         # Outside, real world:
         RegionName.CAGP: {

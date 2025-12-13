@@ -677,5 +677,66 @@ MCFigments60 = "(MC Figments) Collect Figments 60 Percent"
 MCFigments80 = "(MC Figments) Collect Figments 80 Percent"
 MCFigments100 = "(MC Figments) Collect Figments 100 Percent"
 
+# Progressive Baggage Rewards
+# Suitcase Baggage Checks
+SuitcaseProgressive1 = "(Baggage) Suitcase Redeemed 1"
+SuitcaseProgressive2 = "(Baggage) Suitcase Redeemed 2"
+SuitcaseProgressive3 = "(Baggage) Suitcase Redeemed 3"
+SuitcaseProgressive4 = "(Baggage) Suitcase Redeemed 4"
+SuitcaseProgressive5 = "(Baggage) Suitcase Redeemed 5"
+SuitcaseProgressive6 = "(Baggage) Suitcase Redeemed 6"
+SuitcaseProgressive7 = "(Baggage) Suitcase Redeemed 7"
+SuitcaseProgressive8 = "(Baggage) Suitcase Redeemed 8"
+SuitcaseProgressive9 = "(Baggage) Suitcase Redeemed 9"
+SuitcaseProgressive10 = "(Baggage) Suitcase Redeemed 10"
+
+# Purse Baggage Checks
+PurseProgressive1 = "(Baggage) Purse Redeemed 1"
+PurseProgressive2 = "(Baggage) Purse Redeemed 2"
+PurseProgressive3 = "(Baggage) Purse Redeemed 3"
+PurseProgressive4 = "(Baggage) Purse Redeemed 4"
+PurseProgressive5 = "(Baggage) Purse Redeemed 5"
+PurseProgressive6 = "(Baggage) Purse Redeemed 6"
+PurseProgressive7 = "(Baggage) Purse Redeemed 7"
+PurseProgressive8 = "(Baggage) Purse Redeemed 8"
+PurseProgressive9 = "(Baggage) Purse Redeemed 9"
+PurseProgressive10 = "(Baggage) Purse Redeemed 10"
+
+# Hatbox Baggage Checks
+HatboxProgressive1 = "(Baggage) Hatbox Redeemed 1"
+HatboxProgressive2 = "(Baggage) Hatbox Redeemed 2"
+HatboxProgressive3 = "(Baggage) Hatbox Redeemed 3"
+HatboxProgressive4 = "(Baggage) Hatbox Redeemed 4"
+HatboxProgressive5 = "(Baggage) Hatbox Redeemed 5"
+HatboxProgressive6 = "(Baggage) Hatbox Redeemed 6"
+HatboxProgressive7 = "(Baggage) Hatbox Redeemed 7"
+HatboxProgressive8 = "(Baggage) Hatbox Redeemed 8"
+HatboxProgressive9 = "(Baggage) Hatbox Redeemed 9"
+HatboxProgressive10 = "(Baggage) Hatbox Redeemed 10"
+
+# Steamertrunk Baggage Checks
+SteamertrunkProgressive1 = "(Baggage) Steamertrunk Redeemed 1"
+SteamertrunkProgressive2 = "(Baggage) Steamertrunk Redeemed 2"
+SteamertrunkProgressive3 = "(Baggage) Steamertrunk Redeemed 3"
+SteamertrunkProgressive4 = "(Baggage) Steamertrunk Redeemed 4"
+SteamertrunkProgressive5 = "(Baggage) Steamertrunk Redeemed 5"
+SteamertrunkProgressive6 = "(Baggage) Steamertrunk Redeemed 6"
+SteamertrunkProgressive7 = "(Baggage) Steamertrunk Redeemed 7"
+SteamertrunkProgressive8 = "(Baggage) Steamertrunk Redeemed 8"
+SteamertrunkProgressive9 = "(Baggage) Steamertrunk Redeemed 9"
+SteamertrunkProgressive10 = "(Baggage) Steamertrunk Redeemed 10"
+
+# Dufflebag Baggage Checks
+DufflebagProgressive1 = "(Baggage) Dufflebag Redeemed 1"
+DufflebagProgressive2 = "(Baggage) Dufflebag Redeemed 2"
+DufflebagProgressive3 = "(Baggage) Dufflebag Redeemed 3"
+DufflebagProgressive4 = "(Baggage) Dufflebag Redeemed 4"
+DufflebagProgressive5 = "(Baggage) Dufflebag Redeemed 5"
+DufflebagProgressive6 = "(Baggage) Dufflebag Redeemed 6"
+DufflebagProgressive7 = "(Baggage) Dufflebag Redeemed 7"
+DufflebagProgressive8 = "(Baggage) Dufflebag Redeemed 8"
+DufflebagProgressive9 = "(Baggage) Dufflebag Redeemed 9"
+DufflebagProgressive10 = "(Baggage) Dufflebag Redeemed 10"
+
 # Ford's Shop, only a location if Cobweb Duster vanilla (not currently in AP)
 ShopCobwebDuster = "(CA Lodge) Ford's Shop Cobweb Duster"

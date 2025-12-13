@@ -3,7 +3,7 @@ from typing import Dict, TYPE_CHECKING, Set
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
 from .Items import BRAIN_JARS, LOCAL_SET
-from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIVE_RANK_LOCATIONS
+from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIVE_RANK_LOCATIONS, PROG_BAGGAGE_LOCATIONS, PROG_SUITCASE_CHECKS, PROG_PURSE_CHECKS, PROG_HATBOX_CHECKS, PROG_STEAMERTRUNK_CHECKS, PROG_DUFFLEBAG_CHECKS
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
 
@@ -437,6 +437,80 @@ class PsyRules:
             # Update only every five rank locations
             local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
 
+        if self.world.options.ProgressiveBaggage and self.world.options.MaximumProgressiveBaggage != 0:
+            # Progressive Baggage locations do not place items into the world.
+            local_only_forbidden.update(PROG_BAGGAGE_LOCATIONS.keys())
+
+            # checks to see if we have the total number of matching Bags and Tags required for a progressive location
+            # Example: Progressive Suitcase 3 will require 3 Bags AND 3 Tags
+            def has_matching_baggage(state: CollectionState, amount: int, bag, tag):
+                return state.has_all_counts(
+                    {
+                        bag: amount,
+                        tag: amount,
+                    },
+                    self.player
+                )
+            
+            # check how many matching Suitcase and Suitcase Tags we have
+            matches_needed = 1
+            for location_name in PROG_SUITCASE_CHECKS:
+                location = multiworld.get_location(location_name, player)
+                add_rule(
+                    location,
+                    lambda state, m=matches_needed: has_matching_baggage(
+                        state, m, ItemName.Suitcase, ItemName.SuitcaseTag
+                    )
+                )
+                matches_needed += 1
+            
+            # check how many matching Purse and Purse Tags we have
+            matches_needed = 1
+            for location_name in PROG_PURSE_CHECKS:
+                location = multiworld.get_location(location_name, player)
+                add_rule(
+                    location,
+                    lambda state, m=matches_needed: has_matching_baggage(
+                        state, m, ItemName.Purse, ItemName.PurseTag
+                    )
+                )
+                matches_needed += 1
+
+            # check how many matching Hatbox and Hatbox Tags we have
+            matches_needed = 1
+            for location_name in PROG_HATBOX_CHECKS:
+                location = multiworld.get_location(location_name, player)
+                add_rule(
+                    location,
+                    lambda state, m=matches_needed: has_matching_baggage(
+                        state, m, ItemName.Hatbox, ItemName.HatboxTag
+                    )
+                )
+                matches_needed += 1
+
+            # check how many matching Steamertrunk and Steamertrunk Tags we have
+            matches_needed = 1
+            for location_name in PROG_STEAMERTRUNK_CHECKS:
+                location = multiworld.get_location(location_name, player)
+                add_rule(
+                    location,
+                    lambda state, m=matches_needed: has_matching_baggage(
+                        state, m, ItemName.Steamertrunk, ItemName.SteamerTag
+                    )
+                )
+                matches_needed += 1
+
+            # check how many matching Dufflebag and Dufflebag Tags we have
+            matches_needed = 1
+            for location_name in PROG_DUFFLEBAG_CHECKS:
+                location = multiworld.get_location(location_name, player)
+                add_rule(
+                    location,
+                    lambda state, m=matches_needed: has_matching_baggage(
+                        state, m, ItemName.Dufflebag, ItemName.DuffleTag
+                    )
+                )
+                matches_needed += 1
 
         if self.world.options.DeepArrowheadShuffle:
             # Deep Arrowhead Shuffle locations do not place items into the world.

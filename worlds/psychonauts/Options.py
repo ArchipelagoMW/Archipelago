@@ -101,13 +101,19 @@ class RequireMeatCircus(DefaultOnToggle):
     """Require finishing Meat Circus Final Bosses in addition to your goal."""
     display_name = "Require Meat Circus"
 
+
+class RankSanity(Toggle):
+    """Add Rank Rewards to EVERY Rank Up, instead of the traditional Five Ranks Up."""
+    display_name = "Rank Sanity"
+
+
 class FigmentPercentageChecks(Choice):
     """Controls the maximum percentage of figments needed from each mind that will send checks.
 
     One check is sent for every 20 percent of figments found in each mind, up to the maximum set here.
 
     If set to 0, no figment collecting is required."""
-    display_name = "Figment Percentage Max"
+    display_name = "Figment Percentage Maximum"
     option_0_percent = 0
     option_20_percent = 1
     option_40_percent = 2
@@ -115,6 +121,7 @@ class FigmentPercentageChecks(Choice):
     option_80_percent = 4
     option_100_percent = 5
     default = 0
+
 
 class DeepArrowheadShuffle(Toggle):
     """Add Deep Arrowhead checks and shuffle the Dowsing Rod and extra Arrowhead Bundles into the item pool.
@@ -135,9 +142,21 @@ class MentalCobwebShuffle(Toggle):
     display_name = "Mental Cobweb Shuffle"
 
 
-class RankSanity(Toggle):
-    """Add Rank Rewards to EVERY Rank Up, instead of the traditional Five Ranks Up."""
-    display_name = "Rank Sanity"
+class ProgressiveBaggage(Toggle):
+    """Turns Emotional Baggage into Progressive Locations
+    
+    Each time you redeem a Baggage Tag with it's matching Baggage, you'll earn the next check for that type."""
+    display_name = "Progressive Baggage"
+
+
+class MaximumProgressiveBaggage(Range):
+    """Maximum amount of each type of Baggage that will give checks.
+    
+    Only works if Progressive Baggage is Enabled and value is greater than 0."""
+    display_name = "Maximum Progressive Baggage"
+    range_start = 0
+    range_end = 10
+    default = 5
 
 
 @dataclass
@@ -155,10 +174,12 @@ class PsychonautsOptions(PerGameCommonOptions):
     Goal: Goal
     BrainsRequired: BrainsRequired
     RequireMeatCircus: RequireMeatCircus
+    RankSanity: RankSanity
     FigmentPercentageChecks: FigmentPercentageChecks
     DeepArrowheadShuffle: DeepArrowheadShuffle
     MentalCobwebShuffle: MentalCobwebShuffle
-    RankSanity: RankSanity
+    ProgressiveBaggage: ProgressiveBaggage
+    MaximumProgressiveBaggage: MaximumProgressiveBaggage
 
 
 SLOT_DATA_OPTIONS: List[str] = [
@@ -172,8 +193,10 @@ SLOT_DATA_OPTIONS: List[str] = [
     "Goal",
     "BrainsRequired",
     "RequireMeatCircus",
+    "RankSanity",
     "FigmentPercentageChecks",
     "DeepArrowheadShuffle",
     "MentalCobwebShuffle",
-    "RankSanity",
+    "ProgressiveBaggage",
+    "MaximumProgressiveBaggage",
 ]
