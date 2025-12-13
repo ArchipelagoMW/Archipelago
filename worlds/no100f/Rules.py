@@ -2070,25 +2070,24 @@ snack_rules = [
             LocationNames.b003_SS1974: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
             LocationNames.b003_EX__CLUE__SNACKBOX4: lambda player: lambda state: state.has(ItemNames.HelmetPower, player, 1),
 
-            LocationNames.b004_SNACK10: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK12: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK14: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK16: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK18: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK110: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK1120: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK1122: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK1124: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK1126: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK1128: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACK11210: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SS20: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SS21: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SS22: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SS23: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_SNACKBOX2: lambda player: lambda state: (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_DRYER__SNACKBOX__1: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
-            LocationNames.b004_DRYER__SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.can_reach(ConnectionNames.b004_i003, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
+            LocationNames.b004_SNACK10: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK12: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK14: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK16: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK18: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK110: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK1120: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK1122: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK1124: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK1128: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACK11210: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SS20: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SS21: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SS22: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SS23: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_SNACKBOX2: lambda player: lambda state: (state.has(ItemNames.PoundPower, player, 1) and state.has(ItemNames.ProgressiveJump, player, 1)) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player),
+            LocationNames.b004_DRYER__SNACKBOX__1: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.has(ItemNames.ProgressiveJump, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
+            LocationNames.b004_DRYER__SNACKBOX__2: lambda player: lambda state: state.has(ItemNames.PoundPower, player, 1) and (state.has(ItemNames.ProgressiveJump, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1) or state.can_reach(ConnectionNames.i003_b004, "Entrance", player)),
 
             LocationNames.b004_SS24: lambda player: lambda state: state.can_reach(ConnectionNames.b003_b004, "Entrance", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
             LocationNames.b004_SNACKBOX3: lambda player: lambda state: state.can_reach(ConnectionNames.b003_b004, "Entrance", player) and (state.has(ItemNames.HelmetPower, player, 1) or state.has(ItemNames.PoundPower, player, 1)),
@@ -2628,12 +2627,14 @@ def set_rules(multiworld: MultiWorld, options: NO100FOptions, player: int):
             add_rule(multiworld.get_location(LocationNames.key4_w027, player), lambda state: state.has(ItemNames.PoundPower, player, 1))
 
     else:
-        add_rule(multiworld.get_entrance(ConnectionNames.b004_i003, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1) and state.has(ItemNames.PoundPower, player, 1))
         add_rule(multiworld.get_entrance(ConnectionNames.e003_c005, player), lambda state: state.can_reach(RegionNames.c005, "Region", player))
 
     if options.expert_logic.value:
         add_rule(multiworld.get_entrance(ConnectionNames.e002_e003, player), lambda state: state.can_reach(RegionNames.e002, "Region", player))
         add_rule(multiworld.get_entrance(ConnectionNames.w026_w028, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 2))
+
+    else:
+        add_rule(multiworld.get_entrance(ConnectionNames.b004_i003, player), lambda state: state.has(ItemNames.HelmetPower, player, 1) and (state.has(ItemNames.PoundPower, player, 1) or state.has(ItemNames.Cellar4_Warp, player, 1)))
 
     if options.creepy_early.value:
         add_rule(multiworld.get_entrance(ConnectionNames.f003_p001, player), lambda state: state.has(ItemNames.ProgressiveJump, player, 1))
