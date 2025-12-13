@@ -490,7 +490,7 @@ class GloverWorld(World):
         #Create fake items
         self.fake_item_names = create_trap_name_table(self)
         #Create the Mr. Tip Table
-        self.mr_tip_table : list[str] = generate_tip_table()
+        self.mr_tip_table : list[str] = generate_tip_table(self)
 
     def checkpoint_randomization(self):
         #Setup the spawning checkpoints
@@ -941,6 +941,7 @@ class GloverWorld(World):
         player = self.player
         if not self.options.entrance_randomizer:
             return
+        hint_data[player] = {}
         #Go over the randomizable regions
         for vanilla_index, level_region_name in enumerate(self.existing_levels):
             #If it's in a vanilla position, don't flag the location as unique
@@ -956,10 +957,30 @@ class GloverWorld(World):
                     #Don't consider event locations, since they aren't hinted
                     if each_address == None:
                         continue
-                    #If there's hint data about this location
-                    if each_address in hint_data[player]:
-                        #Set it to the randomized value
-                        hint_data[player][each_address] = entrance_name
+                    hint_data[player][each_address] = self.verbose_level_name(entrance_name)
+
+    #Verbose
+    def verbose_level_name(self, inLevel : str) -> str:
+        level_suffix : str = inLevel[3:4]
+        if level_suffix == "?":
+            level_suffix = "Bonus"
+        elif level_suffix == "!":
+            level_suffix = "Boss"
+        match self.world_from_string(inLevel):
+            case 0:
+                return "Atlantis " + level_suffix
+            case 1:
+                return "Carnival " + level_suffix
+            case 2:
+                return "Pirates Cove " + level_suffix
+            case 3:
+                return "Prehistoric " + level_suffix
+            case 4:
+                return "Fortress of Fear " + level_suffix
+            case 5:
+                return "Out of This World " + level_suffix
+        return "Tutorial Well"
+                
 
     #Get all regions contected to the exits of this region
     def recursive_region_search(self, known_regions : list[Region]) -> list[Region]:

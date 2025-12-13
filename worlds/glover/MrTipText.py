@@ -211,8 +211,8 @@ jokes = [
     "Pickle?"
 ]
 
-def generate_tip_table(self):
-    tip_table : list = []
+def generate_tip_table(self) -> list[str]:
+    tip_table : list[str] = []
     tip_table.extend(actual_advice)
     tip_table.extend(jokes)
 
@@ -227,3 +227,4 @@ def generate_tip_table(self):
     for world_name in list(self.multiworld.world_name_lookup.keys()):
         if world_name in world_tables:
             tip_table.extend(world_tables[world_name])
+    return tip_table
