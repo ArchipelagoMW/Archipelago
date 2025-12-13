@@ -92,12 +92,3 @@ class KH2CommandProcessor(ClientCommandProcessor):
     #def _cmd_kill(self):
     #    """Test deathlink"""
     #    self.ctx.socket.send(6,())
-
-    #def _cmd_chest(self,itemid:int):
-    #    from .RecieveItems import to_khscii
-    #    from .ReadAndWrite import kh2_write_bytes,kh2_write_byte
-    #    displayed_string = to_khscii(self.ctx,"Yessir")
-#
-    #    kh2_write_byte(self.ctx, 0x800150, int(itemid))
-    #    kh2_write_bytes(self.ctx, address = 0x800154,value = displayed_string)
-    #    kh2_write_byte(self.ctx,  0x800000, 3)

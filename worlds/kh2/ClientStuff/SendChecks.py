@@ -42,8 +42,8 @@ async def checkLevels(self):
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked \
                     and currentLevel >= data.bitIndex:
-                if self.kh2_seed_save["Levels"]["SoraLevel"] < currentLevel:
-                    self.kh2_seed_save["Levels"]["SoraLevel"] = currentLevel
+                if self.sora_levels["SoraLevel"] < currentLevel:
+                    self.sora_levels["SoraLevel"] = currentLevel
                 self.sending = self.sending + [(int(locationId))]
                 self.check_location_IDs.append((int(locationId)))
         formDict = {
@@ -58,8 +58,8 @@ async def checkLevels(self):
                     locationId = self.kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked \
                             and formlevel >= data.bitIndex:
-                        if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
-                            self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
+                        if formlevel > self.sora_levels[formDict[i][0]]:
+                            self.sora_levels[formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
                         self.check_location_IDs.append((int(locationId)))
     except Exception as e:

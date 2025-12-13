@@ -59,7 +59,6 @@ class KH2Context(CommonContext):
         self.kh2connectionsearching = False
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
-        self.kh2_seed_save = None
         self.kh2_local_items = None
         self.kh2connected = False
         self.kh2_finished_game = False
@@ -79,15 +78,7 @@ class KH2Context(CommonContext):
         self.disconnect_from_server = False
         self.sending = []
 
-        # list used to keep track of locations+items player has. Used for disoneccting
-        self.kh2_seed_save_cache = {
-            "AmountInvo": {
-                "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                "Equipment":    {},  # ItemName: Amount
-            },
-        }
         self.kh2seedname = None
-        self.kh2_seed_save_path_join = None
 
         self.kh2slotdata = None
         self.mem_json = None
@@ -108,17 +99,6 @@ class KH2Context(CommonContext):
             if not os.path.exists(self.kh2_client_settings_join):
                 # make the json with the settings
                 with open(self.kh2_client_settings_join, "wt") as f:
-                    f.close()
-            elif os.path.exists(self.kh2_client_settings_join):
-                with open(self.kh2_client_settings_join) as f:
-                    # if the file isnt empty load it
-                    # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
-                    try:
-                        self.kh2_seed_save = json.load(f)
-                    except json.decoder.JSONDecodeError:
-                        pass
-                        # this is what is effectively doing on
-                        # self.client_settings = default
                     f.close()
 
         self.hitlist_bounties = 0
@@ -146,22 +126,19 @@ class KH2Context(CommonContext):
             18: TWTNW_Checks,
             #  255: {},  # starting screen
         }
-        #Sora,Donald and Goofy are always in your party
-        self.WorldIDtoParty = {
-            4:  "Beast",
-            6:  "Auron",
-            7:  "Aladdin",
-            8:  "Mulan",
-            10: "Simba",
-            14: "Jack Skellington",
-            16: "Jack Sparrow",
-            17: "Tron",
-            18: "Riku"
-        }
         self.last_world_int = -1
         self.current_world_int = -1
         self.sora_form_levels = {
             "Sora": 1,
+            "ValorLevel": 1,
+            "WisdomLevel": 1,
+            "LimitLevel": 1,
+            "MasterLevel": 1,
+            "FinalLevel": 1,
+            "SummonLevel": 1,
+        }
+        self.sora_levels = {
+            "SoraLevel": 1,
             "ValorLevel": 1,
             "WisdomLevel": 1,
             "LimitLevel": 1,
@@ -176,45 +153,7 @@ class KH2Context(CommonContext):
         self.SoraDied = False
         self.keyblade_ability_checked = list()
 
-        self.kh2_seed_save_path = None
-
-        self.equipment_categories = CheckDupingItems["Equipment"]
-        self.armor_set = set(self.equipment_categories["Armor"])
-        self.accessories_set = set(self.equipment_categories["Accessories"])
-        self.all_equipment = self.armor_set.union(self.accessories_set)
-
-        self.AbilityQuantityDict = {}
-        self.ability_categories = CheckDupingItems["Abilities"]
-
-        self.sora_ability_set = set(self.ability_categories["Sora"])
-        self.donald_ability_set = set(self.ability_categories["Donald"])
-        self.goofy_ability_set = set(self.ability_categories["Goofy"])
-
-        self.all_abilities = self.sora_ability_set.union(self.donald_ability_set).union(self.goofy_ability_set)
-
-        self.stat_increase_set = set(CheckDupingItems["Stat Increases"])
-        self.AbilityQuantityDict = {item: self.item_name_to_data[item].quantity for item in self.all_abilities}
-
-        #  Growth:[level 1,level 4,slot]
-        self.growth_values_dict = {
-            "High Jump":    [0x05E, 0x061, 0x25DA],
-            "Quick Run":    [0x62, 0x65, 0x25DC],
-            "Dodge Roll":   [0x234, 0x237, 0x25DE],
-            "Aerial Dodge": [0x66, 0x069, 0x25E0],
-            "Glide":        [0x6A, 0x6D, 0x25E2]
-        }
-
-        self.ability_code_list = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
-
-        self.base_hp = 20
-        self.base_mp = 100
-        self.base_drive = 5
-        self.base_accessory_slots = 1
-        self.base_armor_slots = 1
-        self.base_item_slots = 3
-        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E,
-                                    0x2770, 0x2772]
 
         self.deathlink_toggle = False
         self.deathlink_blacklist = []
@@ -247,19 +186,11 @@ class KH2Context(CommonContext):
 
     async def connection_closed(self):
         self.serverconnected = False
-        if self.kh2seedname is not None and self.auth is not None:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
-                f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
         await super(KH2Context, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
         self.locations_checked = []
-        if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
-                f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
         await super(KH2Context, self).disconnect()
 
     @property
@@ -270,10 +201,6 @@ class KH2Context(CommonContext):
             return []
 
     async def shutdown(self):
-        if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
-                f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
         with open(self.kh2_client_settings_join, 'w') as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
             f2.close()
@@ -293,46 +220,6 @@ class KH2Context(CommonContext):
                 self.serverconnected = False
                 logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
                 return
-            self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
-            self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, Utils.get_file_safe_name(self.kh2_seed_save_path))
-
-            if not os.path.exists(self.kh2_seed_save_path_join):
-                self.kh2_seed_save = {
-                    "Levels":        {
-                        "SoraLevel":   0,
-                        "ValorLevel":  0,
-                        "WisdomLevel": 0,
-                        "LimitLevel":  0,
-                        "MasterLevel": 0,
-                        "FinalLevel":  0,
-                        "SummonLevel": 0,
-                    },
-                    # Item: Amount of them sold
-                    "SoldEquipment": dict(),
-                }
-                with open(self.kh2_seed_save_path_join, 'wt') as f:
-                    f.close()
-            elif os.path.exists(self.kh2_seed_save_path_join):
-                with open(self.kh2_seed_save_path_join) as f:
-                    try:
-                        self.kh2_seed_save = json.load(f)
-                    except json.decoder.JSONDecodeError:
-                        self.kh2_seed_save = None
-                    if self.kh2_seed_save is None or self.kh2_seed_save == {}:
-                        self.kh2_seed_save = {
-                            "Levels":        {
-                                "SoraLevel":   0,
-                                "ValorLevel":  0,
-                                "WisdomLevel": 0,
-                                "LimitLevel":  0,
-                                "MasterLevel": 0,
-                                "FinalLevel":  0,
-                                "SummonLevel": 0,
-                            },
-                            # Item: Amount of them sold
-                            "SoldEquipment": dict(),
-                        }
-                    f.close()
 
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
@@ -415,7 +302,6 @@ class KH2Context(CommonContext):
                     while not self.lookup_id_to_item:
                         asyncio.sleep(0.5)
                     while len(converted_items) >= 1:
-                        print(converted_items[0])
                         self.socket.send_Item(converted_items[0])
                         converted_items.pop(0)
 
@@ -500,12 +386,6 @@ class KH2Context(CommonContext):
                         self.socket.send(MessageType.NotificationSendMessage,[f"{itemName} to {playerName}"])
 
     def connect_to_game(self):
-        if "SoraAbilities" in self.kh2slotdata.keys():
-            # sora ability to slot
-            self.AbilityQuantityDict.update(self.kh2slotdata["SoraAbilities"])
-            # itemid:[slots that are available for that item]
-            self.AbilityQuantityDict.update(self.kh2slotdata["DonaldAbilities"])
-            self.AbilityQuantityDict.update(self.kh2slotdata["GoofyAbilities"])
         self.serverconnected = True
         self.slot_name = self.auth
 
@@ -514,7 +394,6 @@ class KH2Context(CommonContext):
         self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
         self.kh2_item_name_to_id = item_to_id
         self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
-        self.ability_code_list = [self.kh2_item_name_to_id[item] for item in exclusion_item_table["Ability"]]
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         if (self.deathlink_toggle):
@@ -555,22 +434,21 @@ class KH2Context(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def get_items(self):
-        """Resend all items upon client request"""
+        """Resend all items and info upon client request"""
+        for location in self.slot_data_info['BountyBosses']:
+            self.socket.send(MessageType.BountyList, [location])
+        self.socket.send_slot_data(str(self.slot_data_info['FinalXemnas']))
+        self.socket.send_slot_data(str(self.slot_data_info['Goal']))
+        self.socket.send_slot_data(str(self.slot_data_info['LuckyEmblemsRequired']))
+        self.socket.send_slot_data(str(self.slot_data_info['BountyRequired']))
+        self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Receive_Popup_Type'])])
+        self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Send_Popup_Type'])])
+        self.socket.send(MessageType.Deathlink , [str(self.slot_data_info['Deathlink'])])
+
         for item in self.received_items_IDs:
              self.socket.send_Item(item)
 
-        global slot_data_sent
-        if not slot_data_sent and self.kh2connectionconfirmed:
-            for location in self.slot_data_info['BountyBosses']:
-                self.socket.send(MessageType.BountyList, [location])
-            self.socket.send_slot_data(str(self.slot_data_info['FinalXemnas']))
-            self.socket.send_slot_data(str(self.slot_data_info['Goal']))
-            self.socket.send_slot_data(str(self.slot_data_info['LuckyEmblemsRequired']))
-            self.socket.send_slot_data(str(self.slot_data_info['BountyRequired']))
-            self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Receive_Popup_Type'])])
-            self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Send_Popup_Type'])])
-            self.socket.send(MessageType.Deathlink , [str(self.slot_data_info['Deathlink'])])
-            slot_data_sent = True
+
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
@@ -590,7 +468,6 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.checkLevels())
                 await asyncio.create_task(ctx.checkSlots())
                 await asyncio.create_task(ctx.is_dead())
-                #await asyncio.create_task(ctx.verifyChests())
 
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
