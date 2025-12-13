@@ -35,7 +35,7 @@ class MessageType (IntEnum):
     NotificationReceiveMessage = 9,
     ReceiveItem = 10,
     RequestAllItems = 11,
-    Handshake = 12,
+    Handshake  = 12,
     Victory = 19,
     Closed = 20
 
@@ -55,17 +55,12 @@ class KH2Context(CommonContext):
         self.socket = KH2Socket(self)
         asyncio.create_task(self.socket.start_server(), name="KH2SocketServer")
 
-        self.goofy_ability_to_slot = dict()
-        self.donald_ability_to_slot = dict()
-        self.all_weapon_location_id = None
-        self.sora_ability_to_slot = dict()
         self.kh2connectionconfirmed = False
         self.kh2connectionsearching = False
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
         self.kh2_seed_save = None
         self.kh2_local_items = None
-        self.growthlevel = None
         self.kh2connected = False
         self.kh2_finished_game = False
         self.serverconnected = False
@@ -83,62 +78,12 @@ class KH2Context(CommonContext):
         self.slot_name = None
         self.disconnect_from_server = False
         self.sending = []
-        # queue for the strings to display on the screen
-        self.queued_puzzle_popup = []
-        self.queued_info_popup = []
-        self.queued_chest_popup = []
-
-        # special characters for printing in game
-        # A dictionary of all the special characters, which
-        # are hard to convert through a mathematical formula.
-        self.special_dict = {
-            ' ': 0x01, '\n': 0x02, '-': 0x54, '!': 0x48, '?': 0x49, '%': 0x4A, '/': 0x4B,
-            '.': 0x4F, ',': 0x50, ';': 0x51, ':': 0x52, '\'': 0x57, '(': 0x5A, ')': 0x5B,
-            '[': 0x62, ']': 0x63, 'à': 0xB7, 'á': 0xB8, 'â': 0xB9, 'ä': 0xBA, 'è': 0xBB,
-            'é': 0xBC, 'ê': 0xBD, 'ë': 0xBE, 'ì': 0xBF, 'í': 0xC0, 'î': 0xC1, 'ï': 0xC2,
-            'ñ': 0xC3, 'ò': 0xC4, 'ó': 0xC5, 'ô': 0xC6, 'ö': 0xC7, 'ù': 0xC8, 'ú': 0xC9,
-            'û': 0xCA, 'ü': 0xCB, 'ç': 0xE8, 'À': 0xD0, 'Á': 0xD1, 'Â': 0xD2, 'Ä': 0xD3,
-            'È': 0xD4, 'É': 0xD5, 'Ê': 0xD6, 'Ë': 0xD7, 'Ì': 0xD8, 'Í': 0xD9, 'Î': 0xDA,
-            'Ï': 0xDB, 'Ñ': 0xDC, 'Ò': 0xDD, 'Ó': 0xDE, 'Ô': 0xDF, 'Ö': 0xE0, 'Ù': 0xE1,
-            'Ú': 0xE2, 'Û': 0xE3, 'Ü': 0xE4, '¡': 0xE5, '¿': 0xE6, 'Ç': 0xE7
-        }
 
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
-            "itemIndex":  -1,
-            # back of soras invo is 0x25E2. Growth should be moved there
-            #  Character: [back of invo, front of invo]
-            "SoraInvo":   [0x25D8, 0x2546],
-            "DonaldInvo": [0x26F4, 0x2658],
-            "GoofyInvo":  [0x2808, 0x276C],
             "AmountInvo": {
-                "Ability":      {},
-                "Amount":       {
-                    "Bounty": 0,
-                },
-                "Growth":       {
-                    "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                    "Aerial Dodge": 0, "Glide": 0
-                },
-                "Bitmask":      [],
                 "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
                 "Equipment":    {},  # ItemName: Amount
-                "Magic":        {
-                    "Fire Element":     0,
-                    "Blizzard Element": 0,
-                    "Thunder Element":  0,
-                    "Cure Element":     0,
-                    "Magnet Element":   0,
-                    "Reflect Element":  0
-                },
-                "StatIncrease": {
-                    ItemName.MaxHPUp:         0,
-                    ItemName.MaxMPUp:         0,
-                    ItemName.DriveGaugeUp:    0,
-                    ItemName.ArmorSlotUp:     0,
-                    ItemName.AccessorySlotUp: 0,
-                    ItemName.ItemSlotUp:      0,
-                },
             },
         }
         self.kh2seedname = None
@@ -230,58 +175,13 @@ class KH2Context(CommonContext):
         self.World = -1
         self.SoraDied = False
         self.keyblade_ability_checked = list()
-        # PC Address anchors
-        # epic .10 addresses
-        self.Now = 0x0716DF8
-        self.Save = 0x9A9330
-        self.Journal = 0x743260
-        self.Shop = 0x743350
-        self.Slot1 = 0x2A23018
-        self.InfoBarPointer = 0xABE2A8
-        self.isDead = 0x0BEEF28
-
-        self.FadeStatus = 0xABAF38
-        self.PlayerGaugePointer = 0x0ABCCC8
-
-        self.kh2_game_version = None  # can be egs or steam
 
         self.kh2_seed_save_path = None
-
-        self.chest_set = set(exclusion_table["Chests"])
-        self.keyblade_set = set(CheckDupingItems["Weapons"]["Keyblades"])
-        self.staff_set = set(CheckDupingItems["Weapons"]["Staffs"])
-        self.shield_set = set(CheckDupingItems["Weapons"]["Shields"])
-
-        self.all_weapons = self.keyblade_set.union(self.staff_set).union(self.shield_set)
 
         self.equipment_categories = CheckDupingItems["Equipment"]
         self.armor_set = set(self.equipment_categories["Armor"])
         self.accessories_set = set(self.equipment_categories["Accessories"])
         self.all_equipment = self.armor_set.union(self.accessories_set)
-        self.CharacterAnchors = {
-            "Sora":             0x24F0,
-            "Donald":           0x2604,
-            "Goofy":            0x2718,
-            "Auron":            0x2940,
-            "Mulan":            0x2A54,
-            "Aladdin":          0x2B68,
-            "Jack Sparrow":     0x2C7C,
-            "Beast":            0x2D90,
-            "Jack Skellington": 0x2EA4,
-            "Simba":            0x2FB8,
-            "Tron":             0x30CC,
-            "Riku":             0x31E0
-        }
-        self.Equipment_Anchor_Dict = {
-            #Sora, Donald, Goofy in that order
-            # each slot is a short, Sora Anchor:0x24F0, Donald Anchor: 0x2604, Goofy Anchor: 0x2718
-            # Each of these has 8 slots that could have them no matter how many slots are unlocked
-            # If Ability Ring on slot 5 of sora
-            # ReadShort(Save+CharacterAnchors["Sora"]+Equiptment_Anchor["Accessories][4 (index 5)]) == self.item_name_to_data[item_name].memaddr
-            "Armor":       [0x14, 0x16, 0x18, 0x1A, 0x1C, 0x1E, 0x20, 0x22],
-
-            "Accessories": [0x24, 0x26, 0x28, 0x2A, 0x2C, 0x2E, 0x30, 0x32]
-        }
 
         self.AbilityQuantityDict = {}
         self.ability_categories = CheckDupingItems["Abilities"]
@@ -320,7 +220,6 @@ class KH2Context(CommonContext):
         self.deathlink_blacklist = []
 
     from .SendChecks import checkWorldLocations, checkSlots, checkLevels
-    from .RecieveItems import verifyItems, IsInShop
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -475,48 +374,6 @@ class KH2Context(CommonContext):
                     self.slot_data_info['Deathlink'] = [str(self.deathlink_toggle)]
 
         if cmd == "ReceivedItems":
-            # Sora   Front of Ability List:0x2546
-            # Donald Front of Ability List:0x2658
-            # Goofy  Front of Ability List:0x276A
-            start_index = args["index"]
-            if start_index == 0:
-                self.kh2_seed_save_cache = {
-                    "itemIndex":  -1,
-                    #  back of soras invo is 0x25E2. Growth should be moved there
-                    #  Character: [back of invo, front of invo]
-                    "SoraInvo":   [0x25D8, 0x2546],
-                    "DonaldInvo": [0x26F4, 0x2658],
-                    "GoofyInvo":  [0x2808, 0x276C],
-                    "AmountInvo": {
-                        "Ability":      {},
-                        "Amount":       {
-                            "Bounty": 0,
-                        },
-                        "Growth":       {
-                            "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
-                            "Aerial Dodge": 0, "Glide": 0
-                        },
-                        "Bitmask":      [],
-                        "Weapon":       {"Sora": [], "Donald": [], "Goofy": []},
-                        "Equipment":    {},  # ItemName: Amount
-                        "Magic":        {
-                            "Fire Element":     0,
-                            "Blizzard Element": 0,
-                            "Thunder Element":  0,
-                            "Cure Element":     0,
-                            "Magnet Element":   0,
-                            "Reflect Element":  0
-                        },
-                        "StatIncrease": {
-                            ItemName.MaxHPUp:         0,
-                            ItemName.MaxMPUp:         0,
-                            ItemName.DriveGaugeUp:    0,
-                            ItemName.ArmorSlotUp:     0,
-                            ItemName.AccessorySlotUp: 0,
-                            ItemName.ItemSlotUp:      0,
-                        },
-                    },
-                }
             index = args["index"]
             if self.serverconnected:
                 converted_items = list()
@@ -734,7 +591,6 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.checkSlots())
                 await asyncio.create_task(ctx.is_dead())
                 #await asyncio.create_task(ctx.verifyChests())
-                #await asyncio.create_task(ctx.verifyItems())
 
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
