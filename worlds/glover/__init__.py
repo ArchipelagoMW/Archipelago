@@ -89,7 +89,7 @@ class GloverWeb(WebWorld):
             Options.GoldenGaribCount,
             Options.GoldenGaribRequirement
         ]),
-        OptionGroup("???", [
+        OptionGroup("Difficulty", [
             Options.DifficultyLogic,
             Options.EnableBonuses,
             Options.EasyBallWalk

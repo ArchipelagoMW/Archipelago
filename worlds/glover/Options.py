@@ -164,7 +164,7 @@ class GloverExcludeLocations(ExcludeLocations):
     default = frozenset({"Atl? Goal"})
 
 class TagLink(Toggle):
-    """When you transform the ball, everyone who enabled swap link changes character or the ball. Of course, the reverse is true too. Default off.
+    """When you transform the ball, everyone who enabled tag link changes character or the ball. Of course, the reverse is true too. Default off.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Tag Link"
