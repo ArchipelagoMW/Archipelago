@@ -130,6 +130,13 @@ class Portalsanity(Toggle):
     visibility = Visibility.spoiler
     display_name = "Portalsanity"
 
+class GeneratePuml(Toggle):
+    """Generates a .puml file of the world for debugging use with the AP Logic Builder. Default off.
+    !! DEBUG !!
+    """
+    visibility = Visibility.none
+    display_name = "Generate Puml"
+
 class SpawningCheckpointRandomizer(Toggle):
     """Spawning checkpoints are randomized. Default off.
     """
@@ -489,4 +496,5 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
 
     start_inventory_from_pool : StartInventoryPool
     #exclude_locations : GloverExcludeLocations
+    generate_puml : GeneratePuml
 
