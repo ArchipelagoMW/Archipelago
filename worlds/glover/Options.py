@@ -276,7 +276,7 @@ class ChickenHints(Choice):
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Bonus Garib"
     range_start = 1
     range_end = 20
@@ -284,99 +284,99 @@ class ExtraGaribsValue(Range):
 
 
 class FillerExtraGaribsWeight(Range):
-    """What percentage of filler items are Extra Garibs. Default is 0.
+    """The weight of filler items that are Extra Garibs. Default is 0.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Extra Garibs Weight"
     range_start = 0
     range_end = 100
     default = 0
 
 class FillerChickenSoundWeight(Range):
-    """What percentage of filler items are nothing. Default is 10.
+    """The weight of filler items that play a chicken noise. That's it. Default is 10.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Chicken Sound (Nothing) Weight"
     range_start = 0
     range_end = 100
     default = 10
 
 class FillerLifeWeight(Range):
-    """What percentage of filler items are Extra Lives. Default is 50.
+    """The weight of filler items that are Extra Lives. Default is 50.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Life Weight"
     range_start = 0
     range_end = 100
     default = 50
 
 class FillerBoomerangBallWeight(Range):
-    """What percentage of filler items are Boomerang Balls. Default is 5.
+    """The weight of filler items that are Boomerang Balls. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Boomerang Ball Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerBeachballWeight(Range):
-    """What percentage of filler items are Beach Balls. Default is 5.
+    """The weight of filler items that are Beach Balls. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Beach Ball Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerHerculesPotionWeight(Range):
-    """What percentage of filler items are Hercules Potions. Default is 5.
+    """The weight of filler items that are Hercules Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Hercules Potion Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerHelicopterPotionWeight(Range):
-    """What percentage of filler items are Helicopter Potions. Default is 5.
+    """The weight of filler items that are Helicopter Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Helicopter Potion Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerSpeedPotionWeight(Range):
-    """What percentage of filler items are Speed Potions. Default is 5.
+    """The weight of filler items that are Speed Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Speed Potion Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerFrogPotionWeight(Range):
-    """What percentage of filler items are Frog Potions. Default is 5.
+    """The weight of filler items that are Frog Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Frog Potion Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerDeathPotionWeight(Range):
-    """What percentage of filler items are Death Potions. Default is 5.
+    """The weight of filler items that are Death Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Death Potion Weight"
     range_start = 0
     range_end = 100
     default = 5
 
 class FillerStickyPotionWeight(Range):
-    """What percentage of filler items are Sticky Potions. Default is 5.
+    """The weight of filler items that are Sticky Potions. Default is 5.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Sticky Potion Weight"
     range_start = 0
     range_end = 100
@@ -387,50 +387,50 @@ class FillerStickyPotionWeight(Range):
 class TrapPercentage(Range):
     """What percentage of checks that would be filler are replaced with traps. Default is 20.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Trap Weight"
     range_start = 0
     range_end = 100
     default = 20
 
 class TrapFrogWeight(Range):
-    """What percentage of traps are Frog Traps. Default is 20.
+    """The weight of traps that are Frog Traps. Default is 20.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Frog Trap Weight"
     range_start = 0
     range_end = 100
     default = 20
 
 class TrapCursedBallWeight(Range):
-    """What percentage of traps are Cursed Ball. Default is 20.
+    """The weight of traps that are Cursed Ball. Default is 20.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Cursed Ball Trap Weight"
     range_start = 0
     range_end = 100
     default = 20
 
 class TrapBecomesCrystalWeight(Range):
-    """What percentage of traps are Crystal Transformations. Default is 15.
+    """The weight of traps that are Crystal Transformations. Default is 15.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Instant Crystal Trap Weight"
     range_start = 0
     range_end = 100
     default = 15
 
 class TrapCameraRotateWeight(Range):
-    """What percentage of traps are Camera Tilts. Default is 15.
+    """The weight of traps that are Camera Tilts. Default is 15.
     """
-    visibility = Visibility.template | Visibility.spoiler | Visibility.complex_ui
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Camera Tilt Trap Weight"
     range_start = 0
     range_end = 100
     default = 15
 
 class TrapTipWeight(Range):
-    """What percentage of traps are Tips.
+    """The weight of traps that are Tips.
     !! UNIMPLIMENTED !!
     """
     visibility = Visibility.spoiler

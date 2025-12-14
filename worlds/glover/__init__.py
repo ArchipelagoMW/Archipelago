@@ -3,7 +3,7 @@ import math
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
-from Options import OptionError
+from Options import OptionError, OptionGroup
 from .MrTipText import generate_tip_table
 from .TrapText import create_trap_name_table, select_trap_item_name
 import settings
@@ -82,6 +82,77 @@ class GloverWeb(WebWorld):
                      "setup/en",
                      ["Smg065"])
     tutorials = [englishTut]
+    option_groups = [
+        OptionGroup("Victory Conditions", [
+            Options.VictoryCondition,
+            Options.RequiredCrystals,
+            Options.GoldenGaribCount,
+            Options.GoldenGaribRequirement
+        ]),
+        OptionGroup("???", [
+            Options.DifficultyLogic,
+            Options.EnableBonuses,
+            Options.EasyBallWalk
+        ]),
+        OptionGroup("Links", [
+            Options.TagLink,
+            Options.TrapLink
+        ]),
+        OptionGroup("Game Setup", [
+            Options.StartingBall,
+            Options.RandomizeJump,
+            Options.IncludePowerBall
+        ]),
+        OptionGroup("Garibs", [
+            Options.GaribLogic,
+            Options.GaribSorting,
+            Options.GaribOrderOverrides
+        ]),
+        OptionGroup("Entrance Randomization", [
+            Options.EntranceRandomizer,
+            Options.EntranceOverrides#,
+            #Options.Portalsanity
+        ]),
+        OptionGroup("Checkpoints", [
+            Options.SpawningCheckpointRandomizer,
+            Options.CheckpointOverrides
+        ]),
+        OptionGroup("Locations", [
+            Options.CheckpointsChecks,
+            Options.SwitchesChecks,
+            Options.MrTipChecks,
+            Options.Enemysanity,
+            Options.Insectity
+        ]),
+        OptionGroup("Hints", [
+            Options.MrHints,
+            Options.MrTipTextDisplay,
+            Options.MrTipScouts,
+            Options.ChickenHints
+        ]),
+        OptionGroup("Filler", [
+            Options.ExtraGaribsValue,
+            Options.FillerExtraGaribsWeight,
+            Options.FillerChickenSoundWeight,
+            Options.FillerLifeWeight,
+            Options.FillerBoomerangBallWeight,
+            Options.FillerBeachballWeight,
+            Options.FillerHerculesPotionWeight,
+            Options.FillerHelicopterPotionWeight,
+            Options.FillerSpeedPotionWeight,
+            Options.FillerFrogPotionWeight,
+            Options.FillerDeathPotionWeight,
+            Options.FillerStickyPotionWeight
+        ]),
+        OptionGroup("Traps", [
+            Options.TrapPercentage,
+            Options.TrapFrogWeight,
+            Options.TrapCursedBallWeight,
+            Options.TrapBecomesCrystalWeight,
+            Options.TrapCameraRotateWeight#,
+            #Options.TrapTipWeight
+        ])
+    ]
 
 class GloverWorld(World):
     """
