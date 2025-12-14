@@ -20,8 +20,7 @@ class MessageType (IntEnum):
     BountyList = 5,
     Deathlink = 6,
     NotificationType = 7,
-    NotificationSendMessage = 8,
-    NotificationReceiveMessage = 9,
+    NotificationMessage = 8,
     ReceiveItem = 10,
     RequestAllItems = 11,
     Handshake  = 12,
@@ -71,17 +70,19 @@ class KH2Socket():
             self.isConnected = False
 
     async def listen(self):
-        buffer = ""
+        buffer = b""
         while not self.closing:
             try:
                 message = await self.loop.sock_recv(self.client_socket, 1024)
                 if not message:
                     raise ConnectionResetError("Client disconnected")
 
-                buffer += message.decode("utf-8")
+                buffer += message
 
-                while "\n" in buffer:
-                    msgStr, buffer = buffer.split("\n", 1)
+                while b"\n" in buffer:
+                    raw_msg, buffer = buffer.split(b"\n", 1)
+                    msgStr = raw_msg.decode("utf-8")
+
                     values = msgStr.split(";")
                     print("Received message: "+msgStr)
                     self.handle_message(values)
@@ -99,9 +100,24 @@ class KH2Socket():
             msg = str(msgId)
             for val in values:
                 msg += ";" + str(val)
-            msg += "\r\n"
-            self.client_socket.send(msg.encode("utf-8"))
-            print("Sent message: "+msg)
+            chunk_size = 30
+            i = 0
+            if len(msg) >= 30:
+                while i < len(msg):
+                    part = msg[i: i + chunk_size]
+                    if i + chunk_size < len(msg):
+                        part += ";MOR\n"
+                        print("Sending message in parts due to length: " + part)
+                    else:
+                        part += ";FIN\n"
+                        print("Finished sending message in parts due to length: " + part)
+
+                    self.client_socket.sendall(part.encode("utf-8"))
+                    i += chunk_size
+            else:
+                msg += "\n"
+                self.client_socket.sendall(msg.encode("utf-8"))
+                print("Sent message: "+msg)
         except (OSError, ConnectionResetError, BrokenPipeError) as e:
             print(f"Error sending message {msgId}: {e}; connection may be lost")
             self.isConnected = False

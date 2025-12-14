@@ -31,8 +31,7 @@ class MessageType (IntEnum):
     BountyList = 5,
     Deathlink = 6,
     NotificationType = 7,
-    NotificationSendMessage = 8,
-    NotificationReceiveMessage = 9,
+    NotificationMessage = 8,
     ReceiveItem = 10,
     RequestAllItems = 11,
     Handshake  = 12,
@@ -46,7 +45,6 @@ class KH2Context(CommonContext):
     socket: KH2Socket = None
     check_location_IDs = []
     received_items_IDs = []
-    slot_data_info: Dict[str, str] = {}
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
@@ -240,25 +238,17 @@ class KH2Context(CommonContext):
             global slot_data_sent
             if not slot_data_sent:
                 if self.kh2connectionconfirmed:
-                    for location in self.kh2slotdata['BountyBosses']:
-                        self.socket.send(MessageType.BountyList, [location])
+                    if self.kh2slotdata['BountyBosses']:
+                        for location in self.kh2slotdata['BountyBosses']:
+                            self.socket.send(MessageType.BountyList, [location])
                     self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
                     self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
                     self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
                     self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
-                    self.socket.send(MessageType.NotificationType, ["receive", self.client_settings["receive_popup_type"]])
-                    self.socket.send(MessageType.NotificationType, ["send", self.client_settings["send_popup_type"]])
+                    self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
+                    self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
                     self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
                     slot_data_sent = True
-                else: #Hold slot data until game client connects
-                    self.slot_data_info['BountyBosses'] = self.kh2slotdata['BountyBosses']
-                    self.slot_data_info['FinalXemnas'] = 'Final Xemnas;' + str(self.kh2slotdata['FinalXemnas'])
-                    self.slot_data_info['Goal'] = 'Goal;' +str(self.kh2slotdata['Goal'])
-                    self.slot_data_info['LuckyEmblemsRequired'] = 'LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired'])
-                    self.slot_data_info['BountyRequired'] = 'BountyRequired;' + str(self.kh2slotdata['BountyRequired'])
-                    self.slot_data_info['Receive_Popup_Type'] =["receive", self.client_settings["receive_popup_type"]]
-                    self.slot_data_info['Send_Popup_Type'] = ["send", self.client_settings["send_popup_type"]]
-                    self.slot_data_info['Deathlink'] = [str(self.deathlink_toggle)]
 
         if cmd == "ReceivedItems":
             index = args["index"]
@@ -332,16 +322,16 @@ class KH2Context(CommonContext):
                 send_truncate_first = self.client_settings["send_truncate_first"].lower()
                 # checking if sender is the kh2 player, and you aren't sending yourself the item
                 if receiverID == self.slot and senderID != self.slot and receive_popup_type != "none":  # item is sent to you and is not from yourself
-                    itemName = self.item_names.lookup_in_game(itemId)
-                    playerName = self.player_names[networkItem.player]  # player that sent you the item
+                    itemName = self.item_names.lookup_in_game(itemId).replace(";",":")
+                    playerName = self.player_names[networkItem.player].replace(";",":")  # player that sent you the item
                     totalLength = len(itemName) + len(playerName)
 
                     if receive_popup_type == "info":  # no restrictions on size here
                         if totalLength > 90:
                             temp_length = f"Obtained {itemName} from {playerName}"
-                            self.socket.send(MessageType.NotificationReceiveMessage, [temp_length[:90]])
+                            self.socket.send(MessageType.NotificationMessage, ["R", temp_length[:90]])
                         else:
-                            self.socket.send(MessageType.NotificationReceiveMessage,[f"Obtained {itemName} from {playerName}"])
+                            self.socket.send(MessageType.NotificationMessage,["R", f"Obtained {itemName} from {playerName}"])
                     else:  # either chest or puzzle. they are handled the same length wise
                         totalLength = len(itemName) + len(playerName)
                         while totalLength > 25:
@@ -351,25 +341,25 @@ class KH2Context(CommonContext):
                                 else:
                                     itemName = itemName[:-1]
                             else:
-                                if len(ItemName) > 15:
+                                if len(itemName) > 15:
                                     itemName = itemName[:-1]
                                 else:
                                     playerName = playerName[:-1]
                             totalLength = len(itemName) + len(playerName)
                         # from  =6. totalLength of the string cant be over 31 or game crash
                         # sanitize ItemName and receiver name
-                        self.socket.send(MessageType.NotificationReceiveMessage, [f"{itemName} from {playerName}"]) # sanitize ItemName and receiver name
+                        self.socket.send(MessageType.NotificationMessage, ["R", f"{itemName} from {playerName}"]) # sanitize ItemName and receiver name
 
                 if receiverID != self.slot and senderID == self.slot and send_popup_type != "none":  #item is sent to other players
-                    itemName = self.item_names.lookup_in_slot(itemId, receiverID)
-                    playerName = self.player_names[receiverID]
+                    itemName = self.item_names.lookup_in_slot(itemId, receiverID).replace(";",":")
+                    playerName = self.player_names[receiverID].replace(";",":")
                     totalLength = len(itemName) + len(playerName)
                     if send_popup_type == "info":
                         if totalLength > 90:
                             temp_length = f"Sent {itemName} to {playerName}"
-                            self.socket.send(MessageType.NotificationSendMessage, [temp_length[:90]])  #slice it to be 90
+                            self.socket.send(MessageType.NotificationMessage, ["S", temp_length[:90]])  #slice it to be 90
                         else:
-                            self.socket.send(MessageType.NotificationSendMessage,[f"Sent {itemName} to {playerName}"])
+                            self.socket.send(MessageType.NotificationMessage,["S", f"Sent {itemName} to {playerName}"])
                     else:  # else chest or puzzle. they are handled the same length wise
                         while totalLength > 27:
                             if send_truncate_first == "playername":
@@ -378,12 +368,12 @@ class KH2Context(CommonContext):
                                 else:
                                     itemName = itemName[:-1]
                             else:
-                                if len(ItemName) > 15: # limit item name to at least be 15 characters
+                                if len(itemName) > 15: # limit item name to at least be 15 characters
                                     itemName = itemName[:-1]
                                 else:
                                     playerName = playerName[:-1]
                             totalLength = len(itemName) + len(playerName)
-                        self.socket.send(MessageType.NotificationSendMessage,[f"{itemName} to {playerName}"])
+                        self.socket.send(MessageType.NotificationMessage,["S", f"{itemName} to {playerName}"])
 
     def connect_to_game(self):
         self.serverconnected = True
@@ -435,15 +425,17 @@ class KH2Context(CommonContext):
 
     def get_items(self):
         """Resend all items and info upon client request"""
-        for location in self.slot_data_info['BountyBosses']:
-            self.socket.send(MessageType.BountyList, [location])
-        self.socket.send_slot_data(str(self.slot_data_info['FinalXemnas']))
-        self.socket.send_slot_data(str(self.slot_data_info['Goal']))
-        self.socket.send_slot_data(str(self.slot_data_info['LuckyEmblemsRequired']))
-        self.socket.send_slot_data(str(self.slot_data_info['BountyRequired']))
-        self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Receive_Popup_Type'])])
-        self.socket.send(MessageType.NotificationType, [str(self.slot_data_info['Send_Popup_Type'])])
-        self.socket.send(MessageType.Deathlink , [str(self.slot_data_info['Deathlink'])])
+        if self.kh2slotdata['BountyBosses']:
+            for location in self.kh2slotdata['BountyBosses']:
+                self.socket.send(MessageType.BountyList, [location])
+        self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
+        self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
+        self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
+        self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
+        self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
+        self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
+        self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+        slot_data_sent = True
 
         for item in self.received_items_IDs:
              self.socket.send_Item(item)
