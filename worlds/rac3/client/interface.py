@@ -311,6 +311,8 @@ class Rac3Interface(GameInterface):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
+            if self.UnlockItem[name].status:
+                return
             self.UnlockItem[RAC3REGION.SLOT_0].status += 1
             self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
         else:

@@ -166,6 +166,7 @@ all_tags: list[str] = [
     RAC3TAG.WEAPONS,
     RAC3TAG.GADGETS,
     RAC3TAG.INFOBOT,
+    RAC3TAG.VR
 ]
 
 location_groups: dict[str, set[str]] = {
