@@ -283,8 +283,8 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
 
     for item in boss_plando:
         boss_block = item.split("-")
-        boss = boss_block[0].title()
-        slot = boss_block[1].title()
+        boss = boss_block[0].title()  # Boss is what's being placed
+        slot = boss_block[1].title()  # SLot is where the boss is going.
         if boss in boss_typo_key:
             boss = boss_typo_key[boss]
 
@@ -295,10 +295,10 @@ def initialize_bosses(world: "EarthBoundWorld") -> None:
             did_plando_diam_dog = True
             diamond_dog_plando_slot = boss
 
-        old_index = world.boss_list.index(boss)
-        new_index = world.boss_list.index(slot)
+        old_index = world.boss_list.index(boss)  # This should be the slot where the chosen boss currently is
+        new_index = world.boss_slot_order.index(slot)  # Boss slots should use the original position
 
-        world.boss_list[old_index] = slot
+        world.boss_list[old_index] = world.boss_list[new_index]  # We want to replace the boss that was originally there with the boss we're swapping with
         world.boss_list[new_index] = boss
 
     if world.boss_list[25] == "Carbon Dog" and world.boss_list[27] in banned_transformations:
