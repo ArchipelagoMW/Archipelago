@@ -74,13 +74,12 @@ class EntranceLookup:
         if entrance in self._expands_graph_cache:
             return self._expands_graph_cache[entrance]
 
-        visited = set()
+        seen = {entrance.connected_region}
         q: deque[Region] = deque()
         q.append(entrance.connected_region)
 
         while q:
             region = q.popleft()
-            visited.add(region)
 
             # check if the region itself is progression
             if region in region.multiworld.indirect_connections:
@@ -103,7 +102,8 @@ class EntranceLookup:
                         and exit_ in self._usable_exits):
                     self._expands_graph_cache[entrance] = True
                     return True
-                elif exit_.connected_region and exit_.connected_region not in visited:
+                elif exit_.connected_region and exit_.connected_region not in seen:
+                    seen.add(exit_.connected_region)
                     q.append(exit_.connected_region)
 
         self._expands_graph_cache[entrance] = False
@@ -525,7 +525,7 @@ def randomize_entrances(
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
-        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player},"
+        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player}, "
                      f"named {world.multiworld.player_name[world.player]}")
 
     return er_state
