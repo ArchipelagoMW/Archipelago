@@ -29,7 +29,7 @@ class MapMenuElement(MenuElement):
 
     def __str__(self):
         text = super().__str__()
-        if not self.completed:
+        if not self.completed or not self.next_map:
             return text
         else:
             return text + str(self.next_map)
