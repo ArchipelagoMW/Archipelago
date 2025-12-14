@@ -113,11 +113,12 @@ class PSYWorld(World):
             item_classifications[ItemName.Cake] = ItemClassification.filler
 
         # Set Baggage and Baggage Tags to Progression if Progessive Baggage enabled
+        # Skip balancing because Baggage is all local, tags can be anywhere.
         if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
             for name in BAGGAGE:
-                item_classifications[name] = ItemClassification.progression
+                item_classifications[name] = ItemClassification.progression_skip_balancing
             for name in BAGGAGE_TAGS:
-                item_classifications[name] = ItemClassification.progression
+                item_classifications[name] = ItemClassification.progression_skip_balancing
 
     def create_item(self, name: str) -> Item:
         """
@@ -247,7 +248,7 @@ class PSYWorld(World):
         # Add items for MaximumProgressiveBaggage
         # Passes the value for MaximumProgressiveBaggage Option, adds value multiplied by 5
         # Maximum 50
-        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
+        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage.value !=0:
             self._add_progressive_baggage_items(adjusted_item_counts, self.options.MaximumProgressiveBaggage.value)
 
         # Create the initial item pool.
@@ -292,7 +293,7 @@ class PSYWorld(World):
             Regions.create_figments_80_locations(self.multiworld, self.player)
         if self.options.FigmentPercentageChecks.value == 5:
             Regions.create_figments_100_locations(self.multiworld, self.player)
-        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage !=0:
+        if self.options.ProgressiveBaggage and self.options.MaximumProgressiveBaggage.value !=0:
             Regions.create_progressive_baggage_locations(self.multiworld, self.player, self.options.MaximumProgressiveBaggage.value)
         if self.options.DeepArrowheadShuffle:
             Regions.create_deep_arrowhead_locations(self.multiworld, self.player)

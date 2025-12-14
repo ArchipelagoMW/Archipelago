@@ -754,97 +754,78 @@ RANK_LOCATIONS: Dict[str, int] = {
 
 # Figment Percentage Locations
 # One location sent for every 20 percent of figments found within a level
-BB_FIGMENT_CHECKS: Dict[str, int] = {
+
+FIGMENT_20_LOCATIONS: Dict[str, int] = {
     LocationName.BBFigments20: 706,
-    LocationName.BBFigments40: 707,
-    LocationName.BBFigments60: 708,
-    LocationName.BBFigments80: 709,
-    LocationName.BBFigments100: 710,
+    LocationName.SAFigments20: 707,
+    LocationName.MIFigments20: 708,
+    LocationName.NIFigments20: 709,
+    LocationName.LOFigments20: 710,
+    LocationName.MMFigments20: 711,
+    LocationName.THFigments20: 712,
+    LocationName.WWFigments20: 713,
+    LocationName.BVFigments20: 714,
+    LocationName.MCFigments20: 715,
 }
 
-SA_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.SAFigments20: 711,
-    LocationName.SAFigments40: 712,
-    LocationName.SAFigments60: 713,
-    LocationName.SAFigments80: 714,
-    LocationName.SAFigments100: 715,
+FIGMENT_40_LOCATIONS: Dict[str, int] = {
+    LocationName.BBFigments40: 716,
+    LocationName.SAFigments40: 717,
+    LocationName.MIFigments40: 718,
+    LocationName.NIFigments40: 719,
+    LocationName.LOFigments40: 720,
+    LocationName.MMFigments40: 721,
+    LocationName.THFigments40: 722,
+    LocationName.WWFigments40: 723,
+    LocationName.BVFigments40: 724,
+    LocationName.MCFigments40: 725,
 }
 
-MI_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.MIFigments20: 716,
-    LocationName.MIFigments40: 717,
-    LocationName.MIFigments60: 718,
-    LocationName.MIFigments80: 719,
-    LocationName.MIFigments100: 720,
+FIGMENT_60_LOCATIONS: Dict[str, int] = {
+    LocationName.BBFigments60: 726,
+    LocationName.SAFigments60: 727,
+    LocationName.MIFigments60: 728,
+    LocationName.NIFigments60: 729,
+    LocationName.LOFigments60: 730,
+    LocationName.MMFigments60: 731,
+    LocationName.THFigments60: 732,
+    LocationName.WWFigments60: 733,
+    LocationName.BVFigments60: 734,
+    LocationName.MCFigments60: 735,
 }
 
-BT_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.NIFigments20: 721,
-    LocationName.NIFigments40: 722,
-    LocationName.NIFigments60: 723,
-    LocationName.NIFigments80: 724,
-    LocationName.NIFigments100: 725,
+FIGMENT_80_LOCATIONS: Dict[str, int] = {
+    LocationName.BBFigments80: 736,
+    LocationName.SAFigments80: 737,
+    LocationName.MIFigments80: 738,
+    LocationName.NIFigments80: 739,
+    LocationName.LOFigments80: 740,
+    LocationName.MMFigments80: 741,
+    LocationName.THFigments80: 742,
+    LocationName.WWFigments80: 743,
+    LocationName.BVFigments80: 744,
+    LocationName.MCFigments80: 745,
 }
 
-LO_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.LOFigments20: 726,
-    LocationName.LOFigments40: 727,
-    LocationName.LOFigments60: 728,
-    LocationName.LOFigments80: 729,
-    LocationName.LOFigments100: 730,
-}
-
-MM_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.MMFigments20: 731,
-    LocationName.MMFigments40: 732,
-    LocationName.MMFigments60: 733,
-    LocationName.MMFigments80: 734,
-    LocationName.MMFigments100: 735,
-}
-
-TH_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.THFigments20: 736,
-    LocationName.THFigments40: 737,
-    LocationName.THFigments60: 738,
-    LocationName.THFigments80: 739,
-    LocationName.THFigments100: 740,
-}
-
-WW_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.WWFigments20: 741,
-    LocationName.WWFigments40: 742,
-    LocationName.WWFigments60: 743,
-    LocationName.WWFigments80: 744,
-    LocationName.WWFigments100: 745,
-}
-
-BV_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.BVFigments20: 746,
-    LocationName.BVFigments40: 747,
-    LocationName.BVFigments60: 748,
-    LocationName.BVFigments80: 749,
-    LocationName.BVFigments100: 750,
-}
-
-MC_FIGMENT_CHECKS: Dict[str, int] = {
-    LocationName.MCFigments20: 751,
-    LocationName.MCFigments40: 752,
-    LocationName.MCFigments60: 753,
-    LocationName.MCFigments80: 754,
+FIGMENT_100_LOCATIONS: Dict[str, int] = {
+    LocationName.BBFigments100: 746,
+    LocationName.SAFigments100: 747,
+    LocationName.MIFigments100: 748,
+    LocationName.NIFigments100: 749,
+    LocationName.LOFigments100: 750,
+    LocationName.MMFigments100: 751,
+    LocationName.THFigments100: 752,
+    LocationName.WWFigments100: 753,
+    LocationName.BVFigments100: 754,
     LocationName.MCFigments100: 755,
 }
 
-FIGMENT_LOCATIONS: Dict[str, int] = {
-    **BB_FIGMENT_CHECKS,
-    **SA_FIGMENT_CHECKS,
-    **MI_FIGMENT_CHECKS,
-    **BT_FIGMENT_CHECKS,
-    **LO_FIGMENT_CHECKS,
-    **MM_FIGMENT_CHECKS,
-    **TH_FIGMENT_CHECKS,
-    **WW_FIGMENT_CHECKS,
-    **BV_FIGMENT_CHECKS,
-    **MC_FIGMENT_CHECKS,
+ALL_FIGMENT_LOCATIONS: Dict[str, int] = {
+    **FIGMENT_20_LOCATIONS,
+    **FIGMENT_40_LOCATIONS,
+    **FIGMENT_60_LOCATIONS,
+    **FIGMENT_80_LOCATIONS,
+    **FIGMENT_100_LOCATIONS,
 }
 
 # Progressive Baggage Locations
@@ -939,7 +920,7 @@ ALL_FILLABLE_LOCATIONS: Dict[str, int] = {
     **DEEP_ARROWHEAD_LOCATIONS,
     **MENTAL_COBWEB_LOCATIONS,
     **RANK_LOCATIONS,
-    **FIGMENT_LOCATIONS,
+    **ALL_FIGMENT_LOCATIONS,
     **PROG_BAGGAGE_LOCATIONS,
 }
 
@@ -955,7 +936,7 @@ _FULLY_REMOTE_LOCATION_IDS: Set[int] = {
     *DEEP_ARROWHEAD_LOCATIONS.values(),
     *MENTAL_COBWEB_LOCATIONS.values(),
     *RANK_LOCATIONS.values(),
-    *FIGMENT_LOCATIONS.values(),
+    *ALL_FIGMENT_LOCATIONS.values(),
     *PROG_BAGGAGE_LOCATIONS.values(),
 }
 # IDs of locations that place items into the game world, and are therefore used in PsychoSeed generation.

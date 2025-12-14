@@ -3,7 +3,23 @@ from typing import Dict, TYPE_CHECKING, Set
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
 from .Items import BRAIN_JARS, LOCAL_SET
-from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIGMENT_LOCATIONS, PROG_BAGGAGE_LOCATIONS, PROG_SUITCASE_CHECKS, PROG_PURSE_CHECKS, PROG_HATBOX_CHECKS, PROG_STEAMERTRUNK_CHECKS, PROG_DUFFLEBAG_CHECKS
+from .Locations import (
+    DEEP_ARROWHEAD_LOCATIONS, 
+    MENTAL_COBWEB_LOCATIONS, 
+    RANK_LOCATIONS, 
+    FIVE_RANK_LOCATIONS, 
+    FIGMENT_20_LOCATIONS, 
+    FIGMENT_40_LOCATIONS,
+    FIGMENT_60_LOCATIONS,
+    FIGMENT_80_LOCATIONS,
+    FIGMENT_100_LOCATIONS,
+    PROG_BAGGAGE_LOCATIONS, 
+    PROG_SUITCASE_CHECKS, 
+    PROG_PURSE_CHECKS, 
+    PROG_HATBOX_CHECKS, 
+    PROG_STEAMERTRUNK_CHECKS, 
+    PROG_DUFFLEBAG_CHECKS
+)
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
 
@@ -429,23 +445,29 @@ class PsyRules:
         # non-local item, so these locations cannot contain Psychonauts items that can only be placed locally.
         local_only_forbidden: Set[str] = set()
 
-        # Ranks are Always forbidden from local now
-        local_only_forbidden.update(RANK_LOCATIONS.keys())
+        # Ranks are now always spawned by Archipelago, no local only items
+        if self.world.options.RankSanity:
+            # Update ALL rank locations
+            local_only_forbidden.update(RANK_LOCATIONS.keys())
+        else:
+        # Update only every five rank locations
+            local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
 
         # Figment Percent checks are forbidden from local
-        local_only_forbidden.update(FIGMENT_LOCATIONS.keys())
+        if self.world.options.FigmentPercentageChecks.value >= 1:
+            local_only_forbidden.update(FIGMENT_20_LOCATIONS.keys())
+        if self.world.options.FigmentPercentageChecks.value >= 2:
+            local_only_forbidden.update(FIGMENT_40_LOCATIONS.keys())
+        if self.world.options.FigmentPercentageChecks.value >= 3:
+            local_only_forbidden.update(FIGMENT_60_LOCATIONS.keys())
+        if self.world.options.FigmentPercentageChecks.value >= 4:
+            local_only_forbidden.update(FIGMENT_80_LOCATIONS.keys())
+        if self.world.options.FigmentPercentageChecks.value == 5:
+            local_only_forbidden.update(FIGMENT_100_LOCATIONS.keys())
 
-        # Ranks are now always spawned by Archipelago, no local only items
-        # if self.world.options.RankSanity:
-            # Update ALL rank locations
-        #     local_only_forbidden.update(RANK_LOCATIONS.keys())
-        # else:
-            # Update only every five rank locations
-        #     local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
-
-        if self.world.options.ProgressiveBaggage and self.world.options.MaximumProgressiveBaggage != 0:
+        if self.world.options.ProgressiveBaggage and self.world.options.MaximumProgressiveBaggage.value != 0:
             # Progressive Baggage locations do not place items into the world.
-            local_only_forbidden.update(PROG_BAGGAGE_LOCATIONS.keys())
+            # local_only_forbidden.update(PROG_BAGGAGE_LOCATIONS.keys())
 
             # checks to see if we have the total number of matching Bags and Tags required for a progressive location
             # Example: Progressive Suitcase 3 will require 3 Bags AND 3 Tags
@@ -460,63 +482,88 @@ class PsyRules:
             
             # check how many matching Suitcase and Suitcase Tags we have
             matches_needed = 1
+
             for location_name in PROG_SUITCASE_CHECKS:
-                location = multiworld.get_location(location_name, player)
-                add_rule(
-                    location,
-                    lambda state, m=matches_needed: has_matching_baggage(
-                        state, m, ItemName.Suitcase, ItemName.SuitcaseTag
+                if self.world.options.MaximumProgressiveBaggage.value >= matches_needed:
+                    location = multiworld.get_location(location_name, player)
+                    local_only_forbidden.add(location.name)
+                    add_rule(
+                        location,
+                        lambda state, m=matches_needed: has_matching_baggage(
+                            state, m, ItemName.Suitcase, ItemName.SuitcaseTag
+                        )
                     )
-                )
-                matches_needed += 1
+                    matches_needed += 1
+                else:
+                    break
             
             # check how many matching Purse and Purse Tags we have
             matches_needed = 1
+            
             for location_name in PROG_PURSE_CHECKS:
-                location = multiworld.get_location(location_name, player)
-                add_rule(
-                    location,
-                    lambda state, m=matches_needed: has_matching_baggage(
-                        state, m, ItemName.Purse, ItemName.PurseTag
+                if self.world.options.MaximumProgressiveBaggage.value >= matches_needed:
+                    location = multiworld.get_location(location_name, player)
+                    local_only_forbidden.add(location.name)
+                    add_rule(
+                        location,
+                        lambda state, m=matches_needed: has_matching_baggage(
+                            state, m, ItemName.Purse, ItemName.PurseTag
+                        )
                     )
-                )
-                matches_needed += 1
+                    matches_needed += 1
+                else:
+                    break
 
             # check how many matching Hatbox and Hatbox Tags we have
             matches_needed = 1
+            
             for location_name in PROG_HATBOX_CHECKS:
-                location = multiworld.get_location(location_name, player)
-                add_rule(
-                    location,
-                    lambda state, m=matches_needed: has_matching_baggage(
-                        state, m, ItemName.Hatbox, ItemName.HatboxTag
+                if self.world.options.MaximumProgressiveBaggage.value >= matches_needed:
+                    location = multiworld.get_location(location_name, player)
+                    local_only_forbidden.add(location.name)
+                    add_rule(
+                        location,
+                        lambda state, m=matches_needed: has_matching_baggage(
+                            state, m, ItemName.Hatbox, ItemName.HatboxTag
+                        )
                     )
-                )
-                matches_needed += 1
+                    matches_needed += 1
+                else:
+                    break
 
             # check how many matching Steamertrunk and Steamertrunk Tags we have
             matches_needed = 1
+            
             for location_name in PROG_STEAMERTRUNK_CHECKS:
-                location = multiworld.get_location(location_name, player)
-                add_rule(
-                    location,
-                    lambda state, m=matches_needed: has_matching_baggage(
-                        state, m, ItemName.Steamertrunk, ItemName.SteamerTag
+                if self.world.options.MaximumProgressiveBaggage.value >= matches_needed:
+                    location = multiworld.get_location(location_name, player)
+                    local_only_forbidden.add(location.name)
+                    add_rule(
+                        location,
+                        lambda state, m=matches_needed: has_matching_baggage(
+                            state, m, ItemName.Steamertrunk, ItemName.SteamerTag
+                        )
                     )
-                )
-                matches_needed += 1
+                    matches_needed += 1
+                else:
+                    break
 
             # check how many matching Dufflebag and Dufflebag Tags we have
             matches_needed = 1
+            
             for location_name in PROG_DUFFLEBAG_CHECKS:
-                location = multiworld.get_location(location_name, player)
-                add_rule(
-                    location,
-                    lambda state, m=matches_needed: has_matching_baggage(
-                        state, m, ItemName.Dufflebag, ItemName.DuffleTag
+                if self.world.options.MaximumProgressiveBaggage.value >= matches_needed:
+                    location = multiworld.get_location(location_name, player)
+                    local_only_forbidden.add(location.name)
+                    add_rule(
+                        location,
+                        lambda state, m=matches_needed: has_matching_baggage(
+                            state, m, ItemName.Dufflebag, ItemName.DuffleTag
+                        )
                     )
-                )
-                matches_needed += 1
+                    matches_needed += 1
+                else:
+                    break
 
         if self.world.options.DeepArrowheadShuffle:
             # Deep Arrowhead Shuffle locations do not place items into the world.
