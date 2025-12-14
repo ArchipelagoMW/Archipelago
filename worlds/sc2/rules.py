@@ -1168,7 +1168,7 @@ class SC2Logic:
     def two_kerrigan_actives(self, state: CollectionState, story_tech_available=True) -> bool:
         if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
             return True
-        return state.count_group(item_groups.kerrigan_logic_active_abilities, self.player) >= 2
+        return state.count_from_list(item_groups.kerrigan_logic_active_abilities, self.player) >= 2
 
     # Global Protoss
     def protoss_power_rating(self, state: CollectionState) -> int:
