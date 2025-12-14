@@ -3,7 +3,7 @@ from typing import Dict, TYPE_CHECKING, Set
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
 from .Items import BRAIN_JARS, LOCAL_SET
-from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIVE_RANK_LOCATIONS, PROG_BAGGAGE_LOCATIONS, PROG_SUITCASE_CHECKS, PROG_PURSE_CHECKS, PROG_HATBOX_CHECKS, PROG_STEAMERTRUNK_CHECKS, PROG_DUFFLEBAG_CHECKS
+from .Locations import DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS, FIGMENT_LOCATIONS, PROG_BAGGAGE_LOCATIONS, PROG_SUITCASE_CHECKS, PROG_PURSE_CHECKS, PROG_HATBOX_CHECKS, PROG_STEAMERTRUNK_CHECKS, PROG_DUFFLEBAG_CHECKS
 from .Names import LocationName, ItemName, RegionName
 from .Options import Goal
 
@@ -429,13 +429,19 @@ class PsyRules:
         # non-local item, so these locations cannot contain Psychonauts items that can only be placed locally.
         local_only_forbidden: Set[str] = set()
 
+        # Ranks are Always forbidden from local now
+        local_only_forbidden.update(RANK_LOCATIONS.keys())
+
+        # Figment Percent checks are forbidden from local
+        local_only_forbidden.update(FIGMENT_LOCATIONS.keys())
+
         # Ranks are now always spawned by Archipelago, no local only items
-        if self.world.options.RankSanity:
+        # if self.world.options.RankSanity:
             # Update ALL rank locations
-            local_only_forbidden.update(RANK_LOCATIONS.keys())
-        else:
+        #     local_only_forbidden.update(RANK_LOCATIONS.keys())
+        # else:
             # Update only every five rank locations
-            local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
+        #     local_only_forbidden.update(FIVE_RANK_LOCATIONS.keys())
 
         if self.world.options.ProgressiveBaggage and self.world.options.MaximumProgressiveBaggage != 0:
             # Progressive Baggage locations do not place items into the world.

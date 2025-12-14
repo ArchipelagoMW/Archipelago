@@ -111,7 +111,7 @@ CA_CHECKS: Dict[str, int] = {
     LocationName.TinyIslandCard: 105,
     LocationName.TopofBigRockChallengeMarker: 106,
     LocationName.RockWallGapPsychonautsComic1: 107,
-    LocationName.LungfishBossComplete: 365,
+    LocationName.LungfishBossComplete: 345,
     LocationName.MainLodgeRaftersVoodooDoll: 108,
     LocationName.TopofSanctuaryCard: 109,
     LocationName.BottomofSanctuaryCard: 110,
@@ -387,6 +387,8 @@ MC_CHECKS: Dict[str, int] = {
     LocationName.TunnelOfLoveRailDufflebagTag: 343,
     LocationName.NextToTheFatLadyDufflebag: 344,
 }
+
+# REMINDER: Location ID 345 is the Lungfish Boss, earlier in the list
 
 # Leave a gap in the IDs so that more locations can be added that place items into the game world without having to
 # adjust the IDs of all locations that don't place items into the game world.
