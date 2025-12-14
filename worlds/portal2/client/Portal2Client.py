@@ -6,7 +6,7 @@ import time
 import typing
 
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, JSONMessagePart, NetworkItem
 from Utils import async_start, init_logging
 
 from ..mod_helpers.ItemHandling import handle_item, handle_trap
@@ -38,6 +38,15 @@ class Portal2CommandProcessor(ClientCommandProcessor):
     def _cmd_refreshmenu(self):
         """Refreshed the in game menu in case of maps being inaccessible when they should be"""
         self.ctx.refresh_menu()
+
+    def _cmd_messageingame(self, message: str, *color_string):
+        """Send a message to be displayed in game (only works while in a map). 
+        message can be any text 
+        color_string is an optional RGB string e.g. 255 100 0"""
+        if len(color_string) == 3:
+            self.ctx.add_to_in_game_message_queue(message, ' '.join(color_string))
+        else:
+            self.ctx.add_to_in_game_message_queue(message)
 
 class Portal2Context(CommonContext):
     command_processor = Portal2CommandProcessor
@@ -87,6 +96,9 @@ class Portal2Context(CommonContext):
         for location_id in self.checked_locations:
             self.menu.complete_map(location_id)
         self.update_menu()
+
+    def add_to_in_game_message_queue(self, message: str, color_string: str = None) -> None:
+        self.command_queue.append(f'script AddToTextQueue("{message}"{f',"{color_string}"' if color_string else ""})\n')
 
     async def p2_message_listener(self):
         '''Listener for the messages sent from portal 2 to the client'''
@@ -275,6 +287,33 @@ class Portal2Context(CommonContext):
         if cmd == "Connected":
             self.handle_slot_data(args["slot_data"])
             self.alert_game_connection()
+
+        if cmd == "PrintJSON":
+            if "type" in args:
+                if args["type"] == "ItemSend" and args["receiving"] == self.slot:
+                    item: NetworkItem = args["item"]
+                    text = self.parse_message(args["data"], sending = item.player)
+                elif args["type"] == "Goal":
+                    text = self.parse_message(args["data"])
+                else:
+                    return # Don't send text to game
+                self.add_to_in_game_message_queue(text)
+
+    def parse_message(self, data: list[dict], sending: int | None = None) -> str: # data pats not cast to JSONMessagePart as expected, dict instead
+        message = ""
+        for part in data:
+            text = part["text"]
+            if "type" in part:
+                if part["type"] == "item_id":
+                    text = self.item_names.lookup_in_slot(int(text), self.slot)
+                elif part["type"] == "location_id":
+                    text = self.location_names.lookup_in_slot(int(text), sending)
+                elif part["type"] == "player_id":
+                    text = self.player_names[int(text)]
+            message += text
+
+        return message
+
 
     def update_item_remove_commands(self):
         temp_commands = []
