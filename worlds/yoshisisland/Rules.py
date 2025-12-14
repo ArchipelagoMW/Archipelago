@@ -127,7 +127,7 @@ def set_easy_rules(world: "YoshisIslandWorld") -> None:
     set_rule(world.multiworld.get_location("Marching Milde's Fort: Flowers", player), lambda state: state.has_all({"Dashed Stairs", "Vanishing Arrow Wheel", "Arrow Wheel", "Bucket"}, player) and (state.has("Egg Capacity Upgrade", player, 1) or logic.combat_item(state)))
     set_rule(world.multiworld.get_location("Marching Milde's Fort: Stars", player), lambda state: state.has("Dashed Stairs", player) and (logic.has_midring(state) or state.has("Vanishing Arrow Wheel", player) or logic.cansee_clouds(state)))
 
-    set_rule(world.multiworld.get_location("Chomp Rock Zone: Red Coins", player), lambda state: state.has_all({"Large Spring Ball", "Chomp Rock"}, player))
+    set_rule(world.multiworld.get_location("Chomp Rock Zone: Red Coins", player), lambda state: state.has_all({"Large Spring Ball", "Chomp Rock", "Dashed Platform", "! Switch"}, player))
     set_rule(world.multiworld.get_location("Chomp Rock Zone: Flowers", player), lambda state: state.has_all({"Chomp Rock", "! Switch", "Spring Ball", "Dashed Platform"}, player))
     set_rule(world.multiworld.get_location("Chomp Rock Zone: Stars", player), lambda state: state.has_all({"Chomp Rock", "! Switch", "Spring Ball", "Dashed Platform"}, player))
 
@@ -610,4 +610,5 @@ def set_hard_extra_rules(world: "YoshisIslandWorld") -> None:
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Flowers", player), lambda state: state.has(("Large Spring Ball"), player))
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: True)
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: state.has(("Large Spring Ball"), player))
+
 
