@@ -400,6 +400,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.vr_challenges.value == 0:
                     return True  # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
+                if LOCATION_FROM_AP_CODE[data.AP_CODE] == RAC3SKILLPOINT.SEWER_MOTHERLOAD and options.sewer_limitation.value == 99:
+                    return False
                 if LOCATION_FROM_AP_CODE[data.AP_CODE] in every_sewer_crystals[options.sewer_limitation.value::]:
                     return True
                 elif options.sewer_crystals.value == 0:
