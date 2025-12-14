@@ -68,7 +68,7 @@ class NineSolsWorld(World):
                     self.options.seals_for_ethereal.value = slot_data['seals_for_ethereal']
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
                     self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
-                    self.options.logic_difficulty.value = slot_data['logic_difficulty']
+                    self.options.logic_difficulty.value = slot_data.get('logic_difficulty', 0)
             return
 
         # generate game-specific randomizations separate from AP items/locations
