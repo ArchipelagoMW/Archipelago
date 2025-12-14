@@ -478,11 +478,7 @@ class CrystalProjectWorld(World):
             for map_name in self.item_name_groups[MAP]:
                 excluded_items.add(map_name)
 
-        if self.options.goal.value == self.options.goal.option_astley:
-            excluded_items.add(NEW_WORLD_STONE)
-
         if self.options.goal.value == self.options.goal.option_true_astley:
-            excluded_items.add(NEW_WORLD_STONE)
             excluded_items.add(OLD_WORLD_STONE)
 
         if self.options.include_summon_abilities.value == self.options.include_summon_abilities.option_false:
