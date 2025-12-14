@@ -26,6 +26,15 @@ class TestVanillaLogic(NineSolsTestBase):
         self.assertNotReachableWith("AF (Elevator): Over Electrified Floor", prereq_items + ["Cloud Leap"])
         self.assertReachableWith("AF (Elevator): Over Electrified Floor", prereq_items + ["Air Dash", "Cloud Leap"])
 
+    def test_afe_afd_regression(self):
+        prereq_items = ["Wall Climb", "Grapple"]
+        self.assertRegionReachableWith("AFE - Lower Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertRegionReachableWith("AFE - Below Root Node", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertRegionNotReachableWith("AFE - Lower Left Exit", prereq_items)
+        self.assertRegionReachableWith("AFE - Lower Left Exit", prereq_items + ["Air Dash", "Cloud Leap"])
+        self.assertNotReachableWith("AF (Depths): Lower Level", prereq_items)
+        self.assertReachableWith("AF (Depths): Lower Level", prereq_items + ["Air Dash", "Cloud Leap"])
+
 
 class TestMediumLogic(NineSolsTestBase):
     options = {
@@ -53,6 +62,15 @@ class TestMediumLogic(NineSolsTestBase):
         # 2) Swift Runner AND (AD OR CL)  # this will have to change when SR becomes an item
         self.assertReachableWith("AF (Elevator): Over Electrified Floor", prereq_items + ["Air Dash"])
         self.assertReachableWith("AF (Elevator): Over Electrified Floor", prereq_items + ["Cloud Leap"])
+
+    def test_afe_afd_regression(self):
+        prereq_items = ["Wall Climb", "Grapple"]
+        self.assertRegionReachableWith("AFE - Lower Root Node", prereq_items + ["Air Dash"])
+        self.assertRegionReachableWith("AFE - Below Root Node", prereq_items + ["Air Dash"])
+        self.assertRegionNotReachableWith("AFE - Lower Left Exit", prereq_items)
+        self.assertRegionReachableWith("AFE - Lower Left Exit", prereq_items + ["Air Dash"])
+        self.assertNotReachableWith("AF (Depths): Lower Level", prereq_items)
+        self.assertReachableWith("AF (Depths): Lower Level", prereq_items + ["Air Dash"])
 
 
 class TestLedgeStorageLogic(NineSolsTestBase):

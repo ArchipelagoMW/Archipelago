@@ -90,7 +90,7 @@
             { "item": "Ledge Grab" } // T-dash setup from 2nd box to chest platform, parry hover the rest
         ]
     },
-    { "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Below Root Node" }, // just drop down
+    { "from": "AFE - Moving Boxes Below Root Node", "to": "AFE - Below Root Node", "requires": [] }, // just drop down
     {
         "from": "AFE - Below Root Node", "to": "AFE - Moving Boxes Below Root Node",
         "requires": [ { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] } ],
