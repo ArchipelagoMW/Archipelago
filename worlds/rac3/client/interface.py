@@ -210,7 +210,9 @@ class Rac3Interface(GameInterface):
     pause_menu: bool = False
     pause_state: bool = False
     inputs: int = RAC3INPUT.NOTHING
-    health: int = 10
+    health: int = 100
+    max_health: int = 10
+    main_menu: bool = False
     ryno: bool = False
     death_count: int = 0
     last_death_count: int = 0
@@ -242,8 +244,9 @@ class Rac3Interface(GameInterface):
         self.prev_action = self._read8(RAC3STATUS.PREV_ACTION)
         self.inputs = self._read16(RAC3STATUS.READ_INPUT)
         self.health = self._read8(RAC3STATUS.HEALTH)
+        self.max_health = self._read8(RAC3STATUS.MAX_HEALTH)
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
-        self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == 0x14 # The Hacker
+        self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
 
         self.pause_check()
         if self.self_respawning:
@@ -266,6 +269,13 @@ class Rac3Interface(GameInterface):
             self.weapon_exp_cycler()
         # Logic Fixes
         self.logic_fixes()
+        # If loading from the main menu we delay fixing the current health until the load is complete
+        if self.main_menu:
+            if self.max_health > 10:
+                self._write8(RAC3STATUS.HEALTH, self.max_health)
+                self.main_menu = False
+
+
 
     @staticmethod
     def get_victory_code():
@@ -301,6 +311,8 @@ class Rac3Interface(GameInterface):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
+            if self.UnlockItem[name].status:
+                return
             self.UnlockItem[RAC3REGION.SLOT_0].status += 1
             self.UnlockItem[name].status = self.UnlockItem[RAC3REGION.SLOT_0].status
         else:
@@ -444,12 +456,12 @@ class Rac3Interface(GameInterface):
         for location in RAC3_LOCATION_DATA_TABLE.values():
             if RAC3TAG.SEWER in location.TAGS:
                 if not sewer:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 0)  # Reset to 0 Crystals
                     sewer += 1
                 continue
             if RAC3TAG.NANOTECH in location.TAGS:
                 if not nano:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10)
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10) # Reset to 10 Health
                     nano += 1
                 continue
             for check in location.CHECK_ADDRESS:

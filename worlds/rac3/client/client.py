@@ -315,6 +315,8 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
         ctx.main_menu = ctx.game_interface.check_main_menu()
 
         if ctx.main_menu:
+            if menu:
+                ctx.game_interface.main_menu = True
             if ctx.last_game_message is None:
                 message = "Currently on Main Menu, please load a file..."
                 logger.info(message)
