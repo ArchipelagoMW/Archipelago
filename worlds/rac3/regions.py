@@ -63,6 +63,109 @@ every_20_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_100,
 ]
 
+every_sewer_crystals: list[str] = [
+    RAC3SEWER.TRADE_1,
+    RAC3SEWER.TRADE_2,
+    RAC3SEWER.TRADE_3,
+    RAC3SEWER.TRADE_4,
+    RAC3SEWER.TRADE_5,
+    RAC3SEWER.TRADE_6,
+    RAC3SEWER.TRADE_7,
+    RAC3SEWER.TRADE_8,
+    RAC3SEWER.TRADE_9,
+    RAC3SEWER.TRADE_10,
+    RAC3SEWER.TRADE_11,
+    RAC3SEWER.TRADE_12,
+    RAC3SEWER.TRADE_13,
+    RAC3SEWER.TRADE_14,
+    RAC3SEWER.TRADE_15,
+    RAC3SEWER.TRADE_16,
+    RAC3SEWER.TRADE_17,
+    RAC3SEWER.TRADE_18,
+    RAC3SEWER.TRADE_19,
+    RAC3SEWER.TRADE_20,
+    RAC3SEWER.TRADE_21,
+    RAC3SEWER.TRADE_22,
+    RAC3SEWER.TRADE_23,
+    RAC3SEWER.TRADE_24,
+    RAC3SEWER.TRADE_25,
+    RAC3SEWER.TRADE_26,
+    RAC3SEWER.TRADE_27,
+    RAC3SEWER.TRADE_28,
+    RAC3SEWER.TRADE_29,
+    RAC3SEWER.TRADE_30,
+    RAC3SEWER.TRADE_31,
+    RAC3SEWER.TRADE_32,
+    RAC3SEWER.TRADE_33,
+    RAC3SEWER.TRADE_34,
+    RAC3SEWER.TRADE_35,
+    RAC3SEWER.TRADE_36,
+    RAC3SEWER.TRADE_37,
+    RAC3SEWER.TRADE_38,
+    RAC3SEWER.TRADE_39,
+    RAC3SEWER.TRADE_40,
+    RAC3SEWER.TRADE_41,
+    RAC3SEWER.TRADE_42,
+    RAC3SEWER.TRADE_43,
+    RAC3SEWER.TRADE_44,
+    RAC3SEWER.TRADE_45,
+    RAC3SEWER.TRADE_46,
+    RAC3SEWER.TRADE_47,
+    RAC3SEWER.TRADE_48,
+    RAC3SEWER.TRADE_49,
+    RAC3SEWER.TRADE_50,
+    RAC3SEWER.TRADE_51,
+    RAC3SEWER.TRADE_52,
+    RAC3SEWER.TRADE_53,
+    RAC3SEWER.TRADE_54,
+    RAC3SEWER.TRADE_55,
+    RAC3SEWER.TRADE_56,
+    RAC3SEWER.TRADE_57,
+    RAC3SEWER.TRADE_58,
+    RAC3SEWER.TRADE_59,
+    RAC3SEWER.TRADE_60,
+    RAC3SEWER.TRADE_61,
+    RAC3SEWER.TRADE_62,
+    RAC3SEWER.TRADE_63,
+    RAC3SEWER.TRADE_64,
+    RAC3SEWER.TRADE_65,
+    RAC3SEWER.TRADE_66,
+    RAC3SEWER.TRADE_67,
+    RAC3SEWER.TRADE_68,
+    RAC3SEWER.TRADE_69,
+    RAC3SEWER.TRADE_70,
+    RAC3SEWER.TRADE_71,
+    RAC3SEWER.TRADE_72,
+    RAC3SEWER.TRADE_73,
+    RAC3SEWER.TRADE_74,
+    RAC3SEWER.TRADE_75,
+    RAC3SEWER.TRADE_76,
+    RAC3SEWER.TRADE_77,
+    RAC3SEWER.TRADE_78,
+    RAC3SEWER.TRADE_79,
+    RAC3SEWER.TRADE_80,
+    RAC3SEWER.TRADE_81,
+    RAC3SEWER.TRADE_82,
+    RAC3SEWER.TRADE_83,
+    RAC3SEWER.TRADE_84,
+    RAC3SEWER.TRADE_85,
+    RAC3SEWER.TRADE_86,
+    RAC3SEWER.TRADE_87,
+    RAC3SEWER.TRADE_88,
+    RAC3SEWER.TRADE_89,
+    RAC3SEWER.TRADE_90,
+    RAC3SEWER.TRADE_91,
+    RAC3SEWER.TRADE_92,
+    RAC3SEWER.TRADE_93,
+    RAC3SEWER.TRADE_94,
+    RAC3SEWER.TRADE_95,
+    RAC3SEWER.TRADE_96,
+    RAC3SEWER.TRADE_97,
+    RAC3SEWER.TRADE_98,
+    RAC3SEWER.TRADE_99,
+    RAC3SKILLPOINT.SEWER_MOTHERLOAD,
+]
+
 every_5_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_5,
     RAC3SEWER.TRADE_10,
@@ -109,7 +212,6 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
@@ -298,16 +400,18 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.vr_challenges.value == 0:
                     return True  # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
-                if options.sewer_crystals.value == 0:
+                if LOCATION_FROM_AP_CODE[data.AP_CODE] in every_sewer_crystals[options.sewer_limitation.value::]:
+                    return True
+                elif options.sewer_crystals.value == 0:
                     return True  # Skip sewer crystal locations if sewer crystals option is disabled
                 elif options.sewer_crystals.value == 1 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_20_sewer_crystals:
-                    return True  # Skip sewer crystal locations that are not in every 20
+                        return True  # Skip sewer crystal locations that are not in every 20
                 elif options.sewer_crystals.value == 2 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_10_sewer_crystals:
-                    return True  # Skip sewer crystal locations that are not in every 10
+                        return True  # Skip sewer crystal locations that are not in every 10
                 elif options.sewer_crystals.value == 3 and LOCATION_FROM_AP_CODE[
                     data.AP_CODE] not in every_5_sewer_crystals:
-                    return True  # Skip sewer crystal locations that are not in every 5
+                        return True  # Skip sewer crystal locations that are not in every 5
             # Add more conditions here if needed in the future
     return False

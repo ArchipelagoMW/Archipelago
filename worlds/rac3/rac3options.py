@@ -12,6 +12,7 @@ from worlds.rac3.options.nanotech_options import NanotechMilestones
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
@@ -52,6 +53,7 @@ class RaC3Options(PerGameCommonOptions):
     vr_challenges: VRChallenges
     arena: Arena
     sewer_crystals: SewerCrystals
+    sewer_limitation: SewerLimitation
     nanotech_milestones: NanotechMilestones
     exclude_locations: RAC3ExcludeLocations
     ship_nose: ShipNose
@@ -63,7 +65,7 @@ class RaC3Options(PerGameCommonOptions):
 rac3_option_groups: dict[str, list] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
                      ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals],
+                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -91,4 +93,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.VIDCOMICS,
     RAC3OPTION.VR_CHALLENGES,
     RAC3OPTION.SEWER_CRYSTALS,
+    RAC3OPTION.SEWER_LIMITATION,
 ]
