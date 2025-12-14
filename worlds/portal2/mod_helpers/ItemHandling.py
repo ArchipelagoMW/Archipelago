@@ -1,4 +1,5 @@
 from ..Items import *
+from ..ItemNames import motion_blur_trap, fizzle_portal_trap, butter_fingers_trap
 
 # Constants
 DELETE_CUBE = ItemTag.CUBE | ItemTag.DELETE
@@ -10,7 +11,7 @@ def handle_item(item_name: str) -> list[str]:
     Returns command that will be run in Portal 2 on every level entry so that the item is affected in game'''
     # Get item data
     # If item is not present don't handle it
-    if item_name not in item_table:
+    if item_name not in game_item_table:
         return None
     
     item_data = item_table[item_name]
@@ -22,6 +23,10 @@ def handle_item(item_name: str) -> list[str]:
     item_tags = item_data.tags
 
     return_commands = []
+
+    # Check if item tags are set just in case
+    if not item_tags:
+        return None
 
     if DELETE_CUBE in item_tags:
         model = item_data.variant
@@ -53,5 +58,13 @@ def handle_item(item_name: str) -> list[str]:
     
     return return_commands
     
-def handle_trap(trap_name: str) -> list[str]:
-    pass
+def handle_trap(trap_name: str) -> str:
+    if trap_name not in trap_items_table:
+        return
+    
+    if trap_name == motion_blur_trap:
+        return "script MotionBlurTrap()\n"
+    elif trap_name == fizzle_portal_trap:
+        return "script FizzlePortalTrap()\n"
+    elif trap_name == butter_fingers_trap:
+        return "script ButterFingersTrap()\n"

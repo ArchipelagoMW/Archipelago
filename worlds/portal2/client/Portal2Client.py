@@ -9,7 +9,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandP
 from NetUtils import ClientStatus
 from Utils import async_start, init_logging
 
-from ..mod_helpers.ItemHandling import handle_item
+from ..mod_helpers.ItemHandling import handle_item, handle_trap
 from ..mod_helpers.MapMenu import Menu
 from ..Locations import location_names_to_map_codes, map_codes_to_location_names
 from .. import Portal2World
@@ -146,8 +146,9 @@ class Portal2Context(CommonContext):
                         # handle commands
                         if self.command_queue:
                             c = self.command_queue.pop(0)
-                            writer.write(c.encode())
-                            await writer.drain()
+                            if c:
+                                writer.write(c.encode())
+                                await writer.drain()
 
                         # Handle messages
                         elif self.game_message_queue:
@@ -264,6 +265,10 @@ class Portal2Context(CommonContext):
                 self.update_item_remove_commands()
 
         if cmd == "ReceivedItems":
+            items = args["items"]
+            traps = [i for i in items if i.flags == 0b100]
+            for trap in traps:
+                self.command_queue.append(handle_trap(self.item_names.lookup_in_game(trap.item, self.game)))
             update_item_list()
             self.update_item_remove_commands()
 
