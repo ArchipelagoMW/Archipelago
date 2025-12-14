@@ -499,7 +499,7 @@ class MultiData(typing.TypedDict):
     checks_in_area: dict[int, dict[str, int | list[int]]]
     server_options: dict[str, object]
     er_hint_data: dict[int, dict[int, str]]
-    precollected_items: dict[int, list[int]]
+    precollected_items: dict[int, list[int]] | dict[int, list[tuple[int, int]]]
     precollected_hints: dict[int, set[Hint]]
     version: tuple[int, int, int]
     tags: list[str]
