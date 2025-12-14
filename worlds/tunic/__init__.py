@@ -703,8 +703,6 @@ class TunicWorld(World):
                         if location.address is None:
                             continue
                         hint_data[world.player][location.address] = hint_text
-                        if location.name == "Beneath the Well - [Entryway] Chest":
-                            print(hint_text)
 
     def get_real_location(self, location: Location) -> tuple[str, int]:
         # if it's not in a group, it's not in an item link
