@@ -80,9 +80,8 @@ class Portal2Context(CommonContext):
             self.command_processor.output(self.command_processor, "Disconnected from Portal 2. Make sure the mod is open and the `-netconport 3000` launch option is set")
 
     def create_level_begin_command(self):
-        '''Generates a command that deletes all entities not collected yet and connects end level trigger with map completion event'''
-        return (f"{';'.join(self.item_remove_commands)};"
-                f"{"script AttachDeathTrigger()" if self.death_link_active else ""}\n")
+        '''Generates a command that deletes all entities not collected yet'''
+        return f"{';'.join(self.item_remove_commands)}\n"
     
     def update_menu(self, finished_map: str = None):
         menu_file = Portal2World.settings.menu_file
@@ -216,7 +215,7 @@ class Portal2Context(CommonContext):
         await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
 
     def on_deathlink(self, data):
-        self.command_queue.append("kill\n")
+        self.command_queue.append("restart\n")
         return super().on_deathlink(data)
 
     def check_game_connection(self):
