@@ -6,7 +6,7 @@ if __name__ == "__main__":
 import argparse
 import logging
 import os
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 import Utils
 from settings import get_settings
@@ -14,7 +14,7 @@ from settings import get_settings
 logger = logging.getLogger("APWorldInfo")
 
 
-def get_all_world_info() -> List[Dict[str, Any]]:
+def get_all_world_info() -> list[dict[str, Any]]:
     """Get basic info for all installed, non-hidden worlds."""
     from worlds.AutoWorld import AutoWorldRegister
 
@@ -34,17 +34,22 @@ def get_all_world_info() -> List[Dict[str, Any]]:
     return world_info
 
 
-def scan_player_yamls(player_path: str) -> Dict[str, List[Dict[str, Any]]]:
+def scan_player_yamls(player_path: str) -> tuple[dict[str, list[dict[str, Any]]], list[dict[str, Any]] | None]:
     """
     Scan Players folder for YAML files and group by game.
-    Returns: {game_name: [{'filename': str, 'name': str, 'yaml': dict, 'path': str}, ...]}
+    Also loads weights.yaml separately if it exists (matching Generate.py behavior).
+
+    Returns: (
+        {game_name: [{'filename': str, 'name': str, 'yaml': dict, 'path': str}, ...]},
+        weights_configs or None  # Configs from weights.yaml if it exists
+    )
     """
     from Utils import parse_yamls
 
-    yamls_by_game: Dict[str, List[Dict[str, Any]]] = {}
+    yamls_by_game: dict[str, list[dict[str, Any]]] = {}
 
     if not os.path.isdir(player_path):
-        return yamls_by_game
+        return yamls_by_game, None
 
     for file in os.scandir(player_path):
         if not file.is_file():
@@ -52,6 +57,7 @@ def scan_player_yamls(player_path: str) -> Dict[str, List[Dict[str, Any]]]:
         fname = file.name
         if fname.startswith(".") or fname.lower().endswith(".ini"):
             continue
+        # Skip weights.yaml and meta.yaml in main loop (matches Generate.py line 128)
         if fname in ("weights.yaml", "meta.yaml"):
             continue
 
@@ -82,10 +88,42 @@ def scan_player_yamls(player_path: str) -> Dict[str, List[Dict[str, Any]]]:
             logger.debug(f"Could not parse {fname}: {e}")
             continue
 
-    return yamls_by_game
+    # Load weights.yaml separately (matches Generate.py lines 99-105)
+    weights_configs: list[dict[str, Any]] | None = None
+    weights_path = os.path.join(player_path, "weights.yaml")
+    if os.path.isfile(weights_path):
+        try:
+            with open(weights_path, "rb") as f:
+                content = str(f.read(), "utf-8-sig")
+            weights_docs = list(parse_yamls(content))
+            weights_configs = []
+            for doc in weights_docs:
+                if doc is None:
+                    continue
+                game = doc.get("game")
+                # Handle weighted game option (e.g., game: {Archipelago: 1})
+                if isinstance(game, dict) and game:
+                    game = max(game.keys(), key=lambda k: game[k] if isinstance(game[k], (int, float)) else 0)
+                if game and isinstance(game, str):
+                    weights_configs.append(
+                        {
+                            "filename": "weights.yaml",
+                            "name": doc.get("name", "Player{number}"),
+                            "game": game,
+                            "yaml": doc,
+                            "path": weights_path,
+                            "is_weights_file": True,
+                        }
+                    )
+            if not weights_configs:
+                weights_configs = None
+        except Exception as e:
+            logger.debug(f"Could not parse weights.yaml: {e}")
+
+    return yamls_by_game, weights_configs
 
 
-def get_config_item_location_counts(game: str, yaml_data: dict) -> Tuple[int, int]:
+def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, int]:
     """
     Run partial generation to get accurate item/location counts for a config.
     Returns: (item_count, location_count) or (-1, -1) on failure.
@@ -197,11 +235,11 @@ def print_world_info() -> None:
     player_path = settings.generator.player_files_path
 
     if player_path and os.path.isdir(player_path):
-        yamls_by_game = scan_player_yamls(player_path)
+        yamls_by_game, weights_configs = scan_player_yamls(player_path)
+        player_data: list[dict[str, Any]] = []
 
         if yamls_by_game:
             # Build player overview with counts
-            player_data: List[Dict[str, Any]] = []
             for game, configs in yamls_by_game.items():
                 for cfg in configs:
                     items, locs = get_config_item_location_counts(game, cfg["yaml"])
@@ -269,6 +307,31 @@ def print_world_info() -> None:
                                 f"      Items: {len(cls.item_names)}, Locations: {len(cls.location_names)} (possible)"
                             )
 
+        # Display weights.yaml if present
+        if weights_configs:
+            configured_players = settings.generator.players
+            individual_count = len(player_data) if yamls_by_game else 0
+
+            print(f"\n\n{'=' * 60}")
+            print("GENERIC WEIGHTS FILE (weights.yaml)")
+            print(f"{'=' * 60}")
+            print("\nNote: Fallback weights for players without individual YAML files.")
+            print(f"  Configured players in host.yaml: {configured_players} (0 = infer from files)")
+            print(f"  Individual player files found: {individual_count}")
+            if configured_players > 0:
+                additional_players = max(0, configured_players - individual_count)
+                print(f"  Additional players using weights.yaml: {additional_players}")
+
+            for cfg in weights_configs:
+                game = cfg["game"]
+                items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                print(f"\n  {game}:")
+                print(f"    Template name: {cfg['name']}")
+                if items >= 0:
+                    print(f"    Items: {items}, Locations: {locs} (per player)")
+                else:
+                    print(f"    Could not calculate counts")
+
 
 def run_gui() -> None:
     """Launch the Kivy GUI."""
@@ -284,7 +347,8 @@ def run_gui() -> None:
     class APWorldInfoApp(ThemedApp):
         base_title: str = "APWorld Info"
         current_game: str = ""
-        yamls_by_game: Dict[str, List[Dict[str, Any]]] = {}
+        yamls_by_game: dict[str, list[dict[str, Any]]] = {}
+        weights_configs: list[dict[str, Any]] | None = None
 
         def __init__(self):
             self.title = f"{self.base_title} - Archipelago {Utils.__version__}"
@@ -305,7 +369,7 @@ def run_gui() -> None:
             settings = get_settings()
             player_path = settings.generator.player_files_path
             if player_path and os.path.isdir(player_path):
-                self.yamls_by_game = scan_player_yamls(player_path)
+                self.yamls_by_game, self.weights_configs = scan_player_yamls(player_path)
 
             # Populate world list
             worlds = get_all_world_info()
@@ -374,9 +438,10 @@ def run_gui() -> None:
                     settings = get_settings()
                     player_path = settings.generator.player_files_path
                     if player_path and os.path.isdir(player_path):
-                        self.yamls_by_game = scan_player_yamls(player_path)
+                        self.yamls_by_game, self.weights_configs = scan_player_yamls(player_path)
                     else:
                         self.yamls_by_game = {}
+                        self.weights_configs = None
 
                     # Refresh the current view
                     if self.overview_btn.state == "down":
@@ -416,7 +481,7 @@ def run_gui() -> None:
             title_row = self._create_title_row("Multiworld Overview")
             self.info_layout.add_widget(title_row)
 
-            if not self.yamls_by_game:
+            if not self.yamls_by_game and not self.weights_configs:
                 no_configs = MDLabel(
                     text="No player configurations found in Players folder.",
                     size_hint_y=None,
@@ -426,57 +491,137 @@ def run_gui() -> None:
                 return
 
             # Build player data with counts
-            player_data: List[Dict[str, Any]] = []
-            for game, configs in self.yamls_by_game.items():
-                for cfg in configs:
-                    items, locs = get_config_item_location_counts(game, cfg["yaml"])
-                    player_data.append(
-                        {
-                            "name": cfg["name"],
-                            "game": game,
-                            "items": items if items >= 0 else 0,
-                            "locations": locs if locs >= 0 else 0,
-                        }
+            player_data: list[dict[str, Any]] = []
+            if self.yamls_by_game:
+                for game, configs in self.yamls_by_game.items():
+                    for cfg in configs:
+                        items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                        player_data.append(
+                            {
+                                "name": cfg["name"],
+                                "game": game,
+                                "items": items if items >= 0 else 0,
+                                "locations": locs if locs >= 0 else 0,
+                            }
+                        )
+
+            if player_data:
+                # Calculate totals
+                total_items = sum(p["items"] for p in player_data)
+                total_locations = sum(p["locations"] for p in player_data)
+
+                self.info_layout.add_widget(MDDivider())
+
+                # Summary stats
+                summary_title = MDLabel(text="[b]Summary[/b]", markup=True, size_hint_y=None, height=dp(30))
+                self.info_layout.add_widget(summary_title)
+
+                players_label = MDLabel(text=f"  Players: {len(player_data)}", size_hint_y=None, height=dp(25))
+                items_label = MDLabel(text=f"  Total Items: {total_items}", size_hint_y=None, height=dp(25))
+                locs_label = MDLabel(text=f"  Total Locations: {total_locations}", size_hint_y=None, height=dp(25))
+                self.info_layout.add_widget(players_label)
+                self.info_layout.add_widget(items_label)
+                self.info_layout.add_widget(locs_label)
+
+                self.info_layout.add_widget(MDDivider())
+
+                # Player list
+                list_title = MDLabel(text="[b]Players[/b]", markup=True, size_hint_y=None, height=dp(30))
+                self.info_layout.add_widget(list_title)
+
+                for p in sorted(player_data, key=lambda x: str(x["name"]).lower()):
+                    player_label = MDLabel(
+                        text=f"  [b]{p['name']}[/b] - {p['game']}",
+                        markup=True,
+                        size_hint_y=None,
+                        height=dp(25),
                     )
+                    self.info_layout.add_widget(player_label)
 
-            # Calculate totals
-            total_items = sum(p["items"] for p in player_data)
-            total_locations = sum(p["locations"] for p in player_data)
+                    counts_label = MDLabel(
+                        text=f"    Items: {p['items']}, Locations: {p['locations']}",
+                        size_hint_y=None,
+                        height=dp(20),
+                    )
+                    self.info_layout.add_widget(counts_label)
 
-            self.info_layout.add_widget(MDDivider())
+            # Display weights.yaml section if present
+            if self.weights_configs:
+                settings = get_settings()
+                configured_players = settings.generator.players
+                individual_count = len(player_data)
 
-            # Summary stats
-            summary_title = MDLabel(text="[b]Summary[/b]", markup=True, size_hint_y=None, height=dp(30))
-            self.info_layout.add_widget(summary_title)
+                self.info_layout.add_widget(MDDivider())
 
-            players_label = MDLabel(text=f"  Players: {len(player_data)}", size_hint_y=None, height=dp(25))
-            items_label = MDLabel(text=f"  Total Items: {total_items}", size_hint_y=None, height=dp(25))
-            locs_label = MDLabel(text=f"  Total Locations: {total_locations}", size_hint_y=None, height=dp(25))
-            self.info_layout.add_widget(players_label)
-            self.info_layout.add_widget(items_label)
-            self.info_layout.add_widget(locs_label)
-
-            self.info_layout.add_widget(MDDivider())
-
-            # Player list
-            list_title = MDLabel(text="[b]Players[/b]", markup=True, size_hint_y=None, height=dp(30))
-            self.info_layout.add_widget(list_title)
-
-            for p in sorted(player_data, key=lambda x: x["name"].lower()):
-                player_label = MDLabel(
-                    text=f"  [b]{p['name']}[/b] - {p['game']}",
+                weights_title = MDLabel(
+                    text="[b]Generic Weights File (weights.yaml)[/b]",
                     markup=True,
+                    size_hint_y=None,
+                    height=dp(30),
+                )
+                self.info_layout.add_widget(weights_title)
+
+                note_label = MDLabel(
+                    text="  Fallback weights for players without individual YAML files.",
+                    size_hint_y=None,
+                    height=dp(25),
+                    theme_text_color="Secondary",
+                )
+                self.info_layout.add_widget(note_label)
+
+                config_label = MDLabel(
+                    text=f"  Configured players: {configured_players} (0 = infer from files)",
                     size_hint_y=None,
                     height=dp(25),
                 )
-                self.info_layout.add_widget(player_label)
+                self.info_layout.add_widget(config_label)
 
-                counts_label = MDLabel(
-                    text=f"    Items: {p['items']}, Locations: {p['locations']}",
+                individual_label = MDLabel(
+                    text=f"  Individual player files: {individual_count}",
                     size_hint_y=None,
-                    height=dp(20),
+                    height=dp(25),
                 )
-                self.info_layout.add_widget(counts_label)
+                self.info_layout.add_widget(individual_label)
+
+                if configured_players > 0:
+                    additional = max(0, configured_players - individual_count)
+                    additional_label = MDLabel(
+                        text=f"  Additional players using weights: {additional}",
+                        size_hint_y=None,
+                        height=dp(25),
+                    )
+                    self.info_layout.add_widget(additional_label)
+
+                for cfg in self.weights_configs:
+                    game = cfg["game"]
+                    items, locs = get_config_item_location_counts(game, cfg["yaml"])
+
+                    game_label = MDLabel(
+                        text=f"\n  [b]{game}[/b]",
+                        markup=True,
+                        size_hint_y=None,
+                        height=dp(30),
+                    )
+                    self.info_layout.add_widget(game_label)
+
+                    template_label = MDLabel(
+                        text=f"    Template name: {cfg['name']}",
+                        size_hint_y=None,
+                        height=dp(25),
+                    )
+                    self.info_layout.add_widget(template_label)
+
+                    if items >= 0:
+                        counts_text = f"    Items: {items}, Locations: {locs} (per player)"
+                    else:
+                        counts_text = "    Could not calculate counts"
+
+                    weights_counts_label = MDLabel(
+                        text=counts_text,
+                        size_hint_y=None,
+                        height=dp(25),
+                    )
+                    self.info_layout.add_widget(weights_counts_label)
 
         def show_world_details(self, world_data: dict):
             """Display details for selected world."""
