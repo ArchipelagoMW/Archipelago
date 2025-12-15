@@ -696,7 +696,7 @@
 					"mv0": 3,
 					"mv1": 25,
 					"regionIndex": 0,
-					"trickDifficulty": 1
+					"trickDifficulty": 2
 				}
 			],
 			"Glover Switch": [
@@ -24260,6 +24260,13 @@
 					"NEEDS_BALL": false,
 					"REGION": 4,
 					"TYPE": 2
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 5,
+					"mv1": 25,
+					"regionIndex": 4,
+					"trickDifficulty": 0
 				}
 			],
 			"Carpet Garibs": [
