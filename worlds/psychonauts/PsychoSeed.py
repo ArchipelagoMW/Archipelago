@@ -179,6 +179,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append rankSanity setting
     randoseed_parts.append(f"           Ob.rankSanity = {_lua_bool(self.options.RankSanity)}\n")
 
+    # append progressiveBaggage setting
+    randoseed_parts.append(f"           Ob.progressiveBaggage = {_lua_bool(self.options.ProgressiveBaggage)}\n")
+
+    # append progressiveBaggageMax setting
+    randoseed_parts.append(f"           Ob.progressiveBaggageMax = {(self.options.MaximumProgressiveBaggage.value)}\n")
+
     # append Goal settings
     beat_oleander = _lua_bool(self.options.Goal == Goal.option_asylum_brain_tank
                               or self.options.Goal == Goal.option_asylum_brain_tank_and_brain_hunt)
