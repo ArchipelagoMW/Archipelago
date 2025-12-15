@@ -31,19 +31,19 @@ class MotionBlurTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which makes it a little hard to see
     """
-    display_name = motion_blur_trap
+    display_name = motion_blur_trap + " Weight"
 
 class FizzlePortalTrapWeight(BaseTrapWeight):
     """
-    Likelihood of receiving a trap which makes it a little hard to see
+    Likelihood of receiving a trap which fizzles ALL portals on the map
     """
-    display_name = fizzle_portal_trap
+    display_name = fizzle_portal_trap + " Weight"
 
 class ButterFingersTrapWeight(BaseTrapWeight):
     """
-    Likelihood of receiving a trap which makes it a little hard to see
+    Likelihood of receiving a trap which makes it a little hard to hold items
     """
-    display_name = butter_fingers_trap
+    display_name = butter_fingers_trap + " Weight"
 
 
 # class StoryAchievementSanity(Toggle):
