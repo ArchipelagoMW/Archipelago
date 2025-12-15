@@ -26,7 +26,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if notification_type in {"puzzle", "info", "chest", "none"}:
             temp_client_settings = self.ctx.client_settings["receive_popup_type"]
             self.ctx.client_settings["receive_popup_type"] = notification_type
-            self.ctx.socket.send(7,["receive", notification_type])
+            self.ctx.socket.send(7,["R", notification_type])
             self.output(f"Changed receive notification type from {temp_client_settings} to {self.ctx.client_settings['receive_popup_type']}")
         else:
             self.output(f"Unknown receive notification type:{notification_type}. Valid Inputs: Puzzle, Info, Chest, None")
@@ -42,7 +42,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
         if notification_type in {"puzzle", "info", "chest", "none"}:
             temp_client_settings = self.ctx.client_settings["send_popup_type"]
             self.ctx.client_settings["send_popup_type"] = notification_type
-            self.ctx.socket.send(7,["send", notification_type])
+            self.ctx.socket.send(7,["S", notification_type])
             # doing it in this order to make sure it actually changes
             self.output(f"Changed send notification type from {temp_client_settings} to {self.ctx.client_settings['send_popup_type']}")
         else:
