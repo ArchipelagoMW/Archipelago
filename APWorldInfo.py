@@ -34,22 +34,30 @@ def get_all_world_info() -> list[dict[str, Any]]:
     return world_info
 
 
-def scan_player_yamls(player_path: str) -> tuple[dict[str, list[dict[str, Any]]], list[dict[str, Any]] | None]:
+def scan_player_yamls(
+    player_path: str,
+) -> tuple[
+    dict[str, list[dict[str, Any]]],
+    list[dict[str, Any]] | None,
+    list[dict[str, str]],
+]:
     """
     Scan Players folder for YAML files and group by game.
     Also loads weights.yaml separately if it exists (matching Generate.py behavior).
 
     Returns: (
         {game_name: [{'filename': str, 'name': str, 'yaml': dict, 'path': str}, ...]},
-        weights_configs or None  # Configs from weights.yaml if it exists
+        weights_configs or None,  # Configs from weights.yaml if it exists
+        parse_errors  # List of {'filename': str, 'error': str} for files that failed to parse
     )
     """
     from Utils import parse_yamls
 
     yamls_by_game: dict[str, list[dict[str, Any]]] = {}
+    parse_errors: list[dict[str, str]] = []
 
     if not os.path.isdir(player_path):
-        return yamls_by_game, None
+        return yamls_by_game, None, parse_errors
 
     for file in os.scandir(player_path):
         if not file.is_file():
@@ -92,7 +100,7 @@ def scan_player_yamls(player_path: str) -> tuple[dict[str, list[dict[str, Any]]]
                     }
                 )
         except Exception as e:
-            logger.debug(f"Could not parse {fname}: {e}")
+            parse_errors.append({"filename": fname, "error": str(e)})
             continue
 
     # Load weights.yaml separately (matches Generate.py lines 99-105)
@@ -125,9 +133,9 @@ def scan_player_yamls(player_path: str) -> tuple[dict[str, list[dict[str, Any]]]
             if not weights_configs:
                 weights_configs = None
         except Exception as e:
-            logger.debug(f"Could not parse weights.yaml: {e}")
+            parse_errors.append({"filename": "weights.yaml", "error": str(e)})
 
-    return yamls_by_game, weights_configs
+    return yamls_by_game, weights_configs, parse_errors
 
 
 def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, int]:
@@ -242,8 +250,24 @@ def print_world_info() -> None:
     player_path = settings.generator.player_files_path
 
     if player_path and os.path.isdir(player_path):
-        yamls_by_game, weights_configs = scan_player_yamls(player_path)
+        yamls_by_game, weights_configs, parse_errors = scan_player_yamls(player_path)
         player_data: list[dict[str, Any]] = []
+
+        # Display parse errors first if any
+        if parse_errors:
+            print(f"\n\n{'=' * 60}")
+            print("YAML PARSE ERRORS")
+            print(f"{'=' * 60}")
+            print("\nThe following files could not be parsed:\n")
+            for err in parse_errors:
+                print(f"  {err['filename']}:")
+                # Indent the error message for readability
+                error_lines = err["error"].split("\n")
+                for line in error_lines[:3]:  # Show first 3 lines of error
+                    print(f"    {line}")
+                if len(error_lines) > 3:
+                    print(f"    ... ({len(error_lines) - 3} more lines)")
+            print()
 
         if yamls_by_game:
             # Build player overview with counts
@@ -356,6 +380,7 @@ def run_gui() -> None:
         current_game: str = ""
         yamls_by_game: dict[str, list[dict[str, Any]]] = {}
         weights_configs: list[dict[str, Any]] | None = None
+        parse_errors: list[dict[str, str]] = []
 
         def __init__(self):
             self.title = f"{self.base_title} - Archipelago {Utils.__version__}"
@@ -376,7 +401,7 @@ def run_gui() -> None:
             settings = get_settings()
             player_path = settings.generator.player_files_path
             if player_path and os.path.isdir(player_path):
-                self.yamls_by_game, self.weights_configs = scan_player_yamls(player_path)
+                self.yamls_by_game, self.weights_configs, self.parse_errors = scan_player_yamls(player_path)
 
             # Populate world list
             worlds = get_all_world_info()
@@ -445,10 +470,11 @@ def run_gui() -> None:
                     settings = get_settings()
                     player_path = settings.generator.player_files_path
                     if player_path and os.path.isdir(player_path):
-                        self.yamls_by_game, self.weights_configs = scan_player_yamls(player_path)
+                        self.yamls_by_game, self.weights_configs, self.parse_errors = scan_player_yamls(player_path)
                     else:
                         self.yamls_by_game = {}
                         self.weights_configs = None
+                        self.parse_errors = []
 
                     # Refresh the current view
                     if self.overview_btn.state == "down":
@@ -488,7 +514,48 @@ def run_gui() -> None:
             title_row = self._create_title_row("Multiworld Overview")
             self.info_layout.add_widget(title_row)
 
-            if not self.yamls_by_game and not self.weights_configs:
+            # Display parse errors at the top if any
+            if self.parse_errors:
+                self.info_layout.add_widget(MDDivider())
+
+                error_title = MDLabel(
+                    text="[b][color=#ff6b6b]YAML Parse Errors[/color][/b]",
+                    markup=True,
+                    size_hint_y=None,
+                    height=dp(30),
+                )
+                self.info_layout.add_widget(error_title)
+
+                error_note = MDLabel(
+                    text="  The following files could not be parsed:",
+                    size_hint_y=None,
+                    height=dp(25),
+                    theme_text_color="Secondary",
+                )
+                self.info_layout.add_widget(error_note)
+
+                for err in self.parse_errors:
+                    filename_label = MDLabel(
+                        text=f"  [color=#ff6b6b]{err['filename']}[/color]",
+                        markup=True,
+                        size_hint_y=None,
+                        height=dp(25),
+                    )
+                    self.info_layout.add_widget(filename_label)
+
+                    # Show first line of error message
+                    error_msg = err["error"].split("\n")[0]
+                    if len(error_msg) > 80:
+                        error_msg = error_msg[:77] + "..."
+                    error_label = MDLabel(
+                        text=f"    {error_msg}",
+                        size_hint_y=None,
+                        height=dp(20),
+                        theme_text_color="Secondary",
+                    )
+                    self.info_layout.add_widget(error_label)
+
+            if not self.yamls_by_game and not self.weights_configs and not self.parse_errors:
                 no_configs = MDLabel(
                     text="No player configurations found in Players folder.",
                     size_hint_y=None,
