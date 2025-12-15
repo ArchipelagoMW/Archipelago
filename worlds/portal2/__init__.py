@@ -25,6 +25,11 @@ class Portal2Settings(settings.Group):
                     "$HOME/.local/share/Steam/steamapps/sourcemods/Portal2Archipelago/scripts/extras.txt" if is_linux else "" # May may be user specific so cannot auto select
     menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath(extras_path)
 
+    class Portal2NetConPort(int):
+        """The port set in the portal 2 launch options e.g. 3000"""
+
+    default_portal2_port: Portal2NetConPort = Portal2NetConPort(3000)
+
 class Portal2WebWorld(WebWorld):
     game = "Portal 2"
     theme = "partyTime"

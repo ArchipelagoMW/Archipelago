@@ -56,7 +56,7 @@ class Portal2Context(CommonContext):
     items_handling = 0b111  # receive all items for /received
 
     HOST = "localhost"
-    PORT = 3000
+    PORT = int(Portal2World.settings.default_portal2_port)
 
     death_link_active = False
     goal_map_code = ""
