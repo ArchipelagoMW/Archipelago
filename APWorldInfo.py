@@ -69,7 +69,14 @@ def scan_player_yamls(player_path: str) -> tuple[dict[str, list[dict[str, Any]]]
                 if doc is None:
                     continue
                 game = doc.get("game")
-                if not game or not isinstance(game, str):
+                # Handle weighted game option (e.g., game: {Archipelago: 50, ChecksFinder: 50})
+                if isinstance(game, dict):
+                    if game:
+                        # Pick the game with highest weight for display purposes
+                        game = max(game.keys(), key=lambda k: game[k] if isinstance(game[k], (int, float)) else 0)
+                    else:
+                        continue
+                elif not game or not isinstance(game, str):
                     continue
 
                 player_name = doc.get("name", os.path.splitext(fname)[0])
