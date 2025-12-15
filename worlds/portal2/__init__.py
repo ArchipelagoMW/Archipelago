@@ -1,3 +1,5 @@
+import sys
+
 from BaseClasses import ItemClassification, MultiWorld, Region, Tutorial
 from Options import PerGameCommonOptions
 import settings
@@ -17,7 +19,11 @@ class Portal2Settings(settings.Group):
         """The file path of the extras.txt file (used to generate the menu in game)"""
         description = "Portal 2 extras.txt file inside the mod"
 
-    menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath("C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt")
+    is_windows = sys.platform == "win32"
+    is_linux = sys.platform == "linux"
+    extras_path = "C:\\Program Files (x86)\\Steam\\steamapps\\sourcemods\\Portal2Archipelago\\scripts\\extras.txt" if is_windows else \
+                    "$HOME/.local/share/Steam/steamapps/sourcemods/Portal2Archipelago/scripts/extras.txt" if is_linux else "" # May may be user specific so cannot auto select
+    menu_file: Portal2ExtrasFilePath = Portal2ExtrasFilePath(extras_path)
 
 class Portal2WebWorld(WebWorld):
     game = "Portal 2"
@@ -185,9 +191,12 @@ class Portal2World(World):
                         self.options.fizzle_portal_trap_weight.value, 
                         self.options.butter_fingers_trap_weight.value] # in the same order as the traps appear in trap_items list
 
-        traps = self.random.choices(trap_items, weights=trap_weights, k=trap_fill_number)
-        for t in traps:
-            self.multiworld.itempool.append(self.create_item(t))
+        if sum(trap_weights) > 0 and trap_fill_number > 0:
+            traps = self.random.choices(trap_items, weights=trap_weights, k=trap_fill_number)
+            for t in traps:
+                self.multiworld.itempool.append(self.create_item(t))
+        else:
+            trap_fill_number = 0
 
         # Fill remaining with filler item
         filler_name = self.get_filler_item_name()
