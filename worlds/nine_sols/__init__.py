@@ -1,15 +1,13 @@
-import orjson
-import pkgutil
 from typing import Any, ClassVar, TextIO
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
-from Options import OptionError
+from Options import OptionError, OptionGroup
 from .items import NineSolsItem, all_non_event_items_table, item_name_groups, create_item, create_items
 from .locations_and_regions import all_non_event_locations_table, location_name_groups, create_regions
-from .options import FirstRootNode, NineSolsGameOptions
 from .ut_map_page.map_page_index import map_page_index
 from .jade_costs import generate_random_jade_costs
+from .options import *
 
 
 class NineSolsWebWorld(WebWorld):
@@ -23,6 +21,30 @@ class NineSolsWebWorld(WebWorld):
             link="guide/en",
             authors=["Ixrec"]
         )
+    ]
+    option_groups = [
+        OptionGroup("General Progression", [
+            ShuffleSolSeals,
+            SealsForEigong,
+            SealsForPrison,
+            SealsForEthereal,
+            SkipSoulscapePlatforming,
+        ]),
+        OptionGroup("Jade Cost Randomization", [
+            RandomizeJadeCosts,
+            JadeCostMin,
+            JadeCostMax,
+            JadeCostPlando,
+        ]),
+        # OptionGroup("Shop Unlocks", [
+        # ]),
+        OptionGroup("Additional Randomizations", [
+            FirstRootNode,
+            ShuffleGrapple,
+            ShuffleWallClimb,
+            ShuffleLedgeGrab,
+            LogicDifficulty,
+        ]),
     ]
 
 

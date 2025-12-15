@@ -191,21 +191,34 @@ class ShuffleLedgeGrab(Toggle):
     display_name = "Shuffle Ledge Grab"
 
 
+# actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
+
+    # General Progression
     shuffle_sol_seals: ShuffleSolSeals
     seals_for_eigong: SealsForEigong
     seals_for_prison: SealsForPrison
+    # skip weakened prison state?
     seals_for_ethereal: SealsForEthereal
     skip_soulscape_platforming: SkipSoulscapePlatforming
+
+    # Jade Costs
     randomize_jade_costs: RandomizeJadeCosts
     jade_cost_min: JadeCostMin
     jade_cost_max: JadeCostMax
     jade_cost_plando: JadeCostPlando
-    logic_difficulty: LogicDifficulty
+
+    # Shop Unlocks
+    # (several options)
+
+    # Additional Randomizations
     first_root_node: FirstRootNode
     shuffle_grapple: ShuffleGrapple
     shuffle_wall_climb: ShuffleWallClimb
     shuffle_ledge_grab: ShuffleLedgeGrab
-
+    # skill_tree_randomization
+    # shop_randomization
+    logic_difficulty: LogicDifficulty
+    # entrance_randomization
