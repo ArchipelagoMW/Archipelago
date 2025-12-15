@@ -776,7 +776,7 @@ def create_figments_20_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MIFL, {LocationName.MIFigments20})
     _add_locations_to_existing_region(multiworld, player, RegionName.NIMP, {LocationName.NIFigments20})
     _add_locations_to_existing_region(multiworld, player, RegionName.LOMA, {LocationName.LOFigments20})
-    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1BeforeSign, {LocationName.MMFigments20})
+    _add_locations_to_existing_region(multiworld, player, RegionName.MMI1AfterSign, {LocationName.MMFigments20})
     _add_locations_to_existing_region(multiworld, player, RegionName.THMSLev, {LocationName.THFigments20})
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMA, {LocationName.WWFigments20})
     _add_locations_to_existing_region(multiworld, player, RegionName.BVRB, {LocationName.BVFigments20})
@@ -807,7 +807,7 @@ def create_figments_60_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MMI1AfterSign, {LocationName.MMFigments60})
     _add_locations_to_existing_region(multiworld, player, RegionName.THCW, {LocationName.THFigments60})
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMALev, {LocationName.WWFigments60})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVESBoss, {LocationName.BVFigments60})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, {LocationName.BVFigments60})
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments60})
 
 
@@ -821,7 +821,7 @@ def create_figments_80_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLev, {LocationName.WWFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVESBoss, {LocationName.BVFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, {LocationName.BVFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments80})
 
 
@@ -835,7 +835,7 @@ def create_figments_100_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLevPyro, {LocationName.WWFigments100})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVESBoss, {LocationName.BVFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, {LocationName.BVFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments100})
 
 
