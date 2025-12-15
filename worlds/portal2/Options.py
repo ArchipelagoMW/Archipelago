@@ -35,13 +35,13 @@ class MotionBlurTrapWeight(BaseTrapWeight):
 
 class FizzlePortalTrapWeight(BaseTrapWeight):
     """
-    Likelihood of receiving a trap which makes it a little hard to see
+    Likelihood of receiving a trap which fizzles ALL portals on the map
     """
     display_name = fizzle_portal_trap
 
 class ButterFingersTrapWeight(BaseTrapWeight):
     """
-    Likelihood of receiving a trap which makes it a little hard to see
+    Likelihood of receiving a trap which makes it a little hard to hold items
     """
     display_name = butter_fingers_trap
 
