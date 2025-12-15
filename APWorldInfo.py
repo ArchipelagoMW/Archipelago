@@ -20,7 +20,7 @@ def get_all_world_info() -> list[dict[str, Any]]:
 
     world_info = []
     for name, cls in sorted(AutoWorldRegister.world_types.items()):
-        if cls.hidden or len(cls.item_names) == 0:
+        if cls.hidden or (len(cls.item_names) == 0 and len(cls.location_names) == 0):
             continue
         world_info.append(
             {
@@ -138,11 +138,12 @@ def scan_player_yamls(
     return yamls_by_game, weights_configs, parse_errors
 
 
-def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, int]:
+def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, int, str | None]:
     """
-    Run partial generation to get accurate item/location counts for a config.
+    Run partial generation to get partially accurate item/location counts for a config.
     Uses roll_settings from Generate.py to properly resolve triggers and linked_options.
-    Returns: (item_count, location_count) or (-1, -1) on failure.
+    Returns: (item_count, location_count, error) where error is None on success or a message on failure.
+    Note: Counts may vary due to random settings in the YAML.
     """
     import random
 
@@ -151,7 +152,7 @@ def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, in
     from worlds.AutoWorld import AutoWorldRegister, call_single
 
     if game not in AutoWorldRegister.world_types:
-        return (-1, -1)
+        return (-1, -1, f"Unknown game: {game}")
 
     world_type = AutoWorldRegister.world_types[game]
 
@@ -192,14 +193,14 @@ def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, in
         items = len(multiworld.itempool)
         locations = len([loc for loc in multiworld.get_locations(1) if not loc.is_event])
 
-        return (items, locations)
+        return (items, locations, None)
 
     except Exception as e:
         logger.warning(f"Could not get config counts for {game}: {e}")
         import traceback
 
         logger.debug(traceback.format_exc())
-        return (-1, -1)
+        return (-1, -1, str(e))
 
 
 def print_world_info() -> None:
@@ -254,11 +255,13 @@ def print_world_info() -> None:
                     print(f"    ... ({len(error_lines) - 3} more lines)")
             print()
 
+        generation_errors: list[dict[str, str]] = []
+
         if yamls_by_game:
             # Build player overview with counts
             for game, configs in yamls_by_game.items():
                 for cfg in configs:
-                    items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                    items, locs, error = get_config_item_location_counts(game, cfg["yaml"])
                     player_data.append(
                         {
                             "name": cfg["name"],
@@ -268,6 +271,8 @@ def print_world_info() -> None:
                             "locations": locs if locs >= 0 else 0,
                         }
                     )
+                    if error:
+                        generation_errors.append({"name": cfg["name"], "game": game, "error": error})
 
             # Calculate totals
             total_items = sum(p["items"] for p in player_data)
@@ -278,12 +283,27 @@ def print_world_info() -> None:
             print(f"MULTIWORLD OVERVIEW")
             print(f"{'=' * 60}")
             print(f"\nPlayers: {len(player_data)}")
-            print(f"Total Items: {total_items}")
-            print(f"Total Locations: {total_locations}")
+            print(f"Total Items: {total_items} (possible)")
+            print(f"Total Locations: {total_locations} (possible)")
+
+            # Display generation errors if any
+            if generation_errors:
+                print(f"\n\n{'=' * 60}")
+                print("GENERATION WARNINGS")
+                print(f"{'=' * 60}")
+                print("\nCould not calculate exact counts for these configurations:")
+                print("(Using 0 for items/locations in totals)\n")
+                for err in generation_errors:
+                    print(f"  {err['name']} ({err['game']}):")
+                    error_lines = err["error"].split("\n")
+                    for line in error_lines[:2]:
+                        print(f"    {line}")
+                    if len(error_lines) > 2:
+                        print(f"    ... ({len(error_lines) - 2} more lines)")
 
             # Player table
             if player_data:
-                name_width = max(len(p["name"]) for p in player_data)
+                name_width = max(len(str(p["name"])) for p in player_data)
                 game_width = max(len(p["game"]) for p in player_data)
                 item_width = len(str(max(p["items"] for p in player_data)))
                 loc_width = len(str(max(p["locations"] for p in player_data)))
@@ -293,7 +313,7 @@ def print_world_info() -> None:
                 )
                 print("-" * (name_width + game_width + item_width + loc_width + 30))
 
-                for p in sorted(player_data, key=lambda x: x["name"].lower()):
+                for p in sorted(player_data, key=lambda x: str(x["name"]).lower()):
                     print(
                         f" {p['name']:{name_width}} | {p['game']:{game_width}} | "
                         f"Items: {p['items']:{item_width}} | Locations: {p['locations']:{loc_width}}"
@@ -340,13 +360,13 @@ def print_world_info() -> None:
 
             for cfg in weights_configs:
                 game = cfg["game"]
-                items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                items, locs, error = get_config_item_location_counts(game, cfg["yaml"])
                 print(f"\n  {game}:")
                 print(f"    Template name: {cfg['name']}")
                 if items >= 0:
-                    print(f"    Items: {items}, Locations: {locs} (per player)")
+                    print(f"    Items: {items}, Locations: {locs} (possible, per player)")
                 else:
-                    print(f"    Could not calculate counts")
+                    print(f"    Could not calculate counts: {error}")
 
 
 def run_gui() -> None:
@@ -551,10 +571,11 @@ def run_gui() -> None:
 
             # Build player data with counts
             player_data: list[dict[str, Any]] = []
+            generation_errors: list[dict[str, str]] = []
             if self.yamls_by_game:
                 for game, configs in self.yamls_by_game.items():
                     for cfg in configs:
-                        items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                        items, locs, error = get_config_item_location_counts(game, cfg["yaml"])
                         player_data.append(
                             {
                                 "name": cfg["name"],
@@ -563,6 +584,48 @@ def run_gui() -> None:
                                 "locations": locs if locs >= 0 else 0,
                             }
                         )
+                        if error:
+                            generation_errors.append({"name": cfg["name"], "game": game, "error": error})
+
+            # Display generation errors if any
+            if generation_errors:
+                self.info_layout.add_widget(MDDivider())
+
+                gen_error_title = MDLabel(
+                    text="[b][color=#ffaa00]Generation Warnings[/color][/b]",
+                    markup=True,
+                    size_hint_y=None,
+                    height=dp(30),
+                )
+                self.info_layout.add_widget(gen_error_title)
+
+                gen_error_note = MDLabel(
+                    text="  Could not calculate exact counts for these configs:",
+                    size_hint_y=None,
+                    height=dp(25),
+                    theme_text_color="Secondary",
+                )
+                self.info_layout.add_widget(gen_error_note)
+
+                for err in generation_errors:
+                    name_label = MDLabel(
+                        text=f"  [color=#ffaa00]{err['name']}[/color] ({err['game']})",
+                        markup=True,
+                        size_hint_y=None,
+                        height=dp(25),
+                    )
+                    self.info_layout.add_widget(name_label)
+
+                    error_msg = err["error"]
+                    if len(error_msg) > 80:
+                        error_msg = error_msg[:77] + "..."
+                    error_label = MDLabel(
+                        text=f"    {error_msg}",
+                        size_hint_y=None,
+                        height=dp(20),
+                        theme_text_color="Secondary",
+                    )
+                    self.info_layout.add_widget(error_label)
 
             if player_data:
                 # Calculate totals
@@ -653,7 +716,7 @@ def run_gui() -> None:
 
                 for cfg in self.weights_configs:
                     game = cfg["game"]
-                    items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                    items, locs, error = get_config_item_location_counts(game, cfg["yaml"])
 
                     game_label = MDLabel(
                         text=f"\n  [b]{game}[/b]",
@@ -671,9 +734,9 @@ def run_gui() -> None:
                     self.info_layout.add_widget(template_label)
 
                     if items >= 0:
-                        counts_text = f"    Items: {items}, Locations: {locs} (per player)"
+                        counts_text = f"    Items: {items}, Locations: {locs} (possible, per player)"
                     else:
-                        counts_text = "    Could not calculate counts"
+                        counts_text = f"    Could not calculate counts: {error}"
 
                     weights_counts_label = MDLabel(
                         text=counts_text,
@@ -725,7 +788,7 @@ def run_gui() -> None:
 
                 for cfg in self.yamls_by_game[game]:
                     player_name = cfg["name"]
-                    items, locs = get_config_item_location_counts(game, cfg["yaml"])
+                    items, locs, error = get_config_item_location_counts(game, cfg["yaml"])
 
                     # Player name as heading
                     name_label = MDLabel(
@@ -737,7 +800,13 @@ def run_gui() -> None:
                     self.info_layout.add_widget(name_label)
 
                     if items >= 0:
-                        cfg_text = f"    Items: {items}, Locations: {locs}"
+                        cfg_text = f"    Items: {items}, Locations: {locs} (possible)"
+                    elif error:
+                        cfg_text = (
+                            f"    Could not calculate: {error[:60]}..."
+                            if len(error) > 60
+                            else f"    Could not calculate: {error}"
+                        )
                     else:
                         cfg_text = f"    Items: {world_data['items']}, Locations: {world_data['locations']} (possible)"
 
