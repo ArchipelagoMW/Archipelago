@@ -141,9 +141,13 @@ def scan_player_yamls(
 def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, int]:
     """
     Run partial generation to get accurate item/location counts for a config.
+    Uses roll_settings from Generate.py to properly resolve triggers and linked_options.
     Returns: (item_count, location_count) or (-1, -1) on failure.
     """
-    from BaseClasses import MultiWorld, CollectionState, PlandoOptions
+    import random
+
+    from BaseClasses import CollectionState, MultiWorld, PlandoOptions
+    from Generate import roll_settings
     from worlds.AutoWorld import AutoWorldRegister, call_single
 
     if game not in AutoWorldRegister.world_types:
@@ -152,62 +156,43 @@ def get_config_item_location_counts(game: str, yaml_data: dict) -> tuple[int, in
     world_type = AutoWorldRegister.world_types[game]
 
     try:
-        # Create minimal multiworld with proper initialization
+        # Save random state and use fixed seed for deterministic option rolling
+        random_state = random.getstate()
+        random.seed(0)
+
+        # Use roll_settings to properly resolve all options including triggers/linked_options
+        plando_options = PlandoOptions.connections | PlandoOptions.bosses
+        settings = roll_settings(yaml_data, plando_options)
+
+        # Restore random state
+        random.setstate(random_state)
+
+        # Create minimal multiworld
         multiworld = MultiWorld(1)
         multiworld.game = {1: game}
-        multiworld.player_name = {1: yaml_data.get("name", "Info")}
+        multiworld.player_name = {1: settings.name if settings.name else "Info"}
         multiworld.set_seed(0)
-        multiworld.plando_options = PlandoOptions.none
+        multiworld.plando_options = plando_options
 
         # Initialize world instance
         multiworld.worlds[1] = world_type(multiworld, 1)
 
-        # Build options with defaults first
-        options_dict = {}
-        for option_key, option_cls in world_type.options_dataclass.type_hints.items():
-            options_dict[option_key] = option_cls.from_any(option_cls.default)
+        # Build options from rolled settings (same pattern as MultiWorld.set_options)
+        options_dataclass = world_type.options_dataclass
+        options_dict = {option_key: getattr(settings, option_key) for option_key in options_dataclass.type_hints}
+        multiworld.worlds[1].options = options_dataclass(**options_dict)
 
-        # Apply options from YAML if game section exists
-        game_options = yaml_data.get(game, {})
-        if game_options and isinstance(game_options, dict):
-            for option_name, option_cls in world_type.options_dataclass.type_hints.items():
-                if option_name in game_options:
-                    try:
-                        value = game_options[option_name]
-                        # Handle weighted options - pick the highest weight option
-                        # But preserve lists as-is (e.g., included_s1_locations: ['paris', 'sapienza'])
-                        if isinstance(value, dict):
-                            if value:
-                                # Pick the key with highest weight, or first if weights are equal
-                                value = max(
-                                    value.keys(), key=lambda k: value[k] if isinstance(value[k], (int, float)) else 0
-                                )
-                            else:
-                                continue
-                        # Lists are passed directly to from_any() - they're valid option values
-                        # (e.g., included_s1_locations, levels_with_check_for_completion)
-                        options_dict[option_name] = option_cls.from_any(value)
-                    except Exception:
-                        pass  # Use default for this option
-
-        # Set the options on the world
-        multiworld.worlds[1].options = world_type.options_dataclass(**options_dict)
-
-        # Initialize state and required caches
+        # Initialize state and run generation steps
         multiworld.state = CollectionState(multiworld)
-
-        # Run generation steps
         call_single(multiworld, "generate_early", 1)
         call_single(multiworld, "create_regions", 1)
         call_single(multiworld, "create_items", 1)
 
-        # Count results - items in the pool
+        # Count results
         items = len(multiworld.itempool)
+        locations = len([loc for loc in multiworld.get_locations(1) if not loc.is_event])
 
-        # Count non-event locations
-        locations = [loc for loc in multiworld.get_locations(1) if not loc.is_event]
-
-        return (items, len(locations))
+        return (items, locations)
 
     except Exception as e:
         logger.warning(f"Could not get config counts for {game}: {e}")
