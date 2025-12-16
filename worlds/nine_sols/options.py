@@ -191,6 +191,88 @@ class ShuffleLedgeGrab(Toggle):
     display_name = "Shuffle Ledge Grab"
 
 
+class KuafuShopUnlock(Choice):
+    """
+    The condition for unlocking Kuafu's shop in Four Seasons Pavilion.
+
+    - radiant_pagoda is the same as the vanilla game: defeat Yingzhao, talk to Kuafu and use Kuafu's Vital Sanctum
+    in Radiant Pagoda.
+    - sol_seals will unlock Kuafu's shop after a certain number of Sol Seal items have been collected.
+    See kuafu_shop_unlock_sol_seals.
+    - 1_unlock_item will unlock Kuafu's shop after 1 "Progressive Shop Unlock" item has been collected. Remember that
+    since this is an AP item, you can also add it to start_inventory, local_items, and other generic options.
+    """
+    display_name = "Kuafu Shop Unlock"
+    default = 0
+    option_radiant_pagoda = 0
+    option_sol_seals = 1
+    option_1_unlock_item = 2
+
+
+class KuafuShopUnlockSolSeals(Range):
+    """The number of Sol Seals needed to unlock Kuafu's shop in Four Seasons Pavilion.
+    Has no effect unless kuafu_shop_unlock is set to sol_seals."""
+    display_name = "Kuafu Shop Unlock Sol Seals"
+    range_start = 0
+    range_end = 8
+    default = 1
+
+
+class ChiyouShopUnlock(Choice):
+    """
+    The condition for unlocking Chiyou's shop in Four Seasons Pavilion.
+
+    - factory_bridge will unlock Chiyou's shop after you check the "Factory (GH): Raise the Bridge for Chiyou" location.
+    This is the closest we could get to the vanilla behavior (Chiyou moving into FSP after rescuing Yi on the way out of
+    Prison) without enforcing far too much linearity for a randomizer.
+    - sol_seals will unlock Chiyou's shop after a certain number of Sol Seal items have been collected.
+    See chiyou_shop_unlock_sol_seals.
+    - 2_unlock_items will unlock Chiyou's shop after 2 "Progressive Shop Unlock" items have been collected. Remember
+    that since this is an AP item, you can also add it to start_inventory, local_items, and other generic options.
+    """
+    display_name = "Chiyou Shop Unlock"
+    default = 0
+    option_factory_bridge = 0
+    option_sol_seals = 1
+    option_2_unlock_items = 2
+
+
+class ChiyouShopUnlockSolSeals(Range):
+    """The number of Sol Seals needed to unlock Chiyou's shop in Four Seasons Pavilion.
+    Has no effect unless chiyou_shop_unlock is set to sol_seals."""
+    display_name = "Chiyou Shop Unlock Sol Seals"
+    range_start = 0
+    range_end = 8
+    default = 3
+
+
+class KuafuExtraInventoryUnlock(Choice):
+    """
+    The condition for unlocking Kuafu's shop in Four Seasons Pavilion.
+
+    - chiyou is the same as the vanilla game: Kuafu's extra inventory is unlocked when Chiyou moves into FSP.
+    - sol_seals will unlock Kuafu's extra inventory after a certain number of Sol Seal items have been collected.
+    See kuafu_shop_unlock_sol_seals.
+    - 3_unlock_items will unlock Kuafu's extra inventory after 3 "Progressive Shop Unlock" items have been collected.
+    Remember that since this is an AP item, you can also add it to start_inventory, local_items,
+    and other generic options.
+    """
+    display_name = "Kuafu Extra Inventory Unlock"
+    default = 0
+    option_chiyou = 0
+    option_sol_seals = 1
+    option_3_unlock_items = 2
+
+
+class KuafuExtraInventoryUnlockSolSeals(Range):
+    """The number of Sol Seals needed to unlock Kuafu's extra inventory in Four Seasons Pavilion.
+    Has no effect unless kuafu_extra_inventory_unlock is set to sol_seals."""
+    display_name = "Kuafu Extra Inventory Unlock Sol Seals"
+    range_start = 0
+    range_end = 8
+    default = 5
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -211,7 +293,12 @@ class NineSolsGameOptions(PerGameCommonOptions):
     jade_cost_plando: JadeCostPlando
 
     # Shop Unlocks
-    # (several options)
+    kuafu_shop_unlock: KuafuShopUnlock
+    kuafu_shop_unlock_sol_seals: KuafuShopUnlockSolSeals
+    chiyou_shop_unlock: ChiyouShopUnlock
+    chiyou_shop_unlock_sol_seals: ChiyouShopUnlockSolSeals
+    kuafu_extra_inventory_unlock: KuafuExtraInventoryUnlock
+    kuafu_extra_inventory_unlock_sol_seals: KuafuExtraInventoryUnlockSolSeals
 
     # Additional Randomizations
     first_root_node: FirstRootNode

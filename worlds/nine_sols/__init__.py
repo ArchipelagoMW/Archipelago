@@ -36,8 +36,14 @@ class NineSolsWebWorld(WebWorld):
             JadeCostMax,
             JadeCostPlando,
         ]),
-        # OptionGroup("Shop Unlocks", [
-        # ]),
+        OptionGroup("Shop Unlocks", [
+            KuafuShopUnlock,
+            KuafuShopUnlockSolSeals,
+            ChiyouShopUnlock,
+            ChiyouShopUnlockSolSeals,
+            KuafuExtraInventoryUnlock,
+            KuafuExtraInventoryUnlockSolSeals,
+        ]),
         OptionGroup("Additional Randomizations", [
             FirstRootNode,
             ShuffleGrapple,
@@ -91,6 +97,13 @@ class NineSolsWorld(World):
                     self.options.skip_soulscape_platforming.value = slot_data['skip_soulscape_platforming']
                     self.options.first_root_node = FirstRootNode.from_text(slot_data['first_root_node_name'])
                     self.options.logic_difficulty.value = slot_data.get('logic_difficulty', 0)
+                    self.options.kuafu_shop_unlock.value = slot_data.get('kuafu_shop_unlock', 0)
+                    self.options.kuafu_shop_unlock_sol_seals.value = slot_data.get('kuafu_shop_unlock_sol_seals', 0)
+                    self.options.chiyou_shop_unlock.value = slot_data.get('chiyou_shop_unlock', 0)
+                    self.options.chiyou_shop_unlock_sol_seals.value = slot_data.get('chiyou_shop_unlock_sol_seals', 0)
+                    self.options.kuafu_extra_inventory_unlock.value = slot_data.get('kuafu_extra_inventory_unlock', 0)
+                    self.options.kuafu_extra_inventory_unlock_sol_seals.value = (
+                        slot_data.get('kuafu_extra_inventory_unlock_sol_seals', 0))
             return
 
         # generate game-specific randomizations separate from AP items/locations
@@ -143,6 +156,12 @@ class NineSolsWorld(World):
             'seals_for_prison',
             'seals_for_ethereal',
             'logic_difficulty',
+            'kuafu_shop_unlock',
+            'kuafu_shop_unlock_sol_seals',
+            'chiyou_shop_unlock',
+            'chiyou_shop_unlock_sol_seals',
+            'kuafu_extra_inventory_unlock',
+            'kuafu_extra_inventory_unlock_sol_seals',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time
