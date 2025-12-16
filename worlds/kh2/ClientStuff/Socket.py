@@ -38,7 +38,6 @@ class KH2Socket():
         self.client_socket = None
         self.isConnected = False
         self.closing = False
-        pass;
 
     async def start_server(self):
         self.loop = asyncio.get_event_loop()
@@ -48,17 +47,15 @@ class KH2Socket():
 
     async def _accept_client(self):
         """Wait for a client to connect and start a listener task."""
+        logger.info("Waiting for KH2 game connection...")
         while not self.closing:
-            logger.info("Waiting for KH2 game connection...")
             try:
                 self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
                 self.isConnected = True
-                print(f"Client connected from {addr}")
-                logger.info("Connected")
                 self.loop.create_task(self.listen())
                 return
             except OSError as e:
-                print(f"Socket accept failed ({e}); retrying in 5s")
+                logger.info(f"Socket accept failed ({e}); retrying in 5s")
                 self.isConnected = False
                 await asyncio.sleep(5)
 
