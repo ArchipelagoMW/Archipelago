@@ -576,7 +576,7 @@
     },
     {
         "address": 1309, "name": "Greenhouse: Defeat Celestial Spectre: Shuigui",
-        "region": "GH - Shuigui Arena", "requires": []
+        "region": "GH - Shuigui Arena", "requires": [{ "item": "Charged Strike" }]
     },
 
     // Water & Oxygen Synthesis
