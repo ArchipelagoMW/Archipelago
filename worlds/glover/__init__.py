@@ -1205,6 +1205,9 @@ class GloverWorld(World):
             self.vague_chicken_text = {}
 
     def generate_tip_text(self):
+        if not hasattr(self, "mr_tip_text"):
+            self.mr_tip_text = []
+
         #Mr. Tip Custom Text
         if self.options.mr_tip_text_display.value != 0:
             for each_tip in self.tip_locations:
