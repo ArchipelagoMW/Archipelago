@@ -259,6 +259,7 @@ def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> [CollectionR
         return [lambda state: True, []]
     else:
         requires = all_requires_levels[0] if len(all_requires_levels) == 1 else [{"anyOf": all_requires_levels}]
+        requires = pre_eval_option_criteria_in_rule(world.options, requires)
         return [
             lambda state, r=requires: eval_rule(state, world.player, world.options, r),  # noqa
             regions_referenced_by_rule(requires)
@@ -281,15 +282,8 @@ def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions,
         return all(eval_criterion(state, p, options, sub_criterion) for sub_criterion in criterion)
 
     if isinstance(criterion, dict):
-        if "option" in criterion:
-            option_name = criterion["option"]
-            option_str_value = getattr(options, option_name).current_key
-            return eval_criterion(state, p, options, criterion[option_str_value])
-
+        # we can ignore "option" criteria here, because those should have been "pre-eval"ed already
         key, value = next(iter(criterion.items()))
-
-        # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
-        # mean exactly what they sound like, and those are the only kinds of criteria.
         if (key == "item" or key == "item_group") and isinstance(value, str):
             count = 1
             if "count" in criterion:  # technically no longer in use, but I still want it to be part of the format
@@ -312,6 +306,25 @@ def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions,
     raise ValueError("Unable to evaluate rule criterion: " + json.dumps(criterion))
 
 
+def pre_eval_option_criteria_in_rule(options: NineSolsGameOptions, rule: list[Any]) -> list[Any]:
+    return [pre_eval_option_criterion(options, c) for c in rule]
+
+
+def pre_eval_option_criterion(options: NineSolsGameOptions, criterion: Any) -> Any:
+    if isinstance(criterion, list):
+        return pre_eval_option_criteria_in_rule(options, criterion)
+
+    if isinstance(criterion, dict):
+        if "option" in criterion:
+            option_name = criterion["option"]
+            option_str_value = getattr(options, option_name).current_key
+            return pre_eval_option_criterion(options, criterion[option_str_value])
+        else:
+            return criterion
+
+    raise ValueError("Unable to pre-evaluate rule criterion: " + json.dumps(criterion))
+
+
 # Per AP docs:
 # "When using state.can_reach within an entrance access condition,
 # you must also use multiworld.register_indirect_condition."
@@ -327,10 +340,7 @@ def regions_referenced_by_criterion(criterion: Any) -> list[str]:
         return [region for sub_criterion in criterion for region in regions_referenced_by_criterion(sub_criterion)]
 
     if isinstance(criterion, dict):
-        if "option" in criterion:
-            possible_values = [v for v in criterion.values() if not isinstance(v, str)]
-            return [region for sub_criterion in possible_values for region in regions_referenced_by_criterion(sub_criterion)]
-
+        # we can ignore "option" criteria here, because those should have been "pre-eval"ed already
         key, value = next(iter(criterion.items()))
         if key == "item" or key == "item_group" or key == "count":
             return []
