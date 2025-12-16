@@ -177,6 +177,7 @@
     { "code": null, "name": "Victory - Eggnog", "type": "progression" },
     { "code": null, "name": "Event - Kuafu in FSP", "type": "progression" },
     { "code": null, "name": "Event - Chiyou in FSP", "type": "progression" },
+    { "code": null, "name": "Event - Kuafu Extra Shop Inventory", "type": "progression" },
     { "code": null, "name": "Event - Jiequan 1 Fight Unlocked", "type": "progression" },
     { "code": null, "name": "Event - Lady Ethereal Soulscape Unlocked", "type": "progression" },
     { "category": "medium_logic", "code": null, "name": "Trick - Bow Hover", "type": "progression" },
@@ -186,5 +187,8 @@
     // core movement abilities taken away by the randomizer
     { "code": 701, "name": "Wall Climb", "type": "progression" },
     { "code": 702, "name": "Grapple", "type": "progression" },
-    { "code": 703, "name": "Ledge Grab", "type": "progression" }
+    { "code": 703, "name": "Ledge Grab", "type": "progression" },
+
+    // other
+    { "code": 801, "name": "Progressive Shop Unlock", "type": "progression" }
 ]

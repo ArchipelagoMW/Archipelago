@@ -286,7 +286,7 @@ def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions,
         key, value = next(iter(criterion.items()))
         if (key == "item" or key == "item_group") and isinstance(value, str):
             count = 1
-            if "count" in criterion:  # technically no longer in use, but I still want it to be part of the format
+            if "count" in criterion:
                 count = criterion["count"]
             if "count_option" in criterion:
                 count = getattr(options, criterion["count_option"]).value

@@ -5,7 +5,7 @@ class TestDefaultWorld(NineSolsTestBase):
     options = {}
 
     def test_default_world(self):
-        self.assertEqual(self.getLocationCount(), 323)  # 318 default locations + 5 events
+        self.assertEqual(self.getLocationCount(), 324)  # 318 default locations + 6 events
 
         # we don't assert on the whole slot_data dict because e.g. apworld_version would be tautological
         # instead we assert on the set of keys to make sure we haven't forgotten to test a new one
