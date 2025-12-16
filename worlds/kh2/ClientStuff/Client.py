@@ -19,7 +19,6 @@ from .WorldLocations import *
 from NetUtils import ClientStatus, NetworkItem
 from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
 from .CMDProcessor import KH2CommandProcessor
-slot_data_sent = False
 
 class MessageType (IntEnum):
     Invalid = -1,
@@ -55,6 +54,7 @@ class KH2Context(CommonContext):
         self.socket = KH2Socket(self)
         asyncio.create_task(self.socket.start_server(), name="KH2SocketServer")
 
+        self.all_weapon_location_id = None
         self.kh2connectionconfirmed = False
         self.kh2connectionsearching = False
         self.number_of_abilities_sent = dict()
@@ -85,6 +85,8 @@ class KH2Context(CommonContext):
         self.kh2_seed_save_path_join = None
 
         self.kh2slotdata = None
+        self.send_slot_data_event = asyncio.Event()
+        self.send_slot_data_task = asyncio.create_task(self.send_slot_data(),)
         self.mem_json = None
         self.itemamount = {}
         self.client_settings = {
@@ -286,26 +288,7 @@ class KH2Context(CommonContext):
 
             self.locations_checked = set(args["checked_locations"])
 
-            global slot_data_sent
-            if not slot_data_sent:
-                if self.kh2connectionconfirmed:
-                    if self.kh2slotdata['BountyBosses']:
-                        for location in self.kh2slotdata['BountyBosses']:
-                            self.socket.send(MessageType.BountyList, [location])
-                    self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
-                    self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
-                    self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
-                    self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
-                    self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
-                    self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
-                    self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
-                    for item in self.kh2_seed_save["SoldEquipment"]:
-                        self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
-                    for location in self.locations_checked:
-                        chest = self.lookup_id_to_location[location]
-                        if chest in self.chest_set:
-                            self.socket.send(MessageType.ChestsOpened, [str(chest)])
-                    slot_data_sent = True
+            self.send_slot_data_event.set()
 
         if cmd == "ReceivedItems":
             index = args["index"]
@@ -316,6 +299,9 @@ class KH2Context(CommonContext):
                     item_to_send = self.item_name_to_data[name]
                     msg_to_send = list()
                     if item_to_send.ability:
+                        if item.location in self.all_weapon_location_id:
+                            return
+
                         ability_found = self.number_of_abilities_sent.get(name)
                         if not ability_found:
                             self.number_of_abilities_sent[name] = 1
@@ -439,6 +425,7 @@ class KH2Context(CommonContext):
     def connect_to_game(self):
         self.serverconnected = True
         self.slot_name = self.auth
+        self.all_weapon_location_id = {self.kh2_loc_name_to_id[loc] for loc in all_weapon_slot}
 
     def data_package_kh2_cache(self, loc_to_id, item_to_id):
         self.kh2_loc_name_to_id = loc_to_id
@@ -486,28 +473,44 @@ class KH2Context(CommonContext):
 
     def get_items(self):
         """Resend all items and info upon client request"""
-        if self.kh2slotdata['BountyBosses']:
-            for location in self.kh2slotdata['BountyBosses']:
-                self.socket.send(MessageType.BountyList, [location])
-        self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
-        self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
-        self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
-        self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
-        self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
-        self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
-        self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
-        for item in self.kh2_seed_save["SoldEquipment"]:
-            self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
-        for location in self.locations_checked:
-            chest = self.lookup_id_to_location[location]
-            if chest in self.chest_set:
-                self.socket.send(MessageType.ChestsOpened, [str(chest)])
-        slot_data_sent = True
+        self.send_slot_data_event.set()
 
         for item in self.received_items_IDs:
              self.socket.send_Item(item)
 
 
+    async def send_slot_data(self):
+        while not self.exit_event.is_set():
+            await self.send_slot_data_event.wait()
+            self.send_slot_data_event.clear()
+
+            # Wait until we can send
+            while not self.exit_event.is_set():
+                if not self.kh2connectionconfirmed or not self.kh2slotdata:
+                    await asyncio.sleep(5)
+                    continue
+                break
+
+            if self.exit_event.is_set():
+                return
+
+            print("sending slot data")
+            if self.kh2slotdata['BountyBosses']:
+                for location in self.kh2slotdata['BountyBosses']:
+                    self.socket.send(MessageType.BountyList, [location])
+            self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
+            self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
+            self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
+            self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
+            self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
+            self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
+            self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+            for item in self.kh2_seed_save["SoldEquipment"]:
+                self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
+            for location in self.locations_checked:
+                chest = self.lookup_id_to_location[location]
+                if chest in self.chest_set:
+                    self.socket.send(MessageType.ChestsOpened, [str(chest)])
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
