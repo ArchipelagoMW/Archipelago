@@ -181,3 +181,49 @@ class TestMediumFGHLogic(NineSolsTestBase):
         self.assertNotReachableWith("Factory (U): Behind Moving Boxes", [])
 
         self.assertReachableWith("Factory (U): Behind Moving Boxes", ["Arrow: Thunder Buster"])
+
+
+# Test the T-dashing logic around Broken Shanhai
+class TestVanillaFULogic(NineSolsTestBase):
+    options = {
+        "logic_difficulty": "vanilla",
+        "first_root_node": "factory_underground",
+        "shuffle_grapple": True,
+        "shuffle_wall_climb": True,
+        "shuffle_ledge_grab": True,
+    }
+
+    def test_default(self):
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
+        self.assertReachableWith("Factory (MR): Below Right Elevator", [])
+
+        self.assertNotReachableWith("Factory (U): Near Lower Elevator", [])
+        self.assertNotReachableWith("Factory (U): Find Broken Shanhai 9000", [])
+        self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", [])
+
+        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Air Dash"])
+        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Air Dash"])
+        self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", ["Air Dash"])
+
+
+class TestMediumFULogic(NineSolsTestBase):
+    options = {
+        "logic_difficulty": "medium",
+        "first_root_node": "factory_underground",
+        "shuffle_grapple": True,
+        "shuffle_wall_climb": True,
+        "shuffle_ledge_grab": True,
+    }
+
+    def test_default(self):
+        self.assertEqual(len(self.multiworld.get_reachable_locations()), 2)
+        self.assertReachableWith("Factory (MR): Below Right Elevator", [])
+
+        self.assertNotReachableWith("Factory (U): Near Lower Elevator", [])
+        self.assertNotReachableWith("Factory (U): Find Broken Shanhai 9000", [])
+        self.assertNotReachableWith("Factory (U): Examine Evacuation Notice", [])
+
+        self.assertReachableWith("Factory (U): Near Lower Elevator", ["Air Dash"])
+        self.assertReachableWith("Factory (U): Find Broken Shanhai 9000", ["Air Dash"])
+        # this is the medium logic change: combining AD and T-dash lets you cross both hazards
+        self.assertReachableWith("Factory (U): Examine Evacuation Notice", ["Air Dash"])

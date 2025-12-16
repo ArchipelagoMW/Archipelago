@@ -841,12 +841,16 @@
     ] },
     { "from": "FU - Kuiyan Arena", "to": "FU - Main Intersection", "requires": [] }, // hacking one-way door
     {
-        "from": "FU - Main Intersection", "to": "FU - Broken Shanhai",
+        "from": "FU - Main Intersection", "to": "FU - Broken Shanhai (with qi)",
         "requires": [ { "anyOf": [
             { "item": "Air Dash" }, { "item": "Cloud Leap" }
-        ] } ],
+        ] } ]
+    },
+    {
+        "from": "FU - Main Intersection", "to": "FU - Broken Shanhai",
         "medium_requires": [] // T-dash
     },
+    { "from": "FU - Broken Shanhai (with qi)", "to": "FU - Broken Shanhai", "requires": [] },
     {
         "from": "FU - Broken Shanhai", "to": "FU - Middle Right Exit",
         "requires": [
@@ -855,7 +859,11 @@
                 { "item": "Tai-Chi Kick" }, // kinda tight, may revisit
                 [ { "item": "Cloud Leap" }, { "item": "Air Dash" } ]
             ] }
-        ] // T-dash isn't an option here because you likely already spent it reaching FU-BS
+        ] // can't assume you have T-dash since you may have already spent it reaching FU-BS
+    },
+    {
+        "from": "FU - Broken Shanhai (with qi)", "to": "FU - Middle Right Exit",
+        "medium_requires": [] // T-dash
     },
     // we skip the BS <- MRE connection because MRE -> MI -> BS has weaker requirements (unless we want a precise TCK-only jump)
     {
