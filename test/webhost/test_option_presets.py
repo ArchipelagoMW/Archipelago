@@ -19,7 +19,7 @@ class TestOptionPresets(unittest.TestCase):
                             # pass in all plando options in case a preset wants to require certain plando options
                             # for some reason
                             option.verify(world_type, "Test Player", PlandoOptions(sum(PlandoOptions)))
-                            if not Visibility.complex_ui in option.visibility or Visibility.simple_ui in option.visibility:
+                            if not (Visibility.complex_ui in option.visibility or Visibility.simple_ui in option.visibility):
                                 self.fail(f"'{option_name}' in preset '{preset_name}' for game '{game_name}' is not "
                                           f"visible in any supported UI.")
                             supported_types = [NumericOption, OptionSet, OptionList, OptionCounter]
