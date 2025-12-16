@@ -237,16 +237,6 @@ def create_regions(world: "NineSolsWorld") -> None:
 # `logic` can be a location or a connection
 def get_combined_access_rule(logic: Any, world: "NineSolsWorld") -> [CollectionRule, list[str]]:
     vanilla_requires = logic["requires"] if "requires" in logic else None
-    # TODO: replace this hack with a generic "requires": { "option": ... } syntax
-    if (
-        "from" in logic and "to" in logic
-        and logic["from"] == "CC - Root Node" and logic["to"] == "CC - Root Node After Boss"
-        and world.options.skip_soulscape_platforming
-    ):
-        vanilla_requires = [  # no WC/TCK/LG/CL, only the platforming required that
-            {"item": "Event - Lady Ethereal Soulscape Unlocked"},
-            {"item": "Air Dash"}
-        ]
 
     medium_requires = None
     if "medium_requires" in logic:
@@ -291,6 +281,11 @@ def eval_criterion(state: CollectionState, p: int, options: NineSolsGameOptions,
         return all(eval_criterion(state, p, options, sub_criterion) for sub_criterion in criterion)
 
     if isinstance(criterion, dict):
+        if "option" in criterion:
+            option_name = criterion["option"]
+            option_str_value = getattr(options, option_name).current_key
+            return eval_criterion(state, p, options, criterion[option_str_value])
+
         key, value = next(iter(criterion.items()))
 
         # { "item": "..." } and { "anyOf": [ ... ] } and { "location": "foo" } and { "region": "bar" }
@@ -332,6 +327,10 @@ def regions_referenced_by_criterion(criterion: Any) -> list[str]:
         return [region for sub_criterion in criterion for region in regions_referenced_by_criterion(sub_criterion)]
 
     if isinstance(criterion, dict):
+        if "option" in criterion:
+            possible_values = [v for v in criterion.values() if not isinstance(v, str)]
+            return [region for sub_criterion in possible_values for region in regions_referenced_by_criterion(sub_criterion)]
+
         key, value = next(iter(criterion.items()))
         if key == "item" or key == "item_group" or key == "count":
             return []
