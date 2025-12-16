@@ -810,6 +810,10 @@
     ] } ] },
     { "from": "FGH - Above Root Node", "to": "FGH - Hammer Brothers Roof", "requires": [] }, // fall
     { "from": "FGH - Above Root Node", "to": "FGH - Lower Levels & Root Node", "requires": [] }, // fall farther
+    { "from": "FGH - Above Root Node", "to": "FGH - Upper Platforms of Nymph Puzzle Room", "requires": [
+        { "item": "Mystic Nymph: Scout Mode" }, // to rearrange the platforms
+        { "anyOf": [{ "item": "Ledge Grab" }, { "item": "Cloud Leap" }] } // to actually climb onto them
+    ] },
     { "from": "FGH - Lower Levels & Root Node", "to": "FGH - Platform Above Factory (Underground)", "requires": [] }, // fall
     { "from": "FGH - Platform Above Factory (Underground)", "to": "FGH - Lower Levels & Root Node", "requires": [ { "anyOf": [
         { "item": "Wall Climb" }, { "item": "Ledge Grab" }, { "item": "Cloud Leap" }

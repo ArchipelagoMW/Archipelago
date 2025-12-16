@@ -705,15 +705,15 @@
     },
     {
         "address": 1711, "name": "Factory (GH): Ball Drop in Platform Puzzle Room",
-        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ] // AND hacking
+        "region": "FGH - Upper Platforms of Nymph Puzzle Room", "requires": [] // AND hacking
     },
     {
         "address": 1712, "name": "Factory (GH): Recording Device in Platform Puzzle Room",
-        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+        "region": "FGH - Upper Platforms of Nymph Puzzle Room", "requires": []
     },
     {
         "address": 1713, "name": "Factory (GH): Tianhuo Flower in Platform Puzzle Room",
-        "region": "FGH - Above Root Node", "requires": [ { "item": "Mystic Nymph: Scout Mode" } ]
+        "region": "FGH - Upper Platforms of Nymph Puzzle Room", "requires": []
     },
 
     // Factory (Underground)
