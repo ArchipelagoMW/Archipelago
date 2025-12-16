@@ -12978,10 +12978,10 @@ function stringToTipTable(full_string)
 	local output_lines = {[1]=""}
 	for word in full_string:gmatch("%S+")
 	do
+		word = string.upper(word)
 		local sentence_size = string.len(output_lines[cur_line])
 		local first_word = sentence_size > 0
 		local word_prefix = ""
-		word = string.upper(word)
 		if first_word
 		then
 			word_prefix = " "

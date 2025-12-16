@@ -4,7 +4,10 @@ from .Options import GaribSorting, GaribLogic
 world_tables = {
     "Super Mario 64" : [
         "Power Star"
-        ]
+        ],
+    "The Grinch" : [
+        "Ya Grinched!"
+    ]
 }
 
 def select_trap_item_name(self, original_name : str) -> str:
