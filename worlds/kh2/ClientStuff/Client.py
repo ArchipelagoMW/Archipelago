@@ -32,6 +32,7 @@ class MessageType (IntEnum):
     Deathlink = 6,
     NotificationType = 7,
     NotificationMessage = 8,
+    ChestsOpened = 9,
     ReceiveItem = 10,
     RequestAllItems = 11,
     Handshake  = 12,
@@ -160,6 +161,7 @@ class KH2Context(CommonContext):
         self.Event = -1
         self.World = -1
         self.SoraDied = False
+        self.chest_set = set(exclusion_table["Chests"])
         self.keyblade_ability_checked = list()
 
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
@@ -259,6 +261,10 @@ class KH2Context(CommonContext):
                     self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
                     self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
                     self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+                    for location in self.locations_checked:
+                        chest = self.lookup_id_to_location[location]
+                        if chest in self.chest_set:
+                            self.socket.send(MessageType.ChestsOpened, [str(chest)])
                     slot_data_sent = True
 
         if cmd == "ReceivedItems":
@@ -310,6 +316,10 @@ class KH2Context(CommonContext):
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
+                for location in new_locations:
+                    chest = self.lookup_id_to_location[location]
+                    if chest in self.chest_set:
+                        self.socket.send(MessageType.ChestsOpened, [str(chest)])
 
         if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
@@ -446,6 +456,10 @@ class KH2Context(CommonContext):
         self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
         self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
         self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+        for location in self.locations_checked:
+            chest = self.lookup_id_to_location[location]
+            if chest in self.chest_set:
+                self.socket.send(MessageType.ChestsOpened, [str(chest)])
         slot_data_sent = True
 
         for item in self.received_items_IDs:

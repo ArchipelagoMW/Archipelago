@@ -21,6 +21,7 @@ class MessageType (IntEnum):
     Deathlink = 6,
     NotificationType = 7,
     NotificationMessage = 8,
+    ChestsOpened = 9,
     ReceiveItem = 10,
     RequestAllItems = 11,
     Handshake  = 12,
