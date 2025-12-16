@@ -27,15 +27,16 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    SlotData = 4,
-    BountyList = 5,
+    BountyList = 4,
+    SlotData = 5,
     Deathlink = 6,
-    NotificationType = 7,
-    NotificationMessage = 8,
-    ChestsOpened = 9,
-    ReceiveItem = 10,
-    RequestAllItems = 11,
-    Handshake  = 12,
+    SoldItems = 7,
+    NotificationType = 8,
+    NotificationMessage = 9,
+    ChestsOpened = 10,
+    ReceiveItem = 11,
+    RequestAllItems = 12,
+    Handshake  = 13,
     Victory = 19,
     Closed = 20
 
@@ -58,6 +59,7 @@ class KH2Context(CommonContext):
         self.kh2connectionsearching = False
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
+        self.kh2_seed_save = None
         self.kh2_local_items = None
         self.kh2connected = False
         self.kh2_finished_game = False
@@ -76,8 +78,11 @@ class KH2Context(CommonContext):
         self.slot_name = None
         self.disconnect_from_server = False
         self.sending = []
-
+        # list used to keep track of locations+items player has. Used for disoneccting
+        self.kh2_seed_save_cache = {
+        }
         self.kh2seedname = None
+        self.kh2_seed_save_path_join = None
 
         self.kh2slotdata = None
         self.mem_json = None
@@ -197,11 +202,19 @@ class KH2Context(CommonContext):
 
     async def connection_closed(self):
         self.serverconnected = False
+        if self.kh2seedname is not None and self.auth is not None:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
+                f.write(json.dumps(self.kh2_seed_save, indent=4))
+                f.close()
         await super(KH2Context, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
         self.locations_checked = []
+        if self.kh2seedname not in {None} and self.auth not in {None}:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
+                f.write(json.dumps(self.kh2_seed_save, indent=4))
+                f.close()
         await super(KH2Context, self).disconnect()
 
     @property
@@ -212,6 +225,10 @@ class KH2Context(CommonContext):
             return []
 
     async def shutdown(self):
+        if self.kh2seedname not in {None} and self.auth not in {None}:
+            with open(self.kh2_seed_save_path_join, 'w') as f:
+                f.write(json.dumps(self.kh2_seed_save, indent=4))
+                f.close()
         with open(self.kh2_client_settings_join, 'w') as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
             f2.close()
@@ -231,6 +248,27 @@ class KH2Context(CommonContext):
                 self.serverconnected = False
                 logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
                 return
+            self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
+            self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, Utils.get_file_safe_name(self.kh2_seed_save_path))
+            if not os.path.exists(self.kh2_seed_save_path_join):
+                self.kh2_seed_save = {
+                    # Item: Amount of them sold
+                    "SoldEquipment": dict(),
+                }
+                with open(self.kh2_seed_save_path_join, 'wt') as f:
+                    f.close()
+            elif os.path.exists(self.kh2_seed_save_path_join):
+                with open(self.kh2_seed_save_path_join) as f:
+                    try:
+                        self.kh2_seed_save = json.load(f)
+                    except json.decoder.JSONDecodeError:
+                        self.kh2_seed_save = None
+                    if self.kh2_seed_save is None or self.kh2_seed_save == {}:
+                        self.kh2_seed_save = {
+                            # Item: Amount of them sold
+                            "SoldEquipment": dict(),
+                        }
+                    f.close()
 
         if cmd == "Connected":
             self.kh2slotdata = args['slot_data']
@@ -261,6 +299,8 @@ class KH2Context(CommonContext):
                     self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
                     self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
                     self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+                    for item in self.kh2_seed_save["SoldEquipment"]:
+                        self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
                     for location in self.locations_checked:
                         chest = self.lookup_id_to_location[location]
                         if chest in self.chest_set:
@@ -456,6 +496,8 @@ class KH2Context(CommonContext):
         self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
         self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
         self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
+        for item in self.kh2_seed_save["SoldEquipment"]:
+            self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
         for location in self.locations_checked:
             chest = self.lookup_id_to_location[location]
             if chest in self.chest_set:

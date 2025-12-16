@@ -16,15 +16,16 @@ class MessageType (IntEnum):
     WorldLocationChecked = 1,
     LevelChecked = 2,
     KeybladeChecked = 3,
-    SlotData = 4,
-    BountyList = 5,
+    BountyList = 4,
+    SlotData = 5,
     Deathlink = 6,
-    NotificationType = 7,
-    NotificationMessage = 8,
-    ChestsOpened = 9,
-    ReceiveItem = 10,
-    RequestAllItems = 11,
-    Handshake  = 12,
+    SoldItems = 7,
+    NotificationType = 8,
+    NotificationMessage = 9,
+    ChestsOpened = 10,
+    ReceiveItem = 11,
+    RequestAllItems = 12,
+    Handshake  = 13,
     Victory = 19,
     Closed = 20
 
@@ -149,6 +150,9 @@ class KH2Socket():
             self.client.Event = int(message[2])
             self.client.World = int(message[3])
             self.client.SoraDied = True
+
+        elif msgType == MessageType.SoldItems:
+            self.client.kh2_seed_save["SoldEquipment"][message[1]] = message[2]
 
         elif msgType == MessageType.Victory:
             self.client.kh2_finished_game = True
