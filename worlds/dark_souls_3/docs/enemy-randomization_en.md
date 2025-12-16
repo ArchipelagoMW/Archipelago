@@ -37,7 +37,7 @@ This tutorial will show all the ways how to configure that preset.
 There are two main ways to assign an enemy to be randomized: [individual enemy assignments](#individual-assignments)
 to target a singular enemy placement and setting up [Pools](#pools) to target a category of enemies.
 
-Custom pools are recommended unless specifically want to single out one enemy placement.
+Custom pools are recommended unless you specifically want to single out one enemy placement.
 
 All bosses also have their own category, so individual assignment is not necessary in those cases.
 
@@ -55,8 +55,8 @@ Individual enemy assignment is in contrast to a pool, where you cannot target in
 This overrides pools and any other configuration will usually ignore progression and can possibly cause you to have to
 fight Yhorm the Giant without Storm Ruler.
 
-You use it in the [Enemies section](#enemies) by selecting a specific enemy using its unique
-ID, or a name describing it followed by its ID.
+You use it in the [`Enemies`](#enemies) section by selecting a specific enemy using its unique
+ID, or its specific name followed by its ID.
 
 See the '/randomizer/preset/Template.txt' file of the static randomizer for all available IDs.
 
@@ -68,7 +68,7 @@ This is the default and allows any enemy in the pool to appear there.
 
 `norandom`
 
-Assigns an enemy to itself. This has the same effect as adding the enemy name to [DontRandomize](#dontrandomize).
+Assigns an enemy to itself. This has the same effect as adding the enemy name to [`DontRandomize`](#dontrandomize).
 
 ## Pools
 
@@ -138,6 +138,8 @@ Boss:
   Pool: Basic
 ```
 
+Be aware that weights will not work in the [`Enemies`](#enemies) section.
+
 ## Settings
 
 ### Boss
@@ -147,12 +149,10 @@ By default, this is the pool of all 29 bosses.
 
 ```
 Boss:
-- Weight: 79 # 79% of bosses will still be bosses
+- Weight: 80
   Pool: default
 - Weight: 20 # Replace 20% of all bosses with minibosses
   Pool: Miniboss
-- Weight: 1 # Replace 1% of all bosses with regular enemies. It's always funny
-  Pool: Basic
 ```
 
 ### Miniboss
@@ -232,7 +232,7 @@ Boss:
 
 A semicolon-separated list of enemies or enemy types to remove from all pools.
 It can still be assigned to individual enemies.
-This is overridden by directives to [not randomized](#dontrandomize) enemies.
+This is overridden by [`DontRandomize`](#dontrandomize) directives.
 
 ```
 # Remove the most annoying enemies from all pools
@@ -241,7 +241,7 @@ RemoveSource: Bridge Darkeater Midir; Ancient Wyvern Mob; Curse-rotted Greatwood
 
 ### OopsAll
 
-Assigning an enemy or a pool to OopsAll sets all pools to that specific enemy or category of enemy. This can still be
+Assigning an enemy or a pool to `OopsAll` sets all pools to that specific enemy or category of enemy. This can still be
 overridden using [individual enemy assginments](#individual-assignments), but otherwise every enemy is replaced by
 this setting.
 
