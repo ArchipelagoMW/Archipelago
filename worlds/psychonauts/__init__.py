@@ -4,7 +4,7 @@ import settings
 from BaseClasses import Item
 from BaseClasses import Tutorial, ItemClassification, MultiWorld
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess, icon_paths
 from . import Regions
 from . import Rules
 from .ItemUtils import repeated_item_names_gen
@@ -32,10 +32,15 @@ from .Subclasses import PSYItem
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="PSYClient")
+    launch_subprocess(launch, name="PsychonautsClient")
 
 
-components.append(Component("Psychonauts Client", "PSYClient", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("Psychonauts Client", 
+                            func=launch_client, 
+                            component_type=Type.CLIENT, 
+                            icon="AP_Merit_Badge"))
+
+icon_paths["AP_Merit_Badge"] = f"ap:{__name__}/Icons/AP_Merit_Badge.png"
 
 
 class PsychonautsSettings(settings.Group):

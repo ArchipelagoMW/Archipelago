@@ -1,11 +1,12 @@
 # Psychonauts_AP
 
-This project is a work in progress Archipelago World for the Psychonauts Randomizer.
+This is a work in progress Archipelago World for the Psychonauts Randomizer.
 
 Please read [docs/setup_en.md](../psychonauts/docs/setup_en.md) for AP world setup and installation instructions,
 and the [en_Psychonauts.md](../psychonauts/docs/en_Psychonauts.md) for a list of changes from the vanilla game.
 
-Make sure to use the latest version of the PsychoRando AP Branch.
+Thanks to Krista Corkos and Chris Wilson. The Archipelago logo is licensed under Creative Commons https://creativecommons.org/licenses/by-nc/4.0/ 
+- Logo has been modified for use, placed on a merit badge. Modifications made by Ragna.
 
 Randomizer Mod Here:
 https://github.com/Akashortstack/PsychoRando/releases
