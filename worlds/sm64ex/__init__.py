@@ -134,7 +134,7 @@ class SM64World(World):
                                      if self.move_rando_bitvec & (1 << itemdata.code - double_jump_bitvec_offset)]
 
     def generate_basic(self):
-        if not (self.options.buddy_checks):
+        if not self.options.buddy_checks:
             self.multiworld.get_location("BoB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock BoB"))
             self.multiworld.get_location("WF: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WF"))
             self.multiworld.get_location("JRB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock JRB"))
