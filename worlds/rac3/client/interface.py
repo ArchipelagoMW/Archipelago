@@ -318,9 +318,9 @@ class Rac3Interface(GameInterface):
         if other_player is not None:
             classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
             if other_player == our_name:
-                self.messagebox(f'Found: {CLASSIFICATION_TO_COLOR[classification]}{name}')
+                self.messagebox(f'Found {CLASSIFICATION_TO_COLOR[classification]}{name}')
             else:
-                self.messagebox(f"Received: {CLASSIFICATION_TO_COLOR[classification]}{name} {RAC3TEXTCOLOR.NORMAL}from {RAC3TEXTCOLOR.GREEN}{other_player}")
+                self.messagebox(f"Received {CLASSIFICATION_TO_COLOR[classification]}{name} {RAC3TEXTCOLOR.NORMAL}from {RAC3TEXTCOLOR.GREEN}{other_player}")
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -873,8 +873,8 @@ class Rac3Interface(GameInterface):
         # real overflow cap is actually about 248, but we don't need that long messages
         msg_bytes = format_textbox_string(message[:200:])
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
-        # TODO: Fix width to be more consistent and not including color bytes
-        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, int(len(msg_bytes) * 6.85))
+        width = int(len(msg_bytes) * 4.8 + len(msg_bytes) ** 1.18)
+        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
