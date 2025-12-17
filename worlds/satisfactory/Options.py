@@ -64,9 +64,9 @@ class ElevatorPhase(NamedRange):
     
     - **Phase 1 (Tiers 1-2)**: ~3 Hours
     - **Phase 2 (Tiers 1-4)**: ~8 Hours
-    - **Phase 3 (Tiers 1-6)**: ~2 Days
-    - **Phase 4 (Tiers 1-8)**: ~1 Week
-    - **Phase 5 (Tiers 1-9)**: ~1.5 Weeks
+    - **Phase 3 (Tiers 1-6)**: ~50 Hours
+    - **Phase 4 (Tiers 1-8)**: ~100 Hours
+    - **Phase 5 (Tiers 1-9)**: ~150 Hours
     """
     display_name = "Final Space Elevator Phase in logic"
     default = 2
