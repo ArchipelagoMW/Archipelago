@@ -454,10 +454,11 @@
     "condition": {}
   },
   {
-    "from": "WM: Sky",
+    "from": "WM: Underwater",
     "to": "Verso's Drafts",
     "condition": {
-      "Painted Power": 1
+      "Painted Power": 1,
+      "Area - Verso's Drafts": 1
     }
   }
 ]

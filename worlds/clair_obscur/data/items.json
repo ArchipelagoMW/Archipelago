@@ -2812,5 +2812,222 @@
     "internal_name": "Feet Trap",
     "quantity": 1,
     "progressive": 5
+  },
+  {
+    "type": "Area",
+    "name": "Area - Verso's Drafts",
+    "internal_name": "SideLevel_VersosDraft",
+    "quantity": 1,
+    "progressive": 1
+  },
+  {
+    "type": "Weapon",
+    "name": "Cleim",
+    "internal_name": "Simonim",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Duollison",
+    "internal_name": "Duollison",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sucreso",
+    "internal_name": "VD_Verso_1",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Esquiso",
+    "internal_name": "VD_Verso_3",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Licorum",
+    "internal_name": "VD_Maelle_1",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Esqium",
+    "internal_name": "VD_Maelle_2",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Sucetton",
+    "internal_name": "VD_Sciel_1",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Esquion",
+    "internal_name": "VD_Sciel_2",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Esquiaro",
+    "internal_name": "VD_Monoco_2",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Baguettaro",
+    "internal_name": "Baguettaro",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Bonbim",
+    "internal_name": "VD_Lune_1",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Weapon",
+    "name": "Esquim",
+    "internal_name": "VD_Lune_2",
+    "quantity": 1,
+    "progressive": 2
+  },
+  {
+    "type": "Picto",
+    "name": "Empowering Jumps",
+    "internal_name": "EmpoweringJumps",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Gradient Parry",
+    "internal_name": "GradientParry",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Empowered Healer",
+    "internal_name": "EmpoweredHealer",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Gradient Overcharge",
+    "internal_name": "GradientOvercharge",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Longer Break",
+    "internal_name": "LongerBreak",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Frenzy",
+    "internal_name": "Frenzy",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Damage Share",
+    "internal_name": "DamageShare",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Slowing Attack",
+    "internal_name": "SlowingAttack",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Trigger Happy",
+    "internal_name": "TriggerHappy",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Alternating Critical",
+    "internal_name": "AlternatingCritical",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Double Third",
+    "internal_name": "DoubleThird",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "SOS Healing Tint",
+    "internal_name": "SOSHealingTint",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "AP Discount",
+    "internal_name": "APDiscount",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Consuming Attack",
+    "internal_name": "ConsumingAttack",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Feint",
+    "internal_name": "Feint",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "First Life",
+    "internal_name": "FirstLife",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Picto",
+    "name": "Clea's Death",
+    "internal_name": "CleasDeath",
+    "quantity": 1,
+    "progressive": 3
+  },
+  {
+    "type": "Quest item",
+    "name": "Toy Boat",
+    "internal_name": "Quest_ToyBoat",
+    "quantity": 1,
+    "progressive": 1
   }
 ]

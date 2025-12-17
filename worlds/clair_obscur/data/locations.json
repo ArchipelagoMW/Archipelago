@@ -6223,11 +6223,236 @@
         "type": "Lost Gestral reward"
     },
     {
-        "name": "Verso's Drafts: Item 1",
-        "internal_name": "",
+        "name": "Verso's Drafts: Reverie Path - Behind the waterfall",
+        "internal_name": "Chest_SideLevel_VersosDraft_1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "Quest_ToyBoat",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - In hut near the flag",
+        "internal_name": "Chest_SideLevel_VersosDraft_3",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
         "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Waterfall near 2 Esquies",
+        "internal_name": "Chest_SideLevel_VersosDraft_4",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Next to the treehouse piano",
+        "internal_name": "Chest_SideLevel_VersosDraft_6",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - In candy jars at the carnival",
+        "internal_name": "Chest_SideLevel_VersosDraft_8",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Paint cage in the forest",
+        "internal_name": "Chest_SideLevel_VersosDraft_9",
+        "location": "Verso's Drafts",
+        "condition": {"Free Aim": 1},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: In candy jar across from the cake door",
+        "internal_name": "Chest_SideLevel_VersosDraft_12",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - On the diving board",
+        "internal_name": "Chest_SideLevel_VersosDraft_13",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Behind the crowded slide",
+        "internal_name": "Chest_SideLevel_VersosDraft_14",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Open Playground - Paint cage",
+        "internal_name": "",
+        "location": "Verso's Drafts",
+        "condition": {"Free Aim": 1},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: On the train tracks through the door",
+        "internal_name": "Chest_SideLevel_VersosDraft_16",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: On a box through the door",
+        "internal_name": "Chest_SideLevel_VersosDraft_16",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - In jar near carnival exit",
+        "internal_name": "Chest_SideLevel_VersosDraft_20",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - Behind Chromatic Franctale",
+        "internal_name": "Chest_SideLevel_VersosDraft_22",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - Cross the beams",
+        "internal_name": "Chest_SideLevel_VersosDraft_24",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Beside balloon gestral",
+        "internal_name": "Chest_SideLevel_VersosDraft_25",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - In candy jar before carnival entrance",
+        "internal_name": "Chest_SideLevel_VersosDraft_26",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - Behind giant blocks near xylophone bridge",
+        "internal_name": "Chest_SideLevel_VersosDraft_28",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Hopscotch by the flag",
+        "internal_name": "Chest_SideLevel_VersosDraft_31",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - Hopscotch",
+        "internal_name": "Chest_SideLevel_VersosDraft_33",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - In train car with a Licorne",
+        "internal_name": "Chest_SideLevel_VersosDraft_35",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Chromatic Licorne",
+        "internal_name": "VD_LicorneAlpha*1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Verso's Drafts: Chromatic Machinapieds",
+        "internal_name": "VD_MachinapiedsAlpha*1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Verso's Drafts: Chromatic Franctale",
+        "internal_name": "VD_Franctale_Alpha*1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Verso's Drafts: Chromatic Barbasucette",
+        "internal_name": "VD_BarbasucetteAlpha*1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Chromatic"
+    },
+    {
+        "name": "Verso's Drafts: Half-baked Gestral",
+        "internal_name": "VD_GestralBalloon*1",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Verso's Drafts: Licornapieds",
+        "internal_name": "VD_licornapieds*1",
+        "location": "Verso's Drafts",
+        "condition": {
+            "Toy Boat": 1
+        },
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Normal"
+    },
+    {
+        "name": "Root of All Evil: Osquio",
+        "internal_name": "VD_Osquio*1",
+        "location": "Root of All Evil",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Area"
     }
 ]

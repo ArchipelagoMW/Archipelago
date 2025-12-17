@@ -77,8 +77,8 @@ class ClairObscurWorld(World):
             "Revive Tint Shard": 10,
             "Chroma Elixir Shard": 4,
 
-            #Only 10 are possible to get in a normal playthrough
-            "Perfect Chroma Catalyst": 10
+            #Only 15 are possible to get in a normal playthrough (Thank You Update added 5)
+            "Perfect Chroma Catalyst": 15
         }
 
         self.item_pool = []
