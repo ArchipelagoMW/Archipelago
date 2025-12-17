@@ -12079,6 +12079,10 @@ function GLOVERHACK:setCustomTipText(mrhints)
 	mainmemory.writebyte(self.tip_hints + GLOVERHACK:getSettingPointer(), mrhints);
 end
 
+function GLOVERHACK:setCustomGaribSounds(garibsounds)
+	mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
+end
+
 -- function GLOVERHACK:setGaribSorting(gsort)
 --     mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
 -- end
@@ -13385,9 +13389,9 @@ function process_slot(block)
 	then
 		applyCustomTipText(block['slot_mr_tips_text'])
 	end
-	if block['slot_random_garib_sounds'] ~= nil and block['slot_random_garib_sounds'] ~= 0
+	if block['slot_random_garib_sounds'] ~= nil
 	then
-		print("Random Garib Sounds Enabled Here!")
+		GVR:setCustomGaribSounds(block['slot_random_garib_sounds'])
 	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then
