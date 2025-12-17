@@ -67,7 +67,7 @@ async def handle_received_items(ctx: 'Context') -> None:
 
     # 初回だけ記録用に items_received の長さを記憶しておく
     for item in ctx.items_received[ctx.processed_item_count:]:
-        ctx.game_interface.item_received(item.item)
+        ctx.game_interface.item_received(item.item, ctx.player_names[item.player])
         # logger.info(f"Received item: ({item_id})")
 
     ctx.processed_item_count = len(ctx.items_received)

@@ -312,9 +312,10 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code: int):
+    def item_received(self, item_code: int, other_player: str):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
         classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
+        # self.messagebox() # "Received: {name} from {other_player}"
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -864,10 +865,8 @@ class Rac3Interface(GameInterface):
         return self.pause_menu and pressed_square
 
     def messagebox(self, message):
-        # real overflow cap is actually about 248, but we dont need that long messages
-        msg_bytes = format_textbox_string(message)
-        if len(msg_bytes) > 200:
-            msg_bytes = format_textbox_string(message[:200])
+        # real overflow cap is actually about 248, but we don't need that long messages
+        msg_bytes = format_textbox_string(message[:200:])
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
         # TODO: Fix width to be more consistent and not including color bytes
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, len(msg_bytes) * 7)
