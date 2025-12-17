@@ -8,8 +8,8 @@ from typing import ClassVar
 from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .Arrays import item_dict, local_levels, skipped_local_locations
-from .Items import GLItem, item_frequencies, item_list, item_table, obelisks, mirror_shards, traps
+from .Data import item_dict, local_levels, skipped_local_locations, obelisks, mirror_shards
+from .Items import GLItem, item_table, item_list
 from .Locations import LocationData, all_locations, location_table
 from .Options import GLOptions
 from .Regions import connect_regions, create_regions
@@ -179,7 +179,7 @@ class GauntletLegendsWorld(World):
                      or ItemClassification.useful in item_.progression)
                      and item_.item_name not in precollected
                      and item_.item_name not in skipped_items]:
-            freq = item_frequencies.get(item.item_name, 1)
+            freq = item.frequency
             required_items += [item.item_name for _ in range(freq)]
             item_required_count -= freq
 
@@ -192,9 +192,9 @@ class GauntletLegendsWorld(World):
                      and ItemClassification.useful not in item_.progression
                      and item_.item_name not in skipped_items]:
 
-            freq = item_frequencies.get(item.item_name, 1) + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
+            freq = item.frequency + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
             if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
-                freq = item_frequencies.get(item.item_name, 1)
+                freq = item.frequency
             if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency >= 50:
                 freq *= 2
 

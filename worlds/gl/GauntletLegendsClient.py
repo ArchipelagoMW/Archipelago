@@ -11,7 +11,7 @@ from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser,
 from NetUtils import ClientStatus, NetworkItem
 from Utils import user_path
 
-from .Arrays import (
+from .Data import (
     base_count,
     boss_level,
     castle_id,
@@ -170,7 +170,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         if not self.ctx.glslotdata:
             logger.info("Cannot toggle InstantMax: slot data not initialized.")
             return
-        self.ctx.glslotdata["instant_max"] = not self.ctx.glslotdata["instant_max"]
+        self.ctx.glslotdata['instant_max'] = not self.ctx.glslotdata['instant_max']
         logger.info(f"InstantMax {('Enabled.' if self.ctx.glslotdata['instant_max'] else 'Disabled.')}")
 
     def _cmd_players(self, value: int):
@@ -686,15 +686,15 @@ class GauntletLegendsContext(CommonContext):
             self.obelisks = [
                 item
                 for item in self.location_scouts
-                if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
+                if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", "filler")).item_name
                    and item.player == self.slot
             ]
             self.useful = [
                 item
                 for item in self.location_scouts
-                if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).item_name
-                    and (items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.useful
-                    or items_by_id.get(item.item, ItemData(0, "", ItemClassification.filler)).progression == ItemClassification.progression)
+                if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", "filler")).item_name
+                    and (items_by_id.get(item.item, ItemData(0, "", "filler")).progression == ItemClassification.useful
+                    or items_by_id.get(item.item, ItemData(0, "", "filler")).progression == ItemClassification.progression)
                     and item.player == self.slot
             ]
             self.obelisk_locations = [

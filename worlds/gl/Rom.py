@@ -1,4 +1,3 @@
-import hashlib
 import io
 import json
 import os
@@ -11,9 +10,9 @@ from BaseClasses import Location, ItemClassification
 
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
-from .Arrays import item_dict, level_address, level_header, level_locations, level_size
-from .Items import items_by_id, ItemData
-from .Locations import location_data, GLLocation
+from .Data import level_address, level_header, level_locations, level_size
+from .Items import ItemData, items_by_id
+from .Locations import locationName_to_data, GLLocation
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -125,12 +124,12 @@ class GLPatchExtension(APPatchExtension):
                     continue
                 if "Mirror" in location_name:
                     continue
-                if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0], ItemData(0, "", ItemClassification.filler)).item_name:
+                if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0], ItemData(0, "", "filler")).item_name:
                     try:
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
                             bytearray(data.objects[index][0:6])
-                            + bytes(item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4])
+                            + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes([0x27, 0x4]))
                             + bytes([0x0, 0x0, 0x0, 0x0]),
                         ]
                         del data.objects[index]
@@ -159,7 +158,7 @@ class GLPatchExtension(APPatchExtension):
                             + bytearray(
                                 [
                                     0x0, 0x0, 0x26, 0x1, 0x0,
-                                    location_data[location_name].difficulty,
+                                    locationName_to_data[location_name].difficulty,
                                     0x0, 0x0, 0x0,
                                     item[0] - 77780054,
                                     0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
@@ -179,18 +178,18 @@ class GLPatchExtension(APPatchExtension):
                         slice_ = bytearray(chest[0:6])
                         data.items += [
                             slice_
-                            + bytes(item_dict[item[0]] if item[1] == options["player"] else [0x27, 0x4])
+                            + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes([0x27, 0x4]))
                             + bytes([chest[11], 0x0, 0x0, 0x0]),
                         ]
                         del data.chests[chest_index]
                         data.chests_replaced_by_items += 1
                     else:
                         if chest_barrel(location_name):
-                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12:14] = item_dict[item[0]]
+                            data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][12:14] = items_by_id[item[0]].rom_id.to_bytes(2)
                             if "Chest" in location_name:
                                 data.chests[j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][9] = 0x2
                         else:
-                            data.items[j - data.items_replaced_by_obelisks][6:8] = item_dict[item[0]]
+                            data.items[j - data.items_replaced_by_obelisks][6:8] = items_by_id[item[0]].rom_id.to_bytes(2)
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
@@ -289,7 +288,7 @@ def get_level_data(stream: io.BytesIO, size: int, level: int = 0) -> tuple[io.By
         data = patch_camp(data)
     if level == 23:
         data = patch_trenches(data)
-    data.header = data.stream.read(0x5C)
+    data.header = bytearray(data.stream.read(0x5C))
     data.stream.seek(0)
     data.item_addr = int.from_bytes(data.stream.read(4), "big")
     data.spawner_addr = int.from_bytes(data.stream.read(4), "big")
