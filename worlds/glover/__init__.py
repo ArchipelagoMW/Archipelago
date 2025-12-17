@@ -1169,6 +1169,7 @@ class GloverWorld(World):
         options["starting_ball"] = self.options.starting_ball.value
         options["garib_logic"] = self.options.garib_logic.value
         options["garib_sorting"] = self.options.garib_sorting.value
+        options["random_garib_sounds"] = self.options.random_garib_sounds.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
         options["randomized_spawns"] = self.options.spawning_checkpoint_randomizer.value
@@ -1206,7 +1207,7 @@ class GloverWorld(World):
 
     def generate_tip_text(self):
         if not hasattr(self, "mr_tip_text"):
-            self.mr_tip_text = []
+            self.mr_tip_text = {}
 
         #Mr. Tip Custom Text
         if self.options.mr_tip_text_display.value != 0:

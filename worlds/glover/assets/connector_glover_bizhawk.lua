@@ -12919,7 +12919,7 @@ function applyCustomTipText(tipTable)
 				end
 			end
 		end
-		if WAYROOM_TIPS_TABLE[ap_id] ~= nil or 1972 == ap_id
+		if ROM_WAYROOM_TIPS_TABLE[ap_id] ~= nil or 1972 == ap_id
 		then
 			local table_id = 1
 			if 1972 ~= ap_id
@@ -12953,7 +12953,7 @@ function setTipText(tip_address, input_text, is_wayroom)
 	local furthest_line = 0
 	for line_index, line_text in pairs(tip_dialogue)
 	do
-		print(line_text)
+		-- print(line_text)
 		if furthest_line < line_index then
 			furthest_line = line_index
 		end
@@ -12983,15 +12983,17 @@ function stringToTipTable(full_string)
 	local output_lines = {[1]=""}
 	for word in full_string:gmatch("%S+")
 	do
+		-- Uppercase it
 		word = string.upper(word)
-
-		local sentence_size = string.len(output_lines[cur_line])
-		local first_word = sentence_size > 0
-		local word_prefix = ""
+		-- Validate it
+		word = string.gsub(word, "[^A-Z0-9%.%%%?%-%+:;×ÄÜÖÉ£¤¥¬ª«¨©¦',]", "")
+		local sentence_size = string.len(output_lines[cur_line]) + 1
+		local first_word = sentence_size == 0
+		local word_prefix = " "
 		if first_word
 		then
-			word_prefix = " "
-			sentence_size = sentence_size + 1
+			word_prefix = ""
+			sentence_size = sentence_size - 1
 		end
 		--Truncate oversized words
 		if string.len(word) > 20
@@ -13381,6 +13383,10 @@ function process_slot(block)
 	if block['slot_mr_tips_text'] ~= nil
 	then
 		applyCustomTipText(block['slot_mr_tips_text'])
+	end
+	if block['slot_random_garib_sounds'] ~= nil and block['slot_random_garib_sounds'] ~= 0
+	then
+		print("Random Garib Sounds Enabled Here!")
 	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then

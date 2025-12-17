@@ -103,6 +103,11 @@ class GaribOrderOverrides(OptionCounter):
     default = {}
     display_name = "Garib Order Overrides"
 
+class RandomGaribSounds(Toggle):
+    """Makes garib sounds use random sounds instead."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Random Garib Sounds"
+
 class EntranceRandomizer(DefaultOnToggle):
     """Loading zones are randomized. Default on.
     """
@@ -450,6 +455,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     garib_logic : GaribLogic
     garib_sorting : GaribSorting
     garib_order_overrides : GaribOrderOverrides
+    random_garib_sounds : RandomGaribSounds
     entrance_randomizer : EntranceRandomizer
     entrance_overrides : EntranceOverrides
     portalsanity : Portalsanity
