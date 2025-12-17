@@ -9427,7 +9427,6 @@ async def check_locations(ctx: NO100FContext):
             {"cmd": "LocationChecks",
              "locations": locations_checked}
         ])
-        print([ctx.location_names[location] for location in locations_checked])
 
 
 async def check_alive(ctx: NO100FContext):

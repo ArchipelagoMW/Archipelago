@@ -10,7 +10,7 @@ import Utils
 from BaseClasses import Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, SuffixIdentifier, icon_paths
-from worlds.Files import APPlayerContainer, AutoPatchRegister
+from worlds.Files import APPlayerContainer
 from . import Patches
 from .Events import create_events
 from .Items import item_table, NO100FItem
@@ -47,7 +47,7 @@ icon_paths["Scooby-Doo! Night of 100 Frights"] = "ap:worlds.no100f/Assets/icon.p
 NO100F_HASH = "6f078c687c81e26b8e81127ba4b747ba"
 
 
-class NO100FContainer(APPlayerContainer, metaclass=AutoPatchRegister):
+class NO100FContainer(APPlayerContainer):
     hash = NO100F_HASH
     game = "Scooby-Doo! Night of 100 Frights"
     patch_file_ending: str = ".apno100f"
