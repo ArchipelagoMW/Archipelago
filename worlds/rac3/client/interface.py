@@ -73,6 +73,9 @@ class GameInterface:
 
     def _write_float(self, address: int, value: float):
         self.pcsx2_interface.write_float(address, value)
+    
+    def _write_string(self, address: int, value: str):
+        self.pcsx2_interface.write_string(address, value)
 
     def connect_to_game(self):
         """
