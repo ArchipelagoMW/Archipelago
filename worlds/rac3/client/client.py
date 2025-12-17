@@ -153,6 +153,14 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f'RYNO max upgrade is Lv4')
             else:
                 self.output(f'RYNO max upgrade is Lv5')
+    
+    def _cmd_messagebox(self, message: str):
+        """Displays a message box in-game with the specified message."""
+        if not self.verify(4):
+            return
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.game_interface.messagebox(message)
+            self.output(f'Message box displayed with message: {message}')
 
 
 class Rac3Context(CommonContext):

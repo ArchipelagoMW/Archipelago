@@ -20,11 +20,13 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.messagebox import RAC3MESSAGEBOX
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.textformat import RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
 from worlds.rac3.pcsx2_interface.pine import Pine
 
 
@@ -713,14 +715,13 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
-
+    
     def reload_check(self):
         """Detects if the game is currently being reloaded, and updates death data"""
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
             self.reloading_handled = True
-            logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state}, death count: {
-            self.last_death_count}')
+            logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state}, death count: {self.last_death_count}')
         if not self.is_reloading and self.reloading_handled:
             self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
             self.has_died = self.death_count > self.last_death_count
@@ -730,7 +731,7 @@ class Rac3Interface(GameInterface):
                          f' {self.has_died}')
         else:
             self.has_died = False
-
+        
     def pause_check(self):
         if self.planet not in RAC3_REGION_DATA_TABLE.keys():
             # Unknown planet, assume paused to be safe
@@ -860,3 +861,35 @@ class Rac3Interface(GameInterface):
     def respawn_inputs(self) -> bool:
         pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
         return self.pause_menu and pressed_square
+
+    def messagebox(self, message):
+        # real overflow cap is actually about 248, but we dont need that long messages
+        msg_bytes = format_textbox_string(message)
+        if len(msg_bytes) > 200:
+            msg_bytes = format_textbox_string(message[:200])
+        self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
+        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, len(msg_bytes) * 7)
+        self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
+        self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
+        self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
+
+def format_textbox_string(msg: str) -> bytes:
+    result = bytearray()
+    i = 0
+    while i < len(msg):
+        matched = False
+        for code, byte in COLOR_NAME_TO_BYTE.items():
+            if msg.startswith(code, i):
+                # Insert the color code byte (as a single byte)
+                if isinstance(byte, str):
+                    byte = ord(byte)
+                result.append(byte)
+                i += len(code)
+                matched = True
+                break
+        if not matched:
+            # Insert the ASCII value of the character
+            result.append(ord(msg[i]))
+            i += 1
+    result.append(0)  # End of string null terminator
+    return bytes(result)
