@@ -1,10 +1,11 @@
-from typing import Any, ClassVar, Dict, Iterable, List, Mapping, Union
+from collections.abc import Iterable, Mapping
+from typing import Any, ClassVar
 
 from BaseClasses import CollectionState, Entrance, Item, Location, Region
-
-from test.bases import WorldTestBase
 from test.general import gen_steps, setup_multiworld
 from test.multiworld.test_multiworlds import MultiworldTestBase
+
+from test.bases import WorldTestBase
 
 from .. import WitnessWorld
 from ..data.utils import cast_not_none
@@ -26,7 +27,7 @@ class WitnessTestBase(WorldTestBase):
             state.collect(item)
         return state.multiworld.can_beat_game(state)
 
-    def assert_dependency_on_event_item(self, spot: Union[Location, Region, Entrance], item_name: str) -> None:
+    def assert_dependency_on_event_item(self, spot: Location | Region | Entrance, item_name: str) -> None:
         """
         WorldTestBase.assertAccessDependency, but modified & simplified to work with event items
         """
@@ -91,7 +92,7 @@ class WitnessTestBase(WorldTestBase):
         """
         # Find the actual items
         found_items = [item for item in self.multiworld.get_items() if item.name in required_item_counts]
-        actual_items: Dict[str, List[Item]] = {item_name: [] for item_name in required_item_counts}
+        actual_items: dict[str, list[Item]] = {item_name: [] for item_name in required_item_counts}
         for item in found_items:
             if len(actual_items[item.name]) < required_item_counts[item.name]:
                 actual_items[item.name].append(item)
@@ -124,8 +125,8 @@ class WitnessTestBase(WorldTestBase):
 
 
 class WitnessMultiworldTestBase(MultiworldTestBase):
-    options_per_world: List[Dict[str, Any]]
-    common_options: Dict[str, Any] = {}
+    options_per_world: list[dict[str, Any]]
+    common_options: dict[str, Any] = {}
 
     def setUp(self) -> None:
         """
@@ -134,7 +135,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.multiworld = setup_multiworld([WitnessWorld] * len(self.options_per_world), ())
 
-        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world):
+        for world, options in zip(self.multiworld.worlds.values(), self.options_per_world, strict=True):
             for option_name, option_value in {**self.common_options, **options}.items():
                 option = getattr(world.options, option_name)
                 self.assertIsNotNone(option)
@@ -143,7 +144,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
 
         self.assertSteps(gen_steps)
 
-    def collect_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+    def collect_by_name(self, item_names: str | Iterable[str], player: int) -> list[Item]:
         """
         Collect all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """
@@ -153,7 +154,7 @@ class WitnessMultiworldTestBase(MultiworldTestBase):
             self.multiworld.state.collect(item)
         return items
 
-    def get_items_by_name(self, item_names: Union[str, Iterable[str]], player: int) -> List[Item]:
+    def get_items_by_name(self, item_names: str | Iterable[str], player: int) -> list[Item]:
         """
         Return all copies of a specified item name (or list of item names) for a player in the multiworld item pool.
         """

@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 from logging import error, warning
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, ClassVar, cast
 
 from BaseClasses import CollectionState, Entrance, Location, LocationProgressType, Region, Tutorial
 
@@ -73,7 +73,7 @@ class WitnessWorld(World):
     options_dataclass = TheWitnessOptions
     options: TheWitnessOptions
 
-    item_name_to_id = {
+    item_name_to_id: ClassVar[dict[str, int]] = {
         # ITEM_DATA doesn't have any event items in it
         name: cast_not_none(data.ap_code) for name, data in static_witness_items.ITEM_DATA.items()
     }
@@ -88,15 +88,15 @@ class WitnessWorld(World):
     player_items: WitnessPlayerItems
     player_regions: WitnessPlayerRegions
 
-    log_ids_to_hints: Dict[int, CompactHintData]
-    laser_ids_to_hints: Dict[int, CompactHintData]
+    log_ids_to_hints: dict[int, CompactHintData]
+    laser_ids_to_hints: dict[int, CompactHintData]
 
-    items_placed_early: List[str]
-    own_itempool: List[WitnessItem]
+    items_placed_early: list[str]
+    own_itempool: list[WitnessItem]
 
     panel_hunt_required_count: int
 
-    def _get_slot_data(self) -> Dict[str, Any]:
+    def _get_slot_data(self) -> dict[str, Any]:
         return {
             "seed": self.options.puzzle_randomization_seed.value,
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
@@ -135,7 +135,7 @@ class WitnessWorld(World):
         interacts_sufficiently_with_multiworld = (
             self.options.shuffle_symbols
             or self.options.shuffle_doors
-            or self.options.obelisk_keys and self.options.shuffle_EPs
+            or (self.options.obelisk_keys and self.options.shuffle_EPs)
         )
 
         has_locally_relevant_progression = (
@@ -143,7 +143,7 @@ class WitnessWorld(World):
             or self.options.shuffle_doors
             or self.options.shuffle_lasers
             or self.options.shuffle_boat
-            or self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge"
+            or (self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge")
         )
 
         if not has_locally_relevant_progression and self.multiworld.players == 1:
@@ -167,8 +167,8 @@ class WitnessWorld(World):
         )
         self.player_regions: WitnessPlayerRegions = WitnessPlayerRegions(self.player_locations, self)
 
-        self.log_ids_to_hints: Dict[int, CompactHintData] = {}
-        self.laser_ids_to_hints: Dict[int, CompactHintData] = {}
+        self.log_ids_to_hints: dict[int, CompactHintData] = {}
+        self.laser_ids_to_hints: dict[int, CompactHintData] = {}
 
         self.determine_sufficient_progression()
 
@@ -266,7 +266,7 @@ class WitnessWorld(World):
             ("Desert Outside", "Desert Surface 2"),
         ]
 
-        for i in range(num_early_locs, needed_size):
+        for _i in range(num_early_locs, needed_size):
             if not extra_checks:
                 break
 
@@ -341,7 +341,7 @@ class WitnessWorld(World):
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
 
-    def fill_slot_data(self) -> Dict[str, Any]:
+    def fill_slot_data(self) -> dict[str, Any]:
         already_hinted_locations = set()
 
         # Laser hints
@@ -430,12 +430,12 @@ class WitnessLocation(Location):
     """
     game: str = "The Witness"
 
-    def __init__(self, player: int, name: str, address: Optional[int], parent: Region) -> None:
+    def __init__(self, player: int, name: str, address: int | None, parent: Region) -> None:
         super().__init__(player, name, address, parent)
 
 
 def create_region(world: WitnessWorld, name: str, player_locations: WitnessPlayerLocations,
-                  region_locations: Optional[List[str]] = None, exits: Optional[List[str]] = None) -> Region:
+                  region_locations: list[str] | None = None, exits: list[str] | None = None) -> Region:
     """
     Create an Archipelago Region for The Witness
     """
