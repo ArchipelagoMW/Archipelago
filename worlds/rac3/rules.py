@@ -7,6 +7,7 @@ from worlds.rac3 import location_groups
 from worlds.rac3.constants.data.item import infobot_data
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
+from worlds.rac3.constants.locations.nanotech import NANOTECH_OPTION_TO_MOD
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
@@ -15,7 +16,7 @@ from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.locations.vendors import RAC3VENDOR
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
-from worlds.rac3.regions import every_10_nanotech, every_20_nanotech, every_5_nanotech
+from worlds.rac3.regions import every_nanotech
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -519,27 +520,33 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR: lambda state: state.has_all(
             [RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS, RAC3ITEM.TYHRRA_GUISE, RAC3ITEM.HACKER, RAC3ITEM.REFRACTOR],
             world.player),
+        
     }
     # ----- Nanotech -----#
 
-    match world.options.nanotech_milestones.value:
-        case 1:  # 20 nanotech level is a check
-            for level, name in enumerate(every_20_nanotech):
-                add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level * 4))
-        case 2:  # 10 nanotech level is a check
-            for level, name in enumerate(every_10_nanotech):
-                add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level * 2))
-        case 3:  # 5 nanotech level is a check
-            for level, name in enumerate(every_5_nanotech):
-                add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level))
-
-        case 4:  # Every nanotech level is a check
-            for level, name in enumerate(location_groups[RAC3TAG.NANOTECH]):
-                add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(infobot_data.keys(), world.player, level // 5))
+    milestone_mod = NANOTECH_OPTION_TO_MOD.get(world.options.nanotech_milestones.value, 0)
+    if milestone_mod:
+        milestones = []
+        for index, name in enumerate(every_nanotech):
+            lvl = index + 11  # Nanotech levels start at 11
+            if lvl > world.options.nanotech_limitation.value:
+                continue
+            # For every_1, include all
+            # for every_5, every_10, every_20 use mod operator
+            if lvl % milestone_mod == 0:
+                milestones.append(name)
+        for idx, name in enumerate(milestones):
+            # Nanotech requirements scale based on milestone type
+            if milestone_mod == 20:
+                req = idx * 4
+            elif milestone_mod == 10:
+                req = idx * 2
+            elif milestone_mod == 5:
+                req = idx
+            else:
+                req = idx // 5
+            add_rule(world.get_location(name),
+                     lambda state: state.has_from_list(infobot_data.keys(), world.player, req))
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])
