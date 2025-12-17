@@ -62,13 +62,9 @@ See the '/randomizer/preset/Template.txt' file of the static randomizer for all 
 
 There are also some special target names available for individual assignments:
 
-`any`
+- `any`: This is the default and allows any enemy in the pool to appear there.
 
-This is the default and allows any enemy in the pool to appear there.
-
-`norandom`
-
-Assigns an enemy to itself. This has the same effect as adding the enemy name to [`DontRandomize`](#dontrandomize).
+- `norandom`: Assigns an enemy to itself. This has the same effect as adding the enemy name to [`DontRandomize`](#dontrandomize).
 
 ## Pools
 
@@ -85,7 +81,7 @@ than once if used in a custom pool.
 
 Pools can be joined into a pool group by joining several names, separated by a semicolon.
 
-```
+```yaml
 # All basic enemies are just different hollows now
 Basic:
 - Weight: 100
@@ -114,7 +110,7 @@ there are fewer entries in the latter category.
 You can specify `RandomByType: true` to select randomly from the list itself (Hollow Soldiers, Large Hollow Soldiers)
 and make our previous example a true 50/50 split.
 
-```
+```yaml
 # All basic enemies are just different hollows now
 Basic:
 - Weight: 100
@@ -128,7 +124,7 @@ Weights can be used to select multiple different outcomes within a pool, weighte
 
 Weights don't necessarily have to add up to 100, but doing it that way makes estimating probabilities very intuitive.
 
-```
+```yaml
 Boss:
 - Weight: 79 # 79% of bosses will still be bosses
   Pool: default
@@ -147,7 +143,7 @@ Be aware that weights will not work in the [`Enemies`](#enemies) section.
 This setting indicates which enemies can be used as sources for bosses.
 By default, this is the pool of all 29 bosses.
 
-```
+```yaml
 Boss:
 - Weight: 80
   Pool: default
@@ -160,7 +156,7 @@ Boss:
 This setting indicates which enemies can be used as sources for minibosses.
 By default, this is the pool of all 32 minibosses (including duplicates).
 
-```
+```yaml
 Miniboss:
 - Weight: 80
   Pool: default
@@ -173,7 +169,7 @@ Miniboss:
 This setting indicates which enemies can be used as sources for all other enemies, so non-bosses and non-minibosses.
 By default, this is the pool of all ~2000 basic enemies (including duplicates).
 
-```
+```yaml
 Basic:
 - Weight: 94
   Pool: default
@@ -187,7 +183,7 @@ Basic:
 
 If enabled, this causes basic enemies to become a lot stronger when randomized into the slot of a boss.
 
-```
+```yaml
 Boss:
 - Weight: 100 # All bosses are just basic enemies...
   Pool: Basic
@@ -202,7 +198,7 @@ There are two ways you can adjust enemies:
 - Assign to a group of enemies using their category pool (see [Enemy Categories](#enemy-categories))
 - Assign to one specifc enemy by using its number (see [Individual Assignments](#individual-assignments))
 
-```
+```yaml
 Enemies:
   # Replace only the very first Ravenous Crystal Lizard with the final boss
   Ravenous Crystal Lizard 4000380: Lords of Cinder
@@ -220,7 +216,7 @@ A semicolon-separated list of enemies or enemy types to not randomize (assign to
 It is taken out of its default pool and also custom pools in this case, but it can still be assigned to
 [individual enemies](#individual-assignments).
 
-```
+```yaml
 DontRandomize: Iudex Gundyr # Iudex Gundyr will be at his vanilla location
 
 Boss:
@@ -234,7 +230,7 @@ A semicolon-separated list of enemies or enemy types to remove from all pools.
 It can still be assigned to individual enemies.
 This is overridden by [`DontRandomize`](#dontrandomize) directives.
 
-```
+```yaml
 # Remove the most annoying enemies from all pools
 RemoveSource: Bridge Darkeater Midir; Ancient Wyvern Mob; Curse-rotted Greatwood; High Lord Wolnir; Carthus Sandworm
 ```
@@ -245,7 +241,7 @@ Assigning an enemy or a pool to `OopsAll` sets all pools to that specific enemy 
 overridden using [individual enemy assginments](#individual-assignments), but otherwise every enemy is replaced by
 this setting.
 
-```
+```yaml
 # This run suddenly got very spooky
 OopsAll: Skeletons
 ```
