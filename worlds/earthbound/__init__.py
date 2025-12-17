@@ -296,7 +296,7 @@ class EarthBoundWorld(World):
 
     def create_items(self) -> None:
         pool = self.get_item_pool(self.get_excluded_items())
-        self.generate_filler(pool)
+        self.fill_item_pool(pool)
 
         self.multiworld.itempool += pool
 
@@ -556,7 +556,7 @@ class EarthBoundWorld(World):
             item.classification = ItemClassification.useful
         return item
 
-    def generate_filler(self, pool: List[Item]) -> None:
+    def fill_item_pool(self, pool: List[Item]) -> None:
         item_to_counts = {
             "Progressive Bat": self.progressive_filler_bats,
             "Progressive Fry Pan": self.progressive_filler_pans,
