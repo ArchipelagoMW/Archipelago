@@ -107,6 +107,14 @@ class RampingTechCosts(Toggle):
     display_name = "Ramping Tech Costs"
 
 
+class SciencePacks(Choice):
+    """Ingredients to craft science packs."""
+    display_name = "Science packs"
+    option_vanilla = 0
+    option_randomize_recipe = 1
+    default = 0
+
+
 class Silo(Choice):
     """Ingredients to craft rocket silo or auto-place if set to spawn."""
     display_name = "Rocket Silo"
@@ -114,6 +122,14 @@ class Silo(Choice):
     option_randomize_recipe = 1
     option_spawn = 2
     default = 0
+
+
+class RocketPart(Choice):
+    """Ingredients to craft rocket part."""
+    display_name = "Rocket part"
+    option_vanilla = 0
+    option_randomize_recipe = 1
+    default = 1
 
 
 class Satellite(Choice):
@@ -217,13 +233,6 @@ class Progressive(Choice):
 
     def want_progressives(self, random):
         return random.choice([True, False]) if self.value == self.option_grouped_random else bool(self.value)
-
-
-class RecipeIngredients(Choice):
-    """Select if rocket, or rocket + science pack ingredients should be random."""
-    display_name = "Random Recipe Ingredients Level"
-    option_rocket = 0
-    option_science_pack = 1
 
 
 class RecipeIngredientsOffset(Range):
@@ -481,7 +490,9 @@ class FactorioOptions(PerGameCommonOptions):
     tech_cost_distribution: TechCostDistribution
     tech_cost_mix: TechCostMix
     ramping_tech_costs: RampingTechCosts
+    science_packs: SciencePacks
     silo: Silo
+    rocket_part: RocketPart
     satellite: Satellite
     free_samples: FreeSamples
     free_samples_quality: FreeSamplesQuality
@@ -490,7 +501,6 @@ class FactorioOptions(PerGameCommonOptions):
     free_sample_blacklist: FactorioFreeSampleBlacklist
     free_sample_whitelist: FactorioFreeSampleWhitelist
     recipe_time: RecipeTime
-    recipe_ingredients: RecipeIngredients
     recipe_ingredients_offset: RecipeIngredientsOffset
     imported_blueprints: ImportedBlueprint
     world_gen: FactorioWorldGen
@@ -511,6 +521,17 @@ class FactorioOptions(PerGameCommonOptions):
 
 
 option_groups: list[OptionGroup] = [
+    OptionGroup(
+        "Recipes",
+        [
+            SciencePacks,
+            Silo,
+            RocketPart,
+            Satellite,
+            RecipeIngredientsOffset,
+            RecipeTime,
+        ]
+    ),
     OptionGroup(
         "Technologies",
         [
