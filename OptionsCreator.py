@@ -634,6 +634,8 @@ class OptionsCreator(ThemedApp):
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
             if world == "Archipelago":
                 continue
+            if cls.hidden:
+                continue
             world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150),
                                       pos_hint={"x": 0.03, "center_y": 0.5})
             world_text.text_size = (world_text.width, None)
