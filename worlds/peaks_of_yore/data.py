@@ -186,6 +186,8 @@ all_items: list[ItemData] = [
     ItemData("Right Hand", 12, ItemClassification.progression, POYItemLocationType.TOOL,
              is_starter_item=lambda options: options.start_with_hands in (0, 2),
              is_early=lambda options: options.early_hands),
+    ItemData("Ice Axes", 13, ItemClassification.progression, POYItemLocationType.TOOL,
+             is_starter_item=lambda options: options.starting_book.needs_ice_axes()),
 
     # Books
     ItemData("Fundamentals Book", 0, ItemClassification.progression, POYItemLocationType.BOOK,
@@ -448,7 +450,7 @@ poy_regions: POYRegion = POYRegion("Cabin", subregions=[
             LocationData("Ymir's Shadow: Bird Seed", POYItemLocationType.BIRDSEED, 4),
         ]),
     ], enable_requirements=lambda options: options.enable_advanced, is_book=True),
-    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1}, subregions=[
+    POYRegion("Expert", entry_requirements={"Progressive Crampons": 1, "Expert Book": 1, "Ice Axes": 1}, subregions=[
         PeakRegion("The Great Bulwark", 35, locations=[
             LocationData("The Great Bulwark: Expert Trophy", POYItemLocationType.ARTEFACT, 13),
         ], generate_time_attack=False),

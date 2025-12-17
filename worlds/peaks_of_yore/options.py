@@ -66,6 +66,9 @@ class StartingBook(Choice):
             return "Advanced Book"
         return "Expert Book"
 
+    def needs_ice_axes(self) -> bool:
+        return self.value in [3] # more will be added :p
+
 class StartWithBarometer(DefaultOnToggle):
     """Choose to start with the barometer, to locate items quicker"""
     display_name = "Start with Barometer"
