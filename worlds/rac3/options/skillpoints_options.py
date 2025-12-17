@@ -9,6 +9,7 @@ class SkillPoints(Choice):
     Simple: 18 simple skill points are locations, 12 of the more challenging or time-consuming skill points are
     removed. Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled.
     These are the skill points enabled:
+    - Stay Squeaky Clean
     - Monkeying around
     - Beat Helga's best time
     - Turn Up The Heat
@@ -20,7 +21,6 @@ class SkillPoints(Choice):
     - Get to the belt
     - Bash the party
     - 2002 was a good year in the city
-    - Suck it up!
     - Aim High
     - Zap back at ya'
     - Go for hang time

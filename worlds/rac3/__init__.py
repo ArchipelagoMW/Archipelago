@@ -28,7 +28,7 @@ components.append(Component(f"{RAC3OPTION.GAME_TITLE_FULL} Client",
                             file_identifier=SuffixIdentifier(".aprac3"),
                             icon="uya_icon"))
 
-icon_paths["uya_icon"] = f"ap:{__name__}/icons/uya_icon.png"
+icon_paths["uya_icon"] = f"ap:{__name__}/images/uya_icon.png"
 
 
 class RaC3Web(WebWorld):
