@@ -8,10 +8,12 @@ from worlds.rac3.options.deathlink_options import Deathlink
 from worlds.rac3.options.exclude_options import RAC3ExcludeLocations
 from worlds.rac3.options.extra_armor_options import ExtraArmorUpgrade
 from worlds.rac3.options.multiplier_options import BoltAndXPMultiplier
+from worlds.rac3.options.nanotech_limitation_options import NanotechLimitation
 from worlds.rac3.options.nanotech_options import NanotechMilestones
 from worlds.rac3.options.prog_weapons_options import EnableProgressiveWeapons
 from worlds.rac3.options.rangers_options import Rangers
 from worlds.rac3.options.ratchet_skins_options import RatchetSkin
+from worlds.rac3.options.sewer_limitation_options import SewerLimitation
 from worlds.rac3.options.sewer_options import SewerCrystals
 from worlds.rac3.options.ship_nose_options import ShipNose
 from worlds.rac3.options.ship_skin_options import ShipSkin
@@ -52,7 +54,9 @@ class RaC3Options(PerGameCommonOptions):
     vr_challenges: VRChallenges
     arena: Arena
     sewer_crystals: SewerCrystals
+    sewer_limitation: SewerLimitation
     nanotech_milestones: NanotechMilestones
+    nanotech_limitation: NanotechLimitation
     exclude_locations: RAC3ExcludeLocations
     ship_nose: ShipNose
     ship_wings: ShipWings
@@ -63,7 +67,7 @@ class RaC3Options(PerGameCommonOptions):
 rac3_option_groups: dict[str, list] = {
     "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
                      ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals],
+                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation, NanotechLimitation],
     "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
     "Generic Options": [Deathlink, RAC3ExcludeLocations],
 }
@@ -79,6 +83,7 @@ slot_data_options: list[str] = [
     RAC3OPTION.TROPHIES,
     RAC3OPTION.TITANIUM_BOLTS,
     RAC3OPTION.NANOTECH_MILESTONES,
+    RAC3OPTION.NANOTECH_LIMITATION,
     RAC3OPTION.EXCLUDE,
     RAC3OPTION.SHIP_NOSE,
     RAC3OPTION.SHIP_WINGS,
@@ -91,4 +96,5 @@ slot_data_options: list[str] = [
     RAC3OPTION.VIDCOMICS,
     RAC3OPTION.VR_CHALLENGES,
     RAC3OPTION.SEWER_CRYSTALS,
+    RAC3OPTION.SEWER_LIMITATION,
 ]

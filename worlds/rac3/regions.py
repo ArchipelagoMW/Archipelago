@@ -18,6 +18,98 @@ if TYPE_CHECKING:
 class GameLocation(Location):
     game = RAC3OPTION.GAME_TITLE_FULL
 
+every_nanotech: list[str] = [
+    RAC3NANOTECH.LEVEL_11,
+    RAC3NANOTECH.LEVEL_12,
+    RAC3NANOTECH.LEVEL_13,
+    RAC3NANOTECH.LEVEL_14,
+    RAC3NANOTECH.LEVEL_15,
+    RAC3NANOTECH.LEVEL_16,
+    RAC3NANOTECH.LEVEL_17,
+    RAC3NANOTECH.LEVEL_18,
+    RAC3NANOTECH.LEVEL_19,
+    RAC3NANOTECH.LEVEL_20,
+    RAC3NANOTECH.LEVEL_21,
+    RAC3NANOTECH.LEVEL_22,
+    RAC3NANOTECH.LEVEL_23,
+    RAC3NANOTECH.LEVEL_24,
+    RAC3NANOTECH.LEVEL_25,
+    RAC3NANOTECH.LEVEL_26,
+    RAC3NANOTECH.LEVEL_27,
+    RAC3NANOTECH.LEVEL_28,
+    RAC3NANOTECH.LEVEL_29,
+    RAC3NANOTECH.LEVEL_30,
+    RAC3NANOTECH.LEVEL_31,
+    RAC3NANOTECH.LEVEL_32,
+    RAC3NANOTECH.LEVEL_33,
+    RAC3NANOTECH.LEVEL_34,
+    RAC3NANOTECH.LEVEL_35,
+    RAC3NANOTECH.LEVEL_36,
+    RAC3NANOTECH.LEVEL_37,
+    RAC3NANOTECH.LEVEL_38,
+    RAC3NANOTECH.LEVEL_39,
+    RAC3NANOTECH.LEVEL_40,
+    RAC3NANOTECH.LEVEL_41,
+    RAC3NANOTECH.LEVEL_42,
+    RAC3NANOTECH.LEVEL_43,
+    RAC3NANOTECH.LEVEL_44,
+    RAC3NANOTECH.LEVEL_45,
+    RAC3NANOTECH.LEVEL_46,
+    RAC3NANOTECH.LEVEL_47,
+    RAC3NANOTECH.LEVEL_48,
+    RAC3NANOTECH.LEVEL_49,
+    RAC3NANOTECH.LEVEL_50,
+    RAC3NANOTECH.LEVEL_51,
+    RAC3NANOTECH.LEVEL_52,
+    RAC3NANOTECH.LEVEL_53,
+    RAC3NANOTECH.LEVEL_54,
+    RAC3NANOTECH.LEVEL_55,
+    RAC3NANOTECH.LEVEL_56,
+    RAC3NANOTECH.LEVEL_57,
+    RAC3NANOTECH.LEVEL_58,
+    RAC3NANOTECH.LEVEL_59,
+    RAC3NANOTECH.LEVEL_60,
+    RAC3NANOTECH.LEVEL_61,
+    RAC3NANOTECH.LEVEL_62,
+    RAC3NANOTECH.LEVEL_63,
+    RAC3NANOTECH.LEVEL_64,
+    RAC3NANOTECH.LEVEL_65,
+    RAC3NANOTECH.LEVEL_66,
+    RAC3NANOTECH.LEVEL_67,
+    RAC3NANOTECH.LEVEL_68,
+    RAC3NANOTECH.LEVEL_69,
+    RAC3NANOTECH.LEVEL_70,
+    RAC3NANOTECH.LEVEL_71,
+    RAC3NANOTECH.LEVEL_72,
+    RAC3NANOTECH.LEVEL_73,
+    RAC3NANOTECH.LEVEL_74,
+    RAC3NANOTECH.LEVEL_75,
+    RAC3NANOTECH.LEVEL_76,
+    RAC3NANOTECH.LEVEL_77,
+    RAC3NANOTECH.LEVEL_78,
+    RAC3NANOTECH.LEVEL_79,
+    RAC3NANOTECH.LEVEL_80,
+    RAC3NANOTECH.LEVEL_81,
+    RAC3NANOTECH.LEVEL_82,
+    RAC3NANOTECH.LEVEL_83,
+    RAC3NANOTECH.LEVEL_84,
+    RAC3NANOTECH.LEVEL_85,
+    RAC3NANOTECH.LEVEL_86,
+    RAC3NANOTECH.LEVEL_87,
+    RAC3NANOTECH.LEVEL_88,
+    RAC3NANOTECH.LEVEL_89,
+    RAC3NANOTECH.LEVEL_90,
+    RAC3NANOTECH.LEVEL_91,
+    RAC3NANOTECH.LEVEL_92,
+    RAC3NANOTECH.LEVEL_93,
+    RAC3NANOTECH.LEVEL_94,
+    RAC3NANOTECH.LEVEL_95,
+    RAC3NANOTECH.LEVEL_96,
+    RAC3NANOTECH.LEVEL_97,
+    RAC3NANOTECH.LEVEL_98,
+    RAC3NANOTECH.LEVEL_99,
+    RAC3NANOTECH.LEVEL_100,
+]
 
 # Making an array with every 5 nanotech
 every_5_nanotech: list[str] = [
@@ -61,6 +153,109 @@ every_20_nanotech: list[str] = [
     RAC3NANOTECH.LEVEL_60,
     RAC3NANOTECH.LEVEL_80,
     RAC3NANOTECH.LEVEL_100,
+]
+
+every_sewer_crystals: list[str] = [
+    RAC3SEWER.TRADE_1,
+    RAC3SEWER.TRADE_2,
+    RAC3SEWER.TRADE_3,
+    RAC3SEWER.TRADE_4,
+    RAC3SEWER.TRADE_5,
+    RAC3SEWER.TRADE_6,
+    RAC3SEWER.TRADE_7,
+    RAC3SEWER.TRADE_8,
+    RAC3SEWER.TRADE_9,
+    RAC3SEWER.TRADE_10,
+    RAC3SEWER.TRADE_11,
+    RAC3SEWER.TRADE_12,
+    RAC3SEWER.TRADE_13,
+    RAC3SEWER.TRADE_14,
+    RAC3SEWER.TRADE_15,
+    RAC3SEWER.TRADE_16,
+    RAC3SEWER.TRADE_17,
+    RAC3SEWER.TRADE_18,
+    RAC3SEWER.TRADE_19,
+    RAC3SEWER.TRADE_20,
+    RAC3SEWER.TRADE_21,
+    RAC3SEWER.TRADE_22,
+    RAC3SEWER.TRADE_23,
+    RAC3SEWER.TRADE_24,
+    RAC3SEWER.TRADE_25,
+    RAC3SEWER.TRADE_26,
+    RAC3SEWER.TRADE_27,
+    RAC3SEWER.TRADE_28,
+    RAC3SEWER.TRADE_29,
+    RAC3SEWER.TRADE_30,
+    RAC3SEWER.TRADE_31,
+    RAC3SEWER.TRADE_32,
+    RAC3SEWER.TRADE_33,
+    RAC3SEWER.TRADE_34,
+    RAC3SEWER.TRADE_35,
+    RAC3SEWER.TRADE_36,
+    RAC3SEWER.TRADE_37,
+    RAC3SEWER.TRADE_38,
+    RAC3SEWER.TRADE_39,
+    RAC3SEWER.TRADE_40,
+    RAC3SEWER.TRADE_41,
+    RAC3SEWER.TRADE_42,
+    RAC3SEWER.TRADE_43,
+    RAC3SEWER.TRADE_44,
+    RAC3SEWER.TRADE_45,
+    RAC3SEWER.TRADE_46,
+    RAC3SEWER.TRADE_47,
+    RAC3SEWER.TRADE_48,
+    RAC3SEWER.TRADE_49,
+    RAC3SEWER.TRADE_50,
+    RAC3SEWER.TRADE_51,
+    RAC3SEWER.TRADE_52,
+    RAC3SEWER.TRADE_53,
+    RAC3SEWER.TRADE_54,
+    RAC3SEWER.TRADE_55,
+    RAC3SEWER.TRADE_56,
+    RAC3SEWER.TRADE_57,
+    RAC3SEWER.TRADE_58,
+    RAC3SEWER.TRADE_59,
+    RAC3SEWER.TRADE_60,
+    RAC3SEWER.TRADE_61,
+    RAC3SEWER.TRADE_62,
+    RAC3SEWER.TRADE_63,
+    RAC3SEWER.TRADE_64,
+    RAC3SEWER.TRADE_65,
+    RAC3SEWER.TRADE_66,
+    RAC3SEWER.TRADE_67,
+    RAC3SEWER.TRADE_68,
+    RAC3SEWER.TRADE_69,
+    RAC3SEWER.TRADE_70,
+    RAC3SEWER.TRADE_71,
+    RAC3SEWER.TRADE_72,
+    RAC3SEWER.TRADE_73,
+    RAC3SEWER.TRADE_74,
+    RAC3SEWER.TRADE_75,
+    RAC3SEWER.TRADE_76,
+    RAC3SEWER.TRADE_77,
+    RAC3SEWER.TRADE_78,
+    RAC3SEWER.TRADE_79,
+    RAC3SEWER.TRADE_80,
+    RAC3SEWER.TRADE_81,
+    RAC3SEWER.TRADE_82,
+    RAC3SEWER.TRADE_83,
+    RAC3SEWER.TRADE_84,
+    RAC3SEWER.TRADE_85,
+    RAC3SEWER.TRADE_86,
+    RAC3SEWER.TRADE_87,
+    RAC3SEWER.TRADE_88,
+    RAC3SEWER.TRADE_89,
+    RAC3SEWER.TRADE_90,
+    RAC3SEWER.TRADE_91,
+    RAC3SEWER.TRADE_92,
+    RAC3SEWER.TRADE_93,
+    RAC3SEWER.TRADE_94,
+    RAC3SEWER.TRADE_95,
+    RAC3SEWER.TRADE_96,
+    RAC3SEWER.TRADE_97,
+    RAC3SEWER.TRADE_98,
+    RAC3SEWER.TRADE_99,
+    RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
 
 every_5_sewer_crystals: list[str] = [
@@ -109,7 +304,6 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
 
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
@@ -274,16 +468,16 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled
             case RAC3TAG.NANOTECH:
+                nanotech = LOCATION_FROM_AP_CODE[data.AP_CODE]
+                if nanotech in every_nanotech[options.nanotech_limitation.value - 10::]:
+                    return True  # Place nanotech milestone amount specified in nanotech_limitation
                 if options.nanotech_milestones.value == 0:
                     return True  # Skip nanotech milestone locations if nanotech milestones option is disabled
-                elif options.nanotech_milestones.value == 1 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_20_nanotech:
+                elif options.nanotech_milestones.value == 1 and nanotech not in every_20_nanotech:
                     return True  # Skips nanotech milestones that are not in every 20
-                elif options.nanotech_milestones.value == 2 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_10_nanotech:
+                elif options.nanotech_milestones.value == 2 and nanotech not in every_10_nanotech:
                     return True  # Skips nanotech milestones that are not in every 10
-                elif options.nanotech_milestones.value == 3 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_5_nanotech:
+                elif options.nanotech_milestones.value == 3 and nanotech not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
             case RAC3TAG.RANGERS:
                 if options.rangers.value == 0:
@@ -298,16 +492,16 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.vr_challenges.value == 0:
                     return True  # Skips vr challenges locations if vr_challenges option is disabled
             case RAC3TAG.SEWER:
-                if options.sewer_crystals.value == 0:
+                crystal = LOCATION_FROM_AP_CODE[data.AP_CODE]
+                if crystal in every_sewer_crystals[options.sewer_limitation.value::]:
+                    return True  # Place sewer crystal amount specified in sewer_limitations
+                elif options.sewer_crystals.value == 0:
                     return True  # Skip sewer crystal locations if sewer crystals option is disabled
-                elif options.sewer_crystals.value == 1 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_20_sewer_crystals:
+                elif options.sewer_crystals.value == 1 and crystal not in every_20_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 20
-                elif options.sewer_crystals.value == 2 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_10_sewer_crystals:
+                elif options.sewer_crystals.value == 2 and crystal not in every_10_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 10
-                elif options.sewer_crystals.value == 3 and LOCATION_FROM_AP_CODE[
-                    data.AP_CODE] not in every_5_sewer_crystals:
+                elif options.sewer_crystals.value == 3 and crystal not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
             # Add more conditions here if needed in the future
     return False

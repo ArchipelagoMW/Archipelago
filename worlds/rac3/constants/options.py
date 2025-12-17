@@ -27,3 +27,5 @@ class RAC3OPTION:
     VIDCOMICS = "vidcomics"
     VR_CHALLENGES = "vr_challenges"
     SEWER_CRYSTALS = "sewer_crystals"
+    SEWER_LIMITATION = "sewer_limitation"
+    NANOTECH_LIMITATION = "nanotech_limitation"
