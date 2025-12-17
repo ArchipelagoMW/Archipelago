@@ -94,7 +94,7 @@ class CommandProcessor(ClientCommandProcessor):
             if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
                 self.output(f"Weapon EXP item not compatible with Progressive Weapons")
             else:
-                self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE)
+                self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE, self.ctx.player_names[self.ctx.slot], "Test Command")
                 self.output(f"Weapon EXP Received")
 
     def _cmd_bolt_test(self):
@@ -102,7 +102,7 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE)
+            self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE, self.ctx.player_names[self.ctx.slot], "Test Command")
             self.output(f"Bolts Received")
 
     def _cmd_rac3_info(self):

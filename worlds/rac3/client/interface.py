@@ -26,6 +26,7 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
+from worlds.rac3.constants.textcolor import RAC3TEXTCOLOR
 from worlds.rac3.constants.textformat import CLASSIFICATION_TO_COLOR, RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
 from worlds.rac3.pcsx2_interface.pine import Pine
 
@@ -239,7 +240,7 @@ class Rac3Interface(GameInterface):
         if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
                 RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS):
             return
-        self.item_received(item)
+        self.item_received(item, None, None)
 
     def early_update(self):
         self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
@@ -312,10 +313,14 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code: int, other_player: str):
+    def item_received(self, item_code: int, our_name: str, other_player: str):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
-        classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
-        # self.messagebox() # "Received: {name} from {other_player}"
+        if other_player is not None:
+            classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
+            if other_player == our_name:
+                self.messagebox(f'Found: {CLASSIFICATION_TO_COLOR[classification]}{name}')
+            else:
+                self.messagebox(f"Received: {CLASSIFICATION_TO_COLOR[classification]}{name} {RAC3TEXTCOLOR.NORMAL}from {RAC3TEXTCOLOR.GREEN}{other_player}")
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -864,12 +869,12 @@ class Rac3Interface(GameInterface):
         pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
         return self.pause_menu and pressed_square
 
-    def messagebox(self, message):
+    def messagebox(self, message: str) -> None:
         # real overflow cap is actually about 248, but we don't need that long messages
         msg_bytes = format_textbox_string(message[:200:])
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
         # TODO: Fix width to be more consistent and not including color bytes
-        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, len(msg_bytes) * 7)
+        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, int(len(msg_bytes) * 6.85))
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
