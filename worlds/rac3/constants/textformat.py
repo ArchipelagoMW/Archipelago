@@ -1,0 +1,7 @@
+class RAC3TEXTFORMAT:
+    NORMAL = 0x8
+    BLUE = 0x9
+    GREEN = 0xA
+    MAGENTA = 0xB
+    WHITE = 0xC
+    BLACK = 0xD
