@@ -869,6 +869,7 @@ class Rac3Interface(GameInterface):
         if len(msg_bytes) > 200:
             msg_bytes = format_textbox_string(message[:200])
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
+        # TODO: Fix width to be more consistent and not including color bytes
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, len(msg_bytes) * 7)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
