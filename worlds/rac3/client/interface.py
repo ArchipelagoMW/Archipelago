@@ -26,7 +26,7 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
-from worlds.rac3.constants.textformat import RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
+from worlds.rac3.constants.textformat import CLASSIFICATION_TO_COLOR, RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
 from worlds.rac3.pcsx2_interface.pine import Pine
 
 
@@ -314,6 +314,7 @@ class Rac3Interface(GameInterface):
 
     def item_received(self, item_code: int):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
+        classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
         logger.debug(f'Item received: {name}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:

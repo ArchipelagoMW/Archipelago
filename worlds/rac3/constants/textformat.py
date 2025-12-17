@@ -1,3 +1,5 @@
+from BaseClasses import ItemClassification
+
 class RAC3TEXTFORMAT:
     NORMAL = 0x8
     BLUE = 0x9
@@ -13,4 +15,13 @@ COLOR_NAME_TO_BYTE = {
     'MAGENTA': RAC3TEXTFORMAT.MAGENTA,
     'WHITE': RAC3TEXTFORMAT.WHITE,
     'BLACK': RAC3TEXTFORMAT.BLACK,
+}
+CLASSIFICATION_TO_COLOR = {
+    ItemClassification.progression: 'MAGENTA',
+    ItemClassification.progression_deprioritized: 'MAGENTA',
+    ItemClassification.progression_deprioritized_skip_balancing: 'MAGENTA',
+    ItemClassification.progression_skip_balancing: 'MAGENTA',
+    ItemClassification.filler: 'WHITE',
+    ItemClassification.trap: 'WHITE',
+    ItemClassification.useful: 'BLUE',
 }
