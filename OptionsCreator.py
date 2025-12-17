@@ -632,8 +632,6 @@ class OptionsCreator(ThemedApp):
             self.create_options_panel(world_btn)
 
         for world, cls in sorted(AutoWorldRegister.world_types.items(), key=lambda x: x[0]):
-            if world == "Archipelago":
-                continue
             if cls.hidden:
                 continue
             world_text = MDButtonText(text=world, size_hint_y=None, width=dp(150),
