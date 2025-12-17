@@ -1,22 +1,12 @@
 from dataclasses import dataclass
 from typing import List
 
-from Options import Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions
-
-
-class StartingLevitation(Toggle):
-    """Start with Levitation Level 1."""
-    display_name = "Start with Levitation"
+from Options import Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool
 
 
 class StartingMentalMagnet(DefaultOnToggle):
     """Start with Mental Magnet, pulling health, ammo, and arrowhead drops towards you."""
     display_name = "Start with Mental Magnet"
-
-
-class StartingCobwebDuster(Toggle):
-    """Start with the Cobweb Duster."""
-    display_name = "Start with Cobweb Duster"
 
 
 class RandomStartingMinds(Range):
@@ -161,9 +151,7 @@ class MaximumProgressiveBaggage(Range):
 
 @dataclass
 class PsychonautsOptions(PerGameCommonOptions):
-    StartingLevitation: StartingLevitation
     StartingMentalMagnet: StartingMentalMagnet
-    StartingCobwebDuster: StartingCobwebDuster
     RandomStartingMinds: RandomStartingMinds
     LootboxVaults: LootboxVaults
     EasyMillaRace: EasyMillaRace
@@ -180,10 +168,10 @@ class PsychonautsOptions(PerGameCommonOptions):
     MentalCobwebShuffle: MentalCobwebShuffle
     ProgressiveBaggage: ProgressiveBaggage
     MaximumProgressiveBaggage: MaximumProgressiveBaggage
+    start_inventory: StartInventoryPool
 
 
 SLOT_DATA_OPTIONS: List[str] = [
-    "StartingLevitation",
     "StartingMentalMagnet",
     "LootboxVaults",
     "EasyMillaRace",

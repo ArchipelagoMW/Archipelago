@@ -216,6 +216,11 @@ class PSYWorld(World):
 
         adjusted_item_counts = ITEM_COUNT.copy()
 
+        # remove start_inventory items from our adjusted_item_counts
+        # start_inventory is StartInventoryPool, removes items from pool as well
+        for item_name, value in self.options.start_inventory.items():
+            adjusted_item_counts[item_name] -= value
+
         # Pre-collect starting minds and remove them from the item pool.
         num_starting_minds = self.options.RandomStartingMinds.value
         if num_starting_minds > 0:
@@ -226,12 +231,6 @@ class PSYWorld(World):
                 # Reduce the number to add to the pool.
                 adjusted_item_counts[item] -= 1
                 self.multiworld.push_precollected(self.create_item(item))
-
-        # Pre-collect the Cobweb Duster when starting with it.
-        if self.options.StartingCobwebDuster:
-            # Reduce the count to add to the item pool.
-            adjusted_item_counts[ItemName.CobwebDuster] -= 1
-            self.multiworld.push_precollected(self.create_item(ItemName.CobwebDuster))
 
         # Add items for DeepArrowheadShuffle
         if self.options.DeepArrowheadShuffle:

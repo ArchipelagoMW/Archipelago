@@ -141,9 +141,6 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append rando_display_name 
     randoseed_parts.append(f"       Ob.seedname = '{rando_display_name}'\n")
 
-    # append startlevitation setting
-    randoseed_parts.append(f"           Ob.startlevitation = {_lua_bool(self.options.StartingLevitation)}\n")
-
     # append mentalmagnet setting
     randoseed_parts.append(f"           Ob.mentalmagnet = {_lua_bool(self.options.StartingMentalMagnet)}\n")
 
@@ -202,6 +199,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     default_seed_settings = '''
         Ob.isAP = TRUE
         Ob.startcobweb = FALSE
+        Ob.startlevitation = FALSE
         Ob.randomizecobwebduster = TRUE
         Ob.everylocationpossible = FALSE
         Ob.harderbutton = FALSE
