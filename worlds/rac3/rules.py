@@ -7,7 +7,7 @@ from worlds.rac3 import location_groups
 from worlds.rac3.constants.data.item import infobot_data
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.general import RAC3LOCATION
-from worlds.rac3.constants.locations.nanotech import NANOTECH_OPTION_TO_MOD
+from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
@@ -16,7 +16,6 @@ from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.locations.vendors import RAC3VENDOR
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
-from worlds.rac3.regions import every_nanotech
 
 if TYPE_CHECKING:
     from worlds.rac3 import RaC3World
@@ -384,7 +383,8 @@ def set_rules(world: "RaC3World"):
         RAC3SEWER.TRADE_97: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_98: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
         RAC3SEWER.TRADE_99: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
-        RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC], world.player),
+        RAC3SKILLPOINT.SEWER_MOTHERLOAD: lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.MAP_O_MATIC],
+                                                                     world.player),
 
         # RAC3VENDOR.TYHRRANOSIS_ANNIHILATOR
         # RAC3VENDOR.TYHRRANOSIS_SHIELD_GLOVE
@@ -520,20 +520,98 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.COMMAND_CENTER_BIOBLITERATOR: lambda state: state.has_all(
             [RAC3ITEM.HYPERSHOT, RAC3ITEM.GRAV_BOOTS, RAC3ITEM.TYHRRA_GUISE, RAC3ITEM.HACKER, RAC3ITEM.REFRACTOR],
             world.player),
-        
-    }
-    # ----- Nanotech -----#
 
-    milestone_mod = NANOTECH_OPTION_TO_MOD.get(world.options.nanotech_milestones.value, 0)
-    if milestone_mod:
-        for index, name in enumerate(every_nanotech):
-            lvl = index + 11  # Nanotech levels start at 11
-            if lvl > world.options.nanotech_limitation.value:
-                continue
-            if lvl % milestone_mod == 0:
-                req = index // 5  # Every 5 nanotech for 1 infobot
-                add_rule(world.get_location(name),
-                         lambda state: state.has_from_list(infobot_data.keys(), world.player, req))
+        RAC3NANOTECH.LEVEL_11: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_12: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_13: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_14: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_15: lambda state: state.has_from_list(infobot_data.keys(), world.player, 3),
+        RAC3NANOTECH.LEVEL_16: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3NANOTECH.LEVEL_17: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3NANOTECH.LEVEL_18: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3NANOTECH.LEVEL_19: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3NANOTECH.LEVEL_20: lambda state: state.has_from_list(infobot_data.keys(), world.player, 4),
+        RAC3NANOTECH.LEVEL_21: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3NANOTECH.LEVEL_22: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3NANOTECH.LEVEL_23: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3NANOTECH.LEVEL_24: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3NANOTECH.LEVEL_25: lambda state: state.has_from_list(infobot_data.keys(), world.player, 5),
+        RAC3NANOTECH.LEVEL_26: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3NANOTECH.LEVEL_27: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3NANOTECH.LEVEL_28: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3NANOTECH.LEVEL_29: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3NANOTECH.LEVEL_30: lambda state: state.has_from_list(infobot_data.keys(), world.player, 6),
+        RAC3NANOTECH.LEVEL_31: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3NANOTECH.LEVEL_32: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3NANOTECH.LEVEL_33: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3NANOTECH.LEVEL_34: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3NANOTECH.LEVEL_35: lambda state: state.has_from_list(infobot_data.keys(), world.player, 7),
+        RAC3NANOTECH.LEVEL_36: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3NANOTECH.LEVEL_37: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3NANOTECH.LEVEL_38: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3NANOTECH.LEVEL_39: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3NANOTECH.LEVEL_40: lambda state: state.has_from_list(infobot_data.keys(), world.player, 8),
+        RAC3NANOTECH.LEVEL_41: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3NANOTECH.LEVEL_42: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3NANOTECH.LEVEL_43: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3NANOTECH.LEVEL_44: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3NANOTECH.LEVEL_45: lambda state: state.has_from_list(infobot_data.keys(), world.player, 9),
+        RAC3NANOTECH.LEVEL_46: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3NANOTECH.LEVEL_47: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3NANOTECH.LEVEL_48: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3NANOTECH.LEVEL_49: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3NANOTECH.LEVEL_50: lambda state: state.has_from_list(infobot_data.keys(), world.player, 10),
+        RAC3NANOTECH.LEVEL_51: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3NANOTECH.LEVEL_52: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3NANOTECH.LEVEL_53: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3NANOTECH.LEVEL_54: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3NANOTECH.LEVEL_55: lambda state: state.has_from_list(infobot_data.keys(), world.player, 11),
+        RAC3NANOTECH.LEVEL_56: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3NANOTECH.LEVEL_57: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3NANOTECH.LEVEL_58: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3NANOTECH.LEVEL_59: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3NANOTECH.LEVEL_60: lambda state: state.has_from_list(infobot_data.keys(), world.player, 12),
+        RAC3NANOTECH.LEVEL_61: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3NANOTECH.LEVEL_62: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3NANOTECH.LEVEL_63: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3NANOTECH.LEVEL_64: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3NANOTECH.LEVEL_65: lambda state: state.has_from_list(infobot_data.keys(), world.player, 13),
+        RAC3NANOTECH.LEVEL_66: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3NANOTECH.LEVEL_67: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3NANOTECH.LEVEL_68: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3NANOTECH.LEVEL_69: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3NANOTECH.LEVEL_70: lambda state: state.has_from_list(infobot_data.keys(), world.player, 14),
+        RAC3NANOTECH.LEVEL_71: lambda state: state.has_from_list(infobot_data.keys(), world.player, 15),
+        RAC3NANOTECH.LEVEL_72: lambda state: state.has_from_list(infobot_data.keys(), world.player, 15),
+        RAC3NANOTECH.LEVEL_73: lambda state: state.has_from_list(infobot_data.keys(), world.player, 15),
+        RAC3NANOTECH.LEVEL_74: lambda state: state.has_from_list(infobot_data.keys(), world.player, 15),
+        RAC3NANOTECH.LEVEL_75: lambda state: state.has_from_list(infobot_data.keys(), world.player, 15),
+        RAC3NANOTECH.LEVEL_76: lambda state: state.has_from_list(infobot_data.keys(), world.player, 16),
+        RAC3NANOTECH.LEVEL_77: lambda state: state.has_from_list(infobot_data.keys(), world.player, 16),
+        RAC3NANOTECH.LEVEL_78: lambda state: state.has_from_list(infobot_data.keys(), world.player, 16),
+        RAC3NANOTECH.LEVEL_79: lambda state: state.has_from_list(infobot_data.keys(), world.player, 16),
+        RAC3NANOTECH.LEVEL_80: lambda state: state.has_from_list(infobot_data.keys(), world.player, 16),
+        RAC3NANOTECH.LEVEL_81: lambda state: state.has_from_list(infobot_data.keys(), world.player, 17),
+        RAC3NANOTECH.LEVEL_82: lambda state: state.has_from_list(infobot_data.keys(), world.player, 17),
+        RAC3NANOTECH.LEVEL_83: lambda state: state.has_from_list(infobot_data.keys(), world.player, 17),
+        RAC3NANOTECH.LEVEL_84: lambda state: state.has_from_list(infobot_data.keys(), world.player, 17),
+        RAC3NANOTECH.LEVEL_85: lambda state: state.has_from_list(infobot_data.keys(), world.player, 17),
+        RAC3NANOTECH.LEVEL_86: lambda state: state.has_from_list(infobot_data.keys(), world.player, 18),
+        RAC3NANOTECH.LEVEL_87: lambda state: state.has_from_list(infobot_data.keys(), world.player, 18),
+        RAC3NANOTECH.LEVEL_88: lambda state: state.has_from_list(infobot_data.keys(), world.player, 18),
+        RAC3NANOTECH.LEVEL_89: lambda state: state.has_from_list(infobot_data.keys(), world.player, 18),
+        RAC3NANOTECH.LEVEL_90: lambda state: state.has_from_list(infobot_data.keys(), world.player, 18),
+        RAC3NANOTECH.LEVEL_91: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_92: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_93: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_94: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_95: lambda state: state.has_from_list(infobot_data.keys(), world.player, 19),
+        RAC3NANOTECH.LEVEL_96: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+        RAC3NANOTECH.LEVEL_97: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+        RAC3NANOTECH.LEVEL_98: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+        RAC3NANOTECH.LEVEL_99: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+        RAC3NANOTECH.LEVEL_100: lambda state: state.has_from_list(infobot_data.keys(), world.player, 20),
+    }
 
     for region in region_rules_dict.keys():
         add_rule(world.multiworld.get_entrance(region, world.player), region_rules_dict[region])
