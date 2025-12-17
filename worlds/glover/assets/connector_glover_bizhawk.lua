@@ -12915,7 +12915,7 @@ function applyCustomTipText(tipTable)
 						print(check_id)
     				    print(ap_id)
     				end
-					setTipText(tip_address, tip_text)
+					setTipText(tip_address, tip_text, false)
 				end
 			end
 		end
@@ -12938,17 +12938,22 @@ function applyCustomTipText(tipTable)
 			then
 				print("Check wayroom text math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
 			end
-			setTipText(tip_address, tip_text)
+			setTipText(tip_address, tip_text, true)
 		end
 	end
 end
 
-function setTipText(tip_address, input_text)
-	local text_address = tip_address + GLOVERHACK.tip_text
+function setTipText(tip_address, input_text, is_wayroom)
+	local text_offset = GLOVERHACK.tip_text
+	if is_wayroom then
+		text_offset = GLOVERHACK.wr_tip_text
+	end
+	local text_address = tip_address + text_offset
 	local tip_dialogue = stringToTipTable(input_text)
 	local furthest_line = 0
 	for line_index, line_text in pairs(tip_dialogue)
 	do
+		print(line_text)
 		if furthest_line < line_index then
 			furthest_line = line_index
 		end
@@ -12969,7 +12974,7 @@ function setTipText(tip_address, input_text)
 			mainmemory.writebyte(text_start_address + each_char, line_text:byte(each_char + 1))
 		end
 	end
-	local text_end = tip_address + GLOVERHACK.tip_text + GLOVERHACK.last_line
+	local text_end = tip_address + text_offset + GLOVERHACK.last_line
 	mainmemory.writebyte(text_end, furthest_line)
 end
 
@@ -12979,6 +12984,7 @@ function stringToTipTable(full_string)
 	for word in full_string:gmatch("%S+")
 	do
 		word = string.upper(word)
+
 		local sentence_size = string.len(output_lines[cur_line])
 		local first_word = sentence_size > 0
 		local word_prefix = ""
