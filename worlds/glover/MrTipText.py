@@ -200,6 +200,9 @@ world_tables = {
     "Super Mario 64" : [
         "There were plans to have Glover be Mario's Glove.",
         "Shoutouts to Simpleflips."
+    ],
+    "The Grinch" : [
+        "Ya Grinched!"
     ]
 }
 

@@ -104,7 +104,8 @@ class GaribOrderOverrides(OptionCounter):
     display_name = "Garib Order Overrides"
 
 class RandomGaribSounds(Toggle):
-    """Makes garib sounds use random sounds instead."""
+    """Makes garib sounds use random sounds instead.
+    Only works if garibs are not Level Garibs."""
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Random Garib Sounds"
 
