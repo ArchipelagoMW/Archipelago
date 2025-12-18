@@ -4,8 +4,10 @@ from typing import TYPE_CHECKING
 from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.client.texthelper import get_rich_item_name
 from worlds.rac3.constants.box_colors import RAC3BOXCOLOR
 from worlds.rac3.constants.box_theme import RAC3BOXTHEME
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.constants.text_color import RAC3TEXTCOLOR
@@ -94,6 +96,11 @@ async def handle_checked_locations(ctx: 'Context') -> None:
     if new_checks:
         await ctx.send_msgs([ClientMessage.location_checks(new_checks)])
         ctx.locations_checked.update(new_checks)
+        net_item = ctx.locations_info.get(new_checks[-1], None)
+        if net_item is not None and net_item.player != ctx.slot:
+            item_to_player_names = get_rich_item_name(ctx, net_item, True)
+            ctx.game_interface.messagebox(f'Sent {item_to_player_names}')
+    
     # else:
     #     logger.info("Not found new location")
 

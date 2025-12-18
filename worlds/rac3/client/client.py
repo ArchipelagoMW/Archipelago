@@ -10,6 +10,8 @@ from Utils import Any, async_start, init_logging
 from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
 from worlds.rac3.client.callbacks import handle_respawn, init, update
 from worlds.rac3.client.interface import Rac3Interface
+from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE, get_active_locations
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
@@ -227,6 +229,11 @@ class Rac3Context(CommonContext):
                 if self.slot_data[RAC3OPTION.DEATHLINK]:
                     self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
                     async_start(self.update_death_link(self.death_link))
+            
+            all_locations = get_active_locations(self.slot_data)
+            all_location_ids = [loc.AP_CODE for loc in all_locations.values()]
+            self.locations_scouted = set(all_location_ids)
+            async_start(self.send_msgs([ClientMessage.location_scouts(all_location_ids)]))
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
