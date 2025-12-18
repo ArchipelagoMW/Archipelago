@@ -2,7 +2,7 @@ from typing import Dict, TYPE_CHECKING, Set
 
 from BaseClasses import CollectionState, Item
 from worlds.generic.Rules import add_item_rule, add_rule, CollectionRule
-from .Items import BRAIN_JARS, LOCAL_SET, BAGGAGE_TYPES
+from .Items import BRAIN_JARS, LOCAL_SET
 from .Locations import (
     DEEP_ARROWHEAD_LOCATIONS, 
     MENTAL_COBWEB_LOCATIONS, 
@@ -428,12 +428,6 @@ class PsyRules:
 
     def redeemed_brain_goal(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.has(item_name, self.player) for item_name in BRAIN_JARS])
-    
-    def can_claim_baggage(self, baggage, state: CollectionState) -> bool:
-            return (
-                state.count(f"{baggage} Tag", self.player) >
-                state.count(baggage, self.player)
-            )
 
     def set_psy_rules(self) -> None:
         multiworld = self.world.multiworld
@@ -445,19 +439,6 @@ class PsyRules:
                     entrance.access_rule = self.region_rules[region.name]
 
         self.set_psy_goal()
-
-        # Add a count rule to every location that contains baggage
-        baggage_item_names = set(BAGGAGE_TYPES)  # Hatbox, Suitcase, etc.
-
-        baggage_locations = [
-            loc
-            for loc in self.multiworld.get_locations(self.player)
-            if loc.item and loc.item.name in baggage_item_names
-        ]
-
-        for location in baggage_locations:
-            baggage = location.item.name
-            add_rule(location, lambda state, b=baggage: self.can_claim_baggage(b, state))
 
         # Locations which are not included in PsychoSeed generation do not place items into the Psychonauts game world,
         # instead relying on the Archipelago client to tell Psychonauts to spawn in the item as if it were receiving a
