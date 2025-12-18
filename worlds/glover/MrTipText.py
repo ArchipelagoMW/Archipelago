@@ -6,7 +6,7 @@ actual_advice = [
     "You can cartwheel in place of jumping to cross horizontal gaps.",
     "Trap items show up with false names. Remember your settings, and look for typos!",
     "You can defeat some enemies by pushing them off edges.",
-    "On average, it takes 62 garibs to unlock a star mark."
+    "On average, it takes 62 garibs to unlock a star mark.",
     "There are 1497 Garibs in Glover. There are 326 Garib Groups.",
     "You can release the bowling ball to break objects if it has enough speed.",
     "The crystal can float, is fast, and gives double points when getting garibs.",
@@ -28,7 +28,7 @@ actual_advice = [
     "Atl?, Crn?, Pht?, FoF? and Otw! can all be beaten without items.",
     "Avoid hitting the wizard cutouts in Carnival Bonus. They spawn targets.",
     "You don't need the speed potion if you have the right items.",
-    "Cursed balls will not shatter.",
+    "Traps that change your ball may act as a boon in the right context.",
     "If you get a check and die, you still got the check.",
     "Using a checkpoint also checks its location.",
     "You can dribble in place of jumping.",
@@ -52,24 +52,21 @@ actual_advice = [
     "Out of This World 3's Magnet can be ridden.",
     "The Hercules Potion is only truly required for 1 check.",
     "You can predict what levels are coming based on garibs you recieve.",
-    "Jump diagonally from the corners of platforms in Atlantis Bonus."
+    "Jump diagonally from the corners of platforms in Atlantis Bonus.",
+    "You don't need to beat a level to get a star mark for it."
     ]
 
 #References
 references = [
-    "It's dangerous to go alone. Take this!",
     "Look Glover, Ropes! We can use these to climb big pits!",
     "It's so sad the wizard got cursed with changema.",
-    "Shine Get!",
     "Stop! You have violated the law!",
     "I used to be a Glove like you. Then I took a Garib to the knee.",
-    "Crystal wizard garib gang. We love casting spells.",
-    ""
+    "Crystal wizard garib gang. We love casting spells."
 ]
 
 #World specific hints
 world_tables = {
-    "Adventure" : [],
     "A Hat in Time" : [
         "Peck!",
         "Could you use yarn to make more Glovers?",
@@ -78,6 +75,7 @@ world_tables = {
     "A Link to the Past" : [
         "Wait for opertune times to buy spells from shops using Rupees.",
         "Crystals are important for A Link to the Past too.",
+        "It's dangerous to go alone. Take this!",
         "Traps in A Link to the Past are disguised."
     ],
     "APQuest" : [
@@ -200,6 +198,11 @@ world_tables = {
     "Super Mario 64" : [
         "There were plans to have Glover be Mario's Glove.",
         "Shoutouts to Simpleflips."
+    ],
+    "Super Mario Sunshine" : [
+        "Shine Get!",
+        "What's this icky, paint-like ball? It's moving!",
+        "Glover's a Chuckster!"
     ],
     "The Grinch" : [
         "Ya Grinched!"

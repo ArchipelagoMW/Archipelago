@@ -106,7 +106,8 @@ class GloverWeb(WebWorld):
         OptionGroup("Garibs", [
             Options.GaribLogic,
             Options.GaribSorting,
-            Options.GaribOrderOverrides
+            Options.GaribOrderOverrides,
+            Options.RandomGaribSounds
         ]),
         OptionGroup("Entrance Randomization", [
             Options.EntranceRandomizer,
@@ -318,7 +319,7 @@ class GloverWorld(World):
         ]
         self.starting_ball : str = "Rubber Ball"
         #Grab Mr. Tips for hints
-        self.tip_locations : list[str] = []
+        self.tip_locations : Dict[str, int] = {}
         #Speaking of hints
         self.mr_hints = {}
         self.chicken_hints = {}
@@ -1211,12 +1212,11 @@ class GloverWorld(World):
 
         #Mr. Tip Custom Text
         if self.options.mr_tip_text_display.value != 0:
-            for each_tip in self.tip_locations:
-                tip_address = str(self.multiworld.get_location(each_tip, self.player).address)
+            for each_tip, tip_address in self.tip_locations.items():
                 if tip_address in self.mr_tip_text:
                     continue
                 #Create unique tip text
-                self.mr_tip_text[tip_address] = self.random.choice(self.mr_tip_table)
+                self.mr_tip_text[str(tip_address)] = self.random.choice(self.mr_tip_table)
 
     def lua_world_name(self, original_name):
         lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]

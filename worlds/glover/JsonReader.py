@@ -344,7 +344,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
             case 6:
                 #Tip hints
                 if self.options.mr_hints:
-                    self.tip_locations.append(each_location_data.name)
+                    self.tip_locations[each_location_data.name] = ap_ids[0]
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue

@@ -11,7 +11,7 @@ def create_hints(self):
     valid_chicken_items = get_valid_items(self, chicken_catagories)
 
     #Get Mr. Tip Hints First
-    tips_pair = create_hint_lookup(self, self.tip_locations, valid_tip_items, tip_catagories, self.options.mr_hints == 2, "")
+    tips_pair = create_hint_lookup(self, list(self.tip_locations.keys()), valid_tip_items, tip_catagories, self.options.mr_hints == 2, "")
     #Remove any items you've already gotten from being hints from the chicken
     for each_item in tips_pair[0]:
         if each_item in valid_chicken_items:
@@ -135,6 +135,8 @@ def location_to_hint_info(self, in_location : Location) -> dict[str:str]:
 def location_name_to_address(self, location_name : str) -> str:
     if location_name.startswith("Chicken Hint "):
         return location_name.removeprefix("Chicken Hint ")
+    if not self.options.mr_tip_checks:
+        return self.tip_locations[location_name]
     return str(self.multiworld.get_location(location_name, self.player).address)
 
 def get_catagories(set_option, option_origin) -> list[ItemClassification] | None:
