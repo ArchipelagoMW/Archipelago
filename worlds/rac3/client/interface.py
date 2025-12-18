@@ -871,16 +871,18 @@ class Rac3Interface(GameInterface):
 
     def messagebox(self, message: str) -> None:
         # real overflow cap is actually about 248, but we don't need that long messages
-        msg_bytes = format_textbox_string(message[:200:])
+        msg_bytes, color_bytes_count = format_textbox_string(message[:200:])
+        msg_length = (len(msg_bytes) - color_bytes_count)
+        width = int(msg_length * 7.20) + msg_length // 5
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
-        width = int(len(msg_bytes) * 4.8 + len(msg_bytes) ** 1.18)
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
 
-def format_textbox_string(msg: str) -> bytes:
+def format_textbox_string(msg: str) -> tuple[bytes, int]:
     result = bytearray()
+    color_byte_count = 0
     i = 0
     while i < len(msg):
         matched = False
@@ -890,6 +892,7 @@ def format_textbox_string(msg: str) -> bytes:
                 if isinstance(byte, str):
                     byte = ord(byte)
                 result.append(byte)
+                color_byte_count += 1
                 i += len(code)
                 matched = True
                 break
@@ -898,4 +901,5 @@ def format_textbox_string(msg: str) -> bytes:
             result.append(ord(msg[i]))
             i += 1
     result.append(0)  # End of string null terminator
-    return bytes(result)
+    color_byte_count += 1  # Count the null terminator
+    return bytes(result), color_byte_count
