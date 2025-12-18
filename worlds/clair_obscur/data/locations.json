@@ -6454,5 +6454,51 @@
         "original_item": "",
         "type": "Boss",
         "boss_type": "Area"
+    },
+    {
+        "name": "Endless Tower: Duollistes",
+        "internal_name": "Boss_Duolliste_P1",
+        "location": "Endless Tower",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Normal",
+        "pictos_level": 32
+    },
+    {
+        "name": "Endless Tower: Chromatic Lampmaster",
+        "internal_name": "Boss_LampmasterALPHA",
+        "location": "Endless Tower",
+        "condition": {},
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Chromatic",
+        "pictos_level": 32
+    },
+    {
+        "name": "Endless Tower: Clea Unleashed",
+        "internal_name": "Boss_Clea_ALPHA",
+        "location": "Endless Tower",
+        "condition": {
+            "Area - Flying Manor": 1
+        },
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Area",
+        "pictos_level": 32
+    },
+    {
+        "name": "Endless Tower: Simon, the Divergent Star",
+        "internal_name": "Boss_SimonALPHA*1",
+        "location": "Endless Tower",
+        "condition": {
+            "Area - Renoir's Drafts": 1,
+            "Progressive Rock": 5
+        },
+        "original_item": "",
+        "type": "Boss",
+        "boss_type": "Area",
+        "pictos_level": 32
     }
+
 ]
