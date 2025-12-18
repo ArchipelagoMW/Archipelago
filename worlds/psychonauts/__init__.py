@@ -232,6 +232,18 @@ class PSYWorld(World):
                 adjusted_item_counts[item] -= 1
                 self.multiworld.push_precollected(self.create_item(item))
 
+        # Pre-collect the Cobweb Duster when starting with it.
+        if self.options.StartingCobwebDuster:
+            # Reduce the count to add to the item pool.
+            adjusted_item_counts[ItemName.CobwebDuster] -= 1
+            self.multiworld.push_precollected(self.create_item(ItemName.CobwebDuster))
+
+        # Pre-collect one Progressive Levitation when starting with it.
+        if self.options.StartingLevitation:
+            # Reduce the count to add to the item pool.
+            adjusted_item_counts[ItemName.Levitation] -= 1
+            self.multiworld.push_precollected(self.create_item(ItemName.Levitation))
+
         # Add items for DeepArrowheadShuffle
         if self.options.DeepArrowheadShuffle:
             self._add_deep_arrowhead_shuffle_items(adjusted_item_counts)

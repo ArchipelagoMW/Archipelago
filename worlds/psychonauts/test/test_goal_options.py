@@ -48,7 +48,9 @@ class PsychonautsMinimalVictoryTestBase(PsychonautsTestBase):
             cls.options = options
         options.update({
             "RandomStartingMinds": 0,
+            "StartingLevitation": False,
             "StartingMentalMagnet": False,
+            "StartingCobwebDuster": False,
         })
         super().setUpClass()
 
