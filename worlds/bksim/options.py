@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Range, PerGameCommonOptions
+from Options import Range, PerGameCommonOptions, Toggle
 
 
 class LocationsPerWeather(Range):
@@ -37,12 +37,19 @@ class ExtraFillerRate(Range):
     default = 0
 
 
+class DeathLink(Toggle):
+    """If enabled, when another player with DeathLink enabled dies, you will die as well.
+    BK Simulator does not *send* DeathLinks, only receives them."""
+    display_name = "Death Link"
+
+
 @dataclass
 class BKSim_Options(PerGameCommonOptions):
     locs_per_weather: LocationsPerWeather
     start_distance: StartDistance
     speed_per_upgrade: SpeedPerUpgrade
     extra_filler_rate: ExtraFillerRate
+    death_link: DeathLink
 
 
 options_presets = {
