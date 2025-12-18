@@ -35,7 +35,7 @@ components.append(
 # There are two optional parameters that are worth drawing attention to here: "game_name" and "supports_uri".
 # As you might know, on a room page on WebHost, clicking a slot name opens your locally installed Launcher
 # and asks you if you want to open a Text Client.
-# If you have game_name set on your Component, your user also gets the option to open that instead.
+# If you have "game_name" set on your Component, your user also gets the option to open that instead.
 # Furthermore, if you have "supports_uri" set to True, your Component will be passed a uri as an arg.
 # This uri contains the room url + port, the slot name, and the password.
 # You can process this uri arg to automatically connect the user to their slot without having to type anything.
