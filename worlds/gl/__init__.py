@@ -70,8 +70,9 @@ class GauntletLegendsWorld(World):
     options_dataclass = GLOptions
     options: GLOptions
     settings: ClassVar[GLSettings]
-    item_name_to_id = {name: data.code for name, data in item_table.items()}
+    item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
+    excluded_regions: set
     death: list[Item]
     items: list[Item]
 
@@ -79,6 +80,7 @@ class GauntletLegendsWorld(World):
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
+        self.excluded_regions = set()
         self.death = []
         self.items = []
         self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
@@ -258,7 +260,7 @@ class GauntletLegendsWorld(World):
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]
-        return GLItem(item.item_name, item.progression, item.code, self.player)
+        return GLItem(item.item_name, item.progression, item.id, self.player)
 
     def lock_item(self, location: str, item_name: str):
         item = self.create_item(item_name)

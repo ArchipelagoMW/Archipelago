@@ -9,11 +9,11 @@ class LocationData:
     difficulty: int = 0
     tags: Final[tuple[str, ...]]
 
-    def __init__(self, name, id_, difficulty, tags=None):
+    def __init__(self, name, id, difficulty, tags=None):
         if tags is None:
             tags = []
         self.name = name
-        self.id = id_
+        self.id = id
         self.difficulty = difficulty
         self.tags = tags
 
@@ -25,8 +25,7 @@ def import_locations() -> List[LocationData]:
     import json
     import pkgutil
 
-    return (json.loads(pkgutil.get_data(__name__, "json/locations.json").decode("utf-8"), object_hook=lambda d: LocationData(**d)) +
-              json.loads(pkgutil.get_data(__name__, "json/tattles.json").decode("utf-8"), object_hook=lambda d: LocationData(**d)))
+    return json.loads(pkgutil.get_data(__name__, "json/locations.json").decode("utf-8"), object_hook=lambda d: LocationData(**d))
 
 
 

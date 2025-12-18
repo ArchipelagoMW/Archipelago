@@ -3,36 +3,7 @@ from typing import Optional, Callable
 
 from BaseClasses import Region
 
-from .Locations import (
-    GLLocation,
-    arctic_docks,
-    battle_towers,
-    battle_trenches,
-    castle_courtyard,
-    castle_treasury,
-    chimeras_keep,
-    cliffs_of_desolation,
-    crystal_mine,
-    dagger_peak,
-    desecrated_temple,
-    dragons_lair,
-    dungeon_of_torment,
-    erupting_fissure,
-    frozen_camp,
-    gates_of_the_underworld,
-    haunted_cemetery,
-    infernal_fortress,
-    lost_cave,
-    plague_fiend,
-    poisoned_fields,
-    tower_armory,
-    toxic_air_ship,
-    valley_of_fire,
-    venomous_spire,
-    volcanic_cavern,
-    yeti,
-    LocationData
-)
+from .Locations import GLLocation, LocationData, get_locations_by_tags
 
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
@@ -41,57 +12,45 @@ if typing.TYPE_CHECKING:
 def create_regions(world: "GauntletLegendsWorld"):
     world.multiworld.regions.append(Region("Menu", world.player, world.multiworld))
 
-    create_region(world, "Valley of Fire", valley_of_fire)
+    regions_dict = get_regions_dict()
+    for name, locations in regions_dict.items():
+        if name not in world.excluded_regions:
+            create_region(world, name, locations)
+        else:
+            world.disabled_locations.update([loc.name for loc in locations if loc.name not in world.disabled_locations])
 
-    create_region(world, "Dagger Peak", dagger_peak)
-
-    create_region(world, "Cliffs of Desolation", cliffs_of_desolation)
-
-    create_region(world, "Lost Cave", lost_cave)
-
-    create_region(world, "Volcanic Caverns", volcanic_cavern)
-
-    create_region(world, "Dragon's Lair", dragons_lair)
-
-    create_region(world, "Castle Courtyard", castle_courtyard)
-
-    create_region(world, "Dungeon of Torment", dungeon_of_torment)
-
-    create_region(world, "Tower Armory", tower_armory)
-
-    create_region(world, "Castle Treasury", castle_treasury)
-
-    create_region(world, "Chimera's Keep", chimeras_keep)
-
-    create_region(world, "Poisonous Fields", poisoned_fields)
-
-    create_region(world, "Haunted Cemetery", haunted_cemetery)
-
-    create_region(world, "Venomous Spire", venomous_spire)
-
-    create_region(world, "Toxic Air Ship", toxic_air_ship)
-
-    create_region(world, "Vat of the Plague Fiend", plague_fiend)
-
-    create_region(world, "Arctic Docks", arctic_docks)
-
-    create_region(world, "Frozen Camp", frozen_camp)
-
-    create_region(world, "Crystal Mine", crystal_mine)
-
-    create_region(world, "Erupting Fissure", erupting_fissure)
-
-    create_region(world, "Yeti", yeti)
-
-    create_region(world, "Desecrated Temple", desecrated_temple)
-
-    create_region(world, "Battle Trenches", battle_trenches)
-
-    create_region(world, "Battle Towers", battle_towers)
-
-    create_region(world, "Infernal Fortress", infernal_fortress)
-
-    create_region(world, "Gates of the Underworld", gates_of_the_underworld)
+def get_regions_dict() -> dict[str, list[LocationData]]:
+    """
+    Returns a dictionary mapping region names to their corresponding location data lists.
+    """
+    return {
+        "Valley of Fire": get_locations_by_tags("valley_of_fire"),
+        "Dagger Peak": get_locations_by_tags("dagger_peak"),
+        "Cliffs of Desolation": get_locations_by_tags("cliffs_of_desolation"),
+        "Lost Cave": get_locations_by_tags("lost_cave"),
+        "Volcanic Caverns": get_locations_by_tags("volcanic_cavern"),
+        "Dragon's Lair": get_locations_by_tags("dragons_lair"),
+        "Castle Courtyard": get_locations_by_tags("castle_courtyard"),
+        "Dungeon of Torment": get_locations_by_tags("dungeon_of_torment"),
+        "Tower Armory": get_locations_by_tags("tower_armory"),
+        "Castle Treasury": get_locations_by_tags("castle_treasury"),
+        "Chimera's Keep": get_locations_by_tags("chimeras_keep"),
+        "Poisonous Fields": get_locations_by_tags("poisoned_fields"),
+        "Haunted Cemetery": get_locations_by_tags("haunted_cemetery"),
+        "Venomous Spire": get_locations_by_tags("venomous_spire"),
+        "Toxic Air Ship": get_locations_by_tags("toxic_air_ship"),
+        "Vat of the Plague Fiend": get_locations_by_tags("plague_fiend"),
+        "Arctic Docks": get_locations_by_tags("arctic_docks"),
+        "Frozen Camp": get_locations_by_tags("frozen_camp"),
+        "Crystal Mine": get_locations_by_tags("crystal_mine"),
+        "Erupting Fissure": get_locations_by_tags("erupting_fissure"),
+        "Yeti": get_locations_by_tags("yeti"),
+        "Desecrated Temple": get_locations_by_tags("desecrated_temple"),
+        "Battle Trenches": get_locations_by_tags("battle_trenches"),
+        "Battle Towers": get_locations_by_tags("battle_towers"),
+        "Infernal Fortress": get_locations_by_tags("infernal_fortress"),
+        "Gates of the Underworld": get_locations_by_tags("gates_of_the_underworld")
+    }
 
 
 def connect_regions(world: "GauntletLegendsWorld"):

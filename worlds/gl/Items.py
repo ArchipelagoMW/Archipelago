@@ -6,12 +6,12 @@ from BaseClasses import Item, ItemClassification
 from worlds.gl.Data import item_classifications
 
 
-class ItemData(NamedTuple):
+class ItemData:
     id: int
     item_name: str
     progression: ItemClassification
     rom_id: int
-    frequency: int = 1
+    frequency: int
 
     def __init__(self, id: int | None, item_name: str, progression: str, rom_id: int = 0x0, frequency: int = 1):
         self.id = id

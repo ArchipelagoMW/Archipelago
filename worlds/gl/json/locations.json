@@ -184,7 +184,8 @@
     "id": 88870611,
     "difficulty": 1,
     "tags": [
-      "valley_of_fire"
+      "valley_of_fire",
+      "obelisk"
     ]
   },
   {
@@ -652,7 +653,8 @@
     "id": 88870612,
     "difficulty": 1,
     "tags": [
-      "dagger_peak"
+      "dagger_peak",
+      "obelisk"
     ]
   },
   {
@@ -1211,7 +1213,8 @@
     "id": 88870613,
     "difficulty": 1,
     "tags": [
-      "cliffs_of_desolation"
+      "cliffs_of_desolation",
+      "obelisk"
     ]
   },
   {
@@ -3006,7 +3009,8 @@
     "id": 88870176,
     "difficulty": 2,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3014,7 +3018,8 @@
     "id": 88870177,
     "difficulty": 2,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3022,7 +3027,8 @@
     "id": 88870178,
     "difficulty": 4,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3030,7 +3036,8 @@
     "id": 88870179,
     "difficulty": 3,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3038,7 +3045,8 @@
     "id": 88870180,
     "difficulty": 1,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3046,7 +3054,8 @@
     "id": 88870181,
     "difficulty": 1,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3054,7 +3063,8 @@
     "id": 88870607,
     "difficulty": 1,
     "tags": [
-      "dragons_lair"
+      "dragons_lair",
+      "no_obelisks"
     ]
   },
   {
@@ -3365,7 +3375,8 @@
     "id": 88870616,
     "difficulty": 1,
     "tags": [
-      "castle_courtyard"
+      "castle_courtyard",
+      "obelisk"
     ]
   },
   {
@@ -4012,7 +4023,8 @@
     "id": 88870617,
     "difficulty": 1,
     "tags": [
-      "dungeon_of_torment"
+      "dungeon_of_torment",
+      "obelisk"
     ]
   },
   {
@@ -5583,7 +5595,8 @@
     "id": 88870329,
     "difficulty": 1,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5591,7 +5604,8 @@
     "id": 88870330,
     "difficulty": 4,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5599,7 +5613,8 @@
     "id": 88870331,
     "difficulty": 2,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5607,7 +5622,8 @@
     "id": 88870332,
     "difficulty": 3,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5615,7 +5631,8 @@
     "id": 88870333,
     "difficulty": 2,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5623,7 +5640,8 @@
     "id": 88870334,
     "difficulty": 1,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -5631,7 +5649,8 @@
     "id": 88870608,
     "difficulty": 1,
     "tags": [
-      "chimeras_keep"
+      "chimeras_keep",
+      "no_obelisks"
     ]
   },
   {
@@ -6016,7 +6035,8 @@
     "id": 88870614,
     "difficulty": 1,
     "tags": [
-      "poisoned_fields"
+      "poisoned_fields",
+      "obelisk"
     ]
   },
   {
@@ -6853,7 +6873,8 @@
     "id": 88870615,
     "difficulty": 1,
     "tags": [
-      "haunted_cemetery"
+      "haunted_cemetery",
+      "obelisk"
     ]
   },
   {
@@ -8381,7 +8402,8 @@
     "id": 88870609,
     "difficulty": 1,
     "tags": [
-      "plague_fiend"
+      "plague_fiend",
+      "no_obelisks"
     ]
   },
   {
@@ -11493,7 +11515,10 @@
     "name": "Yeti's Cavern - Yeti Mirror Shard",
     "id": 88870610,
     "difficulty": 1,
-    "tags": []
+    "tags": [
+      "yeti",
+      "no_obelisks"
+    ]
   },
   {
     "name": "Desecrated Temple - Death 1",
@@ -13464,7 +13489,8 @@
     "id": 88870584,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13472,7 +13498,8 @@
     "id": 88870585,
     "difficulty": 3,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13480,7 +13507,8 @@
     "id": 88870586,
     "difficulty": 2,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13488,7 +13516,8 @@
     "id": 88870587,
     "difficulty": 2,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13496,7 +13525,8 @@
     "id": 88870588,
     "difficulty": 2,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13504,7 +13534,8 @@
     "id": 88870589,
     "difficulty": 3,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13512,7 +13543,8 @@
     "id": 88870590,
     "difficulty": 4,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13520,7 +13552,8 @@
     "id": 88870591,
     "difficulty": 3,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13528,7 +13561,8 @@
     "id": 88870592,
     "difficulty": 2,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13536,7 +13570,8 @@
     "id": 88870593,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13544,7 +13579,8 @@
     "id": 88870594,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13552,7 +13588,8 @@
     "id": 88870595,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13569,7 +13606,8 @@
     "id": 88870597,
     "difficulty": 4,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13577,7 +13615,8 @@
     "id": 88870598,
     "difficulty": 3,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13585,7 +13624,8 @@
     "id": 88870599,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13593,7 +13633,8 @@
     "id": 88870600,
     "difficulty": 4,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13601,7 +13642,8 @@
     "id": 88870601,
     "difficulty": 2,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13609,7 +13651,8 @@
     "id": 88870602,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13626,7 +13669,8 @@
     "id": 88870604,
     "difficulty": 1,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13634,7 +13678,8 @@
     "id": 88870605,
     "difficulty": 3,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   },
   {
@@ -13642,7 +13687,8 @@
     "id": 88870606,
     "difficulty": 4,
     "tags": [
-      "gates_of_the_underworld"
+      "gates_of_the_underworld",
+      "no_obelisks"
     ]
   }
 ]
