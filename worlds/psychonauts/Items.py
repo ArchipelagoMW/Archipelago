@@ -187,6 +187,14 @@ LOCAL_SET: Set[str] = {
     *BAGGAGE,
 }
 
+BAGGAGE_TYPES = [
+    ItemName.Hatbox,
+    ItemName.Suitcase,
+    ItemName.Purse,
+    ItemName.Steamertrunk,
+    ItemName.Dufflebag,
+]
+
 ITEM_GROUPS: Dict[str, Set[str]] = {
     "Mind": set(MINDS.keys()),
     "Brain": set(BRAIN_JARS.keys()),

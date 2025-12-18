@@ -225,6 +225,15 @@ class PSYWorld(World):
         num_starting_minds = self.options.RandomStartingMinds.value
         if num_starting_minds > 0:
             mind_unlocks = list(MINDS)
+            # If start_inventory contains any minds or sasha's button, remove from MINDS list first
+            for item_name, value in self.options.start_inventory.items():
+                if item_name in mind_unlocks:
+                    mind_unlocks.remove(item_name)
+
+            # make sure num_starting_minds is never greater than mind_unlocks list
+            # can happen if using start_inventory and starting minds is high
+            num_starting_minds = min(num_starting_minds, len(mind_unlocks))
+
             for _ in range(num_starting_minds):
                 # Pop a random mind from the list.
                 item = mind_unlocks.pop(self.random.randrange(len(mind_unlocks)))
