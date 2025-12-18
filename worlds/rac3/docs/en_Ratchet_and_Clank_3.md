@@ -14,7 +14,7 @@ config file.
 
 ## What does randomization do to this game?
 
-Weapons, Planets, Gadgets, Titanium bolts, Trophies, Weapon upgrades are all randomized
+Weapons, Planets, Gadgets, Titanium bolts, Trophies, Weapon upgrades, Sewer Crystals are all randomized
 
 ## What items and locations get shuffled?
 
@@ -34,5 +34,7 @@ certain items to your own world.
 You will be able to visit the planets with whatever post-planet you receive, receiving Post Marcadia will unlock Aquatos
 for travel within Ratchet's Ship. Upon receiving a weapon it unlocks in ratchet's inventory, which will let you equip it
 and use to fire on enemy troops. Progressive upgrades will upgrade your weapons from V1 up to V5 increasing their
-firepower. Receiving Inferno Mode and Jackpot Mode filler items acts like you just broke the corresponding crates.
-However, receiving Inferno Mode will not change your armor, but you will still receive the full effect.
+firepower. Receiving Jackpot Mode filler item acts like you just broke the corresponding crate.
+When you receive a trap, you will get its effect for 10 seconds and then it expires.
+For 1-Hit KO Trap and No Ammo Trap, the effects are instant and will not revert after 10 seconds.
+Receiving the Inferno Mode trap will not change your armor, but you will still receive the full effect for a random amount of time rather than 10 seconds.
