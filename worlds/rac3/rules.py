@@ -190,17 +190,28 @@ def set_rules(world: "RaC3World"):
         # RAC3VENDOR.MARCADIA_HYDRA
         # RAC3TBOLT.MARCADIA_POOL
         # RAC3LOCATION.MARCADIA_RANGERS_1
-        # RAC3LOCATION.MARCADIA_RANGERS_2
-        # RAC3LOCATION.MARCADIA_RANGERS_3
-        # RAC3LOCATION.MARCADIA_RANGERS_4
-        # RAC3LOCATION.MARCADIA_RANGERS_5
-        # RAC3LOCATION.MARCADIA_REFRACTOR
-        RAC3SKILLPOINT.MARCADIA_REFLECT: lambda state: state.has(RAC3ITEM.REFRACTOR, world.player),
+        RAC3LOCATION.MARCADIA_RANGERS_2:
+            lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_1, player=world.player),
+        RAC3LOCATION.MARCADIA_RANGERS_3:
+            lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_2, player=world.player),
+        RAC3LOCATION.MARCADIA_RANGERS_4:
+            lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_3, player=world.player),
+        RAC3LOCATION.MARCADIA_RANGERS_5:
+            lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_4, player=world.player),
+        RAC3LOCATION.MARCADIA_REFRACTOR:
+            lambda state: state.can_reach_location(RAC3LOCATION.MARCADIA_RANGERS_5, player=world.player),
+        RAC3SKILLPOINT.MARCADIA_REFLECT: 
+            lambda state: state.has(RAC3ITEM.REFRACTOR, world.player) 
+                          and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
         RAC3TBOLT.MARCADIA_LAST_REFRACTOR:
-            lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player),
+            lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player)
+                          and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
         RAC3TBOLT.MARCADIA_BEFORE_AL:
-            lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player),
-        RAC3LOCATION.MARCADIA_MEET_AL: lambda state: state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.has_all([RAC3ITEM.REFRACTOR, RAC3ITEM.GRAV_BOOTS], world.player)
+                          and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
+        RAC3LOCATION.MARCADIA_MEET_AL: 
+            lambda state: state.has(RAC3ITEM.REFRACTOR, world.player)
+                          and state.can_reach_location(RAC3LOCATION.MARCADIA_REFRACTOR, world.player),
 
         # RAC3VENDOR.NATION_AGENTS
         # RAC3TBOLT.NATION_CLIFF
@@ -227,7 +238,7 @@ def set_rules(world: "RaC3World"):
         RAC3LOCATION.NATION_HYDRA_N_SEEK:
             lambda state: state.has_any([RAC3ITEM.SPITTING_HYDRA, RAC3ITEM.PROGRESSIVE_SPITTING_HYDRA], world.player)
                           and state.can_reach_location(RAC3LOCATION.NATION_WHIP_IT_GOOD, world.player),
-                          
+
         RAC3SKILLPOINT.NATION_BASH:
             lambda state: state.can_reach_location(RAC3LOCATION.DAXX_GUNSHIP, player=world.player),
         RAC3LOCATION.NATION_MEET_COURTNEY:
@@ -406,10 +417,14 @@ def set_rules(world: "RaC3World"):
         # RAC3TROPHY.TYHRRANOSIS_AL
         RAC3TBOLT.TYHRRANOSIS_CAVE: lambda state: state.has(RAC3ITEM.HYPERSHOT, world.player),
         # RAC3LOCATION.TYHRRANOSIS_BOSS
-        # RAC3LOCATION.TYHRRANOSIS_RANGERS_1
-        # RAC3LOCATION.TYHRRANOSIS_RANGERS_2
-        # RAC3LOCATION.TYHRRANOSIS_RANGERS_3
-        # RAC3LOCATION.TYHRRANOSIS_RANGERS_4
+        RAC3LOCATION.TYHRRANOSIS_RANGERS_1:
+            lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_BOSS, player=world.player),
+        RAC3LOCATION.TYHRRANOSIS_RANGERS_2:
+            lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_RANGERS_1, player=world.player),
+        RAC3LOCATION.TYHRRANOSIS_RANGERS_3:
+            lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_RANGERS_2, player=world.player),
+        RAC3LOCATION.TYHRRANOSIS_RANGERS_4:
+            lambda state: state.can_reach_location(RAC3LOCATION.TYHRRANOSIS_RANGERS_3, player=world.player),
 
         RAC3SKILLPOINT.DAXX_BUGS:
             lambda state: state.has_any([RAC3ITEM.QWACK_O_RAY, RAC3ITEM.PROGRESSIVE_QWACK_O_RAY], world.player),
@@ -430,9 +445,12 @@ def set_rules(world: "RaC3World"):
 
         # RAC3SKILLPOINT.BLACKWATER_BASH
         # RAC3LOCATION.BLACKWATER_CITY_RANGERS_1
-        # RAC3LOCATION.BLACKWATER_CITY_RANGERS_2
-        # RAC3LOCATION.BLACKWATER_CITY_RANGERS_3
-        # RAC3LOCATION.BLACKWATER_CITY_COMPLETE
+        RAC3LOCATION.BLACKWATER_CITY_RANGERS_2:
+            lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_1, player=world.player),
+        RAC3LOCATION.BLACKWATER_CITY_RANGERS_3:
+            lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_2, player=world.player),
+        RAC3LOCATION.BLACKWATER_CITY_COMPLETE:
+            lambda state: state.can_reach_location(RAC3LOCATION.BLACKWATER_CITY_RANGERS_3, player=world.player),
 
         # RAC3VENDOR.HOLOSTAR_RIFT_INDUCER
         # RAC3TROPHY.HOLOSTAR_CLANK
@@ -459,21 +477,21 @@ def set_rules(world: "RaC3World"):
         # RAC3LOCATION.METROPOLIS_METAL_NOIDS
         # RAC3TBOLT.METROPOLIS_BEHIND
         RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
-        RAC3TBOLT.METROPOLIS_RANGERS:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.has_all([RAC3ITEM.GRAV_BOOTS, RAC3ITEM.REFRACTOR], player=world.player),
         RAC3LOCATION.METROPOLIS_RANGERS_1:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_DEFEAT_KLUNK, player=world.player),
+        RAC3TBOLT.METROPOLIS_RANGERS:
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_1, player=world.player),
         RAC3LOCATION.METROPOLIS_RANGERS_2:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_1, player=world.player),
         RAC3LOCATION.METROPOLIS_RANGERS_3:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_2, player=world.player),
         RAC3LOCATION.METROPOLIS_RANGERS_4:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_3, player=world.player),
         RAC3LOCATION.METROPOLIS_RANGERS_5:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_4, player=world.player),
         RAC3LOCATION.METROPOLIS_MAP_O_MATIC:
-            lambda state: state.has(RAC3ITEM.GRAV_BOOTS, world.player) and state.has(RAC3ITEM.REFRACTOR, world.player),
+            lambda state: state.can_reach_location(RAC3LOCATION.METROPOLIS_RANGERS_5, player=world.player),
 
         # RAC3TBOLT.CRASH_SITE
         # RAC3TROPHY.CRASH_NEFARIOUS
