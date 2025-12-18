@@ -6,6 +6,8 @@ from struct import unpack
 from typing import Any, Optional
 
 from CommonClient import logger
+from worlds.rac3.constants.box_colors import RAC3BOXCOLOR, THEME_ID_TO_THEME_COLORS
+from worlds.rac3.constants.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
 from worlds.rac3.constants.data.item import (armor_data, equipable_data, gadget_data, infobot_data, ITEM_FROM_AP_CODE,
@@ -26,8 +28,8 @@ from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYP
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
                                           SHIP_SLOTS)
 from worlds.rac3.constants.status import RAC3STATUS
-from worlds.rac3.constants.textcolor import RAC3TEXTCOLOR
-from worlds.rac3.constants.textformat import CLASSIFICATION_TO_COLOR, RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
+from worlds.rac3.constants.text_color import RAC3TEXTCOLOR
+from worlds.rac3.constants.text_format import CLASSIFICATION_TO_COLOR, RAC3TEXTFORMAT, COLOR_NAME_TO_BYTE
 from worlds.rac3.pcsx2_interface.pine import Pine
 
 
@@ -869,37 +871,78 @@ class Rac3Interface(GameInterface):
         pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
         return self.pause_menu and pressed_square
 
-    def messagebox(self, message: str) -> None:
+    def messagebox(self, message: str, box_theme: RAC3BOXTHEME = RAC3BOXTHEME.DEFAULT) -> None:
         # real overflow cap is actually about 248, but we don't need that long messages
-        msg_bytes, color_bytes_count = format_textbox_string(message[:200:])
-        msg_length = (len(msg_bytes) - color_bytes_count)
-        width = int(msg_length * 7.20) + msg_length // 5
+        msg_bytes, color_bytes_count, longest_line_length = self.format_textbox_string(message[:200:])
+        msg_length = int(longest_line_length - color_bytes_count)
+        width = msg_length * 7 + 10
+
+        box_color = THEME_ID_TO_THEME_COLORS[box_theme]['box']
+        text_color = THEME_ID_TO_THEME_COLORS[box_theme]['text']
+        background_color = THEME_ID_TO_THEME_COLORS[box_theme]['background']
+        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), background_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), box_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
+
         self._write32(RAC3MESSAGEBOX.TIMER, 0x128)
-        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
+        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
         self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
 
-def format_textbox_string(msg: str) -> tuple[bytes, int]:
-    result = bytearray()
-    color_byte_count = 0
-    i = 0
-    while i < len(msg):
-        matched = False
-        for code, byte in COLOR_NAME_TO_BYTE.items():
-            if msg.startswith(code, i):
-                # Insert the color code byte (as a single byte)
-                if isinstance(byte, str):
-                    byte = ord(byte)
-                result.append(byte)
-                color_byte_count += 1
-                i += len(code)
-                matched = True
-                break
-        if not matched:
-            # Insert the ASCII value of the character
-            result.append(ord(msg[i]))
-            i += 1
-    result.append(0)  # End of string null terminator
-    color_byte_count += 1  # Count the null terminator
-    return bytes(result), color_byte_count
+    def format_textbox_string(self, msg: str) -> tuple[bytes, int]:
+        # Split message on \n to handle newlines
+        lines = msg.split('\\n')
+        color_byte_count = 0
+        # Write each line to memory, update string pointers
+        curr_addr = RAC3MESSAGEBOX.MESSAGE
+        entire_msg_bytes = b''
+        longest_line_length = 0
+        for idx, line in enumerate(lines):
+            # Convert to bytes, add null terminator
+            line_bytes, line_color_byte_count = self.format_color_string(line)
+            line_bytes += b'\x00'
+            entire_msg_bytes += line_bytes
+            if len(line_bytes) > longest_line_length:
+                longest_line_length = len(line_bytes)
+                color_byte_count = line_color_byte_count
+            self._write_bytes(curr_addr, line_bytes)
+            # Write pointer to this line at pointer_addr + 4*idx
+            self._write32(RAC3MESSAGEBOX.TEXT_POINTER + 4 * idx, curr_addr)
+            # Move to next address after this string
+            curr_addr += len(line_bytes)
+
+
+        self._write32(RAC3MESSAGEBOX.NUM_LINES, len(lines))
+
+        return entire_msg_bytes, color_byte_count, longest_line_length
+    
+    def format_color_string(self, msg: str) -> tuple[bytes, int]:
+        result = bytearray()
+        color_byte_count = 0
+        i = 0
+        while i < len(msg):
+            matched = False
+            for code, byte in COLOR_NAME_TO_BYTE.items():
+                if msg.startswith(code, i):
+                    # Insert the color code byte (as a single byte)
+                    if isinstance(byte, str):
+                        byte = ord(byte)
+                    result.append(byte)
+                    color_byte_count += 1
+                    i += len(code)
+                    matched = True
+                    break
+            if not matched:
+                # Insert the ASCII value of the character
+                result.append(ord(msg[i]))
+                i += 1
+        color_byte_count += 1  # Count the null terminator
+        return bytes(result), color_byte_count
+    
+    def reset_messagebox_theme(self) -> None:
+        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]['background'])
+        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]['box'])
+        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]['box'])
+        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]['text'])

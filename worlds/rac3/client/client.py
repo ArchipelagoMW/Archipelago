@@ -181,6 +181,8 @@ class Rac3Context(CommonContext):
     processed_item_count: int = 0
     queued_deaths: int = 0
     slot_data: Optional[dict[str, Any]] = None
+    last_deathlink_msg: Optional[str] = None
+    last_deathlink_sender: Optional[str] = None
 
     def __init__(self, server_address: str, password: str):
         super().__init__(server_address, password)
@@ -194,6 +196,8 @@ class Rac3Context(CommonContext):
             logger.info(f"Death Link: Received from {data['source']}")
         if self.death_link:
             self.queued_deaths += 1
+            self.last_deathlink_msg = text if text else "???"
+            self.last_deathlink_sender = data.get("source", "???")
 
     def make_gui(self):
         ui = super().make_gui()

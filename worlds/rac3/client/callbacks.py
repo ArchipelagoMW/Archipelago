@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 from CommonClient import logger
 from NetUtils import ClientStatus
 from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.constants.box_colors import RAC3BOXCOLOR
+from worlds.rac3.constants.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.region import RAC3REGION
 
@@ -102,15 +104,18 @@ async def handle_deathlink(ctx: 'Context') -> None:
     ctx.game_interface.reload_check()
     if time() - ctx.last_death_link > 10:
         alive, message = ctx.game_interface.alive()
+        ctx.game_interface.reset_messagebox_theme() # Deathlink colors stick so we reset them we can receive new a deathlink
         if alive:
             if ctx.queued_deaths > 0:
                 logger.debug(f'Deaths requires processing: {ctx.queued_deaths}')
                 if ctx.game_interface.kill_player():
+                    ctx.game_interface.messagebox(f'WHITEDeathlink Received from GREEN{ctx.last_deathlink_sender}WHITE:\\n{ctx.last_deathlink_msg}', box_theme=RAC3BOXTHEME.DEATHLINK)
                     logger.debug(f'Deaths processed')
                     ctx.queued_deaths = 0
                     ctx.last_death_link = time()
         else:
             logger.debug(f'Sending Death, queue: {ctx.queued_deaths}')
+            ctx.game_interface.messagebox(f'WHITESending Deathlink:\\n{message}', box_theme=RAC3BOXTHEME.DEATHLINK)
             await ctx.send_death(message)
             logger.debug(f'Sent Death, queue: {ctx.queued_deaths}')
 
