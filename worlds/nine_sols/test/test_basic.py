@@ -19,11 +19,9 @@ class TestDefaultWorld(NineSolsTestBase):
             'jade_costs',
             'first_root_node_name',
             'logic_difficulty',
-            'kuafu_shop_unlock',
+            'shop_unlocks',
             'kuafu_shop_unlock_sol_seals',
-            'chiyou_shop_unlock',
             'chiyou_shop_unlock_sol_seals',
-            'kuafu_extra_inventory_unlock',
             'kuafu_extra_inventory_unlock_sol_seals',
         })
         # now for the "real" slot_data tests on our default world:
@@ -34,11 +32,9 @@ class TestDefaultWorld(NineSolsTestBase):
         self.assertEqual(slot_data['jade_costs'], 'vanilla')
         self.assertEqual(slot_data['first_root_node_name'], 'apeman_facility_monitoring')
         self.assertEqual(slot_data['logic_difficulty'], 0)
-        self.assertEqual(slot_data['kuafu_shop_unlock'], 0)
+        self.assertEqual(slot_data['shop_unlocks'], 0)
         self.assertEqual(slot_data['kuafu_shop_unlock_sol_seals'], 1)
-        self.assertEqual(slot_data['chiyou_shop_unlock'], 0)
         self.assertEqual(slot_data['chiyou_shop_unlock_sol_seals'], 3)
-        self.assertEqual(slot_data['kuafu_extra_inventory_unlock'], 0)
         self.assertEqual(slot_data['kuafu_extra_inventory_unlock_sol_seals'], 5)
 
         # breathing tests for logic assertion helpers

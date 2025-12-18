@@ -3,7 +3,7 @@ from typing import NamedTuple
 
 from BaseClasses import Item, ItemClassification
 from .item_data import items_data, jade_items
-from .options import FirstRootNode, LogicDifficulty, KuafuShopUnlock, ChiyouShopUnlock, KuafuExtraInventoryUnlock
+from .options import FirstRootNode, LogicDifficulty, ShopUnlocks
 from .should_generate import should_generate
 
 if typing.TYPE_CHECKING:
@@ -146,13 +146,7 @@ def create_items(world: "NineSolsWorld") -> None:
             else:
                 multiworld.push_precollected(create_item(world, name))
         elif name == "Progressive Shop Unlock":
-            instances = 0
-            if options.kuafu_extra_inventory_unlock == KuafuExtraInventoryUnlock.option_3_unlock_items:
-                instances = 3
-            if options.chiyou_shop_unlock == ChiyouShopUnlock.option_2_unlock_items:
-                instances = 2
-            if options.kuafu_shop_unlock == KuafuShopUnlock.option_1_unlock_item:
-                instances = 1
+            instances = 3 if options.shop_unlocks == ShopUnlocks.option_unlock_items else 0
             for _ in range(0, instances):
                 prog_and_useful_items.append(create_item(world, name))
         elif classification == ItemClassification.filler:

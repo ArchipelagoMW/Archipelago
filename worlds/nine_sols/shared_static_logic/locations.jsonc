@@ -223,10 +223,10 @@
         "address": null, "name": "Event - Kuafu in FSP",
         "region": "FSP - Root Node", "requires": [
             {
-                "option": "kuafu_shop_unlock",
-                "radiant_pagoda": { "region": "RP - After Yingzhao" },
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "region": "RP - After Yingzhao" },
                 "sol_seals": { "item_group": "Sol Seals", "count_option": "kuafu_shop_unlock_sol_seals" },
-                "1_unlock_item": { "item": "Progressive Shop Unlock" }
+                "unlock_items": { "item": "Progressive Shop Unlock" }
             }
         ]
     },
@@ -234,10 +234,10 @@
         "address": null, "name": "Event - Chiyou in FSP",
         "region": "FSP - Root Node", "requires": [
             {
-                "option": "chiyou_shop_unlock",
-                "factory_bridge": { "location": "Factory (GH): Raise the Bridge for Chiyou" },
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "location": "Factory (GH): Raise the Bridge for Chiyou" },
                 "sol_seals": { "item_group": "Sol Seals", "count_option": "chiyou_shop_unlock_sol_seals" },
-                "2_unlock_items": { "item": "Progressive Shop Unlock", "count": 2 }
+                "unlock_items": { "item": "Progressive Shop Unlock", "count": 2 }
             }
         ]
     },
@@ -245,10 +245,10 @@
         "address": null, "name": "Event - Kuafu Extra Shop Inventory",
         "region": "FSP - Root Node", "requires": [
             {
-                "option": "kuafu_extra_inventory_unlock",
-                "chiyou": { "item": "Event - Chiyou in FSP" },
+                "option": "shop_unlocks",
+                "vanilla_like_locations": { "item": "Event - Chiyou in FSP" },
                 "sol_seals": { "item_group": "Sol Seals", "count_option": "kuafu_extra_inventory_unlock_sol_seals" },
-                "3_unlock_items": { "item": "Progressive Shop Unlock", "count": 3 }
+                "unlock_items": { "item": "Progressive Shop Unlock", "count": 3 }
             }
         ]
     },
