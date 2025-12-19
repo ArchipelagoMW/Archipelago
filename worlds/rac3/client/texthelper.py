@@ -19,13 +19,14 @@ def colorize_item_name(item_name: str, item_flags: int) -> str:
 def get_rich_item_name(ctx: 'Rac3Context', net_item: NetworkItem, player_name_after: bool = False) -> str:
     item_name = ctx.item_names.lookup_in_slot(net_item.item, net_item.player)
     item_name = colorize_item_name(item_name, net_item.flags)
+    location_name = ctx.location_names.get(net_item.location, None)
 
     if ctx.slot == net_item.player:
         # Item is ours, no need to specify player name
-        return item_name
+        return f"Found {item_name} at {location_name}"
     else:
         # Item belongs to someone else, give their name
         player_name = ctx.player_names.get(net_item.player, "???")
         if player_name_after:
-            return f"{item_name} to {RAC3TEXTCOLOR.GREEN}{player_name}"
-        return f"{player_name}'s {item_name}"
+            return f"Sent {item_name} to {RAC3TEXTCOLOR.GREEN}{player_name}"
+        return f"Sent {player_name}'s {item_name}"
