@@ -138,7 +138,7 @@ class MentalCobwebShuffle(Toggle):
     Raz's inventory, so the loom in Ford's Sanctuary will have no use."""
     display_name = "Mental Cobweb Shuffle"
 
-class BaggageHints(DefaultOnToggle):
+class HintUnclaimedBaggage(DefaultOnToggle):
     """When interacting with Baggage that you don't have a matching tag for yet, automatically creates a hint for 
     the location in the client."""
     display_name = "Hint Unclaimed Baggage"
@@ -179,7 +179,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     FigmentPercentageChecks: FigmentPercentageChecks
     DeepArrowheadShuffle: DeepArrowheadShuffle
     MentalCobwebShuffle: MentalCobwebShuffle
-    BaggageHints: BaggageHints
+    HintUnclaimedBaggage: HintUnclaimedBaggage
     ProgressiveBaggage: ProgressiveBaggage
     MaximumProgressiveBaggage: MaximumProgressiveBaggage
     start_inventory: StartInventoryPool

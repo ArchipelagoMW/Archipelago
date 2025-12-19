@@ -177,7 +177,7 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     randoseed_parts.append(f"           Ob.rankSanity = {_lua_bool(self.options.RankSanity)}\n")
 
     # append baggageHints setting
-    randoseed_parts.append(f"           Ob.baggageHints = {_lua_bool(self.options.BaggageHints)}\n")
+    randoseed_parts.append(f"           Ob.baggageHints = {_lua_bool(self.options.HintUnclaimedBaggage)}\n")
 
     # append progressiveBaggage setting
     randoseed_parts.append(f"           Ob.progressiveBaggage = {_lua_bool(self.options.ProgressiveBaggage)}\n")
