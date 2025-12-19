@@ -1545,6 +1545,7 @@ class PlandoItems(Option[typing.List[PlandoItem]]):
     default = ()
     supports_weighting = False
     display_name = "Plando Items"
+    visibility = Visibility.template | Visibility.spoiler
 
     def __init__(self, value: typing.Iterable[PlandoItem]) -> None:
         self.value = list(deepcopy(value))
