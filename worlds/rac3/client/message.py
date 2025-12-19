@@ -1,6 +1,7 @@
 from typing import Optional
 
 from NetUtils import ClientStatus
+from worlds.rac3 import RAC3OPTION
 
 
 class ClientMessage:
@@ -38,7 +39,7 @@ class ClientMessage:
         return output
 
     @staticmethod
-    def set(slot: int, team: int, planet: str) -> dict:
+    def set_map(slot: int, team: int, planet: str) -> dict:
         cmd = 'Set'
         key = f'rac3_current_planet_{slot}_{team}'
         default = f'Galaxy'
@@ -50,9 +51,16 @@ class ClientMessage:
         return ClientMessage(cmd, key=key, default=default, want_reply=want_reply, operations=operations).output()
 
     @staticmethod
-    def location_checks(locations: list[int]) -> dict:
-        cmd = 'LocationChecks'
-        return ClientMessage(cmd, locations=locations).output()
+    def set_processed(count: int) -> dict:
+        cmd = 'Set'
+        key = RAC3OPTION.PROCESSED_LOCATIONS
+        default = "0"
+        want_reply = True
+        operations = [{
+            "operation": 'replace',
+            "value": count,
+        }]
+        return ClientMessage(cmd, key=key, default=default, want_reply=want_reply, operations=operations).output()
 
     @staticmethod
     def status_update(status: ClientStatus) -> dict:

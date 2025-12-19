@@ -15,6 +15,7 @@ class RAC3OPTION:
     NANOTECH_MILESTONES = "nanotech_milestones"
     EXCLUDE = "RaC3 Exclude Locations"
     TOTAL_LOCATIONS = "TotalLocations"
+    PROCESSED_LOCATIONS = "ProcessedLocations"
     SHIP_NOSE = "ship_nose"
     SHIP_WINGS = "ship_wings"
     SHIP_SKIN = "ship_skin"

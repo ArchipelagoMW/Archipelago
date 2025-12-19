@@ -239,6 +239,12 @@ class Rac3Context(CommonContext):
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
+        if cmd == "DataPackage":
+            logger.debug(f'Data Package received with args {args}')
+            if RAC3OPTION.GAME_TITLE_FULL in args["data"]["games"]:
+                self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL][RAC3OPTION.PROCESSED_LOCATIONS]
+                logger.debug(f"Data Package updated: {self.data_package}")
+                async_start(self.send_msgs([{'cmd': 'Sync'}]))
 
 
 async def pcsx2_sync_task(ctx: Rac3Context):
@@ -353,7 +359,8 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             for item in ctx.items_received:
                 ctx.game_interface.important_items(item.item)
             ctx.processed_item_count = len(ctx.items_received)
-            logger.info("Items received!")
+            await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
+            logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
             for loc in ctx.locations_checked:
                 ctx.game_interface.collect_location(loc)

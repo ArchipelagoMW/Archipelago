@@ -59,7 +59,7 @@ async def handle_planet_changed(ctx: 'Context') -> None:
         if ctx.current_planet == RAC3REGION.TYHRRANOSIS:
             ctx.game_interface.tyhrranosis_fix()
 
-        await ctx.send_msgs([ClientMessage.set(ctx.slot, ctx.team, _map)])
+        await ctx.send_msgs([ClientMessage.set_map(ctx.slot, ctx.team, _map)])
 
 
 async def handle_received_items(ctx: 'Context') -> None:
@@ -76,6 +76,7 @@ async def handle_received_items(ctx: 'Context') -> None:
         # logger.info(f"Received item: ({item_id})")
 
     ctx.processed_item_count = len(ctx.items_received)
+        await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
 
 
 async def handle_checked_locations(ctx: 'Context') -> None:
