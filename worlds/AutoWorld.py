@@ -9,6 +9,7 @@ from collections.abc import Callable, Iterable, Mapping
 from random import Random
 from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, TextIO, Tuple,
                     TYPE_CHECKING, Type, Union)
+from enum import StrEnum
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState, Entrance
@@ -21,6 +22,13 @@ if TYPE_CHECKING:
     from settings import Group
 
 perf_logger = logging.getLogger("performance")
+
+
+class WorldType(StrEnum):
+    OUTDATED = "Outdated"
+    GAME = "Game"
+    HINT_GAME = "HintGame"
+    TOOL = "Tool"
 
 
 class InvalidItemError(KeyError):
@@ -46,8 +54,52 @@ class AutoWorldRegister(type):
         return cls.__settings
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoWorldRegister:
+        outdated_web: WebWorld | None = None
         if "web" in dct:
-            assert isinstance(dct["web"], WebWorld), "WebWorld has to be instantiated."
+            if isinstance(dct["web"], WebWorld):
+                web_world: WebWorld = dct["web"]
+                if web_world.world_type == WorldType.OUTDATED:
+                    web_world.game = dct["game"]
+                    web_world.hidden = dct.get("hidden", False)
+                    web_world.__doc__ = dct.get("__doc__", "")
+                    web_world.world_type = WorldType.GAME
+                    outdated_web = web_world
+                    WebWorldRegister.register_instance(web_world)
+                else:
+                    raise RuntimeError(f"World {name} should no longer have attribute 'web'!")
+        if outdated_web:  # move some values from WebWorld to World
+            for key in ["option_groups", "option_presets", "location_descriptions", "item_descriptions"]:
+                if key not in dct:
+                    if hasattr(outdated_web, key):
+                        dct[key] = getattr(outdated_web, key)
+        # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
+        # dev, putting it at the end if they don't define options in it
+        option_groups: List[OptionGroup] = dct.get("option_groups", [])
+        prebuilt_options = ["Game Options", "Item & Location Options"]
+        seen_options = []
+        item_group_in_list = False
+        for group in option_groups:
+            assert group.options, "A custom defined Option Group must contain at least one Option."
+            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
+            title_name = group.name.title()
+            assert title_name not in prebuilt_options or title_name == group.name, \
+                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
+
+            if group.name == "Item & Location Options":
+                assert not any(option in item_and_loc_options for option in group.options), \
+                    f"Item and Location Options cannot be specified multiple times"
+                group.options.extend(item_and_loc_options)
+                item_group_in_list = True
+            else:
+                for option in group.options:
+                    assert option not in item_and_loc_options, \
+                           f"{option} cannot be moved out of the \"Item & Location Options\" Group"
+            assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
+            for option in group.options:
+                assert option not in seen_options, f"{option} found in two option groups"
+                seen_options.append(option)
+        if not item_group_in_list:
+            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
 
         if "game" in dct:
             assert "item_name_to_id" in dct, f"{name}: item_name_to_id is required"
@@ -93,6 +145,11 @@ class AutoWorldRegister(type):
                 raise RuntimeError(f"""Game {dct["game"]} already registered in 
                 {AutoWorldRegister.world_types[dct["game"]].__file__} when attempting to register from
                 {new_class.__file__}.""")
+            if dct["game"] in WebWorldRegister.web_worlds:
+                if WebWorldRegister.web_worlds[dct["game"]].world_type != WorldType.GAME:
+                    raise RuntimeError(f"""Game {dct["game"]} matches the name of an already registered non-game WebWorld from
+                    {WebWorldRegister.web_worlds[dct["game"]].__file__} when attempting to register from
+                    {new_class.__file__}""")
             AutoWorldRegister.world_types[dct["game"]] = new_class
         if ".apworld" in new_class.__file__:
             new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
@@ -131,36 +188,28 @@ class AutoLogicRegister(type):
 
 
 class WebWorldRegister(type):
-    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> WebWorldRegister:
-        # don't allow an option to appear in multiple groups, allow "Item & Location Options" to appear anywhere by the
-        # dev, putting it at the end if they don't define options in it
-        option_groups: List[OptionGroup] = dct.get("option_groups", [])
-        prebuilt_options = ["Game Options", "Item & Location Options"]
-        seen_options = []
-        item_group_in_list = False
-        for group in option_groups:
-            assert group.options, "A custom defined Option Group must contain at least one Option."
-            # catch incorrectly titled versions of the prebuilt groups so they don't create extra groups
-            title_name = group.name.title()
-            assert title_name not in prebuilt_options or title_name == group.name, \
-                f"Prebuilt group name \"{group.name}\" must be \"{title_name}\""
+    web_worlds: Dict[str, WebWorld] = {}
 
-            if group.name == "Item & Location Options":
-                assert not any(option in item_and_loc_options for option in group.options), \
-                    f"Item and Location Options cannot be specified multiple times"
-                group.options.extend(item_and_loc_options)
-                item_group_in_list = True
-            else:
-                for option in group.options:
-                    assert option not in item_and_loc_options, \
-                           f"{option} cannot be moved out of the \"Item & Location Options\" Group"
-            assert len(group.options) == len(set(group.options)), f"Duplicate options in option group {group.name}"
-            for option in group.options:
-                assert option not in seen_options, f"{option} found in two option groups"
-                seen_options.append(option)
-        if not item_group_in_list:
-            option_groups.append(OptionGroup("Item & Location Options", item_and_loc_options, True))
-        return super().__new__(mcs, name, bases, dct)
+    @staticmethod
+    def register_instance(web_world: WebWorld):
+        if web_world.world_type == WorldType.OUTDATED:
+            return  # Don't register outdated worlds until their world_type has been changed
+        if web_world.world_type != WorldType.GAME and web_world.game in AutoWorldRegister.world_types:
+            raise RuntimeError(f"""WebWorld '{web_world.game}' matches the name of a
+            registered World, but is not WorldType.GAME!""")
+        if web_world.game in WebWorldRegister.web_worlds:
+            raise RuntimeError(f"""WebWorld {web_world.game} already registered in 
+            {WebWorldRegister.web_worlds[web_world.game].__file__} when attempting to register from
+            {web_world.__file__}.""")
+        WebWorldRegister.web_worlds[web_world.game] = web_world
+
+    def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> WebWorldRegister:
+        new_class = super().__new__(mcs, name, bases, dct)
+        new_class.__file__ = sys.modules[new_class.__module__].__file__
+        if ".apworld" in new_class.__file__:
+            new_class.zip_path = pathlib.Path(new_class.__file__).parents[1]
+        WebWorldRegister.register_instance(new_class())
+        return new_class
 
 
 def _timed_call(method: Callable[..., Any], *args: Any,
@@ -225,6 +274,20 @@ def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
 class WebWorld(metaclass=WebWorldRegister):
     """Webhost integration"""
 
+    zip_path: ClassVar[Optional[pathlib.Path]] = None
+    """If loaded from a .apworld, this is the Path to it."""
+    __file__: ClassVar[str]
+    """path it was loaded from"""
+
+    game: str
+    """name the game or tool. For games, should match the World's 'game' field."""
+
+    world_type: WorldType = WorldType.OUTDATED
+    """the type of WebWorld this is. Determines which page the world is listed on."""
+
+    hidden: bool = False
+    """Hide the WebWorld from being displayed."""
+
     options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
@@ -241,12 +304,6 @@ class WebWorld(metaclass=WebWorldRegister):
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
-    options_presets: Dict[str, Dict[str, Any]] = {}
-    """A dictionary containing a collection of developer-defined game option presets."""
-
-    option_groups: ClassVar[List[OptionGroup]] = []
-    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
-
     rich_text_options_doc = False
     """Whether the WebHost should render Options' docstrings as rich text.
 
@@ -262,12 +319,6 @@ class WebWorld(metaclass=WebWorldRegister):
     .. _reStructuredText: https://docutils.sourceforge.io/rst.html
     """
 
-    location_descriptions: Dict[str, str] = {}
-    """An optional map from location names (or location group names) to brief descriptions for users."""
-
-    item_descriptions: Dict[str, str] = {}
-    """An optional map from item names (or item group names) to brief descriptions for users."""
-
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
@@ -277,6 +328,10 @@ class World(metaclass=AutoWorldRegister):
     """link your Options mapping"""
     options: PerGameCommonOptions
     """resulting options for the player of this world"""
+    options_presets: Dict[str, Dict[str, Any]] = {}
+    """A dictionary containing a collection of developer-defined game option presets."""
+    option_groups: ClassVar[List[OptionGroup]] = []
+    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
     game: ClassVar[str]
     """name the game"""
@@ -297,6 +352,12 @@ class World(metaclass=AutoWorldRegister):
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
 
+    location_descriptions: Dict[str, str] = {}
+    """An optional map from location names (or location group names) to brief descriptions for users."""
+
+    item_descriptions: Dict[str, str] = {}
+    """An optional map from item names (or item group names) to brief descriptions for users."""
+
     required_client_version: Tuple[int, int, int] = (0, 1, 6)
     """
     override this if changes to a world break forward-compatibility of the client
@@ -312,9 +373,6 @@ class World(metaclass=AutoWorldRegister):
 
     hidden: ClassVar[bool] = False
     """Hide World Type from various views. Does not remove functionality."""
-
-    web: ClassVar[WebWorld] = WebWorld()
-    """see WebWorld for options"""
 
     origin_region_name: str = "Menu"
     """Name of the Region from which accessibility is tested."""

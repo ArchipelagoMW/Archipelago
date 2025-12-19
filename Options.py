@@ -1716,7 +1716,7 @@ def get_option_groups(world: typing.Type[World], visibility_level: Visibility = 
     """Generates and returns a dictionary for the option groups of a specified world."""
     option_to_name = {option: option_name for option_name, option in world.options_dataclass.type_hints.items()}
 
-    ordered_groups = {group.name: group.options for group in world.web.option_groups}
+    ordered_groups = {group.name: group.options for group in world.option_groups}
 
     # add a default option group for uncategorized options to get thrown into
     if "Game Options" not in ordered_groups:

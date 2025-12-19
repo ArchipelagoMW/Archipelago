@@ -9,7 +9,7 @@ class TestOptionPresets(unittest.TestCase):
     def test_option_presets_have_valid_options(self):
         """Test that all predefined option presets are valid options."""
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            presets = world_type.web.options_presets
+            presets = world_type.options_presets
             for preset_name, preset in presets.items():
                 for option_name, option_value in preset.items():
                     with self.subTest(game=game_name, preset=preset_name, option=option_name):
@@ -39,7 +39,7 @@ class TestOptionPresets(unittest.TestCase):
         value.
         """
         for game_name, world_type in AutoWorldRegister.world_types.items():
-            presets = world_type.web.options_presets
+            presets = world_type.options_presets
             for preset_name, preset in presets.items():
                 for option_name, option_value in preset.items():
                     with self.subTest(game=game_name, preset=preset_name, option=option_name):
