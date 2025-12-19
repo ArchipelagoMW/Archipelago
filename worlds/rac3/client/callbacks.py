@@ -75,7 +75,10 @@ async def handle_received_items(ctx: 'Context') -> None:
                                          item.location)
         # logger.info(f"Received item: ({item_id})")
 
-    ctx.processed_item_count = len(ctx.items_received)
+    if ctx.processed_item_count != len(ctx.items_received):
+        logger.debug(f'Update Data Package to {len(ctx.items_received)}')
+        ctx.stored_data[RAC3OPTION.PROCESSED_LOCATIONS] = len(ctx.items_received)
+        ctx.processed_item_count = len(ctx.items_received)
         await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
 
 

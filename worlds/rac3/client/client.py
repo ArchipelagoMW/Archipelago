@@ -189,6 +189,7 @@ class Rac3Context(CommonContext):
     slot_data: Optional[dict[str, Any]] = None
     last_deathlink_msg: Optional[str] = None
     last_deathlink_sender: Optional[str] = None
+    data_package: int = 0
 
     def __init__(self, server_address: str, password: str):
         super().__init__(server_address, password)
@@ -356,9 +357,19 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             ctx.game_interface.reset_file()
             logger.info("Old state removed!")
             logger.info("Checking for items...")
-            for item in ctx.items_received:
-                ctx.game_interface.important_items(item.item)
-            ctx.processed_item_count = len(ctx.items_received)
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
+            logger.info(f"Items Received: {len(ctx.items_received)}")
+            items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
+            counter = 0
+            for count, item in enumerate(ctx.items_received):
+                counter += 1
+                logger.debug(f"Processing item {count}: {ITEM_FROM_AP_CODE[item.item]}")
+                if count > items_to_process:
+                    logger.debug(f"Handle Later")
+                    continue
+                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], ctx.player_names[
+                    item.player], item.location)
+            ctx.processed_item_count = min(counter, items_to_process)
             await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
             logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
@@ -374,6 +385,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
 
         if not ctx.main_menu:
             await update(ctx)
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
 
 
 def launch_client():
