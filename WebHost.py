@@ -61,21 +61,21 @@ def copy_tutorials_files_to_static() -> None:
 
     zfile: zipfile.ZipInfo
 
-    from worlds.AutoWorld import AutoWorldRegister
-    worlds = {}
-    for game, world in AutoWorldRegister.world_types.items():
-        if hasattr(world.web, 'tutorials') and (not world.hidden or game == 'Archipelago'):
-            worlds[game] = world
+    from worlds.AutoWorld import WebWorldRegister
+    web_worlds = {}
+    for game, web_world in WebWorldRegister.web_worlds.items():
+        if hasattr(web_world, 'tutorials') and (not web_world.hidden or game == 'Archipelago'):
+            web_worlds[game] = web_world
 
     base_target_path = Utils.local_path("WebHostLib", "static", "generated", "docs")
     shutil.rmtree(base_target_path, ignore_errors=True)
-    for game, world in worlds.items():
+    for game, web_world in web_worlds.items():
         # copy files from world's docs folder to the generated folder
         target_path = os.path.join(base_target_path, secure_filename(game))
         os.makedirs(target_path, exist_ok=True)
 
-        if world.zip_path:
-            zipfile_path = world.zip_path
+        if web_world.zip_path:
+            zipfile_path = web_world.zip_path
 
             assert os.path.isfile(zipfile_path), f"{zipfile_path} is not a valid file(path)."
             assert zipfile.is_zipfile(zipfile_path), f"{zipfile_path} is not a valid zipfile."
@@ -87,7 +87,7 @@ def copy_tutorials_files_to_static() -> None:
                         with open(os.path.join(target_path, secure_filename(zfile.filename)), "wb") as f:
                             f.write(zf.read(zfile))
         else:
-            source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
+            source_path = Utils.local_path(os.path.dirname(web_world.__file__), "docs")
             files = os.listdir(source_path)
             for file in files:
                 shutil.copyfile(Utils.local_path(source_path, file),
@@ -109,13 +109,14 @@ if __name__ == "__main__":
         logging.exception(e)
         logging.warning("Could not update LttP sprites.")
     app = get_app()
-    from worlds import AutoWorldRegister
+    from worlds.AutoWorld import WebWorldRegister, AutoWorldRegister
     # Update to only valid WebHost worlds
-    invalid_worlds = {name for name, world in AutoWorldRegister.world_types.items()
-                      if not hasattr(world.web, "tutorials")}
+    invalid_worlds = {name for name, web_world in WebWorldRegister.web_worlds.items()
+                      if not hasattr(web_world, "tutorials")}
     if invalid_worlds:
         logging.error(f"Following worlds not loaded as they are invalid for WebHost: {invalid_worlds}")
-    AutoWorldRegister.world_types = {k: v for k, v in AutoWorldRegister.world_types.items() if k not in invalid_worlds}
+    WebWorldRegister.web_worlds = {k: v for k, v in WebWorldRegister.web_worlds.items() if k not in invalid_worlds}
+    AutoWorldRegister.world_types = {k: v for k, v in AutoWorldRegister.world_types.items() if k in WebWorldRegister.web_worlds}
     create_options_files()
     copy_tutorials_files_to_static()
     if app.config["SELFLAUNCH"]:

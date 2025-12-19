@@ -10,7 +10,7 @@ from flask import redirect, render_template, request, Response, abort
 
 import Options
 from Utils import local_path
-from worlds.AutoWorld import AutoWorldRegister
+from worlds.AutoWorld import AutoWorldRegister, WebWorldRegister
 from . import app, cache
 from .generate import get_meta
 from .misc import get_world_theme
@@ -25,18 +25,20 @@ def create() -> None:
 
 def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:
     world = AutoWorldRegister.world_types[world_name]
-    if world.hidden or world.web.options_page is False:
+    web_world = WebWorldRegister.web_worlds[world_name]
+    if web_world.hidden or web_world.options_page is False:
         return redirect("games")
     visibility_flag = Options.Visibility.complex_ui if is_complex else Options.Visibility.simple_ui
 
     start_collapsed = {"Game Options": False}
-    for group in world.web.option_groups:
+    for group in world.option_groups:
         start_collapsed[group.name] = group.start_collapsed
 
     return render_template(
         template,
         world_name=world_name,
         world=world,
+        web_world=web_world,
         option_groups=Options.get_option_groups(world, visibility_level=visibility_flag),
         start_collapsed=start_collapsed,
         issubclass=issubclass,
@@ -89,7 +91,7 @@ def option_presets(game: str) -> Response:
     world = AutoWorldRegister.world_types[game]
 
     presets = {}
-    for preset_name, preset in world.web.options_presets.items():
+    for preset_name, preset in world.options_presets.items():
         presets[preset_name] = {}
         for preset_option_name, preset_option in preset.items():
             if preset_option == "random":

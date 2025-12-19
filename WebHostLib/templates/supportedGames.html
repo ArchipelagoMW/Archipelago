@@ -48,22 +48,22 @@
             <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
             <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
-            {% if world.web.tutorials %}
+            {% if world.tutorials %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
             {% endif %}
-            {% if world.web.options_page is string %}
+            {% if world.options_page is string %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.options_page }}">Options Page (External Link)</a>
-            {% elif world.web.options_page %}
+            <a href="{{ world.options_page }}">Options Page (External Link)</a>
+            {% elif world.options_page %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>
             <span class="link-spacer">|</span>
             <a href="{{ url_for("weighted_options", game=game_name) }}">Advanced Options</a>
             {% endif %}
-            {% if world.web.bug_report_page %}
+            {% if world.bug_report_page %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.bug_report_page }}">Report a Bug</a>
+            <a href="{{ world.bug_report_page }}">Report a Bug</a>
             {% endif %}
         </details>
         {% endfor %}
