@@ -904,7 +904,7 @@ class Items:
         self.options = options
 
         self.trap_chance = self.options.trap_chance.value
-        self.enabled_traps = tuple(self.options.trap_selection_override.value)
+        self.enabled_traps = tuple(sorted(self.options.trap_selection_override.value))
 
     @classmethod
     def create_item_uninitialized(cls, name: str, player: int) -> Item:
