@@ -86,6 +86,20 @@ def games():
     return render_template("supportedGames.html", worlds=get_visible_worlds(WorldType.GAME))
 
 
+@app.route('/hintgames')
+@cache.cached()
+def hint_games():
+    """List of supported hint games"""
+    return render_template("hintGames.html", worlds=get_visible_worlds(WorldType.HINT_GAME))
+
+
+@app.route('/tools')
+@cache.cached()
+def tools():
+    """List of supported tools"""
+    return render_template("tools.html", worlds=get_visible_worlds(WorldType.TOOL))
+
+
 @app.route('/tutorial/<string:game>/<string:file>')
 @cache.cached()
 def tutorial(game: str, file: str):
