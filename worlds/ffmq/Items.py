@@ -291,7 +291,7 @@ def create_items(self) -> None:
     for item, count in fillers.items():
         filler_items += [self.create_item(item) for _ in range(count)]
     if self.options.sky_coin_mode == "shattered_sky_coin":
-        self.multiworld.random.shuffle(filler_items)
+        self.random.shuffle(filler_items)
         filler_items = filler_items[39:]
     items += filler_items[1:]
 
