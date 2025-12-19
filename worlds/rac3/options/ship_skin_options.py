@@ -40,4 +40,4 @@ class ShipSkin(Choice):
     option_Sasha_Scarlet = 29
     option_Florana_Breeze = 30
     option_Ozzy_Kamikaze = 31
-    default = "random"
+    default = 0

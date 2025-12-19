@@ -11,4 +11,4 @@ class ShipWings(Choice):
     option_standard = 0
     option_hi_lift = 4
     option_heavy_ordinance = 8
-    default = "random"
+    default = 0
