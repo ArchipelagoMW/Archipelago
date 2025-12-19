@@ -629,14 +629,14 @@ class Items:
         "Building: Ventilation Bundle": ItemData(G.Building, 1338734, C.filler, 0),
 
 ### Ficsmas
-        "Building: FICSMAS Candy Cane": ItemData(G.Building | G.Ficsmas, 1338735, 0),
-        "Building: FICSMAS Decoration": ItemData(G.Building | G.Ficsmas, 1338736, 0),
-        "Building: FICSMAS Gift Tree": ItemData(G.Building | G.Ficsmas, 1338737, 0),
-        "Building: FICSMAS Power Light": ItemData(G.Building | G.Ficsmas, 1338738, 0),
-        "Building: FICSMAS Snow Cannon": ItemData(G.Building | G.Ficsmas, 1338739, 0),
-        "Building: FICSMAS Snow Dispenser": ItemData(G.Building | G.Ficsmas, 1338740, 0),
-        "Building: FICSMAS Snowman": ItemData(G.Building | G.Ficsmas, 1338741, 0),
-        "Building: Giant FICSMAS Tree": ItemData(G.Building | G.Ficsmas, 1338742, 0),
+        "Building: FICSMAS Candy Cane": ItemData(G.Building | G.Ficsmas, 1338735, count=0),
+        "Building: FICSMAS Decoration": ItemData(G.Building | G.Ficsmas, 1338736, count=0),
+        "Building: FICSMAS Gift Tree": ItemData(G.Building | G.Ficsmas, 1338737, count=0),
+        "Building: FICSMAS Power Light": ItemData(G.Building | G.Ficsmas, 1338738, count=0),
+        "Building: FICSMAS Snow Cannon": ItemData(G.Building | G.Ficsmas, 1338739, count=0),
+        "Building: FICSMAS Snow Dispenser": ItemData(G.Building | G.Ficsmas, 1338740, count=0),
+        "Building: FICSMAS Snowman": ItemData(G.Building | G.Ficsmas, 1338741, count=0),
+        "Building: Giant FICSMAS Tree": ItemData(G.Building | G.Ficsmas, 1338742, count=0),
 ###
 ###
         # 1338735 - 1338749 Reserved for buildings
