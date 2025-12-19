@@ -96,6 +96,9 @@ class SatisfactoryWorld(World):
         if resource_sink_goal:
             required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
 
+        if "Erect a FICSMAS Tree" in self.options.goal_selection:
+            required_parts.add("FICSMAS Wonder Star")
+
         self.multiworld.completion_condition[self.player] = \
             lambda state: self.state_logic.can_produce_all(state, required_parts)
 
