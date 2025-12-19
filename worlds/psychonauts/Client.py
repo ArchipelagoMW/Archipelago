@@ -106,6 +106,7 @@ class PsychonautsContext(CommonContext):
         self.clear_mod_data_warning = False
         self.game_communication_path = None
         self.current_level_name = ""
+        self.hinted_location_ids: list[int] = []
 
         # When connecting to a server, the contents of self.locations_scouted are sent in a LocationScouts request,
         # filling self.locations_info once the LocationsInfo response is received.
@@ -425,6 +426,8 @@ async def game_watcher(ctx: PsychonautsContext):
         # The list maintains the order and the set provides fast comparisons and __contains__() checks.
         sending = []
         sending_set = set()
+        hinting = []
+        hinting_set = set()
         victory = False
 
         # Open the file in read mode
@@ -439,6 +442,21 @@ async def game_watcher(ctx: PsychonautsContext):
                     sending.append(value)
                     sending_set.add(value)
 
+        try:
+            # Check for Baggage Hints from player
+            with open(os.path.join(game_communication_path, "BaggageHints.txt"), 'r') as f:
+                baggage_hints = f.readlines()
+                for line in baggage_hints:
+                    # Convert the line to an int, add the offset to convert to AP, and add it to the list and set
+                    value = int(line.strip()) + AP_LOCATION_OFFSET
+                    # Keep track of already collected values to ensure there are no duplicates.
+                    if value not in hinting_set:
+                        hinting.append(value)
+                        hinting_set.add(value)
+        except FileNotFoundError:
+            # File might not exist if the client has been opened before the game.
+            pass
+
         # Psychonauts sends victory to the AP client by writing a specifically named file to the game communication
         # directory.
         if os.path.exists(os.path.join(game_communication_path, "victory.txt")):
@@ -450,6 +468,13 @@ async def game_watcher(ctx: PsychonautsContext):
             ctx.locations_checked = sending_set
             message = [{"cmd": 'LocationChecks', "locations": sending}]
             await ctx.send_msgs(message)
+
+            # Hinted locations differs from before, message the server and create a play hint
+        if ctx.hinted_location_ids != hinting_set:
+            ctx.hinted_location_ids = hinting_set
+            message = [{"cmd": 'LocationScouts', 'locations': hinting, "create_as_hint": 2}]
+            await ctx.send_msgs(message)
+
 
         if not ctx.finished_game and victory:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
