@@ -11,7 +11,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
 from worlds.generic.Rules import add_rule, set_rule
 
-from .Options import GaribLogic, GloverOptions, GaribSorting, StartingBall
+from .Options import DifficultyLogic, GaribLogic, GloverOptions, GaribSorting, StartingBall, VictoryCondition
 from .JsonReader import build_data, generate_location_name_to_id
 from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
 from Utils import local_path, visualize_regions
@@ -413,10 +413,10 @@ class GloverWorld(World):
                 raise OptionError("Level " + target_level + " does not have a \"Checkpoint " + str(set_checkpoint) + "\"! Check your Checkpoint Overrides.")
         
         #Level garibs shouldn't show up
-        if self.options.garib_logic == GaribLogic.option_level_garibs and self.options.extra_garibs_value.value > 0:
+        if self.options.garib_logic == GaribLogic.option_level_garibs and self.options.filler_extra_garibs_weight.value > 0:
             raise OptionError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
-        self.validate_golden_garibs()
-
+        if self.options.victory_condition.value == VictoryCondition.option_golden_garibs:
+            self.validate_golden_garibs()
 
     def validate_golden_garibs(self):
         #Golden Garibs Goal Reachable
@@ -508,14 +508,44 @@ class GloverWorld(World):
             self.wayroom_entrances.insert(19, "Pht?")
             self.wayroom_entrances.insert(24, "FoF?")
             self.wayroom_entrances.insert(29, "Otw?")
-        
+
         #Override randomized entrances here
-        for each_entry, each_door in self.options.entrance_overrides.items():
+        for each_entry, each_door in self.options.entrance_overrides.value.items():
             index = (self.world_from_string(each_door) * 5) + self.level_from_string(each_door) - 1
             original_world = self.wayroom_entrances[index]
             original_index = self.wayroom_entrances.index(each_entry)
             self.wayroom_entrances[index] = each_entry
             self.wayroom_entrances[original_index] = original_world
+
+        #Get all possible starts
+        possible_starts : list[str] = []
+        for each_level in self.existing_levels:
+            is_restrictive : bool = False
+            match each_level:
+                case "Atl2":
+                    match self.spawn_checkpoint[1]:
+                        case 0:
+                            is_restrictive = self.options.difficulty_logic.value == 0 and self.ra
+                        case 1:
+                            is_restrictive = False
+            if not is_restrictive:
+                possible_starts.append(each_level)
+        
+        #If you can't possibly spawn here
+        if not self.wayroom_entrances[0] in possible_starts:
+            #No forcing restrictive starts
+            if "Atl1" in self.options.entrance_overrides.value.values() or len(self.options.entrance_overrides.value.values()) > 28:
+                raise OptionError("Cannot force first level, restrictive start!")
+            #Pick a non-forced possible spot
+            possible_swaps : list[str] = []
+            for each_possible in possible_starts:
+                if not each_possible in self.options.entrance_overrides.value:
+                    possible_swaps.append(each_possible)
+            #Switch atlantis 1's door with it
+            new_start = self.random.choice(possible_swaps)
+            swap_index = self.wayroom_entrances.index(new_start)
+            self.wayroom_entrances[swap_index] = self.wayroom_entrances[0]
+            self.wayroom_entrances[0] = new_start
 
     def setup_garib_order(self):
         #Random Garib Sorting Order
@@ -672,11 +702,11 @@ class GloverWorld(World):
                 if self.options.difficulty_logic.value == 0 and not self.options.bonus_levels:
                     item_classification = ItemClassification.filler
                 #If they're part of World Sorting logic, don't skip balancing for them
-                elif self.options.garib_sorting.value == 0:
+                else: #if self.options.garib_sorting.value == 0:
                     item_classification = ItemClassification.progression_deprioritized
                 #Otherwise, skip balancing too
-                else:
-                    item_classification = ItemClassification.progression_deprioritized_skip_balancing
+                #else:
+                #    item_classification = ItemClassification.progression_deprioritized_skip_balancing
         name_for_use = name
         #Garibsanity is just Garib
         if name == "Garibsanity":
@@ -737,7 +767,7 @@ class GloverWorld(World):
         if not self.options.randomize_jump:
             ability_items.remove("Jump")
 
-        #You don't need the item pool to contain your starting item
+        #You don't need the item pool to contain your starting ball
         ability_items.remove(self.starting_ball)
         
         #Golden Garibs
