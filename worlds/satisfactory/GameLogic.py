@@ -104,12 +104,12 @@ class Building(Recipe):
 class MamNode:
     name: str
     unlock_cost: dict[str, int]
-    """All game parts must be automateable to purchase this MamNode"""
+    """All game parts must be automatable to purchase this MamNode"""
     depends_on: tuple[str, ...]
     """At least one of these prerequisite MamNodes must be unlocked to purchase this MamNode"""
     minimal_phase: Optional[int]
-    """All game items must have atleast be obtained once to purchase this MamNode """
     unlock_items: Optional[tuple[str, ...]]
+    """All game items must have at least been obtained once to purchase this MamNode (not necessarily automatable)"""
 
     def __init__(self, name: str, unlock_cost: dict[str, int], depends_on: tuple[str, ...],
                  minimal_phase: Optional[int] = 1, unlock_items: Optional[tuple[str, ...]] = None):
