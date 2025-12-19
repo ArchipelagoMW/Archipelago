@@ -33,7 +33,7 @@ leek = BundleItem(Forageable.leek)
 dandelion = BundleItem(Forageable.dandelion)
 morel = BundleItem(Mushroom.morel)
 common_mushroom = BundleItem(Mushroom.common)
-salmonberry = BundleItem(Forageable.salmonberry)
+salmonberry = BundleItem(Forageable.salmonberry, can_have_quality=False)
 spring_onion = BundleItem(Forageable.spring_onion)
 
 grape = BundleItem(Fruit.grape)
