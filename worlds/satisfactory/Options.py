@@ -475,6 +475,7 @@ class GoalSelection(OptionSet):
     - **AWESOME Sink Points (total)**
     - **AWESOME Sink Points (per minute)**
     - **Exploration Collectables**
+    - **Erect a FICSMAS Tree**
     """
     display_name = "Select your Goals"
     valid_keys = {

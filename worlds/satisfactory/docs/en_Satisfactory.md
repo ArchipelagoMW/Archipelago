@@ -37,6 +37,9 @@ The player can choose from a number of goals using their YAML settings:
   - The goal completes upon submitting the HUB milestone.
   - There is no partial progress system for this goal - combining it with another goal is recommended.
   - Time to finish this goal varies significantly depending on your map knowledge, equipment, and movement skills.
+- Complete the FICSMAS seasonal event MAM Tree
+  - The goal completes upon researching the Wonder Star MAM Tree Node. TODO Jarno update with decision on data cartridges
+  - If you are outside the natural FICSMAS season you must use [an additional mod](https://ficsit.app/mod/FicsmasEveryday) to enable it.
 
 You can also configure whether completing your slot requires *any one* goal or *all* goals to be met.
 
