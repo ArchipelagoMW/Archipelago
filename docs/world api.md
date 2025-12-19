@@ -31,10 +31,10 @@ follow [reST style](https://peps.python.org/pep-0287/).
 Example:
 
 ```python
-from worlds.AutoWorld import World
+from worlds.AutoWorld import WebWorld
 
 
-class MyGameWorld(World):
+class MyGameWeb(WebWorld):
     """This is the description of My Game that will be displayed on the AP website."""
 ```
 
@@ -53,6 +53,11 @@ for each player of the game for any given generated multiworld.
 
 A `WebWorld` class contains specific attributes and methods that can be modified for your world specifically on the
 webhost:
+
+* `game` must match your game's name.
+
+* `world_type` should be `WorldType.GAME` for a standard game. Alternately, `WorldType.HINT_GAME` and `WorldType.TOOL` are available
+to create webhost pages for Hint Games or Tools, which do not necessarily require a `World` class. 
 
 * `options_page` can be changed to a link instead of an AP-generated options page.
 
@@ -75,104 +80,6 @@ webhost:
 
 * `game_info_languages` (optional) list of strings for defining the existing game info pages your game supports. The
   documents must be prefixed with the same string as defined here. Default already has 'en'.
-
-* `options_presets` (optional) `dict[str, dict[str, Any]]` where the keys are the names of the presets and the values
-  are the options to be set for that preset. The options are defined as a `dict[str, Any]` where the keys are the names
-  of the options and the values are the values to be set for that option. These presets will be available for users to
-  select from on the game's options page.
-
-Note: The values must be a non-aliased value for the option type and can only include the following option types:
-
-* If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
-  values.
-    * If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the
-      `special_range_names` keys.
-* If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values.
-* If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
-* `random` is also a valid value for any of these option types.
-
-`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on
-the webhost at this time.
-
-Here is an example of a defined preset:
-
-```python
-# presets.py
-options_presets = {
-    "Limited Potential": {
-        "progression_balancing":    0,
-        "fairy_chests_per_zone":    2,
-        "starting_class":           "random",
-        "chests_per_zone":          30,
-        "vendors":                  "normal",
-        "architect":                "disabled",
-        "gold_gain_multiplier":     "half",
-        "number_of_children":       2,
-        "free_diary_on_generation": False,
-        "health_pool":              10,
-        "mana_pool":                10,
-        "attack_pool":              10,
-        "magic_damage_pool":        10,
-        "armor_pool":               5,
-        "equip_pool":               10,
-        "crit_chance_pool":         5,
-        "crit_damage_pool":         5,
-    }
-}
-
-
-# __init__.py
-class RLWeb(WebWorld):
-    options_presets = options_presets
-    # ...
-```
-
-* `location_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of locations 
-or location groups.
-
-  ```python
-  # locations.py
-  location_descriptions = {
-      "Red Potion #6": "In a secret destructible block under the second stairway",
-      "L2 Spaceship": """
-        The group of all items in the spaceship in Level 2.
-  
-        This doesn't include the item on the spaceship door, since it can be
-        accessed without the Spaceship Key.
-      """
-  }
-  
-  # __init__.py
-  from worlds.AutoWorld import WebWorld
-  from .locations import location_descriptions
-  
-  
-  class MyGameWeb(WebWorld):
-      location_descriptions = location_descriptions
-  ```
-
-* `item_descriptions` (optional) WebWorlds can provide a map that contains human-friendly descriptions of items or item 
-groups.
-
-  ```python
-  # items.py
-  item_descriptions = {
-      "Red Potion": "A standard health potion",
-      "Spaceship Key": """
-        The key to the spaceship in Level 2.
-  
-        This is necessary to get to the Star Realm.
-      """,
-  }
-  
-  # __init__.py
-  from worlds.AutoWorld import WebWorld
-  from .items import item_descriptions
-  
-  
-  class MyGameWeb(WebWorld):
-      item_descriptions = item_descriptions
-  ```
 
 ### MultiWorld Object
 
@@ -394,6 +301,14 @@ World classes must inherit from the `World` class in `/worlds/AutoWorld.py`, whi
 
 AP will pick up your world automatically due to the `AutoWorld` implementation.
 
+A WebWorld should also be included, which must inherit from the `WebWorld` class in `/worlds/AutoWorld.py`.
+This will also automatically be registered by AP, and must have a 'game' field matching your `World` class's 'game' field.
+
+### Hint Games and Tools
+
+For "Hint Games" or "Tools", a `WebWorld` can be supplied without a corresponding `World` to create pages on the WebHost.
+Such a `WebWorld` should have its `world_type` set to `WorldType.HINT_GAME` or `WorldType.TOOL` to indicate this.
+
 ### Requirements
 
 If your world needs specific python packages, they can be listed in `worlds/<world_name>/requirements.txt`.
@@ -449,6 +364,62 @@ class MyGameLocation(Location):
 
 in your `__init__.py` or your `locations.py`.
 
+### Option Presets
+Option presets can be supplied on your World class as follows:
+
+* `options_presets` (optional) `dict[str, dict[str, Any]]` where the keys are the names of the presets and the values
+  are the options to be set for that preset. The options are defined as a `dict[str, Any]` where the keys are the names
+  of the options and the values are the values to be set for that option. These presets will be available for users to
+  select from on the game's options page.
+
+Note: The values must be a non-aliased value for the option type and can only include the following option types:
+
+* If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
+  values.
+    * If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the
+      `special_range_names` keys.
+* If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values.
+* If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
+* `random` is also a valid value for any of these option types.
+
+`OptionDict`, `OptionList`, `OptionSet`, `FreeText`, or custom `Option`-derived classes are not supported for presets on
+the webhost at this time.
+
+Here is an example of a defined preset:
+
+```python
+# presets.py
+options_presets = {
+    "Limited Potential": {
+        "progression_balancing":    0,
+        "fairy_chests_per_zone":    2,
+        "starting_class":           "random",
+        "chests_per_zone":          30,
+        "vendors":                  "normal",
+        "architect":                "disabled",
+        "gold_gain_multiplier":     "half",
+        "number_of_children":       2,
+        "free_diary_on_generation": False,
+        "health_pool":              10,
+        "mana_pool":                10,
+        "attack_pool":              10,
+        "magic_damage_pool":        10,
+        "armor_pool":               5,
+        "equip_pool":               10,
+        "crit_chance_pool":         5,
+        "crit_damage_pool":         5,
+    }
+}
+
+
+# __init__.py
+from worlds.AutoWorld import World
+from .options import options_presets
+class RLWorld(World):
+    options_presets = options_presets
+    # ...
+```
+
 ### A World Class Skeleton
 
 ```python
@@ -456,11 +427,11 @@ in your `__init__.py` or your `locations.py`.
 
 import settings
 import typing
-from .options import MyGameOptions  # the options we defined earlier
+from .options import MyGameOptions, mygame_option_groups, mygame_option_presets  # the options we defined earlier, as well as groups/presets
 from .items import mygame_items  # data used below to add items to the World
-from .locations import mygame_locations  # same as above
-from worlds.AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
+from .locations import mygame_locations, mygame_location_groups, mygame_location_descriptions  # same as above
+from worlds.AutoWorld import World, WebWorld, WorldType
+from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification, Tutorial
 
 
 class MyGameItem(Item):  # or from Items import MyGameItem
@@ -477,33 +448,85 @@ class MyGameSettings(settings.Group):
 
     rom_file: RomFile = RomFile("MyGame.sfc")
 
+    
+class MyGameWeb(WebWorld):
+    """
+    My Game is a game about doing stuff.
+    """
+    # The docstring should contain a description of the game, to be displayed on the WebHost.
+    
+    # We need to override the "game" field of the WebWorld superclass.
+    # This must be the same string as the regular World class.
+    game = "My Game"
+    
+    # The type of world. Set this to WorldType.GAME if you're making a standard world,
+    # or use WorldType.HINT_GAME or WorldType.TOOL types if making a WebWorld for a Hint Game / Tool
+    world_type = WorldType.GAME
+
+    # Your game pages will have a visual theme (affecting e.g. the background image).
+    # You can choose between dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, and stone.
+    theme = "grassFlowers"
+    
+    # If True, your game's option doc comments will be rendered as rich text.
+    rich_text_options_doc = False
+    
+    # A WebWorld can have any number of tutorials, but should always have at least an English setup guide.
+    # Many WebWorlds just have one setup guide, but some have multiple, e.g. for different languages.
+    # We need to create a Tutorial object for every setup guide.
+    # In order, we need to provide a title, a description, a language, a filepath, a link, and authors.
+    # The filepath is relative to a "/docs/" directory in the root folder of your apworld.
+    # The "link" parameter is unused, but we still need to provide it.
+    setup_en = Tutorial(
+        tutorial_name='Setup Guide',
+        description='A guide to playing My Game',
+        language='English',
+        file_name='setup_en.md',
+        link='setup/en',
+        authors=['Your Name']
+    )
+    # We add these tutorials to our WebWorld by overriding the "tutorials" field.
+    tutorials = [setup_en]
+    
 
 class MyGameWorld(World):
-    """Insert description of the world/game here."""
-    game = "My Game"  # name of the game/world
+    # You must override the "game" field to say the name of the game.
+    game = "My Game"
+    
+    # This is how we associate the options defined in our options.py with our world.
     options_dataclass = MyGameOptions  # options the player can set
     options: MyGameOptions  # typing hints for option results
+    # If we have option groups and/or option presets, we need to specify these here as well.
+    options_presets = mygame_option_presets
+    option_groups = mygame_option_groups
+    
     settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler
 
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
-    base_id = 1234
-    # instead of dynamic numbering, IDs could be part of data
+    # There is always one region that the generator starts from & assumes you can always go back to.
+    # This defaults to "Menu", but you can change it by overriding origin_region_name.
+    origin_region_name = "Menu"
 
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for
-                       id, name in enumerate(mygame_items, base_id)}
-    location_name_to_id = {name: id for
-                           id, name in enumerate(mygame_locations, base_id)}
+    item_name_to_id = {name: id for id, name in enumerate(mygame_items, 1)}
+    location_name_to_id = {name: id for id, name in enumerate(mygame_locations, 1)}
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
     item_name_groups = {
         "weapons": {"sword", "lance"},
     }
+    
+    # The same can be done for locations
+    location_name_groups = mygame_location_groups
+
+    # Human-readable descriptions can also be provided for items and locations
+    item_descriptions = {
+        "sword": "A weapon to slash at enemies!",
+        "lance": "A weapon to stab at enemies from a distance!",
+    }
+    location_descriptions = mygame_location_descriptions
 ```
 
 ### Generation
