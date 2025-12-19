@@ -308,10 +308,7 @@ class FFMQItem(Item):
     type = None
 
     def __init__(self, name, player: int = None):
-        if name in item_table:
-            item_data = item_table[name]
-        else:
-            item_data = ItemData(None, ItemClassification.progression)
+        item_data = item_table.get(name, ItemData(None, ItemClassification.progression))
         super(FFMQItem, self).__init__(
             name,
             item_data.classification,
