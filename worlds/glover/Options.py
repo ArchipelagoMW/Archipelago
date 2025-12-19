@@ -285,7 +285,7 @@ class ExtraGaribsValue(Range):
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Bonus Garib"
     range_start = 1
-    range_end = 20
+    range_end = 16
     default = 4
 
 

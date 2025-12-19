@@ -172,5 +172,8 @@ def get_valid_items(self, item_classes : list[ItemClassification] | None) -> lis
         #Only items from the catagory are valid choices
         if (not each_item.classification in item_classes) and item_classes != []:
             continue
+        #No prefills
+        if each_item.location == None:
+            continue
         valid_items.append(each_item)
     return valid_items

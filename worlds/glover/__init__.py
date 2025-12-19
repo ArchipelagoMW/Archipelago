@@ -3,7 +3,7 @@ import math
 from typing import Any, Dict
 
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
-from Options import OptionError, OptionGroup
+from Options import Accessibility, OptionError, OptionGroup
 from .MrTipText import generate_tip_table
 from .TrapText import create_trap_name_table, select_trap_item_name
 import settings
@@ -355,13 +355,13 @@ class GloverWorld(World):
             #Carnival 2 (Pre-Rollercoaster)
             self.spawn_checkpoint[4] = 1
             #Fear 3 (Post-Warp)
-            self.spawn_checkpoint[14] = 1, 2, 3
+            self.spawn_checkpoint[14] = 3
             #Intended Locks
             if self.options.difficulty_logic.value == 0:
                 #Prehistoric 1 (Icicles)
                 self.spawn_checkpoint[9] = 1
                 #Prehistoric 3 (Lava Platforms)
-                self.spawn_checkpoint[11] = 1, 2, 3
+                self.spawn_checkpoint[11] = 3
             #Without Switch Items
             if not self.options.switches_checks:
                 #Intended Locks
@@ -412,12 +412,57 @@ class GloverWorld(World):
             if max_checkpoint_value < set_checkpoint or set_checkpoint < 1:
                 raise OptionError("Level " + target_level + " does not have a \"Checkpoint " + str(set_checkpoint) + "\"! Check your Checkpoint Overrides.")
         
-        #Golden Garibs Possible
+        #Level garibs shouldn't show up
+        if self.options.garib_logic == GaribLogic.option_level_garibs and self.options.extra_garibs_value.value > 0:
+            raise OptionError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
+        self.validate_golden_garibs()
+
+
+    def validate_golden_garibs(self):
+        #Golden Garibs Goal Reachable
         total_golden_garibs = self.options.golden_garib_count.value
         total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
         if total_golden_garibs < self.options.required_golden_garibs.value:
             raise OptionError("Must have enough golden garibs to get the required golden garib count!")
-    
+
+        #Golden Garibs Enough Filler
+        move_count = 27
+        #Jump Item in Pool
+        if not self.options.randomize_jump:
+            move_count -= 1
+        #Power Ball Item in Pool
+        if not (self.options.include_power_ball or self.options.starting_ball.value == 4):
+            move_count -= 1
+
+        #Filler items that always exist
+        filler_count = 89 + 33 + 1
+        #Portalsanity
+        if self.options.portalsanity:
+            #Star marks
+            filler_count -= 30
+        else:
+            #Goals
+            filler_count += 31
+        #Settings that create filler items
+        if self.options.mr_tip_checks:
+            filler_count += 35
+        if self.options.enemysanity:
+            filler_count += 117
+        if self.options.insectity:
+            filler_count += 11
+        #Chicken
+        filler_count += 1
+        #At least 1 filler item for every type
+        move_count += 15
+
+        #Check if there's enough
+        if filler_count - (move_count + total_golden_garibs) < 0:
+            raise OptionError("There aren't enough filler items! (" + str(move_count + total_golden_garibs) + " core items and " + str(filler_count) + " filler). Lower your golden garib count or add more filler locations!")
+        #Minimal?
+        if self.options.accessibility.value == Accessibility.option_minimal:
+            raise OptionError("Golden Garibs with Minimal Logic does not build solvable paths. Change one of those settings.")
+
+
     def valid_override_level_name(self, in_level : str, allow_bosses : bool = True, allow_bonuses : bool = True) -> bool:
         end_options = ["1", "2", "3"]
         if self.options.bonus_levels and allow_bonuses:

@@ -1,4 +1,6 @@
 from typing import NamedTuple
+
+from Options import OptionError
 from .Options import GaribLogic, GaribSorting
 
 class ItemData(NamedTuple):
@@ -541,8 +543,8 @@ decoupled_garib_table = {
 	"10 Garibs" : 								ItemData(BASE_ID + 10010, 13, "Garib", None),
 	"11 Garibs" : 								ItemData(BASE_ID + 10011, 2, "Garib", None),
 	"12 Garibs" : 								ItemData(BASE_ID + 10012, 7, "Garib", None),
-	#"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
-	#"14 Garibs" : 								ItemData(BASE_ID + 10014, 0, "Garib", None),
+	"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
+	"14 Garibs" : 								ItemData(BASE_ID + 10014, 0, "Garib", None),
 	"15 Garibs" : 								ItemData(BASE_ID + 10015, 1, "Garib", None),
 	"16 Garibs" : 								ItemData(BASE_ID + 10016, 3, "Garib", None)
 } 
@@ -595,9 +597,6 @@ def generate_item_name_groups() -> dict:
 	return output
 
 def convert_extra_garibs(self) -> ItemData:
-	#Level garibs shouldn't show up
-	if self.options.garib_logic == GaribLogic.option_level_garibs:
-		raise ValueError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
 	#Get the garib count
 	extra_garibs_value : int = self.options.extra_garibs_value.value
 	if self.options.garib_sorting != GaribSorting.option_by_level:
