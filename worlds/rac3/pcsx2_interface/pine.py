@@ -12,10 +12,10 @@ the emulator to make it more easily extensible, more portable, require less code
 performant.
 """
 import os
+import socket
 import struct
 from enum import IntEnum
 from platform import system
-import socket
 
 
 class Pine:
@@ -161,7 +161,7 @@ class Pine:
 
     def write_float(self, address: int, value: float) -> None:
         request = Pine._create_request(Pine.IPCCommand.WRITE32, address, 9 + Pine.DataSize.INT32)
-        request + struct.pack("<f", value)
+        request += struct.pack("<f", value)
         self._send_request(request)
 
     def write_bytes(self, address: int, data: bytes) -> None:
@@ -169,17 +169,20 @@ class Pine:
         bytes_written = 0
         while bytes_written < len(data):
             if len(data) - bytes_written >= 8:
-                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written, 9 + Pine.DataSize.INT64)
+                request = self._create_request(Pine.IPCCommand.WRITE64, address + bytes_written,
+                                               9 + Pine.DataSize.INT64)
                 request += data[bytes_written:bytes_written + 8]
                 self._send_request(request)
                 bytes_written += 8
             elif len(data) - bytes_written >= 4:
-                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written, 9 + Pine.DataSize.INT32)
+                request = self._create_request(Pine.IPCCommand.WRITE32, address + bytes_written,
+                                               9 + Pine.DataSize.INT32)
                 request += data[bytes_written:bytes_written + 4]
                 self._send_request(request)
                 bytes_written += 4
             elif len(data) - bytes_written >= 2:
-                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written, 9 + Pine.DataSize.INT16)
+                request = self._create_request(Pine.IPCCommand.WRITE16, address + bytes_written,
+                                               9 + Pine.DataSize.INT16)
                 request += data[bytes_written:bytes_written + 2]
                 self._send_request(request)
                 bytes_written += 2
@@ -188,6 +191,10 @@ class Pine:
                 request += data[bytes_written:bytes_written + 1]
                 self._send_request(request)
                 bytes_written += 1
+    
+    def write_string(self, address: int, value: str) -> None:
+        data = value.encode("ascii") + b'\x00'
+        self.write_bytes(address, data)
 
     def get_game_id(self) -> str:
         request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.ID, 1)
@@ -247,4 +254,3 @@ class Pine:
     @staticmethod
     def from_bytes(arr: bytes) -> int:
         return int.from_bytes(arr, byteorder="little")
-

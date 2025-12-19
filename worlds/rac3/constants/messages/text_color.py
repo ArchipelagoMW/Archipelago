@@ -1,0 +1,7 @@
+class RAC3TEXTCOLOR:
+    NORMAL = "NORMAL"
+    BLUE = "BLUE"
+    GREEN = "GREEN"
+    MAGENTA = "MAGENTA"
+    WHITE = "WHITE"
+    BLACK = "BLACK"
