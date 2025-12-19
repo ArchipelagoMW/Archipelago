@@ -19,10 +19,7 @@ def colorize_item_name(item_name: str, item_flags: int) -> str:
 def get_rich_item_name(ctx: 'Rac3Context', net_item: NetworkItem, player_name_after: bool = False) -> str:
     item_name = ctx.item_names.lookup_in_slot(net_item.item, net_item.player)
     item_name = colorize_item_name(item_name, net_item.flags)
-    try:
-        location_name = ctx.location_names[net_item.location]
-    except KeyError:
-        location_name = "Error Looking Up Location"
+    location_name = ctx.location_names.lookup_in_slot(net_item.location, net_item.player)
 
     if ctx.slot == net_item.player:
         # Item is ours, no need to specify player name
