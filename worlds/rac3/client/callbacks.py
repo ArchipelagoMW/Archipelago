@@ -3,14 +3,13 @@ from typing import TYPE_CHECKING
 
 from CommonClient import logger
 from NetUtils import ClientStatus
+from worlds.rac3 import RAC3OPTION
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.client.texthelper import get_rich_item_name
-from worlds.rac3.constants.box_colors import RAC3BOXCOLOR
-from worlds.rac3.constants.box_theme import RAC3BOXTHEME
-from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCATION_DATA_TABLE
 from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
+from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
+from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 from worlds.rac3.constants.region import RAC3REGION
-from worlds.rac3.constants.text_color import RAC3TEXTCOLOR
 
 ##################################################
 # Only change point: Change filename/Class name  #
@@ -112,7 +111,6 @@ async def handle_deathlink(ctx: 'Context') -> None:
     ctx.game_interface.reload_check()
     if time() - ctx.last_death_link > 10:
         alive, message = ctx.game_interface.alive()
-        ctx.game_interface.reset_messagebox_theme() # Deathlink colors stick so we reset them we can receive new a deathlink
         if alive:
             if ctx.queued_deaths > 0:
                 logger.debug(f'Deaths requires processing: {ctx.queued_deaths}')
@@ -133,9 +131,9 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
     if ctx.game_interface.is_reloading:
         return False
     if ctx.death_link and ctx.game_interface.action not in {0, 1, 2, 3, 4, 0x13, 0x1D, 0x2E, 0x32, 0x33, 0x34, 0x37,
-                                                              0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
-                                                              0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
-        return False # Todo: Action states
+                                                            0x3F, 0x40, 0x4D, 0x51, 0x52, 0x59, 0x5B, 0x5C, 0x61,
+                                                            0x62, 0x75, 0x76, 0x7C, 0x80, 0x9A, 0x9B, 0x9D, 0xA3}:
+        return False  # Todo: Action states
     planet_data = RAC3_REGION_DATA_TABLE[ctx.game_interface.planet]
     if planet_data.ID > 55:
         return False
@@ -146,6 +144,7 @@ async def handle_respawn(ctx: 'Context', skip_inputs: bool = False) -> bool:
             return True
     return False
 
+
 async def handle_check_goal(ctx: 'Context') -> None:
     """Checks if the goal is completed"""
     if ctx.slot_data is None:
@@ -153,4 +152,5 @@ async def handle_check_goal(ctx: 'Context') -> None:
 
     victory_code = ctx.game_interface.get_victory_code()
     if victory_code in ctx.checked_locations:
+        ctx.finished_game = True
         await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_GOAL)])

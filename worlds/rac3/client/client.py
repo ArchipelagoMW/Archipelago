@@ -6,12 +6,14 @@ from traceback import format_exc
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import ClientStatus
 from Utils import Any, async_start, init_logging
 from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
 from worlds.rac3.client.callbacks import handle_respawn, init, update
 from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.client.message import ClientMessage
-from worlds.rac3.constants.data.location import RAC3_LOCATION_DATA_TABLE, get_active_locations
+from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE
+from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
@@ -155,7 +157,7 @@ class CommandProcessor(ClientCommandProcessor):
                 self.output(f'RYNO max upgrade is Lv4')
             else:
                 self.output(f'RYNO max upgrade is Lv5')
-    
+
     def _cmd_messagebox(self, message: str):
         """Displays a message box in-game with the specified message."""
         if not self.verify(4):
@@ -223,17 +225,15 @@ class Rac3Context(CommonContext):
             self.slot_data = args["slot_data"]
             # logger.info(f"Received data: {args}")
             self.game_interface.proc_option(self.slot_data)
+            self.locations_scouted = self.server_locations
+            async_start(self.send_msgs([ClientMessage.location_scouts(list(self.server_locations))]))
+            # async_start(self.send_msgs([{"cmd": "GetDataPackage", "games": [RAC3OPTION.PROCESSED_LOCATIONS]}]))
 
             # Set death link tag if it was requested in options
             if RAC3OPTION.DEATHLINK in self.slot_data:
                 if self.slot_data[RAC3OPTION.DEATHLINK]:
                     self.death_link = bool(self.slot_data[RAC3OPTION.DEATHLINK])
                     async_start(self.update_death_link(self.death_link))
-            
-            all_locations = get_active_locations(self.slot_data)
-            all_location_ids = [loc.AP_CODE for loc in all_locations.values()]
-            self.locations_scouted = set(all_location_ids)
-            async_start(self.send_msgs([ClientMessage.location_scouts(all_location_ids)]))
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
@@ -343,6 +343,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             await sleep(5)
 
         if menu is True and ctx.main_menu is False:
+            await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_PLAYING)])
             logger.info("Starting game...")
             ctx.game_interface.reset_file()
             logger.info("Old state removed!")

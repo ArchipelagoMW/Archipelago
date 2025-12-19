@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Any, Dict
 
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
@@ -12,7 +11,6 @@ from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.locations.vendors import RAC3VENDOR
-from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
 LOCATION_NAME_TO_ID: dict[str, int] = {
@@ -2149,77 +2147,6 @@ class RAC3LOCATIONDATA:
 RAC3_LOCATION_DATA_TABLE: dict[str, RAC3LOCATIONDATA] = {name: RAC3LOCATIONDATA.construct(name) for name in
                                                          LOCATION_NAME_TO_ID.keys()}
 LOCATION_FROM_AP_CODE: dict[int, str] = dict((kv[1].AP_CODE, kv[0]) for kv in RAC3_LOCATION_DATA_TABLE.items())
-
-def get_active_locations(options_as_dict: Dict[str, Any]):
-    active_locations: dict[str, RAC3LOCATIONDATA] = {}
-    skill_points = options_as_dict[RAC3OPTION.SKILL_POINTS]
-    trophies = options_as_dict[RAC3OPTION.TROPHIES]
-    titanium_bolts = options_as_dict[RAC3OPTION.TITANIUM_BOLTS]
-    nanotech_milestones = options_as_dict[RAC3OPTION.NANOTECH_MILESTONES]
-    nanotech_limit = options_as_dict[RAC3OPTION.NANOTECH_LIMITATION]
-    rangers = options_as_dict[RAC3OPTION.RANGERS]
-    arena = options_as_dict[RAC3OPTION.ARENA]
-    vidcomics = options_as_dict[RAC3OPTION.VIDCOMICS]
-    vr = options_as_dict[RAC3OPTION.VR_CHALLENGES]
-    sewer_crystals = options_as_dict[RAC3OPTION.SEWER_CRYSTALS]
-    sewer_limitation = options_as_dict[RAC3OPTION.SEWER_LIMITATION]
-    for location_name, location_data in RAC3_LOCATION_DATA_TABLE.items():
-        if RAC3TAG.UNSTABLE in location_data.TAGS:
-            continue
-        if RAC3TAG.SKILLPOINT in location_data.TAGS:
-            match skill_points:
-                case 0:
-                    continue
-                case 1:
-                    if RAC3TAG.HARD_SKILLPOINT in location_data.TAGS:
-                        continue
-        if RAC3TAG.TROPHY in location_data.TAGS:
-            match trophies:
-                case 0:
-                    continue
-                case 1:
-                    if RAC3TAG.LONG_TROPHY in location_data.TAGS:
-                        continue
-        if RAC3TAG.T_BOLT in location_data.TAGS and titanium_bolts == 0:
-            continue
-        if RAC3TAG.NANOTECH in location_data.TAGS:
-            level = int(location_name.split(' ')[-1])
-            match nanotech_milestones:
-                case 0:
-                    continue
-                case 1:
-                    if level % 20 != 0 or level > nanotech_limit:
-                        continue
-                case 2:
-                    if level % 10 != 0 or level > nanotech_limit:
-                        continue
-                case 3:
-                    if level % 5 != 0 or level > nanotech_limit:
-                        continue
-        if RAC3TAG.RANGERS in location_data.TAGS and rangers == 0:
-            continue
-        if RAC3TAG.ARENA in location_data.TAGS and arena == 0:
-            continue
-        if RAC3TAG.VIDCOMIC in location_data.TAGS and vidcomics == 0:
-            continue
-        if RAC3TAG.VR in location_data.TAGS and vr == 0:
-            continue
-        if RAC3TAG.SEWER in location_data.TAGS:
-            crystal_number = int(location_name.split(' ')[1])
-            match sewer_crystals:
-                case 0:
-                    continue
-                case 1:
-                    if crystal_number % 20 != 0 or crystal_number > sewer_limitation:
-                        continue
-                case 2:
-                    if crystal_number % 10 != 0 or crystal_number > sewer_limitation:
-                        continue
-                case 3:
-                    if crystal_number % 5 != 0 or crystal_number > sewer_limitation:
-                        continue
-        active_locations[location_name] = location_data
-    return active_locations
 
 # {
 #     "Name": "Prizes/Qwark VidComic 2",

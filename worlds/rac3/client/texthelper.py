@@ -1,14 +1,13 @@
 from typing import TYPE_CHECKING
 
 from NetUtils import NetworkItem
-from worlds.rac3.constants.text_color import RAC3TEXTCOLOR
+from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
 
 if TYPE_CHECKING:
     from worlds.rac3.client.client import Rac3Context
 
 
 def colorize_item_name(item_name: str, item_flags: int) -> str:
-    
     color = RAC3TEXTCOLOR.WHITE  # Filler / Trap = White
     if item_flags & 0b001:
         color = RAC3TEXTCOLOR.MAGENTA  # Progression = Magenta
