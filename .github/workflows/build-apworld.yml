@@ -391,13 +391,13 @@ jobs:
           find tmp_unzip/rac3 -type f -name 'archipelago.json' -exec rm {} \;
           echo "🗑️ Removed extra archipelago.json"
 
-          # Update VERSION_NUMBER in options.py
-          options_file="tmp_unzip/rac3/constants/options.py"
-          old_version=$(grep '^VERSION_NUMBER = ' "$options_file" | cut -d'"' -f2 || echo "<none>")
-          echo "🔧 Updating VERSION_NUMBER in $options_file from $old_version to $version"
-          sed -i -E "s/^(VERSION_NUMBER = ).*/\1\"$version\"/" "$options_file"
+          # Update client VERSION_NUMBER
+          client_file="tmp_unzip/rac3/constants/options.py"
+          old_version=$(grep '^VERSION_NUMBER = ' "$client_file" | cut -d'"' -f2 || echo "<none>")
+          echo "🔧 Updating VERSION_NUMBER in $client_file from $old_version to $version"
+          sed -i -E "s/^(VERSION_NUMBER = ).*/\1\"$version\"/" "$client_file"
           # Remove backup if any (from sed -i on some platforms)
-          rm -f "${options_file}.bak"
+          rm -f "${client_file}.bak"
 
           # Rezip the .apworld
           cd tmp_unzip
