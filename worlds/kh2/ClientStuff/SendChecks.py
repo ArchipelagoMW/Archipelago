@@ -32,7 +32,7 @@ async def checkWorldLocations(self):
         if self.kh2connected:
             self.kh2connected = False
         logger.info(e)
-        logger.info("line 425")
+        logger.info("Error in checkWorldLocations")
 
 
 async def checkLevels(self):
@@ -42,8 +42,8 @@ async def checkLevels(self):
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked \
                     and currentLevel >= data.bitIndex:
-                if self.sora_levels["SoraLevel"] < currentLevel:
-                    self.sora_levels["SoraLevel"] = currentLevel
+                if self.kh2_seed_save["Levels"]["SoraLevel"] < currentLevel:
+                    self.kh2_seed_save["Levels"]["SoraLevel"] = currentLevel
                 self.sending = self.sending + [(int(locationId))]
                 self.check_location_IDs.append((int(locationId)))
         formDict = {
@@ -58,15 +58,15 @@ async def checkLevels(self):
                     locationId = self.kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked \
                             and formlevel >= data.bitIndex:
-                        if formlevel > self.sora_levels[formDict[i][0]]:
-                            self.sora_levels[formDict[i][0]] = formlevel
+                        if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
+                            self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
                         self.check_location_IDs.append((int(locationId)))
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
         logger.info(e)
-        logger.info("line 456")
+        logger.info("Error in checkLevels")
 
 
 async def checkSlots(self):
@@ -89,4 +89,4 @@ async def checkSlots(self):
         if self.kh2connected:
             self.kh2connected = False
         logger.info(e)
-        logger.info("line 475")
+        logger.info("Error in checkSlots")

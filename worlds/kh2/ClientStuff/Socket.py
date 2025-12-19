@@ -10,65 +10,65 @@ if TYPE_CHECKING:
 else:
     KH2Context = object
 
-class MessageType (IntEnum):
-    Invalid = -1,
-    Test = 0,
-    WorldLocationChecked = 1,
-    LevelChecked = 2,
-    KeybladeChecked = 3,
-    BountyList = 4,
-    SlotData = 5,
-    Deathlink = 6,
-    SoldItems = 7,
-    NotificationType = 8,
-    NotificationMessage = 9,
-    ChestsOpened = 10,
-    ReceiveItem = 11,
-    RequestAllItems = 12,
-    Handshake  = 13,
-    Victory = 19,
+class MessageType(IntEnum):
+    Invalid = -1
+    Test = 0
+    WorldLocationChecked = 1
+    LevelChecked = 2
+    KeybladeChecked = 3
+    BountyList = 4
+    SlotData = 5
+    Deathlink = 6
+    SoldItems = 7
+    NotificationType = 8
+    NotificationMessage = 9
+    ChestsOpened = 10
+    ReceiveItem = 11
+    RequestAllItems = 12
+    Handshake = 13
+    Victory = 19
     Closed = 20
 
-class KH2Socket():
-    def __init__(self, client, host: str = "127.0.0.1", port:int = 13713):
+class KH2Socket:
+    def __init__(self, client: KH2Context, host: str = "127.0.0.1", port:int = 13137):
         self.client: KH2Context = client
         self.host: str = host
         self.port: int = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket = None
-        self.isConnected = False
+        self.is_connected = False
         self.closing = False
 
-    async def start_server(self):
+    async def start_server(self) -> None:
         self.loop = asyncio.get_event_loop()
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(1)
         await self._accept_client()
 
-    async def _accept_client(self):
+    async def _accept_client(self) -> None:
         """Wait for a client to connect and start a listener task."""
         logger.info("Waiting for KH2 game connection...")
         while not self.closing:
             try:
                 self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
-                self.isConnected = True
+                self.is_connected = True
                 self.loop.create_task(self.listen())
                 return
             except OSError as e:
                 logger.info(f"Socket accept failed ({e}); retrying in 5s")
-                self.isConnected = False
+                self.is_connected = False
                 await asyncio.sleep(5)
 
-    def _safe_close_client(self):
+    def _safe_close_client(self) -> None:
         """Close the current client socket without killing the server socket."""
         try:
             if self.client_socket:
                 self.client_socket.close()
         finally:
             self.client_socket = None
-            self.isConnected = False
+            self.is_connected = False
 
-    async def listen(self):
+    async def listen(self) -> None:
         buffer = b""
         while not self.closing:
             try:
@@ -92,19 +92,19 @@ class KH2Socket():
                     await self._accept_client()
                     return
 
-    def send(self, msgId: int, values: list):
-        if not self.isConnected or self.client_socket is None:
-               return
+    def send(self, msg_id: int, values: list[str]) -> None:
+        if not self.is_connected or self.client_socket is None:
+            return
         try:
-            msg = str(msgId)
+            msg = str(msg_id)
             for val in values:
                 msg += ";" + str(val)
-            chunk_size = 30
+            CHUNK_SIZE = 30
             i = 0
             if len(msg) >= 30:
                 while i < len(msg):
-                    part = msg[i: i + chunk_size]
-                    if i + chunk_size < len(msg):
+                    part = msg[i: i + CHUNK_SIZE]
+                    if i + CHUNK_SIZE < len(msg):
                         part += ";MOR\n"
                         print("Sending message in parts due to length: " + part)
                     else:
@@ -112,66 +112,68 @@ class KH2Socket():
                         print("Finished sending message in parts due to length: " + part)
 
                     self.client_socket.sendall(part.encode("utf-8"))
-                    i += chunk_size
+                    i += CHUNK_SIZE
             else:
                 msg += "\n"
                 self.client_socket.sendall(msg.encode("utf-8"))
                 print("Sent message: "+msg)
         except (OSError, ConnectionResetError, BrokenPipeError) as e:
-            print(f"Error sending message {msgId}: {e}; connection may be lost")
-            self.isConnected = False
+            print(f"Error sending message {msg_id}: {e}; connection may be lost")
+            self.is_connected = False
         except Exception as e:
-            print(f"Error sending message {msgId}: {e}")
+            print(f"Error sending message {msg_id}: {e}")
 
-    def handle_message(self, message: list[str]):
+    def handle_message(self, message: list[str]) -> None:
         if message[0] == '':
             return
 
         print("Handling message: "+str(message))
-        msgType = MessageType(int(message[0]))
+        msg_type = MessageType(int(message[0]))
 
-        if msgType == MessageType.WorldLocationChecked:
+        if msg_type == MessageType.WorldLocationChecked:
             self.client.world_locations_checked.append(message[1])
 
-        elif msgType == MessageType.LevelChecked:
+        elif msg_type == MessageType.LevelChecked:
             self.client.sora_form_levels[message[2]] = int(message[1])
 
-        elif msgType == MessageType.KeybladeChecked:
+        elif msg_type == MessageType.KeybladeChecked:
             self.client.keyblade_ability_checked.append(message[1])
 
-        elif msgType == MessageType.SlotData:
+        elif msg_type == MessageType.SlotData:
             self.client.current_world_int = int(message[1])
 
-        elif msgType == MessageType.Deathlink:
+        elif msg_type == MessageType.Deathlink:
             self.client.Room = int(message[1])
             self.client.Event = int(message[2])
             self.client.World = int(message[3])
             self.client.SoraDied = True
 
-        elif msgType == MessageType.SoldItems:
+        elif msg_type == MessageType.SoldItems:
             self.client.kh2_seed_save["SoldEquipment"][message[1]] = message[2]
 
-        elif msgType == MessageType.Victory:
+        elif msg_type == MessageType.Victory:
             self.client.kh2_finished_game = True
-            self.send(MessageType.Victory, ())
+            self.send(MessageType.Victory, ["Victory Received"])
 
-        elif msgType == MessageType.RequestAllItems:
+        elif msg_type == MessageType.RequestAllItems:
             self.client.get_items()
 
-        elif msgType == MessageType.Handshake:
+        elif msg_type == MessageType.Handshake:
             self.client.kh2connectionconfirmed = True
             self.send(MessageType.Handshake, [str(self.client.serverconnected)])
             print("Responded to Handshake")
 
 
-    def send_Item(self, msg: list):
+    def send_item(self, msg: list) -> None:
         self.send(MessageType.ReceiveItem, msg)
 
-    def send_slot_data(self, data):
+    def send_slot_data(self, data: str) -> None:
         self.send(MessageType.SlotData, [data])
 
-    def shutdown_server(self):
+    def shutdown_server(self) -> None:
         self.closing = True
-        self.client_socket.shutdown(socket.SHUT_WR)
-        self.client_socket.close()
-        self.server_socket.close()
+        if self.client_socket:
+            self.client_socket.shutdown(socket.SHUT_WR)
+            self.client_socket.close()
+        if self.server_socket:
+            self.server_socket.close()

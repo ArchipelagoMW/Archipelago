@@ -1,43 +1,22 @@
 from __future__ import annotations
-from ast import Dict
 from enum import IntEnum
 import ModuleUpdate
-import Utils
-
 ModuleUpdate.update()
-import os
+import Utils
 import asyncio
 import json
-import requests
+import os
 
-from .Socket import KH2Socket
+from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
+from NetUtils import ClientStatus, NetworkItem
+
+from .CMDProcessor import KH2CommandProcessor
+from .Socket import KH2Socket, MessageType
+from .WorldLocations import *
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot, Summon_Checks, popups_set
 from worlds.kh2.Names import ItemName
-from .WorldLocations import *
 
-from NetUtils import ClientStatus, NetworkItem
-from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
-from .CMDProcessor import KH2CommandProcessor
-
-class MessageType (IntEnum):
-    Invalid = -1,
-    Test = 0,
-    WorldLocationChecked = 1,
-    LevelChecked = 2,
-    KeybladeChecked = 3,
-    BountyList = 4,
-    SlotData = 5,
-    Deathlink = 6,
-    SoldItems = 7,
-    NotificationType = 8,
-    NotificationMessage = 9,
-    ChestsOpened = 10,
-    ReceiveItem = 11,
-    RequestAllItems = 12,
-    Handshake  = 13,
-    Victory = 19,
-    Closed = 20
 
 class KH2Context(CommonContext):
     command_processor = KH2CommandProcessor
@@ -78,9 +57,8 @@ class KH2Context(CommonContext):
         self.slot_name = None
         self.disconnect_from_server = False
         self.sending = []
-        # list used to keep track of locations+items player has. Used for disoneccting
-        self.kh2_seed_save_cache = {
-        }
+        # list used to keep track of locations+items player has. Used for disconnecting
+        self.kh2_seed_save_cache = {}
         self.kh2seedname = None
         self.kh2_seed_save_path_join = None
 
@@ -105,18 +83,17 @@ class KH2Context(CommonContext):
             if not os.path.exists(self.kh2_client_settings_join):
                 # make the json with the settings
                 with open(self.kh2_client_settings_join, "wt") as f:
-                    f.close()
+                    pass
             elif os.path.exists(self.kh2_client_settings_join):
                 with open(self.kh2_client_settings_join) as f:
                     # if the file isnt empty load it
-                    # this is the best I could fine to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
+                    # this is the best I could find to valid json stuff https://stackoverflow.com/questions/23344948/validate-and-format-json-files
                     try:
                         self.client_settings = json.load(f)
                     except json.decoder.JSONDecodeError:
                         pass
                         # this is what is effectively doing on
                         # self.client_settings = default
-                    f.close()
 
         self.hitlist_bounties = 0
         # hooked object
@@ -147,15 +124,6 @@ class KH2Context(CommonContext):
         self.current_world_int = -1
         self.sora_form_levels = {
             "Sora": 1,
-            "ValorLevel": 1,
-            "WisdomLevel": 1,
-            "LimitLevel": 1,
-            "MasterLevel": 1,
-            "FinalLevel": 1,
-            "SummonLevel": 1,
-        }
-        self.sora_levels = {
-            "SoraLevel": 1,
             "ValorLevel": 1,
             "WisdomLevel": 1,
             "LimitLevel": 1,
@@ -205,18 +173,16 @@ class KH2Context(CommonContext):
     async def connection_closed(self):
         self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
+            with open(self.kh2_seed_save_path_join, "w") as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
         await super(KH2Context, self).connection_closed()
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
         self.locations_checked = []
         if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
+            with open(self.kh2_seed_save_path_join, "w") as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
         await super(KH2Context, self).disconnect()
 
     @property
@@ -228,24 +194,26 @@ class KH2Context(CommonContext):
 
     async def shutdown(self):
         if self.kh2seedname not in {None} and self.auth not in {None}:
-            with open(self.kh2_seed_save_path_join, 'w') as f:
+            with open(self.kh2_seed_save_path_join, "w") as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
-                f.close()
-        with open(self.kh2_client_settings_join, 'w') as f2:
+        with open(self.kh2_client_settings_join, "w") as f2:
             f2.write(json.dumps(self.client_settings, indent=4))
-            f2.close()
         try:
-            self.socket.send(MessageType.Closed, ())
+            self.socket.send(MessageType.Closed, ["Closed Received"])
             self.socket.shutdown_server()
         except:
             pass
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
+        if self.disconnect_from_server:
+            if cmd != "RoomInfo":
+                return
+
         if cmd == "RoomInfo":
             if not self.kh2seedname:
-                self.kh2seedname = args['seed_name']
-            elif self.kh2seedname != args['seed_name']:
+                self.kh2seedname = args["seed_name"]
+            elif self.kh2seedname != args["seed_name"]:
                 self.disconnect_from_server = True
                 self.serverconnected = False
                 logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
@@ -254,11 +222,20 @@ class KH2Context(CommonContext):
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, Utils.get_file_safe_name(self.kh2_seed_save_path))
             if not os.path.exists(self.kh2_seed_save_path_join):
                 self.kh2_seed_save = {
+                    "Levels":        {
+                        "SoraLevel":   0,
+                        "ValorLevel":  0,
+                        "WisdomLevel": 0,
+                        "LimitLevel":  0,
+                        "MasterLevel": 0,
+                        "FinalLevel":  0,
+                        "SummonLevel": 0,
+                    },
                     # Item: Amount of them sold
                     "SoldEquipment": dict(),
                 }
-                with open(self.kh2_seed_save_path_join, 'wt') as f:
-                    f.close()
+                with open(self.kh2_seed_save_path_join, "wt") as f:
+                    pass
             elif os.path.exists(self.kh2_seed_save_path_join):
                 with open(self.kh2_seed_save_path_join) as f:
                     try:
@@ -267,13 +244,21 @@ class KH2Context(CommonContext):
                         self.kh2_seed_save = None
                     if self.kh2_seed_save is None or self.kh2_seed_save == {}:
                         self.kh2_seed_save = {
+                            "Levels":        {
+                                "SoraLevel":   0,
+                                "ValorLevel":  0,
+                                "WisdomLevel": 0,
+                                "LimitLevel":  0,
+                                "MasterLevel": 0,
+                                "FinalLevel":  0,
+                                "SummonLevel": 0,
+                            },
                             # Item: Amount of them sold
                             "SoldEquipment": dict(),
                         }
-                    f.close()
 
         if cmd == "Connected":
-            self.kh2slotdata = args['slot_data']
+            self.kh2slotdata = args["slot_data"]
             self.all_party_abilities = {**self.kh2slotdata["SoraAbilities"], **self.kh2slotdata["DonaldAbilities"], **self.kh2slotdata["GoofyAbilities"]}
 
             self.kh2_data_package = Utils.load_data_package_for_checksum(
@@ -294,13 +279,13 @@ class KH2Context(CommonContext):
             index = args["index"]
             if self.serverconnected:
                 converted_items = list()
-                for item in args['items']:
+                for item in args["items"]:
                     name = self.lookup_id_to_item[item.item]
                     item_to_send = self.item_name_to_data[name]
                     msg_to_send = list()
                     if item_to_send.ability:
                         if item.location in self.all_weapon_location_id:
-                            return
+                            continue
 
                         ability_found = self.number_of_abilities_sent.get(name)
                         if not ability_found:
@@ -335,7 +320,7 @@ class KH2Context(CommonContext):
                     while not self.lookup_id_to_item:
                         asyncio.sleep(0.5)
                     while len(converted_items) >= 1:
-                        self.socket.send_Item(converted_items[0])
+                        self.socket.send_item(converted_items[0])
                         converted_items.pop(0)
 
         if cmd == "RoomUpdate":
@@ -353,7 +338,7 @@ class KH2Context(CommonContext):
                         args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"],
                         args["data"]["games"]["Kingdom Hearts 2"]["item_name_to_id"])
                 self.connect_to_game()
-                asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
+                asyncio.create_task(self.send_msgs([{"cmd": "Sync"}]))
 
         if cmd == "PrintJSON":
             # shamelessly stolen from kh1
@@ -433,9 +418,9 @@ class KH2Context(CommonContext):
         self.kh2_item_name_to_id = item_to_id
         self.lookup_id_to_item = {v: k for k, v in self.kh2_item_name_to_id.items()}
 
-    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
-        if (self.deathlink_toggle):
-            """Gets dispatched when a new DeathLink is triggered by another linked player."""
+    def on_deathlink(self, data: dict[str, typing.Any]) -> None:
+        """Gets dispatched when a new DeathLink is triggered by another linked player."""
+        if self.deathlink_toggle:
             if data["source"] not in self.deathlink_blacklist:
                 self.last_death_link = max(data["time"], self.last_death_link)
                 text = data.get("cause", "")
@@ -446,7 +431,7 @@ class KH2Context(CommonContext):
                 self.socket.send(MessageType.Deathlink,())
 
     async def is_dead(self):
-        if (self.deathlink_toggle and self.SoraDied):
+        if self.deathlink_toggle and self.SoraDied:
             if (self.World, self.Room, self.Event) in DeathLinkPair.keys():
                 logger.info(f"Deathlink: {self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
                 await self.send_death(death_text=f"{self.player_names[self.slot]} died to {DeathLinkPair[(self.World,self.Room, self.Event)]}.")
@@ -476,7 +461,7 @@ class KH2Context(CommonContext):
         self.send_slot_data_event.set()
 
         for item in self.received_items_IDs:
-             self.socket.send_Item(item)
+            self.socket.send_item(item)
 
 
     async def send_slot_data(self):
@@ -495,13 +480,13 @@ class KH2Context(CommonContext):
                 return
 
             print("sending slot data")
-            if self.kh2slotdata['BountyBosses']:
-                for location in self.kh2slotdata['BountyBosses']:
+            if self.kh2slotdata["BountyBosses"]:
+                for location in self.kh2slotdata["BountyBosses"]:
                     self.socket.send(MessageType.BountyList, [location])
-            self.socket.send_slot_data('Final Xemnas;' + str(self.kh2slotdata['FinalXemnas']))
-            self.socket.send_slot_data('Goal;' +str(self.kh2slotdata['Goal']))
-            self.socket.send_slot_data('LuckyEmblemsRequired;' + str(self.kh2slotdata['LuckyEmblemsRequired']))
-            self.socket.send_slot_data('BountyRequired;' + str(self.kh2slotdata['BountyRequired']))
+            self.socket.send_slot_data("Final Xemnas;" + str(self.kh2slotdata["FinalXemnas"]))
+            self.socket.send_slot_data("Goal;" +str(self.kh2slotdata["Goal"]))
+            self.socket.send_slot_data("LuckyEmblemsRequired;" + str(self.kh2slotdata["LuckyEmblemsRequired"]))
+            self.socket.send_slot_data("BountyRequired;" + str(self.kh2slotdata["BountyRequired"]))
             self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
             self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
             self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
@@ -520,7 +505,7 @@ async def kh2_watcher(ctx: KH2Context):
                 if not ctx.kh2connectionsearching:
                     logger.info("Searching for KH2 Game Client...")
                     ctx.kh2connectionsearching = True
-                if ctx.socket.isConnected:
+                if ctx.socket.is_connected:
                     logger.info(f"KH2 Game Client Found")
                     ctx.kh2connected = True
 
@@ -539,7 +524,7 @@ async def kh2_watcher(ctx: KH2Context):
 
                 if ctx.sending:
                     ctx.sending = list(await ctx.check_locations(ctx.sending))
-                    message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
+                    message = [{"cmd": "LocationChecks", "locations": ctx.sending}]
                     await ctx.send_msgs(message)
             if ctx.disconnect_from_server:
                 ctx.disconnect_from_server = False
@@ -549,7 +534,7 @@ async def kh2_watcher(ctx: KH2Context):
                 ctx.kh2connected = False
                 ctx.kh2connectionsearching = False
             logger.info(e)
-            logger.info("line 940")
+            logger.info("Error in kh2_watcher")
         await asyncio.sleep(0.5)
 
 
