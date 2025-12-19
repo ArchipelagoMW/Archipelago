@@ -535,20 +535,16 @@ class Context:
                              for player, loc_data in decoded_obj["er_hint_data"].items()}
 
         # load start inventory:
-        item_classifications_included: bool = False
-        for slot, item_data in decoded_obj["precollected_items"].items():
-            for element in item_data:
-                if isinstance(element, tuple):
-                    item_classifications_included = True
-                    break
-                break
-        for slot, item_data in decoded_obj["precollected_items"].items():
-            if not item_classifications_included:
-                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_data]
-            # instead of just an item code it's a (code, classification) tuple
-            else:
-                self.start_inventory[slot] = [NetworkItem(item_tuple[0], -2, 0, item_tuple[1]) for item_tuple in item_data]
-
+        precollected_items = decoded_obj["precollected_items"]
+        if NetUtils.is_old_precollected(precollected_items):
+            for slot, item_codes in precollected_items.items():
+                self.start_inventory[slot] = [NetworkItem(item_code, -2, 0) for item_code in item_codes]
+        else:
+            for slot, item_data in precollected_items.items():
+                self.start_inventory[slot] = [
+                    NetworkItem(item_id, -2, 0, item_flags)
+                    for item_id, item_flags in item_data
+                ]
 
         for slot, hints in decoded_obj["precollected_hints"].items():
             self.hints[0, slot].update(hints)

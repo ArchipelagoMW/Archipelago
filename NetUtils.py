@@ -6,6 +6,8 @@ import enum
 import warnings
 from json import JSONEncoder, JSONDecoder
 
+from typing_extensions import TypeIs
+
 if typing.TYPE_CHECKING:
     from websockets import WebSocketServerProtocol as ServerConnection
 
@@ -508,6 +510,13 @@ class MultiData(typing.TypedDict):
     spheres: list[dict[int, set[int]]]
     datapackage: dict[str, GamesPackage]
     race_mode: int
+
+def is_old_precollected(data: dict[int, list[int]] | dict[int, list[tuple[int, int]]]) -> TypeIs[dict[int, list[int]]]:
+    for item_data in data.values():
+        for element in item_data:
+            # only checking the first one we find, and assuming the rest match
+            return isinstance(element, int)
+    return False
 
 
 if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
