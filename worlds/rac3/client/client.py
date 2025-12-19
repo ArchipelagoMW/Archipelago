@@ -6,10 +6,14 @@ from traceback import format_exc
 from typing import Optional
 
 from CommonClient import get_base_parser, gui_enabled, logger, server_loop
+from NetUtils import ClientStatus
 from Utils import Any, async_start, init_logging
 from worlds.rac3 import RAC3_ITEM_DATA_TABLE, RAC3ITEM
 from worlds.rac3.client.callbacks import handle_respawn, init, update
 from worlds.rac3.client.interface import Rac3Interface
+from worlds.rac3.client.message import ClientMessage
+from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE
+from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 
@@ -94,7 +98,8 @@ class CommandProcessor(ClientCommandProcessor):
             if self.ctx.slot_data[RAC3OPTION.ENABLE_PROGRESSIVE_WEAPONS]:
                 self.output(f"Weapon EXP item not compatible with Progressive Weapons")
             else:
-                self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE)
+                self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.WEAPON_XP].AP_CODE,
+                                                      self.ctx.player_names[self.ctx.slot], "Test Command", 0)
                 self.output(f"Weapon EXP Received")
 
     def _cmd_bolt_test(self):
@@ -102,7 +107,8 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE)
+            self.ctx.game_interface.item_received(RAC3_ITEM_DATA_TABLE[RAC3ITEM.BOLTS].AP_CODE,
+                                                  self.ctx.player_names[self.ctx.slot], "Test Command", 0)
             self.output(f"Bolts Received")
 
     def _cmd_rac3_info(self):
@@ -154,6 +160,14 @@ class CommandProcessor(ClientCommandProcessor):
             else:
                 self.output(f'RYNO max upgrade is Lv5')
 
+    def _cmd_messagebox(self, message: str):
+        """Displays a message box in-game with the specified message."""
+        if not self.verify(4):
+            return
+        if isinstance(self.ctx, Rac3Context):
+            self.ctx.game_interface.notification_queue.append((message, RAC3BOXTHEME.DEFAULT))
+            self.output(f'Message box displayed with message: {message}')
+
 
 class Rac3Context(CommonContext):
     # Client variables
@@ -173,6 +187,9 @@ class Rac3Context(CommonContext):
     processed_item_count: int = 0
     queued_deaths: int = 0
     slot_data: Optional[dict[str, Any]] = None
+    last_deathlink_msg: Optional[str] = None
+    last_deathlink_sender: Optional[str] = None
+    data_package: int = 0
 
     def __init__(self, server_address: str, password: str):
         super().__init__(server_address, password)
@@ -186,6 +203,8 @@ class Rac3Context(CommonContext):
             logger.info(f"Death Link: Received from {data['source']}")
         if self.death_link:
             self.queued_deaths += 1
+            self.last_deathlink_msg = text if text else "???"
+            self.last_deathlink_sender = data.get("source", "???")
 
     def make_gui(self):
         ui = super().make_gui()
@@ -209,6 +228,9 @@ class Rac3Context(CommonContext):
             self.slot_data = args["slot_data"]
             # logger.info(f"Received data: {args}")
             self.game_interface.proc_option(self.slot_data)
+            self.locations_scouted = self.server_locations
+            async_start(self.send_msgs([ClientMessage.location_scouts(list(self.server_locations))]))
+            # async_start(self.send_msgs([{"cmd": "GetDataPackage", "games": [RAC3OPTION.PROCESSED_LOCATIONS]}]))
 
             # Set death link tag if it was requested in options
             if RAC3OPTION.DEATHLINK in self.slot_data:
@@ -218,6 +240,12 @@ class Rac3Context(CommonContext):
 
             # async_start(self.send_msgs([ClientMessage.location_scouts(
             #     [Locations.location_table[location].ap_code for location in Locations.location_groups["Purchase"]])]))
+        if cmd == "DataPackage":
+            logger.debug(f'Data Package received with args {args}')
+            if RAC3OPTION.GAME_TITLE_FULL in args["data"]["games"]:
+                self.data_package = args["data"]["games"][RAC3OPTION.GAME_TITLE_FULL][RAC3OPTION.PROCESSED_LOCATIONS]
+                logger.debug(f"Data Package updated: {self.data_package}")
+                async_start(self.send_msgs([{'cmd': 'Sync'}]))
 
 
 async def pcsx2_sync_task(ctx: Rac3Context):
@@ -324,14 +352,26 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             await sleep(5)
 
         if menu is True and ctx.main_menu is False:
+            await ctx.send_msgs([ClientMessage.status_update(ClientStatus.CLIENT_PLAYING)])
             logger.info("Starting game...")
             ctx.game_interface.reset_file()
             logger.info("Old state removed!")
             logger.info("Checking for items...")
-            for item in ctx.items_received:
-                ctx.game_interface.important_items(item.item)
-            ctx.processed_item_count = len(ctx.items_received)
-            logger.info("Items received!")
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
+            logger.info(f"Items Received: {len(ctx.items_received)}")
+            items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
+            counter = 0
+            for count, item in enumerate(ctx.items_received):
+                counter += 1
+                logger.debug(f"Processing item {count}: {ITEM_FROM_AP_CODE[item.item]}")
+                if count > items_to_process:
+                    logger.debug(f"Handle Later")
+                    continue
+                ctx.game_interface.important_items(item.item, ctx.player_names[ctx.slot], ctx.player_names[
+                    item.player], item.location)
+            ctx.processed_item_count = min(counter, items_to_process)
+            await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
+            logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
             for loc in ctx.locations_checked:
                 ctx.game_interface.collect_location(loc)
@@ -345,6 +385,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
 
         if not ctx.main_menu:
             await update(ctx)
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
 
 
 def launch_client():

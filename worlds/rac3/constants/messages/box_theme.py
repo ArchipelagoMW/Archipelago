@@ -1,0 +1,3 @@
+class RAC3BOXTHEME:
+    DEFAULT = 0
+    DEATHLINK = 1

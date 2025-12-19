@@ -191,6 +191,10 @@ class Pine:
                 request += data[bytes_written:bytes_written + 1]
                 self._send_request(request)
                 bytes_written += 1
+    
+    def write_string(self, address: int, value: str) -> None:
+        data = value.encode("ascii") + b'\x00'
+        self.write_bytes(address, data)
 
     def get_game_id(self) -> str:
         request = Pine.to_bytes(5, 4) + Pine.to_bytes(Pine.IPCCommand.ID, 1)

@@ -1,7 +1,7 @@
 import time
 from dataclasses import dataclass
 from enum import IntEnum
-from random import choice, randint, uniform
+from random import randint, uniform
 from struct import unpack
 from typing import Any, Optional
 
@@ -20,6 +20,11 @@ from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
 from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.messages.box_format import THEME_ID_TO_THEME_COLORS
+from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
+from worlds.rac3.constants.messages.messagebox import RAC3MESSAGEBOX
+from worlds.rac3.constants.messages.text_color import RAC3TEXTCOLOR
+from worlds.rac3.constants.messages.text_format import CLASSIFICATION_TO_COLOR, COLOR_NAME_TO_BYTE
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.player_type import PLAYER_TYPE_TO_NAME, RAC3PLAYERTYPE
 from worlds.rac3.constants.region import (PLANET_FROM_INFOBOT, PLANET_NAME_FROM_ID, RAC3REGION, RESPAWN_COORDS_OFFSET,
@@ -73,6 +78,9 @@ class GameInterface:
 
     def _write_float(self, address: int, value: float):
         self.pcsx2_interface.write_float(address, value)
+
+    def _write_string(self, address: int, value: str):
+        self.pcsx2_interface.write_string(address, value)
 
     def connect_to_game(self):
         """
@@ -219,6 +227,9 @@ class Rac3Interface(GameInterface):
     last_death_state: int = 0
     has_died: bool = False
     inside_hacker_puzzle: bool = False
+    notification_queue: list[tuple] = []
+    notification_time: float | None = None
+    message_display: bool = False
 
     # Called at once when client started
     def init(self):
@@ -228,13 +239,13 @@ class Rac3Interface(GameInterface):
         self.remove_all_items()
         self.undo_collections()
 
-    def important_items(self, item: int):
+    def important_items(self, item: int, us: str, them: str, location: int):
         """Runs when loading into game from the main menu to update the player with important items from the server,
         skips filler and trap items to not flood the player with bolts/xp"""
         if (RAC3ITEMTAG.FILLER in RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS or RAC3ITEMTAG.TRAP in
                 RAC3_ITEM_DATA_TABLE[ITEM_FROM_AP_CODE[item]].TAGS):
             return
-        self.item_received(item)
+        self.item_received(item, us, None, location)
 
     def early_update(self):
         self.planet = PLANET_NAME_FROM_ID[self._read8(RAC3STATUS.PLANET)]
@@ -247,6 +258,7 @@ class Rac3Interface(GameInterface):
         self.max_health = self._read8(RAC3STATUS.MAX_HEALTH)
         self.is_reloading = self._read8(RAC3STATUS.FORCE_RELOAD)
         self.inside_hacker_puzzle = self._read8(RAC3STATUS.HELD_ITEM) == RAC3_ITEM_DATA_TABLE[RAC3ITEM.HACKER].ID
+        self.message_display = bool(self._read_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER)))
 
         self.pause_check()
         if self.self_respawning:
@@ -263,6 +275,7 @@ class Rac3Interface(GameInterface):
         self.armor_cycler()
         self.timer_cycler()
         self.verify_quick_select_and_last_used()
+        self.notification_cycler()
         # Proc Options
         self.multiplier_cycler()
         if self.weaponLevelLockFlag:
@@ -274,8 +287,6 @@ class Rac3Interface(GameInterface):
             if self.max_health > 10:
                 self._write8(RAC3STATUS.HEALTH, self.max_health)
                 self.main_menu = False
-
-
 
     @staticmethod
     def get_victory_code():
@@ -307,9 +318,28 @@ class Rac3Interface(GameInterface):
     def tyhrranosis_fix(self):
         self._write8(RAC3STATUS.ROBONOIDS, 0)
 
-    def item_received(self, item_code: int):
+    def item_received(self, item_code: int, our_name: Optional[str], other_player: Optional[str], location: Optional[
+        int]):
         name = PROG_TO_NAME_DICT.get(ITEM_FROM_AP_CODE[item_code], ITEM_FROM_AP_CODE[item_code])
-        logger.debug(f'Item received: {name}, AP code: {item_code}')
+        if other_player is not None:
+            classification = RAC3_ITEM_DATA_TABLE[name].AP_CLASSIFICATION
+            if other_player == our_name:
+                if location == 0:
+                    pass
+                elif location > 0:
+                    self.notification_queue.append(
+                        (f'Found {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} '
+                         f'{RAC3TEXTCOLOR.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}', RAC3BOXTHEME.DEFAULT))
+                else:
+                    self.notification_queue.append(
+                        (f'Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}',
+                         RAC3BOXTHEME.DEFAULT))
+            else:
+                self.notification_queue.append((
+                    f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                    f"{RAC3TEXTCOLOR.NORMAL}from "
+                    f"{RAC3TEXTCOLOR.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
+        logger.debug(f'Item received: {ITEM_FROM_AP_CODE[item_code]}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
                 return
@@ -449,6 +479,7 @@ class Rac3Interface(GameInterface):
         self.verify_quick_select_and_last_used()
         self.weapon_exp_cycler()
         self.timer_cycler()
+        self.notification_cycler()
 
     def undo_collections(self):
         self.health = self._read8(RAC3STATUS.HEALTH)
@@ -461,7 +492,7 @@ class Rac3Interface(GameInterface):
                 continue
             if RAC3TAG.NANOTECH in location.TAGS:
                 if not nano:
-                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10) # Reset to 10 Health
+                    self._write8(location.CHECK_ADDRESS[0].ADDRESS, 10)  # Reset to 10 Health
                     nano += 1
                 continue
             for check in location.CHECK_ADDRESS:
@@ -671,6 +702,41 @@ class Rac3Interface(GameInterface):
                     break
             self.verify_quick_select_and_last_used()
 
+    def notification_cycler(self):
+        """Update the current message on display in game"""
+        current_time = time.time()
+        tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
+        if self.notification_queue:
+            if not self.notification_time:
+                self.notification_time = current_time + 5
+            if not tyhrranoid_game:
+                if self.notification_time < current_time and not self.message_display:
+                    self.notification_queue.pop(0)
+                    self.notification_time = current_time + 5
+                    self.reset_messagebox_theme()
+                    logger.debug(f'notification queue: {len(self.notification_queue)}')
+                # else:
+                # logger.debug(f"{self.notification_time - current_time}, {self._read32(RAC3MESSAGEBOX.TIMER)}")
+                if self.notification_queue:
+                    message, theme = self.notification_queue[0]
+                    msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(message[:200:])
+                    if not self.message_display:
+                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
+                    else:
+                        write_message = b''
+                        for line in msg_list:
+                            write_message += line
+                        read_message = self._read_bytes(RAC3MESSAGEBOX.MESSAGE, len(write_message))
+                        if read_message != write_message:
+                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
+                            self.notification_time = current_time + 5
+                            logger.debug(f'Warning: Incorrect Display message detected')
+                            logger.debug(f'Message: {message}')
+                            logger.debug(f'{read_message}')
+                            logger.debug(f'{write_message}')
+        else:
+            self.notification_time = None
+
     def dump_info(self, slot_data: dict[str, Any]):
         logger.info(f'Collected Items: {self.UnlockItem}')
         count = 0
@@ -716,8 +782,8 @@ class Rac3Interface(GameInterface):
         if self.is_reloading and not self.reloading_handled and not self.self_respawning:
             self.last_death_state = self.action
             self.reloading_handled = True
-            logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state}, death count: {
-            self.last_death_count}')
+            logger.debug(f'{self.player_type} is Respawning, death state: {self.last_death_state},'
+                         f' death count: {self.last_death_count}')
         if not self.is_reloading and self.reloading_handled:
             self.death_count = self._read32(RAC3STATUS.DEATH_COUNT)
             self.has_died = self.death_count > self.last_death_count
@@ -819,7 +885,8 @@ class Rac3Interface(GameInterface):
                 match self.player_type:
                     case RAC3PLAYERTYPE.RATCHET:
                         if self.action not in DEATH_FROM_ACTION.keys() and self.vehicle == 0:
-                            self._write8(RAC3STATUS.ACTION, 0x16) # update ratchet state to cancel free fall and other problematic states
+                            self._write8(RAC3STATUS.ACTION, 0x16)
+                            # update ratchet state to cancel free fall and other problematic states
 
                         # self._write8(RAC3STATUS.ACTION, death)
                         # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
@@ -827,26 +894,26 @@ class Rac3Interface(GameInterface):
                         # Clank taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x42)
                         self._write8(RAC3STATUS.PREV_ACTION, 0x42)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x42)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x42)  # This helps the death animation trigger
                         logger.debug(f'player is clank, clank must die dramatically')
                     case RAC3PLAYERTYPE.GIANT:
                         # Giant Clank punched state (updates state to trigger death animation once at 0 health)
                         self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 0)
                         self._write8(RAC3STATUS.ACTION, 0x5D)
                         self._write8(RAC3STATUS.PREV_ACTION, 0x5D)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x5D)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x5D)  # This helps the death animation trigger
                         logger.debug(f'player is giant clank, giant clank must die dramatically')
                     case RAC3PLAYERTYPE.TYHRRANOID:
                         # Tyhrranoid taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x55)
                         self._write8(RAC3STATUS.PREV_ACTION, 0x55)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x55)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x55)  # This helps the death animation trigger
                         logger.debug(f'player is tyhrranoid, tyhrranoid must be squished')
                     case RAC3PLAYERTYPE.QWARK:
                         # Qwark taking damage state (updates state to trigger death animation once at 0 health)
                         self._write8(RAC3STATUS.ACTION, 0x9E)
                         self._write8(RAC3STATUS.PREV_ACTION, 0x9E)  # Past state
-                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x9E)  # This address helps the death animation trigger
+                        self._write8(RAC3STATUS.SECOND_PREV_ACTION, 0x9E)  # This helps the death animation trigger
                         logger.debug(f'player is qwark, qwark must die dramatically')
             logger.debug(f'player successfully killed')
             return True
@@ -857,3 +924,82 @@ class Rac3Interface(GameInterface):
     def respawn_inputs(self) -> bool:
         pressed_square = bool(self.inputs & RAC3INPUT.SQUARE)
         return self.pause_menu and pressed_square
+
+    def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
+    RAC3BOXTHEME.DEFAULT) -> None:
+        # real overflow cap is actually about 248, but we don't need that long messages
+        curr_addr = RAC3MESSAGEBOX.MESSAGE
+        msg_bytes = b''
+        for idx, line in enumerate(msg_list):
+            msg_bytes += line
+            # self._write_bytes(curr_addr, line)
+            # Write pointer to this line at pointer_addr + 4*idx
+            self._write32(RAC3MESSAGEBOX.TEXT_POINTER + 4 * idx, curr_addr)
+            # Move to next address after this string
+            curr_addr += len(line)
+        self._write32(RAC3MESSAGEBOX.NUM_LINES, len(msg_list))
+        msg_length = int(longest_line_length - color_bytes_count)
+        width = msg_length * 7 + 10
+
+        theme_format = THEME_ID_TO_THEME_COLORS[box_theme]
+        box_color = theme_format.BOX
+        text_color = theme_format.TEXT
+        background_color = theme_format.BACKGROUND
+        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), background_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), box_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
+        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
+
+        self._write32(RAC3MESSAGEBOX.TIMER, 0x258)
+        self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
+        self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
+        self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
+        self._write_float(self._read32(RAC3MESSAGEBOX.VISIBLE_POINTER), 1.0)
+
+    def format_textbox_string(self, msg: str) -> tuple[list[bytes], int, int]:
+        # Split message on \n to handle newlines
+        lines = msg.split('\\n')
+        color_byte_count = 0
+        # Write each line to memory, update string pointers
+        longest_line_length = 0
+        message_list: list[bytes] = []
+        for idx, line in enumerate(lines):
+            # Convert to bytes, add null terminator
+            line_bytes, line_color_byte_count = self.format_color_string(line)
+            line_bytes += b'\x00'
+            message_list.append(line_bytes)
+            if len(line_bytes) > longest_line_length:
+                longest_line_length = len(line_bytes)
+                color_byte_count = line_color_byte_count
+        return message_list, color_byte_count, longest_line_length
+
+    @staticmethod
+    def format_color_string(msg: str) -> tuple[bytes, int]:
+        result = bytearray()
+        color_byte_count = 0
+        i = 0
+        while i < len(msg):
+            matched = False
+            for code, byte in COLOR_NAME_TO_BYTE.items():
+                if msg.startswith(code, i):
+                    # Insert the color code byte (as a single byte)
+                    if isinstance(byte, str):
+                        byte = ord(byte)
+                    result.append(byte)
+                    color_byte_count += 1
+                    i += len(code)
+                    matched = True
+                    break
+            if not matched:
+                # Insert the ASCII value of the character
+                result.append(ord(msg[i]))
+                i += 1
+        color_byte_count += 1  # Count the null terminator
+        return bytes(result), color_byte_count
+
+    def reset_messagebox_theme(self) -> None:
+        default_theme = THEME_ID_TO_THEME_COLORS[RAC3BOXTHEME.DEFAULT]
+        self._write32(self._read32(RAC3MESSAGEBOX.BACKGROUND_COLOR_POINTER), default_theme.BACKGROUND)
+        self._write32(self._read32(RAC3MESSAGEBOX.EDGE_COLOR_POINTER), default_theme.BOX)
+        self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), default_theme.BOX)
+        self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), default_theme.TEXT)
