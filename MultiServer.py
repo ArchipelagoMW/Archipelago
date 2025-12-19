@@ -2141,17 +2141,45 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             client.messageprocessor(args["text"])
 
         elif cmd == "Bounce":
-            games = set(args.get("games", []))
-            tags = set(args.get("tags", []))
-            slots = set(args.get("slots", []))
             args["cmd"] = "Bounced"
             msg = ctx.dumper([args])
 
-            for bounceclient in ctx.endpoints:
-                if client.team == bounceclient.team and (ctx.games[bounceclient.slot] in games or
-                                                         set(bounceclient.tags) & tags or
-                                                         bounceclient.slot in slots):
-                    await ctx.send_encoded_msgs(bounceclient, msg)
+            teams = set(args.get("teams", client.team))
+            games = set(args.get("games", []))
+            tags = set(args.get("tags", []))
+            slots = set(args.get("slots", []))
+
+            def teams_match(target: Client) -> bool:
+                return target.team in teams
+
+            def games_match(target: Client) -> bool:
+                return len(games) == 0 or ctx.games[target.slot] in games
+
+            def tags_match(target: Client) -> bool:
+                return len(tags) == 0 or bool(set(target.tags) & tags)
+
+            def slots_match(target: Client) -> bool:
+                return len(slots) == 0 or target.slot in slots
+
+            boolean_operator = args.get("operator", "legacy")
+
+            if boolean_operator == "legacy":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) and (games_match(target) or tags_match(target) or slots_match(target))
+            elif boolean_operator == "or":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) or games_match(target) or tags_match(target) or slots_match(target)
+            elif boolean_operator == "and":
+                def client_condition(target: Client) -> bool:
+                    return teams_match(target) and games_match(target) and tags_match(target) and slots_match(target)
+            else:
+                await ctx.send_msgs(client, [{'cmd': 'InvalidPacket', "type": "arguments",
+                                    "text": "Bounce", "original_cmd": cmd}])
+                return
+
+            for bounce_client in ctx.endpoints:
+                if client_condition(bounce_client):
+                    await ctx.send_encoded_msgs(bounce_client, msg)
 
         elif cmd == "Get":
             if "keys" not in args or type(args["keys"]) != list:
