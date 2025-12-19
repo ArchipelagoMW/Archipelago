@@ -1,0 +1,64 @@
+{% extends 'pageWrapper.html' %}
+
+{% block head %}
+    <title>Tools</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/supportedGames.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/supportedGames.js") }}"></script>
+    <noscript>
+    <style>
+        /* always un-collapse all and hide arrow and search bar */
+        .js-only{
+          display: none;
+        }
+
+        #games p.collapsed{
+          display: block;
+        }
+
+        #games h2 .collapse-arrow{
+          display: none;
+        }
+
+        #games .collapse-toggle{
+          cursor: unset;
+        }
+    </style>
+    </noscript>
+{% endblock %}
+
+{% block body %}
+    {% include 'header/oceanHeader.html' %}
+    <div id="games" class="markdown">
+        <h1>Tools</h1>
+        <p>This is a list of tools that may be useful when using Archipelago.</p>
+        <div class="js-only">
+            <label for="game-search">Search for your game below!</label><br />
+            <div class="page-controls">
+                <input id="game-search" placeholder="Search by title..." autofocus />
+                <button id="expand-all">Expand All</button>
+                <button id="collapse-all">Collapse All</button>
+            </div>
+        </div>
+        {% for game_name in worlds | title_sorted %}
+        {% set world = worlds[game_name] %}
+        <details data-game="{{ game_name }}">
+            <summary class="h2">{{ game_name }}</summary>
+            {{ world.__doc__ | default("No description provided.", true) }}<br />
+            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
+            {% if world.tutorials %}
+            <span class="link-spacer">|</span>
+            <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
+            {% endif %}
+            {% if world.options_page is string %}
+            <span class="link-spacer">|</span>
+            <a href="{{ world.options_page }}">Options Page (External Link)</a>
+            {% endif %}
+            {% if world.bug_report_page %}
+            <span class="link-spacer">|</span>
+            <a href="{{ world.bug_report_page }}">Report a Bug</a>
+            {% endif %}
+        </details>
+        {% endfor %}
+    </div>
+{% endblock %}
