@@ -393,10 +393,16 @@ jobs:
 
           # Update client VERSION_NUMBER
           client_file="tmp_unzip/rac3/constants/options.py"
-          old_version=$(grep '^VERSION_NUMBER = ' "$client_file" | cut -d'"' -f2 || echo "<none>")
+          old_version=$(grep -E '^\s*VERSION_NUMBER\s*=' "$client_file" | cut -d'"' -f2 || echo "<none>")
           echo "🔧 Updating VERSION_NUMBER in $client_file from $old_version to $version"
-          sed -i -E "s/^(VERSION_NUMBER = ).*/\1\"$version\"/" "$client_file"
-          # Remove backup if any (from sed -i on some platforms)
+          sed -i -E 's/^(\s*VERSION_NUMBER\s*=\s*).*/\1"'$version'"/' "$client_file"
+          echo "🔍 Post-update line:"
+          grep -n 'VERSION_NUMBER' "$client_file"
+          # Hard fail if replacement didn't happen
+          if ! grep -Eq "VERSION_NUMBER\s*=\s*\"$version\"" "$client_file"; then
+            echo "❌ VERSION_NUMBER update failed!"
+            exit 1
+          fi
           rm -f "${client_file}.bak"
 
           # Rezip the .apworld
