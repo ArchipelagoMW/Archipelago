@@ -58,7 +58,7 @@ class ElevatorPhase(NamedRange):
     Put the milestones accessible BEFORE this Space Elevator Phase in logic.
     Milestones after the selected Phase are empty and contain nothing.
     If your goal selection contains *Space Elevator Phase* then submitting this Phase's elevator package completes that goal.
-    If the goal is not enabled, this setting simply limits the HUB's content.
+    If the goal is not enabled, this setting simply limits the included HUB and MAM content.
     
     Estimated in-game completion times:
     

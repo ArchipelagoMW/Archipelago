@@ -59,8 +59,8 @@ class CriticalPathCalculator:
 
                 self.select_minimal_required_parts_for(node.unlock_cost)
 
-                if node.unlock_items:
-                    self.required_item_names.update(node.unlock_items)
+                if node.requires_items:
+                    self.required_item_names.update(node.requires_items)
 
         self.select_minimal_required_parts_for_building("MAM")
         self.select_minimal_required_parts_for_building("AWESOME Sink")

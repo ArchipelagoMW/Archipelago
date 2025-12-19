@@ -104,20 +104,21 @@ class Building(Recipe):
 class MamNode:
     name: str
     unlock_cost: dict[str, int]
-    """All game parts must be automatable to purchase this MamNode"""
+    """Game parts that must be automatable to purchase this MamNode"""
     depends_on: tuple[str, ...]
     """At least one of these prerequisite MamNodes must be unlocked to purchase this MamNode"""
     minimal_phase: Optional[int]
-    unlock_items: Optional[tuple[str, ...]]
-    """All game items must have at least been obtained once to purchase this MamNode (not necessarily automatable)"""
+    """Elevator phase required in logic for this node to be included"""
+    requires_items: Optional[tuple[str, ...]]
+    """AP items that must have been obtained at least once to purchase this MamNode"""
 
     def __init__(self, name: str, unlock_cost: dict[str, int], depends_on: tuple[str, ...],
-                 minimal_phase: Optional[int] = 1, unlock_items: Optional[tuple[str, ...]] = None):
+                 minimal_phase: Optional[int] = 1, requires_items: Optional[tuple[str, ...]] = None):
         self.name = name
         self.unlock_cost = unlock_cost
         self.depends_on = depends_on
         self.minimal_phase = minimal_phase
-        self.unlock_items = unlock_items
+        self.requires_items = requires_items
 
 
 class MamTree:
@@ -913,13 +914,13 @@ class GameLogic:
             MamNode("FICSMAS Tree Base", {"FICSMAS Gift": 1}, depends_on=tuple()), # removed unlock requirement
             MamNode("Candy Cane Basher", {"FICSMAS Tree Branch": 50}, depends_on=("FICSMAS Tree Base", )),
             MamNode("Candy Cane Decor", {"Candy Cane": 10}, depends_on=("FICSMAS Tree Base", )),
-            MamNode("Giant FICSMAS Tree: Upgrade 1", {"Candy Cane": 20, "FICSMAS Bow": 30}, unlock_items=("FICSMAS Data Cartridge Day 4", ), depends_on=("FICSMAS Tree Base", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 1", {"Candy Cane": 20, "FICSMAS Bow": 30}, requires_items=("FICSMAS Data Cartridge Day 4", ), depends_on=("FICSMAS Tree Base", )),
             MamNode("A Friend", { "Candy Cane": 50, "FICSMAS Bow": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
             MamNode("FICSMAS Gift Tree", {"FICSMAS Tree Branch": 50, "Red FICSMAS Ornament": 50, "Blue FICSMAS Ornament": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
-            MamNode("Giant FICSMAS Tree: Upgrade 2", {"Red FICSMAS Ornament": 200, "Blue FICSMAS Ornament": 200, "FICSMAS Gift": 100}, unlock_items=("FICSMAS Data Cartridge Day 8", ), depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 2", {"Red FICSMAS Ornament": 200, "Blue FICSMAS Ornament": 200, "FICSMAS Gift": 100}, requires_items=("FICSMAS Data Cartridge Day 8", ), depends_on=("Giant FICSMAS Tree: Upgrade 1", )),
             MamNode("FICSMAS Lights", {"Red FICSMAS Ornament": 100, "Blue FICSMAS Ornament": 100, "Copper FICSMAS Ornament": 50, "Iron FICSMAS Ornament": 50}, depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
             MamNode("It's Snowing!", {"FICSMAS Actual Snow": 100, "Copper FICSMAS Ornament": 200, "Iron FICSMAS Ornament": 200, "Candy Cane": 200 }, depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
-            MamNode("Giant FICSMAS Tree: Upgrade 3", {"FICSMAS Tree Branch": 200, "FICSMAS Ornament Bundle": 400}, unlock_items=("FICSMAS Data Cartridge Day 14", ), depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
+            MamNode("Giant FICSMAS Tree: Upgrade 3", {"FICSMAS Tree Branch": 200, "FICSMAS Ornament Bundle": 400}, requires_items=("FICSMAS Data Cartridge Day 14", ), depends_on=("Giant FICSMAS Tree: Upgrade 2", )),
             MamNode("FICSMAS Wreath", {"FICSMAS Wreath": 100, "FICSMAS Ornament Bundle": 200, "FICSMAS Bow": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", )),
             MamNode("Snowfight!", {"FICSMAS Actual Snow": 500, "Candy Cane": 500, "FICSMAS Bow": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", )),
             MamNode("Giant FICSMAS Tree: Upgrade 4", {"FICSMAS Wonder Star": 500}, depends_on=("Giant FICSMAS Tree: Upgrade 3", ))
