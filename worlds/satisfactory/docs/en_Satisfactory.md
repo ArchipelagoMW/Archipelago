@@ -114,9 +114,9 @@ EnergyLink is an energy storage supported by certain games that is shared across
 In Satisfactory, if enabled in the player settings, all base-game Power Storage buildings will act as Energy Link interfaces.
 They will deposit surplus produced energy and draw energy from the shared storage when needed.
 
-Just like the base game, there is no limit to the discharge/draw rate of one building,
+Just like the base game, there is no limit to the discharge rate of one building,
 and each Power Storage provides 100 MW of charging throughput.
-The shared storage has unlimited capacity, and only a small amount of energy is lost during depositing.
+The shared storage has unlimited capacity and a small amount of energy is lost upon deposit.
 The amount of energy currently in the shared storage is displayed in the Archipelago client
 and appears in the Power Storage building UI.
 
