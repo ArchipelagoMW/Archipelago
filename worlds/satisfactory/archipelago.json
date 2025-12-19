@@ -1,0 +1,9 @@
+{
+    "game": "Satisfactory",
+    "authors": [
+        "Jarno",
+        "Robb"
+    ],
+    "minimum_ap_version": "0.6.3",
+    "world_version": "2.2.0"
+}
