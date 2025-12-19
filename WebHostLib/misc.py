@@ -86,7 +86,7 @@ def games():
     return render_template("supportedGames.html", worlds=get_visible_worlds(WorldType.GAME))
 
 
-@app.route('/hintgames')
+@app.route('/hint_games')
 @cache.cached()
 def hint_games():
     """List of supported hint games"""
