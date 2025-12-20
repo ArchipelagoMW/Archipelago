@@ -165,8 +165,10 @@ class CommandProcessor(ClientCommandProcessor):
         if not self.verify(4):
             return
         if isinstance(self.ctx, Rac3Context):
-            self.ctx.game_interface.notification_queue.append((message, RAC3BOXTHEME.DEFAULT))
-            self.output(f'Message box displayed with message: {message}')
+            self.ctx.game_interface.notification_queue.append((message[:225:], RAC3BOXTHEME.DEFAULT))
+            if len(message) > 225:
+                self.output(f'Message longer than 225 characters, truncated to fit in message box.')
+            self.output(f'Message box displayed with message: {message[:225:]}')
 
 
 class Rac3Context(CommonContext):

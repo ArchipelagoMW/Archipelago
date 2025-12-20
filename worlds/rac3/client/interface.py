@@ -706,6 +706,7 @@ class Rac3Interface(GameInterface):
     def notification_cycler(self):
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
+        self._write32(RAC3MESSAGEBOX.HIDDEN_AND_PAUSED, int(self.inside_hacker_puzzle)) # Hide message box during hacker puzzle
         if self.notification_queue:
             if not self.notification_time:
                 self.notification_time = current_time + 3

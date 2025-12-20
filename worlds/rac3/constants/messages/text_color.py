@@ -1,7 +1,7 @@
 class RAC3TEXTCOLOR:
-    NORMAL = "NORMAL"
-    BLUE = "BLUE"
-    GREEN = "GREEN"
-    MAGENTA = "MAGENTA"
-    WHITE = "WHITE"
-    BLACK = "BLACK"
+    NORMAL = "\\Normal" # capital N to avoid conflict with \n newline
+    BLUE = "\\blue"
+    GREEN = "\\green"
+    MAGENTA = "\\magenta"
+    WHITE = "\\white"
+    BLACK = "\\black"
