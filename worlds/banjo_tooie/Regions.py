@@ -1583,8 +1583,7 @@ def create_regions(self):
                 region_map[region].append(location)
 
     self.multiworld.regions.extend(create_region(
-        self.multiworld,
-        self.player,
+        self,
         active_locations,
         region,
         locations
@@ -1601,17 +1600,17 @@ def create_regions(self):
         )
 
 
-def create_region(multiworld, player: int, active_locations, name: str, locations=None):
-    ret = Region(name, player, multiworld)
+def create_region(world, active_locations, name: str, locations=None):
+    ret = Region(name, world.player, world.multiworld)
     if locations:
         loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
-        if multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_hag1\
+        if world.options.victory_condition.value == VictoryCondition.option_hag1\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
-        elif multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_wonderwing_challenge\
+        elif world.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
-        elif multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_boss_hunt_and_hag1\
+        elif world.options.victory_condition.value == VictoryCondition.option_boss_hunt_and_hag1\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
         else:
