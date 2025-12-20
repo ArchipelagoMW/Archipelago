@@ -89,14 +89,14 @@ class Hint:
         cryptic_hint_worlds = [
             tooie_world
             for tooie_world in tooie_worlds
-            if tooie_world.options.hint_clarity == HintClarity.option_cryptic
+            if tooie_world.options.hint_clarity.value == HintClarity.option_cryptic
         ]
         return cryptic_hint_worlds[-1] == world
 
     # TODO: have some fun with Grunty's rhymes here
     @property
     def hint_data(self) -> HintData:
-        if self.world.options.hint_clarity == HintClarity.option_clear:
+        if self.world.options.hint_clarity.value == HintClarity.option_clear:
             text = self.__clear_hint_text
         else:
             text = self.__cryptic_hint_text
@@ -217,7 +217,7 @@ def generate_hints(world: "BanjoTooieWorld"):
     generate_move_hints(world, hints)
     generate_slow_locations_hints(world, hints)
 
-    if world.options.hint_clarity == HintClarity.option_cryptic:
+    if world.options.hint_clarity.value == HintClarity.option_cryptic:
         Hint.fill_item_requirement_cache(hints)
 
     hint_data = [hint.hint_data for hint in hints]
@@ -226,7 +226,7 @@ def generate_hints(world: "BanjoTooieWorld"):
 
     # Since these are static variables, we have to manually empty them.
     # Using del messes up with tests, so we're simply deleting the reference.
-    if world.options.hint_clarity == HintClarity.option_cryptic:
+    if world.options.hint_clarity.value == HintClarity.option_cryptic:
         if Hint.is_last_cryptic_hint_world(world):
             Hint.item_requirement_cache = dict()
             Hint.final_state = None
@@ -325,7 +325,7 @@ def generate_slow_locations_hints(world: "BanjoTooieWorld", hints: List[Hint]):
     hint_shuffled = sorted(hint_shuffled, key=lambda x: world.random.random() / x[1])
 
     new_hints = [elem for elem, _ in hint_shuffled]
-    new_hints = new_hints[:world.options.signpost_hints - len(hints)]
+    new_hints = new_hints[:world.options.signpost_hints.value - len(hints)]
     hints.extend(new_hints)
 
     # At this point, we went through all the bad locations, and we still don't have enough hints.
@@ -334,7 +334,7 @@ def generate_slow_locations_hints(world: "BanjoTooieWorld", hints: List[Hint]):
                            if location.name not in local_hint_location_names]
     world.random.shuffle(remaining_locations)
 
-    while len(hints) < world.options.signpost_hints:
+    while len(hints) < world.options.signpost_hints.value:
         hints.append(Hint(world, remaining_locations.pop()))
 
 
@@ -372,7 +372,7 @@ def get_worst_location_names(world: "BanjoTooieWorld"):
         locationName.SCRAT,
     ])
 
-    if world.options.randomize_jinjos:
+    if world.options.randomize_jinjos.value:
         worst_location_names.extend([
             locationName.JIGGYIH7,
             locationName.JIGGYIH8,
@@ -382,12 +382,12 @@ def get_worst_location_names(world: "BanjoTooieWorld"):
             locationName.JINJOGI5,
         ])
 
-    if world.options.randomize_glowbos:
+    if world.options.randomize_glowbos.value:
         worst_location_names.extend([
             locationName.GLOWBOMEG,
         ])
 
-    if world.options.randomize_cheato:
+    if world.options.randomize_cheato.value:
         worst_location_names.extend([
             locationName.CHEATOWW3,
             locationName.CHEATOJR1,
@@ -396,18 +396,18 @@ def get_worst_location_names(world: "BanjoTooieWorld"):
         ])
 
     # The 5 most expensive silos
-    if world.options.randomize_bt_moves:
+    if world.options.randomize_bt_moves.value:
         sorted_silos = [k for k, v in sorted(world.jamjars_siloname_costs.items(), key=lambda item: item[1])]
         for _ in range(5):
             worst_location_names.append(sorted_silos.pop())
 
-    if world.options.cheato_rewards:
+    if world.options.cheato_rewards.value:
         worst_location_names.extend([
             locationName.CHEATOR4,
             locationName.CHEATOR5,
         ])
 
-    if world.options.honeyb_rewards:
+    if world.options.honeyb_rewards.value:
         worst_location_names.extend([
             locationName.HONEYBR5,
         ])
@@ -448,7 +448,7 @@ def get_bad_location_names(world: "BanjoTooieWorld"):
         locationName.SCRAT,
     ])
 
-    if world.options.randomize_jinjos:
+    if world.options.randomize_jinjos.value:
         bad_location_names.extend([
             locationName.JIGGYIH5,
             locationName.JIGGYIH6,
@@ -457,7 +457,7 @@ def get_bad_location_names(world: "BanjoTooieWorld"):
             locationName.JINJOCC1,
         ])
 
-    if world.options.randomize_cheato:
+    if world.options.randomize_cheato.value:
         bad_location_names.extend([
             locationName.CHEATOCC2,
             locationName.CHEATOTL1,
@@ -465,17 +465,17 @@ def get_bad_location_names(world: "BanjoTooieWorld"):
         ])
 
     # The next 5 most expensive silos
-    if world.options.randomize_bt_moves:
+    if world.options.randomize_bt_moves.value:
         sorted_silos = [k for k, v in sorted(world.jamjars_siloname_costs.items(), key=lambda item: item[1])]
         for _ in range(6, 10):
             bad_location_names.append(sorted_silos.pop())
 
-    if world.options.cheato_rewards:
+    if world.options.cheato_rewards.value:
         bad_location_names.extend([
             locationName.CHEATOR3,
         ])
 
-    if world.options.honeyb_rewards:
+    if world.options.honeyb_rewards.value:
         bad_location_names.extend([
             locationName.HONEYBR4,
         ])
@@ -492,7 +492,7 @@ def get_move_locations(world: "BanjoTooieWorld") -> List[Location]:
     all_moves_names = []
 
     # We don't want BT moves to be hinted when they're in the vanilla location.
-    if world.options.randomize_bt_moves:
+    if world.options.randomize_bt_moves.value:
         all_moves_names.extend(moves_table.keys())
     all_moves_names.extend(bk_moves_table.keys())
     all_moves_names.extend(progressive_ability_table.keys())

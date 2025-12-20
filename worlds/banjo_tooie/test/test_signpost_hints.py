@@ -24,7 +24,7 @@ class TestSignpostsHints(BanjoTooieTestBase):
         assert len(self.world.hints) == 61
 
         non_joke_hints = len([hint_data for hint_data in self.world.hints.values() if hint_data.location_id])
-        assert non_joke_hints == self.world.options.signpost_hints
+        assert non_joke_hints == self.world.options.signpost_hints.value
 
     def test_move_hint_count(self) -> None:
         move_names = [
@@ -45,13 +45,13 @@ class TestSignpostsHints(BanjoTooieTestBase):
 
         # There can be more if slow locations are also hinted.
         possible_moves = 0
-        if self.world.options.randomize_bt_moves:
+        if self.world.options.randomize_bt_moves.value:
             possible_moves += 24
-        if self.world.options.randomize_bk_moves == RandomizeBKMoveList.option_all:
+        if self.world.options.randomize_bk_moves.value == RandomizeBKMoveList.option_all:
             possible_moves += 16
 
-        assert move_hints >= min(self.world.options.signpost_move_hints, possible_moves,
-                                 self.world.options.signpost_hints)
+        assert move_hints >= min(self.world.options.signpost_move_hints.value, possible_moves,
+                                 self.world.options.signpost_hints.value)
 
 
 class TestClearSignpostsHints(TestSignpostsHints):

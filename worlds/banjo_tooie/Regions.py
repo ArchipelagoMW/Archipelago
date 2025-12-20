@@ -1479,8 +1479,8 @@ def create_regions(self):
     active_locations = self.location_name_to_id
     region_map = copy.deepcopy(BANJO_TOOIE_REGIONS)
 
-    if self.options.victory_condition == VictoryCondition.option_minigame_hunt\
-            or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
+    if self.options.victory_condition.value == VictoryCondition.option_minigame_hunt\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
         region_map[regionName.MT].append(locationName.MUMBOTKNGAME1)
         region_map[regionName.GM].append(locationName.MUMBOTKNGAME2)
         region_map[regionName.WW].append(locationName.MUMBOTKNGAME3)
@@ -1497,9 +1497,9 @@ def create_regions(self):
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME14)
         region_map[regionName.CC].append(locationName.MUMBOTKNGAME15)
 
-    if self.options.victory_condition == VictoryCondition.option_boss_hunt\
-            or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge\
-            or self.options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1:
+    if self.options.victory_condition.value == VictoryCondition.option_boss_hunt\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge\
+            or self.options.victory_condition.value == VictoryCondition.option_boss_hunt_and_hag1:
         region_map[regionName.MTBOSS].append(locationName.MUMBOTKNBOSS1)
         region_map[regionName.GMBOSS].append(locationName.MUMBOTKNBOSS2)
         region_map[regionName.WWBOSS].append(locationName.MUMBOTKNBOSS3)
@@ -1510,8 +1510,8 @@ def create_regions(self):
         region_map[regionName.HPFBOSS].append(locationName.MUMBOTKNBOSS7)
         region_map[regionName.CCBOSS].append(locationName.MUMBOTKNBOSS8)
 
-    if self.options.victory_condition == VictoryCondition.option_jinjo_family_rescue\
-            or self.options.victory_condition == VictoryCondition.option_wonderwing_challenge:
+    if self.options.victory_condition.value == VictoryCondition.option_jinjo_family_rescue\
+            or self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO1)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO2)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO3)
@@ -1522,14 +1522,14 @@ def create_regions(self):
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO8)
         region_map[regionName.IOHJV].append(locationName.MUMBOTKNJINJO9)
 
-    if self.options.honeyb_rewards:
+    if self.options.honeyb_rewards.value:
         region_map[regionName.IOHPL].append(locationName.HONEYBR1)
         region_map[regionName.IOHPL].append(locationName.HONEYBR2)
         region_map[regionName.IOHPL].append(locationName.HONEYBR3)
         region_map[regionName.IOHPL].append(locationName.HONEYBR4)
         region_map[regionName.IOHPL].append(locationName.HONEYBR5)
 
-    if self.options.skip_puzzles:
+    if self.options.skip_puzzles.value:
         region_map[regionName.IOHWH].append(locationName.W1)
         region_map[regionName.IOHWH].append(locationName.W2)
         region_map[regionName.IOHWH].append(locationName.W3)
@@ -1540,43 +1540,43 @@ def create_regions(self):
         region_map[regionName.IOHWH].append(locationName.W8)
         region_map[regionName.IOHWH].append(locationName.W9)
 
-    if self.options.nestsanity:
+    if self.options.nestsanity.value:
         nest_map = copy.deepcopy(NEST_REGIONS)
         for region, locations in nest_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_signposts:
+    if self.options.randomize_signposts.value:
         signpost_map = copy.deepcopy(SIGNPOST_REGIONS)
         for region, locations in signpost_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_silos:
+    if self.options.randomize_silos.value:
         silo_map = copy.deepcopy(SILO_REGIONS)
         for region, locations in silo_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_warp_pads:
+    if self.options.randomize_warp_pads.value:
         warp_map = copy.deepcopy(WARP_PAD_REGIONS)
         for region, locations in warp_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_tickets:
+    if self.options.randomize_tickets.value:
         ticket_map = copy.deepcopy(BTTICKETS_REGIONS)
         for region, locations in ticket_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_green_relics:
+    if self.options.randomize_green_relics.value:
         relic_map = copy.deepcopy(GREEN_RELIC_REGIONS)
         for region, locations in relic_map.items():
             for location in locations:
                 region_map[region].append(location)
 
-    if self.options.randomize_beans:
+    if self.options.randomize_beans.value:
         beans_map = copy.deepcopy(BEANS_REGIONS)
         for region, locations in beans_map.items():
             for location in locations:
@@ -1589,7 +1589,7 @@ def create_regions(self):
         region,
         locations
     ) for region, locations in region_map.items())
-    if self.options.victory_condition in (
+    if self.options.victory_condition.value in (
                 VictoryCondition.option_hag1,
                 VictoryCondition.option_wonderwing_challenge,
                 VictoryCondition.option_boss_hunt_and_hag1
@@ -1605,13 +1605,13 @@ def create_region(multiworld, player: int, active_locations, name: str, location
     ret = Region(name, player, multiworld)
     if locations:
         loc_to_id = {loc: active_locations.get(loc, 0) for loc in locations if active_locations.get(loc, None)}
-        if multiworld.worlds[player].options.victory_condition == VictoryCondition.option_hag1\
+        if multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_hag1\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
-        elif multiworld.worlds[player].options.victory_condition == VictoryCondition.option_wonderwing_challenge\
+        elif multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_wonderwing_challenge\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
-        elif multiworld.worlds[player].options.victory_condition == VictoryCondition.option_boss_hunt_and_hag1\
+        elif multiworld.worlds[player].options.victory_condition.value == VictoryCondition.option_boss_hunt_and_hag1\
                 and locationName.HAG1 in locations:
             ret.add_locations({locationName.HAG1: None})
         else:
@@ -1915,10 +1915,10 @@ def connect_regions(self):
 
     region_GI1 = self.get_region(regionName.GI1)
     region_GI1.add_exits({regionName.GIO, regionName.GIES, regionName.GI2, regionName.GIWARP, regionName.CHUFFY}, {
-                        regionName.GIO: lambda state: rules.split_up(state) or self.options.open_gi_frontdoor,
+                        regionName.GIO: lambda state: rules.split_up(state) or self.options.open_gi_frontdoor.value,
                         regionName.GI2: lambda state: rules.F1_to_F2(state),
                         regionName.CHUFFY: lambda state: rules.gi_to_chuffy(state),
-                        regionName.GIWARP: lambda state: (rules.split_up(state) or self.options.open_gi_frontdoor) and state.has(itemName.WARPGI1, player),
+                        regionName.GIWARP: lambda state: (rules.split_up(state) or self.options.open_gi_frontdoor.value) and state.has(itemName.WARPGI1, player),
                         })
 
     region_GIWARP = self.get_region(regionName.GIWARP)

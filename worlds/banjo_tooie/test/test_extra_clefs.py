@@ -13,8 +13,8 @@ class TestClefs(BanjoTooieTestBase):
 
     def test_clef_count(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
-        assert item_pool_names.count(itemName.BASS) == self.world.options.bass_clef_amount
-        assert item_pool_names.count(itemName.TREBLE) == self.world.options.extra_trebleclefs_count + 9
+        assert item_pool_names.count(itemName.BASS) == self.world.options.bass_clef_amount.value
+        assert item_pool_names.count(itemName.TREBLE) == self.world.options.extra_trebleclefs_count.value + 9
 
     def test_notes_count(self) -> None:
         item_pool_names = [item.name for item in self.multiworld.itempool if item.advancement]
@@ -24,8 +24,8 @@ class TestClefs(BanjoTooieTestBase):
 
         assert item_pool_names.count(itemName.NOTE)\
             == max(progression_notes_default
-                   - 2 * self.world.options.bass_clef_amount
-                   - 4 * self.world.options.extra_trebleclefs_count,
+                   - 2 * self.world.options.bass_clef_amount.value
+                   - 4 * self.world.options.extra_trebleclefs_count.value,
                    0)
 
 
