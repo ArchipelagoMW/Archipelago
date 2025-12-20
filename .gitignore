@@ -32,7 +32,6 @@
 *.apsave
 *.BIN
 *.puml
-*.lnk
 
 setups
 build
