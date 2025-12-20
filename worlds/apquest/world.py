@@ -30,6 +30,7 @@ class APQuestWorld(World):
     # (Note: options.py has been imported as "apquest_options" at the top of this file to avoid a name conflict)
     options_dataclass = apquest_options.APQuestOptions
     options: apquest_options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+
     # If we have option groups and/or option presets, we need to specify these here as well.
     option_groups = apquest_options.option_groups
     options_presets = apquest_options.option_presets
