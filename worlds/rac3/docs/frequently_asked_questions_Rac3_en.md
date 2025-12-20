@@ -35,10 +35,25 @@ City) these are collected into a location group called  `Unstable`. If you gener
 is in the **excluded locations** section (it should be there by default along with some ones).
 Due to how problematic this has become, the locations in the `Unstable` group have straight up been skipped during generation to prevent issues until a solution has been found.
 
+## Ok, but how do I know which locations are getting excluded with each option?
+
+Go to the [Locations](https://github.com/Taoshix/Archipelago-RaC3/blob/staging/worlds/rac3/constants/data/location.py#L1254) file and search for the following tags with CTRL+F
+
+- Unstable - RAC3TAG.UNSTABLE
+- Weapons - RAC3TAG.WEAPONS
+- Gadgets - RAC3TAG.GADGETS
+
+Any location including one of those tags will be a part of the location group. 
+A location can have multiple tags and be part of multiple groups at the same time.
+
 ## I'm missing Holostar Studios and/or Qwark's hideout in my ship, but I got their infobots, what should I do?
 
 These 2 specific planets have softlock preventions in place. In order to visit Holostar you need to have the hypershot
 and the hacker. For Hideout, you need to have the refractor to avoid being softlocked on Phoenix Rescue.
+
+## My cosmetics are missing, what can I do?
+
+The client tells you to reload the save file as soon you start the game on Veldin. To reapply cosmetics, restart the client and reconnect, then reload your save file without saving first.
 
 ## How do i toggle death link?
 
@@ -47,14 +62,6 @@ You can run the /death_link command in the Ratchet and Clank 3 client to toggle 
 ## Sometimes the message popup does not show when I send/receive items
 
 If the game is paused, you are in a menu, selecting a mission etc the game cannot display the message box we use to show these messages.
-
-## Ok, but how do I know which locations are getting excluded with each option?
-
-Please refer to these:
-
-- [Unstable](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L581-L596)
-- [Weapons](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L509-L527)
-- [Gadgets](https://github.com/Taoshix/Archipelago-RaC3/blob/main/worlds/rac3/Locations.py#L529-L538)
 
 
 
