@@ -596,7 +596,6 @@ Atlantica_Checks = {
     LocationName.MusicalBlizzardElement: WorldLocationData(0x1DF4, 1)
 }
 SoraLevels = {
-    # LocationName.Lvl1:  WorldLocationData(0xFFFF,1),
     LocationName.Lvl2:  WorldLocationData(0xFFFF, 2),
     LocationName.Lvl3:  WorldLocationData(0xFFFF, 3),
     LocationName.Lvl4:  WorldLocationData(0xFFFF, 4),
@@ -698,7 +697,6 @@ SoraLevels = {
 }
 
 ValorLevels = {
-    # LocationName.Valorlvl1:  WorldLocationData(0x32F6, 1),
     LocationName.Valorlvl2: WorldLocationData(0x32F6, 2),
     LocationName.Valorlvl3: WorldLocationData(0x32F6, 3),
     LocationName.Valorlvl4: WorldLocationData(0x32F6, 4),
@@ -708,7 +706,6 @@ ValorLevels = {
 }
 
 WisdomLevels = {
-    # LocationName.Wisdomlvl1: WorldLocationData(0x332E, 1),
     LocationName.Wisdomlvl2: WorldLocationData(0x332E, 2),
     LocationName.Wisdomlvl3: WorldLocationData(0x332E, 3),
     LocationName.Wisdomlvl4: WorldLocationData(0x332E, 4),
@@ -718,7 +715,6 @@ WisdomLevels = {
 }
 
 LimitLevels = {
-    # LocationName.Limitlvl1:  WorldLocationData(0x3366, 1),
     LocationName.Limitlvl2: WorldLocationData(0x3366, 2),
     LocationName.Limitlvl3: WorldLocationData(0x3366, 3),
     LocationName.Limitlvl4: WorldLocationData(0x3366, 4),
@@ -727,7 +723,6 @@ LimitLevels = {
     LocationName.Limitlvl7: WorldLocationData(0x3366, 7),
 }
 MasterLevels = {
-    # LocationName.Masterlvl1: WorldLocationData(0x339E, 1),
     LocationName.Masterlvl2: WorldLocationData(0x339E, 2),
     LocationName.Masterlvl3: WorldLocationData(0x339E, 3),
     LocationName.Masterlvl4: WorldLocationData(0x339E, 4),
@@ -736,7 +731,6 @@ MasterLevels = {
     LocationName.Masterlvl7: WorldLocationData(0x339E, 7),
 }
 FinalLevels = {
-    # LocationName.Finallvl1:  WorldLocationData(0x33D6,1),
     LocationName.Finallvl2: WorldLocationData(0x33D6, 2),
     LocationName.Finallvl3: WorldLocationData(0x33D6, 3),
     LocationName.Finallvl4: WorldLocationData(0x33D6, 4),

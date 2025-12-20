@@ -620,24 +620,6 @@ def patch_kh2(self, output_directory):
         "he.yml":       yaml.dump(self.cups_text, line_break="\n")
     }
 
-    if self.options.HarderAS == True:
-        self.hb32 = ("Program 0x73\nParty DEFAULT\nMission 0x195 \"HB32_FM_VEX\"\nBattleLevel 99\nSpawn \"b_80\"\n" +
-        "Program 0x92\nParty DEFAULT\nMission 0x195 \"HB32_FM_VEX\"\nBattleLevel 99\nSpawn \"b_80\"")
-        self.hb33 = ("Program 0x8E\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
-        "Mission 0x196 \"HB33_FM_LEX\"\nBattleLevel 99\nSpawn \"b_80\"\n\nProgram 0x9B\nAllocEnemy 3670016\nParty DEFAULT" +
-        "Mission 0x199 \"HB33_FM_LAR\"\nBattleLevel 99\nSpawn \"b_81\"\n\nProgram 0x8F\nAllocEnemy 3670016\nParty DEFAULT" +
-        "Mission 0x199 \"HB33_FM_LAR\"\nBattleLevel 99\nSpawn \"b_81\"")
-        self.hb34 = ("Program 0x97\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
-        "Mission 0x197 \"HB34_FM_ZEX\"\nBattleLevel 99\nSpawn \"b_80\"")
-        self.hb38 = ("Program 0x91\nAllocEnemy 3145728\nParty DEFAULT\nAllocEffect 0x100000 0x80000" +
-        "Mission 0x198 \"HB38_FM_MAR\"\nBattleLevel 99\nSpawn \"b_80\"")
-        openkhmod.update({
-        "hb32btl.script": self.hb32,
-        "hb33btl.script": self.hb33,
-        "hb34btl.script": self.hb34,
-        "hb38btl.script": self.hb38,
-        })
-
     ## I think I overlooked a really easy way to find the data folder,
     ## but it has to determine if it's a local client generating,
     ## if it's a server generating, if it's a build, or on the complete
@@ -649,30 +631,57 @@ def patch_kh2(self, output_directory):
     apworldloc = os.path.join("worlds","kh2","data")
     if os.path.exists(apworldloc):
         try:
-            with open(os.path.join(apworldloc, "khapicon.png"),'rb') as icon, \
-                 open(os.path.join(apworldloc, "preview.png"),'rb') as preview:
+            with open(os.path.join(apworldloc, "khapicon.png"),"rb") as icon, \
+                 open(os.path.join(apworldloc, "preview.png"),"rb") as preview:
                 iconbytes = icon.read()
                 previewbytes = preview.read()
             openkhmod["icon.png"] = iconbytes
             openkhmod["preview.png"] = previewbytes
         except IOError as openerror:
             logging.warning(openerror)
+        try:
+            with open(os.path.join(apworldloc, "hb32btl.script"),"rb") as hb32, \
+                 open(os.path.join(apworldloc, "hb33btl.script"),"rb") as hb33, \
+                 open(os.path.join(apworldloc, "hb34btl.script"),"rb") as hb34, \
+                 open(os.path.join(apworldloc, "hb38btl.script"),"rb") as hb38:
+                if self.options.HarderAS:
+                    openkhmod["hb32.script"] = hb32.read()
+                    openkhmod["hb33.script"] = hb33.read()
+                    openkhmod["hb34.script"] = hb34.read()
+                    openkhmod["hb38.script"] = hb38.read()
+        except IOError as openerror:
+            logging.warning(openerror)
+
 
     # client install generating
     apworldloc = os.path.join("lib","worlds")
-    if not os.path.isfile(Utils.user_path(apworldloc, 'kh2.apworld')):
+    if not os.path.isfile(Utils.user_path(apworldloc, "kh2.apworld")):
         apworldloc = os.path.join("custom_worlds", "")
     if os.path.exists(os.path.join(apworldloc,"kh2.apworld")):
         try:
             with zipfile.ZipFile(Utils.user_path(os.path.join(
-                                 apworldloc, 'kh2.apworld')), 'r') as apworld_archive:
+                                 apworldloc, "kh2.apworld")), "r") as apworld_archive:
                 # zipfile requires the forward slash
-                with apworld_archive.open('kh2/data/khapicon.png', 'r') as icon, \
-                     apworld_archive.open('kh2/data/preview.png', 'r') as preview:
+                with apworld_archive.open("kh2/data/khapicon.png", "r") as icon, \
+                     apworld_archive.open("kh2/data/preview.png", "r") as preview:
                     iconbytes = icon.read()
                     previewbytes = preview.read()
                 openkhmod["icon.png"] = iconbytes
                 openkhmod["preview.png"] = previewbytes
+        except IOError as openerror:
+            logging.warning(openerror)
+        try:
+            with zipfile.ZipFile(Utils.user_path(os.path.join(
+                                 apworldloc, "kh2.apworld")), "r") as apworld_archive:
+                with apworld_archive.open("kh2/data/hb32btl.script","r") as hb32, \
+                     apworld_archive.open("kh2/data/hb33btl.script","r") as hb33, \
+                     apworld_archive.open("kh2/data/hb34btl.script","r") as hb34, \
+                     apworld_archive.open("kh2/data/hb38btl.script","r") as hb38:
+                    if self.options.HarderAS:
+                        openkhmod["hb32.script"] = hb32.read()
+                        openkhmod["hb33.script"] = hb33.read()
+                        openkhmod["hb34.script"] = hb34.read()
+                        openkhmod["hb38.script"] = hb38.read()
         except IOError as openerror:
             logging.warning(openerror)
 
