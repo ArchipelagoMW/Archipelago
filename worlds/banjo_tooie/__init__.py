@@ -667,7 +667,6 @@ class BanjoTooieWorld(World):
     def choose_starter_egg(self) -> None:
         if self.options.egg_behaviour == EggsBehaviour.option_random_starting_egg or \
                 self.options.egg_behaviour == EggsBehaviour.option_simple_random_starting_egg:
-            eggs: list = []
             if self.options.egg_behaviour == EggsBehaviour.option_random_starting_egg:
                 eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]
             else:
