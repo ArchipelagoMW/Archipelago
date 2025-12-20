@@ -229,6 +229,7 @@ class Rac3Interface(GameInterface):
     inside_hacker_puzzle: bool = False
     notification_queue: list[tuple] = []
     notification_time: float | None = None
+    notification_merge_count: int = 1
     message_display: bool = False
 
     # Called at once when client started
@@ -364,7 +365,7 @@ class Rac3Interface(GameInterface):
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
                 self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + randint(1, 100))
             case RAC3ITEM.JACKPOT:
-                _time = int(time.time() + uniform(10, 30))
+                _time = round(time.time() + uniform(10, 30), 2)
                 self.timers[name + str(_time)] = _time
                 self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
@@ -703,23 +704,37 @@ class Rac3Interface(GameInterface):
             self.verify_quick_select_and_last_used()
 
     def notification_cycler(self):
-        """Update the current message on display in game"""
         current_time = time.time()
         tyhrranoid_game = self.player_type == RAC3PLAYERTYPE.TYHRRANOID and self.action == 0x58
         if self.notification_queue:
             if not self.notification_time:
-                self.notification_time = current_time + 5
+                self.notification_time = current_time + 3
             if not tyhrranoid_game:
                 if self.notification_time < current_time and not self.message_display:
-                    self.notification_queue.pop(0)
-                    self.notification_time = current_time + 5
+                    # Pop the number of messages that were displayed last cycle
+                    for _ in range(self.notification_merge_count):
+                        if self.notification_queue:
+                            self.notification_queue.pop(0)
+                    self.notification_time = current_time + 3
                     self.reset_messagebox_theme()
                     logger.debug(f'notification queue: {len(self.notification_queue)}')
-                # else:
-                # logger.debug(f"{self.notification_time - current_time}, {self._read32(RAC3MESSAGEBOX.TIMER)}")
                 if self.notification_queue:
-                    message, theme = self.notification_queue[0]
-                    msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(message[:200:])
+                    # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
+                    merged_message, theme = self.notification_queue[0]
+                    merge_count = 1
+                    total_length = len(merged_message)
+                    for i in range(1, min(3, len(self.notification_queue))):
+                        next_message, next_theme = self.notification_queue[i]
+                        # +2 for the '\n' separator
+                        add_length = 2 + len(next_message)
+                        if next_theme == theme and (total_length + add_length) <= 225:
+                            merged_message += "\\n" + next_message
+                            total_length += add_length
+                            merge_count += 1
+                        else:
+                            break
+                    self.notification_merge_count = merge_count
+                    msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
                     if not self.message_display:
                         self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
                     else:
@@ -729,13 +744,14 @@ class Rac3Interface(GameInterface):
                         read_message = self._read_bytes(RAC3MESSAGEBOX.MESSAGE, len(write_message))
                         if read_message != write_message:
                             self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
-                            self.notification_time = current_time + 5
+                            self.notification_time = current_time + 3
                             logger.debug(f'Warning: Incorrect Display message detected')
-                            logger.debug(f'Message: {message}')
+                            logger.debug(f'Message: {merged_message}')
                             logger.debug(f'{read_message}')
                             logger.debug(f'{write_message}')
         else:
             self.notification_time = None
+            self.notification_merge_count = 1
 
     def dump_info(self, slot_data: dict[str, Any]):
         logger.info(f'Collected Items: {self.UnlockItem}')
@@ -950,7 +966,7 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
 
-        self._write32(RAC3MESSAGEBOX.TIMER, 0x258)
+        self._write32(RAC3MESSAGEBOX.TIMER, 0x168)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
