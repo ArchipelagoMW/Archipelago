@@ -567,15 +567,16 @@ def flag_mission_based_item_excludes(world: SC2World, item_list: List[FilterItem
         mission for mission in missions
         if MissionFlag.Nova in mission.flags
            or (
-                   world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                   and MissionFlag.WoLNova in mission.flags
+                world.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+                and MissionFlag.WoLNova in mission.flags
            )
     ]
 
     kerrigan_is_present = (
-            len(kerrigan_missions) > 0
-            and world.options.kerrigan_presence in kerrigan_unit_available
-            and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
+        len(kerrigan_missions) > 0
+        and world.options.kerrigan_presence in kerrigan_unit_available
+        and SC2Campaign.HOTS in get_enabled_campaigns(world) # TODO: Kerrigan available all Zerg/Everywhere
+        and SC2Race.ZERG.get_title() in world.options.selected_races.value
     )
 
     # TvX build missions -- check flags

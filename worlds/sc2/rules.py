@@ -1142,7 +1142,10 @@ class SC2Logic:
         return levels >= target
 
     def basic_kerrigan(self, state: CollectionState, story_tech_available=True) -> bool:
-        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+        if story_tech_available and (
+            self.grant_story_tech == GrantStoryTech.option_grant
+            or not self.kerrigan_unit_available
+        ):
             return True
         # One active ability that can be used to defeat enemies directly
         if not state.has_any(
@@ -1166,7 +1169,10 @@ class SC2Logic:
         return False
 
     def two_kerrigan_actives(self, state: CollectionState, story_tech_available=True) -> bool:
-        if story_tech_available and self.grant_story_tech == GrantStoryTech.option_grant:
+        if story_tech_available and (
+            self.grant_story_tech == GrantStoryTech.option_grant
+            or not self.kerrigan_unit_available
+        ):
             return True
         return state.count_from_list(item_groups.kerrigan_logic_active_abilities, self.player) >= 2
 
@@ -2361,6 +2367,7 @@ class SC2Logic:
             # Note(mm): This check isn't necessary as self.kerrigan_levels cover it,
             # and it's not fully desirable in future when we support non-grant story tech + kerriganless.
             # or not self.kerrigan_presence
+            or not self.kerrigan_unit_available
             or state.has_any((
                 # Cases tested by Snarky
                 item_names.KERRIGAN_KINETIC_BLAST,
