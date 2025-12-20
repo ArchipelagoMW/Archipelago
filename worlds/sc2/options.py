@@ -1597,8 +1597,8 @@ def get_disabled_campaigns(world: 'SC2World') -> Set[SC2Campaign]:
 
 def get_disabled_flags(world: 'SC2World') -> MissionFlag:
     excluded = (
-            (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
-            ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
+        (MissionFlag.Terran | MissionFlag.Zerg | MissionFlag.Protoss)
+        ^ functools.reduce(lambda a, b: a | b, [race.get_mission_flag() for race in get_enabled_races(world)])
     )
     # filter out no-build missions
     if not world.options.shuffle_no_build.value:

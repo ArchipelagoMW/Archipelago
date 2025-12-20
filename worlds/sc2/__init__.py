@@ -12,8 +12,10 @@ from .item.item_tables import (
     get_full_item_list,
     not_balanced_starting_units, WEAPON_ARMOR_UPGRADE_MAX_LEVEL,
 )
-from .item import FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents, \
+from .item import (
+    FilterItem, ItemFilterFlags, StarcraftItem, item_groups, item_names, item_tables, item_parents,
     ZergItemType, ProtossItemType, ItemData
+)
 from .locations import (
 	get_locations, DEFAULT_LOCATION_LIST, get_location_types, get_location_flags,
     get_plando_locations, LocationType, lookup_location_id_to_type
@@ -233,14 +235,14 @@ class SC2World(World):
         enabled_campaigns = get_enabled_campaigns(self)
         slot_data["plando_locations"] = get_plando_locations(self)
         slot_data["use_nova_nco_fallback"] = (
-                enabled_campaigns == {SC2Campaign.NCO}
-                and self.options.mission_order == MissionOrder.option_vanilla
+            enabled_campaigns == {SC2Campaign.NCO}
+            and self.options.mission_order == MissionOrder.option_vanilla
         )
         if (self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                or (
-                        self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_auto
-                        and MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys()
-                )
+            or (
+                self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_auto
+                and MissionFlag.Nova in self.custom_mission_order.get_used_flags().keys()
+            )
         ):
             slot_data["use_nova_wol_fallback"] = False
         else:
@@ -286,8 +288,8 @@ class SC2World(World):
         assert self.logic is not None
         self.logic.total_mission_count = self.custom_mission_order.get_mission_count()
         if (
-                self.options.generic_upgrade_missions > 0
-                and self.options.required_tactics != RequiredTactics.option_no_logic
+            self.options.generic_upgrade_missions > 0
+            and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
             # Attempt to resolve a situation when the option is too high for the mission order rolled
             weapon_armor_item_names = [
@@ -304,8 +306,8 @@ class SC2World(World):
 
             self._fill_needed_items(state_with_kerrigan_levels, weapon_armor_item_names, WEAPON_ARMOR_UPGRADE_MAX_LEVEL)
         if (
-                self.options.kerrigan_levels_per_mission_completed > 0
-                and self.options.required_tactics != RequiredTactics.option_no_logic
+            self.options.kerrigan_levels_per_mission_completed > 0
+            and self.options.required_tactics != RequiredTactics.option_no_logic
         ):
             # Attempt to solve being locked by Kerrigan level requirements
             self._fill_needed_items(lambda: self.multiworld.get_all_state(False), [item_names.KERRIGAN_LEVELS_1], 70)
@@ -545,9 +547,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
                 item.flags |= ItemFilterFlags.FilterExcluded
         if (not protoss_build_missions
             and item.data.type in (
-                        item_tables.ProtossItemType.Unit,
-                        item_tables.ProtossItemType.Unit_2,
-                        item_tables.ProtossItemType.Building,
+                item_tables.ProtossItemType.Unit,
+                item_tables.ProtossItemType.Unit_2,
+                item_tables.ProtossItemType.Building,
             )
         ):
             # Note(mm): This doesn't exclude things like automated assimilators or warp gate improvements
@@ -555,9 +557,9 @@ def flag_excludes_by_faction_presence(world: SC2World, item_list: List[FilterIte
             if (SC2Mission.TEMPLAR_S_RETURN not in missions
                 or world.options.grant_story_tech.value == GrantStoryTech.option_grant
                 or item.name not in (
-                            item_names.IMMORTAL, item_names.ANNIHILATOR,
-                            item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
-                            item_names.SENTRY, item_names.HIGH_TEMPLAR,
+                    item_names.IMMORTAL, item_names.ANNIHILATOR,
+                    item_names.COLOSSUS, item_names.VANGUARD, item_names.REAVER, item_names.DARK_TEMPLAR,
+                    item_names.SENTRY, item_names.HIGH_TEMPLAR,
                 )
             ):
                 item.flags |= ItemFilterFlags.FilterExcluded
