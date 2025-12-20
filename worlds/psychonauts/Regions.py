@@ -512,6 +512,8 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
     RegionName.WWMADusterLev: [
         LocationName.BlacksmithsRightBuildingSteamertrunkTag,
     ],
+    RegionName.WWMAFullAccess: [
+    ],
     RegionName.WWMADusterLevPyro: [
         LocationName.BlacksmithsHaybaleTheMusket,
     ],
@@ -554,6 +556,8 @@ DEFAULT_REGIONS: Dict[str, List[str]] = {
     ],
     RegionName.BVRBLogs: [
         LocationName.BurnTheLogsDufflebag,
+    ],
+    RegionName.BVRBFullAccess: [
     ],
     RegionName.BVES: [
         LocationName.SanctuaryGroundPurse,
@@ -820,8 +824,8 @@ def create_figments_80_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.LOMAShield, {LocationName.LOFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLev, {LocationName.WWFigments80})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, {LocationName.BVFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMAFullAccess, {LocationName.WWFigments80})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBFullAccess, {LocationName.BVFigments80})
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments80})
 
 
@@ -834,8 +838,8 @@ def create_figments_100_locations(multiworld: MultiWorld, player: int):
     _add_locations_to_existing_region(multiworld, player, RegionName.LOMAShield, {LocationName.LOFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.MMDMRollingPin, {LocationName.MMFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.THFB, {LocationName.THFigments100})
-    _add_locations_to_existing_region(multiworld, player, RegionName.WWMADusterLevPyro, {LocationName.WWFigments100})
-    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBDuster, {LocationName.BVFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.WWMAFullAccess, {LocationName.WWFigments100})
+    _add_locations_to_existing_region(multiworld, player, RegionName.BVRBFullAccess, {LocationName.BVFigments100})
     _add_locations_to_existing_region(multiworld, player, RegionName.MCTCEscort, {LocationName.MCFigments100})
 
 
@@ -1038,13 +1042,14 @@ def connect_regions(multiworld: MultiWorld, player: int):
             RegionName.WWMAKnight,
         },
         RegionName.WWMADuster: {RegionName.WWMADusterLev},
-        RegionName.WWMADusterLev: {RegionName.WWMADusterLevPyro},
+        RegionName.WWMADusterLev: {RegionName.WWMADusterLevPyro, RegionName.WWMAFullAccess},
         RegionName.WWMAV1: {RegionName.WWMAV2},
         RegionName.WWMAV2: {RegionName.WWMAV3},
         RegionName.WWMAV3: {RegionName.WWMADone},
 
         # Black Velvetopia
         RegionName.BVRB: {RegionName.BVRBLev, RegionName.BVRBTele, RegionName.BVRBDuster, RegionName.BVES},
+        RegionName.BVRBDuster: {RegionName.BVRBFullAccess},
         RegionName.BVRBTele: {RegionName.BVRBLogs},
         RegionName.BVES: {RegionName.BVESLev, RegionName.BVESCobra},
         RegionName.BVESCobra: {RegionName.BVESBoss},

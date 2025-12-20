@@ -232,6 +232,8 @@ class PsyRules:
 
             RegionName.WWMADusterLev: self.has_levitation,
 
+            RegionName.WWMAFullAccess: self.has_invisibility,
+
             RegionName.WWMADusterLevPyro: self.has_pyrokinesis,
 
             RegionName.WWMAV1: self.has_freds_letter,
@@ -251,6 +253,10 @@ class PsyRules:
             RegionName.BVRBTele: self.has_telekinesis,
 
             RegionName.BVRBDuster: self.has_cobweb_duster,
+
+            RegionName.BVRBFullAccess: lambda state: (self.has_levitation(state) 
+                                                      and self.has_telekinesis(state) 
+                                                      and self.has_pyrokinesis(state)),
 
             RegionName.BVRBLogs: self.has_pyrokinesis,
 
