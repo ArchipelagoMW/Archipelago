@@ -14,16 +14,16 @@ from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
-from .ClientStuff.WorldLocations import bounty_name_to_address
+from .Client.WorldLocations import bounty_name_to_address
 
 
-def launch_client():
-    from .ClientStuff.Client import launch
-    launch_component(launch, name="KH2Client")
+def launch_client(*args: str):
+    from .Client.Client import launch
+    launch_component(launch, name="KH2Client", args=args)
 
 
 icon_paths['kh2apicon'] = f"ap:{__name__}/data/khapicon.png"
-components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT, icon='kh2apicon'))
+components.append(Component("KH2 Client", func=launch_client, game_name="Kingdom Hearts 2", component_type=Type.CLIENT, icon="kh2apicon", supports_uri=True))
 
 
 class KingdomHearts2Web(WebWorld):

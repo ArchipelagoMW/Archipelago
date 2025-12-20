@@ -1,4 +1,5 @@
 from __future__ import annotations
+from argparse import Namespace
 from enum import IntEnum
 import ModuleUpdate
 ModuleUpdate.update()
@@ -7,7 +8,7 @@ import asyncio
 import json
 import os
 
-from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
+from CommonClient import gui_enabled, handle_url_arg, logger, get_base_parser, CommonContext, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
 from .CMDProcessor import KH2CommandProcessor
@@ -537,29 +538,33 @@ async def kh2_watcher(ctx: KH2Context):
             logger.info("Error in kh2_watcher")
         await asyncio.sleep(0.5)
 
+async def main(args: Namespace):
+    ctx = KH2Context(args.connect, args.password)
+    ctx.auth = args.name
+    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+    if gui_enabled:
+        ctx.run_gui()
+    ctx.run_cli()
+    progression_watcher = asyncio.create_task(
+            kh2_watcher(ctx), name="KH2ProgressionWatcher")
 
-def launch():
-    async def main(args):
-        ctx = KH2Context(args.connect, args.password)
-        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
-        if gui_enabled:
-            ctx.run_gui()
-        ctx.run_cli()
-        progression_watcher = asyncio.create_task(
-                kh2_watcher(ctx), name="KH2ProgressionWatcher")
+    await ctx.exit_event.wait()
+    ctx.server_address = None
 
-        await ctx.exit_event.wait()
-        ctx.server_address = None
+    await progression_watcher
 
-        await progression_watcher
+    await ctx.shutdown()
 
-        await ctx.shutdown()
-
+def launch(*args: str):
     import colorama
 
     parser = get_base_parser(description="KH2 Client, for text interfacing.")
+    parser.add_argument("--name", default=None)
+    parser.add_argument("url", nargs="?")
 
-    args, rest = parser.parse_known_args()
-    colorama.init()
-    asyncio.run(main(args))
+    launch_args = handle_url_arg(parser.parse_args(args))
+
+    colorama.just_fix_windows_console()
+
+    asyncio.run(main(launch_args))
     colorama.deinit()
