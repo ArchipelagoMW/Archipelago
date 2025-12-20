@@ -90,7 +90,6 @@ class BanjoTooieWorld(World):
     """
 
     game = "Banjo-Tooie"
-    version = "V4.11.3"
     options: BanjoTooieOptions
     settings: typing.ClassVar[BanjoTooieSettings]
     settings_key = "banjo_tooie_options"
@@ -667,7 +666,7 @@ class BanjoTooieWorld(World):
     def choose_starter_egg(self) -> None:
         if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg or \
                 self.options.egg_behaviour.value == EggsBehaviour.option_simple_random_starting_egg:
-            eggs: list = []
+
             if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg:
                 eggs = [itemName.BEGGS, itemName.FEGGS, itemName.GEGGS, itemName.IEGGS, itemName.CEGGS]
             else:
@@ -1022,7 +1021,7 @@ class BanjoTooieWorld(World):
             "loading_zones": self.loading_zones,
             "preopened_silos_names": self.preopened_silos,
             "preopened_silos_ids": [self.item_name_to_id[name] for name in self.preopened_silos],
-            "version": BanjoTooieWorld.version,
+            "version": f"V{self.world_version.as_simple_string()}",
             "jamjars_siloname_costs": self.jamjars_siloname_costs,
             "jamjars_silo_costs": self.jamjars_silo_costs,
             "hints": {location: asdict(hint_data) for location, hint_data in self.hints.items()}
