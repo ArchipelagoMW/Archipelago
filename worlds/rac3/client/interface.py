@@ -612,7 +612,14 @@ class Rac3Interface(GameInterface):
                     else:
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
-            if number >= self.UnlockItem[RAC3REGION.SLOT_0].status:
+            slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
+            if self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status and not self.UnlockItem[RAC3ITEM.HACKER].status and not \
+                    self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
+                slot_limit -= 1
+            if self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status and not \
+                    self.UnlockItem[RAC3ITEM.REFRACTOR].status:
+                slot_limit -= 1
+            if number >= slot_limit:
                 # logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
         # logger.debug('---------PlanetCycler End---------')
