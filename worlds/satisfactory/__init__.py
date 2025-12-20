@@ -88,22 +88,26 @@ class SatisfactoryWorld(World):
             self.items.build_item_pool(self.random, precollected_items, number_of_locations)
 
     def set_rules(self) -> None:
-        resource_sink_goal: bool = "AWESOME Sink Points (total)" in self.options.goal_selection \
-                                   or "AWESOME Sink Points (per minute)" in self.options.goal_selection
-
         required_parts = set(self.game_logic.space_elevator_phases[self.options.final_elevator_phase.value - 1].keys())
+        required_buildings = set()
         required_items = set()
 
-        if resource_sink_goal:
-            required_parts.union(self.game_logic.buildings["AWESOME Sink"].inputs)
+        if "Space Elevator Phase" in self.options.goal_selection:
+            required_buildings.add("Space Elevator")
+
+        if "AWESOME Sink Points (total)" in self.options.goal_selection \
+                or "AWESOME Sink Points (per minute)" in self.options.goal_selection:
+            required_buildings.add("AWESOME Sink")
 
         if "Erect a FICSMAS Tree" in self.options.goal_selection:
             required_parts.add("FICSMAS Wonder Star")
+            required_buildings.add("MAM")
             required_items.update(
-                ("FICSMAS Data Cartridge Day 4", "FICSMAS Data Cartridge Day 8", "FICSMAS Data Cartridge Day 14"))
+                ("FICSMAS Data Cartridge Day 4", "FICSMAS Data Cartridge Day 8", "FICSMAS Data Cartridge Day 14"))            
 
         self.multiworld.completion_condition[self.player] = \
             lambda state: self.state_logic.can_produce_all(state, required_parts) \
+                and self.state_logic.can_build_all(state, required_buildings) \
                 and self.state_logic.has_obtained_all(state, required_items)
 
     def collect(self, state: CollectionState, item: Item) -> bool:
