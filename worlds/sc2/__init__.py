@@ -117,17 +117,42 @@ class SC2World(World):
         data = get_full_item_list()[name]
         return StarcraftItem(name, data.classification, data.code, self.player)
 
-    def create_regions(self):
+    def generate_early(self) -> None:
+        # Do some options validation/recovery here
+        if not self.options.selected_races.value:
+            self.options.selected_races.value = set(options.SelectedRaces.default)
+        if not self.options.enabled_campaigns.value:
+            self.options.enabled_campaigns.value = set(options.EnabledCampaigns.default)
+
+        # Disable campaigns on vanilla-like mission orders if their race is disabled
+        if self.options.enable_race_swap.value == options.EnableRaceSwapVariants.option_disabled:
+            if self.options.mission_order.value in options.static_mission_orders:
+                enabled_campaigns = set(self.options.enabled_campaigns.value)
+                if SC2Race.TERRAN.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.WOL.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.NCO.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+                if SC2Race.ZERG.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.HOTS.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+                if SC2Race.PROTOSS.get_title() not in self.options.selected_races.value:
+                    enabled_campaigns.discard(SC2Campaign.PROPHECY.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.PROLOGUE.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.LOTV.campaign_name)
+                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+                self.options.enabled_campaigns.value = enabled_campaigns
+
+    def create_regions(self) -> None:
         self.logic = SC2Logic(self)
         self.custom_mission_order = create_mission_order(
             self, get_locations(self), self.location_cache
         )
         self.logic.nova_used = (
-                MissionFlag.Nova in self.custom_mission_order.get_used_flags()
-                or (
-                        MissionFlag.WoLNova in self.custom_mission_order.get_used_flags()
-                        and self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
-                )
+            MissionFlag.Nova in self.custom_mission_order.get_used_flags()
+            or (
+                MissionFlag.WoLNova in self.custom_mission_order.get_used_flags()
+                and self.options.nova_ghost_of_a_chance_variant == NovaGhostOfAChanceVariant.option_nco
+            )
         )
 
     def create_items(self) -> None:
