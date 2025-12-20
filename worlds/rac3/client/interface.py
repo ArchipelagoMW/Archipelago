@@ -366,7 +366,7 @@ class Rac3Interface(GameInterface):
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
                 self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + randint(1, 100))
             case RAC3ITEM.JACKPOT:
-                _time = round(time.time() + uniform(10, 30), 2)
+                _time = round(time.time() + uniform(10, 30), 4)
                 self.timers[name + str(_time)] = _time
                 self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
