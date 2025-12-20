@@ -247,7 +247,8 @@ components: List[Component] = [
     # MegaMan Battle Network 3
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3')),
 
-    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL),
+    Component("Export Datapackage", func=export_datapackage, component_type=Type.TOOL,
+              description="Write item/location data for installed worlds to a file and open it."),
 ]
 
 
@@ -291,11 +292,11 @@ if not is_frozen():
                     manifest = json.load(manifest_file)
 
                 assert "game" in manifest, (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but it"
+                    f"World directory {world_directory} has an archipelago.json manifest file, but it "
                     "does not define a \"game\"."
                 )
                 assert manifest["game"] == worldtype.game, (
-                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the"
+                    f"World directory {world_directory} has an archipelago.json manifest file, but value of the "
                     f"\"game\" field ({manifest['game']} does not equal the World class's game ({worldtype.game})."
                 )
             else:
@@ -318,5 +319,5 @@ if not is_frozen():
         open_folder(apworlds_folder)
 
 
-    components.append(Component('Build APWorlds', func=_build_apworlds, cli=True,
+    components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
