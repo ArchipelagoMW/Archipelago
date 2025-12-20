@@ -613,14 +613,15 @@ class Rac3Interface(GameInterface):
                     else:
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
-            slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
-            if self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status and not self.UnlockItem[RAC3ITEM.HACKER].status and not \
-                    self.UnlockItem[RAC3ITEM.HYPERSHOT].status:
-                slot_limit -= 1
-            if self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status and not \
-                    self.UnlockItem[RAC3ITEM.REFRACTOR].status:
-                slot_limit -= 1
-            if number >= slot_limit:
+            self.ship_slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
+            if (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status and not 
+                self.UnlockItem[RAC3ITEM.HACKER].status and not
+                self.UnlockItem[RAC3ITEM.HYPERSHOT].status):
+                self.ship_slot_limit -= 1
+            if (self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status and not 
+                self.UnlockItem[RAC3ITEM.REFRACTOR].status):
+                self.ship_slot_limit -= 1
+            if number >= self.ship_slot_limit:
                 # logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
         # logger.debug('---------PlanetCycler End---------')
@@ -770,6 +771,7 @@ class Rac3Interface(GameInterface):
                 f'Planet{count}: {PLANET_NAME_FROM_ID[self._read8(RAC3_REGION_DATA_TABLE[name].SLOT_ADDRESS)]}')
             count += 1
         logger.info(f'Current planet Tracked: {self.planet}')
+        logger.info(f'Ship Slot Limit: {self.ship_slot_limit}')
         logger.info(f'Softlock Prevention:\nHolostar Studios - {self.softlock_prevention_check(RAC3REGION.HOLOSTAR_STUDIOS)}\nQwarks Hideout - {self.softlock_prevention_check(RAC3REGION.QWARKS_HIDEOUT)}')
         logger.info(f'Slot Data: {slot_data}')
 
