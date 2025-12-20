@@ -13,11 +13,11 @@ class ItemData:
     rom_id: int
     frequency: int
 
-    def __init__(self, id: int | None, item_name: str, progression: str, rom_id: int = 0x0, frequency: int = 1):
+    def __init__(self, id: int | None, item_name: str, progression: str, rom_id: str = "0x0", frequency: int = 1):
         self.id = id
         self.item_name = item_name
         self.progression = item_classifications[progression]
-        self.rom_id = rom_id
+        self.rom_id = int(rom_id, 16)
         self.frequency = frequency
 
 
