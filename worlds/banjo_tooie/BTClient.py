@@ -19,9 +19,8 @@ import atexit
 from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
-import settings
 from Utils import async_start
-from worlds import network_data_package
+from . import BanjoTooieWorld
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -61,12 +60,12 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 
 '''
 
-bt_loc_name_to_id = network_data_package["games"]["Banjo-Tooie"]["location_name_to_id"]
-bt_itm_name_to_id = network_data_package["games"]["Banjo-Tooie"]["item_name_to_id"]
+bt_loc_name_to_id = BanjoTooieWorld.location_name_to_id
+bt_itm_name_to_id = BanjoTooieWorld.item_name_to_id
 script_version: int = 5
 version: str = "V4.11.3"
 patch_md5: str = "54efb965e58f1bb15487d411dc8955a3"
-bt_options = settings.get_settings().banjo_tooie_options
+bt_options = BanjoTooieWorld.settings
 program = None
 
 def read_file(path):
