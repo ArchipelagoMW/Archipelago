@@ -127,22 +127,23 @@ class SC2World(World):
             self.options.enabled_campaigns.value = set(options.EnabledCampaigns.default)
 
         # Disable campaigns on vanilla-like mission orders if their race is disabled
-        if self.options.enable_race_swap.value == options.EnableRaceSwapVariants.option_disabled:
-            if self.options.mission_order.value in options.static_mission_orders:
-                enabled_campaigns = set(self.options.enabled_campaigns.value)
+        if self.options.mission_order.value in options.static_mission_orders:
+            enabled_campaigns = set(self.options.enabled_campaigns.value)
+            if self.options.enable_race_swap.value == options.EnableRaceSwapVariants.option_disabled:
                 if SC2Race.TERRAN.get_title() not in self.options.selected_races.value:
                     enabled_campaigns.discard(SC2Campaign.WOL.campaign_name)
-                    enabled_campaigns.discard(SC2Campaign.NCO.campaign_name)
-                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
                 if SC2Race.ZERG.get_title() not in self.options.selected_races.value:
                     enabled_campaigns.discard(SC2Campaign.HOTS.campaign_name)
-                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
                 if SC2Race.PROTOSS.get_title() not in self.options.selected_races.value:
                     enabled_campaigns.discard(SC2Campaign.PROPHECY.campaign_name)
                     enabled_campaigns.discard(SC2Campaign.PROLOGUE.campaign_name)
                     enabled_campaigns.discard(SC2Campaign.LOTV.campaign_name)
-                    enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
-                self.options.enabled_campaigns.value = enabled_campaigns
+            # Epilogue and NCO don't have raceswaps currently
+            if SC2Race.TERRAN.get_title() not in self.options.selected_races.value:
+                enabled_campaigns.discard(SC2Campaign.NCO.campaign_name)
+            if len(self.options.selected_races.value) < 3:
+                enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+            self.options.enabled_campaigns.value = enabled_campaigns
 
     def create_regions(self) -> None:
         self.logic = SC2Logic(self)
