@@ -2399,22 +2399,23 @@ class SC2Logic:
     def supreme_requirement(self, state: CollectionState) -> bool:
         return (
             self.grant_story_tech == GrantStoryTech.option_grant
-            or not self.kerrigan_unit_available or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
-                    and state.has_any((
-                        item_names.KERRIGAN_LEAPING_STRIKE,
-                        item_names.OVERLORD_VENTRAL_SACS,
-                        item_names.YGGDRASIL,
-                        item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
-                        item_names.NYDUS_WORM,
-                        item_names.BULLFROG,
-                    ), self.player)
-                    and state.has_any((
-                        item_names.KERRIGAN_MEND,
-                        item_names.SWARM_QUEEN,
-                        item_names.INFESTED_MEDICS,
-                    ), self.player)
-                    and self.kerrigan_levels(state, 35)
-                )
+            or not self.kerrigan_unit_available
+            or (self.grant_story_tech == GrantStoryTech.option_allow_substitutes
+                and state.has_any((
+                    item_names.KERRIGAN_LEAPING_STRIKE,
+                    item_names.OVERLORD_VENTRAL_SACS,
+                    item_names.YGGDRASIL,
+                    item_names.MUTALISK_CORRUPTOR_VIPER_ASPECT,
+                    item_names.NYDUS_WORM,
+                    item_names.BULLFROG,
+                ), self.player)
+                and state.has_any((
+                    item_names.KERRIGAN_MEND,
+                    item_names.SWARM_QUEEN,
+                    item_names.INFESTED_MEDICS,
+                ), self.player)
+                and self.kerrigan_levels(state, 35)
+            )
             or (state.has_all((item_names.KERRIGAN_LEAPING_STRIKE, item_names.KERRIGAN_MEND), self.player) and self.kerrigan_levels(state, 35))
         )
 
@@ -2502,15 +2503,12 @@ class SC2Logic:
                 self.grant_story_tech == GrantStoryTech.option_grant
                 or not self.kerrigan_unit_available
                 or (
-                    state.has_any(
-                        (
-                            item_names.KERRIGAN_KINETIC_BLAST,
-                            item_names.KERRIGAN_SPAWN_BANELINGS,
-                            item_names.KERRIGAN_LEAPING_STRIKE,
-                            item_names.KERRIGAN_SPAWN_LEVIATHAN,
-                        ),
-                        self.player,
-                    )
+                    state.has_any((
+                        item_names.KERRIGAN_KINETIC_BLAST,
+                        item_names.KERRIGAN_SPAWN_BANELINGS,
+                        item_names.KERRIGAN_LEAPING_STRIKE,
+                        item_names.KERRIGAN_SPAWN_LEVIATHAN,
+                    ), self.player)
                     and self.basic_kerrigan(state)
                 )
             )

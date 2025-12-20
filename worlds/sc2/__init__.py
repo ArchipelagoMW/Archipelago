@@ -224,7 +224,9 @@ class SC2World(World):
         slot_data["custom_mission_order"] = self.custom_mission_order.get_slot_data()
         slot_data["version"] = 4
 
-        if SC2Campaign.HOTS not in enabled_campaigns:
+        if (SC2Campaign.HOTS not in enabled_campaigns
+            or SC2Race.ZERG.get_title() not in self.options.selected_races.value
+        ):
             slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
 
         if self.options.mission_order_scouting != MissionOrderScouting.option_none:
