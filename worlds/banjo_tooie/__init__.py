@@ -1,4 +1,5 @@
 import logging
+from collections import Counter
 from math import ceil
 import time
 
@@ -22,7 +23,7 @@ from .Options import BanjoTooieOptions, EggsBehaviour, JamjarsSiloCosts, LogicTy
 from .Rules import BanjoTooieRules
 from .Names import itemName, locationName, regionName
 from .WorldOrder import randomize_world_progression
-from BaseClasses import ItemClassification, Tutorial, Item
+from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 
@@ -945,6 +946,39 @@ class BanjoTooieWorld(World):
                     # self.multiworld.get_location(name, self.player).place_locked_item(item)
                     location = self.get_location(name)
                     location.place_locked_item(item)
+
+    @classmethod
+    def stage_fill_hook(
+        cls,
+        multiworld: MultiWorld,
+        progitempool: list[Item],
+        usefulitempool: list[Item],
+        filleritempool: list[Item],
+        fill_locations: list[Location]
+    ):
+        # If there are a lot of items to fit in few locations, help out the generator by sorting the items into a more
+        # easy to fill order. This reduces the chance of the fill algorithm getting stuck and having to swap items.
+        # 0.75 is a heuristic threshold; default BT settings is about 82% of the pool being progression.
+        if len(progitempool) / len(fill_locations) < 0.75:
+            return
+
+        bt_players = {world.player for world in multiworld.get_game_worlds(cls.game)}
+
+        # Count how many copies of each item exist for each BT player.
+        # Items with more copies are placed first, which helps AP's fill algorithm.
+        item_counts: dict[int, Counter[str]] = {player: Counter() for player in bt_players}
+        for item in progitempool:
+            if item.player in bt_players:
+                item_counts[item.player][item.name] += 1
+
+        def sort_pool(item: Item) -> int:
+            if item.player in item_counts:
+                return item_counts[item.player][item.name]
+            else:
+                # If it's not an item belonging to a Banjo-Tooie player, keep its order the same.
+                return 0
+
+        progitempool.sort(key=sort_pool)
 
     @classmethod
     def stage_write_spoiler(cls, world, spoiler_handle):
