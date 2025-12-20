@@ -11840,6 +11840,42 @@
     ]
   },
   {
+    "name": "Altar of Skorne - Skorne's Mask",
+    "id": 88872033,
+    "difficulty": 1,
+    "tags": [
+      "altar_of_skorne",
+      "no_obelisks"
+    ]
+  },
+  {
+    "name": "Altar of Skorne - Skorne's Horns",
+    "id": 88872034,
+    "difficulty": 1,
+    "tags": [
+      "altar_of_skorne",
+      "no_obelisks"
+    ]
+  },
+  {
+    "name": "Altar of Skorne - Skorne's Left Gauntlet",
+    "id": 88872035,
+    "difficulty": 1,
+    "tags": [
+      "altar_of_skorne",
+      "no_obelisks"
+    ]
+  },
+  {
+    "name": "Altar of Skorne - Skorne's Right Gauntlet",
+    "id": 88872036,
+    "difficulty": 1,
+    "tags": [
+      "altar_of_skorne",
+      "no_obelisks"
+    ]
+  },
+  {
     "name": "Battle Trenches - Fire Potion 1",
     "id": 88870536,
     "difficulty": 1,

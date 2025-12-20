@@ -127,16 +127,6 @@ class GauntletLegendsWorld(World):
             self.lock_item("Yeti's Cavern - Yeti Mirror Shard", "Yeti Mirror Shard")
 
     def fill_slot_data(self) -> dict:
-        dshard = self.get_location("Dragon's Lair - Dragon Mirror Shard").item
-        yshard = self.get_location("Yeti's Cavern - Yeti Mirror Shard").item
-        cshard = self.get_location("Chimera's Keep - Chimera Mirror Shard").item
-        fshard = self.get_location("Vat of the Plague Fiend - Plague Fiend Mirror Shard").item
-        shard_values = [
-            item_dict[dshard.code] if dshard.player == self.player else [0x27, 0x4],
-            item_dict[yshard.code] if yshard.player == self.player else [0x27, 0x4],
-            item_dict[cshard.code] if cshard.player == self.player else [0x27, 0x4],
-            item_dict[fshard.code] if fshard.player == self.player else [0x27, 0x4],
-        ]
         characters = [
             self.options.unlock_character_one.value,
             self.options.unlock_character_two.value,
@@ -147,7 +137,6 @@ class GauntletLegendsWorld(World):
         return {
             "player": self.player,
             "players": self.options.local_players.value,
-            "shards": shard_values,
             "chests": bool(chests_barrels == 3 or chests_barrels == 1),
             "barrels": bool(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
@@ -167,7 +156,7 @@ class GauntletLegendsWorld(World):
         if self.options.infinite_keys:
             skipped_items.add("Key")
         if self.options.permanent_speed:
-            skipped_items.add("Boots")
+            skipped_items.add("Speed Boots")
         if self.options.traps_choice == "only_death" or self.options.traps_choice == "none_active":
             skipped_items.add("Poison Fruit")
         if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active":

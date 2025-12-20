@@ -12,7 +12,7 @@ from BaseClasses import Location, ItemClassification
 
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
-from .Data import level_address, level_header, level_locations, level_size
+from .Data import level_address, level_header, level_locations, level_size, boss_location_offsets
 from .Items import ItemData, items_by_id
 from .Locations import locationName_to_data, GLLocation
 
@@ -216,7 +216,8 @@ class GLPatchExtension(APPatchExtension):
 
             # Patch game.bin with armips if asm exists
             if os.path.exists(game_bin_asm_path):
-                result = subprocess.run([armips_exe, game_bin_asm_path], cwd=temp_dir, capture_output=True, text=True)
+                result = subprocess.run([armips_exe, game_bin_asm_path], cwd=temp_dir, capture_output=True, text=True,
+                                        creationflags=subprocess.CREATE_NO_WINDOW)
                 if result.returncode != 0:
                     raise RuntimeError(f"armips failed on GameBin.asm: {result.stderr}")
 
@@ -263,7 +264,7 @@ class GLPatchExtension(APPatchExtension):
                     f.write(hook_content)
 
                 result = subprocess.run([armips_exe, loader_hook_temp_path], cwd=temp_dir, capture_output=True,
-                                        text=True)
+                                        text=True, creationflags=subprocess.CREATE_NO_WINDOW)
                 if result.returncode != 0:
                     raise RuntimeError(f"armips failed on LoaderHook: {result.stderr}")
 
@@ -274,7 +275,8 @@ class GLPatchExtension(APPatchExtension):
             # PART 3: Assemble and add CustomCode
             # ============================================================
             if os.path.exists(custom_asm_path):
-                result = subprocess.run([armips_exe, custom_asm_path], cwd=temp_dir, capture_output=True, text=True)
+                result = subprocess.run([armips_exe, custom_asm_path], cwd=temp_dir, capture_output=True, text=True,
+                                        creationflags=subprocess.CREATE_NO_WINDOW)
                 if result.returncode != 0:
                     raise RuntimeError(f"armips failed on CustomCode.asm: {result.stderr}")
 
@@ -324,10 +326,36 @@ class GLPatchExtension(APPatchExtension):
             if len(rom) < final_size:
                 rom.extend(b"\xFF" * (final_size - len(rom)))
 
-            # Recalculate CRC
-            crc1, crc2 = n64_crc(rom, cic=6102)
-            rom[0x10:0x14] = crc1.to_bytes(4, "big")
-            rom[0x14:0x18] = crc2.to_bytes(4, "big")
+        return bytes(rom)
+
+
+    @staticmethod
+    def finalize_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
+        """
+        Finalize ROM after all patch steps:
+        - pad to a valid cart size
+        - calculate CRC once
+        """
+        rom = bytearray(rom)
+        final_size = next_cart_size(len(rom))
+        if len(rom) < final_size:
+            rom.extend(b"\xFF" * (final_size - len(rom)))
+
+        crc1, crc2 = n64_crc(rom, cic=6102)
+        rom[0x10:0x14] = crc1.to_bytes(4, "big")
+        rom[0x14:0x18] = crc2.to_bytes(4, "big")
+        return bytes(rom)
+
+    @staticmethod
+    def patch_seed_name(caller: APProcedurePatch, rom: bytes) -> bytes:
+        options = json.loads(caller.get_file("options.json").decode("utf-8"))
+        rom = bytearray(rom)
+
+        SEED_ROM_OFFSET = 0xFFFFF0
+        SEED_LEN = 16
+
+        seed = options["seed_name"].encode("utf-8")[:SEED_LEN]
+        rom[SEED_ROM_OFFSET:SEED_ROM_OFFSET + SEED_LEN] = seed.ljust(SEED_LEN, b"\x00")
 
         return bytes(rom)
 
@@ -366,13 +394,16 @@ class GLPatchExtension(APPatchExtension):
         data.write(bytes([0xFF, 0xFF]))
         stream.seek(0x67E7E0, 0)
         stream.write(zenc(data.getvalue()))
-        return stream.getvalue()
+
+        return bytes(rom)
 
     # Decompress all levels, place all items in the levels.
     @staticmethod
     def patch_items(caller: APProcedurePatch, rom: bytes):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
+        stream.seek(0x540, 0)
+        stream.write(options["seed_name"].encode("utf-8")[0:16])
         for i in range(len(level_locations)):
             level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
@@ -407,7 +438,7 @@ class GLPatchExtension(APPatchExtension):
                         12:14] = [0x27, 0x4]
                         if "Chest" in location_name:
                             data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
                                 9] = 0x1
                     else:
                         data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x4]
@@ -415,7 +446,7 @@ class GLPatchExtension(APPatchExtension):
                     if "Obelisk" in items_by_id[item[0]].item_name and "Obelisk" not in location_name:
                         if chest_barrel(location_name):
                             slice_ = bytearray(data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
                                                0:6])
                         else:
                             slice_ = bytearray(data.items[j - data.items_replaced_by_obelisks][0:6])
@@ -433,7 +464,7 @@ class GLPatchExtension(APPatchExtension):
                         ]
                         if chest_barrel(location_name):
                             del data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)]
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)]
                             data.chests_replaced_by_obelisks += 1
                         else:
                             del data.items[j - data.items_replaced_by_obelisks]
@@ -455,11 +486,11 @@ class GLPatchExtension(APPatchExtension):
                     else:
                         if chest_barrel(location_name):
                             data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
                             12:14] = items_by_id[item[0]].rom_id.to_bytes(2)
                             if "Chest" in location_name:
                                 data.chests[j - (
-                                            len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
                                     9] = 0x2
                         else:
                             data.items[j - data.items_replaced_by_obelisks][6:8] = items_by_id[item[0]].rom_id.to_bytes(
@@ -473,7 +504,77 @@ class GLPatchExtension(APPatchExtension):
             stream.write((write_pos - 0x636E0).to_bytes(4, byteorder="big"))
             stream.seek(write_pos, 0)
             stream.write(compressed)
+
         return stream.getvalue()
+
+    @staticmethod
+    def patch_boss_bin(caller: APProcedurePatch, rom: bytes) -> bytes:
+        """
+        Patch boss.bin using the same extraction / recompression flow as game.bin.
+
+        boss.bin encodes rewards as two 16-bit integers where each is a BYTE of the 16-bit rom_id:
+            rom_id = 0xABCD  -> write 0x00AB, 0x00CD  (i.e. 0x00AB00CD)
+
+        boss_items.json stores (item_code, item_player).
+        """
+        boss_items_data = json.loads(caller.get_file("boss_items.json").decode("UTF-8"))
+        options = json.loads(caller.get_file("options.json").decode("UTF-8"))
+
+        # Boss.bin is entry #2 in the file table (game.bin is entry #4)
+        boss_entry_offset = TABLE_START_OFFSET + (2 * 0x30)
+
+        rom = bytearray(rom)
+
+        boss_rom_offset = be32(rom[boss_entry_offset + 0x10:boss_entry_offset + 0x14])
+        boss_comp_size = be32(rom[boss_entry_offset + 0x14:boss_entry_offset + 0x18])
+
+        boss_compressed = bytes(rom[boss_rom_offset:boss_rom_offset + boss_comp_size])
+        boss_decompressed = bytearray(zdec(boss_compressed))
+
+        FILLER_ROM_ID = 0x2704  # same filler as patch_items (bytes [0x27, 0x04])
+
+        for location_name, item_data in boss_items_data.items():
+            if location_name not in boss_location_offsets:
+                continue
+
+            item_code, item_player = item_data
+            if not item_code:
+                continue
+
+            if item_player != options["player"]:
+                rom_id = FILLER_ROM_ID
+            else:
+                rom_id = items_by_id[item_code].rom_id  # 16-bit
+
+            hi_byte = (rom_id >> 8) & 0xFF
+            lo_byte = rom_id & 0xFF
+
+            offset = boss_location_offsets[location_name]
+            boss_decompressed[offset:offset + 2] = hi_byte.to_bytes(2, "big")
+            boss_decompressed[offset + 2:offset + 4] = lo_byte.to_bytes(2, "big")
+
+        # Recompress and write back (same as game.bin flow)
+        boss_recompressed = zenc(boss_decompressed)
+        new_boss_comp_size = len(boss_recompressed)
+
+        if new_boss_comp_size > boss_comp_size:
+            # Relocate to expanded area (same approach as existing working boss patcher)
+            new_boss_rom_offset = EXPANDED_GAME_ROM_OFFSET + 0x100000
+            new_boss_end = new_boss_rom_offset + new_boss_comp_size
+            ensure_len(rom, new_boss_end, fill=0xFF)
+            rom[new_boss_rom_offset:new_boss_end] = boss_recompressed
+            write_be32(rom, boss_entry_offset + 0x10, new_boss_rom_offset)
+            write_be32(rom, boss_entry_offset + 0x14, new_boss_comp_size)
+        else:
+            rom[boss_rom_offset:boss_rom_offset + new_boss_comp_size] = boss_recompressed
+            write_be32(rom, boss_entry_offset + 0x14, new_boss_comp_size)
+            if new_boss_comp_size < boss_comp_size:
+                leftover_start = boss_rom_offset + new_boss_comp_size
+                leftover_end = boss_rom_offset + boss_comp_size
+                rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
+
+        return bytes(rom)
+
 
 
 class GLProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -482,7 +583,14 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
     patch_file_ending = ".apgl"
     result_file_ending = ".z64"
 
-    procedure = [("patch_repack", []), ("patch_items", []), ("patch_counts", [])]
+    procedure = [
+        ("patch_repack", []),  # full ROM rebuild + ASM
+        ("patch_items", []),  # level data
+        ("patch_boss_bin", []),  # boss.bin
+        ("patch_counts", []),  # misc data
+        ("patch_seed_name", []),  # 0x540 write
+        ("finalize_crc", []),  # ONE CRC, LAST
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -493,10 +601,12 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
 # Also save options
 def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     options_dict = {
-        "seed": world.multiworld.seed,
+        "seed_name": world.multiworld.seed_name,
         "player": world.player,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
+
+    # Write level files
     for i, level in enumerate(level_locations.values()):
         locations: list[Location] = []
         for location in level:
@@ -505,6 +615,30 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
             else:
                 locations += [world.get_location(location.name)]
         patch.write_file(f"level_{i}.json", json.dumps(locations_to_dict(locations)).encode("UTF-8"))
+
+    # Write boss items file
+    boss_location_names = [
+        "Dragon's Lair - Dragon Mirror Shard",
+        "Yeti's Cavern - Yeti Mirror Shard",
+        "Chimera's Keep - Chimera Mirror Shard",
+        "Vat of the Plague Fiend - Plague Fiend Mirror Shard",
+        "Altar of Skorne - Skorne's Mask",
+        "Altar of Skorne - Skorne's Horns",
+        "Altar of Skorne - Skorne's Left Gauntlet",
+        "Altar of Skorne - Skorne's Right Gauntlet"
+    ]
+
+    boss_locations: list[Location] = []
+    for location_name in boss_location_names:
+        if location_name in world.disabled_locations:
+            # Get location ID from locationName_to_data
+            location_data = locationName_to_data.get(location_name)
+            if location_data:
+                boss_locations += [GLLocation(world.player, location_name, location_data.id)]
+        else:
+            boss_locations += [world.get_location(location_name)]
+
+    patch.write_file("boss_items.json", json.dumps(locations_to_dict(boss_locations)).encode("UTF-8"))
 
 
 def locations_to_dict(locations: list[Location]) -> dict[str, tuple]:
@@ -597,9 +731,9 @@ def get_level_data(stream: io.BytesIO, size: int, level: int = 0) -> tuple[io.By
 def level_data_reformat(data: LevelData) -> bytes:
     stream = io.BytesIO()
     obelisk_offset = 24 * (
-                data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks - data.obelisks_replaced_by_items)
+            data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks - data.obelisks_replaced_by_items)
     item_offset = 12 * (
-                data.chests_replaced_by_items + data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
+            data.chests_replaced_by_items + data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
     chest_offset = 16 * (data.chests_replaced_by_obelisks + data.chests_replaced_by_items)
     stream.write(int.to_bytes(0x5C, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))

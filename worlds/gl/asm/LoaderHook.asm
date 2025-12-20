@@ -19,8 +19,8 @@
 ; 5. Hook executes overwritten instructions and continues
 ; ==============================
 
-; Stub size: ~82 instructions = 328 bytes, round up to 0x160 (352) for safety
-.definelabel STUB_SIZE, 0x160
+; Stub size: ~82 instructions = 328 bytes, round up to 0x200 (512) for safety with memory copy
+.definelabel STUB_SIZE, 0x200
 .definelabel STUB_RAM_ADDR, 0x803F0000
 .definelabel STUB_RAM_PHYS, 0x003F0000
 
@@ -188,6 +188,84 @@ LoadMyCodeStub:
 
 @@SkipBSS:
     ; ============================================================
+    ; Copy 0x20 bytes from ROM 0x530 to 0xE00D07E0 via PI DMA
+    ; Must happen before overwritten instructions execute
+    ; Note: PI DMA writes words with byte-lane swapping, so we
+    ;       fix up the 8 words in-place afterwards.
+    ; ============================================================
+
+    ; Wait for PI ready
+@@WaitPI_ROM:
+    lw     $t0, 0x0010($s0)        ; $s0 = PI base (0xA4600000)
+    andi   $t0, $t0, 0x03
+    bnez   $t0, @@WaitPI_ROM
+    nop
+
+    ; Clear PI status
+    li     $t0, 0x02
+    sw     $t0, 0x0010($s0)
+
+    ; PI_DRAM_ADDR = 0x000D07E0 (physical address for 0xE00D07E0)
+    lui    $t0, 0x000D
+    ori    $t0, $t0, 0x07F0
+    sw     $t0, 0x0000($s0)
+
+    ; PI_CART_ADDR = 0x10FFFFF0 (ROM physical address)
+    lui    $t0, 0x10FF
+    ori    $t0, $t0, 0xFFF0
+    sw     $t0, 0x0004($s0)
+
+    ; PI_WR_LEN = 0x0F (16 bytes - 1)
+    li     $t0, 0x0F
+    sw     $t0, 0x000C($s0)
+
+
+    ; Wait for DMA complete
+@@WaitROMCopy:
+    lw     $t0, 0x0010($s0)
+    andi   $t0, $t0, 0x03
+    bnez   $t0, @@WaitROMCopy
+    nop
+
+    ; Clear PI status
+    li     $t0, 0x02
+    sw     $t0, 0x0010($s0)
+
+    ; Sync to ensure DMA completion
+    sync
+
+    ; ------------------------------------------------------------
+    ; Fix PI byte-lane swap (reverse bytes in each 32-bit word)
+    ; 0x20 bytes = 8 words at 0xE00D07E0
+    ; ------------------------------------------------------------
+    lui    $t0, 0xE00D
+    ori    $t0, $t0, 0x07E0        ; $t0 = 0xE00D07E0
+    li     $t1, 8                  ; 8 words
+
+@@FixROMWords:
+    lw     $t2, 0($t0)
+
+    srl    $t3, $t2, 24            ; (w>>24) -> byte0
+    srl    $t4, $t2, 16            ; (w>>16) -> ..byte1..
+    andi   $t4, $t4, 0x00FF
+    sll    $t4, $t4, 8
+    srl    $t5, $t2, 8             ; (w>>8) -> ..byte2..
+    andi   $t5, $t5, 0x00FF
+    sll    $t5, $t5, 16
+    andi   $t6, $t2, 0x00FF        ; byte3
+    sll    $t6, $t6, 24
+
+    or     $t3, $t3, $t4
+    or     $t3, $t3, $t5
+    or     $t3, $t3, $t6
+
+    sw     $t3, 0($t0)
+
+    addiu  $t0, $t0, 4
+    addiu  $t1, $t1, -1
+    bnez   $t1, @@FixROMWords
+    nop
+
     ; Execute overwritten code sequence
     ; Original code at 0x8020025C-0x80200290:
     ;   - Set up copy loop (a0=dest, a1=src, v1=count, a2=-1)

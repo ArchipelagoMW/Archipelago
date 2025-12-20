@@ -46,6 +46,7 @@ def get_regions_dict() -> dict[str, list[LocationData]]:
         "Erupting Fissure": get_locations_by_tags("erupting_fissure"),
         "Yeti": get_locations_by_tags("yeti"),
         "Desecrated Temple": get_locations_by_tags("desecrated_temple"),
+        "Altar of Skorne": get_locations_by_tags("altar_of_skorne"),
         "Battle Trenches": get_locations_by_tags("battle_trenches"),
         "Battle Towers": get_locations_by_tags("battle_towers"),
         "Infernal Fortress": get_locations_by_tags("infernal_fortress"),
@@ -93,6 +94,7 @@ def connect_regions(world: "GauntletLegendsWorld"):
             and state.has("Plague Fiend Mirror Shard", world.player)
             and state.has("Yeti Mirror Shard", world.player)
     )
+    connect(world, names, "Desecrated Temple", "Altar of Skorne")
     connect(world, names, "Desecrated Temple", "Battle Trenches")
     connect(world, names, "Desecrated Temple", "Battle Towers")
     connect(world, names, "Desecrated Temple", "Infernal Fortress")
