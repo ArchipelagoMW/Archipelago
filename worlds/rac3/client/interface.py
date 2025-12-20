@@ -965,7 +965,11 @@ class Rac3Interface(GameInterface):
             curr_addr += len(line)
         self._write32(RAC3MESSAGEBOX.NUM_LINES, len(msg_list))
         msg_length = int(longest_line_length - color_bytes_count)
-        width = msg_length * 7 + 10
+        width = msg_length * 7 + 12
+        if width % 2 != 0:
+            # Odd numbered width values display as if it was the even number below it
+            # Ex: 101 width displays as 100 width
+            width += 1
 
         theme_format = THEME_ID_TO_THEME_COLORS[box_theme]
         box_color = theme_format.BOX
