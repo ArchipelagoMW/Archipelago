@@ -202,10 +202,10 @@ class PSYWorld(World):
 
     @staticmethod
     def _add_progressive_baggage_items(item_counts: Dict[str, int], maxvalue: int):
-        # Add PSI Cards to the pool to fill progressive baggage checks
+        # Add PSIChallengeMarkers to the pool to fill progressive baggage checks
         # Multiplied by the MaximumProgressiveBaggage option value
         baggage_count = maxvalue*5
-        item_counts[ItemName.PsiCard] += baggage_count
+        item_counts[ItemName.ChallengeMarker] += baggage_count
 
 
     def create_items(self):
@@ -282,18 +282,6 @@ class PSYWorld(World):
         assert len(item_pool) <= num_locations_to_fill, ("The initial item pool cannot be larger than the number of"
                                                          " unfilled locations.")
         num_locations_to_fill -= len(item_pool)
-
-        # Add filler/junk items to fill out the remaining locations.
-        # If there are more locations remaining than the desired maximum number of filler items to add, also add the
-        # Feather and Watering Can junk items to the pool.
-        desired_max_filler = 107  # This is arbitrary based on the max number of Psi Cards placeable in the game world.
-        excess = num_locations_to_fill - desired_max_filler
-        if excess >= 1:
-            item_pool.append(self.create_item(ItemName.Feather))
-            num_locations_to_fill -= 1
-            if excess >= 2:
-                item_pool.append(self.create_item(ItemName.WaterCan))
-                num_locations_to_fill -= 1
 
         # Create filler for the remaining locations.
         item_pool.extend(self.create_filler() for _ in range(num_locations_to_fill))

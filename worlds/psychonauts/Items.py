@@ -175,7 +175,7 @@ USEFUL_SET: Set[str] = {
     ItemName.Vault,
     ItemName.ChallengeMarker,
     ItemName.MaxLivesUp,
-    *SCAVENGER_HUNT_ITEMS,
+    *BRAIN_JARS,
     *BAGGAGE_TAGS,
     *BAGGAGE,
     ItemName.AHLarge,
@@ -206,12 +206,14 @@ ITEM_COUNT: Dict[str, int] = {
     **PSYCHORANDO_ITEM_TABLE,
     # Automatically added as filler items, so none are added to the item pool directly.
     ItemName.PsiCard: 0,
-    **{item: 0 for item in OTHER_ITEMS},
+    **{item: 1 for item in OTHER_ITEMS},
     # Only added when DeepArrowheadShuffle is enabled.
     ItemName.DowsingRod: 0,
     # The extra available Arrowhead Bundles are only used when DeepArrowheadShuffle is enabled.
     ItemName.AHSmall: 30,
     ItemName.AHLarge: 5,
+    # The extra PSIChallengeMarkers are only added for Progressive Baggage
+    ItemName.ChallengeMarker: 10,
 }
 
 # Classification for each item. Items not in the Dict are assumed to be Filler.
