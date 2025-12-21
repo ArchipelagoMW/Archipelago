@@ -472,7 +472,6 @@ class BanjoTooieContext(CommonContext):
                     relevant = True
 
                 if relevant == True:
-                    msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                     player = self.player_names[int(args["data"][0]["text"])]
                     to_player = self.player_names[int(args["data"][0]["text"])]
                     for id, data in enumerate(args["data"]):
@@ -488,7 +487,6 @@ class BanjoTooieContext(CommonContext):
             logger.info(text)
             relevant = args.get("type") == "ItemSend"
             if relevant:
-                msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                 player = self.player_names[int(args["data"][0]["text"])]
                 to_player = self.player_names[int(args["data"][0]["text"])]
                 for id, data in enumerate(args["data"]):
