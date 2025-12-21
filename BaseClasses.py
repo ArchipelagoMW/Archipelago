@@ -1665,6 +1665,10 @@ class EntranceInfo(TypedDict, total=False):
     direction: str
 
 
+class SpoilerPlaythroughError(RuntimeError):
+    """Unique Exception type to indicate that a Spoiler's playthrough calculation failed in some way."""
+
+
 class Spoiler:
     multiworld: MultiWorld
     hashes: Dict[int, str]
@@ -1882,17 +1886,70 @@ class Spoiler:
                     # Add the item back into `precollected_items` and collect it into `multiworld.state`.
                     multiworld.push_precollected(item)
 
-        # we are now down to just the required progress items in collection_spheres.
+        # we are now down to just the required progress items in collection_spheres. Unfortunately, logic issues in
+        # worlds could cause the produced spheres to no longer be a valid playthrough, so verify the playthrough to make
+        # sure.
+        # For the first attempt, try to reach each location at the sphere it is expected to be reached.
+        state = CollectionState(multiworld)
+        final_spheres: list[set[Location]] = []
+        failed_sphere_locations: list[Location] = []
+        failed_sphere: int = -1
+        for i, sphere in enumerate(required_spheres, start=1):
+            unreachable_locations: list[Location] = []
+            for location in sphere:
+                if not location.can_reach(state):
+                    unreachable_locations.append(location)
+            if unreachable_locations:
+                # There is probably a logic issue in one of the worlds. Abort the first attempt and try constructing all
+                # spheres from scratch instead.
+                failed_sphere_locations.extend(sphere)
+                failed_sphere = i
+                break
+            # All the locations in the sphere were reachable, so append the sphere and collect the items before moving
+            # on to the next sphere.
+            final_spheres.append(sphere)
+            for location in sphere:
+                state.collect(location.item, True, location)
+
+        # For the second attempt, abandon the calculated spheres and try to build new spheres from scratch.
+        if failed_sphere_locations:
+            # When running with assertions enabled, error instead of trying the second attempt.
+            if __debug__:
+                raise SpoilerPlaythroughError(
+                    f"Not all required items were reachable at their expected spheres. The first failure occurred in"
+                    f" sphere {failed_sphere} with unreachable locations: {failed_sphere_locations}"
+                )
+
+            required_locations = {location for sphere in collection_spheres for location in sphere}
+            state = CollectionState(multiworld)
+            final_spheres = []
+            while required_locations:
+                sphere = {location for location in required_locations if location.can_reach(state)}
+
+                if not sphere:
+                    raise SpoilerPlaythroughError(f"Not all required items reachable. Unreachable locations:"
+                                                  f" {required_locations}")
+
+                for location in sphere:
+                    state.collect(location.item, True, location)
+
+                final_spheres.append(sphere)
+
+                logging.debug("Calculated final sphere %i, containing %i of %i progress items.",
+                              len(final_spheres), len(sphere), len(required_locations))
+
+                required_locations.difference_update(sphere)
+
         # we can finally output our playthrough
         self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
                                          chain.from_iterable(multiworld.precollected_items.values())
                                          if item.advancement])}
 
-        for i, sphere in enumerate(required_spheres):
+        for i, sphere in enumerate(final_spheres):
             self.playthrough[str(i + 1)] = {
                 str(location): str(location.item) for location in sorted(sphere)}
         if create_paths:
-            self.create_paths(state, required_spheres)
+            self.create_paths(state, final_spheres)
 
         # repair the multiworld again
         for item in removed_precollected:
