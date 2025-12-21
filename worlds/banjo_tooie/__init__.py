@@ -289,13 +289,14 @@ class BanjoTooieWorld(World):
         created_item = BanjoTooieItem(name, item_classification, None, self.player)
         return created_item
 
-    def calculate_useful_filler(self, total, progression) -> tuple[int, int]:
-        # We want to split non-progression items into two halfs
+    @staticmethod
+    def calculate_useful_filler(total: int, progression: int) -> tuple[int, int]:
+        # We want to split non-progressive items into two halfs
         # half is useful, half is filler
         remainder = total - progression
         useful = ceil(remainder / 2)
 
-        return (useful, remainder - useful)
+        return useful, remainder - useful
 
     def get_jiggies_in_pool(self) -> List[Item]:
         itempool = []
