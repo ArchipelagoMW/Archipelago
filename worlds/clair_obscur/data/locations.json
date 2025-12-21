@@ -6231,6 +6231,14 @@
         "type": "Chest"
     },
     {
+        "name": "Verso's Drafts: Gestral Baths - Esquie statue in the forest",
+        "internal_name": "Chest_SideLevel_VersosDraft_2",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
         "name": "Verso's Drafts: Gestral Baths - In hut near the flag",
         "internal_name": "Chest_SideLevel_VersosDraft_3",
         "location": "Verso's Drafts",
@@ -6247,8 +6255,24 @@
         "type": "Chest"
     },
     {
+        "name": "Verso's Drafts: Reverie Path - On the edge of the cliff near the merchant",
+        "internal_name": "Chest_SideLevel_VersosDraft_5",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
         "name": "Verso's Drafts: Gestral Baths - Next to the treehouse piano",
         "internal_name": "Chest_SideLevel_VersosDraft_6",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - On the treehouse roof",
+        "internal_name": "Chest_SideLevel_VersosDraft_7",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
@@ -6265,6 +6289,22 @@
     {
         "name": "Verso's Drafts: Gestral Baths - Paint cage in the forest",
         "internal_name": "Chest_SideLevel_VersosDraft_9",
+        "location": "Verso's Drafts",
+        "condition": {"Free Aim": 1},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Open Playground - By the blue Licornes in the bath",
+        "internal_name": "Chest_SideLevel_VersosDraft_10",
+        "location": "Verso's Drafts",
+        "condition": {"Free Aim": 1},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Across the Esquie platforms in the forest",
+        "internal_name": "Chest_SideLevel_VersosDraft_11",
         "location": "Verso's Drafts",
         "condition": {"Free Aim": 1},
         "original_item": "",
@@ -6296,7 +6336,7 @@
     },
     {
         "name": "Verso's Drafts: Open Playground - Paint cage",
-        "internal_name": "",
+        "internal_name": "15",
         "location": "Verso's Drafts",
         "condition": {"Free Aim": 1},
         "original_item": "",
@@ -6312,7 +6352,23 @@
     },
     {
         "name": "Verso's Drafts: On a box through the door",
-        "internal_name": "Chest_SideLevel_VersosDraft_16",
+        "internal_name": "Chest_SideLevel_VersosDraft_17",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - Through the blue tunnel by the Open Playground entrance",
+        "internal_name": "Chest_SideLevel_VersosDraft_18",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - Guarded by Barbasucettes near the flag",
+        "internal_name": "Chest_SideLevel_VersosDraft_19",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
@@ -6327,8 +6383,24 @@
         "type": "Chest"
     },
     {
+        "name": "Verso's Drafts: Candy land - Behind Very Very Cool Gestral",
+        "internal_name": "Chest_SideLevel_VersosDraft_21",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
         "name": "Verso's Drafts: Reverie Path - Behind Chromatic Franctale",
         "internal_name": "Chest_SideLevel_VersosDraft_22",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Reverie Path - Edge of the water before the carnival",
+        "internal_name": "Chest_SideLevel_VersosDraft_23",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
@@ -6359,8 +6431,32 @@
         "type": "Chest"
     },
     {
+        "name": "Verso's Drafts: Candy land - Up the climbing holds",
+        "internal_name": "Chest_SideLevel_VersosDraft_27",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
         "name": "Verso's Drafts: Reverie Path - Behind giant blocks near xylophone bridge",
         "internal_name": "Chest_SideLevel_VersosDraft_28",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - In a jar by the Open Playground entrance",
+        "internal_name": "Chest_SideLevel_VersosDraft_29",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - In a jar by the blue tunnel",
+        "internal_name": "Chest_SideLevel_VersosDraft_30",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
@@ -6375,8 +6471,24 @@
         "type": "Chest"
     },
     {
-        "name": "Verso's Drafts: Candy land - Hopscotch",
+        "name": "Verso's Drafts: Gestral Baths - Hopscotch in the seesaw bath",
+        "internal_name": "Chest_SideLevel_VersosDraft_32",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Candy land - Hopscotch in the cave",
         "internal_name": "Chest_SideLevel_VersosDraft_33",
+        "location": "Verso's Drafts",
+        "condition": {},
+        "original_item": "",
+        "type": "Chest"
+    },
+    {
+        "name": "Verso's Drafts: Gestral Baths - Hopscotch in the forest",
+        "internal_name": "Chest_SideLevel_VersosDraft_34",
         "location": "Verso's Drafts",
         "condition": {},
         "original_item": "",
