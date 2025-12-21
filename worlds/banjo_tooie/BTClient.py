@@ -20,7 +20,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from Utils import async_start
-from . import BanjoTooieWorld
+from . import __path__, BanjoTooieWorld
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -77,20 +77,8 @@ def write_file(path, data):
   with open(path, "wb") as fi:
     fi.write(data)
 
-def open_world_file(resource: str, mode: str = "rb", encoding: str = None):
-  filename = sys.modules[__name__].__file__
-  apworldExt = ".apworld"
-  game = "banjo_tooie/"
-  if apworldExt in filename:
-    zip_path = pathlib.Path(filename[:filename.index(apworldExt) + len(apworldExt)])
-    with zipfile.ZipFile(zip_path) as zf:
-      zipFilePath = game + resource
-      if mode == "rb":
-        return zf.open(zipFilePath, "r")
-      else:
-        return io.TextIOWrapper(zf.open(zipFilePath, "r"), encoding)
-  else:
-    return open(os.path.join(pathlib.Path(__file__).parent, resource), mode, encoding=encoding)
+def open_world_file(resource: str):
+  return __loader__.get_data(os.path.join(__path__[0], resource))
 
 def patch_rom(rom_path, dst_path, patch_path):
   rom = read_file(rom_path)
@@ -104,8 +92,7 @@ def patch_rom(rom_path, dst_path, patch_path):
   elif md5 != "40e98faa24ac3ebe1d25cb5e5ddf49e4":
     logger.error(f"Unknown ROM! Please use /patch or restart the Banjo-Tooie Client to try again.")
     return False
-  with open_world_file(patch_path) as f:
-    patch = f.read()
+  patch = open_world_file(patch_path)
   write_file(dst_path, bsdiff4.patch(rom, patch))
   return True
 
@@ -165,8 +152,7 @@ async def patch_and_run(show_path):
           program_args = f'--lua={lua}'
           if os.access(os.path.split(lua)[0], os.W_OK):
             with open(lua, "w") as to:
-              with open_world_file("assets/connector_banjo_tooie_bizhawk.lua") as f:
-                to.write(f.read().decode())
+              to.write(open_world_file("assets/connector_banjo_tooie_bizhawk.lua").decode())
         args.append(program_args)
       args.append(patch_path)
       program = subprocess.Popen(
