@@ -13,6 +13,7 @@ from worlds.rac3.client.callbacks import handle_respawn, init, update
 from worlds.rac3.client.interface import Rac3Interface
 from worlds.rac3.client.message import ClientMessage
 from worlds.rac3.constants.data.item import ITEM_FROM_AP_CODE
+from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE
 from worlds.rac3.constants.messages.box_theme import RAC3BOXTHEME
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
@@ -375,11 +376,14 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             await ctx.send_msgs([ClientMessage.set_processed(ctx.processed_item_count)])
             logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
+            counter = 0
             for loc in ctx.locations_checked:
+                logger.debug(f"Collecting location: {LOCATION_FROM_AP_CODE[loc]}")
                 ctx.game_interface.collect_location(loc)
+                counter += 1
+            logger.info(f"Locations collected: {counter}")
             ctx.game_interface.fix_health()
             ctx.game_interface.reset_death_count()
-            logger.info("Locations collected!")
             logger.info("Checking cosmetics...")
             ctx.game_interface.add_cosmetics()
             logger.info("Load the latest autosave to apply cosmetics")
