@@ -373,9 +373,12 @@ class Rac3Interface(GameInterface):
                     new_timer = 0x7FFFFFFF
                 self._write32(RAC3STATUS.INFERNO_TIMER, new_timer)
             case RAC3ITEM.JACKPOT:
-                _time = round(time.time() + uniform(10, 30), 4)
-                self.timers[name + str(_time)] = _time
-                self.boltAndXPMultiplierValue += 1
+                # TODO rework jackpot filler item to extend time instead of increasing multiplier
+                # Limit multiplier to 64x
+                if self.boltAndXPMultiplierValue <= 6: 
+                    _time = round(time.time() + uniform(10, 30), 4)
+                    self.timers[name + str(_time)] = _time
+                    self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
                 new_exp = exp + 10000 + randint(1, 300 * level)
