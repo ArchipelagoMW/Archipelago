@@ -277,6 +277,7 @@ async def n64_sync_task(ctx: OoTContext):
             except ConnectionRefusedError:
                 logger.debug("Connection Refused, Trying Again")
                 ctx.n64_status = CONNECTION_REFUSED_STATUS
+                await asyncio.sleep(1)
                 continue
 
 

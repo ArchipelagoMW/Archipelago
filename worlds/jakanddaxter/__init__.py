@@ -34,9 +34,9 @@ from .locations import (JakAndDaxterLocation,
                         cache_location_table,
                         orb_location_table)
 from .regions import create_regions
-from .rules import (enforce_multiplayer_limits,
-                    enforce_singleplayer_limits,
-                    verify_orb_trade_amounts,
+from .rules import (enforce_mp_absolute_limits,
+                    enforce_mp_friendly_limits,
+                    enforce_sp_limits,
                     set_orb_trade_rule)
 from .locs import (cell_locations as cells,
                    scout_locations as scouts,
@@ -258,18 +258,31 @@ class JakAndDaxterWorld(World):
             self.options.mountain_pass_cell_count.value = self.power_cell_thresholds[1]
             self.options.lava_tube_cell_count.value = self.power_cell_thresholds[2]
 
-        # Store this for remove function.
-        self.power_cell_thresholds_minus_one = [x - 1 for x in self.power_cell_thresholds]
-
-        # For the fairness of other players in a multiworld game, enforce some friendly limitations on our options,
-        # so we don't cause chaos during seed generation. These friendly limits should **guarantee** a successful gen.
-        # We would have done this earlier, but we needed to sort the power cell thresholds first.
+        # We would have done this earlier, but we needed to sort the power cell thresholds first. Don't worry, we'll
+        # come back to them.
         enforce_friendly_options = self.settings.enforce_friendly_options
-        if enforce_friendly_options:
-            if self.multiworld.players > 1:
-                enforce_multiplayer_limits(self)
+        if self.multiworld.players == 1:
+            # For singleplayer games, always enforce/clamp the cell counts to valid values.
+            enforce_sp_limits(self)
+        else:
+            if enforce_friendly_options:
+                # For multiplayer games, we have a host setting to make options fair/sane for other players.
+                # If this setting is enabled, enforce/clamp some friendly limitations on our options.
+                enforce_mp_friendly_limits(self)
             else:
-                enforce_singleplayer_limits(self)
+                # Even if the setting is disabled, some values must be clamped to avoid generation errors.
+                enforce_mp_absolute_limits(self)
+
+        # That's right, set the collection of thresholds again. Don't just clamp the values without updating this list!
+        self.power_cell_thresholds = [
+            self.options.fire_canyon_cell_count.value,
+            self.options.mountain_pass_cell_count.value,
+            self.options.lava_tube_cell_count.value,
+            100,  # The 100 Power Cell Door.
+        ]
+
+        # Now that the threshold list is finalized, store this for the remove function.
+        self.power_cell_thresholds_minus_one = [x - 1 for x in self.power_cell_thresholds]
 
         # Calculate the number of power cells needed for full region access, the number being replaced by traps,
         # and the number of remaining filler.
@@ -281,11 +294,6 @@ class JakAndDaxterWorld(World):
         self.total_trap_cells = min(self.options.filler_power_cells_replaced_with_traps.value, non_prog_cells)
         self.options.filler_power_cells_replaced_with_traps.value = self.total_trap_cells
         self.total_filler_cells = non_prog_cells - self.total_trap_cells
-
-        # Verify that we didn't overload the trade amounts with more orbs than exist in the world.
-        # This is easy to do by accident even in a singleplayer world.
-        self.total_trade_orbs = (9 * self.options.citizen_orb_trade_amount) + (6 * self.options.oracle_orb_trade_amount)
-        verify_orb_trade_amounts(self)
 
         # Cache the orb bundle size and item name for quicker reference.
         if self.options.enable_orbsanity == options.EnableOrbsanity.option_per_level:

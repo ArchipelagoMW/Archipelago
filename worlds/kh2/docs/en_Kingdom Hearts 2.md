@@ -1,15 +1,15 @@
 # Kingdom Hearts 2
 
-<h2 style="text-transform:none";>Changes from the vanilla game</h2>
+## Changes from the vanilla game
 
 This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
-<h2 style="text-transform:none";>Where is the options page</h2>
+## Where is the options page
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 
-<h2 style="text-transform:none";>What is randomized in this game?</h2>
+## What is randomized in this game?
 
 
 - Chests
@@ -21,27 +21,27 @@ The [player options page for this game](../player-options) contains all the opti
 - Keyblade Stats
 - Keyblade Abilities
 
-<h2 style="text-transform:none";>What Kingdom Hearts 2 items can appear in other players' worlds?</h2>
+## What Kingdom Hearts 2 items can appear in other players' worlds?
 
 
 Every item in the game except for abilities on weapons.
 
-<h2 style="text-transform:none";>What is The Garden of Assemblage "GoA"?</h2>
+## What is The Garden of Assemblage "GoA"?
 
 
 The Garden of Assemblage Mod made by Sonicshadowsilver2 and Num turns the Garden of Assemblage into a “World Hub” where each portal takes you to one of the game worlds (as opposed to having a world map). This allows you to enter worlds at any time, and world progression is maintained for each world individually.
 
-<h2 style="text-transform:none";>What does another world's item look like in Kingdom Hearts 2?</h2>
+## What does another world's item look like in Kingdom Hearts 2?
 
 
 In Kingdom Hearts 2, items which need to be sent to other worlds appear in any location that has a item in the vanilla game. They are represented by the Archipelago icon, and must be "picked up" as if it were a normal item. Upon obtaining the item, it will be sent to its home world.
 
-<h2 style="text-transform:none";>When the player receives an item, what happens?</h2>
+## When the player receives an item, what happens?
 
 
 It is added to your inventory. If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 
-<h2 style="text-transform:none";>What Happens if I die before Room Saving?</h2>
+## What Happens if I die before Room Saving?
 
 
 When you die in vanilla Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, any chest you have opened will remain open, and you will keep your level, but lose the experience.
@@ -49,7 +49,7 @@ When you die in vanilla Kingdom Hearts 2, you are reverted to the last non-boss 
 
 For example, if you are fighting Roxas, receive Reflect Element, then die mid-fight, you will keep that Reflect Element. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 
-<h2 style="text-transform:none";>Customization options:</h2>
+## Customization options:
 
 
 - Choose a goal from the list below (with an additional option to Kill Final Xemnas alongside your goal).
@@ -64,11 +64,11 @@ For example, if you are fighting Roxas, receive Reflect Element, then die mid-fi
 - Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
 
-<h2 style="text-transform:none";>What are Lucky Emblems?</h2>
+## What are Lucky Emblems?
 Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
 You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
 
-<h2 style="text-transform:none";>What is Hitlist/Bounties?</h2>
+## What is Hitlist/Bounties?
 The Hitlist goal adds "bounty" items to select late-game fights and locations, and you need to collect X number of them to win.<br>
 The list of possible locations that can contain a bounty:
 
@@ -82,7 +82,7 @@ The list of possible locations that can contain a bounty:
 - Transport to Remembrance
 - Godess of Fate cup and Hades Paradox cup
 
-<h2 style="text-transform:none";>Quality of life:</h2>
+## Quality of life:
 
 
 With the help of Shananas, Num, and ZakTheRobot we have many QoL features such are:

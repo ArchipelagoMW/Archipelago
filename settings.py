@@ -579,6 +579,17 @@ class ServerOptions(Group):
         "goal" -> Client can ask for remaining items after goal completion
         """
 
+    class CountdownMode(str):
+        """
+        Countdown modes
+        Determines whether or not a player can initiate a countdown with !countdown
+        Note that /countdown is always available to the host.
+
+        "enabled" -> Client can always initiate a countdown with !countdown.
+        "disabled" -> Client can never initiate a countdown with !countdown.
+        "auto" -> !countdown will be available for any room with less than 30 slots.
+        """
+
     class AutoShutdown(int):
         """Automatically shut down the server after this many seconds without new location checks, 0 to keep running"""
 
@@ -613,6 +624,7 @@ class ServerOptions(Group):
     release_mode: ReleaseMode = ReleaseMode("auto")
     collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
+    countdown_mode: CountdownMode = CountdownMode("auto")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
     log_network: LogNetwork = LogNetwork(0)
@@ -754,7 +766,12 @@ class Settings(Group):
                 return super().__getattribute__(key)
             # directly import world and grab settings class
             world_mod, world_cls_name = _world_settings_name_cache[key].rsplit(".", 1)
-            world = cast(type, getattr(__import__(world_mod, fromlist=[world_cls_name]), world_cls_name))
+            try:
+                world = cast(type, getattr(__import__(world_mod, fromlist=[world_cls_name]), world_cls_name))
+            except AttributeError:
+                import warnings
+                warnings.warn(f"World {world_cls_name} failed to initialize properly.")
+                return super().__getattribute__(key)
             assert getattr(world, "settings_key") == key
             try:
                 cls_or_name = world.__annotations__["settings"]

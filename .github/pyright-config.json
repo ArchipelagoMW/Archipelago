@@ -29,7 +29,7 @@
   "reportMissingImports": true,
   "reportMissingTypeStubs": true,
 
-  "pythonVersion": "3.10",
+  "pythonVersion": "3.11",
   "pythonPlatform": "Windows",
 
   "executionEnvironments": [

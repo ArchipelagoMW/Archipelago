@@ -1324,10 +1324,20 @@ class OOTWorld(World):
             state.prog_items[self.player][alt_item_name] -= count
             if state.prog_items[self.player][alt_item_name] < 1:
                 del (state.prog_items[self.player][alt_item_name])
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
             return True
         changed = super().remove(state, item)
         if changed:
+            # invalidate caches, nothing can be trusted anymore now
+            state.child_reachable_regions[self.player] = set()
+            state.child_blocked_connections[self.player] = set()
+            state.adult_reachable_regions[self.player] = set()
+            state.adult_blocked_connections[self.player] = set()
             state._oot_stale[self.player] = True
         return changed
 

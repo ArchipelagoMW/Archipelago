@@ -12,14 +12,14 @@ from ...regions.regions import create_all_regions, create_all_connections
 class TestVanillaRegionsConnectionsWithGingerIsland(unittest.TestCase):
     def test_region_exits_lead_somewhere(self):
         for region in vanilla_data.regions_with_ginger_island_by_name.values():
-            with self.subTest(region=region):
+            with self.subTest(region=region.name):
                 for exit_ in region.exits:
                     self.assertIn(exit_, vanilla_data.connections_with_ginger_island_by_name,
                                   f"{region.name} is leading to {exit_} but it does not exist.")
 
     def test_connection_lead_somewhere(self):
         for connection in vanilla_data.connections_with_ginger_island_by_name.values():
-            with self.subTest(connection=connection):
+            with self.subTest(connection=connection.name):
                 self.assertIn(connection.destination, vanilla_data.regions_with_ginger_island_by_name,
                               f"{connection.name} is leading to {connection.destination} but it does not exist.")
 
@@ -27,14 +27,14 @@ class TestVanillaRegionsConnectionsWithGingerIsland(unittest.TestCase):
 class TestVanillaRegionsConnectionsWithoutGingerIsland(unittest.TestCase):
     def test_region_exits_lead_somewhere(self):
         for region in vanilla_data.regions_without_ginger_island_by_name.values():
-            with self.subTest(region=region):
+            with self.subTest(region=region.name):
                 for exit_ in region.exits:
                     self.assertIn(exit_, vanilla_data.connections_without_ginger_island_by_name,
                                   f"{region.name} is leading to {exit_} but it does not exist.")
 
     def test_connection_lead_somewhere(self):
         for connection in vanilla_data.connections_without_ginger_island_by_name.values():
-            with self.subTest(connection=connection):
+            with self.subTest(connection=connection.name):
                 self.assertIn(connection.destination, vanilla_data.regions_without_ginger_island_by_name,
                               f"{connection.name} is leading to {connection.destination} but it does not exist.")
 

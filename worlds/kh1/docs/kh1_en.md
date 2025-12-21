@@ -1,54 +1,115 @@
-# Kingdom Hearts Randomizer Setup Guide
+# Kingdom Hearts Archipelago Randomizer Setup Guide
 
-## Setting up the required mods
+## Required software
 
-BEFORE MODDING, PLEASE INSTALL AND RUN KH1 AT LEAST ONCE.
+- KINGDOM HEARTS -HD 1.5+2.5 ReMIX- from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts) or [Steam](https://store.steampowered.com/app/2552430/KINGDOM_HEARTS_HD_1525_ReMIX/)
 
-1. Install OpenKH and the LUA Backend
+- The latest release of [OpenKH](https://github.com/OpenKH/OpenKh/releases)
 
-    Download the [latest release of OpenKH](https://github.com/OpenKH/OpenKh/releases/tag/latest)
-    
-    Extract the files to a directory of your choosing.
-    
-    Open `OpenKh.Tools.ModsManager.exe` and run first time set up
-    
-    When prompted for game edition, choose `PC Release`, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`
-    
-    When prompted, install Panacea, then click `Next`
-    
-    When prompted, check KH1 plus any other AP game you play and click `Install and configure LUA backend`, then click `Next`
-    
-    Extracting game data for KH1 is unnecessary, but you may want to extract data for KH2 if you plan on playing KH2 AP
-    
-    Click `Finish`
-    
-2. Open `OpenKh.Tools.ModsManager.exe`
+- The latest release of the [Kingdom Hearts 1FM Randomizer Software](https://github.com/gaithern/KH1FM-RANDOMIZER/releases)
 
-3. Click the drop-down menu at the top-right and choose `Kingdom Hearts 1`
+- The latest release of [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) for the ArchipelagoKH1Client.exe
 
-4. Click `Mods>Install a New Mod`
+## Setting up the required software
 
-5. In `Add a new mod from GitHub` paste `gaithern/KH-1FM-AP-LUA`
+### OpenKH
 
-6. Click `Install`
+- Extract the OpenKH files to a directory of your choosing.
+- When prompted for game edition, choose PC Release, select which platform you're using (EGS or Steam), navigate to your `Kingdom Hearts I.5 + II.5` installation folder in the path box and click `Next`.
+- When prompted, install Panacea, then click `Next`.
+- When prompted, check KH1 plus any other AP game you want to play, and click `Install and configure Lua backend`, then click `Next`.
+- Extract the data for KH1.
+- Click `Finish`
 
-7. Navigate to Mod Loader and click `Build and Run`
+### Kingdom Hearts 1FM Randomizer Software
 
+- Extract the Kingdom Hearts 1FM Randomizer Software files in a directory of your choosing.
 
-## Configuring your YAML file
+## Obtaining and using the seed zip
 
-### What is a YAML file and why do I need one?
+- When you generate a game you will see a download link for a KH1 .zip seed on the room page.
+- After downloading this zip, open `mod_generator.exe` in your Kingdom Hearts 1FM Randomizer Software folder.
+- Direct `mod_generator.exe` to both your seed zip and your KH1 data folder extracted during your OpenKH set up.
+- Click `start`.
+- After some time, you will find a file in your `Output` folder called `mod_YYYYMMDDHHMMSS.zip`
+- Open `OpenKh.Tools.ModsManager.exe` and ensure that the dropdown in the top right is set to `Kingdom Hearts 1`
+- Click the green plus, choose `Select and install Mod Archive or Lua Script`, and direct the prompt to your new mod zip.
+- You should now see a mod on your list called `KH1 Randomizer Seed XYZ` where XYZ is your seed hex value.
+- Ensure this mod is checked, then, if you want to play right away, click `Mod Loader` at the top.
+- Click `Build and Run`.  Your modded game should now open.
 
-Your YAML file contains a set of configuration options which provide the generator with information about how it should
-generate your game. Each player of a multiworld will provide their own YAML file. This setup allows each player to enjoy
-an experience customized for their taste, and different players in the same multiworld can all have different options.
+## Connecting to your multiworld via the KH1 Client
 
-### Where do I get a YAML file?
+- Once your game is being hosted, open `ArchipelagoLauncher.exe`.
+- Find `KH1 Client` and open it.
+- At the top, in the `Server:` bar, type in the host address and port.
+- Click the `Connect` button in the top right.
+- If connection to the server was successful, you'll be prompted to type in your slot named in the `Command:` bar at the bottom.
+- After typing your slot name, press enter.
+- If all is well, you are now connected.
 
-you can customize your settings by visiting the [Kingdom Hearts Options Page](/games/Kingdom%20Hearts/player-options).
+## FAQ
 
-## Connect to the MultiWorld
+### The client did not confirm connection to the game, is that normal?
 
-For first-time players, it is recommended to open your KH1 Client first before opening the game.
+Yes, the game and client communicate via a game communication path set up in your in your `%AppData%` folder, and therefore don't need to establish a socket connection.
 
-On the title screen, open your KH1 Client and connect to your multiworld.
+### I am not sending or receiving items.
+
+Check out this [troubleshooting guide](https://docs.google.com/document/d/1oAXxJWrNeqSL-tkB_01bLR0eT0urxz2FBo4URpq3VbM/edit?usp=sharing)
+
+### Why aren't the evidence boxes spawning in Wonderland?
+
+You'll need to find `Footprints` in your multiworld.
+
+### Why won't Phil let me start the Prelims?
+
+You'll need to find `Entry Pass` in the multiworld.
+
+### Why aren't the slides spawning in Deep Jungle?
+
+You'll need to find `Slides` in the multiworld.
+
+### Why can't I make progress in Atlantica?
+
+You'll need to find `Crystal Trident` in the multiworld.
+
+### Why won't the doctor let me progress in Halloween Town?
+
+You'll need to find either `Forget-Me-Not` or `Jack-in-the-Box` in the multiworld.
+
+### Why is there a book missing in the Hollow Bastion library?
+
+You'll need to find `Theon Vol. 6` in the multiworld.
+
+### How do I unlock End of the World?
+
+Depending on your settings, your options are either finding a specified amount of `Lucky Emblems` or finding the item `End of the World`.
+
+### How do I enter Destiny Islands?
+
+After obtaining the item `Destiny Islands`, you can land there as an additional option in Traverse Town.
+
+### How do I progress to Destiny Islands Day 2 and 3?
+
+In order to access Day 2 and 3, you need to collect an amount of `Raft Materials` specified in your settings.  When you start Day 3, you'll be immediately warped to Homecoming.
+
+### Why can't I use the summon I obtained?
+
+You need at least one magic spell before you can use summons.
+
+## Troubleshooting
+
+### Why am I not sending or receiving any items despite being connected to the server?
+
+Make sure you are using the KH1 Client and not the Text Client. You will need to open the client manually via the Archipelago Launcher.
+
+### Why don't I have any worlds on the world map?
+
+If you have any of these symptoms: you find that the title screen does not have the Archipelago logo, that you had to do the entirety of Dive to the Heart, that you do not warp to the world map after choosing your Dream Weapons, or that when you get to the world map there are no worlds there;<br><br>
+
+This is likely due to the mod not being applied properly. First, reinstall both Panacea and Lua Backend via the Setup Wizard under Settings. Second, make sure the seed mod is enabled [x]. Finally, ensure the game builds with no errors after selecting Build and Run under Mod Loader.
+
+### Why did the game send checks that I had not collected?
+
+The client caches your inventory and does not clear the cache when switching slots. The game also does something similar, even if backed out to the title screen. Therefore, it's highly encouraged, whenever switching slots or connecting to a different server, to always fully close both the game and the client first.

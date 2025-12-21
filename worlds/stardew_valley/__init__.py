@@ -50,15 +50,25 @@ class StardewWebWorld(WebWorld):
     options_presets = sv_options_presets
     option_groups = sv_option_groups
 
-    tutorials = [
-        Tutorial(
-            "Multiworld Setup Guide",
-            "A guide to playing Stardew Valley with Archipelago.",
-            "English",
-            "setup_en.md",
-            "setup/en",
-            ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
-        )]
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Stardew Valley with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["KaitoKid", "Jouramie", "Witchybun (Mod Support)", "Exempt-Medic (Proofreading)"]
+    )
+
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer Stardew Valley sur Archipelago",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Eindall"]
+    )
+
+    tutorials = [setup_en, setup_fr]
 
 
 class StardewValleyWorld(World):

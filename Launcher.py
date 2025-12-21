@@ -11,6 +11,7 @@ Additional components can be added to worlds.LauncherComponents.components.
 import argparse
 import logging
 import multiprocessing
+import os
 import shlex
 import subprocess
 import sys
@@ -41,13 +42,17 @@ def open_host_yaml():
     if is_linux:
         exe = which('sensible-editor') or which('gedit') or \
               which('xdg-open') or which('gnome-open') or which('kde-open')
-        subprocess.Popen([exe, file])
     elif is_macos:
         exe = which("open")
-        subprocess.Popen([exe, file])
     else:
         webbrowser.open(file)
+        return
 
+    env = os.environ
+    if "LD_LIBRARY_PATH" in env:
+        env = env.copy()
+        del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+    subprocess.Popen([exe, file], env=env)
 
 def open_patch():
     suffixes = []
@@ -70,12 +75,17 @@ def open_patch():
             launch([*exe, file], component.cli)
 
 
-def generate_yamls():
+def generate_yamls(*args):
     from Options import generate_yaml_templates
+
+    parser = argparse.ArgumentParser(description="Generate Template Options", usage="[-h] [--skip_open_folder]")
+    parser.add_argument("--skip_open_folder", action="store_true")
+    args = parser.parse_args(args)
 
     target = Utils.user_path("Players", "Templates")
     generate_yaml_templates(target, False)
-    open_folder(target)
+    if not args.skip_open_folder:
+        open_folder(target)
 
 
 def browse_files():
@@ -92,7 +102,11 @@ def open_folder(folder_path):
         return
 
     if exe:
-        subprocess.Popen([exe, folder_path])
+        env = os.environ
+        if "LD_LIBRARY_PATH" in env:
+            env = env.copy()
+            del env["LD_LIBRARY_PATH"]  # exe is a system binary, so reset LD_LIBRARY_PATH
+        subprocess.Popen([exe, folder_path], env=env)
     else:
         logging.warning(f"No file browser available to open {folder_path}")
 
@@ -187,7 +201,8 @@ def get_exe(component: str | Component) -> Sequence[str] | None:
 def launch(exe, in_terminal=False):
     if in_terminal:
         if is_windows:
-            subprocess.Popen(['start', *exe], shell=True)
+            # intentionally using a window title with a space so it gets quoted and treated as a title
+            subprocess.Popen(["start", "Running Archipelago", *exe], shell=True)
             return
         elif is_linux:
             terminal = which('x-terminal-emulator') or which('gnome-terminal') or which('xterm')
@@ -203,12 +218,17 @@ def launch(exe, in_terminal=False):
 
 def create_shortcut(button: Any, component: Component) -> None:
     from pyshortcuts import make_shortcut
-    script = sys.argv[0]
-    wkdir = Utils.local_path()
+    env = os.environ
+    if "APPIMAGE" in env:
+        script = env["ARGV0"]
+        wkdir = None # defaults to ~ on Linux
+    else:
+        script = sys.argv[0]
+        wkdir = Utils.local_path()
 
     script = f"{script} \"{component.display_name}\""
     make_shortcut(script, name=f"Archipelago {component.display_name}", icon=local_path("data", "icon.ico"),
-                  startmenu=False, terminal=False, working_dir=wkdir)
+                  startmenu=False, terminal=False, working_dir=wkdir, noexe=Utils.is_frozen())
     button.menu.dismiss()
 
 
@@ -474,7 +494,7 @@ def main(args: argparse.Namespace | dict | None = None):
 
 if __name__ == '__main__':
     init_logging('Launcher')
-    Utils.freeze_support()
+    multiprocessing.freeze_support()
     multiprocessing.set_start_method("spawn")  # if launched process uses kivy, fork won't work
     parser = argparse.ArgumentParser(
         description='Archipelago Launcher',

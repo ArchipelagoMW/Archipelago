@@ -7,12 +7,12 @@ Comme nous utilisons BizHawk, ce guide s'applique uniquement aux systèmes Windo
 ## Logiciel requis
 
 - BizHawk : [Sorties BizHawk de TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-   - Les versions 2.3.1 et ultérieures sont prises en charge. La version 2.7 est recommandée pour des raisons de stabilité.
+   - Les versions 2.3.1 et ultérieures sont prises en charge. La version 2.10 est recommandée pour des raisons de stabilité.
    - Des instructions d'installation détaillées pour BizHawk peuvent être trouvées sur le lien ci-dessus.
    - Les utilisateurs Windows doivent d'abord exécuter le programme d'installation des prérequis, qui peut également être trouvé sur le lien ci-dessus.
 - Le client Archipelago intégré, qui peut être installé [ici](https://github.com/ArchipelagoMW/Archipelago/releases)
    (sélectionnez « Ocarina of Time Client » lors de l'installation).
-- Une ROM Ocarina of Time v1.0.
+- Un fichier ROM v1.0 US d'Ocarina of Time.
 
 ## Configuration de BizHawk
 

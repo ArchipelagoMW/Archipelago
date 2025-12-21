@@ -134,6 +134,7 @@
 
 {% macro OptionList(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="_ensure-empty-list"/>
     <div class="option-container">
         {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="option-entry">
@@ -146,6 +147,7 @@
 
 {% macro LocationSet(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="_ensure-empty-list"/>
     <div class="option-container">
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
@@ -169,6 +171,7 @@
 
 {% macro ItemSet(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="_ensure-empty-list"/>
     <div class="option-container">
         {% for group_name in world.item_name_groups.keys()|sort %}
             {% if group_name != "Everything" %}
@@ -192,6 +195,7 @@
 
 {% macro OptionSet(option_name, option) %}
     {{ OptionTitle(option_name, option) }}
+    <input type="hidden" id="{{ option_name }}-{{ key }}-hidden" name="{{ option_name }}" value="_ensure-empty-list"/>
     <div class="option-container">
         {% for key in (option.valid_keys if option.valid_keys is ordered else option.valid_keys|sort) %}
             <div class="option-entry">
