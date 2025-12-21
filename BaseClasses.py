@@ -1940,6 +1940,13 @@ class Spoiler:
 
                 required_locations.difference_update(sphere)
 
+        # Verify that, by following the playthrough, the multiworld has been beaten.
+        if not multiworld.has_beaten_game(state):
+            missing_goals = {player for player in multiworld.player_ids
+                             if not multiworld.has_beaten_game(state, player)}
+            raise SpoilerPlaythroughError(f"All required items reached, but not all games beaten. Unbeaten games:"
+                                          f" {[multiworld.get_player_name(player) for player in missing_goals]}")
+
         # we can finally output our playthrough
         self.playthrough = {"0": sorted([self.multiworld.get_name_string_for_object(item) for item in
                                          chain.from_iterable(multiworld.precollected_items.values())
