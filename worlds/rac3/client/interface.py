@@ -920,9 +920,15 @@ class Rac3Interface(GameInterface):
             # death = choice(list(DEATH_FROM_ACTION.keys()))
             if self.vehicle != 0:
                 health_addr = self._read32(self._read32(self.vehicle + 0x68))
-                vehicle_blow_up_addr = self.vehicle + 0xBC
                 self._write32(health_addr, 0)  # health is a float, but we can write 0 as int32
-                self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
+                if self.planet == RAC3REGION.MARCADIA:
+                    # special case for the marcadia turret mission that cant blow up
+                    # this will force mission failure and increase death count by 1
+                    vehicle_reload_addr = self.vehicle + 0xCB
+                    self._write8(vehicle_reload_addr, 0xD0)  # 0xD0: force reload from vehicle death
+                else:
+                    vehicle_blow_up_addr = self.vehicle + 0xBC
+                    self._write8(vehicle_blow_up_addr, 0x9)  # 0x9: blow up vehicle immediately 0xA: force respawn
                 # self._write8(RAC3STATUS.ACTION, death)
                 logger.debug(f'player in vehicle, killing vehicle too')
                 # logger.debug(f'player died of {DEATH_FROM_ACTION[death]}')
