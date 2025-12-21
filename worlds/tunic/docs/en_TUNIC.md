@@ -83,7 +83,7 @@ Notes:
 - The Entrance Randomizer option must be enabled for it to work.
 - The `direction` field is not supported. Connections are always coupled.
 - For a list of entrance names, check `er_data.py` in the TUNIC world folder or generate a game with the Entrance Randomizer option enabled and check the spoiler log.
-- There is no limit to the number of Shops you can plando.
+- You can plando up to 500 additional shops in Decoupled. You should not do this.
 
 See the [Archipelago Plando Guide](../../../tutorial/Archipelago/plando/en) for more information on Plando and Connection Plando.
 

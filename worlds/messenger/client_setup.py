@@ -2,35 +2,28 @@ import argparse
 import io
 import logging
 import os.path
+import requests
 import subprocess
 import urllib.request
 from shutil import which
-from typing import Any
+from typing import Any, Callable, TYPE_CHECKING
 from zipfile import ZipFile
-from Utils import open_file
+from Utils import is_windows, messagebox, open_file, tuplize_version
 
-import requests
-
-from Utils import is_windows, messagebox, tuplize_version
+if TYPE_CHECKING:
+    from kvui import ButtonsPrompt
 
 
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
 
 
-def ask_yes_no_cancel(title: str, text: str) -> bool | None:
-    """
-    Wrapper for tkinter.messagebox.askyesnocancel, that creates a popup dialog box with yes, no, and cancel buttons.
+def create_yes_no_popup(title: str, text: str, callback: Callable[[str], None]) -> "ButtonsPrompt":
+    from kvui import ButtonsPrompt
+    buttons = ["Yes", "No", "Cancel"]
 
-    :param title: Title to be displayed at the top of the message box.
-    :param text: Text to be displayed inside the message box.
-    :return: Returns True if yes, False if no, None if cancel.
-    """
-    from tkinter import Tk, messagebox
-    root = Tk()
-    root.withdraw()
-    ret = messagebox.askyesnocancel(title, text)
-    root.update()
-    return ret
+    prompt = ButtonsPrompt(title, text, callback, *buttons)
+    prompt.open()
+    return prompt
 
 
 def launch_game(*args) -> None:
@@ -151,6 +144,76 @@ def launch_game(*args) -> None:
         # one of the alpha builds
         return "alpha" in latest_version or tuplize_version(latest_version) > tuplize_version(installed_version)
 
+    def after_courier_install_popup(answer: str) -> None:
+        """Gets called if the user doesn't have courier installed. Handle the button they pressed."""
+        nonlocal prompt
+
+        prompt.dismiss()
+        if answer in ("No", "Cancel"):
+            return
+        logging.info("Installing Courier")
+        install_courier()
+        prompt = create_yes_no_popup("Install Mod",
+                                     "No randomizer mod detected. Would you like to install now?",
+                                     after_mod_install_popup)
+
+    def after_mod_install_popup(answer: str) -> None:
+        """Gets called if the user has courier but mod isn't installed, or there's an available update."""
+        nonlocal prompt
+
+        prompt.dismiss()
+        if answer in ("No", "Cancel"):
+            return
+        logging.info("Installing Mod")
+        install_mod()
+        prompt = create_yes_no_popup("Launch Game",
+                                     "Courier and Game mod installed successfully. Launch game now?",
+                                     launch)
+
+    def after_mod_update_popup(answer: str) -> None:
+        """Gets called if there's an available update."""
+        nonlocal prompt
+
+        prompt.dismiss()
+        if answer == "Cancel":
+            return
+        if answer == "Yes":
+            logging.info("Updating Mod")
+            install_mod()
+            prompt = create_yes_no_popup("Launch Game",
+                                         "Courier and Game mod installed successfully. Launch game now?",
+                                         launch)
+        else:
+            prompt = create_yes_no_popup("Launch Game",
+                                         "Game Mod not updated. Launch game now?",
+                                         launch)
+
+    def launch(answer: str | None = None) -> None:
+        """Launch the game."""
+        nonlocal args
+
+        if prompt:
+            prompt.dismiss()
+        if answer and answer in ("No", "Cancel"):
+            return
+
+        parser = argparse.ArgumentParser(description="Messenger Client Launcher")
+        parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
+        args = parser.parse_args(args)
+
+        if not is_windows:
+            if args.url:
+                open_file(f"steam://rungameid/764790//{args.url}/")
+            else:
+                open_file("steam://rungameid/764790")
+        else:
+            os.chdir(game_folder)
+            if args.url:
+                subprocess.Popen([MessengerWorld.settings.game_path, str(args.url)])
+            else:
+                subprocess.Popen(MessengerWorld.settings.game_path)
+            os.chdir(working_directory)
+
     from . import MessengerWorld
     try:
         game_folder = os.path.dirname(MessengerWorld.settings.game_path)
@@ -172,49 +235,24 @@ def launch_game(*args) -> None:
     except ImportError:
         pass
     if not courier_installed():
-        should_install = ask_yes_no_cancel("Install Courier",
-                                           "No Courier installation detected. Would you like to install now?")
-        if not should_install:
-            return
-        logging.info("Installing Courier")
-        install_courier()
+        prompt = create_yes_no_popup("Install Courier",
+                                     "No Courier installation detected. Would you like to install now?",
+                                     after_courier_install_popup)
+        return
     if not mod_installed():
-        should_install = ask_yes_no_cancel("Install Mod",
-                                           "No randomizer mod detected. Would you like to install now?")
-        if not should_install:
-            return
-        logging.info("Installing Mod")
-        install_mod()
+        prompt = create_yes_no_popup("Install Mod",
+                                     "No randomizer mod detected. Would you like to install now?",
+                                     after_mod_install_popup)
+        return
     else:
         latest = request_data(MOD_URL)["tag_name"]
         if available_mod_update(latest):
-            should_update = ask_yes_no_cancel("Update Mod",
-                                              f"New mod version detected. Would you like to update to {latest} now?")
-            if should_update:
-                logging.info("Updating mod")
-                install_mod()
-            elif should_update is None:
-                return
-
-    if not args:
-        should_launch = ask_yes_no_cancel("Launch Game",
-                                          "Mod installed and up to date. Would you like to launch the game now?")
-        if not should_launch:
+            prompt = create_yes_no_popup("Update Mod",
+                                         f"New mod version detected. Would you like to update to {latest} now?",
+                                         after_mod_update_popup)
             return
 
-    parser = argparse.ArgumentParser(description="Messenger Client Launcher")
-    parser.add_argument("url", type=str, nargs="?", help="Archipelago Webhost uri to auto connect to.")
-    args = parser.parse_args(args)
-
-    if not is_windows:
-        if args.url:
-            open_file(f"steam://rungameid/764790//{args.url}/")
-        else:
-            open_file("steam://rungameid/764790")
-    else:
-        os.chdir(game_folder)
-        if args.url:
-            subprocess.Popen([MessengerWorld.settings.game_path, str(args.url)])
-        else:
-            subprocess.Popen(MessengerWorld.settings.game_path)
-        os.chdir(working_directory)
+    if not args:
+        prompt = create_yes_no_popup("Launch Game",
+                                     "Mod installed and up to date. Would you like to launch the game now?",
+                                     launch)

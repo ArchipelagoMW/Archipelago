@@ -1,4 +1,4 @@
-from .. import SVTestBase
+from ..bases import SVTestBase
 from ..options.presets import allsanity_mods_6_x_x
 from ...stardew_rule import HasProgressionPercent
 

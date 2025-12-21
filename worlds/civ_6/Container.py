@@ -1,10 +1,9 @@
 from dataclasses import dataclass
 import os
-import io
 from typing import TYPE_CHECKING, Dict, List, Optional, cast
 import zipfile
 from BaseClasses import Location
-from worlds.Files import APContainer, AutoPatchRegister
+from worlds.Files import APPlayerContainer
 
 from .Enum import CivVICheckType
 from .Locations import CivVILocation, CivVILocationData
@@ -26,31 +25,29 @@ class CivTreeItem:
     ui_tree_row: int
 
 
-class CivVIContainer(APContainer, metaclass=AutoPatchRegister):
+class CivVIContainer(APPlayerContainer):
     """
     Responsible for generating the dynamic mod files for the Civ VI multiworld
     """
     game: Optional[str] = "Civilization VI"
     patch_file_ending = ".apcivvi"
 
-    def __init__(self, patch_data: Dict[str, str] | io.BytesIO, base_path: str = "", output_directory: str = "",
+    def __init__(self, patch_data: Dict[str, str], base_path: str = "", output_directory: str = "",
                  player: Optional[int] = None, player_name: str = "", server: str = ""):
-        if isinstance(patch_data, io.BytesIO):
-            super().__init__(patch_data, player, player_name, server)
-        else:
-            self.patch_data = patch_data
-            self.file_path = base_path
-            container_path = os.path.join(output_directory, base_path + ".apcivvi")
-            super().__init__(container_path, player, player_name, server)
+        self.patch_data = patch_data
+        self.file_path = base_path
+        container_path = os.path.join(output_directory, base_path + ".apcivvi")
+        super().__init__(container_path, player, player_name, server)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         for filename, yml in self.patch_data.items():
             opened_zipfile.writestr(filename, yml)
         super().write_contents(opened_zipfile)
 
+
 def sanitize_value(value: str) -> str:
-  """Removes values that can cause issues in XML"""
-  return value.replace('"', "'").replace('&', 'and')
+    """Removes values that can cause issues in XML"""
+    return value.replace('"', "'").replace('&', 'and').replace('{', '').replace('}', '')
 
 
 def get_cost(world: 'CivVIWorld', location: CivVILocationData) -> int:
@@ -91,8 +88,10 @@ def generate_new_items(world: 'CivVIWorld') -> str:
     boost_civics = []
 
     if world.options.boostsanity:
-        boost_techs = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
-        boost_civics = [location for location in locations if location.location_type == CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
+        boost_techs = [location for location in locations if location.location_type ==
+                       CivVICheckType.BOOST and location.name.split("_")[1] == "TECH"]
+        boost_civics = [location for location in locations if location.location_type ==
+                        CivVICheckType.BOOST and location.name.split("_")[1] == "CIVIC"]
         techs += boost_techs
         civics += boost_civics
 

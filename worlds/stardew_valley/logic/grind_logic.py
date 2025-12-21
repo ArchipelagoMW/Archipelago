@@ -38,7 +38,7 @@ class GrindLogicMixin(BaseLogicMixin):
         self.grind = GrindLogic(*args, **kwargs)
 
 
-class GrindLogic(BaseLogic[Union[GrindLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, BookLogicMixin, TimeLogicMixin, ToolLogicMixin]]):
+class GrindLogic(BaseLogic):
 
     def can_grind_mystery_boxes(self, quantity: int) -> StardewRule:
         opening_rule = self.logic.region.can_reach(Region.blacksmith)
