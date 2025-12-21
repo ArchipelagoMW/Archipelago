@@ -394,7 +394,7 @@ class PatternInfo(enum.IntFlag):
     dironly = 0b10
 
 
-def _create_regex(pattern: str) -> tuple[re.Pattern, PatternInfo] | None:
+def _create_ignore_regex(pattern: str) -> tuple[re.Pattern, PatternInfo] | None:
     # Remove empty, comment, and invalid lines
     if not pattern or pattern.startswith("#") or pattern.endswith("\\"):
         return None
@@ -468,7 +468,7 @@ def read_apignore(filename: str | pathlib.Path) -> list[tuple[re.Pattern, Patter
     try:
         with open(filename) as file:
             for line in file:
-                res = _create_regex(line)
+                res = _create_ignore_regex(line)
                 if res is not None:
                     ignores.append(res)
     except FileNotFoundError:

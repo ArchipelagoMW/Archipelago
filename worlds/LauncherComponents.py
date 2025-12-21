@@ -321,8 +321,8 @@ if not is_frozen():
                     test_path = pathlib.Path(*relative_path.parts[1:]).as_posix()
                     ignored = False
                     for pattern, info in itertools.chain(global_apignores, apignores):
-                        # Don't test regular patterns on already ignored files or negated patterns on unignored files
                         negated, dironly = PatternInfo.negated in info, PatternInfo.dironly in info
+                        # Don't test regular patterns on already ignored files or negated patterns on unignored files
                         if negated != ignored:
                             continue
                         # Don't test files for dir-only patterns
