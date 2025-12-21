@@ -807,7 +807,7 @@ class Rac3Interface(GameInterface):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
         if nanotech_exp > 0x7FFFFFFF:
             self._write32(RAC3STATUS.NANOTECH_EXP, 0)
-            self.notification_queue.append((f'Negative Nanotech EXP detected! resetting to 0', RAC3BOXTHEME.DEFAULT))
+            self.notification_queue.append((f'Negative Nanotech EXP detected! Resetting EXP to 0', RAC3BOXTHEME.WARNING))
         # If other stuff needs overflow fixing, add here
 
     def reload_check(self):
