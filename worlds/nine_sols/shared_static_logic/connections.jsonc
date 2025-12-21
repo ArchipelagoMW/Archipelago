@@ -564,23 +564,26 @@
     {
         "from": "PRW - Root Node", "to": "PRW - Guarded Chest",
         "requires": [ { "anyOf": [
+            // without WC, using a TCK target is the only way to go between the two long platforms in the big room
             [ { "item": "Cloud Leap" }, { "item": "Tai-Chi Kick" } ],
             [
                 { "item": "Wall Climb" },
-                { "anyOf": [
+                { "anyOf": [ // with WC and without TCK, the hard jump is from the right green wall to the upper long platform
                     [
-                        { "item": "Cloud Leap" },
-                        { "anyOf": [ { "item": "Air Dash" }, { "item": "Charged Strike" } ] }
+                        { "item": "Cloud Leap" }, // is its own horizontal aid, so only 1 more horizontal boost needed
+                        { "anyOf": [
+                            { "item": "Tai-Chi Kick" }, // either using one or both TCK targets
+                            { "item": "Air Dash" } // or the one other horizontal movement we have on vanilla
+                        ] }
                     ],
                     [
-                        { "item": "Grapple" },
-                        { "item": "Air Dash" },
-                        { "item": "Charged Strike" }
+                        { "item": "Grapple" }, // doesn't help in the big room, so 2 horizontal boosts needed
+                        { "item": "Tai-Chi Kick" } // which on vanilla logic can only mean both TCK targets
                     ]
                 ] }
             ]
         ] } ],
-        "medium_requires": [
+        "medium_requires": [ // the new logic here is using CS-dash and T-dash as possible "horizontal boosts"
             { "item": "Wall Climb" },
             { "anyOf": [
                 { "item": "Cloud Leap" }, // and T-dash
@@ -592,9 +595,9 @@
         ],
         "ls_requires": [
             { "item": "Ledge Grab" }, // wall slide up the big room
-            { "anyOf": [ // after we get past the two grapple points somehow
+            { "anyOf": [ // still need CL or G for the grapple points, and CL or T-dash for the final rope->platform jump
                 { "item": "Cloud Leap" },
-                [{ "item": "Grapple" }, { "item": "Air Dash" }] // after wall slide we still need AD OR CL to finish
+                { "item": "Grapple" }
             ] }
         ]
     },
