@@ -1,6 +1,6 @@
 import asyncio, hashlib, json, os, multiprocessing, copy, sys, time, atexit, pkgutil
 import bsdiff4 # pyright: ignore[reportMissingTypeStubs]
-from typing import Any, List, TypedDict, cast
+from typing import TYPE_CHECKING, Any, List, TypedDict, cast
 from collections import Counter
 from dataclasses import dataclass
 
@@ -10,8 +10,10 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
     ClientCommandProcessor, logger, get_base_parser
 import Utils
 from Utils import async_start
-from kvui import MDNavigationItemBase, MessageBox, UILog
 from . import BanjoTooieWorld
+
+if TYPE_CHECKING:
+    from kvui import UILog
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -155,8 +157,8 @@ async def patch_and_run(show_path: bool):
         stderr=subprocess.DEVNULL,
       )
 
-class BanjoTooieClientTab(MDNavigationItemBase):
-    content: UILog
+class BanjoTooieClientTab:
+    content: "UILog"
 
 class BanjoTooieItemTracker:
 
@@ -405,6 +407,8 @@ class BanjoTooieContext(CommonContext):
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
     def on_request_close(self, *args: Any):
+        from kvui import MessageBox
+
         title = "Warning: Autostart program still running!"
         message = "Attempting to close this window again will forcibly close it."
         def cleanup(messagebox: MessageBox):
