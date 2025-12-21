@@ -381,10 +381,10 @@ class Rac3Interface(GameInterface):
                     self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
+                level = self._read8(RAC3STATUS.MAX_HEALTH)
                 new_exp = exp + 10000 + randint(1, 300 * level)
                 if new_exp > 0x7FFFFFFF:
                     new_exp = 0x7FFFFFFF
-                level = self._read8(RAC3STATUS.MAX_HEALTH)
                 self._write32(RAC3STATUS.NANOTECH_EXP, new_exp)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
@@ -617,9 +617,14 @@ class Rac3Interface(GameInterface):
             if self.UnlockItem[name].status:
                 addr = RAC3_REGION_DATA_TABLE[SHIP_SLOTS[self.UnlockItem[name].status - 1]].SLOT_ADDRESS
                 # Don't allow planets that can softlock
-                if ((name != RAC3ITEM.QWARKS_HIDEOUT or self.UnlockItem[RAC3ITEM.REFRACTOR].status) and
-                        (name != RAC3ITEM.HOLOSTAR_STUDIOS or
-                         (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status))):
+                if name == RAC3ITEM.QWARKS_HIDEOUT and not self.UnlockItem[RAC3ITEM.REFRACTOR].status:
+                    # Write 0 if Qwarks Hideout is missing Refractor
+                    self._write8(addr, 0)
+                elif name == (RAC3ITEM.HOLOSTAR_STUDIOS 
+                and not (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status)):
+                    # Write 0 if Holostar Studios is missing Hacker or Hypershot
+                    self._write8(addr, 0)
+                else:
                     if self.UnlockItem[name].unlock_delay:
                         # logger.debug(f'Write access to: {name} at {hex(addr)} value: {hex(planet.ID)}')
                         self._write8(addr, planet.ID)
@@ -627,10 +632,6 @@ class Rac3Interface(GameInterface):
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
             self.ship_slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
-            if self.softlock_prevention_check(RAC3REGION.HOLOSTAR_STUDIOS):
-                self.ship_slot_limit -= 1
-            if self.softlock_prevention_check(RAC3REGION.QWARKS_HIDEOUT):
-                self.ship_slot_limit -= 1
             if number >= self.ship_slot_limit:
                 # logger.debug(f'Remove planet at {slot}')
                 self._write8(RAC3_REGION_DATA_TABLE[slot].SLOT_ADDRESS, 0)
