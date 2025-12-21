@@ -280,6 +280,7 @@ class Rac3Interface(GameInterface):
         self.notification_cycler()
         # Proc Options
         self.multiplier_cycler()
+        self.overflow_fix()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -801,6 +802,13 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
+
+    def overflow_fix(self):
+        nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
+        if nanotech_exp > 0x7FFFFFFF:
+            self._write32(RAC3STATUS.NANOTECH_EXP, 0)
+            self.notification_queue.append((f'Negative Nanotech EXP detected! resetting to 0', RAC3BOXTHEME.DEFAULT))
+        # If other stuff needs overflow fixing, add here
 
     def reload_check(self):
         """Detects if the game is currently being reloaded, and updates death data"""
