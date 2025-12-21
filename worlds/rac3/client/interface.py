@@ -372,8 +372,11 @@ class Rac3Interface(GameInterface):
                 self.boltAndXPMultiplierValue += 1
             case RAC3ITEM.PLAYER_XP:
                 exp = self._read32(RAC3STATUS.NANOTECH_EXP)
+                new_exp = exp + 10000 + randint(1, 300 * level)
+                if new_exp > 0x7FFFFFFF:
+                    new_exp = 0x7FFFFFFF
                 level = self._read8(RAC3STATUS.MAX_HEALTH)
-                self._write32(RAC3STATUS.NANOTECH_EXP, exp + 10000 + randint(1, 300 * level))
+                self._write32(RAC3STATUS.NANOTECH_EXP, new_exp)
             case RAC3ITEM.WEAPON_XP:
                 valid_weapons = []
                 for weapon_name in non_prog_weapon_data.keys():
