@@ -310,7 +310,7 @@ def set_entrance_rules(logic: StardewLogic, rule_collector: StardewRuleCollector
     rule_collector.set_entrance_rule(Entrance.enter_shorts_maze, logic.has(Craftable.staircase))
 
     rule_collector.set_entrance_rule(Entrance.enter_mens_locker_room, logic.wallet.has_mens_locker_key())
-    rule_collector.set_entrance_rule(Entrance.enter_womens_locker_room, logic.wallet.has_mens_locker_key())
+    rule_collector.set_entrance_rule(Entrance.enter_womens_locker_room, logic.wallet.has_womens_locker_key())
 
 
 def set_bookseller_rules(logic, rule_collector):
