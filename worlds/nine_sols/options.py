@@ -194,7 +194,7 @@ class ShuffleLedgeGrab(Toggle):
 class ShopUnlocks(Choice):
     """
     The condition for unlocking the three shops in Four Seasons Pavilion. That is: Kuafu's shop, Chiyou's shop,
-    and Kuafu's extra inventory.
+    and Kuafu's extra inventory (visiting Chiyou outside FSP is considered out of logic)
 
     - vanilla_like_locations means the shops are unlocked by checking AP locations that try to resemble the vanilla
     game's unlock conditions (to the extent feasible in a randomizer).
