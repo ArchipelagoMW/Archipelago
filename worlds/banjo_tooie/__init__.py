@@ -96,13 +96,7 @@ class BanjoTooieWorld(World):
     settings_key = "banjo_tooie_options"
     web = BanjoTooieWeb()
     topology_present = True
-    # item_name_to_id = {name: data.btid for name, data in all_item_table.items()}
-    item_name_to_id = {}
-
-    for name, data in all_item_table.items():
-        if data.btid is None:  # Skip Victory Item
-            continue
-        item_name_to_id[name] = data.btid
+    item_name_to_id = {name: data.btid for name, data in all_item_table.items() if data.btid is not None}
 
     glitches_item_name = itemName.UT_GLITCHED
     ut_can_gen_without_yaml = True
