@@ -276,7 +276,7 @@ class BanjoTooieContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.game = "Banjo-Tooie"
-        self.n64_streams: (StreamReader, StreamWriter) = None # type: ignore
+        self.n64_streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None = None
         self.n64_sync_task = None
         self.n64_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
