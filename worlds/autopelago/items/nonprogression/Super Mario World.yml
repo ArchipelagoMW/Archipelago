@@ -1,0 +1,22 @@
+useful_nonprogression:
+  - ['Charging Chuck''s Helmet', [confident]]
+  - ['Koopa Soup', [well_fed]]
+  - ['Pea Switch', [well_fed]]
+  - ['Plain Donut', [well_fed]]
+  - ['Golden Warp Pipe', [energized]]
+
+trap:
+  - ['Goomba Goo', [sluggish]]
+  - ['Wandering MechaKoopa', [startled]]
+  - ['An Unfortunately Placed Hidden Block', [startled]]
+
+filler:
+  - ['Dinosaur Land Travel Brochure', []]
+  - ['Reznor Nail Clippings', []]
+  - ['Iggy Koopa''s Rubber Ball', []]
+  - ['Wendy Koopa''s Hula Hoop', []]
+  - ['Lemmy Koopa''s Decommissioned Doppelgangers', []]
+  - ['Larry Koopa''s Pet Block-snake', []]
+  - ['Morton Koopa''s Exercise Ball-and-Chain', []]
+  - ['Ludwig von Koopa''s Piano', []]
+  - ['Roy Koopa''s Backup Sunglasses', []]

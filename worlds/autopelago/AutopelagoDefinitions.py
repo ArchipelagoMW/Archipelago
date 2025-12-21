@@ -6,8 +6,7 @@ from typing_extensions import NotRequired, TypeAlias
 from BaseClasses import ItemClassification
 from Utils import parse_yaml
 
-GAME_NAME = "Autopelago"
-BASE_ID = 300000
+GAME_NAME = 'Autopelago'
 lactose_names = set()
 lactose_intolerant_names = set()
 
@@ -178,7 +177,7 @@ _defs: AutopelagoDefinitions = parse_yaml(pkgutil.get_data(__name__, 'Autopelago
 version_stamp = _defs['version_stamp']
 
 def _gen_ids():
-    next_id = BASE_ID
+    next_id = 1
     while True:
         yield next_id
         next_id += 1

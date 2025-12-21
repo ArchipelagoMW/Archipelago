@@ -238,7 +238,7 @@ class AutopelagoWorld(World):
                     r.connect(new_regions[next_exit], rule=rule)
 
     def get_filler_item_name(self):
-        return "Nothing"
+        return 'Nothing'
 
     def fill_slot_data(self):
         return {

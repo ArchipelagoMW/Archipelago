@@ -1,0 +1,193 @@
+# everything at the top level must be a keyed item.
+# the keys here are referenced from elsewhere.
+
+moon_shoes:
+  name: 'Moon Shoes'
+  flavor_text: 'All done here, let''s bounce.'
+
+mongoose_in_a_combat_spacecraft:
+  name: 'Mongoose in a Combat Spacecraft'
+  flavor_text: 'Do an aileron roll!'
+
+quantum_sugar_cube:
+  name: 'Quantum Sugar Cube'
+  flavor_text: 'Improbably sweet!'
+
+playing_with_fire_for_dummies:
+  name: 'Playing with Fire For Dummies'
+  flavor_text: 'Required reading for any hotshot.'
+
+moon_shaped_like_a_butt:
+  name: 'Moon Shaped Like a Butt'
+  flavor_text: 'haha'
+
+asteroid_belt:
+  name: 'Asteroid Belt'
+  flavor_text: 'I prefer asteroid suspenders, myself.'
+
+free_vowel:
+  name: 'Free Vowel'
+  flavor_text: 'A $250 value!'
+
+constellation_prize:
+  name: 'Constellation Prize'
+  flavor_text: 'Please not Leo, please not Leo...'
+
+foreign_coin:
+  name: 'Foreign Coin'
+  flavor_text: 'I wonder where I can spend it...'
+  auras_granted: [lucky]
+
+red_matador_cape:
+  name: 'Red Matador''s Cape'
+  flavor_text: 'For not taking the bull by the horns.'
+
+pharaoh_not_anti_mummy_spray:
+  name: 'Pharaoh-Not Anti-Mummy Spray'
+  flavor_text: 'Curse-free or your money back!'
+  auras_granted: [confident]
+
+pile_of_scrap_metal_in_the_shape_of_a_rocket_ship:
+  name: 'Pile of Scrap Metal in the Shape of a Rocket Ship'
+  flavor_text: 'How incredibly convenient!'
+
+energy_drink_that_is_pure_rocket_fuel:
+  name: 'Energy Drink that is Pure Rocket Fuel'
+  flavor_text: 'Not safe for rodent consumption...'
+
+turbo_encabulator:
+  name: 'Turbo Encabulator'
+  flavor_text: 'Effectively prevents side-fumbling!'
+
+map_of_the_entire_internet:
+  name: 'Map of the Entire Internet'
+  flavor_text: 'Should have taken a left at 104.20.61.247!'
+
+virtual_key:
+  name: 'Virtual Key'
+  flavor_text: 'Unlocks virtually every lock!'
+
+banana_peel:
+  name: 'Banana Peel'
+  flavor_text: 'Ripe for causing chaos.'
+
+blue_turtle_shell:
+  name: 'Blue Turtle Shell'
+  flavor_text: 'A street-seeking missile.'
+
+forklift_certification:
+  name: 'Forklift Certification'
+  flavor_text: 'Essential for having a CRATE time.'
+
+fifty_cents:
+  name: 'Fifty Cents'
+  flavor_text: 'Two packs of M&Ms cost fifty cents? That''s ludicrous!'
+
+childs_first_hand_axe:
+  name: 'Child''s First Hand Axe'
+  flavor_text: 'Good for left-handed and right-handed children!'
+
+hammer_of_problem_solving:
+  name: 'Hammer of Problem-Solving'
+  flavor_text: 'Either way, the screen won''t be blue anymore.'
+
+lost_ctrl_key:
+  name: 'Lost CTRL Key'
+  flavor_text: 'The ALT path to DELETE the problem.'
+
+artificial_grass:
+  name: 'Artificial Grass'
+  flavor_text: 'Grown from just a random seed.'
+
+macguffin:
+  name: 'MacGuffin'
+  flavor_text: 'I''m sure SOMEBODY''s looking for this...'
+
+masterful_longsword:
+  name: 'Masterful Longsword'
+  flavor_text: 'This sword looks dangerous. Best leave it alone.'
+
+legally_binding_contract:
+  name: 'Legally Binding Contract'
+  flavor_text: 'The counsel will decide your fate.'
+
+fake_mouse_ears:
+  name: 'Fake Mouse Ears'
+  flavor_text: 'Needed to sneak into his clubhouse.'
+
+giant_novelty_scissors:
+  name: 'Giant Novelty Scissors'
+  flavor_text: 'The natural predator of the giant novelty check.'
+
+premium_can_of_prawn_food:
+  name: 'Premium Can of Prawn Food'
+  flavor_text: '20% more plankton than the leading brand!'
+
+priceless_antique:
+  name: 'Priceless Antique'
+  flavor_text: 'Best I can do is five bucks.'
+
+# rats
+pack_rat:
+  name: 'Pack Rat'
+  rat_count: 1
+
+rat_pack:
+  name: 'Rat Pack'
+  rat_count: 5
+  flavor_text: 'Five is the canonical number of rats in a Rat Pack.'
+
+pizza_rat:
+  name: 'Pizza Rat'
+  rat_count: 1
+  flavor_text: 'He''s living his best life.'
+
+chef_rat:
+  name: 'Chef Rat'
+  rat_count: 1
+  flavor_text: 'Shh... there''s a human under his hat.'
+
+ninja_rat:
+  name: 'Ninja Rat'
+  rat_count: 1
+  flavor_text: 'Take ''em out? Sure I can!'
+
+gym_rat:
+  name: 'Gym Rat'
+  rat_count: 1
+  flavor_text: 'They call him Monterey, because he''s JACKed.'
+
+computer_rat:
+  name: 'Computer Rat'
+  rat_count: 1
+  flavor_text: 'Obviously superior to the computer mouse.'
+
+pie_rat:
+  name: 'Pie Rat'
+  rat_count: 1
+  flavor_text: 'But you HAVE heard of him?'
+
+ziggu_rat:
+  name: 'Ziggu Rat'
+  rat_count: 1
+  flavor_text: 'WANTED: Roommate. Dead or alive.'
+
+acro_rat:
+  name: 'Acro Rat'
+  rat_count: 1
+  flavor_text: 'PARKOUR!'
+
+lab_rat:
+  name: 'Lab Rat'
+  rat_count: 1
+  flavor_text: 'One more maze and he gets a free coffee.'
+
+ratstronaut:
+  name: 'Ratstronaut'
+  rat_count: 1
+  flavor_text: 'She understands the gravity of the situation.'
+
+notorious_r_a_t:
+  name: 'Notorious R.A.T.'
+  rat_count: 1
+  flavor_text: 'I gotta spit some rhymes? No biggie.'

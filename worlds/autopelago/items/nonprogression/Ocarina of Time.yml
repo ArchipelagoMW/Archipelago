@@ -1,0 +1,16 @@
+useful_nonprogression:
+  - ['Silver Skulltula Token', [lucky]]
+  - ['Pickled Cucco Feet', [well_fed]]
+  - ['Song of Thyme', [well_fed]]
+  - ['Ganondorf''s Tennis Racket', [confident]]
+  - ['Goron Rock Candy', [well_fed]]
+
+trap:
+  - ['Overly-Talkative Fairy in a Bottle', [distracted]]
+  - [['Spoiled Lon Lon Milk', 'Spoiled Bottle of Lon Lon Skulltulas'], [upset_tummy]]
+  - ['Unhappy Mask Salesman', [startled]]
+
+filler:
+  - ['Broken Boss Key', []]
+  - ['Jabu-Jabu''s Missing Kidney', []]
+  - ['Lite Brite Arrow', []]

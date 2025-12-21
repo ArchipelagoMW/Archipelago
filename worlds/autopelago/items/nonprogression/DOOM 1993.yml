@@ -1,0 +1,5 @@
+useful_nonprogression:
+  - ['Misplaced Keycard', [lucky]]
+
+trap:
+  - ['Monster Closet', [startled]]

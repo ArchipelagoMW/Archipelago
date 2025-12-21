@@ -1,0 +1,17 @@
+useful_nonprogression:
+  - ['Very Common Candy', [well_fed]]
+  - ['Icy Blue Feather', [lucky]]
+  - ['Burning Orange Feather', [lucky]]
+  - ['Charged Yellow Feather', [lucky]]
+  - ['Vermilion City Truck Keys', [confident]]
+
+trap:
+  - ['Item-Hider', [distracted]]
+  - ['Team Rocket Membership Card', [conspiratorial]]
+
+filler:
+  - ['Oak''s Other Parcel', []]
+  - ['Silph Scoop', []]
+  - ['Mustard Ball', []]
+  - ['HM02.5 Walk', []]
+  - ['Rat Fossil', []]

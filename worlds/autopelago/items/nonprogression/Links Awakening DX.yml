@@ -1,0 +1,12 @@
+useful_nonprogression:
+  - ['Salad of the Wind Fish', [well_fed]]
+  - ['Frog''s Song of Soup', [well_fed]]
+  - ['Manbo''s Mango', [well_fed]]
+
+trap:
+  - ['Poorly Tuned Wind Marimba', [unlucky]]
+  - ['Malfunctioning Trendy Game Claw', [distracted]]
+
+filler:
+  - ['Pocket Full of Koho Lint', []]
+  - ['Tortoise-Shaped Rock', []]

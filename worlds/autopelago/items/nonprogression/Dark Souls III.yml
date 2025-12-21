@@ -1,0 +1,10 @@
+useful_nonprogression:
+  - ['Severely Scorched Sword', [confident]]
+  - ['Siegward''s Jar of Pickled Onions', [well_fed]]
+
+trap:
+  - ['Asbestos Flask', [upset_tummy]]
+
+filler:
+  - ['Soul of a Cinder Block', []]
+  - ['Treasure Chest with Several Stab Wounds', []]
