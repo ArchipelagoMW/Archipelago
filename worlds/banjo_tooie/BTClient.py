@@ -1,4 +1,4 @@
-import asyncio, hashlib, json, os, multiprocessing, copy, sys, time, atexit
+import asyncio, hashlib, json, os, multiprocessing, copy, sys, time, atexit, pkgutil
 import bsdiff4 # pyright: ignore[reportMissingTypeStubs]
 from typing import Any, List, TypedDict, cast
 from collections import Counter
@@ -11,7 +11,7 @@ from CommonClient import CommonContext, server_loop, gui_enabled, \
 import Utils
 from Utils import async_start
 from kvui import MDNavigationItemBase, MessageBox, UILog
-from . import __path__, BanjoTooieWorld
+from . import BanjoTooieWorld
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -66,7 +66,7 @@ def write_file(path: str, data: bytes):
     fi.write(data)
 
 def open_world_file(resource: str) -> bytes:
-  return __loader__.get_data(os.path.join(__path__[0], resource))
+  return pkgutil.get_data(__package__, resource)
 
 def patch_rom(rom_path: str, dst_path: str, patch_path: str):
   rom: bytes = read_file(rom_path)
