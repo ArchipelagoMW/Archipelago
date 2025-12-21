@@ -102,6 +102,7 @@ class KH2Socket:
             except (ConnectionResetError, OSError) as e:
                 if not self.closing:
                     logger.info("Connection to game lost, reconnecting...")
+                    self.client.kh2connected = False
                     self._safe_close_client()
                     self.loop.create_task(self._accept_client())
                     return
