@@ -161,9 +161,6 @@ async def patch_and_run(show_path):
         stderr=subprocess.DEVNULL,
       )
 
-def get_item_value(ap_id):
-    return ap_id
-
 class BanjoTooieItemTracker:
 
   def __init__(self, ctx):
@@ -517,7 +514,7 @@ def get_payload(ctx: BanjoTooieContext):
     if ctx.sync_ready == True:
         ctx.startup = True
         payload = json.dumps({
-                "items": [get_item_value(item.item) for item in ctx.items_received],
+                "items": [item.item for item in ctx.items_received],
                 "playerNames": [name for (i, name) in ctx.player_names.items() if i != 0],
                 "triggerDeath": trigger_death,
                 "triggerTag": trigger_tag,
