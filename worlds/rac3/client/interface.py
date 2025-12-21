@@ -620,8 +620,8 @@ class Rac3Interface(GameInterface):
                 if name == RAC3ITEM.QWARKS_HIDEOUT and not self.UnlockItem[RAC3ITEM.REFRACTOR].status:
                     # Write 0 if Qwarks Hideout is missing Refractor
                     self._write8(addr, 0)
-                elif name == (RAC3ITEM.HOLOSTAR_STUDIOS 
-                and not (self.UnlockItem[RAC3ITEM.HACKER].status and self.UnlockItem[RAC3ITEM.HYPERSHOT].status)):
+                elif name == RAC3ITEM.HOLOSTAR_STUDIOS and (
+                        self.UnlockItem[RAC3ITEM.HACKER].status == 0 or self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0):
                     # Write 0 if Holostar Studios is missing Hacker or Hypershot
                     self._write8(addr, 0)
                 else:
@@ -1064,9 +1064,7 @@ class Rac3Interface(GameInterface):
         match planet:
             case RAC3REGION.QWARKS_HIDEOUT:
                 return (self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status > 0 and 
-                        (self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0 or
-                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0 or
-                         self.UnlockItem[RAC3ITEM.HACKER].status == 0))
+                        (self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0))
             case RAC3REGION.HOLOSTAR_STUDIOS:
                 return (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status > 0 and
                         (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
