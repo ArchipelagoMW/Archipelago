@@ -462,7 +462,7 @@ class BanjoTooieContext(CommonContext):
     def on_print_json(self, args: dict):
         if self.ui:
             self.ui.print_json(copy.deepcopy(args["data"]))
-            relevant = args.get("type", None) in {"ItemSend"}
+            relevant = args.get("type") == "ItemSend"
             if relevant:
                 relevant = False
                 item = args["item"]
@@ -486,7 +486,7 @@ class BanjoTooieContext(CommonContext):
         else:
             text = self.jsontotextparser(copy.deepcopy(args["data"]))
             logger.info(text)
-            relevant = args.get("type", None) in {"ItemSend"}
+            relevant = args.get("type") == "ItemSend"
             if relevant:
                 msg = self.raw_text_parser(copy.deepcopy(args["data"]))
                 player = self.player_names[int(args["data"][0]["text"])]
