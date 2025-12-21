@@ -99,53 +99,57 @@ items:
   priceless_antique:
     name: 'Priceless Antique'
     flavor_text: 'Best I can do is five bucks.'
-
   pack_rat:
     name: 'Pack Rat'
     rat_count: 1
-
   rat_pack:
     name: 'Rat Pack'
     rat_count: 5
     flavor_text: 'Five is the canonical number of rats in a Rat Pack.'
-
-  # these aren't actually special in any way except that putting them under the
-  # 'rats' section will automatically give them a rat_count of 1. you COULD set
-  # rat_count to something else to override that if you wanted
-  rats:
-    pizza_rat:
-      name: 'Pizza Rat'
-      flavor_text: 'He''s living his best life.'
-    chef_rat:
-      name: 'Chef Rat'
-      flavor_text: 'Shh... there''s a human under his hat.'
-    ninja_rat:
-      name: 'Ninja Rat'
-      flavor_text: 'Take ''em out? Sure I can!'
-    gym_rat:
-      name: 'Gym Rat'
-      flavor_text: 'They call him Monterey, because he''s JACKed.'
-    computer_rat:
-      name: 'Computer Rat'
-      flavor_text: 'Obviously superior to the computer mouse.'
-    pie_rat:
-      name: 'Pie Rat'
-      flavor_text: 'But you HAVE heard of him?'
-    ziggu_rat:
-      name: 'Ziggu Rat'
-      flavor_text: 'WANTED: Roommate. Dead or alive.'
-    acro_rat:
-      name: 'Acro Rat'
-      flavor_text: 'PARKOUR!'
-    lab_rat:
-      name: 'Lab Rat'
-      flavor_text: 'One more maze and he gets a free coffee.'
-    ratstronaut:
-      name: 'Ratstronaut'
-      flavor_text: 'She understands the gravity of the situation.'
-    notorious_r_a_t:
-      name: 'Notorious R.A.T.'
-      flavor_text: 'I gotta spit some rhymes? No biggie.'
+  pizza_rat:
+    name: 'Pizza Rat'
+    rat_count: 1
+    flavor_text: 'He''s living his best life.'
+  chef_rat:
+    name: 'Chef Rat'
+    rat_count: 1
+    flavor_text: 'Shh... there''s a human under his hat.'
+  ninja_rat:
+    name: 'Ninja Rat'
+    rat_count: 1
+    flavor_text: 'Take ''em out? Sure I can!'
+  gym_rat:
+    name: 'Gym Rat'
+    rat_count: 1
+    flavor_text: 'They call him Monterey, because he''s JACKed.'
+  computer_rat:
+    name: 'Computer Rat'
+    rat_count: 1
+    flavor_text: 'Obviously superior to the computer mouse.'
+  pie_rat:
+    name: 'Pie Rat'
+    rat_count: 1
+    flavor_text: 'But you HAVE heard of him?'
+  ziggu_rat:
+    name: 'Ziggu Rat'
+    rat_count: 1
+    flavor_text: 'WANTED: Roommate. Dead or alive.'
+  acro_rat:
+    name: 'Acro Rat'
+    rat_count: 1
+    flavor_text: 'PARKOUR!'
+  lab_rat:
+    name: 'Lab Rat'
+    rat_count: 1
+    flavor_text: 'One more maze and he gets a free coffee.'
+  ratstronaut:
+    name: 'Ratstronaut'
+    rat_count: 1
+    flavor_text: 'She understands the gravity of the situation.'
+  notorious_r_a_t:
+    name: 'Notorious R.A.T.'
+    rat_count: 1
+    flavor_text: 'I gotta spit some rhymes? No biggie.'
 
   useful_nonprogression:
     - ['Refreshing Glass of Lemonade', [well_fed]]

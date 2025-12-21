@@ -85,7 +85,6 @@ def autopelago_item_classification_of(item: AutopelagoNonProgressionItemType):
 
 
 class AutopelagoItemDefinitions(TypedDict):
-    rats: AutopelagoItemDefinitionsSimple
     useful_nonprogression: AutopelagoNonProgressionGroupItems
     trap: AutopelagoNonProgressionGroupItems
     filler: AutopelagoNonProgressionGroupItems
@@ -194,7 +193,7 @@ _item_id_gen = _gen_ids()
 item_name_to_id: dict[str, int] = {}
 
 for k, v in ((k, v) for k, v in _defs['items'].items() if
-             k not in {'rats', 'useful_nonprogression', 'trap', 'filler'}):
+             k not in {'useful_nonprogression', 'trap', 'filler'}):
     v: AutopelagoItemDefinition
     for _name in _names_of(v):
         item_name_to_auras[_name] = _auras_of(v)
@@ -203,14 +202,6 @@ for k, v in ((k, v) for k, v in _defs['items'].items() if
         rat_count = _rat_count_of(v)
         if rat_count and rat_count > 0:
             item_name_to_rat_count[_name] = rat_count
-        item_key_to_name[k] = _name
-
-for k, v in _defs['items']['rats'].items():
-    for _name in _names_of(v):
-        item_name_to_auras[_name] = _auras_of(v)
-        item_name_to_id[_name] = next(_item_id_gen)
-        item_name_to_classification[_name] = ItemClassification.progression
-        item_name_to_rat_count[_name] = _rat_count_of(v) or 1
         item_key_to_name[k] = _name
 
 
