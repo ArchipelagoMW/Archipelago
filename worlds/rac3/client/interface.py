@@ -614,12 +614,9 @@ class Rac3Interface(GameInterface):
                         self.UnlockItem[name].unlock_delay += 1
         for number, slot in enumerate(SHIP_SLOTS):
             self.ship_slot_limit = self.UnlockItem[RAC3REGION.SLOT_0].status
-            if (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status and not 
-                self.UnlockItem[RAC3ITEM.HACKER].status and not
-                self.UnlockItem[RAC3ITEM.HYPERSHOT].status):
+            if self.softlock_prevention_check(RAC3REGION.HOLOSTAR_STUDIOS):
                 self.ship_slot_limit -= 1
-            if (self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status and not 
-                self.UnlockItem[RAC3ITEM.REFRACTOR].status):
+            if self.softlock_prevention_check(RAC3REGION.QWARKS_HIDEOUT):
                 self.ship_slot_limit -= 1
             if number >= self.ship_slot_limit:
                 # logger.debug(f'Remove planet at {slot}')
@@ -1040,9 +1037,11 @@ class Rac3Interface(GameInterface):
         match planet:
             case RAC3REGION.QWARKS_HIDEOUT:
                 return (self.UnlockItem[RAC3ITEM.QWARKS_HIDEOUT].status > 0 and 
-                        self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0)
+                        (self.UnlockItem[RAC3ITEM.REFRACTOR].status == 0 or
+                         self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0 or
+                         self.UnlockItem[RAC3ITEM.HACKER].status == 0))
             case RAC3REGION.HOLOSTAR_STUDIOS:
                 return (self.UnlockItem[RAC3ITEM.HOLOSTAR_STUDIOS].status > 0 and
-                        self.UnlockItem[RAC3ITEM.HACKER].status == 0 and
-                        self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0)
+                        (self.UnlockItem[RAC3ITEM.HACKER].status == 0 or
+                        self.UnlockItem[RAC3ITEM.HYPERSHOT].status == 0))
         return False
