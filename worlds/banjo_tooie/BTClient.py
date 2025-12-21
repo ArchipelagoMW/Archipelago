@@ -1,4 +1,5 @@
 import asyncio
+from collections import Counter
 from dataclasses import dataclass
 import hashlib
 import io
@@ -170,17 +171,15 @@ class BanjoTooieItemTracker:
 
   def __init__(self, ctx):
     self.ctx = ctx
-    self.items = {item_name: 0 for item_name in bt_itm_name_to_id}
+    self.items = Counter()
     self.refresh_items()
 
   def refresh_items(self):
-    for item in self.items:
-      self.items[item] = 0
+    self.items.clear()
     for item in self.ctx.items_received:
       self.items[self.ctx.item_names.lookup_in_game(item.item)] += 1
     self.ctx.tab_items.content.data = []
     for item_name, amount in sorted(self.items.items()):
-      if amount == 0: continue
       if amount > 1: self.ctx.tab_items.content.data.append({"text":f"{item_name}: {amount}"})
       else: self.ctx.tab_items.content.data.append({"text":f"{item_name}"})
 
