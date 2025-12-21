@@ -32,34 +32,31 @@ CONNECTION_TENTATIVE_STATUS = "Initial Connection Made"
 CONNECTION_CONNECTED_STATUS = "Connected"
 CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
-'''
-Payload: lua -> client
-{
-    playerName: string,
-    locations: dict,
-    deathlinkActive: bool,
-    taglinkActive: bool,
-    isDead: bool,
-    isTag: bool,
-    gameComplete: bool
-}
-
-Payload: client -> lua
-{
-    items: list,
-    playerNames: list,
-    triggerDeath: bool,
-    triggerTag: bool,
-    messages: string
-}
-
-Deathlink logic:
-"Dead" is true <-> Banjo is at 0 hp.
-
-deathlink_pending: we need to kill the player
-deathlink_sent_this_death: we interacted with the multiworld on this death, waiting to reset with living link
-
-'''
+# Payload: lua -> client
+# {
+#     playerName: string,
+#     locations: dict,
+#     deathlinkActive: bool,
+#     taglinkActive: bool,
+#     isDead: bool,
+#     isTag: bool,
+#     gameComplete: bool
+# }
+#
+# Payload: client -> lua
+# {
+#     items: list,
+#     playerNames: list,
+#     triggerDeath: bool,
+#     triggerTag: bool,
+#     messages: string
+# }
+#
+# Deathlink logic:
+# "Dead" is true <-> Banjo is at 0 hp.
+#
+# deathlink_pending: we need to kill the player
+# deathlink_sent_this_death: we interacted with the multiworld on this death, waiting to reset with living link
 
 bt_loc_name_to_id = BanjoTooieWorld.location_name_to_id
 bt_itm_name_to_id = BanjoTooieWorld.item_name_to_id
