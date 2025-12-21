@@ -341,11 +341,8 @@ class BanjoTooieContext(CommonContext):
             return
         return
 
-    def _set_message(self, msg: dict, msg_id: Union[int, None]):
-        if msg_id == None:
-            self.messages.update({len(self.messages)+1: msg })
-        else:
-            self.messages.update({msg_id:msg})
+    def _set_message(self, msg: dict | str):
+        self.messages.update({len(self.messages)+1: msg})
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -485,8 +482,7 @@ class BanjoTooieContext(CommonContext):
                             to_player = self.player_names[int(data["text"])]
                             break
                     item_name = self.item_names.lookup_in_slot(int(args["data"][2]["text"]))
-                    # self._set_message(msg, None)
-                    self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player }, None)
+                    self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player })
         else:
             text = self.jsontotextparser(copy.deepcopy(args["data"]))
             logger.info(text)
@@ -502,8 +498,7 @@ class BanjoTooieContext(CommonContext):
                             to_player = self.player_names[int(data["text"])]
                             break
                 item_name = self.item_names.lookup_in_slot(int(args["data"][2]["text"]))
-                # self._set_message(msg, None)
-                self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player}, None)
+                self._set_message({"player":player, "item":item_name, "item_id":int(args["data"][2]["text"]), "to_player":to_player})
 
 def get_payload(ctx: BanjoTooieContext):
     if ctx.deathlink_enabled and ctx.deathlink_pending:
@@ -950,7 +945,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                 "status": 30
             }])
             ctx.finished_game = True
-            ctx._set_message("You have completed your goal", None)
+            ctx._set_message("You have completed your goal")
 
         #Mumbo Tokens
         if (ctx.slot_data["options"]["victory_condition"] == 1 or ctx.slot_data["options"]["victory_condition"] == 2) and not ctx.finished_game:
@@ -966,7 +961,7 @@ async def parse_payload(payload: dict, ctx: BanjoTooieContext, force: bool):
                             "status": 30
                         }])
                         ctx.finished_game = True
-                        ctx._set_message("You have completed your goal", None)
+                        ctx._set_message("You have completed your goal")
 
         if (ctx.current_map == 401 and ctx.slot_data["options"]["victory_condition"] == 5 and not ctx.finished_game):
             mumbo_tokens = 0
