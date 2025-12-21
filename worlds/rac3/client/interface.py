@@ -362,10 +362,16 @@ class Rac3Interface(GameInterface):
                 pass
             case RAC3ITEM.BOLTS:
                 bolt = self._read32(RAC3STATUS.BOLTS)
-                self._write32(RAC3STATUS.BOLTS, bolt + 1000 * randint(1, 100))
+                new_bolts = bolt + 1000 * randint(1, 100)
+                if new_bolts > 0x7FFFFFFF:
+                    new_bolts = 0x7FFFFFFF
+                self._write32(RAC3STATUS.BOLTS, new_bolts)
             case RAC3ITEM.INFERNO_MODE:
                 timer = self._read32(RAC3STATUS.INFERNO_TIMER)
-                self._write32(RAC3STATUS.INFERNO_TIMER, timer + 1000 + randint(1, 100))
+                new_timer = timer + 1000 + randint(1, 100)
+                if new_timer > 0x7FFFFFFF:
+                    new_timer = 0x7FFFFFFF
+                self._write32(RAC3STATUS.INFERNO_TIMER, new_timer)
             case RAC3ITEM.JACKPOT:
                 _time = round(time.time() + uniform(10, 30), 4)
                 self.timers[name + str(_time)] = _time
