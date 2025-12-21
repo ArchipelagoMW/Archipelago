@@ -1,11 +1,13 @@
 import bisect
+import itertools
 import logging
 import pathlib
 import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path
+from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, \
+    PatternInfo, read_apignore
 
 
 class Type(Enum):
@@ -279,6 +281,8 @@ if not is_frozen():
             games = [(worldname, worldtype) for worldname, worldtype in AutoWorldRegister.world_types.items()
                      if not worldtype.zip_path]
 
+        global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))
+
         apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
         for worldname, worldtype in games:
@@ -306,15 +310,31 @@ if not is_frozen():
             apworld = APWorldContainer(str(zip_path))
             apworld.game = worldtype.game
             manifest.update(apworld.get_manifest())
-            apworld.manifest_path = f"{file_name}/archipelago.json"
+            apworld.manifest_path = os.path.join(file_name, "archipelago.json")
+            apignores = read_apignore(os.path.join(world_directory, ".apignore"))
+
             with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
                                  compresslevel=9) as zf:
                 for path in pathlib.Path(world_directory).rglob("*"):
-                    relative_path = os.path.join(*path.parts[path.parts.index("worlds") + 1:])
-                    if "__MACOSX" in relative_path or ".DS_STORE" in relative_path or "__pycache__" in relative_path:
-                        continue
-                    if not relative_path.endswith("archipelago.json"):
+                    relative_path = pathlib.Path(*path.parts[path.parts.index("worlds") + 1:])
+
+                    test_path = pathlib.Path(*relative_path.parts[1:]).as_posix()
+                    ignored = False
+                    for pattern, info in itertools.chain(global_apignores, apignores):
+                        # Don't test regular patterns on already ignored files or negated patterns on unignored files
+                        negated, dironly = PatternInfo.negated in info, PatternInfo.dironly in info
+                        if negated != ignored:
+                            continue
+                        # Don't test files for dir-only patterns
+                        if dironly and not os.path.isdir(path):
+                            continue
+
+                        if pattern.search(test_path):
+                            ignored = not negated
+
+                    if not ignored:
                         zf.write(path, relative_path)
+
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
         open_folder(apworlds_folder)
 
