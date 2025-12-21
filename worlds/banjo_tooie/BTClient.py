@@ -66,7 +66,10 @@ def write_file(path: str, data: bytes):
     fi.write(data)
 
 def open_world_file(resource: str) -> bytes:
-  return pkgutil.get_data(__package__, resource)
+  assert __package__ is not None, "BTClient needs to be loaded as a package."
+  ret = pkgutil.get_data(__package__, resource)
+  assert ret is not None, f"Unable to find: {resource}"
+  return ret
 
 def patch_rom(rom_path: str, dst_path: str, patch_path: str):
   rom: bytes = read_file(rom_path)
