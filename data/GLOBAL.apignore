@@ -1,0 +1,6 @@
+__MACOSX
+.DS_Store
+__pycache__
+
+/archipelago.json
+/.apignore
