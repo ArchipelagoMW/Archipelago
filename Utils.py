@@ -16,6 +16,8 @@ import collections
 import importlib
 import logging
 import warnings
+import enum
+import re
 
 from argparse import Namespace
 from settings import Settings, get_settings
@@ -385,6 +387,94 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+class PatternInfo(enum.IntFlag):
+    negated = 0b01
+    dironly = 0b10
+
+
+def _create_regex(pattern: str) -> tuple[re.Pattern, PatternInfo] | None:
+    # Remove empty, comment, and invalid lines
+    if not pattern or pattern.startswith("#") or pattern.endswith("\\"):
+        return None
+
+    # Test/remove negation prefix
+    if pattern.startswith("!"):
+        negated = True
+        pattern = pattern[1:]
+        if not pattern:
+            return None
+    else:
+        negated = False
+
+    # Remove trailing, unescaped whitespace
+    pos = -1
+    while pattern[pos].isspace():
+        pos -= 1
+        if -pos >= len(pattern):
+            break
+        if pattern[pos] == "\\":
+            pos += 1
+            break
+    pos += 1
+    if pos < 0:
+        pattern = pattern[:pos]
+
+    # Separator before the end means relative to only root dir
+    relative = "/" in pattern[:-1]
+    # Remove starting separator
+    if pattern.startswith("/"):
+        pattern = pattern[1:]
+
+    # Separator at end means match must be directory
+    enddir = pattern.endswith("/")
+    if enddir:
+        pattern = pattern[:-1]
+
+    # Remove original string escapes, gitignore allows them on literal characters
+    pattern = re.sub(r"(?<!\\)\\", "", pattern)
+    pattern = pattern.replace(r"\\", "\\")
+
+    # (Re)escape special regex chars
+    pattern = re.sub("([.|+(){}^$])", r"\\\1", pattern)
+
+    # Replace double asterisk with wildcard including path separators
+    if pattern.startswith("**/"):
+        pattern = ".*" + pattern[3:]
+    if pattern.endswith("/**"):
+        pattern = pattern[:-3] + ".*"
+    pattern = re.sub(r"/\*\*/", "(/.*/|/)", pattern)
+
+    # Replace remaining asterisks with wildcard, but not matching path separators
+    pattern = re.sub(r"(?<![^\\]\.)(?<!\A\.)\*+", "[^/]*", pattern)
+
+    # Replace single wildcard characters
+    pattern = re.sub(r"(?<!\\)\?", "[^/]", pattern)
+
+    # Add appropriate anchors
+    if relative:
+        pattern = r"\A" + pattern
+    else:
+        pattern = r"(?:\A|(?<=/))" + pattern
+    pattern = pattern + r"(?:\Z|(?=/))"
+
+    info = PatternInfo(negated + (enddir << 1))
+    return re.compile(pattern), info
+
+
+def read_apignore(filename: str | pathlib.Path) -> list[tuple[re.Pattern, PatternInfo]]:
+    ignores = []
+    try:
+        with open(filename) as file:
+            for line in file:
+                res = _create_regex(line)
+                if res is not None:
+                    ignores.append(res)
+    except FileNotFoundError:
+        pass
+
+    return ignores
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
