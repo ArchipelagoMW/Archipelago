@@ -72,6 +72,9 @@ class NineSolsWorld(World):
         "map_page_index": map_page_index
     }
 
+    using_ut: bool
+    jade_costs: dict[str, int] | str
+
     def __init__(self, multiworld, player):
         super(NineSolsWorld, self).__init__(multiworld, player)
 
