@@ -36,25 +36,35 @@ class KH2Socket:
         self.port: int = port
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket = None
+        self.accept_task = None
+        self.listen_task = None
         self.is_connected = False
         self.closing = False
 
     async def start_server(self) -> None:
-        self.loop = asyncio.get_event_loop()
+        self.loop = asyncio.get_running_loop()
+        self.server_socket.setblocking(False)
         self.server_socket.bind((self.host, self.port))
         self.server_socket.listen(1)
-        await self._accept_client()
+        self.accept_task = self.loop.create_task(self._accept_client())
 
     async def _accept_client(self) -> None:
         """Wait for a client to connect and start a listener task."""
         logger.info("Waiting for KH2 game connection...")
         while not self.closing:
             try:
-                self.client_socket, addr = await self.loop.sock_accept(self.server_socket)
+                self.client_socket, addr = await asyncio.wait_for(self.loop.sock_accept(self.server_socket), timeout=1.0)
                 self.is_connected = True
-                self.loop.create_task(self.listen())
+                self.client_socket.setblocking(False)
+                self.listen_task = self.loop.create_task(self.listen())
                 return
-            except OSError as e:
+            except asyncio.TimeoutError:
+                continue
+            except asyncio.CancelledError:
+                raise
+            except Exception as e:
+                if self.closing:
+                    return
                 logger.info(f"Socket accept failed ({e}); retrying in 5s")
                 self.is_connected = False
                 await asyncio.sleep(5)
@@ -70,9 +80,9 @@ class KH2Socket:
 
     async def listen(self) -> None:
         buffer = b""
-        while not self.closing:
+        while not self.closing and self.client_socket:
             try:
-                message = await self.loop.sock_recv(self.client_socket, 1024)
+                message = await asyncio.wait_for(self.loop.sock_recv(self.client_socket, 1024), timeout=1.0)
                 if not message:
                     raise ConnectionResetError("Client disconnected")
 
@@ -85,11 +95,15 @@ class KH2Socket:
                     values = msgStr.split(";")
                     print("Received message: "+msgStr)
                     self.handle_message(values)
+            except asyncio.TimeoutError:
+                continue
+            except asyncio.CancelledError:
+                return
             except (ConnectionResetError, OSError) as e:
                 if not self.closing:
                     logger.info("Connection to game lost, reconnecting...")
                     self._safe_close_client()
-                    await self._accept_client()
+                    self.loop.create_task(self._accept_client())
                     return
 
     def send(self, msg_id: int, values: list[str]) -> None:
@@ -172,8 +186,19 @@ class KH2Socket:
 
     def shutdown_server(self) -> None:
         self.closing = True
-        if self.client_socket:
-            self.client_socket.shutdown(socket.SHUT_WR)
-            self.client_socket.close()
-        if self.server_socket:
-            self.server_socket.close()
+        if self.accept_task:
+            try:
+                self.accept_task.cancel()
+            except Exception:
+                pass
+        if self.listen_task:
+            try:
+                self.listen_task.cancel()
+            except Exception:
+                pass
+        self._safe_close_client()
+        try:
+            if self.server_socket:
+                self.server_socket.close()
+        except Exception:
+            pass

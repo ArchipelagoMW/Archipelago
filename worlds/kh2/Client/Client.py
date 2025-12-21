@@ -79,7 +79,7 @@ class KH2Context(CommonContext):
         if is_windows:
             base_path = os.path.expandvars("%localappdata%")
         else:
-             base_path = os.path.expanduser("~/.local/share")
+             base_path = os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
         self.game_communication_path = os.path.join(base_path, "KH2AP")
         self.kh2_client_settings = f"kh2_client_settings.json"
         self.kh2_client_settings_join = os.path.join(self.game_communication_path, self.kh2_client_settings)
@@ -205,9 +205,10 @@ class KH2Context(CommonContext):
             f2.write(json.dumps(self.client_settings, indent=4))
         try:
             self.socket.send(MessageType.Closed, ["Closed Received"])
+            await asyncio.sleep(0)
             self.socket.shutdown_server()
-        except:
-            pass
+        except Exception as e :
+            logger.warning(f"Shutdown error: {e}")
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
