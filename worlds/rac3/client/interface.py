@@ -736,9 +736,9 @@ class Rac3Interface(GameInterface):
                     for _ in range(self.notification_merge_count):
                         if self.notification_queue:
                             self.notification_queue.pop(0)
-                    self.notification_time = current_time + 3
                     self.reset_messagebox_theme()
                     logger.debug(f'notification queue: {len(self.notification_queue)}')
+                    self.notification_time = current_time + 3
                 if self.notification_queue:
                     # Merge up to 3 notifications of the same theme, but do not exceed 225 chars
                     merged_message, theme = self.notification_queue[0]
@@ -758,6 +758,7 @@ class Rac3Interface(GameInterface):
                     msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
                     if not self.message_display:
                         self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
+                        self.notification_time = current_time + 3
                     else:
                         write_message = b''
                         for line in msg_list:
