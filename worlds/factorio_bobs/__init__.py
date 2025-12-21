@@ -6,7 +6,8 @@ import random
 import typing
 
 import Utils
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
+from NetUtils import JSONMessagePart
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
@@ -66,7 +67,10 @@ class FactorioBobs(World):
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
     research new technologies, and become more efficient in your quest to build a rocket and return home.
     """
-    SEEDED_RANDOM_SEED_KEY = "seeded_random_seed"
+    SLOT_RANDOM_SEED_KEY = "seeded_random_seed"
+    SLOT_RANDOM_RECIPES_KEY = "recipes"
+    SLOT_LOCATION_COUNT_KEY = "location_count"
+    SLOT_OPTIONS_KEY = "options"
 
     logger: logging.Logger
 
@@ -121,8 +125,16 @@ class FactorioBobs(World):
 
     generate_output = generate_mod
 
-
-    def interpret_slot_data(self, slot_data: dict[str, typing.Any]) -> dict[str, dict[str, InternalItem] | dict[str, Recipe]]:
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, typing.Any]) -> dict[str, typing.Any]:
+        if FactorioBobs.SLOT_RANDOM_RECIPES_KEY not in slot_data:
+            temp_slot_data = {FactorioBobs.SLOT_RANDOM_RECIPES_KEY: {}}
+            for key, value in slot_data.items():
+                if key in FactorioBobs.SLOT_RANDOM_SEED_KEY:
+                    temp_slot_data[FactorioBobs.SLOT_RANDOM_SEED_KEY] = value
+                    continue
+                temp_slot_data[FactorioBobs.SLOT_RANDOM_RECIPES_KEY][key] = value
+            slot_data = temp_slot_data
         return slot_data
 
     # and this is how we tell Universal Tracker we don't need the yaml
@@ -142,10 +154,11 @@ class FactorioBobs(World):
             self.set_custom_recipes()
         elif hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
             slot_data = self.multiworld.re_gen_passthrough[self.game]
-            if FactorioBobs.SEEDED_RANDOM_SEED_KEY in slot_data:
-                self.set_seeded_random_seed(slot_data[FactorioBobs.SEEDED_RANDOM_SEED_KEY])
-                del slot_data[FactorioBobs.SEEDED_RANDOM_SEED_KEY]
-            for product_name, ingredients_name in self.multiworld.re_gen_passthrough[self.game].items():
+            self.logger.error(f"SLOT_DATA: {slot_data}")
+            if FactorioBobs.SLOT_RANDOM_SEED_KEY in slot_data:
+                self.set_seeded_random_seed(slot_data[FactorioBobs.SLOT_RANDOM_SEED_KEY])
+            slot_recipes = slot_data[FactorioBobs.SLOT_RANDOM_RECIPES_KEY]
+            for product_name, ingredients_name in slot_recipes.items():
                 new_ingredients = {}
                 liquids_used = 0
                 for ingredient_name in ingredients_name:
@@ -161,12 +174,18 @@ class FactorioBobs(World):
                 self.custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
                                                            custom_products, 1)
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
-            self.options.max_science_pack.value = len([x for x in self.custom_products.keys()
-                                                      if x in MaxSciencePack.get_ordered_science_packs()]) - 1
+            self.options.additional_logic.value = self.options.additional_logic.option_none
+            if FactorioBobs.SLOT_OPTIONS_KEY in slot_data:
+                slot_options = slot_data[FactorioBobs.SLOT_OPTIONS_KEY]
+                self.options.tech_cost_mix.value = slot_options[self.options.tech_cost_mix.display_name]
+                self.options.max_science_pack.value = slot_options[self.options.max_science_pack.display_name]
+            else:
+                self.options.max_science_pack.value = len([x for x in self.custom_products.keys()
+                                                          if x in MaxSciencePack.get_ordered_science_packs()]) - 1
 
-        if self.options.additional_logic == self.options.additional_logic.option_none:
+        if self.options.additional_logic.value == self.options.additional_logic.option_none:
             self.additional_logic = {}
-        elif self.options.additional_logic == self.options.additional_logic.option_default:
+        elif self.options.additional_logic.value == self.options.additional_logic.option_default:
             self.additional_logic = {
                 2: InternalItemRule("gun-turret"),
                 3: AndRule(InternalItemRule("lab"),
@@ -215,7 +234,7 @@ class FactorioBobs(World):
                            InternalItemRule("active-provider-chest")
                            )
             }
-        elif self.options.additional_logic == self.options.additional_logic.option_custom:
+        elif self.options.additional_logic.value == self.options.additional_logic.option_custom:
             self.additional_logic = {complexity if type(complexity) is int else
                                      self.options.max_science_pack.aliases[complexity] + 1:
                                         process_yaml_rule(yaml_rule)
@@ -251,11 +270,16 @@ class FactorioBobs(World):
         for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
             location_pool.extend(location_pools[pack])
 
-        if (hasattr(self.multiworld, "generation_is_fake") # if fake
-                and not (hasattr(self.multiworld, "re_gen_passthrough") # and doesn't have seed then fallback
-                         and FactorioBobs.SEEDED_RANDOM_SEED_KEY in self.multiworld.re_gen_passthrough[self.game])):
+        if (hasattr(self.multiworld, "re_gen_passthrough") # if regen and have location count
+                and FactorioBobs.SLOT_LOCATION_COUNT_KEY in self.multiworld.re_gen_passthrough[self.game]):
+            location_count = self.multiworld.re_gen_passthrough[self.game][FactorioBobs.SLOT_LOCATION_COUNT_KEY]
+
+        if (hasattr(self.multiworld, "re_gen_passthrough")  # if regen and doesn't have seed then fallback
+                and FactorioBobs.SLOT_RANDOM_SEED_KEY not in self.multiworld.re_gen_passthrough[self.game]):
+            print("No random seed in slot_data, falling back to old behavior be careful around science pack skips")
+            self.options.tech_cost_mix.value = 100
             location_names = location_pool
-        else:
+        else: # normal gen
             try:
                 location_names = self.seeded_random.sample(location_pool, location_count)
             except ValueError as e:
@@ -350,14 +374,7 @@ class FactorioBobs(World):
             if science_pack == "automation-science-pack":
                 continue
             location = self.get_location(f"Automate {science_pack}")
-            science_pack_item: InternalItem = self.get_internal_item(science_pack)
-
-            if complexity in self.additional_logic:
-                rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
-            else:
-                rule = InternalItemRule(science_pack_item)
-
-            optimized_rule = rule.optimize()
+            optimized_rule = self.get_science_pack_rule(complexity)
             Rules.set_rule(location, lambda state: optimized_rule.eval(self, state))
 
         for location in self.science_locations:
@@ -387,6 +404,15 @@ class FactorioBobs(World):
                                                                            for technology in
                                                                            victory_tech_names)
         self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
+
+    def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
+        science_pack = self.options.max_science_pack.get_ordered_science_packs()[complexity-1]
+        science_pack_item: InternalItem = self.get_internal_item(science_pack)
+        if complexity in self.additional_logic:
+            rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
+        else:
+            rule = InternalItemRule(science_pack_item)
+        return rule.optimize()
 
     def get_internal_item(self, name: str) -> InternalItem:
         return self.custom_products[name] if name in self.custom_products \
@@ -709,15 +735,46 @@ class FactorioBobs(World):
         return item
 
     def fill_slot_data(self):
-        slot_data: dict[str, typing.Any] = {FactorioBobs.SEEDED_RANDOM_SEED_KEY: self.seeded_random_seed}
+        slot_data: dict[str, typing.Any] = {FactorioBobs.SLOT_RANDOM_SEED_KEY: self.seeded_random_seed,
+                                            FactorioBobs.SLOT_LOCATION_COUNT_KEY: len(self.science_locations),
+                                            FactorioBobs.SLOT_OPTIONS_KEY: {
+                                            self.options.tech_cost_mix.display_name: self.options.tech_cost_mix.value,
+                                            self.options.max_science_pack.display_name: self.options.max_science_pack.value,
+                                            },
+                                            FactorioBobs.SLOT_RANDOM_RECIPES_KEY: {}}
         for recipe in self.custom_recipes.values():
             ingredients = []
             for ingredient in recipe.ingredients:
                 ingredients.append(ingredient.name)
-            slot_data[recipe.name] = ingredients
+            slot_data[FactorioBobs.SLOT_RANDOM_RECIPES_KEY][recipe.name] = ingredients
         return slot_data
 
-
+    def explain_more(self, argument: str, state: CollectionState) -> list[JSONMessagePart]:
+        split_arg = argument.split("-")
+        if len(split_arg) == 2:
+            complexity = int(split_arg[1])
+            science_pack_name = self.options.max_science_pack.get_ordered_science_packs()[complexity]
+            rule = self.get_science_pack_rule(complexity)
+            needed_items = {item for item in rule.needed_items() if not state.has(item, self.player)}
+            ingredients = self.get_internal_item(science_pack_name).best_recipe.ingredients
+            return [{"text": f"pack name: {science_pack_name}\n"},
+                    {"text": f"ingredients: {ingredients}\n"},
+                    {"text": f"needed items: {needed_items}\n"}]
+        elif len(split_arg) == 3:
+            # if FactorioBobs.SLOT_RANDOM_SEED_KEY not in self.multiworld.re_gen_passthrough[self.game]:
+            #     return [{"text": "Unknown science pack requirements: game generated on old world\n"}] # todo enable check
+            locations = {location.name: location for location in self.science_locations}
+            if argument not in locations:
+                return [{"text": "Unknown location\n"}] # todo add fuzzy
+            packs_required = [(complexity, pack)
+                              for complexity, pack in enumerate(self.options.max_science_pack.get_ordered_science_packs())
+                              if pack in locations[argument].ingredients]
+            packs_needed = [(complexity, pack) for complexity, pack in packs_required
+                            if not state.has(f"Automated {pack}", self.player)]
+            return [{"text": f"science pack requirements: {packs_required}\n"},
+                    {"text": f"science pack not craftable: {packs_needed}\n"}]
+        else:
+            return [{"text": "Invalid argument only input science pack/location\n"}]
 
 class FactorioLocation(Location):
     game: str = FactorioBobs.game
