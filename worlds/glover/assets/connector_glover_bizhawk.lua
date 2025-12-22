@@ -11888,6 +11888,7 @@ GLOVERHACK = {
         potion_collected = 0x6,
       potion_size = 0x8,
       goal = 0xD90,
+      starred = 0xD91,
     ap_world_offset = 0xD94,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
