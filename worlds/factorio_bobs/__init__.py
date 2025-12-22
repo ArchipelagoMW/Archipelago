@@ -375,7 +375,7 @@ class FactorioBobs(World):
                 continue
             location = self.get_location(f"Automate {science_pack}")
             optimized_rule = self.get_science_pack_rule(complexity)
-            Rules.set_rule(location, lambda state: optimized_rule.eval(self, state))
+            Rules.set_rule(location, lambda state, location_rule = optimized_rule: location_rule.eval(self, state))
 
         for location in self.science_locations:
             Rules.set_rule(location, lambda state: True)
