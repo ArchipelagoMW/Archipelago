@@ -1,8 +1,7 @@
 import io
 import json
 import os
-import subprocess
-import shutil
+import pkgutil
 import traceback
 import typing
 import zlib
@@ -19,13 +18,7 @@ from .Locations import locationName_to_data, GLLocation
 if typing.TYPE_CHECKING:
     from . import GauntletLegendsWorld
 
-# ============================================================
-# Repack constants
-# ============================================================
-FILE_COUNT_OFFSET = 0x12C4
 TABLE_START_OFFSET = 0x12E0
-CUSTOM_ENTRY_OFFSET = TABLE_START_OFFSET + (6 * 0x30)  # 0x1400
-NEW_CUSTOM_ROM_OFFSET = 0xFFB000
 EXPANDED_GAME_ROM_OFFSET = 0x1000000  # 16MB mark
 
 
@@ -93,15 +86,6 @@ def n64_crc(rom: bytes, cic: int = 6102) -> tuple[int, int]:
     return crc1, crc2
 
 
-def next_cart_size(size: int) -> int:
-    """Round up to next valid N64 cart size."""
-    cart_sizes = [0x00800000, 0x01000000, 0x02000000, 0x04000000]
-    for s in cart_sizes:
-        if size <= s:
-            return s
-    raise RuntimeError(f"ROM too large: 0x{size:X}")
-
-
 def get_base_rom_as_bytes() -> bytes:
     """
     Read the base ROM file and verify its MD5 hash.
@@ -158,196 +142,12 @@ class GLPatchExtension(APPatchExtension):
     game = "Gauntlet Legends"
 
     @staticmethod
-    def patch_repack(caller: APProcedurePatch, rom: bytes) -> bytes:
-        """Apply mod code patches: game.bin patches, loader hook, and custom code injection."""
-        import tempfile
-        import pkgutil
-
-        # Get the package for resource loading
-        from . import __name__ as package_name
-
-        rom = bytearray(rom)
-
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_rom_path = os.path.join(temp_dir, "temp_working.z64")
-            game_bin_path = os.path.join(temp_dir, "game.bin")
-            custom_bin_path = os.path.join(temp_dir, "mycode.bin")
-
-            # Extract asm files from package to temp directory
-            asm_files = ["armips.exe", "CustomCode.asm", "GameBin.asm", "LoaderHook.asm"]
-            for asm_file in asm_files:
-                try:
-                    data = pkgutil.get_data(package_name, f"asm/{asm_file}")
-                    if data:
-                        with open(os.path.join(temp_dir, asm_file), "wb") as f:
-                            f.write(data)
-                except FileNotFoundError:
-                    pass  # Optional files may not exist
-
-            armips_exe = os.path.join(temp_dir, "armips.exe")
-            if not os.path.exists(armips_exe):
-                # Try system path
-                armips_exe = shutil.which("armips")
-                if armips_exe is None:
-                    raise FileNotFoundError("armips executable not found in asm folder or system PATH")
-
-            custom_asm_path = os.path.join(temp_dir, "CustomCode.asm")
-            game_bin_asm_path = os.path.join(temp_dir, "GameBin.asm")
-            loader_hook_asm_path = os.path.join(temp_dir, "LoaderHook.asm")
-
-            # Write ROM to temp file for armips
-            with open(temp_rom_path, "wb") as f:
-                f.write(rom)
-
-            # ============================================================
-            # PART 1: Extract and patch game.bin
-            # ============================================================
-            game_entry_offset = TABLE_START_OFFSET + (4 * 0x30)
-            game_rom_offset = be32(rom[game_entry_offset + 0x10:game_entry_offset + 0x14])
-            game_comp_size = be32(rom[game_entry_offset + 0x14:game_entry_offset + 0x18])
-
-            # Extract and decompress game.bin
-            game_compressed = bytes(rom[game_rom_offset:game_rom_offset + game_comp_size])
-            game_decompressed = zdec(game_compressed)
-
-            # Write decompressed game.bin
-            with open(game_bin_path, "wb") as f:
-                f.write(game_decompressed)
-
-            # Patch game.bin with armips if asm exists
-            if os.path.exists(game_bin_asm_path):
-                result = subprocess.run([armips_exe, game_bin_asm_path], cwd=temp_dir, capture_output=True, text=True,
-                                        creationflags=subprocess.CREATE_NO_WINDOW)
-                if result.returncode != 0:
-                    raise RuntimeError(f"armips failed on GameBin.asm: {result.stderr}")
-
-                game_patched_data = open(game_bin_path, "rb").read()
-            else:
-                game_patched_data = game_decompressed
-
-            # Recompress and write back
-            game_recompressed = zenc(game_patched_data)
-            new_game_comp_size = len(game_recompressed)
-
-            if new_game_comp_size > game_comp_size:
-                # Need to relocate to expanded area
-                new_game_rom_offset = EXPANDED_GAME_ROM_OFFSET
-                new_game_end = new_game_rom_offset + new_game_comp_size
-                ensure_len(rom, new_game_end, fill=0xFF)
-                rom[new_game_rom_offset:new_game_end] = game_recompressed
-                write_be32(rom, game_entry_offset + 0x10, new_game_rom_offset)
-                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
-            else:
-                rom[game_rom_offset:game_rom_offset + new_game_comp_size] = game_recompressed
-                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
-                if new_game_comp_size < game_comp_size:
-                    leftover_start = game_rom_offset + new_game_comp_size
-                    leftover_end = game_rom_offset + game_comp_size
-                    rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
-
-            # Write updated ROM for LoaderHook
-            with open(temp_rom_path, "wb") as f:
-                f.write(rom)
-
-            # ============================================================
-            # PART 2: Apply LoaderHook
-            # ============================================================
-            if os.path.exists(loader_hook_asm_path):
-                with open(loader_hook_asm_path, 'r') as f:
-                    hook_content = f.read()
-
-                # Replace input filename with temp file
-                hook_content = hook_content.replace('"input.z64"', f'"{temp_rom_path}"')
-
-                loader_hook_temp_path = os.path.join(temp_dir, "LoaderHook_temp.asm")
-                with open(loader_hook_temp_path, 'w') as f:
-                    f.write(hook_content)
-
-                result = subprocess.run([armips_exe, loader_hook_temp_path], cwd=temp_dir, capture_output=True,
-                                        text=True, creationflags=subprocess.CREATE_NO_WINDOW)
-                if result.returncode != 0:
-                    raise RuntimeError(f"armips failed on LoaderHook: {result.stderr}")
-
-                # Reload ROM after LoaderHook
-                rom = bytearray(open(temp_rom_path, "rb").read())
-
-            # ============================================================
-            # PART 3: Assemble and add CustomCode
-            # ============================================================
-            if os.path.exists(custom_asm_path):
-                result = subprocess.run([armips_exe, custom_asm_path], cwd=temp_dir, capture_output=True, text=True,
-                                        creationflags=subprocess.CREATE_NO_WINDOW)
-                if result.returncode != 0:
-                    raise RuntimeError(f"armips failed on CustomCode.asm: {result.stderr}")
-
-                if not os.path.exists(custom_bin_path):
-                    raise FileNotFoundError("armips did not create mycode.bin")
-
-                custom_code = open(custom_bin_path, "rb").read()
-                custom_compressed = zenc(custom_code)
-
-                # Custom code parameters
-                custom_load_addr = 0xE00D0000
-                custom_uncomp_sz = len(custom_code)
-                custom_comp_sz = len(custom_compressed)
-                custom_bss_sz = 0x00000100
-                custom_bss_addr = custom_load_addr + custom_uncomp_sz
-                custom_total_sz = custom_uncomp_sz + custom_bss_sz
-
-                # Write compressed custom code to ROM
-                custom_rom_off = NEW_CUSTOM_ROM_OFFSET
-                custom_end_off = custom_rom_off + custom_comp_sz
-                ensure_len(rom, custom_end_off, fill=0x00)
-                rom[custom_rom_off:custom_end_off] = custom_compressed
-
-                # Update file table
-                old_count = be32(rom[FILE_COUNT_OFFSET:FILE_COUNT_OFFSET + 4])
-                write_be32(rom, FILE_COUNT_OFFSET, old_count + 1)
-
-                entry_offset = CUSTOM_ENTRY_OFFSET
-                ensure_len(rom, entry_offset + 0x30, fill=0x00)
-
-                for i in range(0x30):
-                    rom[entry_offset + i] = 0x00
-
-                name = b"MyCode\x00"
-                rom[entry_offset:entry_offset + len(name)] = name
-                write_be32(rom, entry_offset + 0x10, custom_rom_off)
-                write_be32(rom, entry_offset + 0x14, custom_comp_sz)
-                write_be32(rom, entry_offset + 0x18, custom_load_addr)
-                write_be32(rom, entry_offset + 0x1C, custom_total_sz)
-                write_be32(rom, entry_offset + 0x20, custom_bss_addr)
-                write_be32(rom, entry_offset + 0x24, custom_bss_sz)
-
-            # ============================================================
-            # PART 4: Finalize ROM
-            # ============================================================
-            final_size = next_cart_size(len(rom))
-            if len(rom) < final_size:
-                rom.extend(b"\xFF" * (final_size - len(rom)))
-
-        return bytes(rom)
-
-
-    @staticmethod
     def finalize_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
         """
         Finalize ROM after all patch steps:
         - pad to a valid cart size
         - calculate CRC once
         """
-        rom = bytearray(rom)
-        final_size = next_cart_size(len(rom))
-        if len(rom) < final_size:
-            rom.extend(b"\xFF" * (final_size - len(rom)))
-
-        crc1, crc2 = n64_crc(rom, cic=6102)
-        rom[0x10:0x14] = crc1.to_bytes(4, "big")
-        rom[0x14:0x18] = crc2.to_bytes(4, "big")
-        return bytes(rom)
-
-    @staticmethod
-    def patch_seed_name(caller: APProcedurePatch, rom: bytes) -> bytes:
         options = json.loads(caller.get_file("options.json").decode("utf-8"))
         rom = bytearray(rom)
 
@@ -357,44 +157,10 @@ class GLPatchExtension(APPatchExtension):
         seed = options["seed_name"].encode("utf-8")[:SEED_LEN]
         rom[SEED_ROM_OFFSET:SEED_ROM_OFFSET + SEED_LEN] = seed.ljust(SEED_LEN, b"\x00")
 
-        return bytes(rom)
-
-    # Patch max item stack values
-    @staticmethod
-    def patch_counts(caller: APProcedurePatch, rom: bytes) -> bytes:
-        stream = io.BytesIO(rom)
-        stream.seek(0x67E7E0)
-        data = io.BytesIO(zdec(stream.read(0x380)))
-        data.seek(0x1A, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x37, 0)
-        data.write(bytes([0xFF]))
-        data.seek(0xDF, 0)
-        data.write(bytes([0xFF]))
-        data.seek(0xFB, 0)
-        data.write(bytes([0xFF]))
-        data.seek(0x117, 0)
-        data.write(bytes([0xFF]))
-        data.seek(0x133, 0)
-        data.write(bytes([0xFF]))
-        data.seek(0x212, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        for i in range(25):
-            data.seek(0x1A, 1)
-            data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x53E, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x55A, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x576, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x506, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        data.seek(0x522, 0)
-        data.write(bytes([0xFF, 0xFF]))
-        stream.seek(0x67E7E0, 0)
-        stream.write(zenc(data.getvalue()))
-
+        rom = bytearray(rom)
+        crc1, crc2 = n64_crc(rom, cic=6102)
+        rom[0x10:0x14] = crc1.to_bytes(4, "big")
+        rom[0x14:0x18] = crc2.to_bytes(4, "big")
         return bytes(rom)
 
     # Decompress all levels, place all items in the levels.
@@ -402,8 +168,6 @@ class GLPatchExtension(APPatchExtension):
     def patch_items(caller: APProcedurePatch, rom: bytes):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
-        stream.seek(0x540, 0)
-        stream.write(options["seed_name"].encode("utf-8")[0:16])
         for i in range(len(level_locations)):
             level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             stream.seek(level_address[i], 0)
@@ -420,7 +184,7 @@ class GLPatchExtension(APPatchExtension):
                         data.items += [
                             bytearray(data.objects[index][0:6])
                             + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
-                                [0x27, 0x4]))
+                                [0x27, 0x1C]))
                             + bytes([0x0, 0x0, 0x0, 0x0]),
                         ]
                         del data.objects[index]
@@ -435,13 +199,13 @@ class GLPatchExtension(APPatchExtension):
                     ):
                         data.chests[
                             j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
-                        12:14] = [0x27, 0x4]
+                        12:14] = [0x27, 0x1C]
                         if "Chest" in location_name:
                             data.chests[j - (
                                     len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
                                 9] = 0x1
                     else:
-                        data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x4]
+                        data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x1C]
                 else:
                     if "Obelisk" in items_by_id[item[0]].item_name and "Obelisk" not in location_name:
                         if chest_barrel(location_name):
@@ -478,7 +242,7 @@ class GLPatchExtension(APPatchExtension):
                         data.items += [
                             slice_
                             + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
-                                [0x27, 0x4]))
+                                [0x27, 0x1C]))
                             + bytes([chest[11], 0x0, 0x0, 0x0]),
                         ]
                         del data.chests[chest_index]
@@ -531,7 +295,7 @@ class GLPatchExtension(APPatchExtension):
         boss_compressed = bytes(rom[boss_rom_offset:boss_rom_offset + boss_comp_size])
         boss_decompressed = bytearray(zdec(boss_compressed))
 
-        FILLER_ROM_ID = 0x2704  # same filler as patch_items (bytes [0x27, 0x04])
+        FILLER_ROM_ID = 0x271C  # same filler as patch_items (bytes [0x27, 0x1C])
 
         for location_name, item_data in boss_items_data.items():
             if location_name not in boss_location_offsets:
@@ -584,12 +348,9 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".z64"
 
     procedure = [
-        ("patch_repack", []),  # full ROM rebuild + ASM
-        ("patch_items", []),  # level data
-        ("patch_boss_bin", []),  # boss.bin
-        ("patch_counts", []),  # misc data
-        ("patch_seed_name", []),  # 0x540 write
-        ("finalize_crc", []),  # ONE CRC, LAST
+        ("patch_boss_bin", []),
+        ("patch_items", []),
+        ("finalize_crc", [])
     ]
 
     @classmethod
@@ -605,6 +366,7 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         "player": world.player,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
+    patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
 
     # Write level files
     for i, level in enumerate(level_locations.values()):

@@ -415,28 +415,24 @@
     "id": 77780064,
     "item_name": "Skorne's Mask",
     "progression": "useful",
-    "rom_id": "0x2A01",
-    "frequency": 1000
+    "rom_id": "0x2A01"
   },
   {
     "id": 77780065,
     "item_name": "Skorne's Horns",
     "progression": "useful",
-    "rom_id": "0x2A02",
-    "frequency": 1000
+    "rom_id": "0x2A02"
   },
   {
     "id": 77780066,
     "item_name": "Skorne's Left Gauntlet",
     "progression": "useful",
-    "rom_id": "0x2A03",
-    "frequency": 1000
+    "rom_id": "0x2A03"
   },
   {
     "id": 77780067,
     "item_name": "Skorne's Right Gauntlet",
     "progression": "useful",
-    "rom_id": "0x2A04",
-    "frequency": 1000
+    "rom_id": "0x2A04"
   }
 ]
