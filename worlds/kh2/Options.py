@@ -344,7 +344,7 @@ class SummonLevelLocationToggle(Toggle):
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
-    start_inventory: StartInventoryPool
+    start_inventory_from_pool: StartInventoryPool
     LevelDepth: LevelDepth
     Sora_Level_EXP: SoraEXP
     Valor_Form_EXP: ValorEXP

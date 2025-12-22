@@ -15,6 +15,7 @@ from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
 from .Client.WorldLocations import bounty_name_to_address
+from itertools import chain
 
 
 def launch_client(*args: str):
@@ -451,7 +452,7 @@ class KH2World(World):
         """
         Making sure the player doesn't put too many abilities in their starting inventory.
         """
-        for item, value in self.options.start_inventory.value.items():
+        for item, value in chain(self.options.start_inventory.value.items(), self.options.start_inventory_from_pool.value.items()):
             if item in ActionAbility_Table \
                     or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
