@@ -29,6 +29,7 @@ class NineSolsWebWorld(WebWorld):
             SealsForPrison,
             SealsForEthereal,
             SkipSoulscapePlatforming,
+            PreventAnnoyingRunbacks,
         ]),
         OptionGroup("Jade Cost Randomization", [
             RandomizeJadeCosts,

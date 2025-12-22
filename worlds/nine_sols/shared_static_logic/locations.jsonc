@@ -113,7 +113,14 @@
     },
     {
         "address": 404, "name": "Central Hall: Turrets and Double Axe Robot Room",
-        "region": "CH - Left", "requires": [ { "item": "Unbounded Counter" } ]
+        "region": "CH - Left", "requires": [
+            { "item": "Unbounded Counter" },
+            {
+                "option": "prevent_annoying_runbacks",
+                "true": [{ "item": "Mystic Nymph: Scout Mode" }],
+                "false": []
+            }
+        ]
     },
     {
         "address": 405, "name": "Central Hall: Vents",

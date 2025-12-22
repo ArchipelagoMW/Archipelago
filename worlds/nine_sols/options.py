@@ -244,6 +244,20 @@ class KuafuExtraInventoryUnlockSolSeals(Range):
     default = 5
 
 
+class PreventAnnoyingRunbacks(DefaultOnToggle):
+    """If the path to a boss or other difficult arena fight has a shortcut requiring items to open,
+    this option makes those items logically required for the fight.
+    This prevents the randomizer from potentially forcing you to attempt these fights while they have
+    annoyingly long runbacks because you can't open the shortcuts yet.
+
+	Two fights are currently affected by this option:
+	- Ji's boss fight and the 3 locations behind it will logically require Mystic Nymph: Scout Mode,
+	because nymph can open the shortcut from Grotto (West)'s root node to his boss arena
+	- The location "Central Hall: Turrets and Double Axe Robot Room" will logically require Mystic Nymph: Scout Mode,
+	because nymph can open the door to the left side of Central Hall
+    """
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -256,6 +270,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     # skip weakened prison state?
     seals_for_ethereal: SealsForEthereal
     skip_soulscape_platforming: SkipSoulscapePlatforming
+    prevent_annoying_runbacks: PreventAnnoyingRunbacks
 
     # Jade Costs
     randomize_jade_costs: RandomizeJadeCosts

@@ -1651,9 +1651,17 @@
 
     // Ancient Stone Pillar
     // No root node in here, so no need for a 2nd region.
-    { "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji", "requires": [
-        { "item": "Tai-Chi Kick" } // or else Ji's divinations are a softlock
-    ] }, // TODO: (more) combat logic?
+    {
+        "from": "GoSW - Above Western Cliffs", "to": "ASP - After Ji",
+        "requires": [
+            { "item": "Tai-Chi Kick" }, // or else Ji's divinations are a softlock
+            {
+                "option": "prevent_annoying_runbacks",
+                "true": [{ "item": "Mystic Nymph: Scout Mode" }],
+                "false": []
+            }
+        ]
+    }, // TODO: (more) combat logic?
 
     // Sky Tower
     {
