@@ -22,14 +22,6 @@ class ClairObscurLocation(Location):
         super().__init__(player, name, code, parent)
         self.default_item = default_item_value
 
-# def set_weapons_to_normal(world: "ClairObscurWorld") -> None:
-#     """
-#     Sets all weapon item classifications to normal rather than useful. Necessary if Exclude Endgame Locations is on,
-#     otherwise there aren't enough filler items to fill the excluded locations.
-#     """
-#     for item in world.item_name_groups["Weapon"]:
-#         world.multiworld.get_items()
-
 def create_locations(world: "ClairObscurWorld", regions: Dict[str, Region]) -> None:
 
     #These locations were in data dumps but not confirmed to be either accessible or inaccessible.

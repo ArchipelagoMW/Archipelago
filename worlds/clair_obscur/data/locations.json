@@ -3452,7 +3452,9 @@
         "name": "Ancient Gestral City item",
         "location": "Mini Levels",
         "original_item": "MusicRecord_16",
-        "condition": {},
+        "condition": {
+            "Progressive Rock": 1
+        },
         "type": "Chest"
     },
     {
@@ -4036,7 +4038,9 @@
         "name": "World Map: First Continent - Outside Ancient Gestral City",
         "location": "World Map",
         "original_item": "Consumable_LuminaPoint",
-        "condition": {},
+        "condition": {
+            "Progressive Rock": 1
+        },
         "type": "Chest"
     },
     {
