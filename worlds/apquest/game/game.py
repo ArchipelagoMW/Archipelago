@@ -158,11 +158,11 @@ class Game:
         if not self.gameboard.ready:
             return
 
-        if self.active_math_problem is not None:
-            if input_key in DIGIT_INPUTS_TO_DIGITS:
-                self.math_problem_input(DIGIT_INPUTS_TO_DIGITS[input_key])
-            if input_key == Input.BACKSPACE:
-                self.math_problem_delete()
+        if input_key in DIGIT_INPUTS_TO_DIGITS:
+            self.math_problem_input(DIGIT_INPUTS_TO_DIGITS[input_key])
+            return
+        if input_key == Input.BACKSPACE:
+            self.math_problem_delete()
             return
 
         if input_key == Input.LEFT:
