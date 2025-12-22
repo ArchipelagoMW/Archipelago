@@ -34,7 +34,7 @@ from ..Names import locationName
 
 
 class Intended_A(BanjoTooieTestBase, IntendedLogic):
-    """Victory: HAG1, All TRUE toggles for item pool, progressive moves enabled"""
+    """HAG1, All TRUE toggles for item pool, progressive moves enabled"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_hag1,
@@ -69,7 +69,7 @@ class Intended_A(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_B(BanjoTooieTestBase, IntendedLogic):
-    """Victory: Minigame Hunt (short), world rando, train, backdoors"""
+    """Minigame Hunt (short), world rando, train, backdoors"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -90,7 +90,7 @@ class Intended_B(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_C(BanjoTooieHintTestBase, IntendedLogic):
-    """Victory: Boss Hunt (long), choice option alternatives, cryptic hints"""
+    """Boss Hunt (long), choice option alternatives, cryptic hints"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt,
@@ -108,7 +108,7 @@ class Intended_C(BanjoTooieHintTestBase, IntendedLogic):
 
 
 class Intended_D(BanjoTooieHintTestBase, IntendedLogic):
-    """Victory: Jinjo Rescue (long), more choice alternatives, progression hints"""
+    """Jinjo Rescue (long), more choice alternatives, progression hints"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -126,7 +126,7 @@ class Intended_D(BanjoTooieHintTestBase, IntendedLogic):
 
 
 class Intended_E(BanjoTooieTestBase, IntendedLogic):
-    """Victory: Wonderwing, BK moves none"""
+    """Wonderwing, BK moves none"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_wonderwing_challenge,
@@ -136,7 +136,7 @@ class Intended_E(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_F(BanjoTooieTestBase, IntendedLogic):
-    """Victory: Boss Hunt + HAG1 (short)"""
+    """Boss Hunt + HAG1 (short)"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1,
@@ -145,7 +145,7 @@ class Intended_F(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_G(BanjoTooieTestBase, IntendedLogic):
-    """Victory: Token Hunt (max tokens)"""
+    """Token Hunt (max tokens)"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_token_hunt,
@@ -204,7 +204,7 @@ class Intended_H(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_I(BanjoTooieTestBase, IntendedLogic):
-    """Minigame Hunt (long), Token Hunt ranges"""
+    """Minigame Hunt (long)"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -213,7 +213,7 @@ class Intended_I(BanjoTooieTestBase, IntendedLogic):
 
 
 class Intended_J(BanjoTooieTestBase, IntendedLogic):
-    """Jinjo Rescue (short), Token Hunt long"""
+    """Jinjo Rescue (short)"""
     options = {
         **IntendedLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -233,7 +233,7 @@ class Intended_K(BanjoTooieTestBase, IntendedLogic):
 
 
 class EasyTricks_A(BanjoTooieTestBase, EasyTricksLogic):
-    """Victory: Minigame Hunt, All TRUE toggles, progressive moves"""
+    """Minigame Hunt, All TRUE toggles, progressive moves"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -269,7 +269,7 @@ class EasyTricks_A(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_B(BanjoTooieTestBase, EasyTricksLogic):
-    """Victory: Boss Hunt, world rando, train, backdoors"""
+    """Boss Hunt, world rando, train, backdoors"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt,
@@ -291,7 +291,7 @@ class EasyTricks_B(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_C(BanjoTooieHintTestBase, EasyTricksLogic):
-    """Victory: Jinjo Rescue, choice alternatives, cryptic hints"""
+    """Jinjo Rescue, choice alternatives, cryptic hints"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -310,7 +310,7 @@ class EasyTricks_C(BanjoTooieHintTestBase, EasyTricksLogic):
 
 
 class EasyTricks_D(BanjoTooieHintTestBase, EasyTricksLogic):
-    """Victory: Wonderwing, more choice alternatives, progression hints"""
+    """Wonderwing, more choice alternatives, progression hints"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_wonderwing_challenge,
@@ -326,7 +326,7 @@ class EasyTricks_D(BanjoTooieHintTestBase, EasyTricksLogic):
 
 
 class EasyTricks_E(BanjoTooieTestBase, EasyTricksLogic):
-    """Victory: HAG1, BK moves none"""
+    """HAG1, BK moves none"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_hag1,
@@ -336,7 +336,7 @@ class EasyTricks_E(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_F(BanjoTooieTestBase, EasyTricksLogic):
-    """Victory: Boss Hunt + HAG1"""
+    """Boss Hunt + HAG1"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1,
@@ -345,7 +345,7 @@ class EasyTricks_F(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_G(BanjoTooieTestBase, EasyTricksLogic):
-    """Victory: Token Hunt"""
+    """Token Hunt"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_token_hunt,
@@ -402,7 +402,7 @@ class EasyTricks_H(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_I(BanjoTooieTestBase, EasyTricksLogic):
-    """Minigame short, Jinjo long"""
+    """Minigame Hunt (short)"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -411,7 +411,7 @@ class EasyTricks_I(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class EasyTricks_J(BanjoTooieTestBase, EasyTricksLogic):
-    """Jinjo long"""
+    """Jinjo Rescue (long)"""
     options = {
         **EasyTricksLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -433,7 +433,7 @@ class EasyTricks_K(BanjoTooieTestBase, EasyTricksLogic):
 
 
 class HardTricks_A(BanjoTooieTestBase, HardTricksLogic):
-    """Victory: Boss Hunt, All TRUE toggles, progressive moves"""
+    """Boss Hunt, All TRUE toggles, progressive moves"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt,
@@ -469,7 +469,7 @@ class HardTricks_A(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_B(BanjoTooieTestBase, HardTricksLogic):
-    """Victory: Jinjo Rescue, world rando, train, backdoors"""
+    """Jinjo Rescue, world rando, train, backdoors"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -492,7 +492,7 @@ class HardTricks_B(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_C(BanjoTooieHintTestBase, HardTricksLogic):
-    """Victory: Wonderwing, choice alternatives, cryptic hints"""
+    """Wonderwing, choice alternatives, cryptic hints"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_wonderwing_challenge,
@@ -509,7 +509,7 @@ class HardTricks_C(BanjoTooieHintTestBase, HardTricksLogic):
 
 
 class HardTricks_D(BanjoTooieHintTestBase, HardTricksLogic):
-    """Victory: Boss Hunt + HAG1, more choice alternatives, progression hints"""
+    """Boss Hunt + HAG1, more choice alternatives, progression hints"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1,
@@ -526,7 +526,7 @@ class HardTricks_D(BanjoTooieHintTestBase, HardTricksLogic):
 
 
 class HardTricks_E(BanjoTooieTestBase, HardTricksLogic):
-    """Victory: Token Hunt (max tokens), BK moves none"""
+    """Token Hunt (max tokens), BK moves none"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_token_hunt,
@@ -540,7 +540,7 @@ class HardTricks_E(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_F(BanjoTooieTestBase, HardTricksLogic):
-    """Victory: HAG1"""
+    """HAG1"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_hag1,
@@ -548,7 +548,7 @@ class HardTricks_F(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_G(BanjoTooieTestBase, HardTricksLogic):
-    """Victory: Minigame Hunt"""
+    """Minigame Hunt"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -604,7 +604,7 @@ class HardTricks_H(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_I(BanjoTooieTestBase, HardTricksLogic):
-    """Minigame long"""
+    """Minigame Hunt (long)"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -613,7 +613,7 @@ class HardTricks_I(BanjoTooieTestBase, HardTricksLogic):
 
 
 class HardTricks_J(BanjoTooieTestBase, HardTricksLogic):
-    """Jinjo short"""
+    """Jinjo Rescue (short)"""
     options = {
         **HardTricksLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -633,7 +633,7 @@ class HardTricks_K(BanjoTooieTestBase, HardTricksLogic):
 
 
 class Glitches_A(BanjoTooieTestBase, GlitchesLogic):
-    """Victory: Jinjo Rescue, All TRUE toggles, progressive moves"""
+    """Jinjo Rescue, All TRUE toggles, progressive moves"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -669,7 +669,7 @@ class Glitches_A(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_B(BanjoTooieTestBase, GlitchesLogic):
-    """Victory: Wonderwing, world rando, train, backdoors"""
+    """Wonderwing, world rando, train, backdoors"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_wonderwing_challenge,
@@ -690,7 +690,7 @@ class Glitches_B(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_C(BanjoTooieHintTestBase, GlitchesLogic):
-    """Victory: Boss Hunt + HAG1, choice alternatives, cryptic hints"""
+    """Boss Hunt + HAG1, choice alternatives, cryptic hints"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt_and_hag1,
@@ -708,7 +708,7 @@ class Glitches_C(BanjoTooieHintTestBase, GlitchesLogic):
 
 
 class Glitches_D(BanjoTooieHintTestBase, GlitchesLogic):
-    """Victory: Token Hunt, more choice alternatives, progression hints"""
+    """Token Hunt, more choice alternatives, progression hints"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_token_hunt,
@@ -726,7 +726,7 @@ class Glitches_D(BanjoTooieHintTestBase, GlitchesLogic):
 
 
 class Glitches_E(BanjoTooieTestBase, GlitchesLogic):
-    """Victory: HAG1, BK moves none"""
+    """HAG1, BK moves none"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_hag1,
@@ -736,7 +736,7 @@ class Glitches_E(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_F(BanjoTooieTestBase, GlitchesLogic):
-    """Victory: Minigame Hunt"""
+    """Minigame Hunt"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -745,7 +745,7 @@ class Glitches_F(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_G(BanjoTooieTestBase, GlitchesLogic):
-    """Victory: Boss Hunt"""
+    """Boss Hunt"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_boss_hunt,
@@ -801,7 +801,7 @@ class Glitches_H(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_I(BanjoTooieTestBase, GlitchesLogic):
-    """Minigame short"""
+    """Minigame Hunt (short)"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_minigame_hunt,
@@ -810,7 +810,7 @@ class Glitches_I(BanjoTooieTestBase, GlitchesLogic):
 
 
 class Glitches_J(BanjoTooieTestBase, GlitchesLogic):
-    """Jinjo long"""
+    """Jinjo Rescue (long)"""
     options = {
         **GlitchesLogic.options,
         "victory_condition": VictoryCondition.option_jinjo_family_rescue,
@@ -828,13 +828,4 @@ class Glitches_K(BanjoTooieTestBase, GlitchesLogic):
         "token_hunt_length": TokenHuntLength.range_end,
         "randomize_signposts": RandomizeSignposts.option_true,
         "nestsanity": EnableNestsanity.option_true,
-    }
-
-
-class Glitches_L(BanjoTooieTestBase, GlitchesLogic):
-    """Boss Hunt short"""
-    options = {
-        **GlitchesLogic.options,
-        "victory_condition": VictoryCondition.option_boss_hunt,
-        "boss_hunt_length": BossHuntLength.range_start,
     }
