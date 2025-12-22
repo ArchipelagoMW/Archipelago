@@ -69,7 +69,7 @@ class StartingBall(Choice):
 
 class GaribLogic(Choice):
     """How the garibs are placed in logic. Default Garib Groups.
-    Level Garibs: You get a check for getting all garibs in a level. You aren't sent garibs.
+    Level Garibs: Acts as vanilla Glover.
     Garib Groups: Each group of garibs in a level is a check. You are sent bundles of garibs.
     Garibsanity: Each garib is a check. You can be sent individual garibs.
     """
@@ -128,6 +128,16 @@ class EntranceOverrides(OptionDict):
         })
     default = {}
     display_name = "Entrance Overrides"
+
+class OpenWorlds(Toggle):
+    """All the world portals start open. Default off."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Open Worlds"
+
+class OpenLevels(Toggle):
+    """All doors in each wayroom start open. Default off."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Open Levels"
 
 class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
@@ -459,6 +469,8 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     random_garib_sounds : RandomGaribSounds
     entrance_randomizer : EntranceRandomizer
     entrance_overrides : EntranceOverrides
+    open_worlds : OpenWorlds
+    open_levels : OpenLevels
     portalsanity : Portalsanity
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     checkpoint_overrides : CheckpointOverrides

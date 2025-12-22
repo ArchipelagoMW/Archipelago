@@ -102,6 +102,34 @@ local TOTAL_PROGRESSIVE_LEVEL_EVENTS = {
 	['AP_FORTRESS_L1_PROGRESSIVE_DOOR'] = 0,
 	['AP_FORTRESS_L2_PROGRESSIVE_GATE'] = 0
 }
+local SCORE_TABLE = {
+	['TOTAL'] = 0,
+	['AP_ATLANTIS_L1'] = 0,
+	['AP_ATLANTIS_L2'] = 0,
+	['AP_ATLANTIS_L3'] = 0,
+	['AP_ATLANTIS_BONUS'] = 0,
+	['AP_CARNIVAL_L1'] = 0,
+	['AP_CARNIVAL_L2'] = 0,
+	['AP_CARNIVAL_L3'] = 0,
+	['AP_CARNIVAL_BONUS'] = 0,
+	['AP_PIRATES_L1'] = 0,
+	['AP_PIRATES_L2'] = 0,
+	['AP_PIRATES_L3'] = 0,
+	['AP_PIRATES_BONUS'] = 0,
+	['AP_PREHISTORIC_L1'] = 0,
+	['AP_PREHISTORIC_L2'] = 0,
+	['AP_PREHISTORIC_L3'] = 0,
+	['AP_PREHISTORIC_BONUS'] = 0,
+	['AP_FORTRESS_L1'] = 0,
+	['AP_FORTRESS_L2'] = 0,
+	['AP_FORTRESS_L3'] = 0,
+	['AP_FORTRESS_BONUS'] = 0,
+	['AP_SPACE_L1'] = 0,
+	['AP_SPACE_L2'] = 0,
+	['AP_SPACE_L3'] = 0,
+	['AP_SPACE_BOSS'] = 0,
+	['AP_SPACE_BONUS'] = 0
+}
 local MISC_ITEMS_RECIEVED = {
     ["CHICKEN"] = 0,
     ["LIFE"] = 0,
@@ -11822,6 +11850,7 @@ GLOVERHACK = {
          wr_last_line = 0x7E,
     wayroom_size = 0x88,
     chicken_collected = 0x1C3FC,
+    score = 0x290188,
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
@@ -12060,6 +12089,10 @@ function GLOVERHACK:checkEnemyGaribLocationFlag(world_id, offset_list, ap_id)
     return false
 end
 
+function GLOVERHACK:getScore()
+	return mainmemory.read_u32_be(self.score)
+end
+
 function GLOVERHACK:getSettingPointer()
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
     if hackPointerIndex == nil
@@ -12083,6 +12116,11 @@ end
 
 function GLOVERHACK:setCustomGaribSounds(garibsounds)
 	mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
+end
+
+function GLOVERHACK:setPortalsanity(portalsanity)
+	--mainmemory.writebyte(self.portalsanity + GLOVERHACK:getSettingPointer(), portalsanity);
+	print("WARNING! PORTALSANITY UNIMPLIMENTED!")
 end
 
 -- function GLOVERHACK:setGaribSorting(gsort)
@@ -12449,6 +12487,22 @@ function ball_returned_check()
 		check[tostring(0x79A + (i - 1))] = i <= highest_returned
 	end
 	return check
+end
+
+function score_check()
+	local current_score = GLOVERHACK:getScore()
+	if SCORE_TABLE["TOTAL"] ~= current_score
+	then
+		-- Update Glover's Total Score
+		local gained_score = current_score - SCORE_TABLE["TOTAL"]
+		SCORE_TABLE["TOTAL"] = current_score
+		-- Update Level-Specific Total Scores
+		if SCORE_TABLE[WORLD_NAME] ~= nil
+		then
+			SCORE_TABLE[WORLD_NAME] = SCORE_TABLE[WORLD_NAME] + gained_score
+		end
+	end
+	return SCORE_TABLE
 end
 
 function received_garibs(itemId)
@@ -13125,6 +13179,7 @@ function SendToClient()
 	retTable["goal"] = goal_check()
 	retTable["ball_returns"] = ball_returned_check()
 	retTable["chicken_collected"] = cheat_chicken_check()
+	retTable["scores"] = score_check()
 	retTable["outro"] = WORLD_NAME == "AP_OUTRO"
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
@@ -13371,6 +13426,14 @@ function process_slot(block)
 	then
 		setSpawningCheckpoints(block['slot_spawning_checkpoints'])
 	end
+	if block['slot_open_worlds'] ~= nil and block['slot_open_worlds'] ~=0
+	then
+		GVR:setItem(ITEM_TABLE["AP_OPEN_HUBS"], 1)
+	end
+	if block['slot_open_levels'] ~= nil and block['slot_open_levels'] ~=0
+	then
+		GVR:setItem(ITEM_TABLE["AP_OPEN_WORLDS"], 1)
+	end
 	if block['slot_world_lookup'] ~= nil
 	then
 		setRandomizedWorlds(block['slot_world_lookup'])
@@ -13390,6 +13453,10 @@ function process_slot(block)
 	if block['slot_mr_tips_text'] ~= nil
 	then
 		applyCustomTipText(block['slot_mr_tips_text'])
+	end
+	if block['slot_portalsanity'] ~= nil and block['slot_portalsanity'] ~=0
+	then
+		GVR:setPortalsanity(block['slot_portalsanity'])
 	end
 	if block['slot_random_garib_sounds'] ~= nil
 	then

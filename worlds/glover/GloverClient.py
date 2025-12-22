@@ -314,6 +314,7 @@ class GloverContext(CommonContext):
         self.goal_table = {}
         self.ball_return_list = {}
         self.chicken = False
+        self.score_table = {}
 
         self.current_world = 0
         self.current_hub = 0
@@ -646,6 +647,9 @@ def get_slot_payload(ctx: GloverContext):
             "slot_traplink": ctx.link_table["TRAP"].enabled,
             "slot_version": version,
             "slot_garib_logic": ctx.slot_data["garib_logic"],
+            "slot_portalsanity": ctx.slot_data["portalsanity"],
+            "slot_open_worlds": ctx.slot_data["open_worlds"],
+            "slot_open_levels": ctx.slot_data["open_levels"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
             "slot_random_garib_sounds" : ctx.slot_data["random_garib_sounds"],
             "slot_garib_order": ctx.slot_data["garib_order"],
@@ -736,6 +740,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     checkpointslist = payload["checkpoint"]
     switchslist = payload["switch"]
     ball_return_list = payload["ball_returns"]
+    score_table = payload["scores"]
 
     glover_world = payload["glover_world"]
     glover_hub = payload["glover_hub"]
@@ -774,6 +779,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         goallist = {}
     if isinstance(ball_return_list, list):
         ball_return_list = {}
+    if isinstance(score_table, list):
+        score_table = {}
     
     if demo == False and ctx.sync_ready == True:
         locs1 = []
@@ -881,6 +888,13 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                                     scoutsVague.append(id)
                                     logger.info(ctx.slot_data["vague_chicken_text"][locationId])
         #TODO: Make it so rechecking Chicken Hint at later hubs works in-game
+        if ctx.score_table != score_table:
+            ctx.score_table = score_table
+            if ctx.slot_data["score_checks"] != {}:
+                for scoreLevel, scoreValue in score_table.items():
+                    for locationId, requiredScore in ctx.slot_data["score_checks"][scoreLevel].items():
+                        if requiredScore <= scoreValue:
+                            locs1.append(int(locationId))
 
         if len(locs1) > 0:
             await ctx.send_msgs([{

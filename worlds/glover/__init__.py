@@ -91,7 +91,6 @@ class GloverWeb(WebWorld):
         ]),
         OptionGroup("Difficulty", [
             Options.DifficultyLogic,
-            Options.EnableBonuses,
             Options.EasyBallWalk
         ]),
         OptionGroup("Links", [
@@ -109,9 +108,12 @@ class GloverWeb(WebWorld):
             Options.GaribOrderOverrides,
             Options.RandomGaribSounds
         ]),
-        OptionGroup("Entrance Randomization", [
+        OptionGroup("Levels", [
+            Options.EnableBonuses,
             Options.EntranceRandomizer,
-            Options.EntranceOverrides#,
+            Options.EntranceOverrides,
+            Options.OpenWorlds,
+            Options.OpenLevels#,
             #Options.Portalsanity
         ]),
         OptionGroup("Checkpoints", [
@@ -204,7 +206,7 @@ class GloverWorld(World):
             progressive_count = state.count(name, self.player)
             state.add_item(name + " " + str(progressive_count), self.player)
         #Garib counting
-        if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
+        if not self.garibs_are_filler:
             if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
@@ -226,7 +228,7 @@ class GloverWorld(World):
             progressive_count = state.count(name, self.player)
             state.remove_item(name + " " + str(progressive_count), self.player)
         #Garib counting
-        if self.options.difficulty_logic.value > 0 or self.options.bonus_levels:
+        if not self.garibs_are_filler:
             if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
@@ -541,7 +543,7 @@ class GloverWorld(World):
             for each_possible in possible_starts:
                 if not each_possible in self.options.entrance_overrides.value:
                     possible_swaps.append(each_possible)
-            #Switch atlantis 1's door with it
+            #Switch Atlantis 1's door with it
             new_start = self.random.choice(possible_swaps)
             swap_index = self.wayroom_entrances.index(new_start)
             self.wayroom_entrances[swap_index] = self.wayroom_entrances[0]
@@ -587,6 +589,30 @@ class GloverWorld(World):
             self.garib_level_order.append(["Pht?", 60])
             self.garib_level_order.append(["FoF?", 56])
             self.garib_level_order.append(["Otw?", 50])
+        elif self.options.accessibility == Accessibility.option_full and not (self.options.portalsanity or self.options.open_levels):
+            #Bonus levels unlock stuff, ergo sorting order is important to stop lockouts.
+            #Open levels and portalsanity already stop star mark lockouts
+            match self.options.garib_sorting:
+                case GaribSorting.option_random_order:
+                    final_garib_level_index = self.wayroom_entrances.index(self.garib_level_order[-1][0])
+                    final_garib_door = final_garib_level_index % 5
+                    #Make sure the final star mark is a bonus level, (or is excluded)
+                    if final_garib_door != 4:
+                        #Get all non-boss levels placed at bonus doors
+                        nonboss_at_bonus : list[str] = []
+                        for bonus_door_levels in range(4,30,5):
+                            level_at_bonus = self.wayroom_entrances[bonus_door_levels]
+                            if not level_at_bonus.endswith("!"):
+                                nonboss_at_bonus.append(level_at_bonus)
+                        #If any of the bonus levels have garibs, that has to be the final level
+                        if len(nonboss_at_bonus) > 0:
+                            #Make one at random the final level instead
+                            to_swap_name = self.random.choice(nonboss_at_bonus)
+                            original_level_entry = self.garib_level_order[-1]
+                            swap_level_entry = next(garib_levels for garib_levels in self.garib_level_order if garib_levels[0] == to_swap_name)
+                            to_swap_index = self.garib_level_order.index(swap_level_entry)
+                            self.garib_level_order[-1] = swap_level_entry
+                            self.garib_level_order[to_swap_index] = original_level_entry
 
     def give_starting_ball(self):
         match self.options.starting_ball:
@@ -618,6 +644,8 @@ class GloverWorld(World):
     def generate_early(self):
         #Set the valid spawning checkpoints
         self.set_highest_valid_checkpoints()
+        #Check if garibs are filler or not
+        self.garibs_are_filler = (not self.options.portalsanity) and ((self.options.difficulty_logic.value == 0 and not self.options.bonus_levels) or (self.options.open_levels == True))
         #Validate options
         self.validate_options()
         #Setup the Filler Table logic
@@ -699,7 +727,7 @@ class GloverWorld(World):
                 item_classification = ItemClassification.trap
             case "Garib":
                 #If the garibs have no use, they're filler
-                if self.options.difficulty_logic.value == 0 and not self.options.bonus_levels:
+                if self.garibs_are_filler:
                     item_classification = ItemClassification.filler
                 #If they're part of World Sorting logic, don't skip balancing for them
                 else: #if self.options.garib_sorting.value == 0:
@@ -1015,9 +1043,11 @@ class GloverWorld(World):
                 #Makes bonus unlocks happen as vanilla
                 if not self.options.portalsanity:
                    bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
-                #Only require marks from levels that require garibs
-                for each_all_garib_location in all_garib_locations:
-                    add_rule(bonus_unlock, lambda state, required_garib_completion = each_all_garib_location.name: state.can_reach_location(required_garib_completion, player))
+                #Portalsanity still has the garib location. Open Levels has no rules to access the bonus gate
+                if (not self.options.open_levels) or self.options.portalsanity:
+                    #Only require marks from levels that require garibs
+                    for each_all_garib_location in all_garib_locations:
+                        add_rule(bonus_unlock, lambda state, required_garib_completion = each_all_garib_location.name: state.can_reach_location(required_garib_completion, player))
 
         #Entry Names
         hub_entry_names : list[str] = [
@@ -1038,10 +1068,9 @@ class GloverWorld(World):
             "Hubworld Fortress of Fear Gate",
             "Hubworld Out of This World Gate"
         ]
-
-        if not self.options.portalsanity:
-            final_location : Location = self.returning_crystal(castle_cave, 7)
-            final_location.place_locked_item(self.create_event("Endscreen"))
+        
+        final_location : Location = self.returning_crystal(castle_cave, 7, False, "E")
+        final_location.place_locked_item(self.create_event("Endscreen"))
 
         #Apply hubworld entrances
         for entrance_index, entrance_name in enumerate(self.overworld_entrances):
@@ -1058,31 +1087,35 @@ class GloverWorld(World):
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
             
             #Make the hubworld operate normally while portalsanity's off
+            crystal_location : Location | None = None
             if not self.options.portalsanity:
-                #The Thing
-                crystal_location : Location | None = None
+                #Place gate openings
                 match entrance_index:
                     case 0:
                         #Requires 1/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 1)
+                        crystal_location = self.returning_crystal(castle_cave, 1, True)
                     case 1:
                         #Requires 2/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 2, "A")
+                        crystal_location = self.returning_crystal(castle_cave, 2, True, "A")
                     case 2:
                         #Requires 2/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 2, "B")
+                        crystal_location = self.returning_crystal(castle_cave, 2, True, "B")
                     case 3:
                         #Requires 4/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 4, "A")
+                        crystal_location = self.returning_crystal(castle_cave, 4, True, "A")
                     case 4:
                         #Requires 4/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 4, "B")
+                        crystal_location = self.returning_crystal(castle_cave, 4, True, "B")
                     case 5:
                         #Requires 6/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 6)
+                        crystal_location = self.returning_crystal(castle_cave, 6, True)
                 #Put the gate to it at the crystal location
                 if crystal_location != None:
                     crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
+            #If portalsanity's on, crystals are locations
+            else:
+                #Portalsanity locations start at 1946
+                crystal_location = self.returning_crystal(castle_cave, entrance_index + 1, False, "", 1946 + entrance_index)
 
     def extend_hint_information(self, hint_data : Dict[int, Dict[int, str]]):
         player = self.player
@@ -1148,7 +1181,7 @@ class GloverWorld(World):
             case 1:
                 castle_cave : Region = multiworld.get_region("Castle Cave", player)
                 victory_condition = str(self.options.required_crystals.value) + " Balls Returned"
-                victory_location : Location = self.returning_crystal(castle_cave, self.options.required_crystals.value, "G")
+                victory_location : Location = self.returning_crystal(castle_cave, self.options.required_crystals.value, False, "G")
                 victory_location.place_locked_item(self.create_event(victory_condition))
             case 2:
                 menu : Region = multiworld.get_region("Menu", player)
@@ -1164,11 +1197,13 @@ class GloverWorld(World):
         multiworld.completion_condition[player] = lambda state: state.has(victory_condition, player)
 
     #Crystal return locations
-    def returning_crystal(self, castle_cave : Region, required_balls : int, suffix : str = "") -> Location:
+    def returning_crystal(self, castle_cave : Region, required_balls : int, can_be_open : bool, suffix : str = "", apId : int | None = None) -> Location:
         player = self.player
-        crystal_return_location : Location = Location(player, "Ball Turn-In " + str(required_balls) + suffix, None, castle_cave)
+        crystal_return_location : Location = Location(player, "Ball Turn-In " + str(required_balls) + suffix, apId, castle_cave)
         castle_cave.locations.append(crystal_return_location)
-        set_rule(crystal_return_location, lambda state, returned_balls_needed = required_balls - 1: state.has("Returned Balls", player, returned_balls_needed))
+        #Open Worlds Glover should bypass the need for unlocking hubs logic-wise
+        if not self.options.open_worlds or not can_be_open:
+            set_rule(crystal_return_location, lambda state, returned_balls_needed = required_balls - 1: state.has("Returned Balls", player, returned_balls_needed))
         return crystal_return_location
 
     #Lacking Portalsanity Gates and Marks
@@ -1202,17 +1237,26 @@ class GloverWorld(World):
             case 4:
                 goal_item = self.create_event(wayroom_name + " Bonus Complete")
                 all_garibs_item  = self.create_event(wayroom_name + " Bonus Star")
-        #What kind of level is this?
-        if connecting_level_name in self.existing_levels:
-            goal_or_boss : str = ": Goal"
-            if connecting_level_name.endswith('!'):
-                goal_or_boss = ": Boss"
-            goal_location : Location = self.multiworld.get_location(connecting_level_name + goal_or_boss, player)
-            psudo_goal_location : Location = Location(player, connecting_level_name + goal_or_boss + " Reached", None, goal_location.parent_region)
-            goal_location.parent_region.locations.append(psudo_goal_location)
-            set_rule(psudo_goal_location, lambda state, psudo_goal = goal_location.name: state.can_reach_location(psudo_goal, player))
-            psudo_goal_location.place_locked_item(goal_item)
         
+        #Tutorial, Level ! and ? Completions always have their goal event items
+        if (not self.options.open_levels) or entry_index >= 3 or entry_index == -1:
+            #What kind of level is this?
+            if connecting_level_name in self.existing_levels:
+                goal_or_boss : str = ": Goal"
+                if connecting_level_name.endswith('!'):
+                    goal_or_boss = ": Boss"
+                goal_location : Location = self.multiworld.get_location(connecting_level_name + goal_or_boss, player)
+                psudo_goal_location : Location = Location(player, connecting_level_name + goal_or_boss + " Reached", None, goal_location.parent_region)
+                goal_location.parent_region.locations.append(psudo_goal_location)
+                set_rule(psudo_goal_location, lambda state, psudo_goal = goal_location.name: state.can_reach_location(psudo_goal, player))
+                psudo_goal_location.place_locked_item(goal_item)
+        #Open Levels give the gate event items for free
+        else:
+            hub_region : Region = self.multiworld.get_region(wayroom_name, self.player)
+            open_gate_spot : Location = Location(player, wayroom_name + " " + self.level_prefixes[entry_index + 1] + " Access", None, hub_region)
+            hub_region.locations.append(open_gate_spot)
+            open_gate_spot.place_locked_item(goal_item)
+
         garibs_location : Location
         #Levels with garibs
         if connecting_level_name.endswith(('1','2','3','?')):
@@ -1248,6 +1292,8 @@ class GloverWorld(World):
         options["random_garib_sounds"] = self.options.random_garib_sounds.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
+        options["open_worlds"] = self.options.open_worlds.value
+        options["open_levels"] = self.options.open_levels.value
         options["randomized_spawns"] = self.options.spawning_checkpoint_randomizer.value
         options["bonus_levels"] = self.options.bonus_levels.value
         options["randomize_jump"] = self.options.randomize_jump.value
@@ -1293,6 +1339,9 @@ class GloverWorld(World):
                 #Create unique tip text
                 self.mr_tip_text[str(tip_address)] = self.random.choice(self.mr_tip_table)
 
+    def slot_score_checks(self):
+        
+
     def lua_world_name(self, original_name):
         lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]
         lua_suffixes = ["_L1", "_L2", "_L3", "_BOSS", "_BONUS", "_WORLD"]
@@ -1328,6 +1377,7 @@ class GloverWorld(World):
         options = self.build_options()
         self.generate_hints()
         self.generate_tip_text()
+        self.slot_score_checks()
         options["mr_hints_locations"] = self.mr_hints
         options["mr_tips_text"] = self.mr_tip_text
         options["chicken_hints_locations"] = self.chicken_hints
