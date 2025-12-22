@@ -213,7 +213,7 @@ class DonaldGoofyStatsanity(Toggle):
 
 
 class AtlanticaToggle(Toggle):
-    """Atlantica Toggle"""
+    """Determines if Atlantica is enabled to have non junk items. (Yes is enabled)"""
     display_name = "Atlantica Toggle"
     default = False
 
