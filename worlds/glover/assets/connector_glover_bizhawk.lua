@@ -353,7 +353,8 @@ local ROM_ITEM_TABLE = {
     "AP_SPACE_L3_CHECKPOINT2",
     "AP_SPACE_L3_CHECKPOINT3",
     "AP_SPACE_L3_CHECKPOINT4",
-	"AP_OPEN_WORLDS",
+	"AP_OPEN_HUBS",
+    "AP_OPEN_WORLDS",
 	"AP_DEBUG",
     "AP_MAX_ITEM",
 };
@@ -11762,7 +11763,7 @@ GLOVERHACK = {
 	base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0x9F,
-    ap_world = 0xE48,
+    ap_world = 0xE4C,
       hub_entrance = 0x0,
       door_number = 0x1,
       warp_spawn_offset = 0x2,
@@ -11808,7 +11809,7 @@ GLOVERHACK = {
     ap_world_offset = 0xD94,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
-    wayroom_locations = 0x1C0C8,
+    wayroom_locations = 0x1C0CC,
       wayroom_id = 0x4,
       wayroom_collected = 0x6,
         wr_tip_text = 0x8,
@@ -11820,7 +11821,7 @@ GLOVERHACK = {
           wr_line6 = 0x69,
          wr_last_line = 0x7E,
     wayroom_size = 0x88,
-    chicken_collected = 0x1C3F8,
+    chicken_collected = 0x1C3FC,
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
@@ -11833,11 +11834,11 @@ GLOVERHACK = {
       random_garib_sounds = 0x8,
     hub_map = 0x8,
     world_map = 0x9,
-    n64_deathlink = 0xD81,
-    n64_taglink = 0xD82,
-    ROM_MAJOR_VERSION = 0xE44,
-    ROM_MINOR_VERSION = 0xE45,
-    ROM_PATCH_VERSION = 0xE46
+    n64_deathlink = 0xD82,
+    n64_taglink = 0xD83,
+    ROM_MAJOR_VERSION = 0xE46,
+    ROM_MINOR_VERSION = 0xE47,
+    ROM_PATCH_VERSION = 0xE48,
 }
 
 function GLOVERHACK:new(t)
