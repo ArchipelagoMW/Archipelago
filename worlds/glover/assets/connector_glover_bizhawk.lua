@@ -353,6 +353,7 @@ local ROM_ITEM_TABLE = {
     "AP_SPACE_L3_CHECKPOINT2",
     "AP_SPACE_L3_CHECKPOINT3",
     "AP_SPACE_L3_CHECKPOINT4",
+	"AP_OPEN_WORLDS",
 	"AP_DEBUG",
     "AP_MAX_ITEM",
 };
@@ -11832,11 +11833,11 @@ GLOVERHACK = {
       random_garib_sounds = 0x8,
     hub_map = 0x8,
     world_map = 0x9,
-    n64_deathlink = 0xD80,
-    n64_taglink = 0xD81,
-    ROM_MAJOR_VERSION = 0xE42,
-    ROM_MINOR_VERSION = 0xE43,
-    ROM_PATCH_VERSION = 0xE44
+    n64_deathlink = 0xD81,
+    n64_taglink = 0xD82,
+    ROM_MAJOR_VERSION = 0xE44,
+    ROM_MINOR_VERSION = 0xE45,
+    ROM_PATCH_VERSION = 0xE46
 }
 
 function GLOVERHACK:new(t)
