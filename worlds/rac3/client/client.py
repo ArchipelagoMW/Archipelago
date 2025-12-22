@@ -377,7 +377,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             logger.info(f"Items Processed: {ctx.processed_item_count}")
             logger.info("Checking locations...")
             counter = 0
-            for loc in ctx.locations_checked:
+            for loc in ctx.checked_locations:
                 logger.debug(f"Collecting location: {LOCATION_FROM_AP_CODE[loc]}")
                 ctx.game_interface.collect_location(loc)
                 counter += 1
