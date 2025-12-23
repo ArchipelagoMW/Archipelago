@@ -6,7 +6,7 @@ from operator import attrgetter
 
 from .Options import GaribLogic, DifficultyLogic
 from .Rules import move_lookup, switches_to_event_items, access_methods_to_rules
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from . import GloverWorld
@@ -323,9 +323,10 @@ def create_access_method(self, info : dict, level_name : str) -> AccessMethod:#
     #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
-def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData]):
+def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], target_score : int):
     player : int = self.player
     multiworld : MultiWorld = self.multiworld
+    score_locations : list[Location] = []
     for each_location_data in location_data_list:
         #Should this location be generated?
         ap_ids : list[int] = each_location_data.ap_ids
@@ -359,11 +360,11 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
             case 10:
                 #Enemysanity
                 if not self.options.enemysanity:
-                    continue
+                    ap_ids.clear()
             case 11:
                 #Insectity
                 if not self.options.insectity:
-                    continue
+                    ap_ids.clear()
                 
         rules_applied : bool = False
 
@@ -405,13 +406,6 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
         else:
             #If there are no methods, continue
             continue
-            #region_name : str
-            #for each_pair in map_regions:
-            #    if each_pair.base_id == each_location_data.default_region:
-            #        region_name = each_pair.name
-            #if each_location_data.default_needs_ball:
-            #    region_name = region_name + " W/Ball"
-            #region_for_use = multiworld.get_region(region_name, player)
         
         #Construct location data
         if each_location_data.type == 1:
@@ -425,6 +419,8 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     region_for_use.locations.append(location)
                     if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                    #Garibs give score
+                    score_locations.append(location)
             #Garib Groups
             elif self.options.garib_logic == GaribLogic.option_garib_groups:
                 #Regular Locations
@@ -435,6 +431,8 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 region_for_use.locations.append(location)
                 if not rules_applied:
                     access_methods_to_rules(self, each_location_data.methods, location)
+                #Garibs give score
+                score_locations.append(location)
             #All Garibs in Level
             else:
                 #It's an event location, with an event item
@@ -444,6 +442,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     access_methods_to_rules(self, each_location_data.methods, location)
                 #These are used to create star gate unlock logic
                 location.place_locked_item(self.create_event(each_location_data.name + " Reached"))
+                score_locations.append(location)
         else:
             #Regular Locations
             address : int | None = None
@@ -454,6 +453,10 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 region_for_use.locations.append(location)
                 if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                #Lives, Potions and Enemies give Score
+                if each_location_data.type in [2, 4, 10]:
+                    score_locations.append(location)
+                    score_locations.append(location)
             #Multiple AP Items
             elif len(each_location_data.ap_ids) > 1:
                 for each_index in range(len(each_location_data.ap_ids)):
@@ -464,6 +467,10 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     region_for_use.locations.append(location)
                     if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                    #Lives, Potions and Enemies give Score
+                    if each_location_data.type in [2, 4, 10]:
+                        score_locations.append(location)
+                        score_locations.append(location)
             else:
                 #Event Item
                 location : Location = Location(player, each_location_data.name, address, region_for_use)
@@ -476,14 +483,35 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     case 0:
                         new_event_item : str = switches_to_event_items[each_location_data.name]
                         location.place_locked_item(self.create_event(new_event_item))
-                    #Checkpoints act likewise
-                    case 3:
+                    #Enemies contribute to score even if disabled
+                    case 10:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
-                    #Level Warps
-                    case 7:
+                        score_locations.append(location)
+                    #Checkpoints & Level Warps
+                    case _:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
+    
+    #Create score addresses anywhere that score is something you can get
+    #(AKA any non-boss level, excluding Space Boss)
+    world_index = 1 + self.world_from_string(region_level.name)
+    level_index = self.level_from_string(region_level.name)
+    if (world_index == 6 or level_index != 4) and level_index != 0:
+        #Score location at root
+        score_address = None
+        if target_score != 0:
+            score_address = ((world_index * 10) + level_index) * 100000
+        level_root = self.get_region(region_level.name)
+        score_location = Location(player, region_level.name + ": Score", score_address, level_root)
+        if score_address == None:
+            score_location.place_locked_item(self.create_event(region_level.name + " Score"))
+        level_root.locations.append(score_location)
+        for each_index, each_location in enumerate(score_locations):
+            if each_index == 0:
+                set_rule(score_location, lambda state, plr = player, scl = each_location: state.can_reach(scl, plr))
+            else:
+                add_rule(score_location, lambda state, plr = player, scl = each_location: state.can_reach(scl, plr), "or")
 
 def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs : List[RegionPair], method : AccessMethod) -> Region:
     for each_pair in region_pairs:
@@ -542,8 +570,13 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                 checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + (level_index - 1)]
             region_level : RegionLevel = create_region_level(self, level_name, checkpoint_for_use, checkpoint_entry_pairs, map_regions)
             
+            #Target Score
+            target_score = 0
+            if level_name in self.options.level_scores.value:
+                target_score = self.options.level_scores.value[level_name]
+
             #Attach the locations to the regions
-            assign_locations_to_regions(self, region_level, map_regions, location_data_list)
+            assign_locations_to_regions(self, region_level, map_regions, location_data_list, target_score)
             
             #Aside from the wayrooms, the hubworld and the castle cave, levels have star marks
             if (world_index < 6 and not level_index == 0) or level_index == 2:
@@ -692,7 +725,7 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
             level_score_address = 100000 * ((world_index * 10) + level_index)
             if level_index == 4 or world_prefix == 6:
                 level_name = world_prefix + level_prefix + ": "
-                output[level_name + " Score"] = level_score_address
+                output[level_name + ": Score"] = level_score_address
     for each_score in range(10000, 100000000, 10000):
         output[str(each_score) + " Score"] = 100000000 + each_score
     return output

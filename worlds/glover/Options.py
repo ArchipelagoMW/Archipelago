@@ -239,7 +239,7 @@ class TotalScores(OptionSet):
     default = []
     display_name = "Total Scores"
 
-class LevelScores(OptionDict):
+class LevelScores(OptionCounter):
     """What level-specific scores being reached will give a check.
     Formatted {"LevelNameA":Score Value A, "LevelNameB":Score Value B}
     Example {"Atl1":3790, "Atl2":6000}
@@ -249,7 +249,7 @@ class LevelScores(OptionDict):
     schema = Schema({
     Optional(And(str, lambda level_name : level_name.startswith(level_prefixes)
         and level_name.endswith(level_suffixes) and len(level_name) == 4))
-    :And(int, lambda score_value : score_value >= 10 and score_value % 10000 == 0 and score_value < 1000000)
+    :And(int, lambda score_value : score_value >= 10 and score_value % 10 == 0 and score_value < 1000000)
     })
     default = {}
     display_name = "Level Scores"

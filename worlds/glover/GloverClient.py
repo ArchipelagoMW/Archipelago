@@ -322,7 +322,7 @@ class GloverContext(CommonContext):
             "DEATH" : BounceLink("DEATH", "DeathLink"),
             "TAG" : BounceLink("TAG", "TagLink"),
             "TRAP" : MultiLink("TRAP", "TrapLink", {
-                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap"]},
+                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap", "Snake Trap"]},
                 "CRYSTAL" : {"Accepts" : ["Disable Tag Trap", "Double Damage", "Eject Ability", "Instant Crystal Trap", "One Hit KO"]},
                 "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Screen Flip Trap"]},
                 "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]}#,
@@ -892,9 +892,39 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             ctx.score_table = score_table
             if ctx.slot_data["score_checks"] != {}:
                 for scoreLevel, scoreValue in score_table.items():
-                    for locationId, requiredScore in ctx.slot_data["score_checks"][scoreLevel].items():
+                    if scoreLevel != "TOTAL":
                         if requiredScore <= scoreValue:
                             locs1.append(int(locationId))
+                            levelInfo = scoreLevel.split("_")
+                            endPair = 0
+                            match levelInfo[0]:
+                                case "L1":
+                                    endPair += 1
+                                case "L2":
+                                    endPair += 2
+                                case "L3":
+                                    endPair += 3
+                                case "BOSS":
+                                    endPair += 4
+                                case "BONUS":
+                                    endPair += 5
+                            match levelInfo[1]:
+                                case "ATLANTIS":
+                                    endPair += 10
+                                case "CARNIVAL":
+                                    endPair += 20
+                                case "PIRATES":
+                                    endPair += 30
+                                case "PREHISTORIC":
+                                    endPair += 40
+                                case "FORTRESS":
+                                    endPair += 50
+                                case "SPACE":
+                                    endPair += 60
+                            100000 * endPair
+                    else:
+                        for locationId, requiredScore in ctx.slot_data["score_checks"][scoreLevel].items():
+                            100000000
 
         if len(locs1) > 0:
             await ctx.send_msgs([{

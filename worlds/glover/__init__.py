@@ -125,7 +125,9 @@ class GloverWeb(WebWorld):
             Options.SwitchesChecks,
             Options.MrTipChecks,
             Options.Enemysanity,
-            Options.Insectity
+            Options.Insectity,
+            Options.TotalScores,
+            Options.LevelScores
         ]),
         OptionGroup("Hints", [
             Options.MrHints,
@@ -415,6 +417,13 @@ class GloverWorld(World):
                 OptionError("Score \""+ each_score + "\" is too low!")
             if each_score_int >= 100000000:
                 OptionError("Score \""+ each_score + "\" is too high!")
+
+        for each_level in self.options.level_scores.value:
+            level_index = self.level_from_string(each_level)
+            if self.world_from_string(each_level) != 5 and level_index == 4:
+                OptionError("The only boss that gives enough score is Out of This World! Update your level scores.")
+            elif level_index == 0:
+                OptionError("Wayrooms do not have score!")
 
         #Checkpoint Overrides In-Bounds
         for target_level, set_checkpoint in self.options.checkpoint_overrides.items():
@@ -715,6 +724,28 @@ class GloverWorld(World):
 
         #Create the rules for garibs now, so filler generation works correct
         self.garib_item_rules()
+
+        self.create_total_scores()
+
+    #Total Scores
+    def create_total_scores(self):
+        score_locations : list[Location] = []
+        menu_region = self.get_region("Menu")
+        for each_score in self.options.total_scores.value:
+            score_address = int(each_score) + 100000000
+            each_location = Location(self.player, each_score + " Score", score_address, menu_region)
+            menu_region.locations.append(each_location)
+            score_locations.append(each_location)
+        for level_index, each_level in enumerate(self.level_prefixes):
+            for world_index, each_world in enumerate(self.world_prefixes):
+                level_name = each_world + each_level
+                if (level_index == 4 and world_index != 5) or level_index == 0:
+                    continue
+                for each_score_location in score_locations:
+                    if world_index == 0 and level_index == 0:
+                        set_rule(each_score_location, lambda state, plr = self.player, scl = level_name + ": Score": state.can_reach_location(scl, plr))
+                    else:
+                        add_rule(each_score_location, lambda state, plr = self.player, scl = level_name + ": Score": state.can_reach_location(scl, plr), "or")
 
     def create_event(self, event : str) -> GloverItem:
         return GloverItem(event, ItemClassification.progression, None, self.player)
