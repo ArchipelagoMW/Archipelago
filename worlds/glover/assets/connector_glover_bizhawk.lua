@@ -12550,6 +12550,7 @@ function score_check()
 	local current_score = GLOVERHACK:getScore()
 	if SCORE_TABLE["TOTAL"] ~= current_score
 	then
+		print(current_score)
 		-- Update Glover's Total Score
 		local gained_score = current_score - SCORE_TABLE["TOTAL"]
 		SCORE_TABLE["TOTAL"] = current_score

@@ -233,7 +233,7 @@ class TotalScores(OptionSet):
     """What total scores being reached will give checks.
     Formatted ["Score Value A", "Score Value B"]
     Example ["50000", "100000"]
-    Scores must be a multiple of 10.
+    Scores must be a multiple of 10000.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     default = []
@@ -242,14 +242,14 @@ class TotalScores(OptionSet):
 class LevelScores(OptionDict):
     """What level-specific scores being reached will give a check.
     Formatted {"LevelNameA":Score Value A, "LevelNameB":Score Value B}
-    Example {"Atl1":3000, "Atl2":6000}
+    Example {"Atl1":3790, "Atl2":6000}
     Scores must be a multiple of 10.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     schema = Schema({
     Optional(And(str, lambda level_name : level_name.startswith(level_prefixes)
         and level_name.endswith(level_suffixes) and len(level_name) == 4))
-    :And(int, lambda score_value : score_value >= 10 and score_value % 10 == 0 and score_value < 1000000)
+    :And(int, lambda score_value : score_value >= 10 and score_value % 10000 == 0 and score_value < 1000000)
     })
     default = {}
     display_name = "Level Scores"

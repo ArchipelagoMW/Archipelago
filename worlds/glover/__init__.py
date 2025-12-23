@@ -408,6 +408,13 @@ class GloverWorld(World):
         for each_score in self.options.total_scores.value:
             if not each_score.isdigit():
                 OptionError("\""+ each_score + "\" is not a valid score!")
+            each_score_int = int(each_score)
+            if each_score_int % 10000 != 0:
+                OptionError("Score \""+ each_score + "\" is not a multiple of 10000!")
+            if each_score_int < 10000:
+                OptionError("Score \""+ each_score + "\" is too low!")
+            if each_score_int >= 100000000:
+                OptionError("Score \""+ each_score + "\" is too high!")
 
         #Checkpoint Overrides In-Bounds
         for target_level, set_checkpoint in self.options.checkpoint_overrides.items():
@@ -1348,11 +1355,11 @@ class GloverWorld(World):
         slot_scores : dict[str, list[int]] = {}
         for each_level, level_scores in self.options.level_scores.value.items():
             ap_name = self.lua_world_name(each_level)
-            slot_scores[ap_name] = []
-            for each_score in level_scores:
-                slot_scores[ap_name].append(each_score / 10)
-        for each_score in self.options.total_scores.value:
-            slot_scores["TOTAL"] = int(each_score) / 10
+            slot_scores[ap_name] = level_scores
+        if len(self.options.total_scores.value):
+            slot_scores["TOTAL"] = []
+            for each_score in self.options.total_scores.value:
+                slot_scores["TOTAL"].append(each_score)
         return slot_scores
 
     def lua_world_name(self, original_name):
