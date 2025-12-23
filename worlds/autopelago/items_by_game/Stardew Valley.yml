@@ -1,13 +1,8 @@
-useful_nonprogression:
-  - ['Prismatic Chard', [well_fed]]
-  - [['Cheese Seeds', 'Spider Seeds'], [well_fed]]
-  - ['JojaMart Sale Coupon', [lucky]]
-  - ['Pickled Dust Sprite', [well_fed]]
-
-trap:
-  - ['Rotten Parsnip', [upset_tummy]]
-  - ['Rotten Walnut', [upset_tummy]]
-  - ['Abigail''s Birth Certificate', [conspiratorial]]
-
-filler:
-  - ['Mayor''s Tax Returns', []]
+- ['Prismatic Chard', [well_fed]]
+- [['Cheese Seeds', 'Spider Seeds'], [well_fed]]
+- ['JojaMart Sale Coupon', [lucky]]
+- ['Pickled Dust Sprite', [well_fed]]
+- ['Rotten Parsnip', [upset_tummy]]
+- ['Rotten Walnut', [upset_tummy]]
+- ['Abigail''s Birth Certificate', [conspiratorial]]
+- ['Mayor''s Tax Returns', []]

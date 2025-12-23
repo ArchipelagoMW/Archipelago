@@ -1,5 +1,2 @@
-useful_nonprogression:
-  - ['Misplaced Keycard', [lucky]]
-
-trap:
-  - ['Monster Closet', [startled]]
+- ['Misplaced Keycard', [lucky]]
+- ['Monster Closet', [startled]]

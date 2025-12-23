@@ -19,10 +19,6 @@ class AutopelagoItemDefinitionCls(TypedDict):
 
 
 AutopelagoItemDefinition = tuple[str | list[str], list[str]] | AutopelagoItemDefinitionCls
-AutopelagoItemDefinitionsSimple = dict[str, AutopelagoItemDefinition]
-AutopelagoGameSpecificItemGroup = dict[Literal['game_specific'], dict[str, list[AutopelagoItemDefinition]]]
-AutopelagoNonProgressionGroupItems = list[AutopelagoItemDefinition | AutopelagoGameSpecificItemGroup]
-AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler']
 
 
 def _to_normal_name(name_or_list: str | list[str]) -> str:
@@ -70,25 +66,6 @@ def _auras_of(item: AutopelagoItemDefinition) -> list[str]:
         item[1] if isinstance(item, list) else \
         item['auras_granted'] if 'auras_granted' in item else \
         []
-
-
-def autopelago_item_classification_of(item: AutopelagoNonProgressionItemType):
-    match item:
-        case 'useful_nonprogression':
-            return ItemClassification.useful
-        case 'trap':
-            return ItemClassification.trap
-        case 'filler':
-            return ItemClassification.filler
-        case _:
-            return None
-
-
-class AutopelagoItemDefinitions(TypedDict):
-    useful_nonprogression: AutopelagoNonProgressionGroupItems
-    trap: AutopelagoNonProgressionGroupItems
-    filler: AutopelagoNonProgressionGroupItems
-    # any_other_str_key_not_listed: AutopelagoItemDefinition
 
 
 AutopelagoGameRequirement: TypeAlias = Union[
@@ -151,7 +128,7 @@ class AutopelagoRegionDefinitions(TypedDict):
 
 class AutopelagoDefinitions(TypedDict):
     version_stamp: str
-    items: AutopelagoItemDefinitions
+    items: dict[str, AutopelagoItemDefinitionCls]
     regions: AutopelagoRegionDefinitions
 
 
@@ -183,18 +160,43 @@ def _gen_ids():
 
 
 item_name_to_auras: dict[str, list[str]] = {}
-generic_nonprogression_item_table: dict[AutopelagoNonProgressionItemType, list[str]] = {'useful_nonprogression': [],
-                                                                                        'trap': [], 'filler': []}
 item_name_to_classification: dict[str, ItemClassification | None] = {}
 item_name_to_rat_count: dict[str, int] = {}
-game_specific_nonprogression_items: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = {}
 item_key_to_name: dict[str, str] = {}
 _item_id_gen = _gen_ids()
 item_name_to_id: dict[str, int] = {}
 
-for k, v in ((k, v) for k, v in _defs['items'].items() if
-             k not in {'useful_nonprogression', 'trap', 'filler'}):
-    v: AutopelagoItemDefinition
+Aura = Literal[
+  'well_fed',
+  'lucky',
+  'energized',
+  'stylish',
+  'smart',
+  'confident',
+  'upset_tummy',
+  'unlucky',
+  'sluggish',
+  'distracted',
+  'startled',
+  'conspiratorial',
+]
+
+_aura_classification_points: dict[Aura, int] = {
+  'well_fed': 5,
+  'lucky': 3,
+  'energized': 5,
+  'stylish': 1,
+  'smart': 1,
+  'confident': 3,
+  'upset_tummy': -5,
+  'unlucky': -1,
+  'sluggish': -5,
+  'distracted': -3,
+  'startled': -6,
+  'conspiratorial': -1,
+}
+
+for k, v in _defs['items'].items():
     for _name in _names_of(v):
         item_name_to_auras[_name] = _auras_of(v)
         item_name_to_id[_name] = next(_item_id_gen)
@@ -204,42 +206,7 @@ for k, v in ((k, v) for k, v in _defs['items'].items() if
             item_name_to_rat_count[_name] = rat_count
         item_key_to_name[k] = _name
 
-
-def _append_nonprogression(k: AutopelagoNonProgressionItemType):
-    item_classification = autopelago_item_classification_of(k)
-    for i in _defs['items'][k]:
-        if isinstance(i, list):
-            for _name in _names_of(i):
-                generic_nonprogression_item_table[k].append(_name)
-                item_name_to_id[_name] = next(_item_id_gen)
-                item_name_to_classification[_name] = item_classification
-                item_name_to_auras[_name] = _auras_of(i)
-            continue
-
-        if 'game_specific' not in i:
-            for _name in _names_of(i):
-                generic_nonprogression_item_table[k].append(_name)
-                item_name_to_id[_name] = next(_item_id_gen)
-                item_name_to_classification[_name] = item_classification
-                item_name_to_rat_count[_name] = _rat_count_of(i) or 0
-                item_name_to_auras[_name] = _auras_of(i)
-            continue
-
-        for g, v in i['game_specific'].items():
-            if g not in game_specific_nonprogression_items:
-                game_specific_nonprogression_items[g] = {}
-            game_specific_nonprogression_items[g][k] = []
-            for it in v:
-                for _name in _names_of(it):
-                    game_specific_nonprogression_items[g][k].append(_name)
-                    item_name_to_id[_name] = next(_item_id_gen)
-                    item_name_to_classification[_name] = item_classification
-                    item_name_to_auras[_name] = _auras_of(it)
-
-
-_append_nonprogression('useful_nonprogression')
-_append_nonprogression('trap')
-_append_nonprogression('filler')
+# fix it here
 
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {}
 location_name_to_progression_item_name: dict[str, str] = {}

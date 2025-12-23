@@ -1,11 +1,6 @@
-useful_nonprogression:
-  - ['Aqua Branded Water Bottle', [well_fed]]
-  - ['Magma Branded Hot Sauce', [well_fed]]
-
-trap:
-  - ['Rabid Zigzagoon', [startled]]
-
-filler:
-  - ['Kevin Scope', []]
-  - ['Ash-Filled Backpack', []]
-  - ['Peeko''s Boating License', []]
+- ['Aqua Branded Water Bottle', [well_fed]]
+- ['Magma Branded Hot Sauce', [well_fed]]
+- ['Rabid Zigzagoon', [startled]]
+- ['Kevin Scope', []]
+- ['Ash-Filled Backpack', []]
+- ['Peeko''s Boating License', []]

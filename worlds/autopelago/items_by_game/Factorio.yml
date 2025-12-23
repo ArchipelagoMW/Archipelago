@@ -1,10 +1,5 @@
-useful_nonprogression:
-  - [['Cheese Science Pack', 'Spider Science Pack'], [well_fed]]
-
-trap:
-  - ['Eau de Pollution', [sluggish]]
-
-filler:
-  - ['Bottleneck', []]
-  - ['Chain of Daisies', []]
-  - ['Cuddly Little Biter', []]
+- [['Cheese Science Pack', 'Spider Science Pack'], [well_fed]]
+- ['Eau de Pollution', [sluggish]]
+- ['Bottleneck', []]
+- ['Chain of Daisies', []]
+- ['Cuddly Little Biter', []]

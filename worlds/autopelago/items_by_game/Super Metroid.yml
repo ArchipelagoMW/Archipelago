@@ -1,11 +1,6 @@
-useful_nonprogression:
-  - ['Morphing Hamster Ball', [confident]]
-  - ['Soup or Missile', [well_fed, confident]]
-  - ['Mice Beam', [confident]]
-
-trap:
-  - ['Lo-Jump Boots', [sluggish]]
-  - ['Wandering Metroid', [startled]]
-
-filler:
-  - ['Empty E-Tank', []]
+- ['Morphing Hamster Ball', [confident]]
+- ['Soup or Missile', [well_fed, confident]]
+- ['Mice Beam', [confident]]
+- ['Lo-Jump Boots', [sluggish]]
+- ['Wandering Metroid', [startled]]
+- ['Empty E-Tank', []]

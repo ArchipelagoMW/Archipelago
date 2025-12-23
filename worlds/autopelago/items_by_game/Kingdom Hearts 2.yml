@@ -1,7 +1,4 @@
-useful_nonprogression:
-  - name: 'One-Winged Rat'
-    rat_count: 1
-  - ['Lucky Rat Emblem', [lucky]]
-
-filler:
-  - [['Proof of Cheese', 'Proof of Spiders'], []]
+- ['Lucky Rat Emblem', [lucky]]
+- [['Proof of Cheese', 'Proof of Spiders'], []]
+- name: 'One-Winged Rat'
+  rat_count: 1

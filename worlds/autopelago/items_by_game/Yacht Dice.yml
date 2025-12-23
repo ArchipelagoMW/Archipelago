@@ -1,10 +1,5 @@
-useful_nonprogression:
-  - [['Block of Swiss Carved Like A Die', 'Ball of Spiders Carved Like A Die'], [well_fed]]
-
-trap:
-  - ['Words of Discouragement', [sluggish]]
-
-filler:
-  - ['Preposterously Small Straight', []]
-  - ['Two Yachts', []]
-  - ['Brand New Hats for Dice', []]
+- [['Block of Swiss Carved Like A Die', 'Ball of Spiders Carved Like A Die'], [well_fed]]
+- ['Words of Discouragement', [sluggish]]
+- ['Preposterously Small Straight', []]
+- ['Two Yachts', []]
+- ['Brand New Hats for Dice', []]

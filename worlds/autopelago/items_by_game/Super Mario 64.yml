@@ -1,14 +1,9 @@
-useful_nonprogression:
-  - ['Lucky MIPS Foot', [lucky]]
-  - ['Metal Moustache', [stylish]]
-  - ['Rat Cap', [stylish]]
-
-trap:
-  - ['Red-Hatted Monkey', [distracted]]
-  - ['Green Demon', [startled]]
-
-filler:
-  - ['Ninth Red Coin', []]
-  - ['Key to the Castle''s Bathroom', []]
-  - ['0.5x A Presses', []]
-  - ['Cannon Unlock PPK (Princess Peach''s Kitchen)', []]
+- ['Lucky MIPS Foot', [lucky]]
+- ['Metal Moustache', [stylish]]
+- ['Rat Cap', [stylish]]
+- ['Red-Hatted Monkey', [distracted]]
+- ['Green Demon', [startled]]
+- ['Ninth Red Coin', []]
+- ['Key to the Castle''s Bathroom', []]
+- ['0.5x A Presses', []]
+- ['Cannon Unlock PPK (Princess Peach''s Kitchen)', []]

@@ -1,11 +1,6 @@
-useful_nonprogression:
-  - name: 'Big the Rat'
-    rat_count: 1
-
-trap:
-  - ['Oh No!', [startled]]
-  - ['Oh No?', [unlucky]]
-  - ['Oh No...', [sluggish]]
-
-filler:
-  - ['Frog with a Tail', []]
+- ['Oh No!', [startled]]
+- ['Oh No?', [unlucky]]
+- ['Oh No...', [sluggish]]
+- ['Frog with a Tail', []]
+- name: 'Big the Rat'
+  rat_count: 1

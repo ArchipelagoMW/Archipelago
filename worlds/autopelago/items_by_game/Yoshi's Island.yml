@@ -1,10 +1,5 @@
-useful_nonprogression:
-  - ['Barbecued Goonie Wings', [well_fed]]
-  - ['3 Shy Guy Omelette', [well_fed]]
-
-trap:
-  - ['Touched Fuzzy, Got Dizzy', [distracted, sluggish]]
-  - ['Hungry Poochy', [startled]]
-
-filler:
-  - ['Mouthful of Watermelon Seeds', []]
+- ['Barbecued Goonie Wings', [well_fed]]
+- ['3 Shy Guy Omelette', [well_fed]]
+- ['Touched Fuzzy, Got Dizzy', [distracted, sluggish]]
+- ['Hungry Poochy', [startled]]
+- ['Mouthful of Watermelon Seeds', []]
