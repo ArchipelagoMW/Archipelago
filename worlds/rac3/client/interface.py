@@ -400,7 +400,10 @@ class Rac3Interface(GameInterface):
                     weapon_num = randint(0, len(valid_weapons) - 1)
                     self.weapon_level_up(valid_weapons[weapon_num])
             case RAC3ITEM.OHKO_TRAP:
+                self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
                 self._write8(RAC3STATUS.HEALTH, 1)
+                if self.player_type == RAC3PLAYERTYPE.GIANT:
+                    self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
             case RAC3ITEM.NO_AMMO_TRAP:
                 for weapon_name in non_prog_weapon_data.keys():
                     if self.UnlockItem[weapon_name].status:
