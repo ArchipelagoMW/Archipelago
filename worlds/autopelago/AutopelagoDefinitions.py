@@ -1,3 +1,5 @@
+import importlib.resources
+import pathlib
 import pkgutil
 from collections import deque
 from typing import Literal, TypedDict, Union
@@ -9,6 +11,20 @@ from Utils import parse_yaml
 GAME_NAME = 'Autopelago'
 lactose_names = set()
 lactose_intolerant_names = set()
+Aura = Literal[
+  'well_fed',
+  'lucky',
+  'energized',
+  'stylish',
+  'smart',
+  'confident',
+  'upset_tummy',
+  'unlucky',
+  'sluggish',
+  'distracted',
+  'startled',
+  'conspiratorial',
+]
 
 
 class AutopelagoItemDefinitionCls(TypedDict):
@@ -19,7 +35,9 @@ class AutopelagoItemDefinitionCls(TypedDict):
 
 
 AutopelagoItemDefinition = tuple[str | list[str], list[str]] | AutopelagoItemDefinitionCls
-
+AutopelagoNonProgressionItemType = Literal['useful_nonprogression', 'trap', 'filler']
+autopelago_nonprogression_item_types: list[AutopelagoNonProgressionItemType] = \
+    ['useful_nonprogression', 'trap', 'filler']
 
 def _to_normal_name(name_or_list: str | list[str]) -> str:
     if isinstance(name_or_list, str):
@@ -61,11 +79,23 @@ def _rat_count_of(item: AutopelagoItemDefinition):
     return item['rat_count'] if isinstance(item, dict) and 'rat_count' in item else None
 
 
-def _auras_of(item: AutopelagoItemDefinition) -> list[str]:
+def _auras_of(item: AutopelagoItemDefinition) -> list[Aura]:
     return \
         item[1] if isinstance(item, list) else \
         item['auras_granted'] if 'auras_granted' in item else \
         []
+
+
+def autopelago_item_classification_of(item: AutopelagoNonProgressionItemType):
+    match item:
+        case 'useful_nonprogression':
+            return ItemClassification.useful
+        case 'trap':
+            return ItemClassification.trap
+        case 'filler':
+            return ItemClassification.filler
+        case _:
+            return None
 
 
 AutopelagoGameRequirement: TypeAlias = Union[
@@ -162,24 +192,10 @@ def _gen_ids():
 item_name_to_auras: dict[str, list[str]] = {}
 item_name_to_classification: dict[str, ItemClassification | None] = {}
 item_name_to_rat_count: dict[str, int] = {}
+items_by_type_by_game: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = {}
 item_key_to_name: dict[str, str] = {}
 _item_id_gen = _gen_ids()
 item_name_to_id: dict[str, int] = {}
-
-Aura = Literal[
-  'well_fed',
-  'lucky',
-  'energized',
-  'stylish',
-  'smart',
-  'confident',
-  'upset_tummy',
-  'unlucky',
-  'sluggish',
-  'distracted',
-  'startled',
-  'conspiratorial',
-]
 
 _aura_classification_points: dict[Aura, int] = {
   'well_fed': 5,
@@ -206,7 +222,32 @@ for k, v in _defs['items'].items():
             item_name_to_rat_count[_name] = rat_count
         item_key_to_name[k] = _name
 
-# fix it here
+
+def _append_items(item_definitions: list[AutopelagoItemDefinition]):
+    res: dict[AutopelagoNonProgressionItemType, list[str]] = {}
+    for item_definition in item_definitions:
+        for _name in _names_of(item_definition):
+            item_name_to_auras[_name] = _auras_of(item_definition)
+            item_name_to_id[_name] = next(_item_id_gen)
+            pts = sum((_aura_classification_points[i] for i in _auras_of(item_definition)))
+            item_type: AutopelagoNonProgressionItemType = \
+                'useful_nonprogression' if pts > 0 else \
+                'trap' if pts < 0 else \
+                'filler'
+            res.setdefault(item_type, []).append(_name)
+            item_name_to_classification[_name] = autopelago_item_classification_of(item_type)
+            rat_count = _rat_count_of(item_definition)
+            if rat_count and rat_count > 0:
+                item_name_to_rat_count[_name] = rat_count
+    return res
+
+
+for package_file_or_dir in importlib.resources.files(__name__).iterdir():
+    if package_file_or_dir.name != 'items_by_game':
+        continue
+    for f in package_file_or_dir.iterdir():
+        game_name = pathlib.Path(f.name).with_suffix('').stem
+        items_by_type_by_game[game_name] = _append_items(parse_yaml(f.open('r')))
 
 autopelago_regions: dict[str, AutopelagoRegionDefinition] = {}
 location_name_to_progression_item_name: dict[str, str] = {}

@@ -1,17 +1,19 @@
 import logging
 from collections import deque
-from typing import Callable, Literal
+from typing import Callable
 
-from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, AutopelagoAllRequirement, \
-    AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, AutopelagoItemRequirement, item_key_to_name, \
-    AutopelagoRatCountRequirement, item_name_to_rat_count, location_name_to_id, location_name_to_requirement, \
-    AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_name_to_classification, \
-    location_name_to_progression_item_name, game_specific_nonprogression_items, generic_nonprogression_item_table, \
-    total_available_rat_count, max_required_rat_count, AutopelagoNonProgressionItemType, \
-    autopelago_item_classification_of, location_name_to_nonprogression_item, autopelago_regions, item_name_groups, \
-    location_name_groups, lactose_names, lactose_intolerant_names
-from .options import AutopelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, ChangedTargetMessages, \
-    EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, ExitBKModeMessages, CompleteGoalMessages
+from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, \
+    AutopelagoAllRequirement, AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, \
+    AutopelagoItemRequirement, AutopelagoRatCountRequirement, item_name_to_classification, \
+    location_name_to_progression_item_name, items_by_type_by_game, location_name_to_requirement, \
+    AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_key_to_name, \
+    item_name_to_rat_count, location_name_to_id, item_name_groups, max_required_rat_count, \
+    total_available_rat_count, autopelago_regions, location_name_to_nonprogression_item, \
+    AutopelagoNonProgressionItemType, autopelago_nonprogression_item_types, location_name_groups, \
+    lactose_names, lactose_intolerant_names
+from .options import AutopelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, \
+    ChangedTargetMessages, EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, \
+    ExitBKModeMessages, CompleteGoalMessages
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
@@ -178,41 +180,45 @@ class AutopelagoWorld(World):
 
         excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
         nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
-                                     for c, items in generic_nonprogression_item_table.items()}
+                                     for c, items in items_by_type_by_game[GAME_NAME].items()}
         for category, items in nonprogression_item_table.items():
-            dlc_games = {g for g, categories in game_specific_nonprogression_items.items() if category in categories}
+            dlc_games = {g for g, categories in items_by_type_by_game.items() if category in categories}
+            dlc_games.remove(GAME_NAME)
             self.multiworld.random.shuffle(items)
             replacements_made = 0
             for game_name in self.multiworld.game.values():
                 if game_name not in dlc_games:
                     continue
                 dlc_games.remove(game_name)
-                for item in game_specific_nonprogression_items[game_name][category]:
+                for item in items_by_type_by_game[game_name][category]:
                     if item not in excluded_names:
                         items[replacements_made] = item
                         replacements_made += 1
 
-        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = {category: 0 for category in
-                                                                                generic_nonprogression_item_table}
+        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = \
+            {category: 0 for category in autopelago_nonprogression_item_types}
         next_filler_becomes_trap = False
-        nonprog_type: Literal['useful_nonprogression', 'filler', 'trap']
-        for l, nonprog_type in location_name_to_nonprogression_item.items():
+        item_type: AutopelagoNonProgressionItemType
+        for l, item_type in location_name_to_nonprogression_item.items():
             if l not in self.locations_in_scope:
                 continue
 
-            if nonprog_type == 'filler':
+            if item_type == 'filler':
                 if next_filler_becomes_trap:
-                    nonprog_type = 'trap'
+                    item_type = 'trap'
                 next_filler_becomes_trap = not next_filler_becomes_trap
 
-            if category_to_next_offset[nonprog_type] >= len(nonprogression_item_table[nonprog_type]):
-                if nonprog_type == 'filler':
-                    nonprog_type = 'trap'
-                elif nonprog_type == 'trap':
-                    nonprog_type = 'filler'
-            next_item = nonprogression_item_table[nonprog_type][category_to_next_offset[nonprog_type]]
+            # 0.x didn't have enough traps to cover half of the locations whose "unrandomized" items
+            # were fillers, so we needed to adjust slightly with this check. note that this doesn't
+            # (currently) allow us to compensate for too-few 'useful_nonprogression' items.
+            if category_to_next_offset[item_type] >= len(nonprogression_item_table[item_type]):
+                if item_type == 'filler':
+                    item_type = 'trap'
+                elif item_type == 'trap':
+                    item_type = 'filler'
+            next_item = nonprogression_item_table[item_type][category_to_next_offset[item_type]]
             self.multiworld.itempool.append(self.create_item(next_item))
-            category_to_next_offset[nonprog_type] += 1
+            category_to_next_offset[item_type] += 1
 
     def create_regions(self):
         victory_region = Region('Victory', self.player, self.multiworld)
