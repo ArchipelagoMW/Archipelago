@@ -12524,408 +12524,408 @@
     ]
   },
   {
-    "name": "Battle Towers - Meat (Dif. 3)",
+    "name": "Fortified Towers - Meat (Dif. 3)",
     "id": 88870560,
     "difficulty": 3,
     "tags": [
-      "battle_towers",
+      "fortified_towers",
       "no_obelisks"
     ]
   },
   {
-    "name": "Battle Towers - Key 1",
+    "name": "Fortified Towers - Key 1",
     "id": 88870561,
     "difficulty": 1,
     "tags": [
-      "battle_towers",
+      "fortified_towers",
       "no_obelisks"
     ]
   },
   {
-    "name": "Battle Towers - Large Pile of Gold (Dif. 3)",
+    "name": "Fortified Towers - Large Pile of Gold (Dif. 3)",
     "id": 88870562,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers - Small Pile of Gold (Dif. 2)",
+    "name": "Fortified Towers - Small Pile of Gold (Dif. 2)",
     "id": 88870563,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers - Reflective Shot (Dif. 2)",
+    "name": "Fortified Towers - Reflective Shot (Dif. 2)",
     "id": 88870564,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers - Key 2",
+    "name": "Fortified Towers - Key 2",
     "id": 88870565,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers - Soul Savior",
+    "name": "Fortified Towers - Soul Savior",
     "id": 88870566,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Fire Breath 1 (Dif. 4)",
+    "name": "Fortified Towers Barrel - Fire Breath 1 (Dif. 4)",
     "id": 8887220,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Scroll 1",
+    "name": "Fortified Towers Barrel - Scroll 1",
     "id": 8887221,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Invulnerability 1",
+    "name": "Fortified Towers Chest - Invulnerability 1",
     "id": 8887222,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Thunder Hammer 1 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Thunder Hammer 1 (Dif. 2)",
     "id": 8887223,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Reflective Shield 1",
+    "name": "Fortified Towers Barrel - Reflective Shield 1",
     "id": 8887224,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Potion 1 (Dif. 4)",
+    "name": "Fortified Towers Barrel - Potion 1 (Dif. 4)",
     "id": 8887225,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 1 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Key 1 (Dif. 2)",
     "id": 8887226,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 2 (Dif. 4)",
+    "name": "Fortified Towers Barrel - Key 2 (Dif. 4)",
     "id": 8887227,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Potion 2 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Potion 2 (Dif. 2)",
     "id": 8887228,
     "difficulty": 2,
     "tags": [
-      "battle_towers",
+      "fortified_towers",
       "no_obelisks"
     ]
   },
   {
-    "name": "Battle Towers Dark Chest - Random 1 (Dif. 3)",
+    "name": "Fortified Towers Dark Chest - Random 1 (Dif. 3)",
     "id": 8887229,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Fruit 1",
+    "name": "Fortified Towers Barrel - Fruit 1",
     "id": 88872210,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Scroll 2",
+    "name": "Fortified Towers Barrel - Scroll 2",
     "id": 88872211,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Gold 1 (Dif. 4)",
+    "name": "Fortified Towers Barrel - Gold 1 (Dif. 4)",
     "id": 88872212,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Scroll 3",
+    "name": "Fortified Towers Barrel - Scroll 3",
     "id": 88872213,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 3",
+    "name": "Fortified Towers Barrel - Key 3",
     "id": 88872214,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 4",
+    "name": "Fortified Towers Barrel - Key 4",
     "id": 88872215,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Scroll 4",
+    "name": "Fortified Towers Barrel - Scroll 4",
     "id": 88872216,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 5",
+    "name": "Fortified Towers Barrel - Key 5",
     "id": 88872217,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Fruit 2 (Dif. 3)",
+    "name": "Fortified Towers Barrel - Fruit 2 (Dif. 3)",
     "id": 88872218,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Gold 2",
+    "name": "Fortified Towers Barrel - Gold 2",
     "id": 88872219,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Potion 3 (Dif. 3)",
+    "name": "Fortified Towers Barrel - Potion 3 (Dif. 3)",
     "id": 88872220,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 6 (Dif. 3)",
+    "name": "Fortified Towers Barrel - Key 6 (Dif. 3)",
     "id": 88872221,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Meat 1 (Dif. 4)",
+    "name": "Fortified Towers Barrel - Meat 1 (Dif. 4)",
     "id": 88872222,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Speed Boots 1 (Dif. 3)",
+    "name": "Fortified Towers Chest - Speed Boots 1 (Dif. 3)",
     "id": 88872223,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Phoenix Familiar 1 (Dif. 2)",
+    "name": "Fortified Towers Chest - Phoenix Familiar 1 (Dif. 2)",
     "id": 88872224,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Fruit 1 (Dif. 4)",
+    "name": "Fortified Towers Chest - Fruit 1 (Dif. 4)",
     "id": 88872225,
     "difficulty": 4,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Gold 1",
+    "name": "Fortified Towers Chest - Gold 1",
     "id": 88872226,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Meat 2",
+    "name": "Fortified Towers Barrel - Meat 2",
     "id": 88872227,
     "difficulty": 1,
     "tags": [
-      "battle_towers",
+      "fortified_towers",
       "no_obelisks"
     ]
   },
   {
-    "name": "Battle Towers Barrel - 3-Way Shot 1 (Dif. 3)",
+    "name": "Fortified Towers Barrel - 3-Way Shot 1 (Dif. 3)",
     "id": 88872228,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Death 1 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Death 1 (Dif. 2)",
     "id": 88872229,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Gold 3",
+    "name": "Fortified Towers Barrel - Gold 3",
     "id": 88872230,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Fruit 3 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Fruit 3 (Dif. 2)",
     "id": 88872231,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 7 (Dif. 3)",
+    "name": "Fortified Towers Barrel - Key 7 (Dif. 3)",
     "id": 88872232,
     "difficulty": 3,
     "tags": [
-      "battle_towers",
+      "fortified_towers",
       "no_obelisks"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Gold 4 (Dif. 3)",
+    "name": "Fortified Towers Barrel - Gold 4 (Dif. 3)",
     "id": 88872233,
     "difficulty": 3,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 8",
+    "name": "Fortified Towers Barrel - Key 8",
     "id": 88872234,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Nothing 1",
+    "name": "Fortified Towers Barrel - Nothing 1",
     "id": 88872235,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Potion 1",
+    "name": "Fortified Towers Chest - Potion 1",
     "id": 88872236,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Key 9 (Dif. 2)",
+    "name": "Fortified Towers Barrel - Key 9 (Dif. 2)",
     "id": 88872237,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Barrel - Rapid Fire 1",
+    "name": "Fortified Towers Barrel - Rapid Fire 1",
     "id": 88872238,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Fruit 2",
+    "name": "Fortified Towers Chest - Fruit 2",
     "id": 88872239,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Meat 1 (Dif. 2)",
+    "name": "Fortified Towers Chest - Meat 1 (Dif. 2)",
     "id": 88872240,
     "difficulty": 2,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Meat 2",
+    "name": "Fortified Towers Chest - Meat 2",
     "id": 88872241,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {
-    "name": "Battle Towers Chest - Fire Breath 1",
+    "name": "Fortified Towers Chest - Fire Breath 1",
     "id": 88872242,
     "difficulty": 1,
     "tags": [
-      "battle_towers"
+      "fortified_towers"
     ]
   },
   {

@@ -19,7 +19,6 @@ from .Data import (
     difficulty_convert,
     item_ids,
     level_locations,
-    mirror_levels,
     spawners,
     sounds,
     colors,

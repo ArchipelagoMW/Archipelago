@@ -231,9 +231,11 @@ class UnlockCharacterFour(Choice):
 class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     local_players: PlayerCount
+    included_areas: IncludedAreas
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
+    portals: Portals
     max_difficulty_toggle: MaxDifficultyToggle
     max_difficulty_value: MaxDifficultyRange
     instant_max: InstantMaxDifficulty

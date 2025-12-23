@@ -1,6 +1,6 @@
 from collections.abc import Mapping, Sequence
 from types import MappingProxyType
-from typing import Final, Dict
+from typing import Final
 
 from BaseClasses import ItemClassification
 from .Locations import LocationData, get_locations_by_tags
@@ -262,7 +262,7 @@ level_locations: Final[Mapping[int, Sequence[LocationData]]] = MappingProxyType(
     0x95: get_locations_by_tags("yeti"),
     0xF1: get_locations_by_tags("desecrated_temple"),
     0x111: get_locations_by_tags("battle_trenches"),
-    0x112: get_locations_by_tags("battle_towers"),
+    0x112: get_locations_by_tags("fortified_towers"),
     0x113: get_locations_by_tags("infernal_fortress"),
 })
 
@@ -287,7 +287,7 @@ local_levels: Final[Sequence[Sequence[LocationData]]] = (
     get_locations_by_tags("erupting_fissure"),
     get_locations_by_tags("desecrated_temple"),
     get_locations_by_tags("battle_trenches"),
-    get_locations_by_tags("battle_towers"),
+    get_locations_by_tags("fortified_towers"),
     get_locations_by_tags("infernal_fortress"),
 )
 
@@ -333,7 +333,7 @@ level_names: Final[Mapping[int, str]] = MappingProxyType({
     0x95: "Yeti's Cavern",
     0xF1: "Desecrated Temple",
     0x111: "Battle Trenches",
-    0x112: "Battle Towers",
+    0x112: "Fortified Towers",
     0x113: "Infernal Fortress",
 })
 
@@ -516,12 +516,12 @@ vanilla: Final[Mapping[int, int]] = MappingProxyType({
     0x8: 80,
 })
 
-item_classifications: Dict[str, ItemClassification] = {
+item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType({
     "filler": ItemClassification.filler,
     "useful": ItemClassification.useful,
     "progression": ItemClassification.progression,
     "trap": ItemClassification.trap
-}
+})
 
 obelisks: Final[tuple[str, ...]] = (
     "Mountain Obelisk 1",
@@ -541,7 +541,7 @@ mirror_shards: Final[tuple[str, ...]] = (
 )
 
 # Map location names to offsets in decompressed boss.bin
-boss_location_offsets = {
+boss_location_offsets: Final[Mapping[str, int]] = MappingProxyType({
     "Dragon's Lair - Dragon Mirror Shard": 0x9C08,
     "Yeti's Cavern - Yeti Mirror Shard": 0x9C18,
     "Chimera's Keep - Chimera Mirror Shard": 0x9C28,
@@ -550,5 +550,5 @@ boss_location_offsets = {
     "Altar of Skorne - Skorne's Horns": 0x9C58,
     "Altar of Skorne - Skorne's Left Gauntlet": 0x9C68,
     "Altar of Skorne - Skorne's Right Gauntlet": 0x9C78
-}
+})
 

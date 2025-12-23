@@ -1,7 +1,7 @@
 import typing
 from typing import Optional, Callable
 
-from BaseClasses import Region
+from BaseClasses import Region, CollectionState
 
 from .Locations import GLLocation, LocationData, get_locations_by_tags
 
@@ -48,7 +48,7 @@ def get_regions_dict() -> dict[str, list[LocationData]]:
         "Desecrated Temple": get_locations_by_tags("desecrated_temple"),
         "Altar of Skorne": get_locations_by_tags("altar_of_skorne"),
         "Battle Trenches": get_locations_by_tags("battle_trenches"),
-        "Battle Towers": get_locations_by_tags("battle_towers"),
+        "Fortified Towers": get_locations_by_tags("fortified_towers"),
         "Infernal Fortress": get_locations_by_tags("infernal_fortress"),
         "Gates of the Underworld": get_locations_by_tags("gates_of_the_underworld")
     }
@@ -58,36 +58,36 @@ def connect_regions(world: "GauntletLegendsWorld"):
     names: dict[str, int] = {}
 
     connect(world, names, "Menu", "Valley of Fire")
-    connect(world, names, "Menu", "Dagger Peak")
-    connect(world, names, "Menu", "Cliffs of Desolation")
-    connect(world, names, "Menu", "Lost Cave")
-    connect(world, names, "Menu", "Volcanic Caverns")
-    connect(world, names, "Menu", "Dragon's Lair")
+    connect(world, names, "Menu", "Dagger Peak", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Menu", "Cliffs of Desolation", _portal_helper("Portal to the Cliffs of Desolation", world))
+    connect(world, names, "Menu", "Lost Cave", _portal_helper("Portal to the Lost Cave", world))
+    connect(world, names, "Menu", "Volcanic Caverns", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Menu", "Dragon's Lair", _portal_helper("Portal to Dagger Peak", world))
     connect(world, names, "Menu", "Castle Courtyard",
             lambda state: state.has("Mountain Obelisk 1", world.player)
             and state.has("Mountain Obelisk 2", world.player)
             and state.has("Mountain Obelisk 3", world.player)
     )
-    connect(world, names, "Castle Courtyard", "Dungeon of Torment")
-    connect(world, names, "Castle Courtyard", "Tower Armory")
-    connect(world, names, "Castle Courtyard", "Castle Treasury")
-    connect(world, names, "Castle Courtyard", "Chimera's Keep")
+    connect(world, names, "Castle Courtyard", "Dungeon of Torment", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Castle Courtyard", "Tower Armory", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Castle Courtyard", "Castle Treasury", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Castle Courtyard", "Chimera's Keep", _portal_helper("Portal to Dagger Peak", world))
     connect(world, names, "Menu", "Poisonous Fields",
             lambda state: state.has("Castle Obelisk 1", world.player)
             and state.has("Castle Obelisk 2", world.player)
     )
-    connect(world, names, "Poisonous Fields", "Haunted Cemetery")
-    connect(world, names, "Poisonous Fields", "Venomous Spire")
-    connect(world, names, "Poisonous Fields", "Toxic Air Ship")
-    connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend")
+    connect(world, names, "Poisonous Fields", "Haunted Cemetery", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Poisonous Fields", "Venomous Spire", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Poisonous Fields", "Toxic Air Ship", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend", _portal_helper("Portal to Dagger Peak", world))
     connect(world, names, "Menu", "Arctic Docks",
             lambda state: state.has("Town Obelisk 1", world.player)
             and state.has("Town Obelisk 2", world.player)
     )
-    connect(world, names, "Arctic Docks", "Frozen Camp")
-    connect(world, names, "Arctic Docks", "Crystal Mine")
-    connect(world, names, "Arctic Docks", "Erupting Fissure")
-    connect(world, names, "Erupting Fissure", "Yeti")
+    connect(world, names, "Arctic Docks", "Frozen Camp", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Arctic Docks", "Crystal Mine", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Arctic Docks", "Erupting Fissure", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Erupting Fissure", "Yeti", _portal_helper("Portal to Dagger Peak", world))
     connect(world, names, "Menu", "Desecrated Temple",
             lambda state: state.has("Dragon Mirror Shard", world.player)
             and state.has("Chimera Mirror Shard", world.player)
@@ -96,11 +96,14 @@ def connect_regions(world: "GauntletLegendsWorld"):
     )
     connect(world, names, "Desecrated Temple", "Altar of Skorne")
     connect(world, names, "Desecrated Temple", "Battle Trenches")
-    connect(world, names, "Desecrated Temple", "Battle Towers")
-    connect(world, names, "Desecrated Temple", "Infernal Fortress")
+    connect(world, names, "Desecrated Temple", "Battle Towers", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Desecrated Temple", "Infernal Fortress", _portal_helper("Portal to the Infernal Fortress", world))
     connect(world, names, "Menu", "Gates of the Underworld",
             lambda state: state.has("stones", world.player, 13)
     )
+
+def _portal_helper(item: str, world: "GauntletLegendsWorld") -> Callable:
+    return lambda state, portals=bool(world.options.portals.value): (state.has(item, world.player) if portals else True)
 
 
 def create_region(world: "GauntletLegendsWorld", name: str, locations: list[LocationData]):

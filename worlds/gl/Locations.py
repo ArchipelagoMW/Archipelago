@@ -48,11 +48,6 @@ def get_location_ids(locations: List[LocationData]) -> List[int]:
 def get_location_names(locations: List[LocationData]) -> List[str]:
     return [loc.name for loc in locations if loc.name]
 
-
-def get_vanilla_item_names(locations: List[LocationData]) -> List[str]:
-    from .Items import items_by_id
-    return [items_by_id.get(loc.vanilla_item, "Unknown").item_name for loc in locations]
-
 all_locations: List[LocationData] = import_locations()
 
 location_table: Dict[str, int] = {locData.name: locData.id for locData in all_locations}
