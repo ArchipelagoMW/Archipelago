@@ -447,8 +447,9 @@ RAC3_ITEM_DATA_TABLE: dict[str, RAC3ITEMDATA] = {
     RAC3ITEM.OHKO_TRAP: RAC3ITEMDATA.construct_trap(0x106),
     RAC3ITEM.NO_AMMO_TRAP: RAC3ITEMDATA.construct_trap(0x107),
     RAC3ITEM.LOCK_TRAP: RAC3ITEMDATA.construct_trap(0x108),
+    RAC3ITEM.MIRROR_TRAP: RAC3ITEMDATA.construct_trap(0x109),
     # Goal
-    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x109),
+    RAC3ITEM.VICTORY: RAC3ITEMDATA.construct_goal(0x110),
 }
 
 
@@ -508,6 +509,7 @@ item_table: dict[str, RAC3ITEMDATA] = {
 default_starting_weapons: dict[str, int] = {name: 1 for name in non_prog_weapon_data.keys()}
 timer_to_status: dict[str, int] = {
     RAC3ITEM.LOCK_TRAP: RAC3STATUS.WEAPON_LOCK,
+    RAC3ITEM.MIRROR_TRAP: RAC3STATUS.MIRROR_UNIVERSE,
 }
 
 item_groups: dict[str, set[str]] = {

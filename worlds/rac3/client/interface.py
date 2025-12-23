@@ -418,6 +418,11 @@ class Rac3Interface(GameInterface):
                         self.timers[name] += randint(5, 15)
                     else:
                         self.timers[name] = int(time.time() + uniform(5, 15))
+            case RAC3ITEM.MIRROR_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(5, 20)
+                else:
+                    self.timers[name] = int(time.time() + uniform(5, 20))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -813,6 +818,8 @@ class Rac3Interface(GameInterface):
                         self._write8(RAC3STATUS.WEAPON_LOCK, 0)
                     case RAC3ITEM.JACKPOT:
                         self.boltAndXPMultiplierValue -= 1
+                    case RAC3ITEM.MIRROR_TRAP:
+                        self._write8(RAC3STATUS.MIRROR_UNIVERSE, 0)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
