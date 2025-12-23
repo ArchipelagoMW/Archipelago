@@ -1309,7 +1309,7 @@ class MaximumSupplyReductionPerItem(Range):
 class LowestMaximumSupply(Range):
     """Controls how far max supply reduction traps can reduce maximum supply."""
     display_name = "Lowest Maximum Supply"
-    range_start = 100
+    range_start = 50
     range_end = 200
     default = 180
 

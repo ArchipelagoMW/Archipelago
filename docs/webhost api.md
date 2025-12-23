@@ -385,6 +385,8 @@ Will provide a dict of static tracker data with the following keys:
   - This hash can then be sent to the datapackage API to receive the appropriate datapackage as necessary
 - The number of checks found vs. total checks available per player (`player_locations_total`)
   - Same logic as the multitracker template: found = len(player_checks_done.locations) / total = player_locations_total.total_locations (all available checks).
+- The game each player is playing (`player_game`)
+  - Provided as a list of objects with `team`, `player`, and `game`.
 
 Example:
 ```json
@@ -409,10 +411,10 @@ Example:
   ],
   "datapackage": {
     "Archipelago": {
-      "checksum": "ac9141e9ad0318df2fa27da5f20c50a842afeecb",
+      "checksum": "ac9141e9ad0318df2fa27da5f20c50a842afeecb"
     },
     "The Messenger": {
-      "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b",
+      "checksum": "6991cbcda7316b65bcb072667f3ee4c4cae71c0b"
     }
   },
   "player_locations_total": [
@@ -427,6 +429,18 @@ Example:
       "total_locations": 20
     }
   ],
+  "player_game": [
+    {
+      "team": 0,
+      "player": 1,
+      "game": "Archipelago"
+    },
+    {
+      "team": 0,
+      "player": 2,
+      "game": "The Messenger"
+    }
+  ]
 }
 ```
 
