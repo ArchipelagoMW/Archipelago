@@ -360,7 +360,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
             ctx.game_interface.reset_file()
             logger.info("Old state removed!")
             logger.info("Checking for items...")
-            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
             logger.info(f"Items Received: {len(ctx.items_received)}")
             items_to_process = ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, len(ctx.items_received))
             counter = 0
@@ -391,7 +391,7 @@ async def _handle_game_ready(ctx: Rac3Context) -> None:
 
         if not ctx.main_menu:
             await update(ctx)
-            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, "Empty")}")
+            logger.debug(f"Data Package: {ctx.stored_data.get(RAC3OPTION.PROCESSED_LOCATIONS, 'Empty')}")
 
 
 def launch_client():
