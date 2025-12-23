@@ -95,4 +95,4 @@ Additionally, the following locations can optionally be included in the Location
 
 ## How can I get started?
 
-To get started playing Celeste (Open World) in Archipelago, [go to the setup guide for this game](../../../tutorial/Celeste%20(Open%20World)/guide/en)
+To get started playing Celeste (Open World) in Archipelago, [go to the setup guide for this game](/tutorial/Celeste%20%28Open%20World%29/guide_en)

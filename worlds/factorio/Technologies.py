@@ -334,14 +334,15 @@ required_technologies: Dict[str, FrozenSet[Technology]] = Utils.KeyedDefaultDict
     recursively_get_unlocking_technologies(ingredient_name, unlock_func=unlock)))
 
 
-def get_rocket_requirements(silo_recipe: Optional[Recipe], part_recipe: Recipe,
+def get_rocket_requirements(silo_recipe: Optional[Recipe], part_recipe: Optional[Recipe],
                             satellite_recipe: Optional[Recipe], cargo_landing_pad_recipe: Optional[Recipe]) -> Set[str]:
     techs = set()
     if silo_recipe:
         for ingredient in silo_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)
-    for ingredient in part_recipe.ingredients:
-        techs |= recursively_get_unlocking_technologies(ingredient)
+    if part_recipe:
+        for ingredient in part_recipe.ingredients:
+            techs |= recursively_get_unlocking_technologies(ingredient)
     if cargo_landing_pad_recipe:
         for ingredient in cargo_landing_pad_recipe.ingredients:
             techs |= recursively_get_unlocking_technologies(ingredient)

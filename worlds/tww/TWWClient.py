@@ -146,8 +146,8 @@ class TWWContext(CommonContext):
         self.curr_stage_switches_bitfield: int
         self.curr_stage_pickups_bitfield: int
 
-        # Keep track of whether the player has yet received their first progressive magic meter.
-        self.received_magic: bool = False
+        # Keep track of when the player received their first progressive magic meter.
+        self.received_magic_idx: int = -1
 
         # A dictionary that maps salvage locations to their sunken treasure bit.
         self.salvage_locations_map: dict[str, int] = {}
@@ -349,10 +349,10 @@ def _give_item(ctx: TWWContext, item_name: str) -> bool:
         if slot == 0xFF:
             # Special case: Use a different item ID for the second progressive magic meter.
             if item_name == "Progressive Magic Meter":
-                if ctx.received_magic:
+                if ctx.received_magic_idx == -1:
+                    ctx.received_magic_idx = idx
+                elif idx > ctx.received_magic_idx:
                     item_id = 0xB2
-                else:
-                    ctx.received_magic = True
             dolphin_memory_engine.write_byte(GIVE_ITEM_ARRAY_ADDR + idx, item_id)
             return True
 
