@@ -487,9 +487,9 @@ class World(metaclass=AutoWorldRegister):
         """Called when the item pool needs to be filled with additional items to match location count.
 
         The returned item name must be for a "repeatable" item, i.e. one that it's okay to generate arbitrarily many of.
-        For most worlds this will be one or more of your ItemClassification.filler items, but despite the method name,
-        that's not a requirement: trap, useful and even progression items are valid as long as they're repeatable.
-        Likewise, a unique/non-repeatable filler item would be a poor choice here."""
+        For most worlds this will be one or more of your filler items, but the classification of these items
+        does not need to be ItemClassification.filler.
+        The item name returned can be for a trap, useful, and/or progression item as long as it's repeatable."""
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.random.choice(tuple(self.item_name_to_id.keys()))
 
