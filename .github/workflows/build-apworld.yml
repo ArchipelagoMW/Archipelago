@@ -333,11 +333,11 @@ jobs:
           echo "branch=$branch" >> $GITHUB_OUTPUT
           echo "is_pre=$is_pre" >> $GITHUB_OUTPUT
 
-      - name: Add manifest to .apworld and set CLIENT_VERSION
+      - name: Add manifest to .apworld and set VERSION_NUMBER
         shell: bash
         run: |
           set -e
-          echo "🧾 Updating archipelago.json manifest & set CLIENT_VERSION"
+          echo "🧾 Updating archipelago.json manifest & set VERSION_NUMBER"
 
           version="${{ steps.semver.outputs.version }}"
           version="${version#v}"
