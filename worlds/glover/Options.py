@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from schema import And, Optional, Schema
-from Options import ExcludeLocations, OptionCounter, OptionDict, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
+from Options import ExcludeLocations, OptionCounter, OptionDict, OptionSet, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
 
 level_prefixes = tuple(["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"])
 level_suffixes = tuple(["1", "2", "3", "!", "?"])
@@ -141,9 +141,8 @@ class OpenLevels(Toggle):
 
 class Portalsanity(Toggle):
     """Goals and All Garibs in Level are checks. Portals and garib completion marks are items. Default off.
-    !! UNIMPLIMENTED !!
     """
-    visibility = Visibility.spoiler
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Portalsanity"
 
 class GeneratePuml(Toggle):
@@ -174,10 +173,6 @@ class EnableBonuses(DefaultOnToggle):
     """
     display_name = "Include Bonus Levels"
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
-
-class GloverExcludeLocations(ExcludeLocations):
-    """Prevent these locations from having important item."""
-    default = frozenset({"Atl? Goal"})
 
 class TagLink(Toggle):
     """When you transform the ball, everyone who enabled tag link changes character or the ball. Of course, the reverse is true too. Default off.
@@ -233,6 +228,31 @@ class Insectity(Toggle):
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Insectity"
+
+class TotalScores(OptionSet):
+    """What total scores being reached will give checks.
+    Formatted ["Score Value A", "Score Value B"]
+    Example ["50000", "100000"]
+    Scores must be a multiple of 10.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    default = []
+    display_name = "Total Scores"
+
+class LevelScores(OptionDict):
+    """What level-specific scores being reached will give a check.
+    Formatted {"LevelNameA":Score Value A, "LevelNameB":Score Value B}
+    Example {"Atl1":3000, "Atl2":6000}
+    Scores must be a multiple of 10.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    schema = Schema({
+    Optional(And(str, lambda level_name : level_name.startswith(level_prefixes)
+        and level_name.endswith(level_suffixes) and len(level_name) == 4))
+    :And(int, lambda score_value : score_value >= 10 and score_value % 10 == 0 and score_value < 1000000)
+    })
+    default = {}
+    display_name = "Level Scores"
 
 class EasyBallWalk(Toggle):
     """Forces the game to de-invert ball controls.
@@ -485,6 +505,8 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     mr_tip_checks : MrTipChecks
     enemysanity : Enemysanity
     insectity : Insectity
+    total_scores : TotalScores
+    level_scores : LevelScores
 
     easy_ball_walk : EasyBallWalk
 
@@ -514,6 +536,5 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     tip_trap_weight : TrapTipWeight
 
     start_inventory_from_pool : StartInventoryPool
-    #exclude_locations : GloverExcludeLocations
     generate_puml : GeneratePuml
 

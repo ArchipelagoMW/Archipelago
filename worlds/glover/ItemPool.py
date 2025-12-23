@@ -138,13 +138,7 @@ portalsanity_table = {
 	"OtwH Boss Gate" : 						ItemData(BASE_ID + 104, 1, "Progression", "Otw3: Goal"),
 	"OtwH Boss Star" : 						ItemData(BASE_ID + 105, 1, "Progression", "Otw!: Goal"),
 	"OtwH Bonus Gate" : 					ItemData(BASE_ID + 106, 1, "Progression", "OtwH: Bonus Unlock"),
-	"OtwH Bonus Star" : 					ItemData(BASE_ID + 107, 1, "Progression", "Otw?: All Garibs"),
-	"Hubworld Atlantis Gate" : 				ItemData(BASE_ID + 121, 1, "Progression", "Ball Turn-In 1"),
-	"Hubworld Carnival Gate" : 				ItemData(BASE_ID + 122, 1, "Progression", "Ball Turn-In 2A"),
-	"Hubworld Pirate's Cove Gate" : 		ItemData(BASE_ID + 123, 1, "Progression", "Ball Turn-In 2B"),
-	"Hubworld Prehistoric Gate" : 			ItemData(BASE_ID + 124, 1, "Progression", "Ball Turn-In 4A"),
-	"Hubworld Fortress of Fear Gate" : 		ItemData(BASE_ID + 125, 1, "Progression", "Ball Turn-In 4B"),
-	"Hubworld Out of This World Gate" : 	ItemData(BASE_ID + 126, 1, "Progression", "Ball Turn-In 6"),
+	"OtwH Bonus Star" : 					ItemData(BASE_ID + 107, 1, "Progression", "Otw?: All Garibs")
 }
 
 level_event_table = {

@@ -13,7 +13,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import DifficultyLogic, GaribLogic, GloverOptions, GaribSorting, StartingBall, VictoryCondition
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table
+from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, portalsanity_table
 from Utils import local_path, visualize_regions
 from .Hints import create_hints
 
@@ -113,8 +113,8 @@ class GloverWeb(WebWorld):
             Options.EntranceRandomizer,
             Options.EntranceOverrides,
             Options.OpenWorlds,
-            Options.OpenLevels#,
-            #Options.Portalsanity
+            Options.OpenLevels,
+            Options.Portalsanity
         ]),
         OptionGroup("Checkpoints", [
             Options.SpawningCheckpointRandomizer,
@@ -404,6 +404,11 @@ class GloverWorld(World):
         if len(entrance_override_doors) != len(set(entrance_override_doors)):
             raise OptionError("Two entrance overrides choose the same door! Make sure all values are unique.")
 
+        #All the scores are actual scores
+        for each_score in self.options.total_scores.value:
+            if not each_score.isdigit():
+                OptionError("\""+ each_score + "\" is not a valid score!")
+
         #Checkpoint Overrides In-Bounds
         for target_level, set_checkpoint in self.options.checkpoint_overrides.items():
             if not self.valid_override_level_name(target_level, False, False):
@@ -439,9 +444,8 @@ class GloverWorld(World):
         #Filler items that always exist
         filler_count = 89 + 33 + 1
         #Portalsanity
-        if self.options.portalsanity:
-            #Star marks
-            filler_count -= 30
+        if self.options.portalsanity and not self.options.open_levels:
+            filler_count -= 29
         else:
             #Goals
             filler_count += 31
@@ -788,6 +792,11 @@ class GloverWorld(World):
         if self.options.switches_checks.value == 1:
             event_items = list(level_event_table.keys())
 
+        #Portalsanity Items only have worth for non-open levels gameplay
+        portalsanity_items = []
+        if self.options.portalsanity and not self.options.open_levels:
+            portalsanity_items = list(portalsanity_table.keys())
+        
         #Abilities
         ability_items = list(ability_table.keys())
         if not self.options.include_power_ball and self.starting_ball != "Power Ball":
@@ -808,6 +817,7 @@ class GloverWorld(World):
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(ability_items)
         all_core_items.extend(event_items)
+        all_core_items.extend(portalsanity_items)
         core_item_count = 0
         #Core Items
         for each_item in all_core_items:
@@ -1086,36 +1096,31 @@ class GloverWorld(World):
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
             
-            #Make the hubworld operate normally while portalsanity's off
+            #Crystal turn-ins logic
             crystal_location : Location | None = None
-            if not self.options.portalsanity:
-                #Place gate openings
-                match entrance_index:
-                    case 0:
-                        #Requires 1/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 1, True)
-                    case 1:
-                        #Requires 2/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 2, True, "A")
-                    case 2:
-                        #Requires 2/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 2, True, "B")
-                    case 3:
-                        #Requires 4/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 4, True, "A")
-                    case 4:
-                        #Requires 4/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 4, True, "B")
-                    case 5:
-                        #Requires 6/7 Balls Returned
-                        crystal_location = self.returning_crystal(castle_cave, 6, True)
-                #Put the gate to it at the crystal location
-                if crystal_location != None:
-                    crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
-            #If portalsanity's on, crystals are locations
-            else:
-                #Portalsanity locations start at 1946
-                crystal_location = self.returning_crystal(castle_cave, entrance_index + 1, False, "", 1946 + entrance_index)
+            #Place gate openings
+            match entrance_index:
+                case 0:
+                    #Requires 1/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 1, True)
+                case 1:
+                    #Requires 2/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 2, True, "A")
+                case 2:
+                    #Requires 2/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 2, True, "B")
+                case 3:
+                    #Requires 4/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 4, True, "A")
+                case 4:
+                    #Requires 4/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 4, True, "B")
+                case 5:
+                    #Requires 6/7 Balls Returned
+                    crystal_location = self.returning_crystal(castle_cave, 6, True)
+            #Put the gate to it at the crystal location
+            if crystal_location != None:
+                crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
 
     def extend_hint_information(self, hint_data : Dict[int, Dict[int, str]]):
         player = self.player
@@ -1339,8 +1344,16 @@ class GloverWorld(World):
                 #Create unique tip text
                 self.mr_tip_text[str(tip_address)] = self.random.choice(self.mr_tip_table)
 
-    def slot_score_checks(self):
-        
+    def slot_score_checks(self) -> dict[str, list[int]]:
+        slot_scores : dict[str, list[int]] = {}
+        for each_level, level_scores in self.options.level_scores.value.items():
+            ap_name = self.lua_world_name(each_level)
+            slot_scores[ap_name] = []
+            for each_score in level_scores:
+                slot_scores[ap_name].append(each_score / 10)
+        for each_score in self.options.total_scores.value:
+            slot_scores["TOTAL"] = int(each_score) / 10
+        return slot_scores
 
     def lua_world_name(self, original_name):
         lua_prefixes = ["AP_ATLANTIS", "AP_CARNIVAL", "AP_PIRATES", "AP_PREHISTORIC", "AP_FORTRESS", "AP_SPACE", "AP_TRAINING"]
@@ -1377,7 +1390,7 @@ class GloverWorld(World):
         options = self.build_options()
         self.generate_hints()
         self.generate_tip_text()
-        self.slot_score_checks()
+        options["score_checks"] = self.slot_score_checks()
         options["mr_hints_locations"] = self.mr_hints
         options["mr_tips_text"] = self.mr_tip_text
         options["chicken_hints_locations"] = self.chicken_hints
