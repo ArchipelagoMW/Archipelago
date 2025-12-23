@@ -529,7 +529,10 @@
     },
     {
         "address": 1208, "name": "LYR: Above Root Node",
-        "region": "LYR - Upper Exit", "requires": []
+        "region": "LYR - Root Node",
+        "requires": [{ "region": "LYR - Upper Exit" }], // just fall down
+        "medium_requires": [{ "item": "Trick - Bow Hover" }] // from the higher ground to the right
+        // ls_requires would be redundant since LS immediately gets you access to Upper Exit
     },
     {
         "address": 1209, "name": "LYR: Statue Hack Room Near Root Node",
