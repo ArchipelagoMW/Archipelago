@@ -60,7 +60,7 @@
 
 This is usage documentation for the `custom_mission_order` YAML option for Starcraft 2. You can enable Custom Mission Orders by setting `mission_order: custom` in your YAML.
 
-You will need to know how to write a YAML before engaging with this feature, and should read the [Archipelago YAML documentation](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en) before continuing here.
+You will need to know how to write a YAML before engaging with this feature, and should read the [Archipelago YAML documentation](/tutorial/Archipelago/advanced_settings/en) before continuing here.
 
 Every example in this document should be valid to generate.
 

@@ -183,7 +183,7 @@ def check_enemizer(enemizercli):
     if getattr(check_enemizer, "done", None):
         return
     if not os.path.exists(enemizercli) and not os.path.exists(enemizercli + ".exe"):
-        raise Exception(f"Enemizer not found at {enemizercli}, please install it."
+        raise Exception(f"Enemizer not found at {enemizercli}, please install it. "
                         f"Such as https://github.com/Ijwu/Enemizer/releases")
 
     with check_lock:
@@ -1197,8 +1197,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         0x51, 0x06, 0x52, 0xFF,  # 6 +5 bomb upgrades -> +10 bomb upgrade
         0x53, 0x06, 0x54, 0xFF,  # 6 +5 arrow upgrades -> +10 arrow upgrade
         0x58, 0x01, 0x36 if local_world.options.retro_bow else 0x43, 0xFF,  # silver arrows -> single arrow (red 20 in retro mode)
-        0x3E, difficulty.boss_heart_container_limit, 0x47, 0xff,  # boss heart -> green 20
-        0x17, difficulty.heart_piece_limit, 0x47, 0xff,  # piece of heart -> green 20
+        0x3E, local_world.logical_heart_containers, 0x47, 0xff,  # boss heart -> green 20
+        0x17, local_world.logical_heart_pieces, 0x47, 0xff,  # piece of heart -> green 20
         0xFF, 0xFF, 0xFF, 0xFF,  # end of table sentinel
     ])
 

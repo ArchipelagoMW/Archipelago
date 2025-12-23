@@ -9,7 +9,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 
 ## Installation via OpenGOAL Launcher
 
-**You must set up a vanilla installation of Jak and Daxter before you can install mods for it.**
+**You must set up a vanilla installation of Jak and Daxter before you can install mods for it.** These instructions will work on both NTSC and PAL versions of the game.
 
 - Follow the installation process for the official OpenGOAL Launcher. See [here](https://opengoal.dev/docs/usage/installation). 
 - Follow the setup process for adding mods to the OpenGOAL Launcher. See [here](https://jakmods.dev/).
@@ -18,45 +18,7 @@ At this time, this method of setup works on Windows only, but Linux support is a
 - Click `Features` in the bottom right corner, then click `Mods`.
 - Under `Available Mods`, click `ArchipelaGOAL`. The mod should begin installing. When it is done, click `Continue` in the bottom right corner.
 - **DO NOT PLAY AN ARCHIPELAGO GAME THROUGH THE OPENGOAL LAUNCHER.** The Archipelago Client should handle everything for you.
-
-### For NTSC versions of the game, follow these steps.
-
-- Run the OpenGOAL Launcher (if you had it open before, close it and reopen it).
-- Click the Jak and Daxter logo on the left sidebar.
-- Click `Features` in the bottom right corner, then click `Mods`, then under `Installed Mods`, click `ArchipelaGOAL`.
-- In the bottom right corner, click `Advanced`, then click `Compile`.
-
-### For PAL versions of the game, follow these steps.
-
-PAL versions of the game seem to require additional troubleshooting/setup in order to work properly.
-Below are some instructions that may help. 
-If you see `-- Compilation Error! --` after pressing `Compile` or Launching the ArchipelaGOAL mod, try these steps.
-
-- Remove these folders if you have them: 
-    - `<opengoal active version directory>/iso_data`
-    - `<archipelagoal directory>/iso_data`
-    - `<archipelagoal directory>/data/iso_data`
-- Place your Jak1 ISO in `<archipelagoal directory>` and rename it to `JakAndDaxter.iso`
-- Type `cmd` in Windows search, right click `Command Prompt`, and pick `Run as Administrator`
-- Run `cd <archipelagoal directory>`
-- Then run `.\extractor.exe --extract --extract-path .\data\iso_data "JakAndDaxter.iso"` 
-    - This command should end by saying `Uses Decompiler Config Version - ntsc_v1` or `... - pal`. Take note of this message.
-- If you saw `ntsc_v1`:
-    - In cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "ntsc_v1" data\iso_data data\decompiler_out`
-- If you saw `pal`:
-    - Rename `<archipelagoal directory>\data\iso_data\jak1` to `jak1_pal`
-    - Back in cmd, run `.\decompiler.exe data\decompiler\config\jak1\jak1_config.jsonc --version "pal" data\iso_data data\decompiler_out`
-    - Rename `<archipelagoal directory>\data\iso_data\jak1_pal` back to `jak1`
-    - Rename `<archipelagoal directory>\data\decompiler_out\jak1_pal` back to `jak1`
-- Open a **brand new** console window and launch the compiler:
-    - `cd <archipelagoal directory>`
-    - `.\goalc.exe --user-auto --game jak1`
-    - From the compiler (in the same window): `(mi)`. This should compile the game. **Note that the parentheses are important.** 
-    - **Don't close this first terminal, you will need it at the end.**
-- Then, open **another brand new** console window and execute the game:
-    - `cd <archipelagoal directory>`
-    - `.\gk.exe -v --game jak1 -- -boot -fakeiso -debug`
-- Finally, **from the first console still in the GOALC compiler**, connect to the game: `(lt)`.
+- Once the mod is installed, in the bottom right corner, click `Advanced`, then click `Compile`.
 
 ## Updates and New Releases via OpenGOAL Launcher
 

@@ -44,19 +44,19 @@ class TestOptions(unittest.TestCase):
             }],
             [{
                 "name": "ItemLinkGroup",
-                "item_pool": ["Hammer", "Bow"],
+                "item_pool": ["Hammer", "Sword"],
                 "link_replacement": False,
                 "replacement_item": None,
             }]
         ]
         # we really need some sort of test world but generic doesn't have enough items for this
-        world = AutoWorldRegister.world_types["A Link to the Past"]
+        world = AutoWorldRegister.world_types["APQuest"]
         plando_options = PlandoOptions.from_option_string("bosses")
         item_links = [ItemLinks.from_any(item_link_groups[0]), ItemLinks.from_any(item_link_groups[1])]
         for link in item_links:
             link.verify(world, "tester", plando_options)
             self.assertIn("Hammer", link.value[0]["item_pool"])
-            self.assertIn("Bow", link.value[0]["item_pool"])
+            self.assertIn("Sword", link.value[0]["item_pool"])
         
         # TODO test that the group created using these options has the items
 

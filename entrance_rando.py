@@ -525,7 +525,7 @@ def randomize_entrances(
 
     running_time = time.perf_counter() - start_time
     if running_time > 1.0:
-        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player},"
+        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player}, "
                      f"named {world.multiworld.player_name[world.player]}")
 
     return er_state

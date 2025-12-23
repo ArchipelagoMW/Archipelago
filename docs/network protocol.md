@@ -647,6 +647,16 @@ class Version(NamedTuple):
     build: int
 ```
 
+If constructing version information as a dict for a custom client rather than as a NamedTuple built into the CommonClient, you must add the `class` key to allow Archipelago to compare version support.
+```
+"version": {
+      "class": "Version",
+      "build": X,
+      "major": Y,
+      "minor": Z
+    }
+```
+
 ### SlotType
 An enum representing the nature of a slot.
 
