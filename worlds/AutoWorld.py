@@ -221,7 +221,7 @@ class WebWorld(metaclass=WebWorldRegister):
     game_info_languages: List[str] = ['en']
     """docs folder will be scanned for game info pages using this list in the format '{language}_{game_name}.md'"""
 
-    tutorials: List["Tutorial"]
+    tutorials: ClassVar[List["Tutorial"]]
     """docs folder will also be scanned for tutorial guides. Each Tutorial class is to be used for one guide."""
 
     theme: str = "grass"

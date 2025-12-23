@@ -5,6 +5,7 @@ from collections.abc import Callable
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
+
 from worlds.AutoWorld import WebWorld, World
 
 from .definitions import (
@@ -109,7 +110,7 @@ class AutopelagoRegion(Region):
 class AutopelagoWebWorld(WebWorld):
     theme = "partyTime"
     rich_text_options_doc = True
-    tutorials = [Tutorial(
+    tutorials: typing.ClassVar[list[Tutorial]] = [Tutorial(
         tutorial_name="Setup Guide",
         description="A guide to playing Autopelago",
         language="English",
