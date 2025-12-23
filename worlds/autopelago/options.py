@@ -1,11 +1,12 @@
 import logging
+import typing
+from collections.abc import Iterable, Mapping
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any
 
 import yaml
 
-from dataclasses import dataclass
-from typing import Any, Mapping, Iterable, Type, TYPE_CHECKING
-
-from Options import Toggle, PerGameCommonOptions, Choice, OptionSet, Range, OptionList, Visibility
+from Options import Choice, OptionList, OptionSet, PerGameCommonOptions, Range, Toggle, Visibility
 from worlds.AutoWorld import World
 
 if TYPE_CHECKING:
@@ -43,7 +44,7 @@ class EnabledBuffs(OptionSet):
     display_name = "Enabled Buffs"
     valid_keys = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
     default = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
-    map = {
+    map: typing.ClassVar[dict[str, str]] = {
         "Well Fed": "well_fed",
         "Lucky": "lucky",
         "Energized": "energized",
@@ -66,7 +67,7 @@ class EnabledTraps(OptionSet):
     valid_keys = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
     default = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
 
-    map = {
+    map: typing.ClassVar[dict[str, str]] = {
         "Upset Tummy": "upset_tummy",
         "Unlucky": "unlucky",
         "Sluggish": "sluggish",
@@ -98,7 +99,7 @@ def represent_rat_chat_messages(_dumper: yaml.Dumper, data: RatChatMessagesHack)
     return yaml.SequenceNode(tag="tag:yaml.org,2002:seq", value=[
         yaml.MappingNode(tag="tag:yaml.org,2002:map", value=[
             (yaml.ScalarNode(tag="tag:yaml.org,2002:str", value=t, style='"' if "'" in t else "'"),
-             yaml.ScalarNode(tag="tag:yaml.org,2002:int", value=f'{w}'))
+             yaml.ScalarNode(tag="tag:yaml.org,2002:int", value=f"{w}"))
         ], flow_style=False) if w != 1 else
         yaml.ScalarNode(tag="tag:yaml.org,2002:str", value=t, style='"' if "'" in t else "'")
         for t, w in data.items
@@ -124,8 +125,7 @@ class RatChatMessages(OptionList):
                 if isinstance(t, Mapping):
                     if len(t) != 1:
                         raise NotImplementedError(f"Dict must have only one item, got {len(t)}")
-                    for kv in t.items():
-                        res.append(kv)
+                    res += t.items()
                 elif isinstance(t, str):
                     res.append((t, 1))
                 else:
@@ -134,9 +134,11 @@ class RatChatMessages(OptionList):
 
         raise NotImplementedError(f"Cannot convert from non-dict, got {type(data)}")
 
-    def verify(self, world: Type[World], player_name: str, plando_options: 'PlandoOptions') -> None:
+    def verify(self, world: type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         if len(self.value) == 0:
-            logging.warning(f"Settings file tried to set empty rat chat messages for {type(self).__name__} (player: {player_name}). This is not allowed. Reverting them to default.")
+            s = f"Settings file tried to set empty rat chat messages for {type(self).__name__} (player: {player_name})."
+            s += "  This is not allowed. Reverting them to default."
+            logging.warning(s)
             self.value = RatChatMessages.from_any(self.default).value
 
 

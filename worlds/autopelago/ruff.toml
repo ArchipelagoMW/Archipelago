@@ -1,0 +1,3 @@
+[per-file-ignores]
+# The way options definitions work right now, world devs are forced to break line length requirements.
+"options.py" = ["E501"]

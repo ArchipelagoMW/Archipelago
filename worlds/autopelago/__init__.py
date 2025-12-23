@@ -1,54 +1,83 @@
 import logging
+import typing
 from collections import deque
-from typing import Callable
-
-from .AutopelagoDefinitions import GAME_NAME, version_stamp, AutopelagoGameRequirement, \
-    AutopelagoAllRequirement, AutopelagoAnyRequirement, AutopelagoAnyTwoRequirement, \
-    AutopelagoItemRequirement, AutopelagoRatCountRequirement, item_name_to_classification, \
-    location_name_to_progression_item_name, items_by_type_by_game, location_name_to_requirement, \
-    AutopelagoRegionDefinition, item_name_to_id, ItemClassification, item_key_to_name, \
-    item_name_to_rat_count, location_name_to_id, item_name_groups, max_required_rat_count, \
-    total_available_rat_count, autopelago_regions, location_name_to_nonprogression_item, \
-    AutopelagoNonProgressionItemType, autopelago_nonprogression_item_types, location_name_groups, \
-    lactose_names, lactose_intolerant_names
-from .options import AutopelagoGameOptions, VictoryLocation, EnabledBuffs, EnabledTraps, \
-    ChangedTargetMessages, EnterGoModeMessages, EnterBKModeMessages, RemindBKModeMessages, \
-    ExitBKModeMessages, CompleteGoalMessages
+from collections.abc import Callable
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import WebWorld, World
+
+from .definitions import (
+    GAME_NAME,
+    AutopelagoAllRequirement,
+    AutopelagoAnyRequirement,
+    AutopelagoAnyTwoRequirement,
+    AutopelagoGameRequirement,
+    AutopelagoItemRequirement,
+    AutopelagoNonProgressionItemType,
+    AutopelagoRatCountRequirement,
+    AutopelagoRegionDefinition,
+    ItemClassification,
+    autopelago_nonprogression_item_types,
+    autopelago_regions,
+    item_key_to_name,
+    item_name_groups,
+    item_name_to_classification,
+    item_name_to_id,
+    item_name_to_rat_count,
+    items_by_type_by_game,
+    lactose_intolerant_names,
+    lactose_names,
+    location_name_groups,
+    location_name_to_id,
+    location_name_to_nonprogression_item,
+    location_name_to_progression_item_name,
+    location_name_to_requirement,
+    max_required_rat_count,
+    total_available_rat_count,
+    version_stamp,
+)
+from .options import (
+    AutopelagoGameOptions,
+    ChangedTargetMessages,
+    CompleteGoalMessages,
+    EnabledBuffs,
+    EnabledTraps,
+    EnterBKModeMessages,
+    EnterGoModeMessages,
+    ExitBKModeMessages,
+    RemindBKModeMessages,
+    VictoryLocation,
+)
 
 the_logger = logging.getLogger(GAME_NAME)
 
 
 def _is_trivial(req: AutopelagoGameRequirement):
-    if 'all' in req:
-        return not req['all']
-    elif 'rat_count' in req:
-        return req['rat_count'] == 0
-    else:
-        return False
+    if "all" in req:
+        return not req["all"]
+    if "rat_count" in req:
+        return req["rat_count"] == 0
+    return False
 
 
 def _is_satisfied(player: int, req: AutopelagoGameRequirement, state: CollectionState):
-    if 'all' in req:
+    if "all" in req:
         req: AutopelagoAllRequirement
-        return all(_is_satisfied(player, sub_req, state) for sub_req in req['all'])
-    elif 'any' in req:
+        return all(_is_satisfied(player, sub_req, state) for sub_req in req["all"])
+    if "any" in req:
         req: AutopelagoAnyRequirement
-        return any(_is_satisfied(player, sub_req, state) for sub_req in req['any'])
-    elif 'any_two' in req:
+        return any(_is_satisfied(player, sub_req, state) for sub_req in req["any"])
+    if "any_two" in req:
         req: AutopelagoAnyTwoRequirement
-        return sum(1 if _is_satisfied(player, sub_req, state) else 0 for sub_req in req['any_two']) > 1
-    elif 'item' in req:
+        return sum(1 if _is_satisfied(player, sub_req, state) else 0 for sub_req in req["any_two"]) > 1
+    if "item" in req:
         req: AutopelagoItemRequirement
-        return state.has(item_key_to_name[req['item']], player)
-    else:
-        assert 'rat_count' in req, 'Only AutopelagoRatCountRequirement is expected here'
-        req: AutopelagoRatCountRequirement
-        return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[player].items() if
-                   k in item_name_to_rat_count) >= req['rat_count']
+        return state.has(item_key_to_name[req["item"]], player)
+    assert "rat_count" in req, "Only AutopelagoRatCountRequirement is expected here"
+    req: AutopelagoRatCountRequirement
+    return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[player].items() if
+               k in item_name_to_rat_count) >= req["rat_count"]
 
 
 class AutopelagoItem(Item):
@@ -78,18 +107,16 @@ class AutopelagoRegion(Region):
 
 
 class AutopelagoWebWorld(WebWorld):
-    theme = 'partyTime'
+    theme = "partyTime"
     rich_text_options_doc = True
-    tutorials = [
-        Tutorial(
-            tutorial_name='Setup Guide',
-            description='A guide to playing Autopelago',
-            language='English',
-            file_name='guide_en.md',
-            link='guide/en',
-            authors=['Joe Amenta']
-        )
-    ]
+    tutorials = [Tutorial(
+        tutorial_name="Setup Guide",
+        description="A guide to playing Autopelago",
+        language="English",
+        file_name="guide_en.md",
+        link="guide/en",
+        authors=["airbreather"]
+    )]
 
 
 class AutopelagoWorld(World):
@@ -104,8 +131,8 @@ class AutopelagoWorld(World):
     victory_location: str
     regions_in_scope: set[str]
     locations_in_scope: set[str]
-    option_groups = [
-        OptionGroup('Message Text Replacements', [
+    option_groups: typing.ClassVar[list[OptionGroup]] = [
+        OptionGroup("Message Text Replacements", [
             ChangedTargetMessages,
             EnterGoModeMessages,
             EnterBKModeMessages,
@@ -134,18 +161,18 @@ class AutopelagoWorld(World):
     def generate_early(self):
         match self.options.victory_location:
             case VictoryLocation.option_captured_goldfish:
-                self.victory_location = 'Captured Goldfish'
+                self.victory_location = "Captured Goldfish"
             case VictoryLocation.option_secret_cache:
-                self.victory_location = 'Secret Cache'
+                self.victory_location = "Secret Cache"
             case _:
-                self.victory_location = 'Snakes on a Planet'
+                self.victory_location = "Snakes on a Planet"
 
         self.locations_in_scope = set()
-        q = deque(('Menu',))
-        self.regions_in_scope = {'Menu',}
+        q = deque(("Menu",))
+        self.regions_in_scope = {"Menu",}
         while q:
             r = autopelago_regions[q.popleft()]
-            locations_set = {l for l in r.locations}
+            locations_set = set(r.locations)
             self.locations_in_scope.update(locations_set)
             if self.victory_location in locations_set:
                 continue
@@ -158,22 +185,21 @@ class AutopelagoWorld(World):
     def create_item(self, name: str):
         item_id = item_name_to_id[name]
         classification = item_name_to_classification[name]
-        item = AutopelagoItem(name, classification, item_id, self.player)
-        return item
+        return AutopelagoItem(name, classification, item_id, self.player)
 
     def create_items(self):
         new_items = [self.create_item(item)
                      for location, item in location_name_to_progression_item_name.items()
-                     if location in self.locations_in_scope and item != 'Moon Shoes']
+                     if location in self.locations_in_scope and item != "Moon Shoes"]
 
         # skip balancing for the pack_rat items that take us beyond the minimum limit
         rat_items = sorted(
             (item for item in new_items if item.name in item_name_to_rat_count),
-            key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name['pack_rat'] else 1)
+            key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name["pack_rat"] else 1)
         )
         for i in range(total_available_rat_count - max_required_rat_count):
             assert rat_items[i].name == item_key_to_name[
-                'pack_rat'], 'Expected there to be enough pack_rat fillers for this calculation.'
+                "pack_rat"], "Expected there to be enough pack_rat fillers for this calculation."
             rat_items[i].classification |= ItemClassification.skip_balancing
 
         self.multiworld.itempool += new_items
@@ -196,32 +222,33 @@ class AutopelagoWorld(World):
                         replacements_made += 1
 
         category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = \
-            {category: 0 for category in autopelago_nonprogression_item_types}
+            dict.fromkeys(autopelago_nonprogression_item_types, 0)
         next_filler_becomes_trap = False
         item_type: AutopelagoNonProgressionItemType
-        for l, item_type in location_name_to_nonprogression_item.items():
-            if l not in self.locations_in_scope:
+        for loc, original_item_type in location_name_to_nonprogression_item.items():
+            if loc not in self.locations_in_scope:
                 continue
 
-            if item_type == 'filler':
+            item_type = original_item_type
+            if item_type == "filler":
                 if next_filler_becomes_trap:
-                    item_type = 'trap'
+                    item_type = "trap"
                 next_filler_becomes_trap = not next_filler_becomes_trap
 
             # 0.x didn't have enough traps to cover half of the locations whose "unrandomized" items
             # were fillers, so we needed to adjust slightly with this check. note that this doesn't
             # (currently) allow us to compensate for too-few 'useful_nonprogression' items.
             if category_to_next_offset[item_type] >= len(nonprogression_item_table[item_type]):
-                if item_type == 'filler':
-                    item_type = 'trap'
-                elif item_type == 'trap':
-                    item_type = 'filler'
+                if item_type == "filler":
+                    item_type = "trap"
+                elif item_type == "trap":
+                    item_type = "filler"
             next_item = nonprogression_item_table[item_type][category_to_next_offset[item_type]]
             self.multiworld.itempool.append(self.create_item(next_item))
             category_to_next_offset[item_type] += 1
 
     def create_regions(self):
-        victory_region = Region('Victory', self.player, self.multiworld)
+        victory_region = Region("Victory", self.player, self.multiworld)
         self.multiworld.regions.append(victory_region)
         self.multiworld.completion_condition[self.player] =\
             lambda state: state.can_reach(victory_region)
@@ -233,32 +260,33 @@ class AutopelagoWorld(World):
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
             rule: Callable[[CollectionState], bool] | None
+            # disable PLC3002: the lambda must use the CURRENT value of 'req', so it needs a new scope somehow.
             rule = None if _is_trivial(req) \
-                else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
+                else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req) # noqa: PLC3002
             if self.victory_location in r.autopelago_definition.locations:
                 r.connect(victory_region, rule=rule)
                 if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
-                    r.locations[0].place_locked_item(self.create_item('Moon Shoes'))
+                    r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
             else:
                 for next_exit in r.autopelago_definition.exits:
                     r.connect(new_regions[next_exit], rule=rule)
 
     def get_filler_item_name(self):
-        return 'Nothing'
+        return "Nothing"
 
     def fill_slot_data(self):
         return {
-            'version_stamp': version_stamp,
-            'victory_location_name': self.victory_location,
-            'enabled_buffs': [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
-            'enabled_traps': [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
-            'msg_changed_target': self.options.msg_changed_target.value,
-            'msg_enter_go_mode': self.options.msg_enter_go_mode.value,
-            'msg_enter_bk': self.options.msg_enter_bk.value,
-            'msg_remind_bk': self.options.msg_remind_bk.value,
-            'msg_exit_bk': self.options.msg_exit_bk.value,
-            'msg_completed_goal': self.options.msg_completed_goal.value,
-            'lactose_intolerant': not not self.options.lactose_intolerant,
+            "version_stamp": version_stamp,
+            "victory_location_name": self.victory_location,
+            "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
+            "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
+            "msg_changed_target": self.options.msg_changed_target.value,
+            "msg_enter_go_mode": self.options.msg_enter_go_mode.value,
+            "msg_enter_bk": self.options.msg_enter_bk.value,
+            "msg_remind_bk": self.options.msg_remind_bk.value,
+            "msg_exit_bk": self.options.msg_exit_bk.value,
+            "msg_completed_goal": self.options.msg_completed_goal.value,
+            "lactose_intolerant": not not self.options.lactose_intolerant,
 
             # not working yet:
             # 'death_link': not not self.options.death_link,
