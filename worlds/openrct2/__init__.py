@@ -414,6 +414,7 @@ class OpenRCT2World(World):
                 add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                     self.player).entrances[0],
                          lambda state, selected_prereq=selected_item: state.has(selected_prereq, self.player))
+
                 # Only add rules if there's an item to be unlocked in the first place
                 if (selected_item in item_info["requires_height"]) and (
                         self.options.forbid_high_construction.value == "unlockable"):
@@ -421,21 +422,12 @@ class OpenRCT2World(World):
                                                         self.player).entrances[0],
                              lambda state, selected_prereq="Allow High Construction": state.has(selected_prereq,
                                                                                                 self.player))
-                    # print(
-                    #     "Added rule: \nHave: Allow High Construction\nLocation: " +
-                    #     get_previous_region_from_OpenRCT2_location(location_number))
+
                 if (selected_item in item_info["requires_landscaping"]) and self.options.forbid_landscape_changes.value == "unlockable":
                     add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
                              lambda state, selected_prereq="Allow Landscape Changes":
                              state.has(selected_prereq, self.player))
-                    # print(
-                    #     "Added rule: \nHave: Allow Landscape Changes\nLocation: " +
-                    #     get_previous_region_from_OpenRCT2_location(location_number))
-                # print(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
-                #                                  self.player).entrances)
-                # print("Added rule: \nHave: " + str(
-                #     chosen_prereq) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
 
             else: # This is a category
                 add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),

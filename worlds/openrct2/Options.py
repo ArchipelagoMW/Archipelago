@@ -1,5 +1,5 @@
 from enum import IntEnum
-from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup, Visibility as OptionVisibility
+from Options import DefaultOnToggle, Toggle, Range, Choice, PerGameCommonOptions, OptionGroup, DeathLink, Visibility as OptionVisibility
 from dataclasses import dataclass
 
 class Scenario(IntEnum):
@@ -156,10 +156,6 @@ class Scenario(IntEnum):
     random_RCT2_expansions = 150
     archipelago_madness_vanilla = 151
     archipelago_madness_expansions = 152
-
-class DeathLinkMode(IntEnum):
-    disabled = 0
-    enabled = 1
 
 class Visibility(IntEnum):
     nothing = 0
@@ -408,17 +404,13 @@ class SelectedScenario(Choice):
     option_build_your_own_six_flags_over_texas = Scenario.build_your_own_six_flags_over_texas.value
     default = Scenario.archipelago_madness_vanilla.value    
 
-class DeathLink(Choice):
-    """If you die, everybody dies, and vise versa!
-    - This manifests itself in exploding rides. Somebody dying will cause a random ride to crash,
-    and building rides badly will cause others to die. There's a 20 second timer between deathlink events.
-    Fix that coaster quickly! This option can be enabled/disabled in game as well by typing !!toggledeathlink
-    in the chat tab of the unlock shop.
-    """
-    display_name = "DeathLink"
-    option_disabled = DeathLinkMode.disabled.value
-    option_enabled = DeathLinkMode.enabled.value
-    default = DeathLinkMode.enabled.value
+
+
+class openRCT2DeathLink(DeathLink):
+    __doc__ = (DeathLink.__doc__ + "\nThis manifests itself in exploding rides. Somebody dying will cause a random ride to crash,"
+        + " and building rides badly will cause others to die. \n There's a 20 second timer between deathlink events."
+        + "Fix that coaster quickly!\n This option can be enabled/disabled in game as well by typing !!toggledeathlink"
+        + " in the chat tab of the unlock shop.")
 
 class SelectedVisibility(Choice):
     """Choose how much the unlock shop displays. 
@@ -921,7 +913,7 @@ class openRCT2Options(PerGameCommonOptions):
     skips: Skips
 
     # deathlink
-    death_link: DeathLink
+    death_link: openRCT2DeathLink
 
     # traps
     furry_convention_traps: FurryConventionTraps
