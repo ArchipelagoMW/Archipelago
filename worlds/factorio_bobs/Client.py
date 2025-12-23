@@ -329,7 +329,7 @@ async def factorio_server_watcher(ctx: FactorioContext):
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name, "--preset", "archipelago"
+            executable, "--create", savegame_name, "--preset", "archipelago", *ctx.server_args
         ))
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
