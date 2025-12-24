@@ -599,7 +599,7 @@ def launch(*new_args: str):
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
     config_directory = args.config if args.config \
-        else os.path.join(getattr(settings, "write_directory", None), "apconfig.ini")
+        else os.path.join(getattr(settings, "write_directory", None), "config")
 
     if not os.path.exists(config_directory):
         logger.info(f"Could not find {config_directory} for config. Attempting to create it.")
