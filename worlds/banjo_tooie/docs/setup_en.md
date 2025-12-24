@@ -10,7 +10,7 @@ Our implementation also supports the Everdrive 3.0 and X7. (USB Support).
 
 - PC Emulation:
     -   BizHawk:  [BizHawk Releases from TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-        -   Version <b>2.10</b> and later are supported
+        -   Version **2.10** and later are supported
         -   Detailed installation instructions for BizHawk can be found at the above link
         -   Windows users must run the prereq installer first, which can also be found at the above link
 - Everdrive:
@@ -48,7 +48,7 @@ This will create some visual artifacts however, it should not affect gameplay.
 - **one time only** run `/autostart` in the Banjo-Tooie Client and select Emuhawk.exe. This will automatically open Bizhawk, the patched Banjo-Tooie ROM and the required Lua script to connect.
 - Connect the Archipelago Client with the server.
     - To connect the client to the multiserver simply put  `<address>:<port>`  on the textfield on top and press `connect` (if the server uses password, then it will prompt after connection)
-- If you rather not use <b>/autostart</b>:
+- If you rather not use **/autostart**:
     - Open Bizhawk and open your patched Banjo-Tooie (US) game
     - Once you are in the game title menu or game select screen, drag and drop the connector_bt_bizhawk.lua script (which can be found in the data/lua folder of Archipelago) onto the Lua console window
 
@@ -60,9 +60,9 @@ This will create some visual artifacts however, it should not affect gameplay.
     - You can also click "Browse Files" in the Launcher which will take you to this folder
 - Load the patched version of the ROM on your everdrive sd card
 - The Everdrive will need to have a USB connection to the PC that will be running the Banjo-Tooie Client
-- <b>one time only</b> run <b>/autostart</b> in the Banjo-Tooie Client and select banjo_tooie_everdrive_connector.exe. This will automatically open the connector for the everdrive
+- **one time only** run `/autostart` in the Banjo-Tooie Client and select banjo_tooie_everdrive_connector.exe. This will automatically open the connector for the everdrive
     - If you are on Linux, select Banjo_Tooie_everdrive_connector_linux instead
-- If you rather not use <b>/autostart</b>:
+- If you rather not use `/autostart`:
     - Open banjo_tooie_everdrive_connector.exe if you are on Windows
     - If you are on Linux, select Banjo_Tooie_everdrive_connector_linux instead
 - Run the patched Banjo-Tooie Rom on the everdrive
