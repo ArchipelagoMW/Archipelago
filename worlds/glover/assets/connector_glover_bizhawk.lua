@@ -12176,8 +12176,7 @@ function GLOVERHACK:setCustomGaribSounds(garibsounds)
 end
 
 function GLOVERHACK:setPortalsanity(portalsanity)
-	--mainmemory.writebyte(self.portalsanity + GLOVERHACK:getSettingPointer(), portalsanity);
-	print("WARNING! PORTALSANITY UNIMPLIMENTED!")
+	mainmemory.writebyte(self.portalsanity + GLOVERHACK:getSettingPointer(), portalsanity);
 end
 
 -- function GLOVERHACK:setGaribSorting(gsort)
@@ -12898,6 +12897,117 @@ function receive_checkpoint(world_index, checkpoint_number)
 	end
 end
 
+function recieve_portalsanity(itemId)
+    if itemId == 6500000 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR1_STAR"], 1)
+    elseif itemId == 6500001 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR2_OPEN"], 1)
+    elseif itemId == 6500002 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR2_STAR"], 1)
+    elseif itemId == 6500003 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR3_OPEN"], 1)
+    elseif itemId == 6500004 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR3_STAR"], 1)
+    elseif itemId == 6500005 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR4_OPEN"], 1)
+    elseif itemId == 6500006 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR4_STAR"], 1)
+    elseif itemId == 6500007 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR5_OPEN"], 1)
+    elseif itemId == 6500008 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR5_STAR"], 1)
+    elseif itemId == 6500015 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR1_STAR"], 1)
+    elseif itemId == 6500016 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR2_OPEN"], 1)
+    elseif itemId == 6500017 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR2_STAR"], 1)
+    elseif itemId == 6500018 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR3_OPEN"], 1)
+    elseif itemId == 6500019 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR3_STAR"], 1)
+    elseif itemId == 6500020 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR4_OPEN"], 1)
+    elseif itemId == 6500021 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR4_STAR"], 1)
+    elseif itemId == 6500022 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR5_OPEN"], 1)
+    elseif itemId == 6500023 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR5_STAR"], 1)
+    elseif itemId == 6500036 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR1_STAR"], 1)
+    elseif itemId == 6500037 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR2_OPEN"], 1)
+    elseif itemId == 6500038 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR2_STAR"], 1)
+    elseif itemId == 6500039 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR3_OPEN"], 1)
+    elseif itemId == 6500040 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR3_STAR"], 1)
+    elseif itemId == 6500041 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR4_OPEN"], 1)
+    elseif itemId == 6500042 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR4_STAR"], 1)
+    elseif itemId == 6500043 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR5_OPEN"], 1)
+    elseif itemId == 6500044 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR5_STAR"], 1)
+    elseif itemId == 6500060 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR1_STAR"], 1)
+    elseif itemId == 6500061 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR2_OPEN"], 1)
+    elseif itemId == 6500062 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR2_STAR"], 1)
+    elseif itemId == 6500063 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR3_OPEN"], 1)
+    elseif itemId == 6500064 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR3_STAR"], 1)
+    elseif itemId == 6500065 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR4_OPEN"], 1)
+    elseif itemId == 6500066 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR4_STAR"], 1)
+    elseif itemId == 6500067 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR5_OPEN"], 1)
+    elseif itemId == 6500068 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR5_STAR"], 1)
+    elseif itemId == 6500082 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR1_STAR"], 1)
+    elseif itemId == 6500083 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR2_OPEN"], 1)
+    elseif itemId == 6500084 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR2_STAR"], 1)
+    elseif itemId == 6500085 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR3_OPEN"], 1)
+    elseif itemId == 6500086 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR3_STAR"], 1)
+    elseif itemId == 6500087 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR4_OPEN"], 1)
+    elseif itemId == 6500088 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR4_STAR"], 1)
+    elseif itemId == 6500089 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR5_OPEN"], 1)
+    elseif itemId == 6500090 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR5_STAR"], 1)
+    elseif itemId == 6500099 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR1_STAR"], 1)
+    elseif itemId == 6500100 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR2_OPEN"], 1)
+    elseif itemId == 6500101 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR2_STAR"], 1)
+    elseif itemId == 6500102 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR3_OPEN"], 1)
+    elseif itemId == 6500103 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR3_STAR"], 1)
+    elseif itemId == 6500104 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR4_OPEN"], 1)
+    elseif itemId == 6500105 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR4_STAR"], 1)
+    elseif itemId == 6500106 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR5_OPEN"], 1)
+    elseif itemId == 6500107 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR5_STAR"], 1)
+	end
+end
 ---------------------------------- MAP FUNCTIONS -----------------------------------
 
 function set_map(map)
@@ -13159,10 +13269,11 @@ function processAGIItem(item_list)
             elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
             then
                 received_traps(memlocation)
-            elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
+            elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events/Portalsanity
             then
+                recieve_portalsanity(memlocation)
                 received_events(memlocation)
-            elseif(6500130 <= memlocation and memlocation <= 6500189) -- Events
+            elseif(6500130 <= memlocation and memlocation <= 6500189) -- Checkpoints
             then
                 received_checkpoints(memlocation)
             end
