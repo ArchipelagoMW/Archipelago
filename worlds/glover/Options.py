@@ -330,13 +330,13 @@ class FillerDuration(NamedRange):
     range_start = 250
     range_end = 15000
     special_range_names = {
-    "5 Seconds": 250,
-    "10 Seconds": 500,
-    "30 Seconds": 1500,
-    "1 Minute": 3000,
-    "5 Minutes": 15000
+    "5_seconds": 250,
+    "10_seconds": 500,
+    "30_seconds": 1500,
+    "1_minute": 3000,
+    "5_minutes": 15000
     }
-    default = 10
+    default = 500
 
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.

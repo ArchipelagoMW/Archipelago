@@ -93,10 +93,6 @@ class GloverWeb(WebWorld):
             Options.DifficultyLogic,
             Options.EasyBallWalk
         ]),
-        OptionGroup("Links", [
-            Options.TagLink,
-            Options.TrapLink
-        ]),
         OptionGroup("Game Setup", [
             Options.StartingBall,
             Options.RandomizeJump,
@@ -107,6 +103,7 @@ class GloverWeb(WebWorld):
             Options.GaribSorting,
             Options.GaribOrderOverrides,
             Options.RandomGaribSounds,
+            Options.MadGaribs,
             Options.DisableGaribItems
         ]),
         OptionGroup("Levels", [
@@ -783,7 +780,7 @@ class GloverWorld(World):
                     item_classification = ItemClassification.filler
                 #If they're part of World Sorting logic, don't skip balancing for them
                 else: #if self.options.garib_sorting.value == 0:
-                    item_classification = ItemClassification.progression_deprioritized
+                    item_classification = ItemClassification.progression_deprioritized_skip_balancing
             case "Star":
                 #Star Marks are filler if you're on Intended
                 if self.options.difficulty_logic.value == 0:
@@ -864,13 +861,13 @@ class GloverWorld(World):
 
         #Apply all core items
         all_core_items = []
+        all_core_items.extend(ability_items)
+        all_core_items.extend(checkpoint_items)
+        all_core_items.extend(portalsanity_items)
+        all_core_items.extend(event_items)
         #Filler garibs can be disabled here
         if (not self.garibs_are_filler) or not self.options.disable_garib_items:
             all_core_items.extend(garib_items)
-        all_core_items.extend(checkpoint_items)
-        all_core_items.extend(ability_items)
-        all_core_items.extend(event_items)
-        all_core_items.extend(portalsanity_items)
         core_item_count = 0
         #Core Items
         for each_item in all_core_items:
@@ -1409,6 +1406,7 @@ class GloverWorld(World):
         return options
 
     def generate_hints(self):
+        self.mr_tip_text = {}
         hint_groups = create_hints(self)
         self.mr_hints = hint_groups[0]
         self.chicken_hints = hint_groups[1]
@@ -1421,13 +1419,10 @@ class GloverWorld(World):
             self.vague_chicken_text = {}
 
     def generate_tip_text(self):
-        if not hasattr(self, "mr_tip_text"):
-            self.mr_tip_text = {}
-
         #Mr. Tip Custom Text
         if self.options.mr_tip_text_display.value != 0:
             for each_tip, tip_address in self.tip_locations.items():
-                if tip_address in self.mr_tip_text:
+                if str(tip_address) in self.mr_tip_text:
                     continue
                 #Create unique tip text
                 self.mr_tip_text[str(tip_address)] = self.random.choice(self.mr_tip_table)
