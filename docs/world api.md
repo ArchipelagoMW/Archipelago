@@ -61,12 +61,6 @@ to create webhost pages for Hint Games or Tools, which do not necessarily requir
 
 * `options_page` can be changed to a link instead of an AP-generated options page.
 
-* `rich_text_options_doc` controls whether [Option documentation] uses plain text (`False`) or rich text (`True`). It
-  defaults to `False`, but world authors are encouraged to set it to `True` for nicer-looking documentation that looks
-  good on both the WebHost and the YAML template.
-
-  [Option documentation]: /docs/options%20api.md#option-documentation
-
 * `theme` to be used for your game-specific AP pages. Available themes:
 
   | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
@@ -420,6 +414,14 @@ class RLWorld(World):
     # ...
 ```
 
+### Option Documentation
+
+* `rich_text_options_doc` controls whether [Option documentation] uses plain text (`False`) or rich text (`True`). It
+  defaults to `False`, but world authors are encouraged to set it to `True` for nicer-looking documentation that looks
+  good on both the WebHost and the YAML template.
+
+  [Option documentation]: /docs/options%20api.md#option-documentation
+
 ### A World Class Skeleton
 
 ```python
@@ -467,9 +469,6 @@ class MyGameWeb(WebWorld):
     # You can choose between dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, and stone.
     theme = "grassFlowers"
     
-    # If True, your game's option doc comments will be rendered as rich text.
-    rich_text_options_doc = False
-    
     # A WebWorld can have any number of tutorials, but should always have at least an English setup guide.
     # Many WebWorlds just have one setup guide, but some have multiple, e.g. for different languages.
     # We need to create a Tutorial object for every setup guide.
@@ -495,9 +494,13 @@ class MyGameWorld(World):
     # This is how we associate the options defined in our options.py with our world.
     options_dataclass = MyGameOptions  # options the player can set
     options: MyGameOptions  # typing hints for option results
+    
     # If we have option groups and/or option presets, we need to specify these here as well.
     options_presets = mygame_option_presets
     option_groups = mygame_option_groups
+    
+    # If True, your game's option doc comments will be rendered as rich text.
+    rich_text_options_doc = False
     
     settings: typing.ClassVar[MyGameSettings]  # will be automatically assigned from type hint
     topology_present = True  # show path to required location checks in spoiler

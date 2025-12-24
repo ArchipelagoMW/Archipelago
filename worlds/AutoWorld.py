@@ -68,7 +68,7 @@ class AutoWorldRegister(type):
                 else:
                     raise RuntimeError(f"World {name} should no longer have attribute 'web'!")
         if outdated_web:  # move some values from WebWorld to World
-            for key in ["option_groups", "option_presets", "location_descriptions", "item_descriptions"]:
+            for key in ["option_groups", "option_presets", "rich_text_options_doc", "location_descriptions", "item_descriptions"]:
                 if key not in dct:
                     if hasattr(outdated_web, key):
                         dct[key] = getattr(outdated_web, key)
@@ -304,6 +304,21 @@ class WebWorld(metaclass=WebWorldRegister):
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
+
+class World(metaclass=AutoWorldRegister):
+    """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
+    A Game should have its own subclass of World in which it defines the required data structures."""
+
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
+    """link your Options mapping"""
+    options: PerGameCommonOptions
+    """resulting options for the player of this world"""
+
+    options_presets: Dict[str, Dict[str, Any]] = {}
+    """A dictionary containing a collection of developer-defined game option presets."""
+    option_groups: ClassVar[List[OptionGroup]] = []
+    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
+
     rich_text_options_doc = False
     """Whether the WebHost should render Options' docstrings as rich text.
 
@@ -318,20 +333,6 @@ class WebWorld(metaclass=WebWorldRegister):
 
     .. _reStructuredText: https://docutils.sourceforge.io/rst.html
     """
-
-
-class World(metaclass=AutoWorldRegister):
-    """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
-    A Game should have its own subclass of World in which it defines the required data structures."""
-
-    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
-    """link your Options mapping"""
-    options: PerGameCommonOptions
-    """resulting options for the player of this world"""
-    options_presets: Dict[str, Dict[str, Any]] = {}
-    """A dictionary containing a collection of developer-defined game option presets."""
-    option_groups: ClassVar[List[OptionGroup]] = []
-    """Ordered list of option groupings. Any options not set in a group will be placed in a pre-built "Game Options"."""
 
     game: ClassVar[str]
     """name the game"""
