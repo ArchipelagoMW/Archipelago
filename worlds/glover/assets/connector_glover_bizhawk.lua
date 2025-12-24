@@ -11906,7 +11906,8 @@ GLOVERHACK = {
          wr_last_line = 0x7E,
     wayroom_size = 0x88,
     chicken_collected = 0x1C468,
-    wayroom_completed_stars = 0x8E,
+    score = 0x29018,
+	wayroom_completed_stars = 0x8E,
     wayroom_completed_size = 0x1,
     settings = 0x96,
       garib_logic = 0x0,
@@ -12386,7 +12387,7 @@ function garib_completion_check()
     		local check_value = mainmemory.readbyte(starred_address)
 			local world_id = WORLDS_TABLE[WORLD_NAME]
 			local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
-			local apId = address_mod + 30000
+			local apId = address_mod + 3000
     		checks[tostring(apId)] = check_value
 		end
 	else
@@ -12399,7 +12400,7 @@ function garib_completion_check()
 				then
 					local world_id = WORLDS_TABLE[base_name]
 					local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
-					local apId = address_mod + 30000
+					local apId = address_mod + 3000
 					checks[tostring(apId)] = true
 				end
 			end

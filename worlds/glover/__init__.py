@@ -775,9 +775,12 @@ class GloverWorld(World):
                 #If they're part of World Sorting logic, don't skip balancing for them
                 else: #if self.options.garib_sorting.value == 0:
                     item_classification = ItemClassification.progression_deprioritized
-                #Otherwise, skip balancing too
-                #else:
-                #    item_classification = ItemClassification.progression_deprioritized_skip_balancing
+            case "Star":
+                #Star Marks are filler if you're on Intended
+                if self.options.difficulty_logic.value == 0:
+                    item_classification = ItemClassification.filler
+                else:
+                    item_classification = ItemClassification.progression
         name_for_use = name
         #Garibsanity is just Garib
         if name == "Garibsanity":
