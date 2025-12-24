@@ -38,7 +38,6 @@ def render_options_page(template: str, world_name: str, is_complex: bool = False
         template,
         world_name=world_name,
         world=world,
-        web_world=web_world,
         option_groups=Options.get_option_groups(world, visibility_level=visibility_flag),
         start_collapsed=start_collapsed,
         issubclass=issubclass,
