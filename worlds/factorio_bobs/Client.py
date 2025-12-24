@@ -456,7 +456,7 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
     if not os.path.exists(savegame_name):
         logger.info(f"Creating savegame {savegame_name}")
         subprocess.run((
-            executable, "--create", savegame_name
+            executable, "--create", savegame_name, *ctx.server_args
         ))
         if not os.path.exists(savegame_name):
             raise FileNotFoundError(f"Failed to create savegame {savegame_name}")
