@@ -12388,7 +12388,7 @@ function garib_completion_check()
     		local check_value = mainmemory.readbyte(starred_address)
 			local world_id = WORLDS_TABLE[WORLD_NAME]
 			local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
-			local apId = address_mod + 3000
+			local apId = address_mod + 30000
     		checks[tostring(apId)] = check_value
 		end
 	else
@@ -12401,7 +12401,7 @@ function garib_completion_check()
 				then
 					local world_id = WORLDS_TABLE[base_name]
 					local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
-					local apId = address_mod + 3000
+					local apId = address_mod + 30000
 					checks[tostring(apId)] = true
 				end
 			end
