@@ -20,7 +20,7 @@ import platformdirs
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
-from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between
+from Utils import async_start, get_file_safe_name, is_windows, Version, format_SI_prefix, get_text_between, user_path
 from .FactorioSettings import FactorioSettings
 from settings import get_settings
 
@@ -599,18 +599,27 @@ def launch(*new_args: str):
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
-    config_directory = args.config if args.config \
-        else os.path.join(getattr(settings, "write_directory", None), "config")
+    if args.config:
+        config_file = args.config
+        if not os.path.exists(config_file):
+            raise FileNotFoundError(f"Could not find factorio config file: {config_file}.")
+    else:
+        config_file = os.path.join(getattr(settings, "config_file", None))
 
-    if not os.path.exists(config_directory):
-        logger.info(f"Could not find {config_directory} for config. Attempting to create it.")
-        os.makedirs(config_directory, exist_ok=True)
+        if not os.path.exists(config_file):
+            if config_file != user_path("factorio_mods", "config", "apconfig.ini"):
+                raise FileNotFoundError(f"Could not find factorio config file: {config_file}.")
+            write_directory = user_path("factorio_mods")
+            config_directory = os.path.join(write_directory, "config")
+            if not os.path.exists(config_directory):
+                logger.info(f"Could not find {config_directory} for config. Attempting to create it.")
+                os.makedirs(config_directory, exist_ok=True)
 
-    config_file = os.path.join(config_directory, "apconfig.ini")
-    if not os.path.exists(config_file):
-        logger.info(f"Could not find {config_file} for config file. Attempting to create it.")
-        with open(config_file, 'w') as f:
-            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={getattr(settings, "write_directory", None)}")
+            config_file = os.path.join(config_directory, "apconfig.ini")
+            if not os.path.exists(config_file):
+                logger.info(f"Could not find {config_file} for config file. Attempting to create it.")
+                with open(config_file, 'w') as f:
+                    f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={write_directory}")
 
     mod_directory = args.mod_directory if args.mod_directory \
         else getattr(settings, "mod_directory", None)

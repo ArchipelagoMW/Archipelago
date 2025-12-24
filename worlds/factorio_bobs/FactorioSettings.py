@@ -15,7 +15,7 @@ If this file does exist, then it will be used.
         server_settings: "factorio\\\\data\\\\server-settings.json"
         """
 
-    class WriteDirectory(settings.OptionalUserFilePath):
+    class ConfigFile(settings.OptionalUserFilePath):
         """
         by default, in ap folder
         This is also the location
@@ -34,7 +34,7 @@ If this file does exist, then it will be used.
 
     executable: Executable = Executable("factorio/bin/x64/factorio")
     server_settings: typing.Optional[ServerSettings] = None
-    write_directory: WriteDirectory = WriteDirectory(user_path("factorio_mods"))
+    config_file: ConfigFile = ConfigFile(user_path("factorio_mods", "config", "apconfig.ini"))
     mod_directory: typing.Optional[ModDirectory] = None
     filter_item_sends: typing.Union[FilterItemSends, bool] = False
     bridge_chat_out: typing.Union[BridgeChatOut, bool] = True
