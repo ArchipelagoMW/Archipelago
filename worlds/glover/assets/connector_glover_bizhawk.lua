@@ -141,7 +141,9 @@ local MISC_ITEMS_RECIEVED = {
     ["SPEED"] = 0,
 	["FROG"] = 0,
 	["DEATH"] = 0,
-    ["STICKY"] = 0
+    ["STICKY"] = 0,
+	["BIG_BALL"] = 0,
+	["LOW_GRAVITY"] = 0
 }
 
 --------------- LINKS ----------------------
@@ -172,6 +174,26 @@ local LINKS_TABLE = {
 				['AP'] = 0
 			},
 			['CRYSTAL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['TIP'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['FISH_EYE'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['ENEMY_BALL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['CONTROL_BALL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['INVISIBALL'] = {
 				['LOCAL'] = 0,
 				['AP'] = 0
 			}
@@ -12174,6 +12196,11 @@ function GLOVERHACK:setCustomTipText(mrhints)
 	mainmemory.writebyte(self.tip_hints + GLOVERHACK:getSettingPointer(), mrhints);
 end
 
+function GLOVERHACK:setFillerDuration(duration)
+	print("Duration set to "..tostring(duration).." frames!")
+	-- mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
+end
+
 function GLOVERHACK:setCustomGaribSounds(garibsounds)
 	mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
 end
@@ -12752,23 +12779,37 @@ function received_misc(itemId)
     elseif itemId == 6500367 then
 		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
         GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
+    elseif itemId == 6500368 then
+		MISC_ITEMS_RECIEVED["BIG_BALL"] = MISC_ITEMS_RECIEVED["BIG_BALL"] + 1
+		print("Big Ball Unimplimented!")
+        -- GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
+    elseif itemId == 6500369 then
+		MISC_ITEMS_RECIEVED["LOW_GRAVITY"] = MISC_ITEMS_RECIEVED["LOW_GRAVITY"] + 1
+		print("Low Gravity Unimplimented!")
+        -- GVR:setItem(ITEM_TABLE["AP_LOW_GRAVITY"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
     end
 end
 
 function received_traps(itemId)
-	if itemId == 6500368 then
+	if itemId == 6500370 then
 		send_linked_item("FROG")
-    elseif itemId == 6500369 then
-		send_linked_item("CURSE_BALL")
-    elseif itemId == 6500370 then
-		send_linked_item("CRYSTAL")
     elseif itemId == 6500371 then
+		send_linked_item("CURSE_BALL")
+    elseif itemId == 6500372 then
+		send_linked_item("CRYSTAL")
+    elseif itemId == 6500373 then
 		send_linked_item("CAMERA")
-	else
-		print("Tip Trap Unimplimented")
-    -- elseif itemId == 6500372 then
-    --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], )
-    end
+    elseif itemId == 6500374 then
+		send_linked_item("TIP")
+    elseif itemId == 6500375 then
+		send_linked_item("FISH_EYE")
+    elseif itemId == 6500376 then
+		send_linked_item("ENEMY_BALL")
+    elseif itemId == 6500377 then
+		send_linked_item("CONTROL_BALL")
+    elseif itemId == 6500378 then
+		send_linked_item("INVISIBALL")
+	end
 end
 
 function received_events(itemId)
@@ -13253,13 +13294,14 @@ function stringToTipTable(full_string)
 		word = string.upper(word)
 		-- Validate it
 		word = string.gsub(word, "[^A-Z0-9%.%%%?%-%+:;×ÄÜÖÉ£¤¥¬ª«¨©¦',]", "")
-		local sentence_size = string.len(output_lines[cur_line]) + 1
+		local sentence_size = string.len(output_lines[cur_line])
 		local first_word = sentence_size == 0
 		local word_prefix = " "
 		if first_word
 		then
 			word_prefix = ""
-			sentence_size = sentence_size - 1
+		else
+			sentence_size = sentence_size + 1
 		end
 		--Truncate oversized words
 		if string.len(word) > 20
@@ -13269,12 +13311,14 @@ function stringToTipTable(full_string)
 		--Line steps
 		if sentence_size + string.len(word) > 20
 		then
+			word_prefix = ""
+			print(tostring(cur_line)..": "..output_lines[cur_line])
 			cur_line = cur_line + 1
-			output_lines[cur_line] = ""
-			sentence_size = 0
 			if cur_line > 6 then
 				return output_lines
 			end
+			output_lines[cur_line] = ""
+			sentence_size = 0
 		end
 		output_lines[cur_line] = output_lines[cur_line]..word_prefix..word
 	end
@@ -13300,10 +13344,10 @@ function processAGIItem(item_list)
             elseif(6500329 <= memlocation and memlocation <= 6500356) -- Moves and Balls
             then
                 received_moves(memlocation)
-            elseif(6500358 <= memlocation and memlocation <= 6500367) -- Misc
+            elseif(6500358 <= memlocation and memlocation <= 6500369) -- Misc
             then
                 received_misc(memlocation)
-            elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
+            elseif(6500370 <= memlocation and memlocation <= 6500378) -- Traps
             then
                 received_traps(memlocation)
             elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events/Portalsanity
@@ -13478,7 +13522,10 @@ function send_linked_item(linkName)
 	elseif linkName == "CAMERA"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'])
+		local old_count = GVR:getItem(ITEM_TABLE["AP_CAMERA_TRAP"])
+		local total_spins = math.random(7)
+		print(total_spins)
+		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], old_count + total_spins)
 	elseif linkName == "CURSE_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
@@ -13487,6 +13534,31 @@ function send_linked_item(linkName)
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'])
+	elseif linkName == "TIP"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'] + 1
+		print("Tip Trap Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'])
+	elseif linkName == "FISH_EYE"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] + 1
+		print("Fish Eye Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'])
+	elseif linkName == "ENEMY_BALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] + 1
+		print("Enemy Ball Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'])
+	elseif linkName == "CONTROL_BALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] + 1
+		print("Control Ball Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'])
+	elseif linkName == "INVISIBALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] + 1
+		print("Invisiball Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'])
 	else
 		print("Unknown Linked Item: "..linkName)
 	end
@@ -13668,9 +13740,18 @@ function process_slot(block)
 	then
 		GVR:setPortalsanity(block['slot_portalsanity'])
 	end
+	if block["slot_mad_garibs"] ~= nil and block['slot_mad_garibs'] ~= 0
+    then
+		print("Mad Garibs Unimplimented!")
+        -- GVR:setItem(ITEM_TABLE["AP_MAD_GARIBS"], 1)
+    end
 	if block['slot_random_garib_sounds'] ~= nil
 	then
 		GVR:setCustomGaribSounds(block['slot_random_garib_sounds'])
+	end
+	if block["slot_filler_duration"] ~= nil
+	then
+		GVR:setFillerDuration(block['slot_filler_duration'])
 	end
     if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
     then

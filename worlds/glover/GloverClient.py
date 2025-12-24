@@ -326,8 +326,12 @@ class GloverContext(CommonContext):
                 "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap", "Snake Trap"]},
                 "CRYSTAL" : {"Accepts" : ["Disable Tag Trap", "Double Damage", "Eject Ability", "Instant Crystal Trap", "One Hit KO"]},
                 "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Screen Flip Trap"]},
-                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]}#,
-                #"TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Tutorial Trap", "Spam Trap"]},
+                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]},
+                "TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Tutorial Trap", "Spam Trap"]},
+                "FISH_EYE" : {"Accepts" : []},
+                "ENEMY_BALL" : {"Accepts" : []},
+                "CONTROL_BALL" : {"Accepts" : []},
+                "INVISIBALL" : {"Accepts" : []}
                 })
         }
         self.version_warning = False
@@ -652,6 +656,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_open_worlds": ctx.slot_data["open_worlds"],
             "slot_open_levels": ctx.slot_data["open_levels"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
+            "slot_mad_garibs" : ctx.slot_data["mad_garibs"],
             "slot_random_garib_sounds" : ctx.slot_data["random_garib_sounds"],
             "slot_garib_order": ctx.slot_data["garib_order"],
             "slot_spawning_checkpoints": ctx.slot_data["spawning_checkpoints"],
@@ -662,6 +667,7 @@ def get_slot_payload(ctx: GloverContext):
             "slot_randomized_spawns": ctx.slot_data["randomized_spawns"],
             "slot_mr_tip_text_display":ctx.slot_data["mr_tip_text_display"],
             "slot_mr_tips_text":ctx.slot_data["mr_tips_text"],
+            "slot_filler_duration":ctx.slot_data["filler_duration"],
             "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
     ctx.sendSlot = False
@@ -724,8 +730,16 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                                         await ctx.send_traplink("Camera Rotate Trap")
                                     case "CURSE_BALL":
                                         await ctx.send_traplink("Cursed Ball Trap")
-                                    #case "TIP":
-                                    #    await ctx.send_traplink("Tip Trap")
+                                    case "TIP":
+                                        await ctx.send_traplink("Tip Trap")
+                                    case "FISH_EYE":
+                                        await ctx.send_traplink("Fish Eye Trap")
+                                    case "ENEMY_BALL":
+                                        await ctx.send_traplink("Enemy Ball Trap")
+                                    case "CONTROL_BALL":
+                                        await ctx.send_traplink("Control Ball Trap")
+                                    case "INVISIBALL":
+                                        await ctx.send_traplink("Invisiball Trap")
 
     # Locations handling
     demo = payload["DEMO"]
@@ -901,12 +915,15 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             ctx.score_table = score_table
             if ctx.slot_data["score_checks"] != {}:
                 for scoreLevel, scoreValue in score_table.items():
+                    #Only scores you care about should be checked
+                    if not scoreLevel in ctx.slot_data["score_checks"]:
+                        continue
+
                     if scoreLevel != "TOTAL":
-                        if requiredScore <= scoreValue:
-                            locs1.append(int(locationId))
+                        if ctx.slot_data["score_checks"][scoreLevel] <= scoreValue:
                             levelInfo = scoreLevel.split("_")
                             endPair = 0
-                            match levelInfo[0]:
+                            match levelInfo[2]:
                                 case "L1":
                                     endPair += 1
                                 case "L2":
@@ -930,10 +947,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                                     endPair += 50
                                 case "SPACE":
                                     endPair += 60
-                            100000 * endPair
+                            locs1.append(int(100000 * endPair))
                     else:
-                        for locationId, requiredScore in ctx.slot_data["score_checks"][scoreLevel].items():
-                            100000000
+                        for requiredScore in ctx.slot_data["score_checks"][scoreLevel]:
+                            if requiredScore <= scoreValue:
+                                locs1.append(int(100000000 + requiredScore))
 
         if len(locs1) > 0:
             await ctx.send_msgs([{

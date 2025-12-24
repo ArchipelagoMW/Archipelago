@@ -723,11 +723,11 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
                         output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 5
     #Scores
     for world_index, world_prefix in enumerate(world_prefixes, 1):
-        for level_index, level_prefix in enumerate(level_prefixes, 1):
+        for level_index, level_prefix in enumerate(level_prefixes):
             level_score_address = 100000 * ((world_index * 10) + level_index)
-            if level_index == 4 or world_prefix == 6:
+            if (level_index != 4 or world_index == 6) and level_index != 0:
                 level_name = world_prefix + level_prefix + ": "
-                output[level_name + ": Score"] = level_score_address
+                output[level_name + "Score"] = level_score_address
     for each_score in range(10000, 100000000, 10000):
         output[str(each_score) + " Score"] = 100000000 + each_score
     return output

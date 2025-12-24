@@ -136,8 +136,12 @@ class GloverWeb(WebWorld):
             Options.MrTipScouts,
             Options.ChickenHints
         ]),
-        OptionGroup("Filler", [
+        OptionGroup("Filler and Trap Setup", [
+            Options.FillerDuration,
+            Options.TrapPercentage,
             Options.ExtraGaribsValue,
+        ]),
+        OptionGroup("Filler Weights", [
             Options.FillerExtraGaribsWeight,
             Options.FillerChickenSoundWeight,
             Options.FillerLifeWeight,
@@ -148,14 +152,19 @@ class GloverWeb(WebWorld):
             Options.FillerSpeedPotionWeight,
             Options.FillerFrogPotionWeight,
             Options.FillerDeathPotionWeight,
-            Options.FillerStickyPotionWeight
+            Options.FillerStickyPotionWeight,
+            Options.FillerBigBallWeight,
+            Options.FillerLowGravityWeight
         ]),
-        OptionGroup("Traps", [
-            Options.TrapPercentage,
+        OptionGroup("Trap Weights", [
             Options.TrapFrogWeight,
             Options.TrapCursedBallWeight,
             Options.TrapBecomesCrystalWeight,
-            Options.TrapCameraRotateWeight#,
+            Options.TrapCameraRotateWeight,
+            Options.TrapFishEyeWeight,
+            Options.TrapEnemyBallWeight,
+            Options.TrapControlBallWeight,
+            Options.TrapInvisiballWeight#,
             #Options.TrapTipWeight
         ])
     ]
@@ -892,12 +901,18 @@ class GloverWorld(World):
             "Frog Spell" : 			    self.percent_of(self.options.filler_frog_weight.value),
             "Death Spell" : 		    self.percent_of(self.options.filler_death_weight.value),
             "Sticky Spell" : 		    self.percent_of(self.options.filler_sticky_weight.value),
+            "Big Ball" :    		    self.percent_of(self.options.filler_big_ball_weight.value),
+            "Low Gravity" : 		    self.percent_of(self.options.filler_low_gravity_weight.value)
 	    }
         trap_percentages : dict[str, float] = {
             "Frog Trap" : 			    self.percent_of(self.options.frog_trap_weight.value),
             "Cursed Ball Trap" :	    self.percent_of(self.options.cursed_ball_trap_weight.value),
             "Instant Crystal Trap" :    self.percent_of(self.options.instant_crystal_trap_weight.value),
             "Camera Rotate Trap" :	    self.percent_of(self.options.camera_rotate_trap_weight.value),
+            "Fish Eye Trap" :	        self.percent_of(self.options.fish_eye_trap_weight.value),
+            "Enemy Ball Trap" :	        self.percent_of(self.options.enemy_ball_trap_weight.value),
+            "Control Ball Trap" :	    self.percent_of(self.options.control_ball_trap_weight.value),
+            "Invisiball Trap" : 	    self.percent_of(self.options.invisiball_trap_weight.value),
             "Tip Trap" :			    self.percent_of(self.options.tip_trap_weight.value)
         }
         
@@ -1365,6 +1380,7 @@ class GloverWorld(World):
         options["starting_ball"] = self.options.starting_ball.value
         options["garib_logic"] = self.options.garib_logic.value
         options["garib_sorting"] = self.options.garib_sorting.value
+        options["mad_garibs"] = self.options.mad_garibs.value
         options["random_garib_sounds"] = self.options.random_garib_sounds.value
         options["entrance_randomizer"] = self.options.entrance_randomizer.value
         options["portalsanity"] = self.options.portalsanity.value
@@ -1385,6 +1401,7 @@ class GloverWorld(World):
         options["mr_tip_text_display"] = self.options.mr_tip_text_display.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
+        options["filler_duration"] = self.options.filler_duration.value
 
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)
@@ -1423,7 +1440,7 @@ class GloverWorld(World):
         if len(self.options.total_scores.value):
             slot_scores["TOTAL"] = []
             for each_score in self.options.total_scores.value:
-                slot_scores["TOTAL"].append(each_score)
+                slot_scores["TOTAL"].append(int(each_score))
         return slot_scores
 
     def lua_world_name(self, original_name):

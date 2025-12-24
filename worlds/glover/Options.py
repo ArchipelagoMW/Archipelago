@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from schema import And, Optional, Schema
-from Options import ExcludeLocations, OptionCounter, OptionDict, OptionSet, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
+from Options import ExcludeLocations, NamedRange, OptionCounter, OptionDict, OptionSet, Toggle, PerGameCommonOptions, StartInventoryPool, Choice, DefaultOnToggle, Range, DeathLinkMixin, Visibility
 
 level_prefixes = tuple(["Atl", "Crn", "Prt", "Pht", "FoF", "Otw"])
 level_suffixes = tuple(["1", "2", "3", "!", "?"])
@@ -102,6 +102,11 @@ class GaribOrderOverrides(OptionCounter):
     max = 23
     default = {}
     display_name = "Garib Order Overrides"
+
+class MadGaribs(Toggle):
+    """Swaps garibs with the Mad Garib variant."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Mad Garibs"
 
 class RandomGaribSounds(Toggle):
     """Makes garib sounds use random sounds instead.
@@ -315,6 +320,24 @@ class ChickenHints(Choice):
     option_progression = 6
     default = 3
 
+class FillerDuration(NamedRange):
+    """How long Filler and Trap items last, in frames.
+    Glover runs at 30 Frames/Second.
+    Defaults to 10 Seconds.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Filler Duration"
+    range_start = 250
+    range_end = 15000
+    special_range_names = {
+    "5 Seconds": 250,
+    "10 Seconds": 500,
+    "30 Seconds": 1500,
+    "1 Minute": 3000,
+    "5 Minutes": 15000
+    }
+    default = 10
+
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
     """
@@ -424,13 +447,29 @@ class FillerStickyPotionWeight(Range):
     range_end = 100
     default = 5
 
+class FillerBigBallWeight(Range):
+    """The weight of filler items that are Big Balls. Default is 5.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Big Ball Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
 
+class FillerLowGravityWeight(Range):
+    """The weight of filler items that are Low Gravity. Default is 5.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Low Gravity Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
 
 class TrapPercentage(Range):
     """What percentage of checks that would be filler are replaced with traps. Default is 20.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
-    display_name = "Trap Weight"
+    display_name = "Trap Percent"
     range_start = 0
     range_end = 100
     default = 20
@@ -471,6 +510,42 @@ class TrapCameraRotateWeight(Range):
     range_end = 100
     default = 15
 
+class TrapFishEyeWeight(Range):
+    """The weight of traps that are Fish Eyes. Default is 15.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Fish Eye Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 15
+
+class TrapEnemyBallWeight(Range):
+    """The weight of traps that make your ball an enemy. Default is 10.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Enemy Ball Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+class TrapControlBallWeight(Range):
+    """The weight of traps that turn you into the ball. Default is 10.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Control Ball Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+class TrapInvisiballWeight(Range):
+    """The weight of traps that make your ball vanish. Default is 5.
+    """
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Invisiball Trap Weight"
+    range_start = 0
+    range_end = 100
+    default = 5
+
 class TrapTipWeight(Range):
     """The weight of traps that are Tips.
     !! UNIMPLIMENTED !!
@@ -489,11 +564,14 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     required_golden_garibs : GoldenGaribRequirement
     difficulty_logic : DifficultyLogic
     starting_ball : StartingBall
+
     garib_logic : GaribLogic
     garib_sorting : GaribSorting
     garib_order_overrides : GaribOrderOverrides
+    mad_garibs : MadGaribs
     random_garib_sounds : RandomGaribSounds
     disable_garib_items : DisableGaribItems
+
     entrance_randomizer : EntranceRandomizer
     entrance_overrides : EntranceOverrides
     open_worlds : OpenWorlds
@@ -502,6 +580,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     spawning_checkpoint_randomizer : SpawningCheckpointRandomizer
     checkpoint_overrides : CheckpointOverrides
     bonus_levels : EnableBonuses
+
     tag_link : TagLink
     trap_link : TrapLink
 
@@ -519,9 +598,12 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
 
     mr_hints : MrHints
     chicken_hints : ChickenHints
-    extra_garibs_value : ExtraGaribsValue
     mr_tip_text_display : MrTipTextDisplay
     mr_hints_scouts : MrTipScouts
+
+    filler_duration : FillerDuration
+    extra_garibs_value : ExtraGaribsValue
+    trap_percentage : TrapPercentage
 
     filler_extra_garibs_weight : FillerExtraGaribsWeight
     filler_chicken_sound_weight : FillerChickenSoundWeight
@@ -534,12 +616,17 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     filler_frog_weight : FillerFrogPotionWeight
     filler_death_weight : FillerDeathPotionWeight
     filler_sticky_weight : FillerStickyPotionWeight
+    filler_big_ball_weight : FillerBigBallWeight
+    filler_low_gravity_weight : FillerLowGravityWeight
 
-    trap_percentage : TrapPercentage
     frog_trap_weight : TrapFrogWeight
     cursed_ball_trap_weight : TrapCursedBallWeight
     instant_crystal_trap_weight : TrapBecomesCrystalWeight
     camera_rotate_trap_weight : TrapCameraRotateWeight
+    fish_eye_trap_weight : TrapFishEyeWeight
+    enemy_ball_trap_weight : TrapEnemyBallWeight
+    control_ball_trap_weight : TrapControlBallWeight
+    invisiball_trap_weight : TrapInvisiballWeight
     tip_trap_weight : TrapTipWeight
 
     start_inventory_from_pool : StartInventoryPool

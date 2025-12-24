@@ -484,15 +484,21 @@ filler_table = {
 	"Speed Spell" : 							ItemData(BASE_ID + 364, -1, "Filler", None),
 	"Frog Spell" : 								ItemData(BASE_ID + 365, -1, "Filler", None),
 	"Death Spell" : 							ItemData(BASE_ID + 366, -1, "Filler", None),
-	"Sticky Spell" : 							ItemData(BASE_ID + 367, -1, "Filler", None)
+	"Sticky Spell" : 							ItemData(BASE_ID + 367, -1, "Filler", None),
+	"Big Ball" : 								ItemData(BASE_ID + 368, -1, "Filler", None),
+	"Low Gravity" : 							ItemData(BASE_ID + 369, -1, "Filler", None)
 	}
 
 trap_table = {
-	"Frog Trap" : 								ItemData(BASE_ID + 368, -1, "Trap", None),
-	"Cursed Ball Trap" :						ItemData(BASE_ID + 369, -1, "Trap", None),
-	"Instant Crystal Trap" :					ItemData(BASE_ID + 370, -1, "Trap", None),
-	"Camera Rotate Trap" :						ItemData(BASE_ID + 371, -1, "Trap", None),
-	"Tip Trap" :								ItemData(BASE_ID + 372, -1, "Trap", None)
+	"Frog Trap" : 								ItemData(BASE_ID + 370, -1, "Trap", None),
+	"Cursed Ball Trap" :						ItemData(BASE_ID + 371, -1, "Trap", None),
+	"Instant Crystal Trap" :					ItemData(BASE_ID + 372, -1, "Trap", None),
+	"Camera Rotate Trap" :						ItemData(BASE_ID + 373, -1, "Trap", None),
+	"Tip Trap" :								ItemData(BASE_ID + 374, -1, "Trap", None),
+	"Fish Eye Trap" :	 						ItemData(BASE_ID + 375, -1, "Trap", None),
+	"Enemy Ball Trap" :	 						ItemData(BASE_ID + 376, -1, "Trap", None),
+	"Control Ball Trap" :						ItemData(BASE_ID + 377, -1, "Trap", None),
+	"Invisiball Trap" : 						ItemData(BASE_ID + 378, -1, "Trap", None)
 	}
 
 garibsanity_world_table = {
