@@ -571,6 +571,7 @@ def launch(*new_args: str):
     parser.add_argument('--server-settings', help='Factorio server settings configuration file.')
     parser.add_argument('--config', help='Factorio server config file.')
     parser.add_argument('--mod-directory', help='Factorio server Mod directory.')
+    parser.add_argument('--client-only', default=False, action='store_true', help="Only run factorio client with mod directory")
 
     args, rest = parser.parse_known_args(args=new_args)
     rcon_port = args.rcon_port
@@ -622,6 +623,12 @@ def launch(*new_args: str):
         if not os.path.exists(mod_directory):
             raise FileNotFoundError(f"Could not find mod_directory. Aborting.")
         logger.info(f"No mod directory specified defaulting to {mod_directory}.")
+
+    if args.client_only:
+        subprocess.Popen((executable,
+                          "--mod-directory", mod_directory,
+                          *rest))
+        return
 
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
