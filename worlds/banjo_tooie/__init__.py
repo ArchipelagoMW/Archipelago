@@ -106,16 +106,16 @@ class BanjoTooieWorld(World):
 
     item_name_groups = {
         # "Jiggy": all_group_table["jiggy"],
-        "Jinjo": all_group_table["jinjo"],
-        "Moves": all_group_table["moves"],
-        "Magic": all_group_table["magic"],
-        "Stations": all_group_table["stations"],
-        "StopnSwap": all_group_table["stopnswap"],
-        "Access": all_group_table["levelaccess"],
-        "Dino": all_group_table["dino"],
-        "Silos": all_group_table["Silos"],
-        "Warp Pads": all_group_table["Warp Pads"],
-        "Cheats": all_group_table["cheats"]
+        "Jinjo": set(all_group_table["jinjo"].keys()),
+        "Moves": set(all_group_table["moves"].keys()),
+        "Magic": set(all_group_table["magic"].keys()),
+        "Stations": set(all_group_table["stations"].keys()),
+        "StopnSwap": set(all_group_table["stopnswap"].keys()),
+        "Access": set(all_group_table["levelaccess"].keys()),
+        "Dino": set(all_group_table["dino"].keys()),
+        "Silos": set(all_group_table["Silos"].keys()),
+        "Warp Pads": set(all_group_table["Warp Pads"].keys()),
+        "Cheats": set(all_group_table["cheats"].keys())
     }
 
     location_name_groups = {
