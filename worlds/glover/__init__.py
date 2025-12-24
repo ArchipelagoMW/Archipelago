@@ -106,7 +106,8 @@ class GloverWeb(WebWorld):
             Options.GaribLogic,
             Options.GaribSorting,
             Options.GaribOrderOverrides,
-            Options.RandomGaribSounds
+            Options.RandomGaribSounds,
+            Options.DisableGaribItems
         ]),
         OptionGroup("Levels", [
             Options.EnableBonuses,
@@ -851,7 +852,9 @@ class GloverWorld(World):
 
         #Apply all core items
         all_core_items = []
-        all_core_items.extend(garib_items)
+        #Filler garibs can be disabled here
+        if (not self.garibs_are_filler) or not self.options.disable_garib_items:
+            all_core_items.extend(garib_items)
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(ability_items)
         all_core_items.extend(event_items)
@@ -985,7 +988,7 @@ class GloverWorld(World):
         if self.options.garib_logic == GaribLogic.option_level_garibs:
             return
         #Filler Garibs
-        if not self.options.bonus_levels and self.options.difficulty_logic == 0:
+        if self.garibs_are_filler:
             for each_level in self.garib_level_order:
                 #Ignore bonus levels if it's disabled
                 if each_level[0].endswith("?"):
@@ -1076,7 +1079,10 @@ class GloverWorld(World):
                 #Default portal and star positions
                 if not self.options.portalsanity:
                     self.populate_goals_and_marks(connecting_level_name, wayroom_name, entry_index)
-                
+                else:
+                    #Garibsanity only manually places the second 'boss clear' location
+                    self.portalsanity_plugs(connecting_level_name, wayroom_name, entry_index)
+
                 #Bonus unlocks require all levels with garibs
                 if connecting_level_name.endswith(('1','2','3','?')) and entry_index < 4:
                     all_garib_locations.append(multiworld.get_location(connecting_level_name + ": All Garibs", player))
@@ -1129,6 +1135,8 @@ class GloverWorld(World):
                 #Plug the well's completions up so they do nothing
                 if not self.options.portalsanity:
                     self.populate_goals_and_marks(connecting_name, "Well", -1)
+                else:
+                    self.portalsanity_plugs(connecting_name, "Well", -1)
             connecting_level : Region = multiworld.get_region(connecting_name, player)
             reaching_location : str = "Hubworld: " + loading_zone
             reaching_region : Region = multiworld.get_location(reaching_location, player).parent_region
@@ -1248,6 +1256,28 @@ class GloverWorld(World):
         if not self.options.open_worlds or not can_be_open:
             set_rule(crystal_return_location, lambda state, returned_balls_needed = required_balls - 1: state.has("Returned Balls", player, returned_balls_needed))
         return crystal_return_location
+
+    #Portalsanity Gates and Marks
+    def portalsanity_plugs(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
+        player = self.player
+        #Disable bonus levels
+        if connecting_level_name.endswith('?') and not self.options.bonus_levels:
+            return
+        #Completions
+        if not connecting_level_name.endswith(('1','2','3','?')):
+            garibs_location = self.multiworld.get_location(connecting_level_name + ": Completion", player)
+            garibs_location.place_locked_item(self.create_event(wayroom_name + " Completed"))
+        #The ball goes at the 4th gate
+        if entry_index == 3:
+            goal_or_boss : str = ": Goal"
+            if connecting_level_name.endswith('!'):
+                goal_or_boss = ": Boss"
+            goal_item = self.create_event(wayroom_name + " Ball")
+            goal_location : Location = self.multiworld.get_location(connecting_level_name + goal_or_boss, player)
+            psudo_goal_location : Location = Location(player, connecting_level_name + goal_or_boss + " Reached", None, goal_location.parent_region)
+            goal_location.parent_region.locations.append(psudo_goal_location)
+            set_rule(psudo_goal_location, lambda state, psudo_goal = goal_location.name: state.can_reach_location(psudo_goal, player))
+            psudo_goal_location.place_locked_item(goal_item)
 
     #Lacking Portalsanity Gates and Marks
     def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):

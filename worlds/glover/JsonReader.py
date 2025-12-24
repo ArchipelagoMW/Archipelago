@@ -604,6 +604,8 @@ def create_star_mark(self, level_index : int, world_index : int, level_name : st
     else:
         #No
         secondary_condition = "Completion"
+        #Which means, don't give them a second item here
+        star_mark_ap_id = None
     #Otherwise, they contain the star marks
     level_base_region : Region = self.multiworld.get_region(level_name, player)
     star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, level_base_region)

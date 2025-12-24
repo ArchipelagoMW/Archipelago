@@ -109,6 +109,12 @@ class RandomGaribSounds(Toggle):
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Random Garib Sounds"
 
+class DisableGaribItems(Toggle):
+    """Replaces filler garib items with other items from the filler table.
+    Only works if garibs are enabled and aren't required to unlock checks."""
+    visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
+    display_name = "Disable Garib Items"
+
 class EntranceRandomizer(DefaultOnToggle):
     """Loading zones are randomized. Default on.
     """
@@ -487,6 +493,7 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
     garib_sorting : GaribSorting
     garib_order_overrides : GaribOrderOverrides
     random_garib_sounds : RandomGaribSounds
+    disable_garib_items : DisableGaribItems
     entrance_randomizer : EntranceRandomizer
     entrance_overrides : EntranceOverrides
     open_worlds : OpenWorlds
