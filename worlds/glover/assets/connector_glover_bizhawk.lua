@@ -11843,6 +11843,8 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
+	score = 0x290188,
+
 	base_pointer = 0x400000,
     pc = 0x0,
     ap_items = 0xA0,
@@ -11906,8 +11908,7 @@ GLOVERHACK = {
          wr_last_line = 0x7E,
     wayroom_size = 0x88,
     chicken_collected = 0x1C468,
-    score = 0x29018,
-	wayroom_completed_stars = 0x8E,
+    wayroom_completed_stars = 0x8E,
     wayroom_completed_size = 0x1,
     settings = 0x96,
       garib_logic = 0x0,
