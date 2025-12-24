@@ -672,7 +672,7 @@ class GauntletLegendsContext(CommonContext):
                 if self.item_locations[i].id not in self.locations_checked:
                     acquired += [self.item_locations[i].id]
         for j in range(len(self.obelisk_locations)):
-            ob = await self.inv_bitwise("Obelisk", base_count[items_by_id[self.obelisks[j].item].item_name], 0)
+            ob = await self.inv_bitwise("Obelisk", (1 << (base_count[items_by_id[self.obelisks[j].item].item_name] - 1)), 0)
             if ob:
                 acquired += [self.obelisk_locations[j].id]
         for k, obj in enumerate(self.chest_objects):

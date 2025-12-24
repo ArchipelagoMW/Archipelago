@@ -272,7 +272,7 @@ class GLPatchExtension(APPatchExtension):
         return stream.getvalue()
 
     @staticmethod
-    def patch_boss_bin(caller: APProcedurePatch, rom: bytes) -> bytes:
+    def patch_bins(caller: APProcedurePatch, rom: bytes) -> bytes:
         """
         Patch boss.bin using the same extraction / recompression flow as game.bin.
 
@@ -337,6 +337,35 @@ class GLPatchExtension(APPatchExtension):
                 leftover_end = boss_rom_offset + boss_comp_size
                 rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
 
+        if options["portals"]:
+            game_entry_offset = TABLE_START_OFFSET + (4 * 0x30)
+
+            game_rom_offset = be32(rom[game_entry_offset + 0x10:game_entry_offset + 0x14])
+            game_comp_size = be32(rom[game_entry_offset + 0x14:game_entry_offset + 0x18])
+
+            game_compressed = bytes(rom[game_rom_offset:game_rom_offset + game_comp_size])
+            game_decompressed = bytearray(zdec(game_compressed))
+
+            game_decompressed[0x6b9d4:0x6b9d4 + 8] = b'\x00\x00\x00\x00\x00\x00\x00\x00'
+
+            game_recompressed = zenc(game_decompressed)
+            new_game_comp_size = len(game_recompressed)
+
+            if new_game_comp_size > game_comp_size:
+                new_game_rom_offset = EXPANDED_GAME_ROM_OFFSET + 0x200000
+                new_game_end = new_game_rom_offset + new_game_comp_size
+                ensure_len(rom, new_game_end, fill=0xFF)
+                rom[new_game_rom_offset:new_game_end] = game_recompressed
+                write_be32(rom, game_entry_offset + 0x10, new_game_rom_offset)
+                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
+            else:
+                rom[game_rom_offset:game_rom_offset + new_game_comp_size] = game_recompressed
+                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
+                if new_game_comp_size < game_comp_size:
+                    leftover_start = game_rom_offset + new_game_comp_size
+                    leftover_end = game_rom_offset + game_comp_size
+                    rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
+
         return bytes(rom)
 
 
@@ -348,7 +377,8 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".z64"
 
     procedure = [
-        ("patch_boss_bin", []),
+        ("apply_bsdiff4", ["basepatch.bsdiff4"]),
+        ("patch_bins", []),
         ("patch_items", []),
         ("finalize_crc", [])
     ]
@@ -364,6 +394,7 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     options_dict = {
         "seed_name": world.multiworld.seed_name,
         "player": world.player,
+        "portals": world.options.portals.value,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
