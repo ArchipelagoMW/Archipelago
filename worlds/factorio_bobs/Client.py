@@ -15,6 +15,7 @@ import typing
 from queue import Queue
 
 import factorio_rcon
+import platformdirs
 
 from CommonClient import ClientCommandProcessor, CommonContext, logger, server_loop, gui_enabled, get_base_parser
 from MultiServer import mark_raw
@@ -71,6 +72,7 @@ class FactorioContext(CommonContext):
 
     def __init__(self, server_address, password, filter_item_sends: bool, bridge_chat_out: bool,
                  rcon_port: int, rcon_password: str, server_settings_path: str | None,
+                 config_file: str, mod_directory: str,
                  factorio_server_args: tuple[str, ...]):
         super(FactorioContext, self).__init__(server_address, password)
         self.send_index: int = 0
@@ -87,6 +89,8 @@ class FactorioContext(CommonContext):
         self.rcon_port: int = rcon_port
         self.rcon_password: str = rcon_password
         self.server_settings_path: str = server_settings_path
+        self.config_file: str = config_file
+        self.mod_directory: str = mod_directory
         self.additional_factorio_server_args = factorio_server_args
 
     @property
@@ -139,6 +143,8 @@ class FactorioContext(CommonContext):
                 "--rcon-port", str(self.rcon_port),
                 "--rcon-password", self.rcon_password,
                 "--server-settings", self.server_settings_path,
+                "--config", self.config_file,
+                "--mod-directory", self.mod_directory,
                 *self.additional_factorio_server_args)
         else:
             return ("--rcon-port", str(self.rcon_port), "--rcon-password", self.rcon_password,
@@ -552,6 +558,8 @@ def launch(*new_args: str):
     parser.add_argument('--rcon-port', default='24242', type=int, help='Port to use to communicate with Factorio')
     parser.add_argument('--rcon-password', help='Password to authenticate with RCON.')
     parser.add_argument('--server-settings', help='Factorio server settings configuration file.')
+    parser.add_argument('--config', help='Factorio server config file.')
+    parser.add_argument('--mod-directory', help='Factorio server Mod directory.')
 
     args, rest = parser.parse_known_args(args=new_args)
     rcon_port = args.rcon_port
@@ -579,9 +587,34 @@ def launch(*new_args: str):
         else:
             raise FileNotFoundError(f"Path {executable} is not an executable file.")
 
+    config_directory = args.config if args.config \
+        else os.path.join(getattr(settings, "write_directory", None), "apconfig.ini")
+
+    if not os.path.exists(config_directory):
+        logger.info(f"Could not find {config_directory} for config. Attempting to create it.")
+        os.makedirs(config_directory, exist_ok=True)
+
+    config_file = os.path.join(config_directory, "apconfig.ini")
+    if not os.path.exists(config_file):
+        logger.info(f"Could not find {config_file} for config file. Attempting to create it.")
+        with open(config_file, 'w') as f:
+            f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={getattr(settings, "write_directory", None)}")
+
+    mod_directory = args.config if args.config \
+        else getattr(settings, "mod_directory", None)
+    if not mod_directory or not os.path.exists(mod_directory):
+        mod_directory = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(executable))), "mods")
+        if not os.path.exists(mod_directory):
+            # mod directory not in normal place
+            # assumes steam factorio
+            mod_directory = os.path.join(platformdirs.user_data_dir(roaming=True), "factorio", "mods")
+        if not os.path.exists(mod_directory):
+            raise FileNotFoundError(f"Could not find mod_directory. Aborting.")
+        logger.info(f"No mod directory specified defaulting to {mod_directory}.")
+
     asyncio.run(main(lambda: FactorioContext(
         args.connect, args.password,
         initial_filter_item_sends, initial_bridge_chat_out,
-        rcon_port, rcon_password, server_settings, rest
+        rcon_port, rcon_password, server_settings, config_file, mod_directory, rest
     )))
     colorama.deinit()
