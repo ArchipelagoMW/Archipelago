@@ -714,13 +714,13 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
             if each_world_index < 6:
                 match level_key:
                     case "l1":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 1
+                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 1
                     case "l2":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 2
+                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 2
                     case "l3":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 3
+                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 3
                     case "l5":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 5
+                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 5
     #Scores
     for world_index, world_prefix in enumerate(world_prefixes, 1):
         for level_index, level_prefix in enumerate(level_prefixes, 1):
