@@ -612,7 +612,7 @@ def launch(*new_args: str):
         with open(config_file, 'w') as f:
             f.write(f"[path]\nread-data=__PATH__system-read-data__\nwrite-data={getattr(settings, "write_directory", None)}")
 
-    mod_directory = args.config if args.config \
+    mod_directory = args.mod_directory if args.mod_directory \
         else getattr(settings, "mod_directory", None)
     if not mod_directory or not os.path.exists(mod_directory):
         mod_directory = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(executable))), "mods")
