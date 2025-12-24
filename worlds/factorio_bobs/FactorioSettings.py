@@ -15,7 +15,7 @@ If this file does exist, then it will be used.
         server_settings: "factorio\\\\data\\\\server-settings.json"
         """
 
-    class WriteDirectory(settings.UserFilePath):
+    class WriteDirectory(settings.OptionalUserFilePath):
         """
         by default, in ap folder
         This is also the location
