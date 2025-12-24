@@ -137,18 +137,17 @@ class FactorioContext(CommonContext):
                                       f"{text}")
 
     @property
-    def server_args(self) -> tuple[str, ...]:
+    def server_args(self, config=True) -> tuple[str, ...]:
+        server_args = [
+            "--rcon-port", str(self.rcon_port),
+            "--rcon-password", self.rcon_password,
+            "--mod-directory", self.mod_directory,
+            "--config", self.config_file,
+            *self.additional_factorio_server_args
+        ]
         if self.server_settings_path:
-            return (
-                "--rcon-port", str(self.rcon_port),
-                "--rcon-password", self.rcon_password,
-                "--server-settings", self.server_settings_path,
-                "--config", self.config_file,
-                "--mod-directory", self.mod_directory,
-                *self.additional_factorio_server_args)
-        else:
-            return ("--rcon-port", str(self.rcon_port), "--rcon-password", self.rcon_password,
-                    *self.additional_factorio_server_args)
+            server_args.extend(["--server-settings", self.server_settings_path])
+        return tuple(server_args)
 
     @property
     def energy_link_status(self) -> str:
