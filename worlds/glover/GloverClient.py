@@ -312,6 +312,7 @@ class GloverContext(CommonContext):
         self.checkpoint_table = {}
         self.switch_table = {}
         self.goal_table = {}
+        self.garib_completion_table = {}
         self.ball_return_list = {}
         self.chicken = False
         self.score_table = {}
@@ -733,6 +734,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     enemylist = payload["enemy"]
     potionlist = payload["potions"]
     goallist = payload["goal"]
+    garibcompletionlist = payload["garib_completion"]
     garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
@@ -777,6 +779,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         glover_hub = 0
     if isinstance(goallist, list):
         goallist = {}
+    if isinstance(garibcompletionlist, list):
+        garibcompletionlist = {}
     if isinstance(ball_return_list, list):
         ball_return_list = {}
     if isinstance(score_table, list):
@@ -809,6 +813,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         if ctx.garib_group_table != garibgrouplist:
             ctx.garib_group_table = garibgrouplist
             for locationId, value in garibgrouplist.items():
+                if value == True:
+                    locs1.append(int(locationId))
+        if ctx.garib_completion_table != garibcompletionlist:
+            ctx.garib_completion_table = garibcompletionlist
+            for locationId, value in garibcompletionlist.items():
                 if value == True:
                     locs1.append(int(locationId))
         if ctx.life_table != lifeslist:

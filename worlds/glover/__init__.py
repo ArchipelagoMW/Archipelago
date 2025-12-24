@@ -714,8 +714,8 @@ class GloverWorld(World):
         multiworld = self.multiworld
         player = self.player
         #Build all the game locations, and the locations contained under them
-        build_data(self)
         multiworld.regions.append(Region("Menu", player, multiworld))
+        build_data(self)
         
         #Randomize the entrances for those remaining regions
         self.entrance_randomizer()

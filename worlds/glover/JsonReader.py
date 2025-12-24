@@ -580,14 +580,14 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             
             #Aside from the wayrooms, the hubworld and the castle cave, levels have star marks
             if (world_index < 6 and not level_index == 0) or level_index == 2:
-                create_star_mark(self, level_index, world_index, level_name, prefix, location_data_list)
+                create_star_mark(self, level_index, world_index, prefix, location_data_list)
             
             #Append it to the level list
             all_levels.append(region_level)
 
     return all_levels
 
-def create_star_mark(self, level_index : int, world_index : int, level_name : str, prefix : str, location_data_list : List[LocationData]):
+def create_star_mark(self, level_index : int, world_index : int, prefix : str, location_data_list : List[LocationData]):
     player : int = self.player
     
     #Does this location have a star mark item, or a random one?
@@ -607,8 +607,8 @@ def create_star_mark(self, level_index : int, world_index : int, level_name : st
         #Which means, don't give them a second item here
         star_mark_ap_id = None
     #Otherwise, they contain the star marks
-    level_base_region : Region = self.multiworld.get_region(level_name, player)
-    star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, level_base_region)
+    menu_region : Region = self.multiworld.get_region("Menu", player)
+    star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, menu_region)
     #Boss levels and the well just give you it if you reach the goal
     if not level_has_garibs:
         goal_location : Location
@@ -622,7 +622,7 @@ def create_star_mark(self, level_index : int, world_index : int, level_name : st
     #Level garibs means you take all garib methods from before
     elif self.options.garib_logic == GaribLogic.option_level_garibs:
         all_garibs_rule(self, star_mark_location, location_data_list)
-    level_base_region.locations.append(star_mark_location)
+    menu_region.locations.append(star_mark_location)
 
 def all_garibs_rule(self, star_mark_location : Location, location_data_list : List[LocationData]):
     #If it's all garibs in level logic, logic construction looks diffrent

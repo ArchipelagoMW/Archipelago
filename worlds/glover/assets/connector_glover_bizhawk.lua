@@ -39,6 +39,7 @@ local WORLD_NAME = "";
 
 -------------- GARIB LOGIC -----------
 
+local LEVEL_GARIBS = false
 local GARIB_GROUPS = false
 local GARIB_ORDER = {}
 
@@ -12373,6 +12374,38 @@ function garib_group_contruction()
     return checks
 end
 
+function garib_completion_check()
+    local checks = {}
+	if LEVEL_GARIBS then
+		-- Level All Garibs Checks
+		if TOTAL_WORLD_GARIBS[WORLD_NAME.."_GARIBS"] ~= nil
+		then
+    		local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer);
+    		local world_address = hackPointerIndex + GVR:getWorldOffset(WORLD_ID)
+			local starred_address = world_address + GVR.starred
+    		local check_value = mainmemory.readbyte(starred_address)
+			local apId = world_name_to_address_mod(WORLD_NAME) + 30000
+    		checks[apId] = check_value
+		end
+	else
+		-- Garib Items All Garibs Checks
+		for each_world, current_garibs in pairs(TOTAL_WORLD_GARIBS) do
+			if MAX_WORLD_GARIBS[each_world] <= current_garibs then
+				local world_name = each_world:gsub("%_GARIBS", "")
+				local apId = world_name_to_address_mod(world_name) + 30000
+				checks[apId] = true
+			end
+		end
+	end
+	return checks
+end
+
+function world_name_to_address_mod(world_name)
+	local output = 0
+	local world_id = WORLDS_TABLE[world_name]
+	return (math.floor(world_id / 5) * 10) + (world_id % 5)
+end
+
 function life_check()
     local checks = {}
         if ADDRESS_MAP[WORLD_NAME] ~= nil
@@ -13338,6 +13371,7 @@ function SendToClient()
     retTable["triggered_links"] = outbound_links()
     retTable["garibs"] = garib_check()
     retTable["garib_groups"] =  garib_group_contruction()
+	retTable["garib_completion"] = garib_completion_check()
     retTable["life"] = life_check()
     retTable["tip"] = tip_check()
     retTable["checkpoint"] = checkpoint_check()
@@ -13578,7 +13612,10 @@ function process_slot(block)
 	if block['slot_garib_logic'] ~= nil
     then
         GVR:setGaribLogic(block['slot_garib_logic'])
-        if block['slot_garib_logic'] == 1
+		if block['slot_garib_logic'] == 0
+		then
+            LEVEL_GARIBS = true
+		elseif block['slot_garib_logic'] == 1
         then
             GARIB_GROUPS = true
         end
