@@ -12384,26 +12384,28 @@ function garib_completion_check()
     		local world_address = hackPointerIndex + GVR:getWorldOffset(WORLD_ID)
 			local starred_address = world_address + GVR.starred
     		local check_value = mainmemory.readbyte(starred_address)
-			local apId = world_name_to_address_mod(WORLD_NAME) + 30000
-    		checks[apId] = check_value
+			local world_id = WORLDS_TABLE[WORLD_NAME]
+			local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
+			local apId = address_mod + 30000
+    		checks[tostring(apId)] = check_value
 		end
 	else
 		-- Garib Items All Garibs Checks
-		for each_world, current_garibs in pairs(TOTAL_WORLD_GARIBS) do
+		for each_world, current_garibs in pairs(TOTAL_WORLD_GARIBS)
+		do
 			if MAX_WORLD_GARIBS[each_world] <= current_garibs then
-				local world_name = each_world:gsub("%_GARIBS", "")
-				local apId = world_name_to_address_mod(world_name) + 30000
-				checks[apId] = true
+				local base_name = each_world:sub(1, -8)
+				if WORLDS_TABLE[base_name] ~= nil
+				then
+					local world_id = WORLDS_TABLE[base_name]
+					local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
+					local apId = address_mod + 30000
+					checks[tostring(apId)] = true
+				end
 			end
 		end
 	end
 	return checks
-end
-
-function world_name_to_address_mod(world_name)
-	local output = 0
-	local world_id = WORLDS_TABLE[world_name]
-	return (math.floor(world_id / 5) * 10) + (world_id % 5)
 end
 
 function life_check()
