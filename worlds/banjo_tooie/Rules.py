@@ -4848,21 +4848,21 @@ class BanjoTooieRules:
             logic = (self.climb(state) and self.sack_pack(state))\
                     or self.notes_ccl_high(state)\
                     or self.springy_step_shoes(state) and self.split_up(state)\
-                    or self.claw_clamber_boots and self.glide(state)
+                    or self.claw_clamber_boots(state) and self.glide(state)
         elif self.hard_tricks_logic(state):
             logic = self.climb(state)\
                     or (self.springy_step_shoes(state))\
                     or self.notes_ccl_high(state)\
                     or self.clockwork_shot(state)\
                     or self.springy_step_shoes(state) and self.split_up(state)\
-                    or self.claw_clamber_boots and self.glide(state)
+                    or self.claw_clamber_boots(state) and self.glide(state)
         elif self.glitches_logic(state):
             logic = self.climb(state)\
                     or (self.springy_step_shoes(state))\
                     or self.notes_ccl_high(state)\
                     or self.clockwork_shot(state)\
                     or self.springy_step_shoes(state) and self.split_up(state)\
-                    or self.claw_clamber_boots and self.glide(state)
+                    or self.claw_clamber_boots(state) and self.glide(state)
         return logic
 
     def notes_ccl_high(self, state: CollectionState) -> bool:
