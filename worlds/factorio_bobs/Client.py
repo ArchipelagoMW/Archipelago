@@ -336,6 +336,8 @@ async def factorio_server_watcher(ctx: FactorioContext):
         subprocess.run((
             executable, "--create", savegame_name, "--preset", "archipelago", *ctx.server_args
         ))
+        if not os.path.exists(savegame_name):
+            raise FileNotFoundError(f"Failed to create savegame {savegame_name}")
     factorio_process = subprocess.Popen((executable, "--start-server", savegame_name,
                                          *ctx.server_args),
                                         stderr=subprocess.PIPE,
@@ -448,6 +450,8 @@ async def factorio_spinup_server(ctx: FactorioContext) -> bool:
         subprocess.run((
             executable, "--create", savegame_name
         ))
+        if not os.path.exists(savegame_name):
+            raise FileNotFoundError(f"Failed to create savegame {savegame_name}")
     factorio_process = subprocess.Popen(
         (executable, "--start-server", savegame_name, *ctx.server_args),
         stderr=subprocess.PIPE,
