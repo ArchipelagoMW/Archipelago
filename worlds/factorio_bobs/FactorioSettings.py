@@ -17,13 +17,12 @@ If this file does exist, then it will be used.
 
     class ConfigFile(settings.OptionalUserFilePath):
         """
-        by default, in ap folder
-        This is also the location
+        The config file used by the factorio server
         """
 
     class ModDirectory(settings.OptionalUserFilePath):
         """
-        by default, if empty will use the mod folder for Executable
+        by default, if empty will use the mod folder for used by the executable by default
         """
 
     class FilterItemSends(settings.Bool):
