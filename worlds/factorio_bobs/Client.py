@@ -61,6 +61,14 @@ class FactorioCommandProcessor(ClientCommandProcessor):
         """Toggle sending of chat messages from players on the Factorio server to Archipelago."""
         self.ctx.toggle_bridge_chat_out()
 
+    def _cmd_start_client(self):
+        """Start a Factorio client with same mods as server (also use this to configure mods)."""
+        subprocess.Popen((executable,
+                          "--mod-directory", self.ctx.mod_directory,
+                          "--mp-connect", "localhost",
+                          *self.ctx.additional_factorio_server_args), )
+
+
 
 class FactorioContext(CommonContext):
     command_processor = FactorioCommandProcessor
