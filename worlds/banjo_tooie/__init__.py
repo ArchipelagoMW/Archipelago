@@ -3,7 +3,6 @@ from collections import Counter
 from math import ceil
 import time
 
-import loguru
 from Options import OptionError
 import typing
 from typing import Dict, Any, List
@@ -362,7 +361,7 @@ class BanjoTooieWorld(World):
             filler_notes += useful_notes
             useful_notes = 0
         if filler_notes < 0:
-            loguru.logger.warning("Number of notes that need to be inserted is somehow negative.")
+            logging.warning("Number of notes that need to be inserted is somehow negative.")
 
         itempool += [
             self.create_item(itemName.NOTE) for i in range(progression_notes)
