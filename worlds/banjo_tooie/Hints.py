@@ -36,7 +36,7 @@ class Hint:
         self.location = location
 
     @staticmethod
-    def fill_item_requirement_cache(hints: Iterable["Hint"]) -> set[Location]:
+    def fill_item_requirement_cache(hints: Iterable["Hint"]) -> None:
         if not hints:
             return
 
