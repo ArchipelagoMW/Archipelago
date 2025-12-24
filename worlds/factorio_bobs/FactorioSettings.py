@@ -1,6 +1,7 @@
 import typing
 
 import settings
+from Utils import user_path
 
 
 class FactorioSettings(settings.Group):
@@ -14,6 +15,17 @@ If this file does exist, then it will be used.
         server_settings: "factorio\\\\data\\\\server-settings.json"
         """
 
+    class WriteDirectory(settings.UserFilePath):
+        """
+        by default, in ap folder
+        This is also the location
+        """
+
+    class ModDirectory(settings.OptionalUserFilePath):
+        """
+        by default, if empty will use the mod folder for Executable
+        """
+
     class FilterItemSends(settings.Bool):
         """Whether to filter item send messages displayed in-game to only those that involve you."""
 
@@ -22,5 +34,7 @@ If this file does exist, then it will be used.
 
     executable: Executable = Executable("factorio/bin/x64/factorio")
     server_settings: typing.Optional[ServerSettings] = None
+    write_directory: WriteDirectory = WriteDirectory(user_path("factorio_mods"))
+    mod_directory: typing.Optional[ModDirectory] = None
     filter_item_sends: typing.Union[FilterItemSends, bool] = False
     bridge_chat_out: typing.Union[BridgeChatOut, bool] = True
