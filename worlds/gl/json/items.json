@@ -364,37 +364,37 @@
   },
   {
     "id": 77780055,
-    "item_name": "Mountain Obelisk 1",
+    "item_name": "Valley of Fire Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780056,
-    "item_name": "Mountain Obelisk 2",
+    "item_name": "Dagger Peak Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780057,
-    "item_name": "Mountain Obelisk 3",
+    "item_name": "Cliffs of Desolation Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780058,
-    "item_name": "Town Obelisk 1",
+    "item_name": "Poisoned Fields Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780059,
-    "item_name": "Town Obelisk 2",
+    "item_name": "Haunted Cemetery Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780060,
-    "item_name": "Castle Obelisk 1",
+    "item_name": "Castle Courtyard Obelisk",
     "progression": "progression"
   },
   {
     "id": 77780061,
-    "item_name": "Castle Obelisk 2",
+    "item_name": "Dungeon of Torment Obelisk",
     "progression": "progression"
   },
   {
@@ -425,13 +425,13 @@
   },
   {
     "id": 77780066,
-    "item_name": "Skorne's Left Gauntlet",
+    "item_name": "Skorne's Right Gauntlet",
     "progression": "useful",
     "rom_id": "0x2A03"
   },
   {
     "id": 77780067,
-    "item_name": "Skorne's Right Gauntlet",
+    "item_name": "Skorne's Left Gauntlet",
     "progression": "useful",
     "rom_id": "0x2A04"
   },
@@ -443,109 +443,109 @@
   },
   {
     "id": 77780069,
-    "item_name": "Portal to the Cliffs of Desolation",
+    "item_name": "Portal to Cliffs of Desolation",
     "progression": "progression",
     "rom_id": "0x270A"
   },
   {
     "id": 77780070,
-    "item_name": "Portal to the Lost Cave",
+    "item_name": "Portal to Lost Cave",
     "progression": "progression",
     "rom_id": "0x270B"
   },
   {
     "id": 77780071,
-    "item_name": "Portal to the Volcanic Caverns",
+    "item_name": "Portal to Volcanic Caverns",
     "progression": "progression",
     "rom_id": "0x270C"
   },
   {
     "id": 77780072,
-    "item_name": "Portal to the Dragon's Lair",
+    "item_name": "Portal to Dragon's Lair",
     "progression": "progression",
     "rom_id": "0x270D"
   },
   {
     "id": 77780073,
-    "item_name": "Portal to the Dungeon of Torment",
+    "item_name": "Portal to Dungeon of Torment",
     "progression": "progression",
     "rom_id": "0x270E"
   },
   {
     "id": 77780074,
-    "item_name": "Portal to the Tower Armoury",
+    "item_name": "Portal to Tower Armory",
     "progression": "progression",
     "rom_id": "0x270F"
   },
   {
     "id": 77780075,
-    "item_name": "Portal to the Castle Treasury",
+    "item_name": "Portal to Castle Treasury",
     "progression": "progression",
     "rom_id": "0x2710"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Chimera's Keep",
+    "id": 77780076,
+    "item_name": "Portal to Chimera's Keep",
     "progression": "progression",
     "rom_id": "0x2711"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Frozen Camp",
+    "id": 77780077,
+    "item_name": "Portal to Haunted Cemetery",
     "progression": "progression",
     "rom_id": "0x2712"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Crystal Mine",
+    "id": 77780078,
+    "item_name": "Portal to Venomous Spire",
     "progression": "progression",
     "rom_id": "0x2713"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Erupting Fissure",
+    "id": 77780079,
+    "item_name": "Portal to Toxic Air Ship",
     "progression": "progression",
     "rom_id": "0x2714"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Yeti's Cavern",
+    "id": 77780080,
+    "item_name": "Portal to Vat of the Plague Fiend",
     "progression": "progression",
     "rom_id": "0x2715"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Haunted Cemetery",
+    "id": 77780081,
+    "item_name": "Portal to Frozen Camp",
     "progression": "progression",
     "rom_id": "0x2716"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Venomous Spire",
+    "id": 77780082,
+    "item_name": "Portal to Crystal Mine",
     "progression": "progression",
     "rom_id": "0x2717"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Toxic Air Ship",
+    "id": 77780083,
+    "item_name": "Portal to Erupting Fissure",
     "progression": "progression",
     "rom_id": "0x2718"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Vat of the Plague Fiend",
+    "id": 77780084,
+    "item_name": "Portal to Yeti's Cavern",
     "progression": "progression",
     "rom_id": "0x2719"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Fortified Towers",
+    "id": 77780085,
+    "item_name": "Portal to Fortified Towers",
     "progression": "progression",
     "rom_id": "0x271A"
   },
   {
-    "id": 77780075,
-    "item_name": "Portal to the Infernal Fortress",
+    "id": 77780086,
+    "item_name": "Portal to Infernal Fortress",
     "progression": "progression",
     "rom_id": "0x271B"
   }

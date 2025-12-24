@@ -7,10 +7,10 @@ from .Locations import LocationData, get_locations_by_tags
 
 # Item name to ram value conversion
 item_ids: Final[Mapping[str, int]] = MappingProxyType({
-    "Strength": 0x000002,         # (0x0, 0x2, 0x0) -> 0x00, 0x02 -> 0x0002
-    "Speed": 0x000003,          # (0x0, 0x3, 0x0) -> 0x00, 0x03 -> 0x0003
-    "Magic": 0x000004,     # (0x0, 0x4, 0x0) -> 0x00, 0x04 -> 0x0004
-    "Armour": 0x000005,            # (0x0, 0x5, 0x0) -> 0x00, 0x05 -> 0x0005
+    "Strength": 0x000002,
+    "Speed": 0x000003,
+    "Magic": 0x000004,
+    "Armour": 0x000005,
     "Gold": 0x000006,
     "Key": 0x000007,
     "XP": 0x000009,
@@ -70,6 +70,10 @@ item_ids: Final[Mapping[str, int]] = MappingProxyType({
     "Jackal": 0x0001A3,
     "Tigress": 0x0001A4,
     "Sumner": 0x0001A5,
+    "Skorne's Mask": 0x840620,
+    "Skorne's Horns": 0x840630,
+    "Skorne's Right Gauntlet": 0x840A40,
+    "Skorne's Left Gauntlet": 0x840A50,
 })
 
 # Character names used for slot data
@@ -231,6 +235,29 @@ base_count: Final[Mapping[str, int]] = MappingProxyType({
     "Jackal": 1,
     "Sumner": 1,
     "Poison Fruit": -50,
+    "Skorne's Mask": 50,
+    "Skorne's Horns": 50,
+    "Skorne's Left Gauntlet": 100,
+    "Skorne's Right Gauntlet": 100,
+    "Portal to Dagger Peak": 1,
+    "Portal to Cliffs of Desolation": 2,
+    "Portal to Lost Cave": 3,
+    "Portal to Volcanic Caverns": 4,
+    "Portal to Dragon's Lair": 5,
+    "Portal to Dungeon of Torment": 1,
+    "Portal to Tower Armory": 2,
+    "Portal to Castle Treasury": 3,
+    "Portal to Chimera's Keep": 4,
+    "Portal to Haunted Cemetery": 1,
+    "Portal to Venomous Spire": 2,
+    "Portal to Toxic Air Ship": 3,
+    "Portal to Vat of the Plague Fiend": 4,
+    "Portal to Frozen Camp": 1,
+    "Portal to Crystal Mine": 2,
+    "Portal to Erupting Fissure": 3,
+    "Portal to Yeti's Cavern": 4,
+    "Portal to Fortified Towers": 1,
+    "Portal to Infernal Fortress": 2
 })
 
 # Castle level ID order
@@ -263,7 +290,7 @@ level_locations: Final[Mapping[int, Sequence[LocationData]]] = MappingProxyType(
     0xF1: get_locations_by_tags("desecrated_temple"),
     0x111: get_locations_by_tags("battle_trenches"),
     0x112: get_locations_by_tags("fortified_towers"),
-    0x113: get_locations_by_tags("infernal_fortress"),
+    0x113: get_locations_by_tags("infernal_fortress")
 })
 
 local_levels: Final[Sequence[Sequence[LocationData]]] = (
@@ -288,7 +315,7 @@ local_levels: Final[Sequence[Sequence[LocationData]]] = (
     get_locations_by_tags("desecrated_temple"),
     get_locations_by_tags("battle_trenches"),
     get_locations_by_tags("fortified_towers"),
-    get_locations_by_tags("infernal_fortress"),
+    get_locations_by_tags("infernal_fortress")
 )
 
 skipped_local_locations: Final[tuple[str, ...]] = (
@@ -334,7 +361,7 @@ level_names: Final[Mapping[int, str]] = MappingProxyType({
     0xF1: "Desecrated Temple",
     0x111: "Battle Trenches",
     0x112: "Fortified Towers",
-    0x113: "Infernal Fortress",
+    0x113: "Infernal Fortress"
 })
 
 # Count of all spawners in a level
@@ -396,7 +423,7 @@ level_size: Final[tuple[int, ...]] = (
     0x3F0,
     0xB00,
     0xA30,
-    0xB30,
+    0xB30
 )
 
 # Level address in ROM
@@ -426,7 +453,7 @@ level_address: Final[tuple[int, ...]] = (
     0xF90B50,
     0xF8D960,
     0xF8E6E0,
-    0xF8F110,
+    0xF8F110
 )
 
 # Level header address in ROM
@@ -456,7 +483,7 @@ level_header: Final[tuple[int, ...]] = (
     0xF9DC2C,
     0xF9DA04,
     0xF9DABC,
-    0xF9DB74,
+    0xF9DB74
 )
 
 # Convert area to base level
@@ -466,13 +493,13 @@ difficulty_convert: Final[Mapping[int, int]] = MappingProxyType({0x2: 0, 0x1: 10
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
-    0x2: (0, 0, 1, 2),
-    0x1: (0, 1, 2, 3),
-    0x7: (0, 3, 4, 5),
-    0x9: (0, 5, 6, 7),
-    0xF: (0, 7, 8, 9),
-    0x11: (0, 7, 8, 9),
-    0x8: (0, 13, 13, 13),
+    0x2: (0, 1, 2, 3),
+    0x1: (0, 3, 4, 5),
+    0x7: (0, 5, 6, 7),
+    0x9: (0, 7, 8, 9),
+    0xF: (0, 9, 10, 11),
+    0x11: (0, 11, 12, 13),
+    0x8: (0, 13, 13, 13)
 })
 
 # Area ID's with bosses in them
@@ -494,7 +521,7 @@ sounds: Final[Mapping[int, int]] = MappingProxyType({
     6: 0xA1,
     7: 0xA0,
     8: 0xA2,
-    9: 0xA7,
+    9: 0xA7
 })
 
 # ID's for colors said by announcer
@@ -502,7 +529,7 @@ colors: Final[Mapping[int, int]] = MappingProxyType({
     0: 0xA3,
     1: 0xA6,
     2: 0x9C,
-    3: 0xA4,
+    3: 0xA4
 })
 
 # Level for vanilla scaling
@@ -513,7 +540,7 @@ vanilla: Final[Mapping[int, int]] = MappingProxyType({
     0x9: 50,
     0xF: 100,
     0x11: 70,
-    0x8: 80,
+    0x8: 80
 })
 
 item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType({
@@ -539,6 +566,49 @@ mirror_shards: Final[tuple[str, ...]] = (
     "Yeti Mirror Shard",
     "Plague Fiend Mirror Shard"
 )
+
+portals: Final[Mapping[str, str]] = MappingProxyType({
+    "Portal to Dagger Peak": "Mountain",
+    "Portal to Cliffs of Desolation": "Mountain",
+    "Portal to Lost Cave": "Mountain",
+    "Portal to Volcanic Caverns": "Mountain",
+    "Portal to Dragon's Lair": "Mountain",
+    "Portal to Dungeon of Torment": "Castle",
+    "Portal to Tower Armory": "Castle",
+    "Portal to Castle Treasury": "Castle",
+    "Portal to Chimera's Keep": "Castle",
+    "Portal to Frozen Camp": "Ice",
+    "Portal to Crystal Mine": "Ice",
+    "Portal to Erupting Fissure": "Ice",
+    "Portal to Yeti's Cavern": "Ice",
+    "Portal to Haunted Cemetery": "Town",
+    "Portal to Venomous Spire": "Town",
+    "Portal to Toxic Air Ship": "Town",
+    "Portal to Vat of the Plague Fiend": "Town",
+    "Portal to Fortified Towers": "Battlefield",
+    "Portal to Infernal Fortress": "Battlefield"
+})
+
+excluded_portals: Final[Mapping[str, list[str]]] = MappingProxyType({
+    "Castle" : ["Portal to Dungeon of Torment", "Portal to Tower Armory", "Portal to Castle Treasury", "Portal to Chimera's Keep"],
+    "Town" : ["Portal to Haunted Cemetery", "Portal to Venomous Spire", "Portal to Toxic Air Ship", "Portal to Vat of the Plague Fiend"],
+    "Ice" : ["Portal to Frozen Camp", "Portal to Crystal Mine", "Portal to Erupting Fissure", "Portal to Yeti's Cavern"],
+    "Battlefield" : ["Portal to Fortified Towers", "Portal to Infernal Fortress"]
+})
+
+excluded_levels: Final[Mapping[str, list[str]]] = MappingProxyType({
+    "Mountain" : ["Valley of Fire", "Dagger Peak", "Cliffs of Desolation", "Lost Cave", "Volcanic Caverns", "Dragon's Lair"],
+    "Castle" : ["Castle Courtyard" ,"Dungeon of Torment", "Tower Armory", "Castle Treasury", "Chimera's Keep"],
+    "Ice" : ["Arctic Docks", "Frozen Camp", "Crystal Mine", "Erupting Fissure", "Yeti's Cavern"],
+    "Town" : ["Poisoned Fields", "Haunted Cemetery", "Venomous Spire", "Toxic Air Ship", "Vat of the Plague Fiend"],
+    "Battlefield" : ["Battle Trenches", "Fortified Towers", "Infernal Fortress"]
+})
+
+excluded_obelisks: Final[Mapping[str, list[str]]] = MappingProxyType({
+    "Castle" : ["Valley of Fire Obelisk", "Dagger Peak Obelisk", "Cliffs of Desolation Obelisk"],
+    "Town" : ["Castle Courtyard Obelisk", "Dungeon of Torment Obelisk"],
+    "Ice" : ["Poisoned Fields Obelisk", "Haunted Cemetery Obelisk"],
+})
 
 # Map location names to offsets in decompressed boss.bin
 boss_location_offsets: Final[Mapping[str, int]] = MappingProxyType({

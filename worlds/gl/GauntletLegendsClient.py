@@ -22,7 +22,7 @@ from .Data import (
     spawners,
     sounds,
     colors,
-    vanilla, level_names,
+    vanilla, level_names, portals,
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
@@ -409,6 +409,8 @@ class GauntletLegendsContext(CommonContext):
             return "Obelisk"
         if "Mirror" in name:
             return "Mirror Shard"
+        if portals.get(name, False):
+            return portals[name]
         return name
 
     async def update_item(self, name: str, count: int, player: int = None, infinite_count: bool = False):

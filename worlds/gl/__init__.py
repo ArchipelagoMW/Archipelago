@@ -8,10 +8,11 @@ from typing import ClassVar
 from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .Data import item_dict, local_levels, skipped_local_locations, obelisks, mirror_shards
+from .Data import item_dict, local_levels, skipped_local_locations, obelisks, mirror_shards, portals, excluded_portals, \
+    excluded_obelisks
 from .Items import GLItem, item_table, item_list
 from .Locations import LocationData, all_locations, location_table
-from .Options import GLOptions
+from .Options import GLOptions, IncludedAreas
 from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
 from .Rules import set_rules
@@ -75,12 +76,14 @@ class GauntletLegendsWorld(World):
     excluded_regions: set
     death: list[Item]
     items: list[Item]
+    unlockable: set
 
     disabled_locations: set[str]
 
     def generate_early(self) -> None:
         self.disabled_locations = set()
         self.excluded_regions = set()
+        self.unlockable = set()
         self.death = []
         self.items = []
         self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
@@ -104,6 +107,7 @@ class GauntletLegendsWorld(World):
         if self.options.max_difficulty_toggle:
             self.disabled_locations.update([location.name for location in all_locations
                                         if location.difficulty > self.options.max_difficulty_value])
+        self.excluded_regions.update([region for region in IncludedAreas.valid_keys if region not in self.options.included_areas.value])
 
         create_regions(self)
         connect_regions(self)
@@ -112,13 +116,13 @@ class GauntletLegendsWorld(World):
             self.lock_item("Valley of Fire - Key 5", "Key")
 
         if not self.options.obelisks:
-            self.lock_item("Valley of Fire - Obelisk", "Mountain Obelisk 1")
-            self.lock_item("Dagger Peak - Obelisk", "Mountain Obelisk 2")
-            self.lock_item("Cliffs of Desolation - Obelisk", "Mountain Obelisk 3")
-            self.lock_item("Castle Courtyard - Obelisk", "Castle Obelisk 1")
-            self.lock_item("Dungeon of Torment - Obelisk", "Castle Obelisk 2")
-            self.lock_item("Poisoned Fields - Obelisk", "Town Obelisk 1")
-            self.lock_item("Haunted Cemetery - Obelisk", "Town Obelisk 2")
+            self.lock_item("Valley of Fire - Obelisk", "Valley of Fire Obelisk")
+            self.lock_item("Dagger Peak - Obelisk", "Dagger Peak Obelisk")
+            self.lock_item("Cliffs of Desolation - Obelisk", "Cliffs of Desolation Obelisk")
+            self.lock_item("Castle Courtyard - Obelisk", "Castle Courtyard Obelisk")
+            self.lock_item("Dungeon of Torment - Obelisk", "Dungeon of Torment Obelisk")
+            self.lock_item("Poisoned Fields - Obelisk", "Poisoned Fields Obelisk")
+            self.lock_item("Haunted Cemetery - Obelisk", "Haunted Cemetery Obelisk")
 
         if not self.options.mirror_shards:
             self.lock_item("Dragon's Lair - Dragon Mirror Shard", "Dragon Mirror Shard")
@@ -162,9 +166,15 @@ class GauntletLegendsWorld(World):
         if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active":
             skipped_items.add("Death")
         if not self.options.obelisks:
-            skipped_items.update(obelisks)
+            skipped_items.update([obelisk for obelisk in obelisks if obelisk not in self.unlockable])
         if not self.options.mirror_shards:
-            skipped_items.update(mirror_shards)
+            skipped_items.update([shard for shard in mirror_shards if shard not in self.unlockable])
+        if not self.options.portals:
+            skipped_items.update([item for item in portals])
+        if len(self.excluded_regions) > 0:
+            for region in self.excluded_regions:
+                skipped_items.update(excluded_portals.get(region, []))
+                skipped_items.update(excluded_obelisks.get(region, []))
         for item in [item_ for item_ in item_list
                      if (ItemClassification.progression in item_.progression
                      or ItemClassification.useful in item_.progression)
@@ -204,7 +214,10 @@ class GauntletLegendsWorld(World):
 
         for i in range(item_required_count):
             if i < int(item_required_count * (self.options.local_filler_frequency / 100)):
-                self.items.append(self.create_item(filler_items.pop()))
+                if self.multiworld.players > 1:
+                    self.items.append(self.create_item(filler_items.pop()))
+                else:
+                    self.multiworld.itempool.append(self.create_item(filler_items.pop()))
             else:
                 self.multiworld.itempool.append(self.create_item(filler_items.pop()))
 
@@ -216,32 +229,51 @@ class GauntletLegendsWorld(World):
         )
 
     def pre_fill(self) -> None:
-        # A percentage of all items will be placed locally, all deaths will be placed locally
         local_item_count = len(self.items) + len(self.death)
         local_locations = []
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         unfilled_names = {location.name for location in unfilled_locations}
 
         for level in local_levels:
-            level = [location for location in level if
-                     location.name in unfilled_names and location.name not in skipped_local_locations]
-            self.random.shuffle(level)
-            for i in range(min(len(level), (local_item_count // len(local_levels)) + 3)):
-                local_locations.append(self.get_location(level[i].name))
+            available_locs = [location for location in level if
+                            location.name in unfilled_names and location.name not in skipped_local_locations]
+            if not available_locs:
+                continue
 
-        # If we don't have enough locations, add more from remaining unfilled locations
+            available_locs.sort(key=lambda loc: loc.difficulty, reverse=True)
+            target_count = min(len(available_locs), (local_item_count // len(local_levels)) + 2)
+            harder_count = int(target_count * 0.6)
+            easier_count = target_count - harder_count
+
+            harder_half = available_locs[:len(available_locs) // 2]
+            easier_half = available_locs[len(available_locs) // 2:]
+            self.random.shuffle(harder_half)
+            self.random.shuffle(easier_half)
+
+            for i in range(min(harder_count, len(harder_half))):
+                local_locations.append(self.get_location(harder_half[i].name))
+            for i in range(min(easier_count, len(easier_half))):
+                local_locations.append(self.get_location(easier_half[i].name))
+
         if len(local_locations) < local_item_count:
             used_location_names = {loc.name for loc in local_locations}
             remaining_unfilled = [loc for loc in unfilled_locations
                                   if loc.name not in used_location_names
                                   and loc.name not in skipped_local_locations]
-            self.random.shuffle(remaining_unfilled)
+
+            remaining_with_difficulty = []
+            for loc in remaining_unfilled:
+                loc_data = next((l for l in all_locations if l.name == loc.name), None)
+                if loc_data:
+                    remaining_with_difficulty.append((loc, loc_data.difficulty))
+
+            remaining_with_difficulty.sort(key=lambda x: x[1], reverse=True)
+            self.random.shuffle(remaining_with_difficulty)
 
             needed = local_item_count - len(local_locations)
-            for i in range(min(needed, len(remaining_unfilled))):
-                local_locations.append(remaining_unfilled[i])
+            for i in range(min(needed, len(remaining_with_difficulty))):
+                local_locations.append(remaining_with_difficulty[i][0])
 
-        # Only slice if we have more than needed
         local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)
@@ -253,18 +285,25 @@ class GauntletLegendsWorld(World):
 
     def lock_item(self, location: str, item_name: str):
         item = self.create_item(item_name)
+        if location in self.disabled_locations:
+            self.unlockable.update({item_name})
+            return
         self.get_location(location).place_locked_item(item)
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
         if change and "Runestone" in item.name:
             state.prog_items[item.player]["stones"] += 1
+        if change and ("Runestone" in item.name or "Portal" in item.name):
+            state.prog_items[item.player]["progression"] += 1
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
         if change and "Runestone" in item.name:
             state.prog_items[item.player]["stones"] -= 1
+        if change and ("Runestone" in item.name or "Portal" in item.name):
+            state.prog_items[item.player]["progression"] -= 1
         return change
 
     def get_filler_item_name(self) -> str:

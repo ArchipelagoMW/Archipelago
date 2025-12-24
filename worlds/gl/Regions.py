@@ -2,6 +2,7 @@ import typing
 from typing import Optional, Callable
 
 from BaseClasses import Region, CollectionState
+from .Data import excluded_levels
 
 from .Locations import GLLocation, LocationData, get_locations_by_tags
 
@@ -14,7 +15,7 @@ def create_regions(world: "GauntletLegendsWorld"):
 
     regions_dict = get_regions_dict()
     for name, locations in regions_dict.items():
-        if name not in world.excluded_regions:
+        if name not in [level for region, levels in excluded_levels.items() if region in world.excluded_regions for level in levels]:
             create_region(world, name, locations)
         else:
             world.disabled_locations.update([loc.name for loc in locations if loc.name not in world.disabled_locations])
@@ -35,7 +36,7 @@ def get_regions_dict() -> dict[str, list[LocationData]]:
         "Tower Armory": get_locations_by_tags("tower_armory"),
         "Castle Treasury": get_locations_by_tags("castle_treasury"),
         "Chimera's Keep": get_locations_by_tags("chimeras_keep"),
-        "Poisonous Fields": get_locations_by_tags("poisoned_fields"),
+        "Poisoned Fields": get_locations_by_tags("poisoned_fields"),
         "Haunted Cemetery": get_locations_by_tags("haunted_cemetery"),
         "Venomous Spire": get_locations_by_tags("venomous_spire"),
         "Toxic Air Ship": get_locations_by_tags("toxic_air_ship"),
@@ -44,7 +45,7 @@ def get_regions_dict() -> dict[str, list[LocationData]]:
         "Frozen Camp": get_locations_by_tags("frozen_camp"),
         "Crystal Mine": get_locations_by_tags("crystal_mine"),
         "Erupting Fissure": get_locations_by_tags("erupting_fissure"),
-        "Yeti": get_locations_by_tags("yeti"),
+        "Yeti's Cavern": get_locations_by_tags("yeti"),
         "Desecrated Temple": get_locations_by_tags("desecrated_temple"),
         "Altar of Skorne": get_locations_by_tags("altar_of_skorne"),
         "Battle Trenches": get_locations_by_tags("battle_trenches"),
@@ -59,35 +60,35 @@ def connect_regions(world: "GauntletLegendsWorld"):
 
     connect(world, names, "Menu", "Valley of Fire")
     connect(world, names, "Menu", "Dagger Peak", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Menu", "Cliffs of Desolation", _portal_helper("Portal to the Cliffs of Desolation", world))
-    connect(world, names, "Menu", "Lost Cave", _portal_helper("Portal to the Lost Cave", world))
-    connect(world, names, "Menu", "Volcanic Caverns", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Menu", "Dragon's Lair", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Menu", "Cliffs of Desolation", _portal_helper("Portal to Cliffs of Desolation", world))
+    connect(world, names, "Menu", "Lost Cave", _portal_helper("Portal to Lost Cave", world))
+    connect(world, names, "Menu", "Volcanic Caverns", _portal_helper("Portal to Volcanic Caverns", world))
+    connect(world, names, "Menu", "Dragon's Lair", _portal_helper("Portal to Dragon's Lair", world))
     connect(world, names, "Menu", "Castle Courtyard",
-            lambda state: state.has("Mountain Obelisk 1", world.player)
-            and state.has("Mountain Obelisk 2", world.player)
-            and state.has("Mountain Obelisk 3", world.player)
+            lambda state: state.has("Valley of Fire Obelisk", world.player)
+            and state.has("Dagger Peak Obelisk", world.player)
+            and state.has("Cliffs of Desolation Obelisk", world.player)
     )
-    connect(world, names, "Castle Courtyard", "Dungeon of Torment", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Castle Courtyard", "Tower Armory", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Castle Courtyard", "Castle Treasury", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Castle Courtyard", "Chimera's Keep", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Menu", "Poisonous Fields",
-            lambda state: state.has("Castle Obelisk 1", world.player)
-            and state.has("Castle Obelisk 2", world.player)
+    connect(world, names, "Castle Courtyard", "Dungeon of Torment", _portal_helper("Portal to Dungeon of Torment", world))
+    connect(world, names, "Castle Courtyard", "Tower Armory", _portal_helper("Portal to Tower Armory", world))
+    connect(world, names, "Castle Courtyard", "Castle Treasury", _portal_helper("Portal to Castle Treasury", world))
+    connect(world, names, "Castle Courtyard", "Chimera's Keep", _portal_helper("Portal to Chimera's Keep", world))
+    connect(world, names, "Menu", "Poisoned Fields",
+            lambda state: state.has("Castle Courtyard Obelisk", world.player)
+            and state.has("Dungeon of Torment Obelisk", world.player)
     )
-    connect(world, names, "Poisonous Fields", "Haunted Cemetery", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Poisonous Fields", "Venomous Spire", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Poisonous Fields", "Toxic Air Ship", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Poisoned Fields", "Haunted Cemetery", _portal_helper("Portal to Haunted Cemetery", world))
+    connect(world, names, "Poisoned Fields", "Venomous Spire", _portal_helper("Portal to Venomous Spire", world))
+    connect(world, names, "Poisoned Fields", "Toxic Air Ship", _portal_helper("Portal to Toxic Air Ship", world))
+    connect(world, names, "Toxic Air Ship", "Vat of the Plague Fiend", _portal_helper("Portal to Vat of the Plague Fiend", world))
     connect(world, names, "Menu", "Arctic Docks",
-            lambda state: state.has("Town Obelisk 1", world.player)
-            and state.has("Town Obelisk 2", world.player)
+            lambda state: state.has("Poisoned Fields Obelisk", world.player)
+            and state.has("Haunted Cemetery Obelisk", world.player)
     )
-    connect(world, names, "Arctic Docks", "Frozen Camp", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Arctic Docks", "Crystal Mine", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Arctic Docks", "Erupting Fissure", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Erupting Fissure", "Yeti", _portal_helper("Portal to Dagger Peak", world))
+    connect(world, names, "Arctic Docks", "Frozen Camp", _portal_helper("Portal to Frozen Camp", world))
+    connect(world, names, "Arctic Docks", "Crystal Mine", _portal_helper("Portal to Crystal Mine", world))
+    connect(world, names, "Arctic Docks", "Erupting Fissure", _portal_helper("Portal to Erupting Fissure", world))
+    connect(world, names, "Erupting Fissure", "Yeti's Cavern", _portal_helper("Portal to Yeti's Cavern", world))
     connect(world, names, "Menu", "Desecrated Temple",
             lambda state: state.has("Dragon Mirror Shard", world.player)
             and state.has("Chimera Mirror Shard", world.player)
@@ -96,8 +97,8 @@ def connect_regions(world: "GauntletLegendsWorld"):
     )
     connect(world, names, "Desecrated Temple", "Altar of Skorne")
     connect(world, names, "Desecrated Temple", "Battle Trenches")
-    connect(world, names, "Desecrated Temple", "Battle Towers", _portal_helper("Portal to Dagger Peak", world))
-    connect(world, names, "Desecrated Temple", "Infernal Fortress", _portal_helper("Portal to the Infernal Fortress", world))
+    connect(world, names, "Desecrated Temple", "Fortified Towers", _portal_helper("Portal to Fortified Towers", world))
+    connect(world, names, "Desecrated Temple", "Infernal Fortress", _portal_helper("Portal to Infernal Fortress", world))
     connect(world, names, "Menu", "Gates of the Underworld",
             lambda state: state.has("stones", world.player, 13)
     )
@@ -118,6 +119,9 @@ def connect(world: "GauntletLegendsWorld",
             target: str,
             rule: Optional[Callable] = None,
 ):
+    excluded_levels_ = [level for region, levels in excluded_levels.items() if region in world.excluded_regions for level in levels]
+    if source in excluded_levels_ or target in excluded_levels_:
+        return
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)
 
