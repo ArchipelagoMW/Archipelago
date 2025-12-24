@@ -1,8 +1,10 @@
 import asyncio
+import settings
 import datetime
 import os
 import socket
 import traceback
+import subprocess
 from typing import Optional
 
 import Patch
@@ -225,10 +227,19 @@ class GauntletLegendsContext(CommonContext):
             new_inv: list[InventoryEntry] = []
             new_inv += [_inv[0]]
             addr = new_inv[0].n_addr
+            visited = {new_inv[0].addr}  # Track visited addresses to detect cycles
             while True:
                 if addr == 0:
                     break
-                new_inv += [inv for inv in _inv if inv.addr == addr]
+                if addr in visited:  # Circular reference detected
+                    logger.warning(f"Circular reference detected in inventory chain at {addr:#x}")
+                    break
+                matching = [inv for inv in _inv if inv.addr == addr]
+                if not matching:  # Broken chain - address not found
+                    logger.warning(f"Broken inventory chain: addr {addr:#x} not found in inventory data")
+                    break
+                new_inv += matching
+                visited.add(addr)
                 addr = new_inv[-1].n_addr
             self.inventory += [new_inv]
 
@@ -773,8 +784,125 @@ class GauntletLegendsContext(CommonContext):
         return ui
 
 
-async def _patch_game(patch_file: str):
+# Store original file content for restoration
+_original_opt_content: dict[str, str | None] = {}
+
+
+async def _patch_opt():
+    """
+    Create RetroArch core options override for CountPerOp=1.
+    Backs up existing content for restoration on close.
+    """
+    retroarch_path = settings.get_settings().gl_options.retroarch_path
+
+    override_dir = os.path.join(retroarch_path, "config", "Mupen64Plus-Next")
+    os.makedirs(override_dir, exist_ok=True)
+    override_path = os.path.join(override_dir, f"Mupen64Plus-Next.opt")
+
+    logger.info(f"Override path: {override_path}")
+    logger.info(f"File exists: {os.path.exists(override_path)}")
+
+    # Store original content for restoration (None if file didn't exist)
+    if override_path not in _original_opt_content:
+        if os.path.exists(override_path):
+            with open(override_path, "r") as f:
+                _original_opt_content[override_path] = f.read()
+        else:
+            _original_opt_content[override_path] = None
+
+    if os.path.exists(override_path):
+        with open(override_path, "r") as f:
+            content = f.read()
+
+        logger.info(f"Current content length: {len(content)}")
+        logger.info(f"CountPerOp in content: {'mupen64plus-CountPerOp' in content}")
+
+        if 'mupen64plus-CountPerOp = "1"' in content:
+            logger.info(f"CountPerOp=1 already set in: {override_path}")
+            return
+
+        # Check if CountPerOp exists with different value - replace it
+        import re
+        if 'mupen64plus-CountPerOp' in content:
+            logger.info("Replacing existing CountPerOp value")
+            content = re.sub(
+                r'mupen64plus-CountPerOp\s*=\s*"[^"]*"',
+                'mupen64plus-CountPerOp = "1"',
+                content
+            )
+        else:
+            logger.info("Appending CountPerOp")
+            if not content.endswith("\n"):
+                content += "\n"
+            content += 'mupen64plus-CountPerOp = "1"\n'
+    else:
+        logger.info("Creating new file")
+        content = 'mupen64plus-CountPerOp = "1"\n'
+
+    logger.info(f"Writing content: {content[:100]}...")
+    with open(override_path, "w") as f:
+        f.write(content)
+
+    # Verify write
+    with open(override_path, "r") as f:
+        verify = f.read()
+    logger.info(f"Verified content: {verify[:100]}...")
+
+    logger.info(f"Created CountPerOp override at: {override_path}")
+
+
+def _restore_opt_files():
+    """
+    Restore original .opt files on application close.
+    Call this from shutdown/cleanup.
+    """
+    for path, original_content in _original_opt_content.items():
+        try:
+            if original_content is None:
+                # File didn't exist before, delete it
+                if os.path.exists(path):
+                    os.remove(path)
+                    logger.info(f"Removed override file: {path}")
+            else:
+                # Restore original content
+                with open(path, "w") as f:
+                    f.write(original_content)
+                logger.info(f"Restored override file: {path}")
+        except Exception as e:
+            logger.error(f"Failed to restore {path}: {e}")
+
+    _original_opt_content.clear()
+
+
+async def _launch_retroarch(rom_path: str):
+    """
+    Launch RetroArch with the ROM.
+    """
+    retroarch_path = settings.get_settings().gl_options.retroarch_path
+    retroarch_exe = os.path.join(retroarch_path, "retroarch.exe")
+    core_path = os.path.join(retroarch_path, "cores", "mupen64plus_next_libretro.dll")
+
+    if not os.path.exists(retroarch_exe):
+        logger.error(f"RetroArch not found at: {retroarch_exe}")
+        return
+
+    if not os.path.exists(core_path):
+        logger.error(f"Mupen64Plus core not found at: {core_path}")
+        return
+
+    subprocess.Popen([retroarch_exe, "-L", core_path, rom_path])
+    logger.info(f"Launched RetroArch with ROM: {rom_path}")
+
+    # Wait for RetroArch to start up
+    await asyncio.sleep(3)
+
+# Update _patch_game to call _patch_crc:
+async def _patch_and_launch_game(patch_file: str):
     metadata, output_file = Patch.create_rom_file(patch_file)
+    await _patch_opt()
+    await _launch_retroarch(output_file)
+
+
 
 
 async def gl_sync_task(ctx: GauntletLegendsContext):
@@ -908,6 +1036,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             except (TimeoutError, ConnectionRefusedError, ConnectionResetError) as e:
                 error_type = type(e).__name__
                 logger.info(f"{error_type.replace('Error', ' ')}, Trying Again")
+                logger.info(traceback.format_exc())
                 await asyncio.sleep(2)
                 continue
             except Exception as e:
@@ -920,7 +1049,7 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
 def launch(*args):
     async def main(args):
         if args.patch_file:
-            await asyncio.create_task(_patch_game(args.patch_file))
+            await asyncio.create_task(_patch_and_launch_game(args.patch_file))
         ctx = GauntletLegendsContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:
@@ -932,6 +1061,9 @@ def launch(*args):
         ctx.server_address = None
 
         await ctx.shutdown()
+
+        # Restore original .opt files on exit
+        _restore_opt_files()
 
     parser = get_base_parser()
     parser.add_argument("patch_file", default="", type=str, nargs="?", help="Path to an APGL file")

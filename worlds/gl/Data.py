@@ -220,7 +220,7 @@ base_count: Final[Mapping[str, int]] = MappingProxyType({
     "Valley of Fire Obelisk": 1,
     "Dagger Peak Obelisk": 2,
     "Cliffs of Desolation Obelisk": 3,
-    "Poisoned Fields Obeliks": 4,
+    "Poisoned Fields Obelisk": 4,
     "Haunted Cemetery Obelisk": 5,
     "Castle Courtyard Obelisk": 6,
     "Dungeon of Torment Obelisk": 7,
@@ -551,13 +551,13 @@ item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType
 })
 
 obelisks: Final[tuple[str, ...]] = (
-    "Mountain Obelisk 1",
-    "Mountain Obelisk 2",
-    "Mountain Obelisk 3",
-    "Town Obelisk 1",
-    "Town Obelisk 2",
-    "Castle Obelisk 1",
-    "Castle Obelisk 2"
+    "Valley of Fire Obelisk",
+    "Dagger Peak Obelisk",
+    "Cliffs of Desolation Obelisk",
+    "Poisoned Fields Obelisk",
+    "Haunted Cemetery Obelisk",
+    "Castle Courtyard Obelisk",
+    "Dungeon of Torment Obelisk"
 )
 
 mirror_shards: Final[tuple[str, ...]] = (

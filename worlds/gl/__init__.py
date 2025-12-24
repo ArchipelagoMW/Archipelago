@@ -48,15 +48,19 @@ class GauntletLegendsWebWorld(WebWorld):
 
 
 class GLSettings(settings.Group):
+    class RetorarchPath(settings.UserFolderPath):
+        """The location of your Retroarch folder"""
+        description = "Retroarch Folder"
+
     class RomFile(settings.UserFilePath):
         """File name of the GL US rom"""
-
         copy_to = "Gauntlet Legends (U) [!].z64"
         description = "Gauntlet Legends ROM File"
         md5s = ["9cb963e8b71f18568f78ec1af120362e"]
 
+    retroarch_path: RetorarchPath = RetorarchPath(None)
     rom_file: RomFile = RomFile(RomFile.copy_to)
-    rom_start: bool = False
+    rom_start: bool = True
 
 
 class GauntletLegendsWorld(World):
