@@ -755,7 +755,8 @@ def _mp_save_filename(res: "multiprocessing.Queue[typing.Optional[str]]", *args:
     if is_kivy_running():
         raise RuntimeError("kivy should not be running in multiprocess")
     res.put(save_filename(*args))
-    
+
+
 def _run_for_stdout(*args: str):
     env = os.environ
     if "LD_LIBRARY_PATH" in env:
@@ -819,12 +820,12 @@ def save_filename(title: str, filetypes: typing.Iterable[typing.Tuple[str, typin
         kdialog = which("kdialog")
         if kdialog:
             k_filters = '|'.join((f'{text} (*{" *".join(ext)})' for (text, ext) in filetypes))
-            return run(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
+            return _run_for_stdout(kdialog, f"--title={title}", "--getsavefilename", suggest or ".", k_filters)
         zenity = which("zenity")
         if zenity:
             z_filters = (f'--file-filter={text} ({", ".join(ext)}) | *{" *".join(ext)}' for (text, ext) in filetypes)
             selection = (f"--filename={suggest}",) if suggest else ()
-            return run(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
+            return _run_for_stdout(zenity, f"--title={title}", "--file-selection", "--save", *z_filters, *selection)
 
     # fall back to tk
     try:
