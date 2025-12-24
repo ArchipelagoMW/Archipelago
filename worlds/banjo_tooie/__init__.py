@@ -806,18 +806,18 @@ class BanjoTooieWorld(World):
             for location_name in MumboTokenJinjo_table.keys():
                 self.get_location(location_name).place_locked_item(item)
 
-        prefill_locations_with_item(itemName.JIGGY, [
-            locationName.JIGGYIH1,
-            locationName.JIGGYIH2,
-            locationName.JIGGYIH3,
-            locationName.JIGGYIH4,
-            locationName.JIGGYIH5,
-            locationName.JIGGYIH6,
-            locationName.JIGGYIH7,
-            locationName.JIGGYIH8,
-            locationName.JIGGYIH9
-        ])
         if not self.options.randomize_jinjos.value:
+            prefill_locations_with_item(itemName.JIGGY, [
+                locationName.JIGGYIH1,
+                locationName.JIGGYIH2,
+                locationName.JIGGYIH3,
+                locationName.JIGGYIH4,
+                locationName.JIGGYIH5,
+                locationName.JIGGYIH6,
+                locationName.JIGGYIH7,
+                locationName.JIGGYIH8,
+                locationName.JIGGYIH9
+            ])
             prefill_locations_with_item(itemName.WJINJO, [
                 locationName.JINJOJR5
             ])
