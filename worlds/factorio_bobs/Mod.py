@@ -81,7 +81,7 @@ recipe_time_ranges = {
 
 
 class FactorioBobsModFile(worlds.Files.APPlayerContainer):
-    game = "Factorio Bob's"
+    game = "Factorio"  # This is wrong, but the correct value causes webhost issues.
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
     writing_tasks: List[Callable[[], Tuple[str, Union[str, bytes]]]]
     patch_file_ending = ".zip"
