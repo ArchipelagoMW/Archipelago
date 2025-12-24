@@ -3299,10 +3299,8 @@ class BanjoTooieRules:
     def ccl_glowbo_pool(self, state: CollectionState) -> bool:
         if self.intended_logic(state):
             return self.dive(state)
-        elif self.hard_tricks_logic(state):
-            return True # Jumping in the pool outside and going through the loading zone gives dive for free.
         else:
-            return True
+            return True # Jumping in the pool outside and going through the loading zone gives dive for free.
 
     def notes_ccl_low(self, state: CollectionState) -> bool:
         return True
