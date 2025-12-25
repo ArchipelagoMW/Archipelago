@@ -19,7 +19,7 @@ import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
-from time import sleep
+from time import sleep, time
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union, TypeGuard
 from yaml import load, load_all, dump
 
@@ -359,6 +359,9 @@ def load_data_package_for_checksum(game: str, checksum: typing.Optional[str]) ->
         path = cache_path("datapackage", get_file_safe_name(game), f"{checksum}.json")
         if os.path.exists(path):
             try:
+                # Last modified time on the file is used to determine if the file has gone unused
+                # for a long time when deleting old data packages, so we refresh it when we use the package
+                os.utime(path, (time(), time()))
                 with open(path, "r", encoding="utf-8-sig") as f:
                     return json.load(f)
             except Exception as e:
@@ -385,6 +388,43 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
                 json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         except Exception as e:
             logging.debug(f"Could not store data package: {e}")
+
+
+def delete_old_data_packages() -> None:
+    if getattr(delete_old_data_packages, "checked", False):
+        return
+    setattr(delete_old_data_packages, "checked", True)
+
+    expiry_in_months = 6
+    expiry_in_seconds = expiry_in_months * 30 * 24 * 60 * 60
+
+    datapackage_folder = cache_path("datapackage")
+    game_folders = [game_folder.path for game_folder in os.scandir(datapackage_folder) if game_folder.is_dir()]
+    for game_folder in game_folders:
+        datapackage_files = [os.path.join(game_folder, file) for file in os.listdir(game_folder) if os.path.isfile(os.path.join(game_folder, file))]
+
+        # Find the newest file in the folder
+        newest_file_path = None
+        newest_mtime = None
+        try:
+            for file_path in datapackage_files:
+                file_mtime = os.path.getmtime(file_path)
+                if newest_mtime is None or file_mtime > newest_mtime:
+                    newest_mtime = file_mtime
+                    newest_file_path = file_path
+        except Exception as e:
+            logging.warning(f"Could not delete old data package: {e}")
+
+        #don't delete the newest file in the folder
+        if newest_file_path is not None:
+            datapackage_files.remove(newest_file_path)
+
+        for file_path in datapackage_files:
+            try:
+                if time() - os.path.getmtime(file_path) > expiry_in_seconds:
+                    os.remove(file_path)
+            except Exception as e:
+                logging.warning(f"Could not delete old data package: {e}")
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:
