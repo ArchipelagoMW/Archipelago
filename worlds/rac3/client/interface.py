@@ -791,16 +791,17 @@ class Rac3Interface(GameInterface):
                     self.notification_merge_count = merge_count
                     msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
                     if not self.message_display:
-                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
                         self.notification_time = current_time + 3
+                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, int((self.notification_time - current_time)*120))
                     else:
                         write_message = b''
                         for line in msg_list:
                             write_message += line
                         read_message = self._read_bytes(RAC3MESSAGEBOX.MESSAGE, len(write_message))
                         if read_message != write_message:
-                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme)
-                            self.notification_time = current_time + 3
+                            # Give the player a bit more time to read the new appended line in case it was about to expire
+                            self.notification_time += 0.33
+                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, int((self.notification_time - current_time)*120))
                             logger.debug(f'Warning: Incorrect Display message detected')
                             logger.debug(f'Message: {merged_message}')
                             logger.debug(f'{read_message}')
@@ -842,7 +843,11 @@ class Rac3Interface(GameInterface):
                             self._write8(status, 1)
             else:
                 self.timers.pop(name)
-                self.notification_queue.append((f'{name}{RAC3TEXTCOLOR.WHITE} effect has worn off', RAC3BOXTHEME.WARNING))
+                if 'Jackpot' in name:
+                    self.notification_queue.append((f'{RAC3TEXTCOLOR.WHITE}Jackpot x{2 ** self.boltAndXPMultiplierValue} '
+                                                    f'{RAC3TEXTCOLOR.NORMAL}effect has worn off.', RAC3BOXTHEME.DEFAULT))
+                else:
+                    self.notification_queue.append((f'{name}{RAC3TEXTCOLOR.WHITE} effect has worn off.', RAC3BOXTHEME.WARNING))
                 match _name:
                     case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
                         # Clear when timer ends directly rather than from the trap cleanup loop below
@@ -1025,7 +1030,7 @@ class Rac3Interface(GameInterface):
         return self.pause_menu and pressed_square
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
-    RAC3BOXTHEME.DEFAULT) -> None:
+    RAC3BOXTHEME.DEFAULT, time: int = 0x168) -> None:
         # real overflow cap is actually about 248, but we don't need that long messages
         curr_addr = RAC3MESSAGEBOX.MESSAGE
         msg_bytes = b''
@@ -1053,7 +1058,7 @@ class Rac3Interface(GameInterface):
         self._write32(self._read32(RAC3MESSAGEBOX.CENTER_COLOR_POINTER), box_color)
         self._write32(self._read32(RAC3MESSAGEBOX.TEXT_COLOR_POINTER), text_color)
 
-        self._write32(RAC3MESSAGEBOX.TIMER, 0x168)
+        self._write32(RAC3MESSAGEBOX.TIMER, time)
         self._write32(RAC3MESSAGEBOX.TEXT_POINTER, RAC3MESSAGEBOX.MESSAGE)
         self._write32(RAC3MESSAGEBOX.BOX_WIDTH, width)
         self._write_bytes(RAC3MESSAGEBOX.MESSAGE, msg_bytes)
