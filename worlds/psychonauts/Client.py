@@ -5,6 +5,7 @@ import logging
 import os
 import shutil
 import sys
+import random
 from typing import Dict, Any, List, Tuple, NoReturn
 from argparse import Namespace
 
@@ -364,6 +365,11 @@ class PsychonautsContext(CommonContext):
         self.got_deathlink = True
         super().on_deathlink(data)
 
+    def hint_missing_location(self):
+        if not self.missing_locations:
+            return None
+        return random.choice(tuple(self.missing_locations))
+
 
 async def game_watcher(ctx: PsychonautsContext):
     while not ctx.exit_event.is_set():
@@ -469,7 +475,27 @@ async def game_watcher(ctx: PsychonautsContext):
             message = [{"cmd": 'LocationChecks', "locations": sending}]
             await ctx.send_msgs(message)
 
-            # Hinted locations differs from before, message the server and create a play hint
+
+        try:
+            # Check for Vault Hints from player
+            with open(os.path.join(game_communication_path, "VaultHints.txt"), 'r+') as f:
+                vault_hint = f.read()
+                if vault_hint:
+                    # Move the file pointer to the beginning
+                    f.seek(0)
+                    # Empty the file by writing an empty string
+                    f.truncate(0)
+                    # grab a hint from a random uncollected location
+                    hint_value = ctx.hint_missing_location()
+                    # if we get a value back, get the hint
+                    if hint_value is not None:
+                        hinting.append(hint_value)
+                        hinting_set.add(hint_value)
+        except FileNotFoundError:
+            # File might not exist if the client has been opened before the game.
+            pass
+
+        # Hinted locations differs from before, message the server and create a hint
         if ctx.hinted_location_ids != hinting_set:
             ctx.hinted_location_ids = hinting_set
             message = [{"cmd": 'LocationScouts', 'locations': hinting, "create_as_hint": 2}]

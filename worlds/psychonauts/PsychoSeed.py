@@ -144,8 +144,8 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # append mentalmagnet setting
     randoseed_parts.append(f"           Ob.mentalmagnet = {_lua_bool(self.options.StartingMentalMagnet)}\n")
 
-    # append lootboxvaults setting
-    randoseed_parts.append(f"           Ob.lootboxvaults = {_lua_bool(self.options.LootboxVaults)}\n")
+    # append vaultHints setting
+    randoseed_parts.append(f"           Ob.vaultHints = {_lua_bool(self.options.VaultHints)}\n")
 
     # append enemydamagemultiplier setting
     enemy_damage_multiplier = self.options.EnemyDamageMultiplier.value

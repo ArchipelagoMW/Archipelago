@@ -24,11 +24,9 @@ class RandomStartingMinds(Range):
     default = 3
 
 
-class LootboxVaults(DefaultOnToggle):
-    """Turns all Memory Vaults into Lootboxes! Vaults will contain 10-50 Arrowheads, with a 50% chance to receive a rank up.
-    If you get really lucky, you can even win jackpots of up to 250 Arrowheads or Five Ranks Up!
-    If False, Vaults will always give One Rank Up and 15 Arrowheads."""
-    display_name = "Lootbox Vaults"
+class VaultHints(DefaultOnToggle):
+    """When receiving a Memory Vault, hint a random location in your AP world that hasn't been collected yet."""
+    display_name = "Vault Hints"
 
 
 class EasyMillaRace(Toggle):
@@ -166,7 +164,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     StartingCobwebDuster: StartingCobwebDuster
     StartingMentalMagnet: StartingMentalMagnet
     RandomStartingMinds: RandomStartingMinds
-    LootboxVaults: LootboxVaults
+    VaultHints: VaultHints
     EasyMillaRace: EasyMillaRace
     EasyFlightMode: EasyFlightMode
     OtherItemsModel: OtherItemsModel
@@ -188,7 +186,7 @@ class PsychonautsOptions(PerGameCommonOptions):
 SLOT_DATA_OPTIONS: List[str] = [
     "StartingLevitation",
     "StartingMentalMagnet",
-    "LootboxVaults",
+    "VaultHints",
     "EasyMillaRace",
     "EasyFlightMode",
     "EnemyDamageMultiplier",
