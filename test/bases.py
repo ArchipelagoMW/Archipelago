@@ -202,7 +202,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
-            state = self.multiworld.get_all_state(False)
+            state = self.multiworld.get_all_state()
             for location in self.multiworld.get_locations():
                 with self.subTest("Location should be reached", location=location.name):
                     reachable = location.can_reach(state)

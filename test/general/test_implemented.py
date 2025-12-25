@@ -61,7 +61,7 @@ class TestImplemented(unittest.TestCase):
                 with self.subTest(gamename):
                     multiworld = setup_solo_multiworld(world_type, ("generate_early", "create_regions", "create_items",
                                                                     "set_rules", "connect_entrances", "generate_basic"))
-                    allstate = multiworld.get_all_state(False)
+                    allstate = multiworld.get_all_state()
                     locations = multiworld.get_locations()
                     reachable = multiworld.get_reachable_locations(allstate)
                     unreachable = [location for location in locations if location not in reachable]
