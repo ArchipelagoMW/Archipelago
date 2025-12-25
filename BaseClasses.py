@@ -427,7 +427,7 @@ class MultiWorld():
     def get_location(self, location_name: str, player: int) -> Location:
         return self.regions.location_cache[player][location_name]
 
-    def get_all_state(self, use_cache: bool | None = None, allow_partial_entrances: bool = False,
+    def get_all_state(self, allow_partial_entrances: bool = False,
                       collect_pre_fill_items: bool = True, perform_sweep: bool = True) -> CollectionState:
         """
         Creates a new CollectionState, and collects all precollected items, all items in the multiworld itempool, those
