@@ -906,10 +906,19 @@
         { "item": "Wall Climb" },
         { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
     ] },
-    { "from": "FU - Root Node & Lower Elevator", "to": "FU - Crystal Passage", "requires": [
-        { "item": "Wall Climb" },
-        { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
-    ] }, // again, no enemies in RN&LE for a T-dash to help
+    {
+        "from": "FU - Root Node & Lower Elevator", "to": "FU - Crystal Passage",
+        "requires": [
+            { "item": "Wall Climb" },
+            { "anyOf": [ { "item": "Air Dash" }, { "item": "Cloud Leap" } ] }
+        ],
+        "medium_requires": [
+            { "item": "Ledge Grab" }, // grab the top of the left green wall
+            { "item": "Cloud Leap" } // need this to reach it without WC
+            // CL also lets us get to other regions with qi sources, so although CL isn't enough to jump from the
+            // ledge to the Crystal Passage platform, we can assume T-dash access in this case
+        ]
+    },
     { "from": "FU - Crystal Passage", "to": "FU - Root Node & Lower Elevator", "requires": [] }, // single jump is enough to clear the spikes
     { "from": "FU - Root Node & Lower Elevator", "to": "FU - Box After Laser", "requires": [
         { "item": "Air Dash" }, // to get past the laser
