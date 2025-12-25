@@ -1226,7 +1226,9 @@
     },
     {
         "address": 3010, "name": "GoS (Entry): Lower Left Caves",
-        "region": "GoSY - Lower Right Exit", "requires": [ { "item": "Wall Climb" } ]
+        "region": "GoSY - Lower Right Exit",
+        "requires": [ { "item": "Wall Climb" } ],
+        "ls_requires": [ { "item": "Cloud Leap" }, { "item": "Ledge Grab" } ] // use LS vault to get an extra CL
     },
     {
         "address": 3011, "name": "GoS (Entry): Alcove Above Middle Caves Portal",
