@@ -2,7 +2,9 @@
   "include": [
     "../BizHawkClient.py",
     "../Patch.py",
-    "../rule_builder.py",
+    "../rule_builder/cached_world.py",
+    "../rule_builder/options.py",
+    "../rule_builder/rules.py",
     "../test/param.py",
     "../test/general/test_groups.py",
     "../test/general/test_helpers.py",

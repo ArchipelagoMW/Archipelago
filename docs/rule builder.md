@@ -12,9 +12,9 @@ This document describes the API provided for the rule builder. Using this API pr
 
 The rule builder consists of 3 main parts:
 
-1. The rules, which are classes that inherit from `rule_builder.Rule`. These are what you write for your logic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
-1. Resolved rules, which are classes that inherit from `rule_builder.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable logic explanations.
-1. The optional rule builder world mixin class `CachedRuleBuilderMixin`, which is a class your world can inherit. It adds a number of helper functions related to assigning and resolving rules.
+1. The rules, which are classes that inherit from `rule_builder.rules.Rule`. These are what you write for your logic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
+1. Resolved rules, which are classes that inherit from `rule_builder.rules.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable logic explanations.
+1. The optional rule builder world subclass `CachedRuleBuilderWorld`, which is a class your world can inherit from instead of `World`. It adds a caching system to the rules that will lazy evaluate and cache the result.
 
 ## Usage
 
@@ -131,10 +131,10 @@ common_rule_only_on_easy = common_rule << easy_filter
 
 ### Enabling caching
 
-The rule builder provides a `CachedRuleBuilderMixin` for your `World` class that enables caching on your rules.
+The rule builder provides a `CachedRuleBuilderWorld` base class for your `World` class that enables caching on your rules.
 
 ```python
-class MyWorld(CachedRuleBuilderMixin, World):
+class MyWorld(CachedRuleBuilderWorld):
     game = "My Game"
 ```
 
@@ -149,7 +149,7 @@ If you have multiple real items that map to a single logic item, add a `item_map
 For example, if you have multiple `Currency x<num>` items on locations, but your rules only check a singular logical `Currency` item, eg `Has("Currency", 1000)`, you'll want to map each numerical currency item to the single logical `Currency`.
 
 ```python
-class MyWorld(CachedRuleBuilderMixin, World):
+class MyWorld(CachedRuleBuilderWorld):
     item_mapping = {
         "Currency x10": "Currency",
         "Currency x50": "Currency",
@@ -369,7 +369,7 @@ If your logic has been done in custom JSON first, you can define a `from_dict` c
 ```python
 class BasicLogicRule(Rule, game="My Game"):
     @classmethod
-    def from_dict(cls, data: Mapping[str, Any], world_cls: type[CachedRuleBuilderMixin]) -> Self:
+    def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         items = data.get("items", ())
         return cls(*items)
 ```
