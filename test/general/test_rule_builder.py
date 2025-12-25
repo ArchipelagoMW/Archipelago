@@ -7,9 +7,10 @@ from typing_extensions import override
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region
 from NetUtils import JSONMessagePart
 from Options import Choice, PerGameCommonOptions, Toggle
-from rule_builder import (
+from rule_builder.cached_world import CachedRuleBuilderWorld
+from rule_builder.options import OptionFilter
+from rule_builder.rules import (
     And,
-    CachedRuleBuilderMixin,
     CanReachEntrance,
     CanReachLocation,
     CanReachRegion,
@@ -24,7 +25,6 @@ from rule_builder import (
     HasFromListUnique,
     HasGroup,
     HasGroupUnique,
-    OptionFilter,
     Or,
     Rule,
     True_,
@@ -32,7 +32,7 @@ from rule_builder import (
 from test.general import setup_solo_multiworld
 from test.param import classvar_matrix
 from worlds import network_data_package
-from worlds.AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld
 
 
 class ToggleOption(Toggle):
@@ -68,7 +68,7 @@ class RuleBuilderWebWorld(WebWorld):
     tutorials = []  # noqa: RUF012
 
 
-class RuleBuilderWorld(CachedRuleBuilderMixin, World):  # pyright: ignore[reportUnsafeMultipleInheritance]
+class RuleBuilderWorld(CachedRuleBuilderWorld):
     game = GAME
     web = RuleBuilderWebWorld()
     item_name_to_id: ClassVar[dict[str, int]] = {f"Item {i}": i for i in range(1, LOC_COUNT + 1)}

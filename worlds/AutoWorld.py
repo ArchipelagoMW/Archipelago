@@ -12,7 +12,7 @@ from typing import (Any, ClassVar, Dict, FrozenSet, List, Optional, Self, Set, T
 
 from Options import item_and_loc_options, ItemsAccessibility, OptionGroup, PerGameCommonOptions
 from BaseClasses import CollectionState, Entrance
-from rule_builder import CustomRuleRegister, Rule
+from rule_builder.rules import CustomRuleRegister, Rule
 from Utils import Version
 
 if TYPE_CHECKING:

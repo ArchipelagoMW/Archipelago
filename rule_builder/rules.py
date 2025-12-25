@@ -1,15 +1,13 @@
 import dataclasses
-import importlib
-import operator
-from collections import defaultdict
 from collections.abc import Callable, Iterable, Mapping
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, Never, Self, cast
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Never, Self, cast
 
 from typing_extensions import TypeVar, dataclass_transform, override
 
-from BaseClasses import CollectionState, Item, MultiWorld, Region
+from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
-from Options import CommonOptions, Option
+
+from .options import OptionFilter
 
 if TYPE_CHECKING:
     from worlds.AutoWorld import World
@@ -18,216 +16,7 @@ if TYPE_CHECKING:
 else:
     World = object
 
-    TWorld = TypeVar("TWorld", contravariant=True)  # noqa: PLC0105
-
-
-class CachedRuleBuilderMixin(World):
-    """A World mixin that provides helpers for interacting with the rule builder"""
-
-    rule_item_dependencies: dict[str, set[int]]
-    """A mapping of item name to set of rule ids"""
-
-    rule_region_dependencies: dict[str, set[int]]
-    """A mapping of region name to set of rule ids"""
-
-    rule_location_dependencies: dict[str, set[int]]
-    """A mapping of location name to set of rule ids"""
-
-    rule_entrance_dependencies: dict[str, set[int]]
-    """A mapping of entrance name to set of rule ids"""
-
-    item_mapping: ClassVar[dict[str, str]] = {}
-    """A mapping of actual item name to logical item name.
-    Useful when there are multiple versions of a collected item but the logic only uses one. For example:
-    item = Item("Currency x500"), rule = Has("Currency", count=1000), item_mapping = {"Currency x500": "Currency"}"""
-
-    rule_caching_enabled: ClassVar[bool] = True
-    """Enable or disable the rule result caching system"""
-
-    def __init__(self, multiworld: MultiWorld, player: int) -> None:
-        super().__init__(multiworld, player)
-        self.rule_item_dependencies = defaultdict(set)
-        self.rule_region_dependencies = defaultdict(set)
-        self.rule_location_dependencies = defaultdict(set)
-        self.rule_entrance_dependencies = defaultdict(set)
-
-    @override
-    def register_rule_dependencies(self, resolved_rule: "Rule.Resolved") -> None:
-        if not self.rule_caching_enabled:
-            return
-        for item_name, rule_ids in resolved_rule.item_dependencies().items():
-            self.rule_item_dependencies[item_name] |= rule_ids
-        for region_name, rule_ids in resolved_rule.region_dependencies().items():
-            self.rule_region_dependencies[region_name] |= rule_ids
-        for location_name, rule_ids in resolved_rule.location_dependencies().items():
-            self.rule_location_dependencies[location_name] |= rule_ids
-        for entrance_name, rule_ids in resolved_rule.entrance_dependencies().items():
-            self.rule_entrance_dependencies[entrance_name] |= rule_ids
-
-    def register_dependencies(self) -> None:
-        """Register all rules that depend on locations or entrances with their dependencies"""
-        if not self.rule_caching_enabled:
-            return
-
-        for location_name, rule_ids in self.rule_location_dependencies.items():
-            try:
-                location = self.get_location(location_name)
-            except KeyError:
-                continue
-            if not isinstance(location.access_rule, Rule.Resolved):
-                continue
-            for item_name in location.access_rule.item_dependencies():
-                self.rule_item_dependencies[item_name] |= rule_ids
-            for region_name in location.access_rule.region_dependencies():
-                self.rule_region_dependencies[region_name] |= rule_ids
-
-        for entrance_name, rule_ids in self.rule_entrance_dependencies.items():
-            try:
-                entrance = self.get_entrance(entrance_name)
-            except KeyError:
-                continue
-            if not isinstance(entrance.access_rule, Rule.Resolved):
-                continue
-            for item_name in entrance.access_rule.item_dependencies():
-                self.rule_item_dependencies[item_name] |= rule_ids
-            for region_name in entrance.access_rule.region_dependencies():
-                self.rule_region_dependencies[region_name] |= rule_ids
-
-    @override
-    def collect(self, state: CollectionState, item: Item) -> bool:
-        changed = super().collect(state, item)
-        if changed and self.rule_caching_enabled and self.rule_item_dependencies:
-            player_results = state.rule_cache[self.player]
-            mapped_name = self.item_mapping.get(item.name, "")
-            rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
-            for rule_id in rule_ids:
-                if player_results.get(rule_id, None) is False:
-                    del player_results[rule_id]
-
-        return changed
-
-    @override
-    def remove(self, state: CollectionState, item: Item) -> bool:
-        changed = super().remove(state, item)
-        if not changed or not self.rule_caching_enabled:
-            return changed
-
-        player_results = state.rule_cache[self.player]
-        if self.rule_item_dependencies:
-            mapped_name = self.item_mapping.get(item.name, "")
-            rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
-            for rule_id in rule_ids:
-                player_results.pop(rule_id, None)
-
-        # clear all region dependent caches as none can be trusted
-        if self.rule_region_dependencies:
-            for rule_ids in self.rule_region_dependencies.values():
-                for rule_id in rule_ids:
-                    player_results.pop(rule_id, None)
-
-        # clear all location dependent caches as they may have lost region access
-        if self.rule_location_dependencies:
-            for rule_ids in self.rule_location_dependencies.values():
-                for rule_id in rule_ids:
-                    player_results.pop(rule_id, None)
-
-        # clear all entrance dependent caches as they may have lost region access
-        if self.rule_entrance_dependencies:
-            for rule_ids in self.rule_entrance_dependencies.values():
-                for rule_id in rule_ids:
-                    player_results.pop(rule_id, None)
-
-        return changed
-
-    @override
-    def reached_region(self, state: CollectionState, region: Region) -> None:
-        super().reached_region(state, region)
-        if self.rule_caching_enabled and self.rule_region_dependencies:
-            player_results = state.rule_cache[self.player]
-            for rule_id in self.rule_region_dependencies[region.name]:
-                player_results.pop(rule_id, None)
-
-
-Operator = Literal["eq", "ne", "gt", "lt", "ge", "le", "contains"]
-
-OPERATORS: dict[Operator, Callable[..., bool]] = {
-    "eq": operator.eq,
-    "ne": operator.ne,
-    "gt": operator.gt,
-    "lt": operator.lt,
-    "ge": operator.ge,
-    "le": operator.le,
-    "contains": operator.contains,
-}
-operator_strings: dict[Operator, str] = {
-    "eq": "==",
-    "ne": "!=",
-    "gt": ">",
-    "lt": "<",
-    "ge": ">=",
-    "le": "<=",
-}
-
-T = TypeVar("T")
-
-
-@dataclasses.dataclass(frozen=True)
-class OptionFilter(Generic[T]):
-    option: type[Option[T]]
-    value: T
-    operator: Operator = "eq"
-
-    def to_dict(self) -> dict[str, Any]:
-        """Returns a JSON compatible dict representation of this option filter"""
-        return {
-            "option": f"{self.option.__module__}.{self.option.__name__}",
-            "value": self.value,
-            "operator": self.operator,
-        }
-
-    def check(self, options: CommonOptions) -> bool:
-        """Tests the given options dataclass to see if it passes this option filter"""
-        option_name = next(
-            (name for name, cls in options.__class__.type_hints.items() if cls is self.option),
-            None,
-        )
-        if option_name is None:
-            raise ValueError(f"Cannot find option {self.option.__name__} in options class {options.__class__.__name__}")
-        opt = cast(Option[Any] | None, getattr(options, option_name, None))
-        if opt is None:
-            raise ValueError(f"Invalid option: {option_name}")
-
-        return OPERATORS[self.operator](opt.value, self.value)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> Self:
-        """Returns a new OptionFilter instance from a dict representation"""
-        if "option" not in data or "value" not in data:
-            raise ValueError("Missing required value and/or option")
-
-        option_path = data["option"]
-        try:
-            option_mod_name, option_cls_name = option_path.rsplit(".", 1)
-            option_module = importlib.import_module(option_mod_name)
-            option = getattr(option_module, option_cls_name, None)
-        except (ValueError, ImportError) as e:
-            raise ValueError(f"Cannot parse option '{option_path}'") from e
-        if option is None or not issubclass(option, Option):
-            raise ValueError(f"Invalid option '{option_path}' returns type '{option}' instead of Option subclass")
-
-        value = data["value"]
-        operator = data.get("operator", "eq")
-        return cls(option=cast(type[Option[Any]], option), value=value, operator=operator)
-
-    @classmethod
-    def multiple_from_dict(cls, data: Iterable[dict[str, Any]]) -> tuple["OptionFilter[Any]", ...]:
-        """Returns a tuple of OptionFilters instances from an iterable of dict representations"""
-        return tuple(cls.from_dict(o) for o in data)
-
-    @override
-    def __str__(self) -> str:
-        op = operator_strings.get(self.operator, self.operator)
-        return f"{self.option.__name__} {op} {self.value}"
+    TWorld = TypeVar("TWorld")
 
 
 def _create_hash_fn(resolved_rule_cls: "CustomRuleRegister") -> Callable[..., int]:
@@ -375,7 +164,7 @@ class Rule(Generic[TWorld]):
             if cls.__qualname__ in custom_rules:
                 raise TypeError(f"Rule {cls.__qualname__} has already been registered for game {game}")
             custom_rules[cls.__qualname__] = cls
-        elif cls.__module__ != "rule_builder":
+        elif cls.__module__ != "rule_builder.rules":
             # TODO: test to make sure this works on frozen
             raise TypeError("You cannot define custom rules for the base Archipelago world")
         cls.game_name = game
