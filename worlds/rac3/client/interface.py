@@ -5,6 +5,7 @@ from random import randint, uniform
 from struct import unpack
 from typing import Any, Optional
 
+from BaseClasses import ItemClassification
 from CommonClient import logger
 from worlds.rac3.constants.check_type import CHECKTYPE
 from worlds.rac3.constants.data.address import RAC3ADDRESSDATA
@@ -330,18 +331,34 @@ class Rac3Interface(GameInterface):
                 if location == 0:
                     pass
                 elif location > 0:
-                    self.notification_queue.append(
-                        (f'Found {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} '
-                         f'{RAC3TEXTCOLOR.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}', RAC3BOXTHEME.DEFAULT))
+                    if classification == ItemClassification.trap:
+                        self.notification_queue.append(
+                            (f'{RAC3TEXTCOLOR.WHITE}Activated {RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]} '
+                             f'{RAC3TEXTCOLOR.WHITE}at\\n{RAC3TEXTCOLOR.WHITE}{LOCATION_FROM_AP_CODE[location]}', 
+                             RAC3BOXTHEME.WARNING))
+                    else:
+                        self.notification_queue.append(
+                            (f'Found {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} '
+                            f'{RAC3TEXTCOLOR.NORMAL}at\\n{LOCATION_FROM_AP_CODE[location]}', RAC3BOXTHEME.DEFAULT))
                 else:
-                    self.notification_queue.append(
-                        (f'Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}',
-                         RAC3BOXTHEME.DEFAULT))
+                    if classification == ItemClassification.trap:
+                        self.notification_queue.append(
+                            (f'{RAC3TEXTCOLOR.WHITE}Activated {RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]}',
+                             RAC3BOXTHEME.WARNING))
+                    else:
+                        self.notification_queue.append(
+                            (f'Collected {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]}',
+                            RAC3BOXTHEME.DEFAULT))
             else:
-                self.notification_queue.append((
-                    f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
-                    f"{RAC3TEXTCOLOR.NORMAL}from "
-                    f"{RAC3TEXTCOLOR.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
+                if classification == ItemClassification.trap:
+                    self.notification_queue.append((
+                        f'{RAC3TEXTCOLOR.GREEN}{other_player}{RAC3TEXTCOLOR.WHITE} activated your '
+                        f'{RAC3TEXTCOLOR.NORMAL}{ITEM_FROM_AP_CODE[item_code]}', RAC3BOXTHEME.WARNING))
+                else:
+                    self.notification_queue.append((
+                        f"Received {CLASSIFICATION_TO_COLOR[classification]}{ITEM_FROM_AP_CODE[item_code]} "
+                        f"{RAC3TEXTCOLOR.NORMAL}from "
+                        f"{RAC3TEXTCOLOR.GREEN}{other_player}", RAC3BOXTHEME.DEFAULT))
         logger.debug(f'Item received: {ITEM_FROM_AP_CODE[item_code]}, AP code: {item_code}')
         if name in infobot_data.keys():
             if self.UnlockItem[name].status:
@@ -410,10 +427,6 @@ class Rac3Interface(GameInterface):
                         self._write8(non_prog_weapon_data[weapon_name].AMMO_ADDRESS, 0)
                 self._write8(RAC3STATUS.QWARK_AMMO, 0)
             case RAC3ITEM.LOCK_TRAP:
-                already_locked = self._read8(RAC3STATUS.WEAPON_LOCK)
-
-                # skip if already locked like in weapon challenges or weapon cycle challenges
-                if already_locked == 0:
                     if self.timers.get(name, False):
                         self.timers[name] += randint(5, 15)
                     else:
@@ -428,6 +441,14 @@ class Rac3Interface(GameInterface):
                     self.timers[name] += randint(3, 5)
                 else:
                     self.timers[name] = int(time.time() + uniform(3, 5))
+            case RAC3ITEM.NO_CLANK_TRAP:
+                    if self.timers.get(name, False):
+                        self.timers[name] += randint(5, 20)
+                    else:
+                        # Special case for holostar, nefarious base and klunk fight
+                        already_no_clank = self._read8(RAC3STATUS.NO_CLANK)
+                        if already_no_clank == 0:
+                            self.timers[name] = int(time.time() + uniform(5, 20))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -821,6 +842,7 @@ class Rac3Interface(GameInterface):
                             self._write8(status, 1)
             else:
                 self.timers.pop(name)
+                self.notification_queue.append((f'{name} \\whiteeffect has worn off', RAC3BOXTHEME.WARNING))
                 match _name:
                     case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
                         # Clear when timer ends directly rather than from the trap cleanup loop below
@@ -832,6 +854,8 @@ class Rac3Interface(GameInterface):
                         self._write8(RAC3STATUS.MIRROR_UNIVERSE, 0)
                     case RAC3ITEM.BLACK_SCREEN_TRAP:
                         self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
+                    case RAC3ITEM.NO_CLANK_TRAP:
+                        self._write8(RAC3STATUS.NO_CLANK, 0)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle
