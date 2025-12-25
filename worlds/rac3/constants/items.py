@@ -261,6 +261,7 @@ class RAC3ITEM:
     PANCAKE_TRAP = "Pancake Trap"
     LAVA_TRAP = "Lava Trap"
     NO_AMMO_TRAP = "No Ammo Trap"
+    BLACK_SCREEN_TRAP = "Black Screen Trap"
 
     QUICK_SELECT_0 = "Quick Select 0"
     QUICK_SELECT_1 = "Quick Select 1"

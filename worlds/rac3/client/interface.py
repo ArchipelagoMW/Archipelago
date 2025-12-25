@@ -374,7 +374,7 @@ class Rac3Interface(GameInterface):
                 self._write32(RAC3STATUS.INFERNO_TIMER, new_timer)
             case RAC3ITEM.JACKPOT:
                 # TODO rework jackpot filler item to extend time instead of increasing multiplier
-                # Limit multiplier to 64x
+                # Limit multiplier to 128x
                 if self.boltAndXPMultiplierValue <= 6: 
                     _time = round(time.time() + uniform(10, 30), 4)
                     self.timers[name + str(_time)] = _time
@@ -423,6 +423,11 @@ class Rac3Interface(GameInterface):
                     self.timers[name] += randint(5, 20)
                 else:
                     self.timers[name] = int(time.time() + uniform(5, 20))
+            case RAC3ITEM.BLACK_SCREEN_TRAP:
+                if self.timers.get(name, False):
+                    self.timers[name] += randint(3, 5)
+                else:
+                    self.timers[name] = int(time.time() + uniform(3, 5))
         if name in non_prog_weapon_data.keys():
             if non_prog_weapon_data[name].AMMO:
                 self._write8(non_prog_weapon_data[name].AMMO_ADDRESS, non_prog_weapon_data[name].AMMO)
@@ -808,7 +813,12 @@ class Rac3Interface(GameInterface):
                 _name = name
             if time.time() < _time:
                 if _name == name:
-                    self._write8(timer_to_status[name], 1)
+                    status = timer_to_status[name]
+                    match status:
+                        case RAC3STATUS.BLACK_SCREEN:
+                            self._write16(status, 0)
+                        case _:
+                            self._write8(status, 1)
             else:
                 self.timers.pop(name)
                 match _name:
@@ -820,6 +830,8 @@ class Rac3Interface(GameInterface):
                         self.boltAndXPMultiplierValue -= 1
                     case RAC3ITEM.MIRROR_TRAP:
                         self._write8(RAC3STATUS.MIRROR_UNIVERSE, 0)
+                    case RAC3ITEM.BLACK_SCREEN_TRAP:
+                        self._write16(RAC3STATUS.BLACK_SCREEN, 0x8C)
 
         # Remove trap effects for traps not in the timer dictionary to prevent any stuck effects
         # Prevent not having lock trap from unlocking weapon during arena weapon specific challenges every cycle

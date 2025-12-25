@@ -119,7 +119,7 @@ class RAC3LOCATION:
     BLACKWATER_CITY_RANGERS_2 = "Blackwater City: Operation BLACK TIDE 2: The Bridge"
     BLACKWATER_CITY_RANGERS_3 = "Blackwater City: Operation BLACK TIDE 3: Counterattack"
     BLACKWATER_CITY_COMPLETE = "Blackwater City: Received Gravity Boots"
-    SKIDD_CAPTURED = "Skidd is captured"
+    SKIDD_CAPTURED = "Galaxy Burger: Skidd is captured"
     DRACO_COURTNEY = "Obani Draco: Defeat Courtney Gears"
     ZELDRIN_STARPORT_ITEM = "Zeldrin Starport: Received Bolt Grabber V2"
     ZELDRIN_STARPORT_SHIP = "Zeldrin Starport: Escape the Exploding Ship"
