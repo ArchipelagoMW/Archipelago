@@ -842,7 +842,7 @@ class Rac3Interface(GameInterface):
                             self._write8(status, 1)
             else:
                 self.timers.pop(name)
-                self.notification_queue.append((f'{name} \\whiteeffect has worn off', RAC3BOXTHEME.WARNING))
+                self.notification_queue.append((f'{name}{RAC3TEXTCOLOR.WHITE} effect has worn off', RAC3BOXTHEME.WARNING))
                 match _name:
                     case RAC3ITEM.LOCK_TRAP:  # Special case for lock trap
                         # Clear when timer ends directly rather than from the trap cleanup loop below
