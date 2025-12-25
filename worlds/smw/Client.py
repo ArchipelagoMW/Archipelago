@@ -132,7 +132,7 @@ class SMWSNIClient(SNIClient):
             self.instance_id = time.time()
 
         source_name = args["data"]["source"]
-        if "TrapLink" in ctx.tags and "TrapLink" in args["tags"] and source_name != ctx.slot_info[ctx.slot].name:
+        if "TrapLink" in ctx.tags and "TrapLink" in args["tags"] and source_name != ctx.player_names[ctx.slot]:
             trap_name: str = args["data"]["trap_name"]
             if trap_name not in trap_name_to_value:
                 # We don't know how to handle this trap, ignore it
