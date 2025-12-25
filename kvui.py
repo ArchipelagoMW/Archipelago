@@ -542,9 +542,7 @@ class AutocompleteHintInput(ResizableTextField):
             item_names = ctx.item_names._game_store[ctx.game].values()
 
             def on_press(text):
-                split_text = MarkupLabel(text=text).markup
-                self.set_text(self, "".join(text_frag for text_frag in split_text
-                                            if not text_frag.startswith("[")))
+                self.set_text(self, text)
                 self.dropdown.dismiss()
                 self.focus = True
 
@@ -559,7 +557,7 @@ class AutocompleteHintInput(ResizableTextField):
                     text = text[:index] + "[b]" + text[index:index+len(value)]+"[/b]"+text[index+len(value):]
                     self.dropdown.items.append({
                         "text": text,
-                        "on_release": lambda txt=text: on_press(txt),
+                        "on_release": lambda txt=item_name: on_press(txt),
                         "markup": True
                     })
             if not self.dropdown.parent:
