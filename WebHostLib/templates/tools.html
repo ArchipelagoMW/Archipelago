@@ -33,9 +33,9 @@
         <h1>Tools</h1>
         <p>This is a list of tools that may be useful when using Archipelago.</p>
         <div class="js-only">
-            <label for="game-search">Search for your game below!</label><br />
+            <label for="game-search">Search for your tool below!</label><br />
             <div class="page-controls">
-                <input id="game-search" placeholder="Search by title..." autofocus />
+                <input id="game-search" placeholder="Search by name..." autofocus />
                 <button id="expand-all">Expand All</button>
                 <button id="collapse-all">Collapse All</button>
             </div>
@@ -45,7 +45,7 @@
         <details data-game="{{ game_name }}">
             <summary class="h2">{{ game_name }}</summary>
             {{ world.__doc__ | default("No description provided.", true) }}<br />
-            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Game Page</a>
+            <a href="{{ url_for("game_info", game=game_name, lang="en") }}">Tool Page</a>
             {% if world.tutorials %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("tutorial_landing", _anchor = game_name | urlencode) }}">Setup Guides</a>
