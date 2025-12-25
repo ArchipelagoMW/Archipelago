@@ -202,8 +202,10 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                 region.add_exits([room_region.name])
 
             if room.checkpoint != None:
+                goal_and_level_farewell = (level.name.startswith("10") and world.goal_area.startswith("10"))
+                is_locked_goal = world.options.lock_goal_area and (level.name == world.goal_area or goal_and_level_farewell)
                 if room.checkpoint == "Start":
-                    if world.options.lock_goal_area and (level.name == world.goal_area or (level.name[:2] == world.goal_area[:2] and world.goal_area[:2] == "10")):
+                    if is_locked_goal:
                         world.goal_start_region: str = room.checkpoint_region
                     elif level.name == "8a":
                         world.epilogue_start_region: str = room.checkpoint_region
@@ -217,7 +219,7 @@ def create_regions_and_locations(world: CelesteOpenWorld):
                         checkpoint_location_name: world.location_name_to_id[checkpoint_location_name]
                     }, CelesteLocation)
 
-                    if world.options.lock_goal_area and (level.name == world.goal_area or (level.name[:2] == world.goal_area[:2] and world.goal_area[:2] == "10")):
+                    if is_locked_goal:
                         world.goal_checkpoint_names[room.checkpoint_region] = checkpoint_location_name
                     else:
                         menu_region.add_exits([room.checkpoint_region], {room.checkpoint_region: checkpoint_rule})
