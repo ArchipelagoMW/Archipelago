@@ -12750,43 +12750,29 @@ end
 
 function received_misc(itemId)
     if itemId == 6500358 then
-		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
-        GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], MISC_ITEMS_RECIEVED["CHICKEN"])
+		send_linked_item("CHICKEN")
     elseif itemId == 6500359 then
-		MISC_ITEMS_RECIEVED["LIFE"] = MISC_ITEMS_RECIEVED["LIFE"] + 1
-        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], MISC_ITEMS_RECIEVED["LIFE"])
+		send_linked_item("LIFE")
     elseif itemId == 6500360 then
-		MISC_ITEMS_RECIEVED["BOOMERANG"] = MISC_ITEMS_RECIEVED["BOOMERANG"] + 1
-        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_TRANSFORM"], MISC_ITEMS_RECIEVED["BOOMERANG"])
+		send_linked_item("BOOMERANG")
     elseif itemId == 6500361 then
-		MISC_ITEMS_RECIEVED["BEACHBALL"] = MISC_ITEMS_RECIEVED["BEACHBALL"] + 1
-        GVR:setItem(ITEM_TABLE["AP_BEACHBALL_TRANSFORM"], MISC_ITEMS_RECIEVED["BEACHBALL"])
+		send_linked_item("BEACHBALL")
     elseif itemId == 6500362 then
-		MISC_ITEMS_RECIEVED["HERCULES"] = MISC_ITEMS_RECIEVED["HERCULES"] + 1
-        GVR:setItem(ITEM_TABLE["AP_HERCULES_TRANSFORM"], MISC_ITEMS_RECIEVED["HERCULES"])
+		send_linked_item("HERCULES")
     elseif itemId == 6500363 then
-		MISC_ITEMS_RECIEVED["HELICOPTER"] = MISC_ITEMS_RECIEVED["HELICOPTER"] + 1
-        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_TRANSFORM"], MISC_ITEMS_RECIEVED["HELICOPTER"])
+		send_linked_item("HELICOPTER")
     elseif itemId == 6500364 then
-		MISC_ITEMS_RECIEVED["SPEED"] = MISC_ITEMS_RECIEVED["SPEED"] + 1
-        GVR:setItem(ITEM_TABLE["AP_SPEED_TRANSFORM"], MISC_ITEMS_RECIEVED["SPEED"])
+		send_linked_item("SPEED")
     elseif itemId == 6500365 then
-		MISC_ITEMS_RECIEVED["FROG"] = MISC_ITEMS_RECIEVED["FROG"] + 1
-        GVR:setItem(ITEM_TABLE["AP_FROG_TRANSFORM"], MISC_ITEMS_RECIEVED["FROG"])
+		send_linked_item("FROG_SPELL")
     elseif itemId == 6500366 then
-		MISC_ITEMS_RECIEVED["DEATH"] = MISC_ITEMS_RECIEVED["DEATH"] + 1
-        GVR:setItem(ITEM_TABLE["AP_DEATH_TRANSFORM"], MISC_ITEMS_RECIEVED["DEATH"])
+		send_linked_item("DEATH")
     elseif itemId == 6500367 then
-		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
-        GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
+		send_linked_item("STICKY")
     elseif itemId == 6500368 then
-		MISC_ITEMS_RECIEVED["BIG_BALL"] = MISC_ITEMS_RECIEVED["BIG_BALL"] + 1
-		print("Big Ball Unimplimented!")
-        -- GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
+		send_linked_item("BIG_BALL")
     elseif itemId == 6500369 then
-		MISC_ITEMS_RECIEVED["LOW_GRAVITY"] = MISC_ITEMS_RECIEVED["LOW_GRAVITY"] + 1
-		print("Low Gravity Unimplimented!")
-        -- GVR:setItem(ITEM_TABLE["AP_LOW_GRAVITY"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
+		send_linked_item("LOW_GRAVITY")
     end
 end
 
@@ -13497,6 +13483,8 @@ function incoming_links(triggered_links)
 						then
 							LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] = LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] + 1
 							send_linked_item(each_link)
+						elseif MISC_ITEMS_RECIEVED[each_link] ~= nil then
+							send_linked_item(each_link)
 						end
 					end
 				end
@@ -13507,6 +13495,7 @@ end
 
 -- Sends an itemized version of the link to the Glover Rom
 function send_linked_item(linkName)
+	-- Traps
 	if linkName == "DEATH"
 	then
 		LINKS_TABLE["DEATH"]['LOCAL'] = LINKS_TABLE["DEATH"]['LOCAL'] + 1
@@ -13559,6 +13548,45 @@ function send_linked_item(linkName)
 		LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] + 1
 		print("Invisiball Unimplimented!")
 		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'])
+	-- Filler
+	elseif linkName == "CHICKEN" then
+		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
+        GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], MISC_ITEMS_RECIEVED["CHICKEN"])
+    elseif linkName == "LIFE" then
+		MISC_ITEMS_RECIEVED["LIFE"] = MISC_ITEMS_RECIEVED["LIFE"] + 1
+        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], MISC_ITEMS_RECIEVED["LIFE"])
+    elseif linkName == "BOOMERANG" then
+		MISC_ITEMS_RECIEVED["BOOMERANG"] = MISC_ITEMS_RECIEVED["BOOMERANG"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_TRANSFORM"], MISC_ITEMS_RECIEVED["BOOMERANG"])
+    elseif linkName == "BEACHBALL" then
+		MISC_ITEMS_RECIEVED["BEACHBALL"] = MISC_ITEMS_RECIEVED["BEACHBALL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BEACHBALL_TRANSFORM"], MISC_ITEMS_RECIEVED["BEACHBALL"])
+    elseif linkName == "HERCULES" then
+		MISC_ITEMS_RECIEVED["HERCULES"] = MISC_ITEMS_RECIEVED["HERCULES"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HERCULES_TRANSFORM"], MISC_ITEMS_RECIEVED["HERCULES"])
+    elseif linkName == "HELICOPTER" then
+		MISC_ITEMS_RECIEVED["HELICOPTER"] = MISC_ITEMS_RECIEVED["HELICOPTER"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_TRANSFORM"], MISC_ITEMS_RECIEVED["HELICOPTER"])
+    elseif linkName == "SPEED" then
+		MISC_ITEMS_RECIEVED["SPEED"] = MISC_ITEMS_RECIEVED["SPEED"] + 1
+        GVR:setItem(ITEM_TABLE["AP_SPEED_TRANSFORM"], MISC_ITEMS_RECIEVED["SPEED"])
+    elseif linkName == "FROG_SPELL" then
+		MISC_ITEMS_RECIEVED["FROG"] = MISC_ITEMS_RECIEVED["FROG"] + 1
+        GVR:setItem(ITEM_TABLE["AP_FROG_TRANSFORM"], MISC_ITEMS_RECIEVED["FROG"])
+    elseif linkName == "DEATH" then
+		MISC_ITEMS_RECIEVED["DEATH"] = MISC_ITEMS_RECIEVED["DEATH"] + 1
+        GVR:setItem(ITEM_TABLE["AP_DEATH_TRANSFORM"], MISC_ITEMS_RECIEVED["DEATH"])
+    elseif linkName == "STICKY" then
+		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
+        GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
+    elseif linkName == "BIG_BALL" then
+		MISC_ITEMS_RECIEVED["BIG_BALL"] = MISC_ITEMS_RECIEVED["BIG_BALL"] + 1
+		print("Big Ball Unimplimented!")
+        -- GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
+    elseif linkName == "LOW_GRAVITY" then
+		MISC_ITEMS_RECIEVED["LOW_GRAVITY"] = MISC_ITEMS_RECIEVED["LOW_GRAVITY"] + 1
+		print("Low Gravity Unimplimented!")
+        -- GVR:setItem(ITEM_TABLE["AP_LOW_GRAVITY"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
 	else
 		print("Unknown Linked Item: "..linkName)
 	end

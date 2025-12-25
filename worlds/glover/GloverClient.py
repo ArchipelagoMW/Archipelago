@@ -323,15 +323,19 @@ class GloverContext(CommonContext):
             "DEATH" : BounceLink("DEATH", "DeathLink"),
             "TAG" : BounceLink("TAG", "TagLink"),
             "TRAP" : MultiLink("TRAP", "TrapLink", {
-                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap", "Snake Trap"]},
-                "CRYSTAL" : {"Accepts" : ["Disable Tag Trap", "Double Damage", "Eject Ability", "Instant Crystal Trap", "One Hit KO"]},
-                "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Screen Flip Trap"]},
-                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]},
-                "TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Tutorial Trap", "Spam Trap"]},
-                "FISH_EYE" : {"Accepts" : []},
-                "ENEMY_BALL" : {"Accepts" : []},
-                "CONTROL_BALL" : {"Accepts" : []},
-                "INVISIBALL" : {"Accepts" : []}
+                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap", "Jump Trap", "Jumping Jacks Trap", "No Guarding", "Snake Trap", "Slow Trap", "Slowness Trap", "Tiny Trap"]},
+                "CRYSTAL" : {"Accepts" : ["Damage Trap", "Double Damage", "Eject Ability", "Energy Drain Trap", "Gadget Shuffle Trap", "Items to Bombs", "Instant Crystal Trap", "One Hit KO", "Radiation Trap", "Swap Trap", "Whoops! Trap"]},
+                "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Confound Trap", "Confuse Trap", "Deisometric Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Reverse Trap", "Screen Flip Trap"]},
+                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Confusion Trap", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "My Turn! Trap", "Slip Trap"]},
+                "TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Ghost Chat", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Trivia Trap", "Tutorial Trap", "Spam Trap"]},
+                "FISH_EYE" : {"Accepts" : ["144p Trap", "Fish Eye Trap", "Fuzzy Trap", "Pixelate Trap", "Pixellation Trap", "Spotlight Trap", "Underwater Trap", "W I D E Trap", "Zoom Trap"]},
+                "ENEMY_BALL" : {"Accepts" : ["Army Trap", "Bee Trap", "Bunyon Trap", "Fear Trap", "Gooey Bag", "Police Trap", "Spooky Time", "Tarr Trap", "Thwimp Trap"]},
+                "CONTROL_BALL" : {"Accepts" : ["Bald Trap", "Breakout Trap", "Bubble Trap", "Control Ball Trap", "Disable A Trap", "Disable Z Trap", "Ghost", "Pinball Trap", "PONG Challenge", "Pong Trap"]},
+                "INVISIBALL" : {"Accepts" : ["Depletion Trap", "Disable B Trap", "Empty Item Box Trap", "Fishin' Boo Trap", "Get Out Trap", "Invisiball Trap", "Invisible Trap", "Invisibility Trap", "No Stocks", "No Vac Trap", "Resistance Trap", "Spike Ball Trap"]},
+                # Not traps, but activated by them
+                "STICKY" : {"Accepts" : ["Honey Trap", "Iron Boots Trap", "Sticky Floor Trap", "Sticky Hands Trap"]},
+                "SPEED" : {"Accepts" : ["Fast Trap"]},
+                "LOW_GRAVITY" : {"Accepts" : ["Gravity Trap"]}
                 })
         }
         self.version_warning = False
@@ -574,13 +578,16 @@ class LinkInfo():
         """Sets pending and local to false."""
         self.set_timestamp()
         self.pending = False
-        self.local = False
+        #self.local = False
     
     def recieve_pending(self):
         self.set_timestamp()
+        #if self.local:
+        #    self.local = False
+        #    return False
         if self.pending:
             self.pending = False
-            self.local = True
+        #    self.local = True
             return True
         return False
 
