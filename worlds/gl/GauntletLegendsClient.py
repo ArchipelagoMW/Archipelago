@@ -1,6 +1,5 @@
 import asyncio
 import settings
-import datetime
 import os
 import socket
 import traceback
@@ -11,7 +10,6 @@ import Patch
 from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
-from Utils import user_path
 
 from .Data import (
     base_count,
@@ -21,10 +19,10 @@ from .Data import (
     difficulty_convert,
     item_ids,
     level_locations,
-    spawners,
     sounds,
     colors,
-    vanilla, level_names, portals,
+    vanilla,
+    portals
 )
 from .Items import ItemData, items_by_id
 from .Locations import LocationData
@@ -32,7 +30,6 @@ from .Locations import LocationData
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
 INV_ADDR = 0xC5BF0
-OBJ_ADDR = 0xBB5C0
 ACTIVE_LEVEL = 0x4EFC0
 PLAYER_COUNT = 0x127764
 PLAYER_LEVEL = 0xFD31B
@@ -46,6 +43,8 @@ SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
 PAUSED = 0xC5B18
+ITEM_OBJECTS_BASE_ADDRESS = 0x1070A8
+CHEST_OBJECTS_BASE_ADDRESS = 0x107350
 
 BOSS_ADDR = 0x289C08
 TIME = 0xC5B1C
@@ -175,28 +174,22 @@ class GauntletLegendsContext(CommonContext):
         self.rom_loaded: bool = False
         self.locations_checked: list[int] = []
         self.inventory: list[list[InventoryEntry]] = []
-        self.item_objects: list[ObjectEntry] = []
-        self.chest_objects: list[ObjectEntry] = []
-        self.item_objects_init: list[ObjectEntry] = []
-        self.chest_objects_init: list[ObjectEntry] = []
         self.retro_connected: bool = False
         self.level_loading: bool = False
         self.in_game: bool = False
-        self.objects_loaded: bool = False
+        self.scouted: bool = False
         self.obelisks: list[NetworkItem] = []
         self.item_locations: list[LocationData] = []
         self.obelisk_locations: list[LocationData] = []
         self.chest_locations: list[LocationData] = []
-        self.extra_items: int = 0
-        self.extra_spawners: int = 0
-        self.extra_chests: int = 0
+        self.item_address: int = 0
+        self.chest_address: int = 0
         self.limbo: bool = False
         self.in_portal: bool = False
         self.scaled: bool = False
         self.offset: int = -1
         self.clear_counts = None
         self.current_level: bytes = b""
-        self.logged: bool = False
         self.output_file: str = ""
         self.movement: int = 0
         self.init_refactor: bool = False
@@ -255,161 +248,6 @@ class GauntletLegendsContext(CommonContext):
         if item is None:
             return False
         return (item.count & bit) != 0
-
-    async def get_obj_addr(self) -> int:
-        return (int.from_bytes(await self.socket.read(message_format(READ, f"0x{format(OBJ_ADDR, 'x')} 4")),
-                               "little")) & 0xFFFFF
-
-    async def obj_read(self, mode=0):
-        MAX_CHUNK_SIZE = 50
-        OBJ_SIZE = 0x3C
-        _obj: list[ObjectEntry] = []
-
-        if self.offset == -1:
-            await self._initialize_offset(MAX_CHUNK_SIZE, OBJ_SIZE)
-
-        if mode == 0:
-            await self._read_items(MAX_CHUNK_SIZE, OBJ_SIZE)
-        else:
-            await self._read_chests(MAX_CHUNK_SIZE, OBJ_SIZE)
-
-        if mode == 0:
-            total_items = len(self.item_locations) + self.extra_items
-            addr = OBJ_ADDR + (self.offset * OBJ_SIZE)
-        else:
-            spawner_count = self._get_spawner_count()
-            total_items = len(self.chest_locations) + self.extra_chests
-            addr = OBJ_ADDR + ((
-                                           len(self.item_locations) + self.offset + self.extra_items + self.extra_spawners + spawner_count) * OBJ_SIZE)
-
-        b = RamChunk(await self.socket.read(message_format(READ, f"0x{addr:x} {total_items * OBJ_SIZE}")))
-        b.iterate(OBJ_SIZE)
-
-        for arr in b.split:
-            _obj.append(ObjectEntry(arr))
-        _obj = [obj for obj in _obj if obj.raw[1] != 0xFF]
-
-        if mode == 1:
-            self.chest_objects = _obj[:len(self.chest_locations)]
-            if not self.chest_objects_init:
-                self.chest_objects_init = self.chest_objects
-        else:
-            self.item_objects = _obj[:len(self.item_locations)]
-            if not self.item_objects_init:
-                self.item_objects_init = self.item_objects
-
-    async def _initialize_offset(self, max_chunk: int, obj_size: int):
-        log_arr = []
-        for i in range(5):
-            chunk_addr = OBJ_ADDR + ((i * max_chunk) * obj_size)
-            b = RamChunk(await self.socket.read(message_format(READ, f"0x{chunk_addr:x} {max_chunk * obj_size}")))
-            b.iterate(obj_size)
-            log_arr += [arr for arr in b.split]
-
-        output_folder = user_path("logs")
-        os.makedirs(output_folder, exist_ok=True)
-        _id = self.current_level[0]
-        if self.current_level[1] == 1:
-            _id = castle_id.index(self.current_level[0]) + 1
-        self.output_file = os.path.join(output_folder,
-                                        f"({datetime.datetime.now().strftime('%Y-%m-%d - %I-%M-%S-%p')}) Gauntlet Legends RAMSTATE - {level_names[(self.current_level[1] << 4) + _id]}.txt")
-
-        with open(self.output_file, 'w+') as f:
-            for i, arr in enumerate(log_arr):
-                f.write(f"0x{format(OBJ_ADDR + (obj_size * i), 'x')}: " + " ".join(
-                    f"{int(byte):02x}" for byte in arr) + '\n')
-
-        b = RamChunk(await self.socket.read(message_format(READ, f"0x{OBJ_ADDR:x} {0x40 * obj_size}")))
-        b.iterate(obj_size)
-        for i, obj in enumerate(b.split):
-            if obj[1] != 0xFF:
-                self.offset = i
-                break
-
-    async def _read_items(self, max_chunk: int, obj_size: int):
-        while True:
-            total_size = (len(self.item_locations) + self.extra_items) * obj_size
-            addr = OBJ_ADDR + (self.offset * obj_size)
-            b = RamChunk(await self.socket.read(message_format(READ, f"0x{addr:x} {total_size}")))
-            b.iterate(obj_size)
-
-            count = sum(1 for obj in b.split if obj[1] == 0xFF) - self.extra_items
-            if count <= 0:
-                break
-            self.extra_items += count
-
-        if not self.logged:
-            with open(self.output_file, 'a') as f:
-                f.write(f"Item Address: 0x{format(OBJ_ADDR + (self.offset * obj_size), 'x')}\n")
-                f.write(f"Extra Items: {self.extra_items}\n")
-
-    def _get_spawner_count(self):
-        level_id = (self.current_level[1] << 4) + (
-            self.current_level[0] if self.current_level[1] != 1
-            else castle_id.index(self.current_level[0]) + 1
-        )
-        return len([spawner for spawner in spawners[level_id] if self.difficulty >= spawner])
-
-    async def _read_chests(self, max_chunk: int, obj_size: int):
-        spawner_count = self._get_spawner_count()
-
-        if self.extra_spawners == 0:
-            count = 0
-            num_chunks = (spawner_count + max_chunk - 1) // max_chunk
-
-            for i in range(num_chunks):
-                chunk_size = min((spawner_count - (max_chunk * i)), max_chunk)
-                addr = OBJ_ADDR + (
-                            (len(self.item_locations) + self.offset + self.extra_items + (i * max_chunk)) * obj_size)
-
-                b = RamChunk(await self.socket.read(message_format(READ, f"0x{addr:x} {chunk_size * obj_size}")))
-                b.iterate(obj_size)
-                chunk_count = sum(1 for obj in b.split if obj[1] == 0xFF)
-                count += chunk_count
-
-                if not self.logged:
-                    with open(self.output_file, 'a') as f:
-                        f.write(f"Spawner Address {i + 1}: 0x{addr:x}\n")
-                        f.write(f"Count: {chunk_count}\n")
-
-            self.extra_spawners += count
-
-            count = 0
-            if self.extra_spawners != 0:
-                while True:
-                    addr = OBJ_ADDR + (
-                                (len(self.item_locations) + self.offset + self.extra_items + spawner_count) * obj_size)
-                    b = RamChunk(await self.socket.read(
-                        message_format(READ, f"0x{addr:x} {(self.extra_spawners + count) * obj_size}")))
-                    b.iterate(obj_size)
-
-                    current_count = sum(1 for obj in b.split if obj[1] == 0xFF) - count
-                    if current_count <= 0:
-                        break
-                    count += current_count
-
-            self.extra_spawners += count
-            if not self.logged:
-                with open(self.output_file, 'a') as f:
-                    f.write(f"Total Extra Spawners: {self.extra_spawners}\n")
-
-        while True:
-            addr = OBJ_ADDR + ((
-                                           len(self.item_locations) + self.offset + self.extra_items + self.extra_spawners + spawner_count) * obj_size)
-            total_size = (len(self.chest_locations) + self.extra_chests) * obj_size
-            b = RamChunk(await self.socket.read(message_format(READ, f"0x{addr:x} {total_size}")))
-            b.iterate(obj_size)
-
-            count = sum(1 for obj in b.split if obj[1] == 0xFF) - self.extra_chests
-            if count <= 0:
-                break
-            self.extra_chests += count
-
-        if not self.logged:
-            with open(self.output_file, 'a') as f:
-                f.write(f"Chest Address: 0x{addr:x}\n")
-                f.write(f"Extra Chests: {self.extra_chests}\n")
-                self.logged = True
 
     def _normalize_item_name(self, name: str) -> str:
         if "Runestone" in name:
@@ -613,22 +451,11 @@ class GauntletLegendsContext(CommonContext):
 
             # Filter locations by difficulty and settings
             level_id = self._get_level_id(level)
-            max_diff = min(self.difficulty, self.glslotdata["max"])
 
-            raw_locations = []
-            for location in level_locations.get(level_id, []):
-                if max_diff < location.difficulty:
-                    continue
+            self.item_address = await self._read_ram_int(ITEM_OBJECTS_BASE_ADDRESS, 4) & 0xFFFFFF
+            self.chest_address = await self._read_ram_int(CHEST_OBJECTS_BASE_ADDRESS, 4) & 0xFFFFFF
 
-                if "Chest" in location.name and not self.glslotdata["chests"]:
-                    continue
-                if "Barrel" in location.name and "Barrel of Gold" not in location.name and not self.glslotdata[
-                    "barrels"]:
-                    continue
-                if "Mirror" in location.name:
-                    continue
-
-                raw_locations.append(location)
+            raw_locations = [location for location in level_locations.get(level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
 
             # Scout locations if any exist
             if raw_locations:
@@ -673,23 +500,28 @@ class GauntletLegendsContext(CommonContext):
             logger.error(traceback.format_exc())
 
     async def location_loop(self) -> list[int]:
-        if not self.logged:
-            await asyncio.sleep(0.5)
-        await self.obj_read()
-        await self.obj_read(1)
         acquired = []
-        for i, obj in enumerate(self.item_objects):
-            if int.from_bytes(obj.raw[8:12], "little") != int.from_bytes(self.item_objects_init[i].raw[8:12], "little"):
-                if self.item_locations[i].id not in self.locations_checked:
-                    acquired += [self.item_locations[i].id]
+        for i in range(len(self.item_locations)):
+            state = await self._read_ram_int(self.item_address + (i * 0x18), 1)
+            active = await self._read_ram_int(self.item_address + (i * 0x18) + 0x1, 1)
+            if state >= 0x7F:
+                continue
+            if state == 0 and active == 1:
+                acquired += [self.item_locations[i].id]
+
         for j in range(len(self.obelisk_locations)):
             ob = await self.inv_bitwise("Obelisk", (1 << (base_count[items_by_id[self.obelisks[j].item].item_name] - 1)), 0)
             if ob:
                 acquired += [self.obelisk_locations[j].id]
-        for k, obj in enumerate(self.chest_objects):
-            if int.from_bytes(obj.raw[0x30:0x34], "little") != 0:
-                if self.chest_locations[k].id not in self.locations_checked:
-                    acquired += [self.chest_locations[k].id]
+
+        for i in range(len(self.item_locations)):
+            state = await self._read_ram_int(self.chest_address + (i * 0x18), 1)
+            active = await self._read_ram_int(self.chest_address + (i * 0x18) + 0x1, 1)
+            if state >= 0x7F:
+                continue
+            if state != 1 and active == 1:
+                acquired += [self.item_locations[i].id]
+
         paused = await self.paused()
         dead = await self.dead()
         if paused or dead:
@@ -730,21 +562,12 @@ class GauntletLegendsContext(CommonContext):
         return False
 
     def var_reset(self):
-        self.objects_loaded = False
-        self.logged = False
         self.output_file = ""
-        self.extra_items = 0
-        self.extra_spawners = 0
-        self.extra_chests = 0
         self.item_locations = []
-        self.item_objects = []
         self.chest_locations = []
-        self.chest_objects = []
         self.obelisk_locations = []
         self.obelisks = []
         self.useful = []
-        self.item_objects_init = []
-        self.chest_objects_init = []
         self.in_game = False
         self.level_loading = False
         self.scaled = False
@@ -753,12 +576,8 @@ class GauntletLegendsContext(CommonContext):
         self.difficulty = 0
         self.location_scouts = []
         self.ignore_deathlink = False
-
-    async def load_objects(self, ctx: "GauntletLegendsContext"):
-        await self.scout_locations(ctx)
-        await self.obj_read()
-        await self.obj_read(1)
-        self.objects_loaded = True
+        self.item_address = 0
+        self.chest_address = 0
 
     async def die(self):
         """Trigger deathlink death with character-specific death sound."""
@@ -981,8 +800,9 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.in_game = not await ctx.check_loading()
                 if ctx.in_game:
                     ctx.level_loading = False
-                    if not ctx.objects_loaded:
-                        await ctx.load_objects(ctx)
+                    if not ctx.scouted:
+                        await ctx.scout_locations(ctx)
+                        ctx.scouted = True
                         await asyncio.sleep(1)
                     status = await ctx.level_status(ctx)
                     if status:

@@ -152,7 +152,9 @@ class GauntletLegendsWorld(World):
             "characters": characters,
             "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
             "instant_max": self.options.instant_max.value,
-            "death_link": bool((self.options.death_link.value == 1))
+            "death_link": bool((self.options.death_link.value == 1)),
+            "portals": self.options.portals.value,
+            "included_areas": [area for area in IncludedAreas.valid_keys if area in self.options.included_areas.value],
         }
 
     def create_items(self) -> None:
