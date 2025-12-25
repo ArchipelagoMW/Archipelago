@@ -792,7 +792,8 @@ class Rac3Interface(GameInterface):
                     msg_list, color_bytes_count, longest_line_length = self.format_textbox_string(merged_message)
                     if not self.message_display:
                         self.notification_time = current_time + 3
-                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, int((self.notification_time - current_time)*120))
+                        display_time = int((self.notification_time - current_time)*120)
+                        self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
                     else:
                         write_message = b''
                         for line in msg_list:
@@ -801,7 +802,8 @@ class Rac3Interface(GameInterface):
                         if read_message != write_message:
                             # Give the player a bit more time to read the new appended line in case it was about to expire
                             self.notification_time += 0.33
-                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, int((self.notification_time - current_time)*120))
+                            display_time = int((self.notification_time - current_time)*120)
+                            self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
                             logger.debug(f'Warning: Incorrect Display message detected')
                             logger.debug(f'Message: {merged_message}')
                             logger.debug(f'{read_message}')
@@ -1031,6 +1033,8 @@ class Rac3Interface(GameInterface):
 
     def messagebox(self, msg_list: list[bytes], color_bytes_count: int, longest_line_length: int, box_theme: int =
     RAC3BOXTHEME.DEFAULT, time: int = 0x168) -> None:
+        if time < 0:
+            time = 0
         # real overflow cap is actually about 248, but we don't need that long messages
         curr_addr = RAC3MESSAGEBOX.MESSAGE
         msg_bytes = b''
