@@ -16,7 +16,7 @@ local math = require('math')
 require('common')
 
 local SCRIPT_VERSION = 5
-local BT_VERSION = "V4.11.3"
+local BT_VERSION = "4.11.4"
 local PLAYER = ""
 local SEED = 0
 
@@ -6361,9 +6361,9 @@ function BTHACK:getRomVersion()
     patch = mainmemory.readbyte(self.version + 3 + hackPointerIndex);
     if patch == 0
     then
-        return "V"..tostring(major).."."..tostring(minor)
+        return tostring(major).."."..tostring(minor)
     else
-        return "V"..tostring(major).."."..tostring(minor).."."..tostring(patch)
+        return tostring(major).."."..tostring(minor).."."..tostring(patch)
     end
 end
 

@@ -53,8 +53,8 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 bt_loc_name_to_id = BanjoTooieWorld.location_name_to_id
 bt_itm_name_to_id = BanjoTooieWorld.item_name_to_id
 script_version: int = 5
-version: str = "V4.11.3"
-patch_md5: str = "54efb965e58f1bb15487d411dc8955a3"
+version: str = BanjoTooieWorld.world_version.as_simple_string()
+patch_md5: str = "301fb828cb16db9001414954693f3a49"
 bt_options = BanjoTooieWorld.settings
 program = None
 

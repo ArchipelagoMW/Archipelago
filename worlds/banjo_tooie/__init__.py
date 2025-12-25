@@ -24,7 +24,7 @@ from .Names import itemName, locationName, regionName
 from .WorldOrder import randomize_world_progression
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type, launch_subprocess
+from worlds.LauncherComponents import Component, icon_paths, components, Type, launch_subprocess
 
 
 def run_client():
@@ -32,8 +32,9 @@ def run_client():
     launch_subprocess(main)
 
 
-components.append(Component("Banjo-Tooie Client", func=run_client, component_type=Type.CLIENT))
-
+components.append(Component("Banjo-Tooie Client", func=run_client, component_type=Type.CLIENT,
+                            icon='Jinjo Icon'))
+icon_paths['Jinjo Icon'] = "ap:worlds.banjo_tooie/assets/icon.png"
 
 class BanjoTooieSettings(settings.Group):
     class RomPath(settings.OptionalUserFilePath):
@@ -997,7 +998,7 @@ class BanjoTooieWorld(World):
             regionName.CCBOSS: regionName.CC,
         }
         bt_players = world.get_game_players(cls.game)
-        spoiler_handle.write(f"\n\nBanjo-Tooie (V{cls.world_version.as_simple_string()})")
+        spoiler_handle.write(f"\n\nBanjo-Tooie ({cls.world_version.as_simple_string()})")
         for player in bt_players:
             currentWorld: BanjoTooieWorld = world.worlds[player]
             name = world.get_player_name(player)
@@ -1049,7 +1050,7 @@ class BanjoTooieWorld(World):
             "loading_zones": self.loading_zones,
             "preopened_silos_names": self.preopened_silos,
             "preopened_silos_ids": [self.item_name_to_id[name] for name in self.preopened_silos],
-            "version": f"V{self.world_version.as_simple_string()}",
+            "version": f"{self.world_version.as_simple_string()}",
             "jamjars_siloname_costs": self.jamjars_siloname_costs,
             "jamjars_silo_costs": self.jamjars_silo_costs,
             "hints": {location: asdict(hint_data) for location, hint_data in self.hints.items()}
