@@ -1,13 +1,11 @@
 import bisect
-import itertools
 import logging
 import pathlib
 import weakref
 from enum import Enum, auto
 from typing import Optional, Callable, List, Iterable, Tuple
 
-from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, \
-    PatternInfo, read_apignore
+from Utils import local_path, open_filename, is_frozen, is_kivy_running, open_file, user_path, read_apignore
 
 
 class Type(Enum):
@@ -311,33 +309,14 @@ if not is_frozen():
             apworld.game = worldtype.game
             manifest.update(apworld.get_manifest())
             apworld.manifest_path = os.path.join(file_name, "archipelago.json")
-            apignores = read_apignore(os.path.join(world_directory, ".apignore"))
+            apignores = global_apignores + read_apignore(pathlib.Path(world_directory, ".apignore"))
 
-            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED,
-                                 compresslevel=9) as zf:
-                for path in pathlib.Path(world_directory).rglob("*"):
-                    relative_path = pathlib.Path(*path.parts[path.parts.index("worlds") + 1:])
-
-                    test_path = pathlib.Path(*relative_path.parts[1:]).as_posix()
-                    ignored = False
-                    for pattern, info in itertools.chain(global_apignores, apignores):
-                        negated, dironly = PatternInfo.negated in info, PatternInfo.dironly in info
-                        # Don't test regular patterns on already ignored files or negated patterns on unignored files
-                        if negated != ignored:
-                            continue
-                        # Don't test files for dir-only patterns
-                        if dironly and not os.path.isdir(path):
-                            continue
-
-                        if pattern.search(test_path):
-                            ignored = not negated
-
-                    if not ignored:
-                        zf.write(path, relative_path)
+            with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
+                for file in apignores.match_tree_files(world_directory, negate=True):
+                    zf.write(pathlib.Path(world_directory, file), pathlib.Path(file_name, file))
 
                 zf.writestr(apworld.manifest_path, json.dumps(manifest))
         open_folder(apworlds_folder)
-
 
     components.append(Component("Build APWorlds", func=_build_apworlds, cli=True,
                                 description="Build APWorlds from loose-file world folders."))
