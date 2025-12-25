@@ -43,8 +43,7 @@ SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
 PAUSED = 0xC5B18
-ITEM_OBJECTS_BASE_ADDRESS = 0x1070A8
-CHEST_OBJECTS_BASE_ADDRESS = 0x107350
+LOCATIONS_BASE_ADDRESS = 0x64A68
 
 BOSS_ADDR = 0x289C08
 TIME = 0xC5B1C
@@ -349,10 +348,11 @@ class GauntletLegendsContext(CommonContext):
                         continue
 
                     await self.wait_for_mod_clear()
-                    await asyncio.sleep(0.02)
+                    await asyncio.sleep(0.05)
                     await self.update_item(item_name, base_count[item_name])
 
             await self.wait_for_mod_clear()
+            await asyncio.sleep(0.05)
             await self.set_item("Compass", len(self.items_received) + 1)
 
     async def wait_for_mod_clear(self, poll_interval: float = 0.05):
@@ -452,8 +452,9 @@ class GauntletLegendsContext(CommonContext):
             # Filter locations by difficulty and settings
             level_id = self._get_level_id(level)
 
-            self.item_address = await self._read_ram_int(ITEM_OBJECTS_BASE_ADDRESS, 4) & 0xFFFFFF
-            self.chest_address = await self._read_ram_int(CHEST_OBJECTS_BASE_ADDRESS, 4) & 0xFFFFFF
+            locations_address = await self._read_ram_int(LOCATIONS_BASE_ADDRESS, 4) & 0xFFFFFF
+            self.item_address = await self._read_ram_int(locations_address + 0x14, 4) & 0xFFFFFF
+            self.chest_address = await self._read_ram_int(locations_address + 0x30, 4) & 0xFFFFFF
 
             raw_locations = [location for location in level_locations.get(level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
 
@@ -496,17 +497,20 @@ class GauntletLegendsContext(CommonContext):
                 loc for loc in raw_locations
                 if loc not in self.obelisk_locations and loc not in self.item_locations
             ]
+
+            self.scouted = True
         except Exception:
             logger.error(traceback.format_exc())
 
     async def location_loop(self) -> list[int]:
         acquired = []
+        item_section = await self._read_ram(self.item_address, (len(self.item_locations) * 0x18))
         for i in range(len(self.item_locations)):
-            state = await self._read_ram_int(self.item_address + (i * 0x18), 1)
-            active = await self._read_ram_int(self.item_address + (i * 0x18) + 0x1, 1)
+            active = item_section[i * 0x18 + 0x2]
+            state = item_section[i * 0x18 + 0x3]
             if state >= 0x7F:
                 continue
-            if state == 0 and active == 1:
+            if active == 1 and state == 0:
                 acquired += [self.item_locations[i].id]
 
         for j in range(len(self.obelisk_locations)):
@@ -514,13 +518,14 @@ class GauntletLegendsContext(CommonContext):
             if ob:
                 acquired += [self.obelisk_locations[j].id]
 
-        for i in range(len(self.item_locations)):
-            state = await self._read_ram_int(self.chest_address + (i * 0x18), 1)
-            active = await self._read_ram_int(self.chest_address + (i * 0x18) + 0x1, 1)
+        chest_section = await self._read_ram(self.chest_address, (len(self.chest_locations) * 0x18))
+        for i in range(len(self.chest_locations)):
+            active = chest_section[i * 0x18 + 0x2]
+            state = chest_section[i * 0x18 + 0x3]
             if state >= 0x7F:
                 continue
-            if state != 1 and active == 1:
-                acquired += [self.item_locations[i].id]
+            if active == 1 and state != 1:
+                acquired += [self.chest_locations[i].id]
 
         paused = await self.paused()
         dead = await self.dead()
@@ -578,6 +583,7 @@ class GauntletLegendsContext(CommonContext):
         self.ignore_deathlink = False
         self.item_address = 0
         self.chest_address = 0
+        self.scouted = False
 
     async def die(self):
         """Trigger deathlink death with character-specific death sound."""
@@ -713,7 +719,7 @@ async def _launch_retroarch(rom_path: str):
     logger.info(f"Launched RetroArch with ROM: {rom_path}")
 
     # Wait for RetroArch to start up
-    await asyncio.sleep(3)
+    await asyncio.sleep(2)
 
 # Update _patch_game to call _patch_crc:
 async def _patch_and_launch_game(patch_file: str):
@@ -802,7 +808,6 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                     ctx.level_loading = False
                     if not ctx.scouted:
                         await ctx.scout_locations(ctx)
-                        ctx.scouted = True
                         await asyncio.sleep(1)
                     status = await ctx.level_status(ctx)
                     if status:
