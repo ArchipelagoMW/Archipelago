@@ -216,7 +216,7 @@ class GloverWorld(World):
             state.add_item(name + " " + str(progressive_count), self.player)
         #Garib counting
         if not self.garibs_are_filler:
-            if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
+            if self.is_garib_item(name):
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.add_item("Total Garibs", self.player, garibs_number)
@@ -238,11 +238,14 @@ class GloverWorld(World):
             state.remove_item(name + " " + str(progressive_count), self.player)
         #Garib counting
         if not self.garibs_are_filler:
-            if name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib":
+            if self.is_garib_item(name):
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.remove_item("Total Garibs", self.player, garibs_number)
         return output
+
+    def is_garib_item(self, name : str):
+        return name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib"
 
     def get_garib_group_size(self, garibName : str):
         if garibName == "Garib":
@@ -1468,6 +1471,9 @@ class GloverWorld(World):
             #Table entry with original world as a key, and the data entries as
             output[self.lua_world_name(each_wayroom_entrance)] = (wayroom_orign * 10) + wayroom_door
         return output
+
+    def fill_hook(self, progitempool: list[Item], usefulitempool: list[Item], filleritempool: list[Item], fill_locations: list[Location]):
+        progitempool.sort(key = lambda item: item.player == self.player and self.is_garib_item(item.name))
 
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.build_options()
