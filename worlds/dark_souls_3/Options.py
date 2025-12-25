@@ -295,10 +295,8 @@ class ImpatientMimicsOption(Toggle):
 class RandomEnemyPresetOption(OptionDict):
     """The YAML preset for the static enemy randomizer.
 
-    See the static randomizer documentation in `randomizer\\presets\\README.txt` for details.
+    See the online enemy randomization documentation for all available options.
     Include this as nested YAML. For example:
-
-    .. code-block:: YAML
 
       random_enemy_preset:
         RemoveSource: Ancient Wyvern; Darkeater Midir
