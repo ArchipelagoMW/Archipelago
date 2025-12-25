@@ -70,7 +70,7 @@ def run_locations_benchmark():
                 else:
                     locations = sorted(multiworld.get_unfilled_locations())
 
-                all_state = multiworld.get_all_state(False)
+                all_state = multiworld.get_all_state()
                 for location in locations:
                     if state != "all_state":
                         time_taken = self.location_test(location, multiworld.state, "empty_state")
