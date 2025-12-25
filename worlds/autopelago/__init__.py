@@ -1,0 +1,295 @@
+import logging
+import typing
+from collections import deque
+from collections.abc import Callable
+
+from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
+from Options import OptionGroup
+
+from worlds.AutoWorld import WebWorld, World
+
+from .definitions import (
+    GAME_NAME,
+    AutopelagoAllRequirement,
+    AutopelagoAnyRequirement,
+    AutopelagoAnyTwoRequirement,
+    AutopelagoGameRequirement,
+    AutopelagoItemRequirement,
+    AutopelagoNonProgressionItemType,
+    AutopelagoRatCountRequirement,
+    AutopelagoRegionDefinition,
+    ItemClassification,
+    autopelago_nonprogression_item_types,
+    autopelago_regions,
+    item_key_to_name,
+    item_name_groups,
+    item_name_to_classification,
+    item_name_to_id,
+    item_name_to_rat_count,
+    items_by_type_by_game,
+    lactose_intolerant_names,
+    lactose_names,
+    location_name_groups,
+    location_name_to_id,
+    location_name_to_nonprogression_item,
+    location_name_to_progression_item_name,
+    location_name_to_requirement,
+    max_required_rat_count,
+    total_available_rat_count,
+    version_stamp,
+)
+from .options import (
+    AutopelagoGameOptions,
+    ChangedTargetMessages,
+    CompleteGoalMessages,
+    EnabledBuffs,
+    EnabledTraps,
+    EnterBKModeMessages,
+    EnterGoModeMessages,
+    ExitBKModeMessages,
+    RemindBKModeMessages,
+    VictoryLocation,
+)
+
+the_logger = logging.getLogger(GAME_NAME)
+
+
+def _is_trivial(req: AutopelagoGameRequirement):
+    if "all" in req:
+        return not req["all"]
+    if "rat_count" in req:
+        return req["rat_count"] == 0
+    return False
+
+
+def _is_satisfied(player: int, req: AutopelagoGameRequirement, state: CollectionState):
+    if "all" in req:
+        req: AutopelagoAllRequirement
+        return all(_is_satisfied(player, sub_req, state) for sub_req in req["all"])
+    if "any" in req:
+        req: AutopelagoAnyRequirement
+        return any(_is_satisfied(player, sub_req, state) for sub_req in req["any"])
+    if "any_two" in req:
+        req: AutopelagoAnyTwoRequirement
+        return sum(1 if _is_satisfied(player, sub_req, state) else 0 for sub_req in req["any_two"]) > 1
+    if "item" in req:
+        req: AutopelagoItemRequirement
+        return state.has(item_key_to_name[req["item"]], player)
+    assert "rat_count" in req, "Only AutopelagoRatCountRequirement is expected here"
+    req: AutopelagoRatCountRequirement
+    return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[player].items() if
+               k in item_name_to_rat_count) >= req["rat_count"]
+
+
+class AutopelagoItem(Item):
+    game = GAME_NAME
+
+
+class AutopelagoLocation(Location):
+    game = GAME_NAME
+
+    def __init__(self, player: int, name: str, parent: Region):
+        super().__init__(player, name, location_name_to_id[name] if name in location_name_to_id else None, parent)
+        if name in location_name_to_requirement:
+            req = location_name_to_requirement[name]
+            if not _is_trivial(req):
+                self.access_rule = lambda state: _is_satisfied(player, req, state)
+
+
+class AutopelagoRegion(Region):
+    game = GAME_NAME
+    autopelago_definition: AutopelagoRegionDefinition
+
+    def __init__(self, autopelago_definition: AutopelagoRegionDefinition, player: int, multiworld: MultiWorld,
+                 hint: str | None = None):
+        super().__init__(autopelago_definition.key, player, multiworld, hint)
+        self.autopelago_definition = autopelago_definition
+        self.locations += (AutopelagoLocation(player, loc, self) for loc in autopelago_definition.locations)
+
+
+class AutopelagoWebWorld(WebWorld):
+    theme = "partyTime"
+    rich_text_options_doc = True
+    tutorials: typing.ClassVar[list[Tutorial]] = [Tutorial(
+        tutorial_name="Setup Guide",
+        description="A guide to playing Autopelago",
+        language="English",
+        file_name="guide_en.md",
+        link="guide/en",
+        authors=["airbreather"]
+    )]
+
+
+class AutopelagoWorld(World):
+    """
+    An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
+    """
+    game = GAME_NAME
+    topology_present = False  # it's static, so setting this to True isn't actually helpful
+    web = AutopelagoWebWorld()
+    options_dataclass = AutopelagoGameOptions
+    options: AutopelagoGameOptions
+    victory_location: str
+    regions_in_scope: set[str]
+    locations_in_scope: set[str]
+    option_groups: typing.ClassVar[list[OptionGroup]] = [
+        OptionGroup("Message Text Replacements", [
+            ChangedTargetMessages,
+            EnterGoModeMessages,
+            EnterBKModeMessages,
+            RemindBKModeMessages,
+            ExitBKModeMessages,
+            CompleteGoalMessages,
+        ]),
+    ]
+
+    # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
+    # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
+    # been able to get away with populating these just based on what we actually need.
+    item_name_to_id = item_name_to_id
+    location_name_to_id = location_name_to_id
+    item_name_groups = item_name_groups
+    location_name_groups = location_name_groups
+
+    def __init__(self, multiworld, player):
+        super().__init__(multiworld, player)
+
+    # insert other ClassVar values... suggestions include:
+    # - item_descriptions
+    # - location_descriptions
+    # - hint_blacklist (should it include the goal item?)
+
+    def generate_early(self):
+        match self.options.victory_location:
+            case VictoryLocation.option_captured_goldfish:
+                self.victory_location = "Captured Goldfish"
+            case VictoryLocation.option_secret_cache:
+                self.victory_location = "Secret Cache"
+            case _:
+                self.victory_location = "Snakes on a Planet"
+
+        self.locations_in_scope = set()
+        q = deque(("Menu",))
+        self.regions_in_scope = {"Menu",}
+        while q:
+            r = autopelago_regions[q.popleft()]
+            locations_set = set(r.locations)
+            self.locations_in_scope.update(locations_set)
+            if self.victory_location in locations_set:
+                continue
+            for next_exit in r.exits:
+                if next_exit in self.regions_in_scope:
+                    continue
+                self.regions_in_scope.add(next_exit)
+                q.append(next_exit)
+
+    def create_item(self, name: str):
+        item_id = item_name_to_id[name]
+        classification = item_name_to_classification[name]
+        return AutopelagoItem(name, classification, item_id, self.player)
+
+    def create_items(self):
+        new_items = [self.create_item(item)
+                     for location, item in location_name_to_progression_item_name.items()
+                     if location in self.locations_in_scope and item != "Moon Shoes"]
+
+        # skip balancing for the pack_rat items that take us beyond the minimum limit
+        rat_items = sorted(
+            (item for item in new_items if item.name in item_name_to_rat_count),
+            key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name["pack_rat"] else 1)
+        )
+        for i in range(total_available_rat_count - max_required_rat_count):
+            assert rat_items[i].name == item_key_to_name[
+                "pack_rat"], "Expected there to be enough pack_rat fillers for this calculation."
+            rat_items[i].classification |= ItemClassification.skip_balancing
+
+        self.multiworld.itempool += new_items
+
+        excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
+        nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
+                                     for c, items in items_by_type_by_game[GAME_NAME].items()}
+        for category, items in nonprogression_item_table.items():
+            dlc_games = {g for g, categories in items_by_type_by_game.items() if category in categories}
+            dlc_games.remove(GAME_NAME)
+            self.multiworld.random.shuffle(items)
+            replacements_made = 0
+            for game_name in self.multiworld.game.values():
+                if game_name not in dlc_games:
+                    continue
+                dlc_games.remove(game_name)
+                for item in items_by_type_by_game[game_name][category]:
+                    if item not in excluded_names:
+                        items[replacements_made] = item
+                        replacements_made += 1
+
+        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = \
+            dict.fromkeys(autopelago_nonprogression_item_types, 0)
+        next_filler_becomes_trap = False
+        item_type: AutopelagoNonProgressionItemType
+        for loc, original_item_type in location_name_to_nonprogression_item.items():
+            if loc not in self.locations_in_scope:
+                continue
+
+            item_type = original_item_type
+            if item_type == "filler":
+                if next_filler_becomes_trap:
+                    item_type = "trap"
+                next_filler_becomes_trap = not next_filler_becomes_trap
+
+            # 0.x didn't have enough traps to cover half of the locations whose "unrandomized" items
+            # were fillers, so we needed to adjust slightly with this check. note that this doesn't
+            # (currently) allow us to compensate for too-few 'useful_nonprogression' items.
+            if category_to_next_offset[item_type] >= len(nonprogression_item_table[item_type]):
+                if item_type == "filler":
+                    item_type = "trap"
+                elif item_type == "trap":
+                    item_type = "filler"
+            next_item = nonprogression_item_table[item_type][category_to_next_offset[item_type]]
+            self.multiworld.itempool.append(self.create_item(next_item))
+            category_to_next_offset[item_type] += 1
+
+    def create_regions(self):
+        victory_region = Region("Victory", self.player, self.multiworld)
+        self.multiworld.regions.append(victory_region)
+        self.multiworld.completion_condition[self.player] =\
+            lambda state: state.can_reach(victory_region)
+
+        new_regions = {r.key: AutopelagoRegion(r, self.player, self.multiworld)
+                       for key, r in autopelago_regions.items()
+                       if key in self.regions_in_scope}
+        for r in new_regions.values():
+            self.multiworld.regions.append(r)
+            req = r.autopelago_definition.requires
+            rule: Callable[[CollectionState], bool] | None
+            # disable PLC3002: the lambda must use the CURRENT value of 'req', so it needs a new scope somehow.
+            rule = None if _is_trivial(req) \
+                else (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req) # noqa: PLC3002
+            if self.victory_location in r.autopelago_definition.locations:
+                r.connect(victory_region, rule=rule)
+                if self.options.victory_location == VictoryLocation.option_snakes_on_a_planet:
+                    r.locations[0].place_locked_item(self.create_item("Moon Shoes"))
+            else:
+                for next_exit in r.autopelago_definition.exits:
+                    r.connect(new_regions[next_exit], rule=rule)
+
+    def get_filler_item_name(self):
+        return "Nothing"
+
+    def fill_slot_data(self):
+        return {
+            "version_stamp": version_stamp,
+            "victory_location_name": self.victory_location,
+            "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
+            "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
+            "msg_changed_target": self.options.msg_changed_target.value,
+            "msg_enter_go_mode": self.options.msg_enter_go_mode.value,
+            "msg_enter_bk": self.options.msg_enter_bk.value,
+            "msg_remind_bk": self.options.msg_remind_bk.value,
+            "msg_exit_bk": self.options.msg_exit_bk.value,
+            "msg_completed_goal": self.options.msg_completed_goal.value,
+            "lactose_intolerant": not not self.options.lactose_intolerant,
+
+            # not working yet:
+            # 'death_link': not not self.options.death_link,
+            # 'death_delay_seconds': self.options.death_delay_seconds - 0,
+        }
