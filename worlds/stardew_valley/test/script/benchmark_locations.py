@@ -8,8 +8,6 @@ import argparse
 import collections
 import gc
 import logging
-import os
-import sys
 import time
 import typing
 
@@ -119,22 +117,8 @@ class TimeIt:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if not self.end_timer:
             self.end_timer = time.perf_counter()
-        if self.logger:
-            self.logger.info(f"{self.dif:.4f} seconds in {self.name}.")
-
-
-def change_home():
-    """Allow scripts to run from "this" folder."""
-    old_home = os.path.dirname(__file__)
-    sys.path.remove(old_home)
-    new_home = os.path.normpath(os.path.join(os.path.dirname(__file__), os.pardir, os.pardir))
-    os.chdir(new_home)
-    sys.path.append(new_home)
-    # fallback to local import
-    sys.path.append(old_home)
-
-    from Utils import local_path
-    local_path.cached_path = new_home
+        # if self.logger:
+        #     self.logger.info(f"{self.dif:.4f} seconds in {self.name}.")
 
 
 if __name__ == "__main__":
