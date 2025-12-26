@@ -1,9 +1,9 @@
 from collections import Counter, defaultdict
-from typing import Any, Dict, FrozenSet, List, Optional, Set
+from typing import Dict, FrozenSet, List, Optional, Set
 
 from Utils import cache_argsless
 
-from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule
+from .definition_classes import AreaDefinition, ConnectionDefinition, RegionDefinition, WitnessRule, EntityDefinition
 from .item_definition_classes import (
     CATEGORY_NAME_MAPPINGS,
     DoorItemDefinition,
@@ -36,19 +36,22 @@ class StaticWitnessLogicObj:
         self.CONNECTIONS_WITH_DUPLICATES: Dict[str, List[ConnectionDefinition]] = defaultdict(list)
         self.STATIC_CONNECTIONS_BY_REGION_NAME: Dict[str, List[ConnectionDefinition]] = {}
 
-        self.ENTITIES_BY_HEX: Dict[str, Dict[str, Any]] = {}
-        self.ENTITIES_BY_NAME: Dict[str, Dict[str, Any]] = {}
-        self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX: Dict[str, Dict[str, WitnessRule]] = {}
+        self.ENTITIES_BY_ID: Dict[int, EntityDefinition] = {}
+        self.ENTITIES_BY_NAME: Dict[str, EntityDefinition] = {}
+        self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID: Dict[int, Dict[str, WitnessRule]] = {}
 
-        self.OBELISK_SIDE_ID_TO_EP_HEXES: Dict[int, Set[int]] = {}
+        self.OBELISK_SIDE_ID_TO_EP_IDS: Dict[int, List[int]] = {}
 
-        self.EP_TO_OBELISK_SIDE: Dict[str, str] = {}
-
-        self.ENTITY_ID_TO_NAME: Dict[str, str] = {}
+        self.EP_ID_TO_OBELISK_SIDE_ID: Dict[int, int] = {}
 
         self.read_logic_file(lines)
         self.reverse_connections()
         self.combine_connections()
+
+    def add_entity(self, entity: EntityDefinition) -> None:
+        entity.order = len(self.ENTITIES_BY_ID)
+        self.ENTITIES_BY_ID[entity.entity_id] = entity
+        self.ENTITIES_BY_NAME[entity.entity_name] = entity
 
     def add_easter_eggs(self) -> None:
         egg_counter = 0
@@ -58,61 +61,51 @@ class StaticWitnessLogicObj:
             correct_area = region_object.area
 
             for _ in range(entity_amount):
-                location_id = 160200 + egg_counter
-                entity_hex = hex(0xEE000 + egg_counter)
+                entity_id = 0xEE000 + egg_counter
                 egg_counter += 1
 
                 area_counts[correct_area.name] += 1
                 full_entity_name = f"{correct_area.name} Easter Egg {area_counts[correct_area.name]}"
 
-                self.ENTITIES_BY_HEX[entity_hex] = {
-                    "checkName": full_entity_name,
-                    "entity_hex": entity_hex,
-                    "region": region_object,
-                    "id": int(location_id),
-                    "entityType": "Easter Egg",
-                    "locationType": "Easter Egg",
-                    "area": correct_area,
-                    "order": len(self.ENTITIES_BY_HEX),
-                }
+                self.add_entity(EntityDefinition(
+                    full_entity_name,
+                    entity_id,
+                    region_object,
+                    "Easter Egg",
+                    "Easter Egg",
+                    correct_area,
+                ))
 
-                self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
-
-                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID[entity_id] = {
                     "entities": frozenset({frozenset({})})
                 }
-                region_object.logical_entities.append(entity_hex)
-                region_object.physical_entities.append(entity_hex)
+                region_object.logical_entities.append(entity_id)
+                region_object.physical_entities.append(entity_id)
 
         easter_egg_region = self.ALL_REGIONS_BY_NAME["Easter Eggs"]
         easter_egg_area = easter_egg_region.area
         for i in range(sum(EASTER_EGGS.values())):
-            location_id = 160000 + i
-            entity_hex = hex(0xEE200 + i)
+            entity_id = 0xEE200 + i
 
             if i == 0:
                 continue
 
             full_entity_name = f"{i + 1} Easter Eggs Collected"
 
-            self.ENTITIES_BY_HEX[entity_hex] = {
-                "checkName": full_entity_name,
-                "entity_hex": entity_hex,
-                "region": easter_egg_region,
-                "id": int(location_id),
-                "entityType": "Easter Egg Total",
-                "locationType": "Easter Egg Total",
-                "area": easter_egg_area,
-                "order": len(self.ENTITIES_BY_HEX),
-            }
+            self.add_entity(EntityDefinition(
+                full_entity_name,
+                entity_id,
+                easter_egg_region,
+                "Easter Egg Total",
+                "Easter Egg Total",
+                easter_egg_area,
+            ))
 
-            self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
-
-            self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+            self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID[entity_id] = {
                 "entities": frozenset({frozenset({})})
             }
-            easter_egg_region.logical_entities.append(entity_hex)
-            easter_egg_region.physical_entities.append(entity_hex)
+            easter_egg_region.logical_entities.append(entity_id)
+            easter_egg_region.physical_entities.append(entity_id)
 
     def read_logic_file(self, lines: List[str]) -> None:
         """
@@ -144,41 +137,39 @@ class StaticWitnessLogicObj:
 
             line_split = line.split(" - ")
 
-            location_id = line_split.pop(0)
+            entity_type = "General"
+            if line_split[0] in ("Door", "Laser"):
+                entity_type = line_split.pop(0)
 
             entity_name_full = line_split.pop(0)
 
-            entity_hex = entity_name_full[0:7]
+            entity_id = int(entity_name_full[0:7], 16)
             entity_name = entity_name_full[9:-1]
 
             entity_requirement_string = line_split.pop(0)
 
             full_entity_name = current_region.short_name + " " + entity_name
 
-            if location_id == "Door" or location_id == "Laser":
-                self.ENTITIES_BY_HEX[entity_hex] = {
-                    "checkName": full_entity_name,
-                    "entity_hex": entity_hex,
-                    "region": None,
-                    "id": None,
-                    "entityType": location_id,
-                    "locationType": None,
-                    "area": current_area,
-                    "order": len(self.ENTITIES_BY_HEX),
-                }
+            if entity_type in ("Door", "Laser"):
+                self.add_entity(EntityDefinition(
+                    full_entity_name,
+                    entity_id,
+                    None,
+                    entity_type,
+                    None,
+                    current_area,
+                ))
 
-                self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
-
-                self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = {
+                self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID[entity_id] = {
                     "entities": parse_witness_rule(entity_requirement_string)
                 }
 
                 # Lasers and Doors exist in a region, but don't have a regional *requirement*
                 # If a laser is activated, you don't need to physically walk up to it for it to count
                 # As such, logically, they behave more as if they were part of the "Entry" region
-                self.ALL_REGIONS_BY_NAME["Entry"].logical_entities.append(entity_hex)
+                self.ALL_REGIONS_BY_NAME["Entry"].logical_entities.append(entity_id)
                 # However, it will also be important to keep track of their physical location for postgame purposes.
-                current_region.physical_entities.append(entity_hex)
+                current_region.physical_entities.append(entity_id)
                 continue
 
             item_requirement_string = line_split.pop(0)
@@ -210,7 +201,7 @@ class StaticWitnessLogicObj:
             elif "Pet the Dog" in entity_name:
                 entity_type = "Event"
                 location_type = "Good Boi"
-            elif entity_hex.startswith("0xFF"):
+            elif entity_id & 0xFF000 == 0xFF000:
                 entity_type = "Event"
                 location_type = None
             else:
@@ -231,30 +222,26 @@ class StaticWitnessLogicObj:
                 eps = set(next(iter(required_entities)))
                 eps -= {"Theater to Tunnels"}
 
-                eps_ints = {int(h, 16) for h in eps}
+                eps_ints = [int(h, 16) for h in eps]
 
-                self.OBELISK_SIDE_ID_TO_EP_HEXES[int(entity_hex, 16)] = eps_ints
-                for ep_hex in eps:
-                    self.EP_TO_OBELISK_SIDE[ep_hex] = entity_hex
+                self.OBELISK_SIDE_ID_TO_EP_IDS[entity_id] = eps_ints
+                for ep_id in eps_ints:
+                    self.EP_ID_TO_OBELISK_SIDE_ID[ep_id] = entity_id
 
-            self.ENTITIES_BY_HEX[entity_hex] = {
-                "checkName": full_entity_name,
-                "entity_hex": entity_hex,
-                "region": current_region,
-                "id": int(location_id),
-                "entityType": entity_type,
-                "locationType": location_type,
-                "area": current_area,
-                "order": len(self.ENTITIES_BY_HEX),
-            }
+            self.add_entity(EntityDefinition(
+                full_entity_name,
+                entity_id,
+                current_region,
+                entity_type,
+                location_type,
+                current_area,
+            ))
 
-            self.ENTITY_ID_TO_NAME[entity_hex] = full_entity_name
+            self.ENTITIES_BY_NAME[self.ENTITIES_BY_ID[entity_id].entity_name] = self.ENTITIES_BY_ID[entity_id]
+            self.STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID[entity_id] = requirement
 
-            self.ENTITIES_BY_NAME[self.ENTITIES_BY_HEX[entity_hex]["checkName"]] = self.ENTITIES_BY_HEX[entity_hex]
-            self.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX[entity_hex] = requirement
-
-            current_region.logical_entities.append(entity_hex)
-            current_region.physical_entities.append(entity_hex)
+            current_region.logical_entities.append(entity_id)
+            current_region.physical_entities.append(entity_id)
 
         self.add_easter_eggs()
 
@@ -323,7 +310,8 @@ def parse_items() -> None:
 
         if current_category in [ItemCategory.DOOR, ItemCategory.LASER]:
             # Map doors to IDs.
-            ALL_ITEMS[item_name] = DoorItemDefinition(item_code, current_category, arguments)
+            entity_ids = [int(entity_id_str, 16) for entity_id_str in arguments]
+            ALL_ITEMS[item_name] = DoorItemDefinition(item_code, current_category, entity_ids)
         elif current_category == ItemCategory.TRAP or current_category == ItemCategory.FILLER:
             # Read filler weights.
             weight = int(arguments[0]) if len(arguments) >= 1 else 1
@@ -363,6 +351,10 @@ def get_sigma_expert() -> StaticWitnessLogicObj:
 def get_umbra_variety() -> StaticWitnessLogicObj:
     return StaticWitnessLogicObj(get_umbra_variety_logic())
 
+vanilla: StaticWitnessLogicObj
+sigma_normal: StaticWitnessLogicObj
+sigma_expert: StaticWitnessLogicObj
+umbra_variety: StaticWitnessLogicObj
 
 def __getattr__(name: str) -> StaticWitnessLogicObj:
     if name == "vanilla":
@@ -382,12 +374,10 @@ ALL_REGIONS_BY_NAME = get_sigma_normal().ALL_REGIONS_BY_NAME
 ALL_AREAS_BY_NAME = get_sigma_normal().ALL_AREAS_BY_NAME
 STATIC_CONNECTIONS_BY_REGION_NAME = get_sigma_normal().STATIC_CONNECTIONS_BY_REGION_NAME
 
-ENTITIES_BY_HEX = get_sigma_normal().ENTITIES_BY_HEX
+ENTITIES_BY_ID = get_sigma_normal().ENTITIES_BY_ID
 ENTITIES_BY_NAME = get_sigma_normal().ENTITIES_BY_NAME
-STATIC_DEPENDENT_REQUIREMENTS_BY_HEX = get_sigma_normal().STATIC_DEPENDENT_REQUIREMENTS_BY_HEX
+STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID = get_sigma_normal().STATIC_DEPENDENT_REQUIREMENTS_BY_ENTITY_ID
 
-OBELISK_SIDE_ID_TO_EP_HEXES = get_sigma_normal().OBELISK_SIDE_ID_TO_EP_HEXES
+OBELISK_SIDE_ID_TO_EP_IDS = get_sigma_normal().OBELISK_SIDE_ID_TO_EP_IDS
 
-EP_TO_OBELISK_SIDE = get_sigma_normal().EP_TO_OBELISK_SIDE
-
-ENTITY_ID_TO_NAME = get_sigma_normal().ENTITY_ID_TO_NAME
+EP_TO_OBELISK_SIDE = get_sigma_normal().EP_ID_TO_OBELISK_SIDE_ID
