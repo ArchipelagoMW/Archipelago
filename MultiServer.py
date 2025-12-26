@@ -1325,7 +1325,7 @@ class CommandProcessor(metaclass=CommandMeta):
     marker = "/"
 
     def output(self, text: str):
-        print(text)
+        print(text, flush=True)
 
     def __call__(self, raw: str) -> typing.Optional[bool]:
         if not raw:
