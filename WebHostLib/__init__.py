@@ -37,6 +37,7 @@ app.config["MAX_FORM_MEMORY_SIZE"] = 2 * 1024 * 1024  # 2 MB, needed for large o
 app.config["SELFHOST"] = True  # application process is in charge of running the websites
 app.config["GENERATORS"] = 8  # maximum concurrent world gens
 app.config["HOSTERS"] = 8  # maximum concurrent room hosters
+app.config["ROOM_IDLE_TIMEOUT"] = 2 * 60 * 60  # seconds of idle before a Room spins down
 app.config["SELFLAUNCH"] = True  # application process is in charge of launching Rooms.
 app.config["SELFLAUNCHCERT"] = None  # can point to a SSL Certificate to encrypt Room websocket connections
 app.config["SELFLAUNCHKEY"] = None  # can point to a SSL Certificate Key to encrypt Room websocket connections

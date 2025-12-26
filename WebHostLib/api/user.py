@@ -16,7 +16,6 @@ def get_rooms():
             "creation_time": room.creation_time,
             "last_activity": room.last_activity,
             "last_port": room.last_port,
-            "timeout": room.timeout,
             "tracker": to_url(room.tracker),
         })
     return jsonify(response)
