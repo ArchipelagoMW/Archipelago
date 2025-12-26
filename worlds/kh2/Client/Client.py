@@ -300,11 +300,11 @@ class KH2Context(CommonContext):
                             self.number_of_abilities_sent[name] += 1
                         if name not in self.master_growth:
                             if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
-                                if "Donald" in name:
+                                if "Donald" in name or name in ["Flare Force", "Fantasia"]:
                                     msg_to_send = [str(item_to_send.kh2id), "Donald", str(index)]
                                     converted_items.append(msg_to_send)
                                     self.received_items_IDs.append(msg_to_send)
-                                elif "Goofy" in name:
+                                elif "Goofy" in name or name in ["Tornado Fusion", "Teamwork"]:
                                     msg_to_send = [str(item_to_send.kh2id), "Goofy", str(index)]
                                     converted_items.append(msg_to_send)
                                     self.received_items_IDs.append(msg_to_send)
