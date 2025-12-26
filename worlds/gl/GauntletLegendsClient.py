@@ -133,6 +133,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         super().__init__(ctx)
 
     def _cmd_connected(self):
+        """Show Retroarch connection status"""
         logger.info(f"Retroarch Connected Status: {self.ctx.retro_connected}")
 
     def _cmd_deathlink_toggle(self):
