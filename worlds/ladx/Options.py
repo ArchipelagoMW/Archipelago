@@ -554,22 +554,15 @@ class InGameHints(DefaultOnToggle):
     display_name = "In-game Hints"
 
 
-class TarinsGift(Choice):
+class ExpandStart(Range):
     """
-    **Local Progression:** Forces Tarin's gift to be an item that immediately
-    opens up local checks. Has little effect in single player games, and isn't
-    always necessary with randomized entrances.
-
-    **Bush Breaker:** Forces Tarin's gift to be an item that can destroy bushes.
-
-    **Any Item:** Tarin's gift can be any item for any world
+    Starting from Tarin's Gift, locally place progression items until the target
+    number of locations or more can be reached. Does nothing if set to *1*.
     """
-    display_name = "Tarin's Gift"
-    rich_text_doc = True
-    option_local_progression = 0
-    option_bush_breaker = 1
-    option_any_item = 2
-    default = option_local_progression
+    display_name = "Expand Start"
+    range_start = 1
+    range_end = 10
+    default = 5
 
 
 class StabilizeItemPool(DefaultOffToggle):
@@ -602,7 +595,6 @@ class ForeignItemIcons(Choice):
 ladx_option_groups = [
     OptionGroup("Gameplay Adjustments", [
         InGameHints,
-        TarinsGift,
         HardMode,
         TrendyGame,
     ]),
@@ -675,10 +667,11 @@ class LinksAwakeningOptions(PerGameCommonOptions):
     text_mode: TextMode
     no_flash: NoFlash
     in_game_hints: InGameHints
-    tarins_gift: TarinsGift
     overworld: Overworld
     stabilize_item_pool: StabilizeItemPool
     start_inventory_from_pool: StartInventoryPool
+    expand_start: ExpandStart
 
     warp_improvements: Removed
     additional_warp_points: Removed
+    tarins_gift: Removed
