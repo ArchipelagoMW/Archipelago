@@ -559,7 +559,7 @@ decoupled_garib_bonus_count = {
 	"12 Garibs" :		1#,
 }
 
-garbinsanity_bonus_count = 155
+garbinsanity_bonus_count = 261
 
 
 all_items = {
