@@ -1080,8 +1080,6 @@ class GloverWorld(World):
             wayroom_name : str = each_world_prefix + "H"
             hubroom : Region = multiworld.get_region(wayroom_name, player)
             hubroom.connect(multiworld.get_region(wayroom_name + ": Main W/Ball", player))
-            #Unlocking the bonus level doesn't ACTUALLY care about the star marks; it cares about all garibs in level
-            all_garib_locations : list[Location] = []
             #Entries
             for entry_index, each_entry_suffix in enumerate(entry_name):
                 #Connect hubs to the right location
@@ -1100,26 +1098,22 @@ class GloverWorld(World):
                 else:
                     #Garibsanity only manually places the second 'boss clear' location
                     self.portalsanity_plugs(connecting_level_name, wayroom_name, entry_index)
-
-                #Bonus unlocks require all levels with garibs
-                if connecting_level_name.endswith(('1','2','3','?')) and entry_index < 4:
-                    all_garib_locations.append(multiworld.get_location(connecting_level_name + ": All Garibs", player))
             
-            #Getting all garibs from non-boss levels
-            if self.options.bonus_levels:
-                bonus_unlock_address : int | None = None
-                if self.options.portalsanity:
-                    bonus_unlock_address = 3100 + (world_index * 100)
-                bonus_unlock : Location = Location(player, wayroom_name + ": Bonus Unlock", bonus_unlock_address, hubroom)
-                hubroom.locations.append(bonus_unlock)
+            #Getting all garibs from non-boss levels opens the last gate
+            if self.options.bonus_levels and not self.options.portalsanity:
+                bonus_unlock : Location
                 #Makes bonus unlocks happen as vanilla
-                if not self.options.portalsanity:
-                   bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
-                #Portalsanity still has the garib location. Open Levels has no rules to access the bonus gate
-                if (not self.options.open_levels) or self.options.portalsanity:
-                    #Only require marks from levels that require garibs
-                    for each_all_garib_location in all_garib_locations:
-                        add_rule(bonus_unlock, lambda state, required_garib_completion = each_all_garib_location.name: state.can_reach_location(required_garib_completion, player))
+                bonus_unlock = Location(player, wayroom_name + ": Three Stars", None, hubroom)
+                bonus_unlock.place_locked_item(self.create_event(wayroom_name + " Bonus Gate"))
+                hubroom.locations.append(bonus_unlock)
+                star_names : list[str] = []
+                #Requires your 1, 2 and 3 stars
+                for each_star_number in range(1, 4):
+                    star_name = wayroom_name + " " + str(each_star_number) + " Star"
+                    star_names.append(star_name)
+                #Require the three stars
+                if not self.options.open_levels:
+                    set_rule(bonus_unlock, lambda state, required_stars = star_names: state.has_all(required_stars, player))
 
         #Entry Names
         hub_entry_names : list[str] = [
@@ -1296,6 +1290,21 @@ class GloverWorld(World):
             goal_location.parent_region.locations.append(psudo_goal_location)
             set_rule(psudo_goal_location, lambda state, psudo_goal = goal_location.name: state.can_reach_location(psudo_goal, player))
             psudo_goal_location.place_locked_item(goal_item)
+        elif self.options.open_levels and entry_index != -1:
+            #What fixed item is there?
+            match entry_index:
+                case 0:
+                    goal_item = self.create_event(wayroom_name + " 2 Gate")
+                case 1:
+                    goal_item = self.create_event(wayroom_name + " 3 Gate")
+                case 2:
+                    goal_item = self.create_event(wayroom_name + " Boss Gate")
+                case 4:
+                    goal_item = self.create_event(wayroom_name + " Bonus Gate")
+            hub_region : Region = self.multiworld.get_region(wayroom_name, self.player)
+            open_gate_spot : Location = Location(player, wayroom_name + " " + self.level_prefixes[entry_index + 1] + " Access", None, hub_region)
+            hub_region.locations.append(open_gate_spot)
+            open_gate_spot.place_locked_item(goal_item)
 
     #Lacking Portalsanity Gates and Marks
     def populate_goals_and_marks(self, connecting_level_name : str, wayroom_name : str, entry_index : int):
