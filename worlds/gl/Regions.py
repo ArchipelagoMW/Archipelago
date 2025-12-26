@@ -1,7 +1,7 @@
 import typing
 from typing import Optional, Callable
 
-from BaseClasses import Region, CollectionState
+from BaseClasses import Region
 from .Data import excluded_levels
 
 from .Locations import GLLocation, LocationData, get_locations_by_tags

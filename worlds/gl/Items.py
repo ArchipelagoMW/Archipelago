@@ -1,6 +1,6 @@
 from collections.abc import Mapping
 from types import MappingProxyType
-from typing import Final, NamedTuple, List, Dict
+from typing import Final, List
 
 from BaseClasses import Item, ItemClassification
 from worlds.gl.Data import item_classifications
@@ -32,5 +32,5 @@ def import_items() -> List[ItemData]:
     return json.loads(pkgutil.get_data(__name__, "json/items.json").decode("utf-8"), object_hook=lambda d: ItemData(**d))
 
 item_list: List[ItemData] = import_items()
-item_table: Dict[str, ItemData] = {item.item_name: item for item in item_list}
-items_by_id: Dict[int, ItemData] = {item.id: item for item in item_list}
+item_table: Final[Mapping[str, ItemData]] = MappingProxyType({item.item_name: item for item in item_list})
+items_by_id: Final[Mapping[int, ItemData]] = MappingProxyType({item.id: item for item in item_list})
