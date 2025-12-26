@@ -44,7 +44,7 @@ def load_aliases():
 
 
 def isliteral(expr):
-    return isinstance(expr, (ast.Num, ast.Constant, ast.Bytes, ast.NameConstant))
+    return isinstance(expr, (ast.Num, ast.Str, ast.Bytes, ast.NameConstant))
 
 
 class Rule_AST_Transformer(ast.NodeTransformer):
@@ -81,7 +81,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has',
                     ctx=ast.Load()),
-                args=[ast.Constant(escaped_items[node.id]), ast.Constant(self.player)],
+                args=[ast.Str(escaped_items[node.id]), ast.Constant(self.player)],
                 keywords=[])
         elif node.id in self.world.__dict__:
             # Settings are constant
@@ -97,7 +97,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has',
                     ctx=ast.Load()),
-                args=[ast.Constant(node.id.replace('_', ' ')), ast.Constant(self.player)],
+                args=[ast.Str(node.id.replace('_', ' ')), ast.Constant(self.player)],
                 keywords=[])
         else:
             raise Exception('Parse Error: invalid node name %s' % node.id, self.current_spot.name, ast.dump(node, False))
@@ -108,13 +108,13 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Constant(node.s), ast.Constant(self.player)],
+            args=[ast.Str(node.s), ast.Constant(self.player)],
             keywords=[])
 
     # python 3.8 compatibility: ast walking now uses visit_Constant for Constant subclasses
     # this includes Num, Str, NameConstant, Bytes, and Ellipsis. We only handle Str.
     def visit_Constant(self, node):
-        if isinstance(node, ast.Constant):
+        if isinstance(node, ast.Str):
             return self.visit_Str(node)
         return node
 
@@ -125,7 +125,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         item, count = node.elts
 
-        if not isinstance(item, (ast.Name, ast.Constant)):
+        if not isinstance(item, (ast.Name, ast.Str)):
             raise Exception('Parse Error: first value must be an item. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
         iname = item.id if isinstance(item, ast.Name) else item.s
 
@@ -147,7 +147,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Constant(iname), ast.Constant(self.player), count],
+            args=[ast.Str(iname), ast.Constant(self.player), count],
             keywords=[])
 
 
@@ -168,6 +168,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     val = arg_val.id
                 elif isinstance(arg_val, ast.Constant):
                     val = repr(arg_val.value)
+                elif isinstance(arg_val, ast.Str):
+                    val = repr(arg_val.s)
                 else:
                     raise Exception('Parse Error: invalid argument %s' % ast.dump(arg_val, False),
                             self.current_spot.name, ast.dump(node, False))
@@ -189,10 +191,10 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 elif child.id in rule_aliases:
                     child = self.visit(child)
                 elif child.id in escaped_items:
-                    child = ast.Constant(escaped_items[child.id])
+                    child = ast.Str(escaped_items[child.id])
                 else:
-                    child = ast.Constant(child.id.replace('_', ' '))
-            elif not isinstance(child, ast.Constant):
+                    child = ast.Str(child.id.replace('_', ' '))
+            elif not isinstance(child, ast.Str):
                 child = self.visit(child)
             new_args.append(child)
 
@@ -220,7 +222,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                         ctx=ast.Load()),
                     attr=node.value.id,
                     ctx=ast.Load()),
-                slice=ast.Index(value=ast.Constant(s.id.replace('_', ' '))),
+                slice=ast.Index(value=ast.Str(s.id.replace('_', ' '))),
                 ctx=node.ctx)
         else:
             return node
@@ -229,8 +231,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     def visit_Compare(self, node):
         def escape_or_string(n):
             if isinstance(n, ast.Name) and n.id in escaped_items:
-                return ast.Constant(escaped_items[n.id])
-            elif not isinstance(n, ast.Constant):
+                return ast.Str(escaped_items[n.id])
+            elif not isinstance(n, ast.Str):
                 return self.visit(n)
             return n
 
@@ -285,7 +287,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # if any elt is True(And)/False(Or), we can omit it
         # if any is False(And)/True(Or), the whole node can be replaced with it
         for elt in list(node.values):
-            if isinstance(elt, ast.Constant):
+            if isinstance(elt, ast.Str):
                 items.add(elt.s)
             elif isinstance(elt, ast.Name) and elt.id in nonaliases:
                 items.add(escaped_items[elt.id])
@@ -300,7 +302,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 elif (isinstance(elt, ast.Call) and isinstance(elt.func, ast.Attribute)
                         and elt.func.attr in ('has', groupable) and len(elt.args) == 1):
                     args = elt.args[0]
-                    if isinstance(args, ast.Constant):
+                    if isinstance(args, ast.Str):
                         items.add(args.s)
                     else:
                         items.update(it.s for it in args.elts)
@@ -320,7 +322,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     value=ast.Name(id='state', ctx=ast.Load()),
                     attr='has_any' if early_return else 'has_all',
                     ctx=ast.Load()),
-                args=[ast.Tuple(elts=[ast.Constant(i) for i in items], ctx=ast.Load()), ast.Constant(self.player)],
+                args=[ast.Tuple(elts=[ast.Str(i) for i in items], ctx=ast.Load()), ast.Constant(self.player)],
                 keywords=[])] + new_values
         else:
             node.values = new_values
@@ -362,7 +364,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 value=ast.Name(id='state', ctx=ast.Load()),
                 attr='has',
                 ctx=ast.Load()),
-            args=[ast.Constant(subrule_name), ast.Constant(self.player)],
+            args=[ast.Str(subrule_name), ast.Constant(self.player)],
             keywords=[])
         # Cache the subrule for any others in this region
         # (and reserve the item name in the process)
@@ -426,7 +428,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
     # Creates an internal event at the remote region and depends on it.
     def at(self, node):
         # Cache this under the target (region) name
-        if len(node.args) < 2 or not isinstance(node.args[0], ast.Constant):
+        if len(node.args) < 2 or not isinstance(node.args[0], ast.Str):
             raise Exception('Parse Error: invalid at() arguments', self.current_spot.name, ast.dump(node, False))
         return self.replace_subrule(node.args[0].s, node.args[1])
 
