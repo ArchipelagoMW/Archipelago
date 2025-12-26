@@ -10,7 +10,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
 from .Data import item_dict, local_levels, skipped_local_locations, obelisks, mirror_shards, portals, excluded_portals, \
     excluded_obelisks
-from .Items import GLItem, item_table, item_list
+from .Items import GLItem, item_table, item_list, gauntlet_item_name_groups
 from .Locations import LocationData, all_locations, location_table
 from .Options import GLOptions, IncludedAreas
 from .Regions import connect_regions, create_regions
@@ -75,6 +75,7 @@ class GauntletLegendsWorld(World):
     options_dataclass = GLOptions
     options: GLOptions
     settings: ClassVar[GLSettings]
+    item_name_groups = gauntlet_item_name_groups
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     excluded_regions: set
@@ -176,7 +177,7 @@ class GauntletLegendsWorld(World):
         if not self.options.mirror_shards:
             skipped_items.update([shard for shard in mirror_shards if shard not in self.unlockable])
         if not self.options.portals:
-            skipped_items.update([item for item in portals])
+            skipped_items.update([item for item in portals.keys()])
         if len(self.excluded_regions) > 0:
             for region in self.excluded_regions:
                 skipped_items.update(excluded_portals.get(region, []))

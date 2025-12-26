@@ -3,7 +3,7 @@ from types import MappingProxyType
 from typing import Final, List
 
 from BaseClasses import Item, ItemClassification
-from worlds.gl.Data import item_classifications
+from worlds.gl.Data import item_classifications, portals, obelisks
 
 
 class ItemData:
@@ -34,3 +34,9 @@ def import_items() -> List[ItemData]:
 item_list: List[ItemData] = import_items()
 item_table: Final[Mapping[str, ItemData]] = MappingProxyType({item.item_name: item for item in item_list})
 items_by_id: Final[Mapping[int, ItemData]] = MappingProxyType({item.id: item for item in item_list})
+
+gauntlet_item_name_groups = {
+    "Runestone": [f"Runestone {i}" for i in range(1, 14)],
+    "Portal": portals.keys(),
+    "Obelisk": obelisks,
+}
