@@ -390,9 +390,9 @@ class KH2World(World):
         # take one of the 2 out
         # randomize the list with only
         for location in goofy_weapon_location_list:
-            random_ability = self.random.choice(self.goofy_weapon_abilities)
+            i = self.random.randrange(len(self.goofy_weapon_abilities))
+            random_ability = self.goofy_weapon_abilities.pop(i)
             location.place_locked_item(random_ability)
-            self.goofy_weapon_abilities.remove(random_ability)
 
         if not self.options.DonaldGoofyStatsanity:
             # plando goofy get bonuses
@@ -401,10 +401,9 @@ class KH2World(World):
             if len(goofy_get_bonus_location_pool) > len(self.goofy_get_bonus_abilities):
                 raise Exception(f"Too little abilities to fill goofy get bonus locations for player {self.player_name}.")
             for location in goofy_get_bonus_location_pool:
-                self.random.choice(self.goofy_get_bonus_abilities)
-                random_ability = self.random.choice(self.goofy_get_bonus_abilities)
+                i = self.random.randrange(len(self.goofy_get_bonus_abilities))
+                random_ability = self.goofy_get_bonus_abilities.pop(i)
                 location.place_locked_item(random_ability)
-                self.goofy_get_bonus_abilities.remove(random_ability)
 
     def donald_pre_fill(self):
         donald_weapon_location_list = [self.multiworld.get_location(location, self.player) for location in
@@ -413,9 +412,9 @@ class KH2World(World):
         # take one of the 2 out
         # randomize the list with only
         for location in donald_weapon_location_list:
-            random_ability = self.random.choice(self.donald_weapon_abilities)
+            i = self.random.randrange(len(self.donald_weapon_abilities))
+            random_ability = self.donald_weapon_abilities.pop(i)
             location.place_locked_item(random_ability)
-            self.donald_weapon_abilities.remove(random_ability)
         # if option is turned off
         if not self.options.DonaldGoofyStatsanity:
             donald_get_bonus_location_pool = [self.multiworld.get_location(location, self.player) for location in
@@ -423,9 +422,9 @@ class KH2World(World):
             if len(donald_get_bonus_location_pool) > len(self.donald_get_bonus_abilities):
                 raise Exception(f"Too little abilities to fill donald get bonus locations for player {self.player_name}.")
             for location in donald_get_bonus_location_pool:
-                random_ability = self.random.choice(self.donald_get_bonus_abilities)
+                i = self.random.randrange(len(self.donald_get_bonus_abilities))
+                random_ability = self.donald_get_bonus_abilities.pop(i)
                 location.place_locked_item(random_ability)
-                self.donald_get_bonus_abilities.remove(random_ability)
 
     def keyblade_pre_fill(self):
         """
