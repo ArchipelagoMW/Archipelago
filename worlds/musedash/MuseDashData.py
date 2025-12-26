@@ -683,4 +683,11 @@ SONG_DATA: Dict[str, SongData] = {
     "Hit Maker": SongData(2900807, "91-3", "48 Hours After Discharge", False, 4, 6, 9),
     "THX 4 playing": SongData(2900808, "91-4", "48 Hours After Discharge", True, 3, 5, 8),
     "Theory of Existence": SongData(2900809, "91-5", "48 Hours After Discharge", True, 4, 6, 9),
+    "Kirakira Noel Story!!": SongData(2900810, "43-68", "MD Plus Project", False, 6, 8, 10),
+    "Fantasista LAST END": SongData(2900811, "92-0", "HARDCORE MOTTO TANO*C", True, 7, 9, 11),
+    "Colorful Universe": SongData(2900812, "92-1", "HARDCORE MOTTO TANO*C", True, 3, 6, 9),
+    "Future Flux": SongData(2900813, "92-2", "HARDCORE MOTTO TANO*C", True, 5, 8, 10),
+    "SOMEONE STOP ME!!!": SongData(2900814, "92-3", "HARDCORE MOTTO TANO*C", True, 6, 8, 10),
+    "Azathoth": SongData(2900815, "92-4", "HARDCORE MOTTO TANO*C", True, 6, 8, 10),
+    "Change the Game feat. Iori Matsunaga": SongData(2900816, "92-5", "HARDCORE MOTTO TANO*C", False, 6, 8, 10),
 }
