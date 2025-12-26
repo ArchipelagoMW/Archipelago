@@ -111,8 +111,8 @@ class InventoryEntry:
         self.name = type_to_name(arr[1:4])
         self.count: int = int.from_bytes(arr[4:8], "little")
         self.addr = INV_ADDR + (0x400 * player) + (index * 0x10)
-        self.n_addr: int = int.from_bytes(arr[12:15], "little")
-        self.p_addr: int = int.from_bytes(arr[8:11], "little")
+        self.p_addr: int = int.from_bytes(arr[8:12], "little") & 0x00FFFFFF
+        self.n_addr: int = int.from_bytes(arr[12:16], "little") & 0x00FFFFFF
 
 
 class ObjectEntry:
@@ -212,22 +212,25 @@ class GauntletLegendsContext(CommonContext):
             b.iterate(0x10)
             for i, arr in enumerate(b.split):
                 _inv += [InventoryEntry(arr, i, player)]
-            for i in range(len(_inv)):
-                if _inv[i].p_addr == 0:
-                    _inv = _inv[i:]
+            start_entry = None
+            for entry in _inv:
+                if entry.p_addr == 0:
+                    start_entry = entry
                     break
+            if start_entry is None:
+                self.inventory += [[]]
+                continue
             new_inv: list[InventoryEntry] = []
-            new_inv += [_inv[0]]
-            addr = new_inv[0].n_addr
-            visited = {new_inv[0].addr}  # Track visited addresses to detect cycles
+            new_inv += [start_entry]
+            addr = start_entry.n_addr
+            visited = {start_entry.addr}
             while True:
                 if addr == 0:
                     break
-                if addr in visited:  # Circular reference detected
-                    logger.warning(f"Circular reference detected in inventory chain at {addr:#x}")
+                if addr in visited:
                     break
                 matching = [inv for inv in _inv if inv.addr == addr]
-                if not matching:  # Broken chain - address not found
+                if not matching:
                     logger.warning(f"Broken inventory chain: addr {addr:#x} not found in inventory data")
                     break
                 new_inv += matching
@@ -271,14 +274,6 @@ class GauntletLegendsContext(CommonContext):
             await self._write_ram(MOD_QUANTITY, int.to_bytes(count, 4, "little", signed=True))
             await self._write_ram(MOD_PLAYER_ID, int.to_bytes(player_id, 4, "little"))
             await asyncio.sleep(0.05)
-
-    async def set_item(self, name: str, value: int, player: int = None):
-        players_to_update = range(self.players) if player is None else [player]
-        for p in players_to_update:
-            current = await self.item_from_name(name, p)
-            diff = value - (current.count if current else 0)
-            if diff != 0:
-                await self.update_item(name, diff, p)
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -348,12 +343,11 @@ class GauntletLegendsContext(CommonContext):
                         continue
 
                     await self.wait_for_mod_clear()
-                    await asyncio.sleep(0.05)
+                    await asyncio.sleep(0.02)
                     await self.update_item(item_name, base_count[item_name])
-
-            await self.wait_for_mod_clear()
-            await asyncio.sleep(0.05)
-            await self.set_item("Compass", len(self.items_received) + 1)
+                    await self.wait_for_mod_clear()
+                    await asyncio.sleep(0.02)
+                    await self.update_item("Compass", 1)
 
     async def wait_for_mod_clear(self, poll_interval: float = 0.05):
         while True:
@@ -721,7 +715,7 @@ async def _launch_retroarch(rom_path: str):
     # Wait for RetroArch to start up
     await asyncio.sleep(2)
 
-# Update _patch_game to call _patch_crc:
+
 async def _patch_and_launch_game(patch_file: str):
     metadata, output_file = Patch.create_rom_file(patch_file)
     await _patch_opt()
@@ -887,7 +881,6 @@ def launch(*args):
 
         await ctx.shutdown()
 
-        # Restore original .opt files on exit
         _restore_opt_files()
 
     parser = get_base_parser()

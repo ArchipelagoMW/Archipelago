@@ -273,18 +273,9 @@ class GLPatchExtension(APPatchExtension):
 
     @staticmethod
     def patch_bins(caller: APProcedurePatch, rom: bytes) -> bytes:
-        """
-        Patch boss.bin using the same extraction / recompression flow as game.bin.
-
-        boss.bin encodes rewards as two 16-bit integers where each is a BYTE of the 16-bit rom_id:
-            rom_id = 0xABCD  -> write 0x00AB, 0x00CD  (i.e. 0x00AB00CD)
-
-        boss_items.json stores (item_code, item_player).
-        """
         boss_items_data = json.loads(caller.get_file("boss_items.json").decode("UTF-8"))
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
 
-        # Boss.bin is entry #2 in the file table (game.bin is entry #4)
         boss_entry_offset = TABLE_START_OFFSET + (2 * 0x30)
 
         rom = bytearray(rom)
@@ -295,7 +286,7 @@ class GLPatchExtension(APPatchExtension):
         boss_compressed = bytes(rom[boss_rom_offset:boss_rom_offset + boss_comp_size])
         boss_decompressed = bytearray(zdec(boss_compressed))
 
-        FILLER_ROM_ID = 0x271C  # same filler as patch_items (bytes [0x27, 0x1C])
+        FILLER_ROM_ID = 0x271C
 
         for location_name, item_data in boss_items_data.items():
             if location_name not in boss_location_offsets:
@@ -308,7 +299,7 @@ class GLPatchExtension(APPatchExtension):
             if item_player != options["player"]:
                 rom_id = FILLER_ROM_ID
             else:
-                rom_id = items_by_id[item_code].rom_id  # 16-bit
+                rom_id = items_by_id[item_code].rom_id
 
             hi_byte = (rom_id >> 8) & 0xFF
             lo_byte = rom_id & 0xFF
@@ -317,12 +308,10 @@ class GLPatchExtension(APPatchExtension):
             boss_decompressed[offset:offset + 2] = hi_byte.to_bytes(2, "big")
             boss_decompressed[offset + 2:offset + 4] = lo_byte.to_bytes(2, "big")
 
-        # Recompress and write back (same as game.bin flow)
         boss_recompressed = zenc(boss_decompressed)
         new_boss_comp_size = len(boss_recompressed)
 
         if new_boss_comp_size > boss_comp_size:
-            # Relocate to expanded area (same approach as existing working boss patcher)
             new_boss_rom_offset = EXPANDED_GAME_ROM_OFFSET + 0x100000
             new_boss_end = new_boss_rom_offset + new_boss_comp_size
             ensure_len(rom, new_boss_end, fill=0xFF)
@@ -337,35 +326,8 @@ class GLPatchExtension(APPatchExtension):
                 leftover_end = boss_rom_offset + boss_comp_size
                 rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
 
-        if options["portals"]:
-            game_entry_offset = TABLE_START_OFFSET + (4 * 0x30)
-
-            game_rom_offset = be32(rom[game_entry_offset + 0x10:game_entry_offset + 0x14])
-            game_comp_size = be32(rom[game_entry_offset + 0x14:game_entry_offset + 0x18])
-
-            game_compressed = bytes(rom[game_rom_offset:game_rom_offset + game_comp_size])
-            game_decompressed = bytearray(zdec(game_compressed))
-
-            game_decompressed[0x6b9d4:0x6b9d4 + 8] = b'\x00\x00\x00\x00\x00\x00\x00\x00'
-
-            game_recompressed = zenc(game_decompressed)
-            new_game_comp_size = len(game_recompressed)
-
-            if new_game_comp_size > game_comp_size:
-                new_game_rom_offset = EXPANDED_GAME_ROM_OFFSET + 0x200000
-                new_game_end = new_game_rom_offset + new_game_comp_size
-                ensure_len(rom, new_game_end, fill=0xFF)
-                rom[new_game_rom_offset:new_game_end] = game_recompressed
-                write_be32(rom, game_entry_offset + 0x10, new_game_rom_offset)
-                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
-            else:
-                rom[game_rom_offset:game_rom_offset + new_game_comp_size] = game_recompressed
-                write_be32(rom, game_entry_offset + 0x14, new_game_comp_size)
-                if new_game_comp_size < game_comp_size:
-                    leftover_start = game_rom_offset + new_game_comp_size
-                    leftover_end = game_rom_offset + game_comp_size
-                    rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
-
+        # Write portals option
+        rom[0xFFFFE0] = (0x01 if options["portals"] else 0x00)
         return bytes(rom)
 
 
@@ -457,7 +419,7 @@ def patch_camp(data: LevelData) -> LevelData:
 
 def patch_trenches(data: LevelData) -> LevelData:
     data.stream.seek(0xD4, 0)
-    data.stream.write(bytes([0xFB, 0x29, 0x0, 0x82]))
+    data.stream.write(bytes([0xFB, 0x68, 0x0, 0x82]))
     return data
 
 
