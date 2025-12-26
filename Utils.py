@@ -388,9 +388,12 @@ def store_data_package_for_checksum(game: str, data: typing.Dict[str, Any]) -> N
             logging.debug(f"Could not store data package: {e}")
 
 
-def read_apignore(filename: str | pathlib.Path) -> PathSpec:
-    with open(filename) as ignore_file:
-        return GitIgnoreSpec.from_lines(ignore_file)
+def read_apignore(filename: str | pathlib.Path) -> PathSpec | None:
+    try:
+        with open(filename) as ignore_file:
+            return GitIgnoreSpec.from_lines(ignore_file)
+    except FileNotFoundError:
+        return None
 
 
 def get_default_adjuster_settings(game_name: str) -> Namespace:

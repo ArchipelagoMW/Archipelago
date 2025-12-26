@@ -280,6 +280,8 @@ if not is_frozen():
                      if not worldtype.zip_path]
 
         global_apignores = read_apignore(local_path("data", "GLOBAL.apignore"))
+        if not global_apignores:
+            raise RuntimeError("Could not read global apignore file for build component")
 
         apworlds_folder = os.path.join("build", "apworlds")
         os.makedirs(apworlds_folder, exist_ok=True)
@@ -309,7 +311,9 @@ if not is_frozen():
             apworld.game = worldtype.game
             manifest.update(apworld.get_manifest())
             apworld.manifest_path = os.path.join(file_name, "archipelago.json")
-            apignores = global_apignores + read_apignore(pathlib.Path(world_directory, ".apignore"))
+
+            local_ignores = read_apignore(pathlib.Path(world_directory, ".apignore"))
+            apignores = global_apignores + local_ignores if local_ignores else global_apignores
 
             with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
                 for file in apignores.match_tree_files(world_directory, negate=True):
