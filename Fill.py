@@ -1146,7 +1146,7 @@ def distribute_planned_blocks(multiworld: MultiWorld, plando_blocks: list[Plando
             candidates = [candidate for candidate in locations if candidate.item is None
                           and bool(candidate.address) == is_real]
             multiworld.random.shuffle(candidates)
-            allstate = multiworld.get_all_state(False)
+            allstate = multiworld.get_all_state()
             mincount = placement.count["min"]
             allowed_margin = len(item_candidates) - mincount
             fill_restrictive(multiworld, allstate, candidates, item_candidates, lock=True,
