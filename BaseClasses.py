@@ -1502,6 +1502,8 @@ class Location:
     def place_locked_item(self, item: Item):
         if self.item:
             raise Exception(f"Location {self} already filled.")
+        if item.location is not None:
+            raise Exception(f"Item {item} is already placed at {item.location}")
         self.item = item
         item.location = self
         self.locked = True
