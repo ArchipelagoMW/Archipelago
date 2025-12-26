@@ -41,19 +41,21 @@ files. Your patch file should have a `.aplttp` extension.
 Put your patch file on your desktop or somewhere convenient, and double click it. This should automatically launch the
 client, and will also create your ROM in the same place as your patch file.
 
-### Connect to the client
+## Connect to the client
 
-#### With an emulator
+### With an emulator
 
-When the client launched automatically, SNI should have also automatically launched in the background. If this is its
+When patching the ROM, the client should have launched automatically, and SNI should have also automatically launched in the background. If this is its
 first time launching, you may be prompted to allow it to communicate through the Windows Firewall.
+
+If the client did not launch automaticlly, use the `SNI Client` in the Archipelago Launcher to manually start the AP client.
 
 #### snes9x-nwa
 
 1. Click on the Network Menu and check **Enable Emu Network Control**
 2. Load your ROM file if it hasn't already been loaded.
 
-##### snes9x-rr
+#### snes9x-rr
 
 1. Load your ROM file if it hasn't already been loaded.
 2. Click on the File menu and hover on **Lua Scripting**
@@ -69,7 +71,7 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 1. Load your ROM file if it hasn't already been loaded.
 2. The emulator should automatically connect while SNI is running.
 
-##### BizHawk
+#### BizHawk
 
 1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
     - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
@@ -81,7 +83,7 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
     - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
       with the file picker.
 
-##### RetroArch 1.10.1 or newer
+#### RetroArch 1.10.1 or newer
 
 You only have to do these steps once.
 
@@ -96,7 +98,7 @@ You only have to do these steps once.
 When loading a ROM, be sure to select a **bsnes-mercury** core. These are the only cores that allow external tools to
 read ROM data.
 
-#### With hardware
+### With hardware
 
 This guide assumes you have downloaded the correct firmware for your device. If you have not done so already, please do
 this now. SD2SNES and FXPak Pro users may download the appropriate firmware
@@ -106,7 +108,7 @@ this now. SD2SNES and FXPak Pro users may download the appropriate firmware
 1. Close your emulator, which may have auto-launched.
 2. Power on your device and load the ROM.
 
-### Connect to the Archipelago Server
+## Connect to the Archipelago Server
 
 The patch file which launched your client should have automatically connected you to the AP Server. There are a few
 reasons this may not happen however, including if the game is hosted on the website but was generated elsewhere. If the
@@ -115,7 +117,7 @@ into the "Server" input field then press enter.
 
 The client will attempt to reconnect to the new server address, and should momentarily show "Server Status: Connected".
 
-### Play the game
+## Play the game
 
 When the client shows both SNES Device and Server as connected, you're ready to begin playing. Congratulations on
 successfully joining a multiworld game! You can execute various commands in your client. For more information regarding
