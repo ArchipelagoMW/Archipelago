@@ -162,3 +162,18 @@ class TestBase(unittest.TestCase):
                                          f"{game_name} modified local_items during {step}")
                         self.assertEqual(non_local_items, multiworld.worlds[1].options.non_local_items.value,
                                          f"{game_name} modified non_local_items during {step}")
+
+    def test_game_attribute(self):
+        """Test that worlds properly set "game" on all their non-event Items."""
+        gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "connect_entrances", "generate_basic", "pre_fill")
+        for game_name, world_type in AutoWorldRegister.world_types.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+
+                for item in multiworld.get_items():
+                    if item.is_event:
+                        continue
+
+                    self.assertEqual(
+                        item.game, world_type.game, f"Item {item} does not have game attribute set correctly."
+                    )
