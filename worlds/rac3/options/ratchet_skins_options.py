@@ -6,6 +6,7 @@ class RatchetSkin(Choice):
     """
     Cosmetic:
     What Skin should Ratchet have?
+    Remember to reload your save file after starting a new game to apply the skin!
     """
     display_name = RAC3OPTION.SKIN
     option_default = 0
