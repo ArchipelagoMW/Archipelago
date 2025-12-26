@@ -588,13 +588,13 @@ class BanjoTooieWorld(World):
         if self.options.randomize_worlds.value \
                 and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none\
                 and self.options.logic_type.value == LogicType.option_intended:
-            raise OptionError("Banjo-Tooie: Randomize Worlds and Randomize BK Moves is not compatible with Intended Logic.")
+            raise OptionError("Randomize Worlds and Randomize BK Moves is not compatible with Intended Logic.")
         if not self.options.randomize_notes.value \
                 and not self.options.randomize_signposts.value and not self.options.nestsanity.value \
                 and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none:
                 raise OptionError(
-                    "Banjo-Tooie: Your options are too restrictive for Randomize BK Moves. \
-                    Try randomizing notes, signs or nestsanity"
+                    "Your options are too restrictive for Randomize BK Moves. "
+                    "Try randomizing notes, signs or nestsanity"
                 )
         if self.options.victory_condition.value == VictoryCondition.option_token_hunt:
             if self.options.token_hunt_length.value > self.options.tokens_in_pool.value:
@@ -603,63 +603,64 @@ class BanjoTooieWorld(World):
                     and not self.options.randomize_signposts.value\
                     and not self.options.nestsanity.value:
                 raise OptionError(
-                    "Banjo-Tooie: You cannot have more than 15 Mumbo Tokens without enabling Randomize Signposts or Nestanity."
+                    "You cannot have more than 15 Mumbo Tokens without enabling Randomize Signposts or Nestanity."
                 )
             if self.options.tokens_in_pool.value > 50 and not self.options.nestsanity.value:
-                raise OptionError("Banjo-Tooie: You cannot have more than 50 Mumbo Tokens without enabling Nestanity.")
+                raise OptionError("You cannot have more than 50 Mumbo Tokens without enabling Nestanity.")
         if not self.options.randomize_notes.value\
                 and self.options.extra_trebleclefs_count.value != 0\
                 and self.options.bass_clef_amount.value != 0:
-            raise OptionError("Banjo-Tooie: Randomize Notes is required to add extra Treble Clefs or Bass Clefs")
+            raise OptionError("Randomize Notes is required to add extra Treble Clefs or Bass Clefs")
         if self.options.progressive_beak_buster.value\
                 and (not self.options.randomize_bk_moves.value or not self.options.randomize_bt_moves.value):
             raise OptionError(
-                "Banjo-Tooie: You cannot have progressive Beak Buster without randomizing moves and randomizing BK moves"
+                "You cannot have progressive Beak Buster without randomizing moves and randomizing BK moves"
             )
         if (self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg
                 or self.options.egg_behaviour.value == EggsBehaviour.option_simple_random_starting_egg) \
                 and (not self.options.randomize_bk_moves.value or not self.options.randomize_bt_moves.value):
             raise OptionError(
-                "Banjo-Tooie: You cannot have Randomize Starting Egg without randomizing moves and randomizing BK moves"
+                "You cannot have Randomize Starting Egg without randomizing moves and randomizing BK moves"
             )
         elif self.options.egg_behaviour.value == EggsBehaviour.option_progressive_eggs\
                 and not self.options.randomize_bt_moves.value:
-            raise OptionError("Banjo-Tooie: You cannot have progressive Eggs without randomizing moves")
+            raise OptionError("You cannot have progressive Eggs without randomizing moves")
         if self.options.progressive_shoes.value\
                 and not (
                     self.options.randomize_bk_moves.value
                     and self.options.randomize_bt_moves.value
                     and (self.options.randomize_signposts.value or self.options.nestsanity.value)
                 ):
-            raise OptionError("Banjo-Tooie: You cannot have progressive Shoes without randomizing moves, "
+            raise OptionError("You cannot have progressive Shoes without randomizing moves, "
                                 "randomizing BK moves and enabling either nestanity or randomize signpost")
         if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none \
                 and (
                     self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_none
                     or not self.options.randomize_bt_moves.value
                 ):
-            raise OptionError("Banjo-Tooie: You cannot have progressive Water Training\
-                without randomizing moves and randomizing BK moves")
+            raise OptionError(
+                "You cannot have progressive Water Training without randomizing moves and randomizing BK moves"
+            )
         if self.options.progressive_flight.value\
                 and (not self.options.randomize_bk_moves.value or not self.options.randomize_bt_moves.value):
-            raise OptionError("Banjo-Tooie: You cannot have progressive flight without randomizing moves and randomizing BK moves")
+            raise OptionError("You cannot have progressive flight without randomizing moves and randomizing BK moves")
         if self.options.progressive_egg_aiming.value != ProgressiveEggAim.option_none\
                 and (not self.options.randomize_bk_moves.value or not self.options.randomize_bt_moves.value):
             raise OptionError(
-                "Banjo-Tooie: You cannot have progressive egg aiming without randomizing moves and randomizing BK moves"
+                "You cannot have progressive egg aiming without randomizing moves and randomizing BK moves"
             )
         if self.options.progressive_bash_attack.value\
                 and (not self.options.randomize_stop_n_swap.value or not self.options.randomize_bt_moves.value):
             raise OptionError(
-                "Banjo-Tooie: You cannot have progressive bash attack without randomizing Stop N Swap and randomizing BK moves"
+                "You cannot have progressive bash attack without randomizing Stop N Swap and randomizing BK moves"
                 )
         if not self.options.randomize_bt_moves.value and self.options.jamjars_silo_costs.value != JamjarsSiloCosts.option_vanilla:
-            raise OptionError("Banjo-Tooie: You cannot change the silo costs without randomizing Jamjars' moves.")
+            raise OptionError("You cannot change the silo costs without randomizing Jamjars' moves.")
         if not self.options.open_hag1.value\
                 and self.options.victory_condition.value == VictoryCondition.option_wonderwing_challenge:
             self.options.open_hag1.value = True
         if self.options.world_requirements.value != WorldRequirements.option_normal and not self.options.skip_puzzles.value:
-            raise OptionError("Banjo-Tooie: Your world requirements needs to be set to normal if you are not going to skip puzzles.")
+            raise OptionError("Your world requirements needs to be set to normal if you are not going to skip puzzles.")
 
     def choose_starter_egg(self) -> None:
         if self.options.egg_behaviour.value == EggsBehaviour.option_random_starting_egg or \
