@@ -189,6 +189,11 @@ def main(args=None) -> tuple[argparse.Namespace, int]:
                                         yaml[category][key] = option
                             elif category_name not in yaml:
                                 logging.warning(f"Meta: Category {category_name} is not present in {path}.")
+                            elif key == "triggers":
+                                if "triggers" not in yaml[category_name]:
+                                    yaml[category_name][key] = []
+                                for trigger in option:
+                                    yaml[category_name][key].append(trigger)
                             else:
                                 yaml[category_name][key] = option
 
@@ -342,7 +347,9 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
             elif isinstance(new_value, list):
                 cleaned_value.extend(new_value)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) + Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.update(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
@@ -356,13 +363,18 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
                 for element in new_value:
                     cleaned_value.remove(element)
             elif isinstance(new_value, dict):
-                cleaned_value = dict(Counter(cleaned_value) - Counter(new_value))
+                counter_value = Counter(cleaned_value)
+                counter_value.subtract(new_value)
+                cleaned_value = dict(counter_value)
             else:
                 raise Exception(f"Cannot apply remove to non-dict, set, or list type {option_name},"
                                 f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = cleaned_value
         else:
-            cleaned_weights[option_name] = new_weights[option]
+            # Options starting with + and - may modify values in-place, and new_weights may be shared by multiple slots
+            # using the same .yaml, so ensure that the new value is a copy.
+            cleaned_value = copy.deepcopy(new_weights[option])
+            cleaned_weights[option_name] = cleaned_value
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
@@ -384,6 +396,8 @@ def roll_meta_option(option_key, game: str, category_dict: dict) -> Any:
         if option_key in options:
             if options[option_key].supports_weighting:
                 return get_choice(option_key, category_dict)
+            return category_dict[option_key]
+        if option_key == "triggers":
             return category_dict[option_key]
     raise Options.OptionError(f"Error generating meta option {option_key} for {game}.")
 

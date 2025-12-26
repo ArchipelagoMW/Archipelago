@@ -11,3 +11,5 @@ Play Sudoku puzzles of varying difficulties, earning a hint for each puzzle corr
 ## Where is the options page?
 
 There is no options page; this game cannot be used in your .yamls. Instead, the client can connect to any slot in a multiworld.
+
+By using the connected room's Admin Password on the Admin Panel tab, you can configure some settings at any time to affect the entire room. This allows disabling hints entirely, as well as altering the hint odds for each difficulty.
