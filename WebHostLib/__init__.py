@@ -59,7 +59,7 @@ app.config["PONY"] = {
 }
 app.config["MAX_ROLL"] = 20
 app.config["CACHE_TYPE"] = "SimpleCache"
-app.config["HOST_ADDRESS"] = ""
+app.config["HOST_ADDRESS"] = "localhost"
 app.config["ASSET_RIGHTS"] = False
 
 cache = Cache()
