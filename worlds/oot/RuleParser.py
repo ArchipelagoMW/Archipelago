@@ -103,13 +103,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             raise Exception('Parse Error: invalid node name %s' % node.id, self.current_spot.name, ast.dump(node, False))
 
     def visit_Str(self, node):
-        return ast.Call(
-            func=ast.Attribute(
-                value=ast.Name(id='state', ctx=ast.Load()),
-                attr='has',
-                ctx=ast.Load()),
-            args=[ast.Str(node.s), ast.Constant(self.player)],
-            keywords=[])
+        return node
 
     # python 3.8 compatibility: ast walking now uses visit_Constant for Constant subclasses
     # this includes Num, Str, NameConstant, Bytes, and Ellipsis. We only handle Str.
