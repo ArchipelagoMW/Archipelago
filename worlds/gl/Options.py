@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin, DefaultOnToggle
+from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Range, DeathLinkMixin, DefaultOnToggle, \
+    OptionSet
 
 
 class PlayerCount(Range):
@@ -13,6 +14,18 @@ class PlayerCount(Range):
     range_start = 1
     range_end = 4
     default = 1
+
+
+class IncludedAreas(OptionSet):
+    """
+    Select which areas will have their locations included in the randomization pool.
+    Each selected area's stages and checks will be accessible in your world.
+    Unselected areas will not be included in the location pool.
+    Mountain is always available and cannot be excluded.
+    """
+    display_name = "Included Areas"
+    valid_keys = ["Castle", "Town", "Ice", "Battlefield"]
+    default = ["Castle", "Town", "Ice", "Battlefield"]
 
 
 class ChestBarrels(Choice):
@@ -49,6 +62,14 @@ class MirrorShards(DefaultOnToggle):
     """
 
     display_name = "Mirror Shards"
+
+class Portals(DefaultOnToggle):
+    """
+    Level portals will be added to the random pool as items.
+    Getting a portal item will unlock access to that level.
+    Levels will no longer unlock in succession when clearing the previous level.
+    """
+    display_name = "Portals"
 
 
 class MaxDifficultyToggle(Toggle):
@@ -210,9 +231,11 @@ class UnlockCharacterFour(Choice):
 class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
     local_players: PlayerCount
+    included_areas: IncludedAreas
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
+    portals: Portals
     max_difficulty_toggle: MaxDifficultyToggle
     max_difficulty_value: MaxDifficultyRange
     instant_max: InstantMaxDifficulty

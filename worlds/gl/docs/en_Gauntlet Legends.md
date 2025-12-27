@@ -35,11 +35,12 @@ Items that can be placed into locations:
 - Runestones
 - Obelisks
 - Mirror Shards
+- Level Portals
 - Death
 
 ## What does another world's item look like in Gauntlet Legends?
 
-Items will show up as a purple coin, both as items and in chests or barrels.
+Items will show up as as the Archipelago Logo, both as items and in chests or barrels.
 
 ## When the player receives an item, what happens?
 
