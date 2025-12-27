@@ -143,6 +143,11 @@ class SC2World(World):
                 enabled_campaigns.discard(SC2Campaign.NCO.campaign_name)
             if len(self.options.selected_races.value) < 3:
                 enabled_campaigns.discard(SC2Campaign.EPILOGUE.campaign_name)
+            if not enabled_campaigns:
+                raise OptionError(
+                    "Campaign and race exclusions remove all possible missions from the pool. "
+                    "Either include more campaigns, include more races, or enable race swap."
+                )
             self.options.enabled_campaigns.value = enabled_campaigns
 
     def create_regions(self) -> None:
