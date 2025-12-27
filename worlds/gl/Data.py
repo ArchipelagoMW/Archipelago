@@ -288,6 +288,7 @@ level_locations: Final[Mapping[int, Sequence[LocationData]]] = MappingProxyType(
     0x94: get_locations_by_tags("erupting_fissure"),
     0x95: get_locations_by_tags("yeti"),
     0xF1: get_locations_by_tags("desecrated_temple"),
+    0xF2: get_locations_by_tags("altar_of_skorne"),
     0x111: get_locations_by_tags("battle_trenches"),
     0x112: get_locations_by_tags("fortified_towers"),
     0x113: get_locations_by_tags("infernal_fortress")
@@ -359,6 +360,7 @@ level_size: Final[tuple[int, ...]] = (
     0xCD0,
     0x20,
     0x3F0,
+    0x0,
     0xB00,
     0xA30,
     0xB30
@@ -389,6 +391,7 @@ level_address: Final[tuple[int, ...]] = (
     0xF8B760,
     0xF8C7C0,
     0xF90B50,
+    0x0,
     0xF8D960,
     0xF8E6E0,
     0xF8F110
@@ -419,6 +422,7 @@ level_header: Final[tuple[int, ...]] = (
     0xF9E54C,
     0xF9E600,
     0xF9DC2C,
+    0x0,
     0xF9DA04,
     0xF9DABC,
     0xF9DB74

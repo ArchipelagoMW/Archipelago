@@ -170,7 +170,10 @@ class GLPatchExtension(APPatchExtension):
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
         for i in range(len(level_locations)):
             level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
-            stream.seek(level_address[i], 0)
+            level_address_ = level_address[i]
+            if level_address_ == 0:
+                continue
+            stream.seek(level_address_, 0)
             stream, data = get_level_data(stream, level_size[i], i)
             for j, (location_name, item) in enumerate(level.items()):
                 if item[0] == 0:

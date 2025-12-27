@@ -558,6 +558,11 @@ class GauntletLegendsContext(CommonContext):
                 elif self.deathlink_enabled:
                     await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
             self.var_reset()
+            if (self.current_level[1] << 4) + self.current_level[0] == 0xF1:
+                self.current_level = bytes([0x2, 0xF])
+                self.var_reset()
+                self.in_portal = True
+                return False
             return True
         return False
 
@@ -826,6 +831,8 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         await asyncio.sleep(0.05)
                         continue
                     await asyncio.sleep(0.1)
+                    if ctx.in_portal:
+                        continue
                     checking = await ctx.location_loop()
                     if len(checking) > 0:
                         ctx.locations_checked += checking
