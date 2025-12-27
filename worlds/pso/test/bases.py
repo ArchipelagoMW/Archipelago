@@ -1,6 +1,6 @@
 from test.bases import WorldTestBase
 
-from ..world import APQuestWorld
+from ..world import PSOWorld
 
 # Tests are a big topic.
 # The testing API and the core code in general empower you to test all kinds of complicated custom behavior.
@@ -13,7 +13,7 @@ from ..world import APQuestWorld
 # The first thing you'll want to do is subclass it. You'll want to override "game" And "world" like this.
 class APQuestTestBase(WorldTestBase):
     game = "APQuest"
-    world: APQuestWorld
+    world: PSOWorld
 
 
 # The actual tests you write should be in files whose names start with "test_".

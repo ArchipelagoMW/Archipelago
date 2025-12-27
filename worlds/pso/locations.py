@@ -7,7 +7,7 @@ from BaseClasses import ItemClassification, Location
 from . import items
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import PSOWorld
 
 # Every location must have a unique integer ID associated with it.
 # We will have a lookup from location name to ID here that, in world.py, we will import and bind to the world class.
@@ -40,12 +40,12 @@ def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | No
     return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
 
 
-def create_all_locations(world: APQuestWorld) -> None:
+def create_all_locations(world: PSOWorld) -> None:
     create_regular_locations(world)
     create_events(world)
 
 
-def create_regular_locations(world: APQuestWorld) -> None:
+def create_regular_locations(world: PSOWorld) -> None:
     # Finally, we need to put the Locations ("checks") into their regions.
     # Once again, before we do anything, we can grab our regions we created by using world.get_region()
     overworld = world.get_region("Overworld")
@@ -95,7 +95,7 @@ def create_regular_locations(world: APQuestWorld) -> None:
         overworld.add_locations(bottom_left_extra_chest, APQuestLocation)
 
 
-def create_events(world: APQuestWorld) -> None:
+def create_events(world: PSOWorld) -> None:
     # Sometimes, the player may perform in-game actions that allow them to progress which are not related to Items.
     # In our case, the player must press a button in the top left room to open the final boss door.
     # AP has something for this purpose: "Event locations" and "Event items".

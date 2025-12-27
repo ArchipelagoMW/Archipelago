@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Item, ItemClassification
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import PSOWorld
 
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
@@ -42,7 +42,7 @@ class APQuestItem(Item):
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
 # To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
 # For now, let's make a function that returns the name of a random filler item here in items.py.
-def get_random_filler_item_name(world: APQuestWorld) -> str:
+def get_random_filler_item_name(world: PSOWorld) -> str:
     # APQuest has an option called "trap_chance".
     # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
     # For this purpose, we need to use a random generator.
@@ -55,7 +55,7 @@ def get_random_filler_item_name(world: APQuestWorld) -> str:
     return "Confetti Cannon"
 
 
-def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
+def create_item_with_correct_classification(world: PSOWorld, name: str) -> APQuestItem:
     # Our world class must have a create_item() function that can create any of our items by name at any time.
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,
@@ -71,7 +71,7 @@ def create_item_with_correct_classification(world: APQuestWorld, name: str) -> A
 
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
-def create_all_items(world: APQuestWorld) -> None:
+def create_all_items(world: PSOWorld) -> None:
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
     # There must be exactly as many items as there are locations.
     # In our case, there are either six or seven locations.
