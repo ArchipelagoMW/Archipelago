@@ -6,19 +6,19 @@ from .Subclasses import ItemData
 
 # 0x130000
 Reports_Table = {
-    ItemName.SecretAnsemsReport1:  ItemData(1, 226, 0x36C4, 6),
-    ItemName.SecretAnsemsReport2:  ItemData(1, 227, 0x36C4, 7),
-    ItemName.SecretAnsemsReport3:  ItemData(1, 228, 0x36C5, 0),
-    ItemName.SecretAnsemsReport4:  ItemData(1, 229, 0x36C5, 1),
-    ItemName.SecretAnsemsReport5:  ItemData(1, 230, 0x36C5, 2),
-    ItemName.SecretAnsemsReport6:  ItemData(1, 231, 0x36C5, 3),
-    ItemName.SecretAnsemsReport7:  ItemData(1, 232, 0x36C5, 4),
-    ItemName.SecretAnsemsReport8:  ItemData(1, 233, 0x36C5, 5),
-    ItemName.SecretAnsemsReport9:  ItemData(1, 234, 0x36C5, 6),
-    ItemName.SecretAnsemsReport10: ItemData(1, 235, 0x36C5, 7),
-    ItemName.SecretAnsemsReport11: ItemData(1, 236, 0x36C6, 0),
-    ItemName.SecretAnsemsReport12: ItemData(1, 237, 0x36C6, 1),
-    ItemName.SecretAnsemsReport13: ItemData(1, 238, 0x36C6, 2),
+    ItemName.SecretAnsemsReport1:  ItemData(0, 226, 0x36C4, 6),
+    ItemName.SecretAnsemsReport2:  ItemData(0, 227, 0x36C4, 7),
+    ItemName.SecretAnsemsReport3:  ItemData(0, 228, 0x36C5, 0),
+    ItemName.SecretAnsemsReport4:  ItemData(0, 229, 0x36C5, 1),
+    ItemName.SecretAnsemsReport5:  ItemData(0, 230, 0x36C5, 2),
+    ItemName.SecretAnsemsReport6:  ItemData(0, 231, 0x36C5, 3),
+    ItemName.SecretAnsemsReport7:  ItemData(0, 232, 0x36C5, 4),
+    ItemName.SecretAnsemsReport8:  ItemData(0, 233, 0x36C5, 5),
+    ItemName.SecretAnsemsReport9:  ItemData(0, 234, 0x36C5, 6),
+    ItemName.SecretAnsemsReport10: ItemData(0, 235, 0x36C5, 7),
+    ItemName.SecretAnsemsReport11: ItemData(0, 236, 0x36C6, 0),
+    ItemName.SecretAnsemsReport12: ItemData(0, 237, 0x36C6, 1),
+    ItemName.SecretAnsemsReport13: ItemData(0, 238, 0x36C6, 2),
 }
 
 Progression_Table = {
@@ -27,30 +27,28 @@ Progression_Table = {
     ItemName.ProofofPeace:        ItemData(1, 595, 0x36B4),
     ItemName.PromiseCharm:        ItemData(1, 524, 0x3694),
     ItemName.NamineSketches:      ItemData(1, 368, 0x3642),
-    ItemName.CastleKey:           ItemData(2, 460, 0x365D),  # dummy 13
-    ItemName.BattlefieldsofWar:   ItemData(2, 54, 0x35AE),
-    ItemName.SwordoftheAncestor:  ItemData(2, 55, 0x35AF),
-    ItemName.BeastsClaw:          ItemData(2, 59, 0x35B3),
-    ItemName.BoneFist:            ItemData(2, 60, 0x35B4),
-    ItemName.ProudFang:           ItemData(2, 61, 0x35B5),
-    ItemName.SkillandCrossbones:  ItemData(2, 62, 0x35B6),
-    ItemName.Scimitar:            ItemData(2, 72, 0x35C0),
+    ItemName.RoyalSummons:        ItemData(2, 460, 0x365D),  # dummy 13
+    ItemName.BattlefieldsofWar:   ItemData(2, 54,  0x35AE),
+    ItemName.SwordoftheAncestor:  ItemData(2, 55,  0x35AF),
+    ItemName.BeastsClaw:          ItemData(2, 59,  0x35B3),
+    ItemName.BoneFist:            ItemData(2, 60,  0x35B4),
+    ItemName.ProudFang:           ItemData(2, 61,  0x35B5),
+    ItemName.SkillandCrossbones:  ItemData(2, 62,  0x35B6),
+    ItemName.Scimitar:            ItemData(2, 72,  0x35C0),
     ItemName.MembershipCard:      ItemData(2, 369, 0x3643),
-    ItemName.IceCream:            ItemData(3, 375, 0x3649),
-    # Changed to 3 instead of one poster, picture and ice cream respectively
-    ItemName.WaytotheDawn:        ItemData(2, 73, 0x35C1),
-    # currently first visit locking doesn't work for twtnw.When goa is updated should be 2
-    ItemName.IdentityDisk:        ItemData(2, 74, 0x35C2),
-    ItemName.TornPages:           ItemData(5, 32, 0x3598),
+    ItemName.IceCream:            ItemData(3, 375, 0x3649), # Changed to 3 instead of one poster, picture and ice cream respectively
+    ItemName.WaytotheDawn:        ItemData(2, 73,  0x35C1),
+    ItemName.IdentityDisk:        ItemData(2, 74,  0x35C2),
+    ItemName.TornPages:           ItemData(5, 32,  0x3598),
 
 }
 Forms_Table = {
-    ItemName.ValorForm:  ItemData(1, 26, 0x36C0, 1),
-    ItemName.WisdomForm: ItemData(1, 27, 0x36C0, 2),
+    ItemName.ValorForm:  ItemData(1, 26,  0x36C0, 1),
+    ItemName.WisdomForm: ItemData(1, 27,  0x36C0, 2),
     ItemName.LimitForm:  ItemData(1, 563, 0x36CA, 3),
-    ItemName.MasterForm: ItemData(1, 31, 0x36C0, 6),
-    ItemName.FinalForm:  ItemData(1, 29, 0x36C0, 4),
-    ItemName.AntiForm:   ItemData(1, 30, 0x36C0, 5)
+    ItemName.MasterForm: ItemData(1, 31,  0x36C0, 6),
+    ItemName.FinalForm:  ItemData(1, 29,  0x36C0, 4),
+    ItemName.AntiForm:   ItemData(1, 30,  0x36C0, 5),
 }
 Magic_Table = {
     ItemName.FireElement:     ItemData(3, 21, 0x3594),
@@ -63,20 +61,20 @@ Magic_Table = {
 Summon_Table = {
     ItemName.Genie:         ItemData(1, 159, 0x36C4, 4),
     ItemName.PeterPan:      ItemData(1, 160, 0x36C4, 5),
-    ItemName.Stitch:        ItemData(1, 25, 0x36C0, 0),
+    ItemName.Stitch:        ItemData(1, 25,  0x36C0, 0),
     ItemName.ChickenLittle: ItemData(1, 383, 0x36C0, 3),
 }
 Movement_Table = {
-    ItemName.HighJump:    ItemData(4, 94, 0x05E, ability=True),
-    ItemName.QuickRun:    ItemData(4, 98, 0x062, ability=True),
+    ItemName.HighJump:    ItemData(4, 94,  0x05E, ability=True),
+    ItemName.QuickRun:    ItemData(4, 98,  0x062, ability=True),
     ItemName.DodgeRoll:   ItemData(4, 564, 0x234, ability=True),
     ItemName.AerialDodge: ItemData(4, 102, 0x066, ability=True),
     ItemName.Glide:       ItemData(4, 106, 0x06A, ability=True),
 }
 
 Keyblade_Table = {
-    ItemName.Oathkeeper:      ItemData(1, 42, 0x35A2),
-    ItemName.Oblivion:        ItemData(1, 43, 0x35A3),
+    ItemName.Oathkeeper:      ItemData(1, 42,  0x35A2),
+    ItemName.Oblivion:        ItemData(1, 43,  0x35A3),
     ItemName.StarSeeker:      ItemData(1, 480, 0x367B),
     ItemName.HiddenDragon:    ItemData(1, 481, 0x367C),
     ItemName.HerosCrest:      ItemData(1, 484, 0x367F),
@@ -98,7 +96,7 @@ Keyblade_Table = {
     ItemName.Fenrir:          ItemData(1, 499, 0x368E),
     ItemName.UltimaWeapon:    ItemData(1, 500, 0x368F),
     ItemName.WinnersProof:    ItemData(1, 544, 0x3699),
-    ItemName.Pureblood:       ItemData(1, 71, 0x35BF),
+    ItemName.Pureblood:       ItemData(1, 71,  0x35BF),
 }
 Staffs_Table = {
     ItemName.Centurion2:        ItemData(1, 546, 0x369B),
@@ -123,47 +121,47 @@ Shields_Table = {
     ItemName.UltimateMushroom:  ItemData(1, 558, 0x36A7),
 }
 Accessory_Table = {
-    ItemName.AbilityRing:     ItemData(1, 8, 0x3587),
-    ItemName.EngineersRing:   ItemData(1, 9, 0x3588),
-    ItemName.TechniciansRing: ItemData(1, 10, 0x3589),
-    ItemName.SkillRing:       ItemData(1, 38, 0x359F),
-    ItemName.SkillfulRing:    ItemData(1, 39, 0x35A0),
-    ItemName.ExpertsRing:     ItemData(1, 11, 0x358A),
-    ItemName.MastersRing:     ItemData(1, 34, 0x359B),
-    ItemName.CosmicRing:      ItemData(1, 52, 0x35AD),
+    ItemName.AbilityRing:     ItemData(1, 8,   0x3587),
+    ItemName.EngineersRing:   ItemData(1, 9,   0x3588),
+    ItemName.TechniciansRing: ItemData(1, 10,  0x3589),
+    ItemName.SkillRing:       ItemData(1, 38,  0x359F),
+    ItemName.SkillfulRing:    ItemData(1, 39,  0x35A0),
+    ItemName.ExpertsRing:     ItemData(1, 11,  0x358A),
+    ItemName.MastersRing:     ItemData(1, 34,  0x359B),
+    ItemName.CosmicRing:      ItemData(1, 52,  0x35AD),
     ItemName.ExecutivesRing:  ItemData(1, 599, 0x36B5),
-    ItemName.SardonyxRing:    ItemData(1, 12, 0x358B),
-    ItemName.TourmalineRing:  ItemData(1, 13, 0x358C),
-    ItemName.AquamarineRing:  ItemData(1, 14, 0x358D),
-    ItemName.GarnetRing:      ItemData(1, 15, 0x358E),
-    ItemName.DiamondRing:     ItemData(1, 16, 0x358F),
-    ItemName.SilverRing:      ItemData(1, 17, 0x3590),
-    ItemName.GoldRing:        ItemData(1, 18, 0x3591),
-    ItemName.PlatinumRing:    ItemData(1, 19, 0x3592),
-    ItemName.MythrilRing:     ItemData(1, 20, 0x3593),
-    ItemName.OrichalcumRing:  ItemData(1, 28, 0x359A),
-    ItemName.SoldierEarring:  ItemData(1, 40, 0x35A6),
-    ItemName.FencerEarring:   ItemData(1, 46, 0x35A7),
-    ItemName.MageEarring:     ItemData(1, 47, 0x35A8),
-    ItemName.SlayerEarring:   ItemData(1, 48, 0x35AC),
-    ItemName.Medal:           ItemData(1, 53, 0x35B0),
-    ItemName.MoonAmulet:      ItemData(1, 35, 0x359C),
-    ItemName.StarCharm:       ItemData(1, 36, 0x359E),
-    ItemName.CosmicArts:      ItemData(1, 56, 0x35B1),
-    ItemName.ShadowArchive:   ItemData(1, 57, 0x35B2),
-    ItemName.ShadowArchive2:  ItemData(1, 58, 0x35B7),
-    ItemName.FullBloom:       ItemData(1, 64, 0x35B9),
-    ItemName.FullBloom2:      ItemData(1, 66, 0x35BB),
-    ItemName.DrawRing:        ItemData(1, 65, 0x35BA),
-    ItemName.LuckyRing:       ItemData(1, 63, 0x35B8),
+    ItemName.SardonyxRing:    ItemData(1, 12,  0x358B),
+    ItemName.TourmalineRing:  ItemData(1, 13,  0x358C),
+    ItemName.AquamarineRing:  ItemData(1, 14,  0x358D),
+    ItemName.GarnetRing:      ItemData(1, 15,  0x358E),
+    ItemName.DiamondRing:     ItemData(1, 16,  0x358F),
+    ItemName.SilverRing:      ItemData(1, 17,  0x3590),
+    ItemName.GoldRing:        ItemData(1, 18,  0x3591),
+    ItemName.PlatinumRing:    ItemData(1, 19,  0x3592),
+    ItemName.MythrilRing:     ItemData(1, 20,  0x3593),
+    ItemName.OrichalcumRing:  ItemData(1, 28,  0x359A),
+    ItemName.SoldierEarring:  ItemData(1, 40,  0x35A6),
+    ItemName.FencerEarring:   ItemData(1, 46,  0x35A7),
+    ItemName.MageEarring:     ItemData(1, 47,  0x35A8),
+    ItemName.SlayerEarring:   ItemData(1, 48,  0x35AC),
+    ItemName.Medal:           ItemData(1, 53,  0x35B0),
+    ItemName.MoonAmulet:      ItemData(1, 35,  0x359C),
+    ItemName.StarCharm:       ItemData(1, 36,  0x359E),
+    ItemName.CosmicArts:      ItemData(1, 56,  0x35B1),
+    ItemName.ShadowArchive:   ItemData(1, 57,  0x35B2),
+    ItemName.ShadowArchive2:  ItemData(1, 58,  0x35B7),
+    ItemName.FullBloom:       ItemData(1, 64,  0x35B9),
+    ItemName.FullBloom2:      ItemData(1, 66,  0x35BB),
+    ItemName.DrawRing:        ItemData(1, 65,  0x35BA),
+    ItemName.LuckyRing:       ItemData(1, 63,  0x35B8),
 }
 Armor_Table = {
-    ItemName.ElvenBandana:     ItemData(1, 67, 0x35BC),
-    ItemName.DivineBandana:    ItemData(1, 68, 0x35BD),
-    ItemName.ProtectBelt:      ItemData(1, 78, 0x35C7),
-    ItemName.GaiaBelt:         ItemData(1, 79, 0x35CA),
-    ItemName.PowerBand:        ItemData(1, 69, 0x35BE),
-    ItemName.BusterBand:       ItemData(1, 70, 0x35C6),
+    ItemName.ElvenBandana:     ItemData(1, 67,  0x35BC),
+    ItemName.DivineBandana:    ItemData(1, 68,  0x35BD),
+    ItemName.ProtectBelt:      ItemData(1, 78,  0x35C7),
+    ItemName.GaiaBelt:         ItemData(1, 79,  0x35CA),
+    ItemName.PowerBand:        ItemData(1, 69,  0x35BE),
+    ItemName.BusterBand:       ItemData(1, 70,  0x35C6),
     ItemName.CosmicBelt:       ItemData(1, 111, 0x35D1),
     ItemName.FireBangle:       ItemData(1, 173, 0x35D7),
     ItemName.FiraBangle:       ItemData(1, 174, 0x35D8),
@@ -194,17 +192,17 @@ Armor_Table = {
     ItemName.GrandRibbon:      ItemData(1, 157, 0x35D4),
 }
 Usefull_Table = {
-    ItemName.MickeyMunnyPouch: ItemData(1, 535, 0x3695),  # 5000 munny per
-    ItemName.OletteMunnyPouch: ItemData(2, 362, 0x363C),  # 2500 munny per
-    ItemName.HadesCupTrophy:   ItemData(1, 537, 0x3696),
-    ItemName.UnknownDisk:      ItemData(1, 462, 0x365F),
-    ItemName.OlympusStone:     ItemData(1, 370, 0x3644),
+    ItemName.MickeyMunnyPouch: ItemData(1,  535, 0x3695),  # 5000 munny per
+    ItemName.OletteMunnyPouch: ItemData(2,  362, 0x363C),  # 2500 munny per
+    ItemName.HadesCupTrophy:   ItemData(1,  537, 0x3696),
+    ItemName.UnknownDisk:      ItemData(1,  462, 0x365F),
+    ItemName.OlympusStone:     ItemData(1,  370, 0x3644),
     ItemName.MaxHPUp:          ItemData(20, 112, 0x3671),  # 470 is DUMMY 23, 112 is Encampment Area Map
-    ItemName.MaxMPUp:          ItemData(4, 113, 0x3672),  # 471 is DUMMY 24, 113 is Village Area Map
-    ItemName.DriveGaugeUp:     ItemData(6, 114, 0x3673),  # 472 is DUMMY 25, 114 is Cornerstone Hill Map
-    ItemName.ArmorSlotUp:      ItemData(3, 116, 0x3674),  # 473 is DUMMY 26, 116 is Lilliput Map
-    ItemName.AccessorySlotUp:  ItemData(3, 117, 0x3675),  # 474 is DUMMY 27, 117 is Building Site Map
-    ItemName.ItemSlotUp:       ItemData(5, 118, 0x3660),  # 463 is DUMMY 16, 118 is Mickey’s House Map
+    ItemName.MaxMPUp:          ItemData(4,  113, 0x3672),  # 471 is DUMMY 24, 113 is Village Area Map
+    ItemName.DriveGaugeUp:     ItemData(6,  114, 0x3673),  # 472 is DUMMY 25, 114 is Cornerstone Hill Map
+    ItemName.ArmorSlotUp:      ItemData(3,  116, 0x3674),  # 473 is DUMMY 26, 116 is Lilliput Map
+    ItemName.AccessorySlotUp:  ItemData(3,  117, 0x3675),  # 474 is DUMMY 27, 117 is Building Site Map
+    ItemName.ItemSlotUp:       ItemData(5,  118, 0x3660),  # 463 is DUMMY 16, 118 is Mickey’s House Map
 }
 SupportAbility_Table = {
     ItemName.Scan:             ItemData(2, 138, 0x08A, ability=True),
@@ -237,16 +235,16 @@ SupportAbility_Table = {
     ItemName.MPHastega:        ItemData(1, 422, 0x1A6, ability=True),
     ItemName.Defender:         ItemData(2, 414, 0x19E, ability=True),
     ItemName.DamageControl:    ItemData(2, 542, 0x21E, ability=True),
-    ItemName.NoExperience:     ItemData(0, 404, 0x194, ability=True),  # quantity changed to 0 because the player starts with one always.
     ItemName.LightDarkness:    ItemData(1, 541, 0x21D, ability=True),
     ItemName.MagicLock:        ItemData(1, 403, 0x193, ability=True),
     ItemName.LeafBracer:       ItemData(1, 402, 0x192, ability=True),
     ItemName.CombinationBoost: ItemData(1, 400, 0x190, ability=True),
     ItemName.OnceMore:         ItemData(1, 416, 0x1A0, ability=True),
     ItemName.SecondChance:     ItemData(1, 415, 0x19F, ability=True),
+    #ItemName.NoExperience:    ItemData(0, 404, 0x194, ability=True),  # quantity changed to 0 because the player starts with one always.
 }
 ActionAbility_Table = {
-    ItemName.Guard:            ItemData(1, 82, 0x052, ability=True),
+    ItemName.Guard:            ItemData(1, 82,  0x052, ability=True),
     ItemName.UpperSlash:       ItemData(1, 137, 0x089, ability=True),
     ItemName.HorizontalSlash:  ItemData(1, 271, 0x10F, ability=True),
     ItemName.FinishingLeap:    ItemData(1, 267, 0x10B, ability=True),
@@ -281,12 +279,12 @@ Boosts_Table = {
 
 # These items cannot be in other games so these are done locally in kh2
 DonaldAbility_Table = {
-    ItemName.DonaldFire:          ItemData(1, 165, 0xA5, ability=True),
-    ItemName.DonaldBlizzard:      ItemData(1, 166, 0xA6, ability=True),
-    ItemName.DonaldThunder:       ItemData(1, 167, 0xA7, ability=True),
-    ItemName.DonaldCure:          ItemData(1, 168, 0xA8, ability=True),
-    ItemName.Fantasia:            ItemData(1, 199, 0xC7, ability=True),
-    ItemName.FlareForce:          ItemData(1, 200, 0xC8, ability=True),
+    ItemName.DonaldFire:          ItemData(1, 165, 0x0A5, ability=True),
+    ItemName.DonaldBlizzard:      ItemData(1, 166, 0x0A6, ability=True),
+    ItemName.DonaldThunder:       ItemData(1, 167, 0x0A7, ability=True),
+    ItemName.DonaldCure:          ItemData(1, 168, 0x0A8, ability=True),
+    ItemName.Fantasia:            ItemData(1, 199, 0x0C7, ability=True),
+    ItemName.FlareForce:          ItemData(1, 200, 0x0C8, ability=True),
     ItemName.DonaldMPRage:        ItemData(1, 412, 0x19C, ability=True),  # originally 3 but swapped to 1 because crit checks
     ItemName.DonaldJackpot:       ItemData(1, 406, 0x196, ability=True),
     ItemName.DonaldLuckyLucky:    ItemData(3, 407, 0x197, ability=True),
@@ -308,8 +306,8 @@ GoofyAbility_Table = {
     ItemName.GoofyTornado:       ItemData(1, 423, 0x1A7, ability=True),
     ItemName.GoofyTurbo:         ItemData(1, 425, 0x1A9, ability=True),
     ItemName.GoofyBash:          ItemData(1, 429, 0x1AD, ability=True),
-    ItemName.TornadoFusion:      ItemData(1, 201, 0xC9, ability=True),
-    ItemName.Teamwork:           ItemData(1, 202, 0xCA, ability=True),
+    ItemName.TornadoFusion:      ItemData(1, 201, 0x0C9, ability=True),
+    ItemName.Teamwork:           ItemData(1, 202, 0x0CA, ability=True),
     ItemName.GoofyDraw:          ItemData(1, 405, 0x195, ability=True),
     ItemName.GoofyJackpot:       ItemData(1, 406, 0x196, ability=True),
     ItemName.GoofyLuckyLucky:    ItemData(1, 407, 0x197, ability=True),
@@ -334,8 +332,8 @@ GoofyAbility_Table = {
 
 Wincon_Table = {
     ItemName.LuckyEmblem: ItemData(kh2id=367, memaddr=0x3641),  # letter item
-    # ItemName.Victory:     ItemData(kh2id=263, memaddr=0x111),
     ItemName.Bounty:      ItemData(kh2id=461, memaddr=0x365E),  # Dummy 14
+    # ItemName.Victory:     ItemData(kh2id=263, memaddr=0x111),
     # ItemName.UniversalKey:ItemData(,365,0x363F,0)#Tournament Poster
 }
 
@@ -567,7 +565,7 @@ useful_set = {item_name for keys in [
 
 visit_locking_dict = {
     "2VisitLocking":   [
-        ItemName.CastleKey,
+        ItemName.RoyalSummons,
         ItemName.BattlefieldsofWar,
         ItemName.SwordoftheAncestor,
         ItemName.BeastsClaw,
@@ -583,7 +581,7 @@ visit_locking_dict = {
         ItemName.NamineSketches
     ],
     "AllVisitLocking": {
-        ItemName.CastleKey:          2,
+        ItemName.RoyalSummons:       2,
         ItemName.BattlefieldsofWar:  2,
         ItemName.SwordoftheAncestor: 2,
         ItemName.BeastsClaw:         2,

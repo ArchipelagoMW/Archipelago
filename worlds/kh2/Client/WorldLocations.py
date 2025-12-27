@@ -1,5 +1,5 @@
 import typing
-from .Names import LocationName
+from ..Names import LocationName
 
 
 class WorldLocationData(typing.NamedTuple):
@@ -97,9 +97,6 @@ DC_Checks = {
     LocationName.LingeringWillProofofConnection: WorldLocationData(0x370C, 6),
     LocationName.LingeringWillManifestIllusion:  WorldLocationData(0x370C, 6),
 
-    'Lingering Will Bonus: Sora Slot 1':         WorldLocationData(14092, 6),
-    'Lingering Will Proof of Connection':        WorldLocationData(14092, 6),
-    'Lingering Will Manifest Illusion':          WorldLocationData(14092, 6),
 }
 TR_Checks = {
     LocationName.CornerstoneHillMap:        WorldLocationData(0x23B2, 0),
@@ -118,6 +115,7 @@ TR_Checks = {
     LocationName.GoofyFuturePete:           WorldLocationData(0x3706, 1),
     LocationName.Monochrome:                WorldLocationData(0x1E33, 2),
     LocationName.WisdomForm:                WorldLocationData(0x1E33, 2),
+
 }
 
 HundredAcreChecks = {
@@ -145,6 +143,7 @@ HundredAcreChecks = {
     LocationName.StarryHillStyleRecipe:      WorldLocationData(0x23B5, 1),
     LocationName.StarryHillCureElement:      WorldLocationData(0x1DB5, 5),
     LocationName.StarryHillOrichalcumPlus:   WorldLocationData(0x1DB5, 5),
+
 }
 Oc_Checks = {
     LocationName.PassageMythrilShard:            WorldLocationData(0x23B9, 6),
@@ -192,6 +191,7 @@ Oc_Checks = {
     LocationName.FatalCrestGoddessofFateCup:     WorldLocationData(0x1D58, 4),
     LocationName.OrichalcumPlusGoddessofFateCup: WorldLocationData(0x1D58, 4),
     LocationName.HadesCupTrophyParadoxCups:      WorldLocationData(0x1D5A, 1),
+
 }
 
 BC_Checks = {
@@ -231,7 +231,6 @@ BC_Checks = {
     LocationName.SecretAnsemReport4:            WorldLocationData(0x1D31, 2),
     LocationName.XaldinDataDefenseBoost:        WorldLocationData(0x1D34, 7),
 
-    'Data Xaldin':                              WorldLocationData(7476, 7),
 }
 SP_Checks = {
     LocationName.PitCellAreaMap:                    WorldLocationData(0x23CA, 2),
@@ -258,6 +257,7 @@ SP_Checks = {
     LocationName.CentralComputerCoreMap:            WorldLocationData(0x23D9, 0),
     LocationName.MCP:                               WorldLocationData(0x3708, 0),
     LocationName.MCPGetBonus:                       WorldLocationData(0x3708, 0),
+
 }
 HT_Checks = {
     LocationName.GraveyardMythrilShard:           WorldLocationData(0x23C0, 2),
@@ -349,7 +349,6 @@ HB_Checks = {
     LocationName.CorridorsMythrilCrystal:                      WorldLocationData(0x23C7, 0),
     LocationName.CorridorsDarkCrystal:                         WorldLocationData(0x23C7, 1),
     LocationName.CorridorsAPBoost:                             WorldLocationData(0x23C9, 1),
-    # this is probably gonna be wrong
     LocationName.AnsemsStudyMasterForm:                        WorldLocationData(0x1D12, 6),
     LocationName.AnsemsStudySleepingLion:                      WorldLocationData(0x1D12, 6),
     LocationName.AnsemsStudySkillRecipe:                       WorldLocationData(0x23C4, 7),
@@ -357,7 +356,6 @@ HB_Checks = {
     LocationName.RestorationSiteMoonRecipe:                    WorldLocationData(0x23C9, 3),
     LocationName.RestorationSiteAPBoost:                       WorldLocationData(0x23DB, 2),
     LocationName.DemyxHB:                                      WorldLocationData(0x3707, 4),
-    '(HB) Demyx Bonus: Donald Slot 1':                         WorldLocationData(14087, 4),
     LocationName.DemyxHBGetBonus:                              WorldLocationData(0x3707, 4),
     LocationName.DonaldDemyxHBGetBonus:                        WorldLocationData(0x3707, 4),
     LocationName.FFFightsCureElement:                          WorldLocationData(0x1D14, 6),
@@ -375,7 +373,6 @@ HB_Checks = {
     LocationName.SephirothFenrir:                              WorldLocationData(0x1D1F, 7),
     LocationName.WinnersProof:                                 WorldLocationData(0x1D27, 5),
     LocationName.ProofofPeace:                                 WorldLocationData(0x1D27, 5),
-
     LocationName.CoRDepthsAPBoost:                             WorldLocationData(0x23DC, 2),
     LocationName.CoRDepthsPowerCrystal:                        WorldLocationData(0x23DC, 3),
     LocationName.CoRDepthsFrostCrystal:                        WorldLocationData(0x23DC, 4),
@@ -398,42 +395,23 @@ HB_Checks = {
     LocationName.CoRMineshaftUpperLevelMagicBoost:             WorldLocationData(0x23DE, 6),
     LocationName.CoRMineshaftUpperLevelAPBoost:                WorldLocationData(0x23DE, 3),
     LocationName.TransporttoRemembrance:                       WorldLocationData(0x370D, 0),
-
     LocationName.LexaeusBonus:                                 WorldLocationData(0x370C, 1),
     LocationName.LexaeusASStrengthBeyondStrength:              WorldLocationData(0x370C, 1),
-    LocationName.LexaeusDataLostIllusion:                      WorldLocationData(0x370C, 1),  #
+    LocationName.LexaeusDataLostIllusion:                      WorldLocationData(0x370C, 1),
     LocationName.MarluxiaGetBonus:                             WorldLocationData(0x370C, 3),
     LocationName.MarluxiaASEternalBlossom:                     WorldLocationData(0x370C, 3),
-    LocationName.MarluxiaDataLostIllusion:                     WorldLocationData(0x370C, 3),  #
+    LocationName.MarluxiaDataLostIllusion:                     WorldLocationData(0x370C, 3),
     LocationName.ZexionBonus:                                  WorldLocationData(0x370C, 2),
     LocationName.GoofyZexion:                                  WorldLocationData(0x370C, 2),
     LocationName.ZexionASBookofShadows:                        WorldLocationData(0x370C, 2),
-    LocationName.ZexionDataLostIllusion:                       WorldLocationData(0x370C, 2),  #
+    LocationName.ZexionDataLostIllusion:                       WorldLocationData(0x370C, 2),
     LocationName.LarxeneBonus:                                 WorldLocationData(0x370C, 4),
     LocationName.LarxeneASCloakedThunder:                      WorldLocationData(0x370C, 4),
-    LocationName.LarxeneDataLostIllusion:                      WorldLocationData(0x370C, 4),  #
+    LocationName.LarxeneDataLostIllusion:                      WorldLocationData(0x370C, 4),
     LocationName.VexenBonus:                                   WorldLocationData(0x370C, 0),
     LocationName.VexenASRoadtoDiscovery:                       WorldLocationData(0x370C, 0),
-    LocationName.VexenDataLostIllusion:                        WorldLocationData(0x370C, 0),  #
+    LocationName.VexenDataLostIllusion:                        WorldLocationData(0x370C, 0),
     LocationName.DemyxDataAPBoost:                             WorldLocationData(0x1D26, 5),
-
-    'Lexaeus Bonus: Sora Slot 1':                              WorldLocationData(14092, 1),
-    'AS Lexaeus':                                              WorldLocationData(14092, 1),
-    'Data Lexaeus':                                            WorldLocationData(14092, 1),
-    'Marluxia Bonus: Sora Slot 1':                             WorldLocationData(14092, 3),
-    'AS Marluxia':                                             WorldLocationData(14092, 3),
-    'Data Marluxia':                                           WorldLocationData(14092, 3),
-    'Zexion Bonus: Sora Slot 1':                               WorldLocationData(14092, 2),
-    'Zexion Bonus: Goofy Slot 1':                              WorldLocationData(14092, 2),
-    'AS Zexion':                                               WorldLocationData(14092, 2),
-    'Data Zexion':                                             WorldLocationData(14092, 2),
-    'Larxene Bonus: Sora Slot 1':                              WorldLocationData(14092, 4),
-    'AS Larxene':                                              WorldLocationData(14092, 4),
-    'Data Larxene':                                            WorldLocationData(14092, 4),
-    'Vexen Bonus: Sora Slot 1':                                WorldLocationData(14092, 0),
-    'AS Vexen':                                                WorldLocationData(14092, 0),
-    'Data Vexen':                                              WorldLocationData(14092, 0),
-    'Data Demyx':                                              WorldLocationData(7462, 5),
 
     LocationName.GardenofAssemblageMap:                        WorldLocationData(0x23DF, 1),
     LocationName.GoALostIllusion:                              WorldLocationData(0x23DF, 2),
@@ -442,17 +420,6 @@ HB_Checks = {
     LocationName.KingdomKeySlot:                               WorldLocationData(0x1D27, 3),
     LocationName.MagesStaff:                                   WorldLocationData(0x1D27, 3),
     LocationName.KnightsShield:                                WorldLocationData(0x1D27, 3),
-    LocationName.DonaldStarting1:                              WorldLocationData(0x1D27, 3),
-    LocationName.DonaldStarting2:                              WorldLocationData(0x1D27, 3),
-    LocationName.GoofyStarting1:                               WorldLocationData(0x1D27, 3),
-    LocationName.GoofyStarting2:                               WorldLocationData(0x1D27, 3),
-    LocationName.Crit_1:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_2:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_3:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_4:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_5:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_6:                                       WorldLocationData(0x1D27, 3),
-    LocationName.Crit_7:                                       WorldLocationData(0x1D27, 3),
 
 }
 PL_Checks = {
@@ -576,7 +543,6 @@ TT_Checks = {
     LocationName.BetwixtandBetweenBondofFlame:          WorldLocationData(0x1CE9, 1),
     LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB, 4),
 
-    'Data Axel':                                        WorldLocationData(7403, 4),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:             WorldLocationData(0x23CB, 4),
@@ -622,44 +588,6 @@ TWTNW_Checks = {
     LocationName.LuxordDataAPBoost:                        WorldLocationData(0x1EDA, 1),
     LocationName.RoxasDataMagicBoost:                      WorldLocationData(0x1ED9, 6),
 
-    "(TWTNW) Roxas Bonus: Sora Slot 1":                    WorldLocationData(14092, 5),
-    "(TWTNW) Roxas Bonus: Sora Slot 2":                    WorldLocationData(14092, 5),
-    "(TWTNW) Roxas Secret Ansem Report 8":                 WorldLocationData(7889, 1),
-    "(TWTNW) Two Become One":                              WorldLocationData(7889, 1),
-    "(TWTNW) Memory's Skyscaper Mythril Crystal":          WorldLocationData(9165, 3),
-    "(TWTNW) Memory's Skyscaper AP Boost":                 WorldLocationData(9180, 0),
-    "(TWTNW) Memory's Skyscaper Mythril Stone":            WorldLocationData(9180, 1),
-    "(TWTNW) The Brink of Despair Dark City Map":          WorldLocationData(9162, 5),
-    "(TWTNW) The Brink of Despair Orichalcum+":            WorldLocationData(9178, 2),
-    "(TWTNW) Nothing's Call Mythril Gem":                  WorldLocationData(9164, 0),
-    "(TWTNW) Nothing's Call Orichalcum":                   WorldLocationData(9164, 1),
-    "(TWTNW) Twilight's View Cosmic Belt":                 WorldLocationData(9162, 6),
-    "(TWTNW) Xigbar Bonus: Sora Slot 1":                   WorldLocationData(14086, 7),
-    "(TWTNW) Xigbar Secret Ansem Report 3":                WorldLocationData(7890, 2),
-    "(TWTNW) Naught's Skyway Mythril Gem":                 WorldLocationData(9164, 2),
-    "(TWTNW) Naught's Skyway Orichalcum":                  WorldLocationData(9164, 3),
-    "(TWTNW) Naught's Skyway Mythril Crystal":             WorldLocationData(9164, 4),
-    "(TWTNW) Oblivion":                                    WorldLocationData(7890, 4),
-    "(TWTNW) Castle That Never Was Map":                   WorldLocationData(7890, 4),
-    "(TWTNW) Luxord":                                      WorldLocationData(14087, 0),
-    "(TWTNW) Luxord Bonus: Sora Slot 1":                   WorldLocationData(14087, 0),
-    "(TWTNW) Luxord Secret Ansem Report 9":                WorldLocationData(7890, 7),
-    "(TWTNW) Saix Bonus: Sora Slot 1":                     WorldLocationData(14087, 1),
-    "(TWTNW) Saix Secret Ansem Report 12":                 WorldLocationData(7891, 2),
-    "(TWTNW) Secret Ansem Report 11 (Pre-Xemnas 1)":       WorldLocationData(7891, 6),
-    "(TWTNW) Ruin and Creation's Passage Mythril Stone":   WorldLocationData(9164, 7),
-    "(TWTNW) Ruin and Creation's Passage AP Boost":        WorldLocationData(9165, 0),
-    "(TWTNW) Ruin and Creation's Passage Mythril Crystal": WorldLocationData(9165, 1),
-    "(TWTNW) Ruin and Creation's Passage Orichalcum":      WorldLocationData(9165, 2),
-    "(TWTNW) Xemnas 1 Bonus: Sora Slot 1":                 WorldLocationData(14087, 2),
-    "(TWTNW) Xemnas 1 Bonus: Sora Slot 2":                 WorldLocationData(14087, 2),
-    "(TWTNW) Xemnas 1 Secret Ansem Report 13":             WorldLocationData(7892, 5),
-    "Data Xemnas":                                         WorldLocationData(7898, 2),
-    "Data Xigbar":                                         WorldLocationData(7897, 7),
-    "Data Saix":                                           WorldLocationData(7898, 0),
-    "Data Luxord":                                         WorldLocationData(7898, 1),
-    "Data Roxas":                                          WorldLocationData(7897, 6),
-
 }
 Atlantica_Checks = {
     LocationName.UnderseaKingdomMap:     WorldLocationData(0x1DF4, 2),
@@ -668,7 +596,6 @@ Atlantica_Checks = {
     LocationName.MusicalBlizzardElement: WorldLocationData(0x1DF4, 1)
 }
 SoraLevels = {
-    # LocationName.Lvl1:  WorldLocationData(0xFFFF,1),
     LocationName.Lvl2:  WorldLocationData(0xFFFF, 2),
     LocationName.Lvl3:  WorldLocationData(0xFFFF, 3),
     LocationName.Lvl4:  WorldLocationData(0xFFFF, 4),
@@ -770,7 +697,6 @@ SoraLevels = {
 }
 
 ValorLevels = {
-    # LocationName.Valorlvl1:  WorldLocationData(0x32F6, 1),
     LocationName.Valorlvl2: WorldLocationData(0x32F6, 2),
     LocationName.Valorlvl3: WorldLocationData(0x32F6, 3),
     LocationName.Valorlvl4: WorldLocationData(0x32F6, 4),
@@ -780,7 +706,6 @@ ValorLevels = {
 }
 
 WisdomLevels = {
-    # LocationName.Wisdomlvl1: WorldLocationData(0x332E, 1),
     LocationName.Wisdomlvl2: WorldLocationData(0x332E, 2),
     LocationName.Wisdomlvl3: WorldLocationData(0x332E, 3),
     LocationName.Wisdomlvl4: WorldLocationData(0x332E, 4),
@@ -790,7 +715,6 @@ WisdomLevels = {
 }
 
 LimitLevels = {
-    # LocationName.Limitlvl1:  WorldLocationData(0x3366, 1),
     LocationName.Limitlvl2: WorldLocationData(0x3366, 2),
     LocationName.Limitlvl3: WorldLocationData(0x3366, 3),
     LocationName.Limitlvl4: WorldLocationData(0x3366, 4),
@@ -799,7 +723,6 @@ LimitLevels = {
     LocationName.Limitlvl7: WorldLocationData(0x3366, 7),
 }
 MasterLevels = {
-    # LocationName.Masterlvl1: WorldLocationData(0x339E, 1),
     LocationName.Masterlvl2: WorldLocationData(0x339E, 2),
     LocationName.Masterlvl3: WorldLocationData(0x339E, 3),
     LocationName.Masterlvl4: WorldLocationData(0x339E, 4),
@@ -808,7 +731,6 @@ MasterLevels = {
     LocationName.Masterlvl7: WorldLocationData(0x339E, 7),
 }
 FinalLevels = {
-    # LocationName.Finallvl1:  WorldLocationData(0x33D6,1),
     LocationName.Finallvl2: WorldLocationData(0x33D6, 2),
     LocationName.Finallvl3: WorldLocationData(0x33D6, 3),
     LocationName.Finallvl4: WorldLocationData(0x33D6, 4),
@@ -841,7 +763,6 @@ weaponSlots = {
     LocationName.OgreShield:          WorldLocationData(0x35E8, 1),
     LocationName.SaveTheKing2:        WorldLocationData(0x3693, 1),
     LocationName.UltimateMushroom:    WorldLocationData(0x36A7, 1),
-
     LocationName.CometStaff:          WorldLocationData(0x35F2, 1),
     LocationName.HammerStaff:         WorldLocationData(0x35EF, 1),
     LocationName.LordsBroom:          WorldLocationData(0x35F3, 1),
@@ -856,7 +777,6 @@ weaponSlots = {
     LocationName.VictoryBell:         WorldLocationData(0x35F0, 1),
     LocationName.WisdomWand:          WorldLocationData(0x35F4, 1),
     LocationName.Centurion2:          WorldLocationData(0x369B, 1),
-
     LocationName.OathkeeperSlot:      WorldLocationData(0x35A2, 1),
     LocationName.OblivionSlot:        WorldLocationData(0x35A3, 1),
     LocationName.StarSeekerSlot:      WorldLocationData(0x367B, 1),
@@ -889,13 +809,117 @@ formSlots = {
     LocationName.EdgeofUltimaSlot:   WorldLocationData(0x36C0, 4),
 }
 
-tornPageLocks = {
-    "TornPage1": WorldLocationData(0x1DB7, 4),  # --Scenario_1_start
-    "TornPage2": WorldLocationData(0x1DB7, 7),  # --Scenario_2_start
-    "TornPage3": WorldLocationData(0x1DB8, 2),  # --Scenario_3_start
-    "TornPage4": WorldLocationData(0x1DB8, 4),  # --Scenario_4_start
-    "TornPage5": WorldLocationData(0x1DB8, 7),  # --Scenario_5_start
+# (Room,Event) : Boss event
+# Used for deathlink to say Sora died at : (Room,Event) which returns like Old pete
+DeathLinkPair = {
+    (2, 34, 157): "Twilight Thorn",
+    (2, 5, 88):   "Setzer",
+    (2, 20, 137): "Axel",
+    (2, 4, 80):   "Sandlot",
+    (2, 41, 186): "Mansion fight",
+    (2, 40, 161): "Betwixt and Between",
+    (2, 20, 213): "Data Axel",
+    (4, 8, 52):   "Bailey",
+    (4, 20, 86):  "Corridor",
+    (4, 18, 73):  "Dancers",
+    (4, 4, 55):   "HB Demyx",
+    (4, 16, 65):  "FF Cloud",
+    (4, 17, 66):  "1k Heartless",
+    (4, 1, 75):   "Sephiroth",
+    (4, 4, 114):  "Data Demyx",
+    (5, 11, 72):  "Thresholder",
+    (5, 3, 69):   "Beast",
+    (5, 5, 79):   "Dark Thorn",
+    (5, 4, 74):   "Dragoons",
+    (5, 15, 82):  "Xaldin",
+    (5, 15, 97):  "Data Xaldin",
+    (6, 7, 114):  "Cerberus",
+    (6, 17, 123): "OC Demyx",
+    (6, 8, 116):  "OC Pete",
+    (6, 18, 171): "Hydra",
+    (6, 6, 126):  "Auron Statue fight",
+    (6, 19, 202): "Hades",
+    (4, 34, 151): "Zexion", # all as fights are in hb "world"
+    (7, 9, 2):    "Abu",
+    (7, 13, 79):  "Chasm fight",
+    (7, 10, 58):  "Treasure Room",
+    (7, 3, 59):   "Lords",
+    (7, 14, 100): "Carpet",
+    (7, 5, 62):   "Genie Jafar",
+    (4, 33, 142): "Lexaeus",
+    (8, 5, 72):   "Cave",
+    (8, 7, 73):   "Summit",
+    (8, 9, 75):   "Shan Yu",
+    (8, 10, 78):  "Antechamber fight",
+    (8, 8, 79):   "Storm Rider",
+    (10,14, 55):  "Scar",
+    (10,15, 59):  "Groundshaker",
+    (11,2, 63):   "Tutorial",
+    (11,9, 65):   "Ursula's Revenge",
+    (11,4, 55):   "A New Day is Dawning",
+    (12,1, 53):   "Library (DC)",
+    (12,0, 51):   "Minnie Escort",
+    (13,1, 58):   "Old Pete",
+    (13,2, 52):   "Boat Pete",
+    (13,3, 53):   "DC Pete",
+    (4, 38, 145): "Marluxia",
+    (12,7, 67):   "Lingering Will",
+    (14,6, 53):   "Candy Cane Lane fight",
+    (14,3, 52):   "Prison Keeper",
+    (14,9, 55):   "Oogie Boogie",
+    (14,10, 63):  "Presents minigame",
+    (14,7, 64):   "Experiment",
+    (4, 32, 115): "Vexen",
+    (16,2, 55):   "Town",
+    (16,10, 60):  "Barbossa",
+    (16,14, 62):  "Gambler",
+    (16,1, 54):   "Grim Reaper",
+    (17,3, 54):   "Screens",
+    (17,4, 55):   "Hostile Program",
+    (17,7, 57):   "Solar Sailer",
+    (17,9, 59):   "MCP",
+    (4, 33, 143): "Larxene",
+    (18,21, 65):  "Roxas",
+    (18,10, 57):  "Xigbar",
+    (18,14, 58):  "Luxord",
+    (18,15, 56):  "Saix",
+    (18,19, 59):  "Xemnas 1",
+    (18,20, 98):  "Data Xemnas",
+    (18,21, 99):  "Data Roxas",
+    (18,10, 100): "Data Xigbar",
+    (18,15, 102): "Data Saix",
+    (18,14, 101): "Data Luxord",
 }
+
+bounty_name_to_address = {
+     "(Post BC2: Ballroom) Data Xaldin":                                        (0x1D34, 7),
+     "(Post AG2: Peddler's Shop) Data Lexaeus":                                 (0x370C, 1),
+     "(Post TR:Hall of the Cornerstone) Data Marluxia":                         (0x370C, 3),
+     "(Post OC2: Cave of the Dead Inner Chamber) Data Zexion":                  (0x370C, 2),
+     "(Post SP2: Central Computer Core) Data Larxene":                          (0x370C, 4),
+     "(Post HT2: Yuletide Hill) Data Vexen":                                    (0x370C, 0),
+     "(Post HB2: Restoration Site) Data Demyx":                                 (0x1D26, 5),
+     "(Post TT3: Betwixt and Between) Data Axel":                               (0x1CEB, 4),
+     "(Post TWTNW3: The Altar of Naught) Data Xemnas":                          (0x1EDA, 2),
+     "(Post LoD2: Summit) Data Xigbar":                                         (0x1ED9, 7),
+     "(Post PL2: Peak) Data Saix":                                              (0x1EDA, 0),
+     "(Post PR2: Treasure Heap) Data Luxord":                                   (0x1EDA, 1),
+     "(Post STT: Mansion Pod Room) Data Roxas":                                 (0x1ED9, 6),
+     "Valor level 7":                                                           (0x32F6, 7),
+     "Wisdom level 7":                                                          (0x332E, 7),
+     "Limit level 7":                                                           (0x3366, 7),
+     "Master level 7":                                                          (0x339E, 7),
+     "Final level 7":                                                           (0x33D6, 7),
+     "Summon level 7":                                                          (0x3526, 7),
+     "(AT) Musical Orichalcum+":                                                (0x1DF4, 1),
+     "Sephiroth Fenrir":                                                        (0x1D1F, 7),
+     "(Post TR:Hall of the Cornerstone) Lingering Will Proof of Connection":    (0x370C, 6),
+     "(100Acre) Starry Hill Orichalcum+":                                       (0x1DB5, 5),
+     "Transport to Remembrance":                                                (0x370D, 0),
+     "Orichalcum+ Goddess of Fate Cup":                                         (0x1D58, 4),
+     "Hades Cup Trophy Paradox Cups":                                           (0x1D5A, 1),
+}
+
 all_world_locations = {
     **TWTNW_Checks,
     **TT_Checks,

@@ -46,7 +46,9 @@ class WisdomEXP(Range):
 
 
 class ValorEXP(Range):
-    """Valor Form Exp Multiplier"""
+    """Valor Form Exp Multiplier
+
+    If Multiplier is greater than 1 then required hits to level Valor Form can never be greater than 120 hits."""
     display_name = "Valor Form EXP"
     range_start = 1
     range_end = 10
@@ -159,6 +161,14 @@ class RandomVisitLockingItem(Range):
     default = 0
 
 
+class HarderAS(Toggle):
+    """Choose if there are Absent Silhouettes to fight for checks or only Datas
+
+    True: The 5 fights that can be Absent Silhouettes will be the Data Version
+    False: The 5 fights that can be Absent Silhouettes will be Absent Silhouettes"""
+    display_name = "Data Organization Fights Only"
+    default = False
+
 class SuperBosses(Toggle):
     """Terra Sephiroth and Data Fights Toggle."""
     display_name = "Super Bosses"
@@ -203,7 +213,7 @@ class DonaldGoofyStatsanity(Toggle):
 
 
 class AtlanticaToggle(Toggle):
-    """Atlantica Toggle"""
+    """Determines if Atlantica is enabled to have non junk items. (Yes is enabled)"""
     display_name = "Atlantica Toggle"
     default = False
 
@@ -334,7 +344,7 @@ class SummonLevelLocationToggle(Toggle):
 # shamelessly stolen from the messanger
 @dataclass
 class KingdomHearts2Options(PerGameCommonOptions):
-    start_inventory: StartInventoryPool
+    start_inventory_from_pool: StartInventoryPool
     LevelDepth: LevelDepth
     Sora_Level_EXP: SoraEXP
     Valor_Form_EXP: ValorEXP
@@ -364,6 +374,7 @@ class KingdomHearts2Options(PerGameCommonOptions):
     FillerItemsLocal: FillerItemsLocal
     Visitlocking: Visitlocking
     RandomVisitLockingItem: RandomVisitLockingItem
+    HarderAS: HarderAS
     SuperBosses: SuperBosses
     Cups: Cups
     SummonLevelLocationToggle: SummonLevelLocationToggle

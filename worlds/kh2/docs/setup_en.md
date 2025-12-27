@@ -13,31 +13,15 @@ Kingdom Hearts II Final Mix from the [Epic Games Store](https://store.epicgames.
     1. Version 25.03.16.0 or greater OpenKH Mod Manager with Panacea
     2. Lua Backend from the OpenKH Mod Manager
     3. Install the mod `KH2FM-Mods-Num/GoA-ROM-Edition` using OpenKH Mod Manager
-- Needed for Archipelago 
-    1. [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases)
-    2. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
-    3. Install the mod from `KH2FM-Mods-equations19/auto-save` using OpenKH Mod Manager
-    4. Install the mod from `KH2FM-Mods-equations19/KH2-Lua-Library` using OpenKH Mod Manager
-    5. AP Randomizer Seed
-- Optional Quality of Life Mods for Archipelago
-    1. Optionally Install the Archipelago Quality Of Life mod from `JaredWeakStrike/AP_QOL` using OpenKH Mod Manager
-    2. Optionally Install the Quality Of Life mod from `shananas/BearSkip` using OpenKH Mod Manager
-
-### Required: Archipelago Companion Mod
-
-Load this mod just like the <b>GoA ROM</b> you did during the KH2 Rando setup. `JaredWeakStrike/APCompanion`<br> 
-Have this mod second-highest priority below the .zip seed.<br>
-This mod is based upon Num's Garden of Assemblage Mod and requires it to work. Without Num this could not be possible. 
-
-### Required: Auto Save Mod and KH2 Lua Library
-
-Load these mods just like you loaded the GoA ROM mod during the KH2 Rando setup. `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library` Location doesn't matter, required in case of crashes. See [Best Practices](#best-practices) on how to load the auto save
-
-### Optional QoL Mods: AP QoL and Bear Skip
-
-`JaredWeakStrike/AP_QOL` Makes the urns minigames much faster, makes Cavern of Remembrance orbs drop significantly more drive orbs for refilling drive/leveling master form, skips the animation when using the bulky vendor RC, skips carpet escape auto-scroller in Agrabah 2, and prevents the wardrobe in the Beasts Castle wardrobe push minigame from waking up while being pushed.
-
-`shananas/BearSkip` Skips all minigames in 100 Acre Woods except the Spooky Cave minigame since there are chests in Spooky Cave you can only get during the minigame. For Spooky Cave, Pooh is moved to the other side of the invisible wall that prevents you from using his RC to finish the minigame.
+    4. [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases)
+    5. Install the Archipelago Companion mod from `JaredWeakStrike/APCompanion` using OpenKH Mod Manager
+    6. Install the mod from `TopazTK/KH2-ArchipelagoEnablers` using OpenKH Mod manager
+       1. Do Note that if you have `KH2FM-Mods-equations19/auto-save` OR `KH2FM-Mods-equations19/soft-reset` you should download `TopazTK/KH2-ArchipelagoEnablersLITE` instead
+       2. This mod overwrites slot 99 with an autosave. Make sure to copy your save data to another slot before installing.
+    7. AP Randomizer Seed
+    8. Optional Quality of Life Mods for Archipelago
+       1. Optionally Install the Archipelago Quality Of Life mod from `JaredWeakStrike/AP_QOL` using OpenKH Mod Manager
+       2. Optionally Install the Quality Of Life mod from `shananas/BearSkip` using OpenKH Mod Manager
 
 ### Installing A Seed
 
@@ -49,29 +33,6 @@ After Installing the seed click "Mod Loader -> Build/Build and Run". Every slot 
 
 - [Kingdom Hearts 2 AP Tracker](https://github.com/palex00/kh2-ap-tracker/releases/latest/), for use with
 [PopTracker](https://github.com/black-sliver/PopTracker/releases)
-
-## What the Mod Manager Should Look Like.
-
-![image](https://i.imgur.com/N0WJ8Qn.png)
-
-
-## Using the KH2 Client
-
-Start the game through OpenKH Mod Manager. If starting a new run, enter the Garden of Assemblage from a new save. If returning to a run, load the save and enter the Garden of Assemblage. Then run the [ArchipelagoKH2Client.exe](https://github.com/ArchipelagoMW/Archipelago/releases).<br>
-When you successfully connect to the server the client will automatically hook into the game to send/receive checks. <br>
-If the client ever loses connection to the game, it will also disconnect from the server and you will need to reconnect.<br> 
-
-Make sure the game is open whenever you try to connect the client to the server otherwise it will immediately disconnect you.<br>
-
-Most checks will be sent to you anywhere outside a load or cutscene.<br>
-
-If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
-
-## KH2 Client should look like this: 
-
-![image](https://i.imgur.com/qP6CmV8.png)
-
-Enter The room's port number into the top box <b> where the x's are</b> and press "Connect". Follow the prompts there and you should be connected
 
 ## Common Pitfalls
 
@@ -86,6 +47,9 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
 -  Using a seed from the standalone KH2 Randomizer Seed Generator.
     - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
 
+- Using equations19/auto-save OR equations19/soft-reset while using TopazTK/KH2-ArchipelagoEnablers. 
+    - Since APEnablers has both of these features they conflict with each-other. If you want to keep on using Equation's mods you need to download TopazTK/KH2-ArchipelagoEnablersLITE instead
+
 ## Best Practices
 
 - Make a save at the start of the GoA before opening anything. This will be the file to select when loading an autosave if/when your game crashes.
@@ -93,6 +57,7 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
 - Set fps limit to 60fps.
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
 - Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
+
 
 ## Logic Sheet & PopTracker Autotracking
 
@@ -111,7 +76,6 @@ Alternatively you can use the Kingdom Hearts 2 PopTracker Pack that is based off
 
 This pack will handle logic, received items, checked locations and autotabbing for you!
 
-
 ## F.A.Q.
 
 - Why is my Client giving me a "Cannot Open Process: " error?
@@ -125,7 +89,7 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why did I not load into the correct visit?
     - You need to trigger a cutscene or visit The World That Never Was for it to register that you have received the item.
 - What versions of Kingdom Hearts 2 are supported?
-    - Currently the only supported versions are Epic Games Version 1.0.0.10_WW and Steam Build Version 15194255.
+    - Currently, the only supported versions are Epic Games Version 1.0.0.10_WW and Steam Build Version 15194255.
 - Why am I getting wallpapered while going into a world for the first time?
     - Your Lua Backend was not configured correctly. Look over the step in the [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/) guide.
 - Why am I not getting magic?
@@ -138,8 +102,6 @@ This pack will handle logic, received items, checked locations and autotabbing f
 - Why am I getting dummy items or letters?
     - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this if you scroll up)
 - Why am I not sending or receiving items?
-    - Make sure you are connected to the KH2 client and the correct room (for more information scroll up)
-- Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save` and `KH2FM-Mods-equations19/KH2-Lua-Library`?
-    - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress. Both mods are needed for auto save to work.
+    - Make sure you are connected to the KH2 client and the correct room (for more information scroll up). You may need to run the client/launcher as admin
 - How do I load an auto save?
     - To load an auto-save, hold down the Select or your equivalent on your preferred controller while choosing a file. Make sure to hold the button down the whole time.

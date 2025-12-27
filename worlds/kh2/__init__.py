@@ -3,7 +3,8 @@ from typing import List
 
 from BaseClasses import Tutorial, ItemClassification
 from Fill import fast_fill
-from worlds.LauncherComponents import Component, components, Type, launch as launch_component
+from Utils import local_path
+from worlds.LauncherComponents import Component, components, icon_paths, Type, launch as launch_component
 from worlds.AutoWorld import World, WebWorld
 from .Items import *
 from .Locations import *
@@ -13,14 +14,17 @@ from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
 from .Subclasses import KH2Item
+from .Client.WorldLocations import bounty_name_to_address
+from itertools import chain
 
 
-def launch_client():
-    from .Client import launch
-    launch_component(launch, name="KH2Client")
+def launch_client(*args: str):
+    from .Client.Client import launch
+    launch_component(launch, name="KH2Client", args=args)
 
 
-components.append(Component("KH2 Client", func=launch_client, component_type=Type.CLIENT))
+icon_paths['kh2apicon'] = f"ap:{__name__}/data/khapicon.png"
+components.append(Component("KH2 Client", func=launch_client, game_name="Kingdom Hearts 2", component_type=Type.CLIENT, icon="kh2apicon", supports_uri=True))
 
 
 class KingdomHearts2Web(WebWorld):
@@ -75,6 +79,7 @@ class KH2World(World):
         # random_super_boss_list List[str]
         # has to be in __init__ or else other players affect each other's bounties
         self.random_super_boss_list = list()
+        self.slot_data_bounties = list()
         self.growth_list = list()
         # lists of KH2Item
         self.keyblade_ability_pool = list()
@@ -102,23 +107,23 @@ class KH2World(World):
                 self.goofy_ability_dict[ability] -= 1
 
         slot_data = self.options.as_dict(
-            "Goal", 
-            "FinalXemnas", 
-            "LuckyEmblemsRequired", 
-            "BountyRequired",
-            "FightLogic",
-            "FinalFormLogic",
-            "AutoFormLogic",
-            "LevelDepth",
-            "DonaldGoofyStatsanity",
-            "CorSkipToggle"
+                "Goal",
+                "FinalXemnas",
+                "LuckyEmblemsRequired",
+                "BountyRequired",
+                "FightLogic",
+                "FinalFormLogic",
+                "AutoFormLogic",
+                "LevelDepth",
+                "DonaldGoofyStatsanity",
+                "CorSkipToggle"
         )
         slot_data.update({
-            "hitlist":                [],  # remove this after next update
+            "BountyBosses":           self.slot_data_bounties,
             "PoptrackerVersionCheck": 4.3,
-            "KeybladeAbilities":      self.sora_ability_dict,
-            "StaffAbilities":         self.donald_ability_dict,
-            "ShieldAbilities":        self.goofy_ability_dict,
+            "SoraAbilities":      self.sora_ability_dict,
+            "DonaldAbilities":         self.donald_ability_dict,
+            "GoofyAbilities":        self.goofy_ability_dict,
         })
         return slot_data
 
@@ -201,6 +206,7 @@ class KH2World(World):
         """
         Determines the quantity of items and maps plando locations to items.
         """
+
         # Item: Quantity Map
         # Example. Quick Run: 4
         self.total_locations = len(all_locations.keys())
@@ -260,6 +266,7 @@ class KH2World(World):
                 else:
                     random_boss = self.random.choice(self.random_super_boss_list)
                 self.plando_locations[random_boss] = ItemName.Bounty
+                self.slot_data_bounties.append(bounty_name_to_address[random_boss])
                 self.random_super_boss_list.remove(random_boss)
                 self.total_locations -= 1
 
@@ -444,7 +451,7 @@ class KH2World(World):
         """
         Making sure the player doesn't put too many abilities in their starting inventory.
         """
-        for item, value in self.options.start_inventory.value.items():
+        for item, value in chain(self.options.start_inventory.value.items(), self.options.start_inventory_from_pool.value.items()):
             if item in ActionAbility_Table \
                     or item in SupportAbility_Table or item in exclusion_item_table["StatUps"] \
                     or item in DonaldAbility_Table or item in GoofyAbility_Table:
