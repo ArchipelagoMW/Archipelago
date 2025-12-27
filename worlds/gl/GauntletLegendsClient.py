@@ -677,10 +677,6 @@ async def _patch_opt():
 
 
 def _restore_opt_files():
-    """
-    Restore original .opt files on application close.
-    Call this from shutdown/cleanup.
-    """
     for path, original_content in _original_opt_content.items():
         try:
             if original_content is None:
@@ -700,9 +696,6 @@ def _restore_opt_files():
 
 
 async def _launch_retroarch(rom_path: str):
-    """
-    Launch RetroArch with the ROM.
-    """
     retroarch_path = settings.get_settings().gl_options.retroarch_path
     retroarch_exe = os.path.join(retroarch_path, "retroarch.exe")
     core_path = os.path.join(retroarch_path, "cores", "mupen64plus_next_libretro.dll")

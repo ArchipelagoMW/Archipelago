@@ -141,13 +141,9 @@ class LevelData:
 class GLPatchExtension(APPatchExtension):
     game = "Gauntlet Legends"
 
+    # Patched ROM requires updated CRC values.
     @staticmethod
     def finalize_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
-        """
-        Finalize ROM after all patch steps:
-        - pad to a valid cart size
-        - calculate CRC once
-        """
         options = json.loads(caller.get_file("options.json").decode("utf-8"))
         rom = bytearray(rom)
 
