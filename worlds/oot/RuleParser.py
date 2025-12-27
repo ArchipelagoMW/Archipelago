@@ -44,7 +44,7 @@ def load_aliases():
 
 
 def isliteral(expr):
-    return isinstance(expr, (ast.Num, ast.Str, ast.Bytes, ast.NameConstant))
+    return isinstance(expr, ast.Constant)
 
 
 class Rule_AST_Transformer(ast.NodeTransformer):
