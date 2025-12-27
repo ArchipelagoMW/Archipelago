@@ -226,7 +226,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         if (len(node.ops) == 1 and isinstance(node.ops[0], ast.Eq)
                 and isinstance(node.left, ast.Name) and isinstance(node.comparators[0], ast.Name)
                 and node.left.id not in self.world.__dict__ and node.comparators[0].id not in self.world.__dict__):
-            return ast.NameConstant(node.left.id == node.comparators[0].id)
+            return ast.Constant(node.left.id == node.comparators[0].id)
 
         node.left = escape_or_string(node.left)
         node.comparators = list(map(escape_or_string, node.comparators))
@@ -281,7 +281,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 # It's possible this returns a single item check,
                 # but it's already wrapped in a Call.
                 elt = self.visit(elt)
-                if isinstance(elt, ast.NameConstant):
+                if isinstance(elt, ast.Constant):
                     if elt.value == early_return:
                         return elt
                     # else omit it
@@ -300,7 +300,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # package up the remaining items and values
         if not items and not new_values:
             # all values were True(And)/False(Or)
-            return ast.NameConstant(not early_return)
+            return ast.Constant(not early_return)
 
         if items:
             node.values = [ast.Call(
@@ -436,7 +436,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
             return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAY, [], player)", mode='eval').body
-        return ast.NameConstant(True)
+        return ast.Constant(True)
 
     def at_dampe_time(self, node):
         if self.world.ensure_tod_access:
@@ -444,7 +444,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
             return ast.parse(f"state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
-        return ast.NameConstant(True)
+        return ast.Constant(True)
 
     def at_night(self, node):
         if self.current_spot.type == 'GS Token' and self.world.logic_no_night_tokens_without_suns_song:
@@ -455,7 +455,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             # parsing is better than constructing this expression by hand
             r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
             return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
-        return ast.NameConstant(True)
+        return ast.Constant(True)
 
 
     # Parse entry point
