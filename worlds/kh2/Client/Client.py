@@ -1,6 +1,7 @@
 from __future__ import annotations
 from argparse import Namespace
 from enum import IntEnum
+import time
 import ModuleUpdate
 ModuleUpdate.update()
 import Utils
@@ -24,8 +25,6 @@ class KH2Context(CommonContext):
     command_processor = KH2CommandProcessor
     game = "Kingdom Hearts 2"
     items_handling = 0b111  # Indicates you get items sent from other worlds.
-    socket: KH2Socket = None
-    received_items_IDs = []
 
     def __init__(self, server_address, password):
         super(KH2Context, self).__init__(server_address, password)
@@ -33,6 +32,7 @@ class KH2Context(CommonContext):
         #Socket
         self.socket = KH2Socket(self)
         asyncio.create_task(self.socket.start_server(), name="KH2SocketServer")
+        self.received_items_IDs = []
 
         self.all_weapon_location_id = None
         self.kh2connectionconfirmed = False
@@ -40,7 +40,6 @@ class KH2Context(CommonContext):
         self.number_of_abilities_sent = dict()
         self.all_party_abilities = dict()
         self.kh2_seed_save = None
-        self.kh2_local_items = None
         self.kh2connected = False
         self.kh2_finished_game = False
         self.serverconnected = False
@@ -66,8 +65,6 @@ class KH2Context(CommonContext):
         self.kh2slotdata = None
         self.send_slot_data_event = asyncio.Event()
         self.send_slot_data_task = asyncio.create_task(self.send_slot_data(),)
-        self.mem_json = None
-        self.itemamount = {}
         self.client_settings = {
             "send_truncate_first":    "playername",  # there is no need to truncate item names for info popup
             "receive_truncate_first": "playername",  # truncation order. Can be PlayerName or ItemName
@@ -135,13 +132,13 @@ class KH2Context(CommonContext):
             "FinalLevel": 1,
             "SummonLevel": 1,
         }
-        self.world_locations_checked = list()
+        self.world_locations_checked = set()
         self.Room = -1
         self.Event = -1
         self.World = -1
         self.SoraDied = False
         self.chest_set = set(exclusion_table["Chests"])
-        self.keyblade_ability_checked = list()
+        self.keyblade_ability_checked = set()
 
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
@@ -183,7 +180,9 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
-        self.locations_checked = []
+        self.locations_checked.clear()
+        self.world_locations_checked.clear()
+        self.keyblade_ability_checked.clear()
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, "w") as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -323,7 +322,7 @@ class KH2Context(CommonContext):
                 if self.kh2connectionconfirmed:
                     #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
                     while not self.lookup_id_to_item:
-                        asyncio.sleep(0.5)
+                        time.sleep(0.5)
                     while len(converted_items) >= 1:
                         self.socket.send_item(converted_items[0])
                         converted_items.pop(0)

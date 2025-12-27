@@ -146,13 +146,13 @@ class KH2Socket:
         msg_type = MessageType(int(message[0]))
 
         if msg_type == MessageType.WorldLocationChecked:
-            self.client.world_locations_checked.append(message[1])
+            self.client.world_locations_checked.add(message[1])
 
         elif msg_type == MessageType.LevelChecked:
             self.client.sora_form_levels[message[2]] = int(message[1])
 
         elif msg_type == MessageType.KeybladeChecked:
-            self.client.keyblade_ability_checked.append(message[1])
+            self.client.keyblade_ability_checked.add(message[1])
 
         elif msg_type == MessageType.SlotData:
             self.client.current_world_int = int(message[1])

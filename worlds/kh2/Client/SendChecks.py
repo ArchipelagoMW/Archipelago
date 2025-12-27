@@ -26,7 +26,7 @@ async def checkWorldLocations(self):
                     locationId = self.kh2_loc_name_to_id[location]
                     if location in self.world_locations_checked:
                         self.sending = self.sending + [(int(locationId))]
-                        self.world_locations_checked.remove(location)
+                        self.world_locations_checked.discard(location)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
@@ -73,13 +73,13 @@ async def checkSlots(self):
             if locationId not in self.locations_checked:
                 if location in self.keyblade_ability_checked:
                     self.sending = self.sending + [(int(locationId))]
-                    self.keyblade_ability_checked.remove(location)
+                    self.keyblade_ability_checked.discard(location)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked and location in self.keyblade_ability_checked:
                 self.sending = self.sending + [(int(locationId))]
-                self.keyblade_ability_checked.remove(location)
+                self.keyblade_ability_checked.discard(location)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
