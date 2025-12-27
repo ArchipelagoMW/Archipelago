@@ -281,11 +281,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 # It's possible this returns a single item check,
                 # but it's already wrapped in a Call.
                 elt = self.visit(elt)
-                if isinstance(elt, ast.NameConstant):
-                    if elt.value == early_return:
-                        return elt
-                    # else omit it
-                elif (isinstance(elt, ast.Call) and isinstance(elt.func, ast.Attribute)
+                if (isinstance(elt, ast.Call) and isinstance(elt.func, ast.Attribute)
                         and elt.func.attr in ('has', groupable) and len(elt.args) == 1):
                     args = elt.args[0]
                     if isinstance(args, ast.Constant):
