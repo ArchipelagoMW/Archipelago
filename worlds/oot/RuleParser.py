@@ -30,7 +30,6 @@ allowed_globals = {'TimeOfDay': TimeOfDay}
 rule_aliases = {}
 nonaliases = set()
 
-
 def load_aliases():
     j = read_json(data_path('LogicHelpers.json'))
     for s, repl in j.items():
@@ -41,7 +40,6 @@ def load_aliases():
             rule = s
             args = ()
         rule_aliases[rule] = (args, repl)
-    global nonaliases
     nonaliases = escaped_items.keys() - rule_aliases.keys()
 
 
@@ -67,6 +65,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         self.kwarg_defaults = kwarg_defaults.copy()  # otherwise this gets contaminated between players
         self.kwarg_defaults['player'] = self.player
 
+
     def visit_Name(self, node):
         if node.id in dir(self):
             return getattr(self, node.id)(node)
@@ -74,7 +73,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             args, repl = rule_aliases[node.id]
             if args:
                 raise Exception('Parse Error: expected %d args for %s, not 0' % (len(args), node.id),
-                                self.current_spot.name, ast.dump(node, False))
+                        self.current_spot.name, ast.dump(node, False))
             return self.visit(ast.parse(repl, mode='eval').body)
         elif node.id in escaped_items:
             return ast.Call(
@@ -101,11 +100,12 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 args=[ast.Constant(node.id.replace('_', ' ')), ast.Constant(self.player)],
                 keywords=[])
         else:
-            raise Exception('Parse Error: invalid node name %s' % node.id, self.current_spot.name,
-                            ast.dump(node, False))
+            raise Exception('Parse Error: invalid node name %s' % node.id, self.current_spot.name, ast.dump(node, False))
+
 
     def visit_Constant(self, node):
         return node
+
 
     def visit_Tuple(self, node):
         if len(node.elts) != 2:
@@ -114,13 +114,11 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         item, count = node.elts
 
         if not isinstance(item, (ast.Name, ast.Constant)):
-            raise Exception('Parse Error: first value must be an item. Got %s' % item.__class__.__name__,
-                            self.current_spot.name, ast.dump(node, False))
+            raise Exception('Parse Error: first value must be an item. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
         iname = item.id if isinstance(item, ast.Name) else item.value
 
         if not isinstance(count, (ast.Name, ast.Constant)):
-            raise Exception('Parse Error: second value must be a number. Got %s' % item.__class__.__name__,
-                            self.current_spot.name, ast.dump(node, False))
+            raise Exception('Parse Error: second value must be a number. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
 
         if isinstance(count, ast.Name):
             # Must be a settings constant
@@ -140,6 +138,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             args=[ast.Constant(iname), ast.Constant(self.player), count],
             keywords=[])
 
+
     def visit_Call(self, node):
         if not isinstance(node.func, ast.Name):
             return node
@@ -149,9 +148,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         elif node.func.id in rule_aliases:
             args, repl = rule_aliases[node.func.id]
             if len(args) != len(node.args):
-                raise Exception(
-                    'Parse Error: expected %d args for %s, not %d' % (len(args), node.func.id, len(node.args)),
-                    self.current_spot.name, ast.dump(node, False))
+                raise Exception('Parse Error: expected %d args for %s, not %d' % (len(args), node.func.id, len(node.args)),
+                        self.current_spot.name, ast.dump(node, False))
             # straightforward string manip
             for arg_re, arg_val in zip(args, node.args):
                 if isinstance(arg_val, ast.Name):
@@ -160,7 +158,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                     val = repr(arg_val.value)
                 else:
                     raise Exception('Parse Error: invalid argument %s' % ast.dump(arg_val, False),
-                                    self.current_spot.name, ast.dump(node, False))
+                            self.current_spot.name, ast.dump(node, False))
                 repl = arg_re.sub(val, repl)
             return self.visit(ast.parse(repl, mode='eval').body)
 
@@ -188,6 +186,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         return self.make_call(node, node.func.id, new_args, node.keywords)
 
+
     def visit_Subscript(self, node):
         if isinstance(node.value, ast.Name):
             s = node.slice if isinstance(node.slice, ast.Name) else node.slice.value
@@ -213,6 +212,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 ctx=node.ctx)
         else:
             return node
+
 
     def visit_Compare(self, node):
         def escape_or_string(n):
@@ -243,6 +243,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return self.visit(ast.parse('%r' % res, mode='eval').body)
         return node
 
+
     def visit_UnaryOp(self, node):
         # visit the children first
         self.generic_visit(node)
@@ -252,6 +253,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return ast.parse('%r' % res, mode='eval').body
         return node
 
+
     def visit_BinOp(self, node):
         # visit the children first
         self.generic_visit(node)
@@ -260,6 +262,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             res = eval(compile(ast.Expression(node), '<string>', 'eval'))
             return ast.parse('%r' % res, mode='eval').body
         return node
+
 
     def visit_BoolOp(self, node):
         # Everything else must be visited, then can be removed/reduced to.
@@ -309,13 +312,13 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             return node.values[0]
         return node
 
+
     # Generates an ast.Call invoking the given State function 'name',
     # providing given args and keywords, and adding in additional
     # keyword args from kwarg_defaults (age, etc.)
     def make_call(self, node, name, args, keywords):
         if not hasattr(State, name):
-            raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name,
-                            ast.dump(node, False))
+            raise Exception('Parse Error: No such function State.%s' % name, self.current_spot.name, ast.dump(node, False))
 
         for (k, v) in self.kwarg_defaults.items():
             keywords.append(ast.keyword(arg=f'{k}', value=ast.Constant(v)))
@@ -327,6 +330,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 ctx=ast.Load()),
             args=args,
             keywords=keywords)
+
 
     def replace_subrule(self, target, node):
         rule = ast.dump(node, False)
@@ -348,6 +352,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # (and reserve the item name in the process)
         self.replaced_rules[target][rule] = item_rule
         return item_rule
+
 
     # Requires the target regions have been defined in the world.
     def create_delayed_rules(self):
@@ -373,6 +378,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # Safeguard in case this is called multiple times per world
         self.delayed_rules.clear()
 
+
     def make_access_rule(self, body):
         rule_str = ast.dump(body, False)
         if rule_str not in self.rule_cache:
@@ -397,7 +403,8 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 raise Exception('Parse Error: %s' % e, self.current_spot.name, ast.dump(body, False))
         return self.rule_cache[rule_str]
 
-    # Handlers for specific internal functions used in the json logic.
+
+    ## Handlers for specific internal functions used in the json logic.
 
     # at(region_name, rule)
     # Creates an internal event at the remote region and depends on it.
@@ -407,47 +414,45 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             raise Exception('Parse Error: invalid at() arguments', self.current_spot.name, ast.dump(node, False))
         return self.replace_subrule(node.args[0].value, node.args[1])
 
+
     # here(rule)
     # Creates an internal event in the same region and depends on it.
     def here(self, node):
         if not node.args:
             raise Exception('Parse Error: missing here() argument', self.current_spot.name, ast.dump(node, False))
         return self.replace_subrule(
-            self.current_spot.parent_region.name,
-            node.args[0])
+                self.current_spot.parent_region.name,
+                node.args[0])
 
-    # Handlers for compile-time optimizations (former State functions)
+    ## Handlers for compile-time optimizations (former State functions)
 
-    def at_day(self):
+    def at_day(self, node):
         if self.world.ensure_tod_access:
             # tod has DAY or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
-            r = self.current_spot if isinstance(self.current_spot, OOTRegion) else self.current_spot.parent_region
-            return ast.parse(
-                f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAY, [], player)",
-                mode='eval').body
+            r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+            return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAY, [], player)", mode='eval').body
         return ast.Constant(True)
 
-    def at_dampe_time(self):
+    def at_dampe_time(self, node):
         if self.world.ensure_tod_access:
             # tod has DAMPE or (tod == NONE and (find a path from a provider))
             # parsing is better than constructing this expression by hand
-            r = self.current_spot if isinstance(self.current_spot, OOTRegion) else self.current_spot.parent_region
+            r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
             return ast.parse(f"state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
         return ast.Constant(True)
 
-    def at_night(self):
+    def at_night(self, node):
         if self.current_spot.type == 'GS Token' and self.world.logic_no_night_tokens_without_suns_song:
             # Using visit here to resolve 'can_play' rule
             return self.visit(ast.parse('can_play(Suns_Song)', mode='eval').body)
         if self.world.ensure_tod_access:
             # tod has DAMPE or (tod == NONE and (ss or find a path from a provider))
             # parsing is better than constructing this expression by hand
-            r = self.current_spot if isinstance(self.current_spot, OOTRegion) else self.current_spot.parent_region
-            return ast.parse(
-                f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)",
-                mode='eval').body
+            r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
+            return ast.parse(f"(state.has('Ocarina', player) and state.has('Suns Song', player)) or state._oot_reach_at_time('{r.name}', TimeOfDay.DAMPE, [], player)", mode='eval').body
         return ast.Constant(True)
+
 
     # Parse entry point
     # If spot is None, here() rules won't work.
@@ -466,18 +471,18 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             spot.always = True
 
     # Hijacking functions
-    def current_spot_child_access(self):
-        r = self.current_spot if isinstance(self.current_spot, OOTRegion) else self.current_spot.parent_region
+    def current_spot_child_access(self, node): 
+        r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
         return ast.parse(f"state._oot_reach_as_age('{r.name}', 'child', {self.player})", mode='eval').body
 
-    def current_spot_adult_access(self):
-        r = self.current_spot if isinstance(self.current_spot, OOTRegion) else self.current_spot.parent_region
+    def current_spot_adult_access(self, node): 
+        r = self.current_spot if type(self.current_spot) == OOTRegion else self.current_spot.parent_region
         return ast.parse(f"state._oot_reach_as_age('{r.name}', 'adult', {self.player})", mode='eval').body
 
-    def current_spot_starting_age_access(self):
-        return self.current_spot_child_access() if self.world.starting_age == 'child' else self.current_spot_adult_access()
+    def current_spot_starting_age_access(self, node): 
+        return self.current_spot_child_access(node) if self.world.starting_age == 'child' else self.current_spot_adult_access(node)
 
-    def has_bottle(self):
+    def has_bottle(self, node): 
         return ast.parse(f"state._oot_has_bottle({self.player})", mode='eval').body
 
     def can_live_dmg(self, node):
