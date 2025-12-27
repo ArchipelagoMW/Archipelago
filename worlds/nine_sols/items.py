@@ -48,6 +48,9 @@ item_names: set[str] = set(entry["name"] for entry in items_data)
 prog_items = set(entry["name"] for entry in items_data
                  if "progression" in entry["type"] and entry["code"] is not None)
 
+arrow_items = set(entry["name"] for entry in items_data
+                 if entry["name"].startswith("Arrow: "))
+
 item_name_groups = {
     # Auto-generated groups
     # We don't need an "Everything" group because AP makes that for us
@@ -64,6 +67,9 @@ item_name_groups = {
     "Recyclables": set(entry["name"] for entry in items_data if entry["name"].startswith("(Recyclable) ")),
     "Poisons": set(entry["name"] for entry in items_data if entry["name"].startswith("(Poison) ")),
     "Database Entries": set(entry["name"] for entry in items_data if entry["name"].startswith("(Database) ")),
+
+    "Arrows": arrow_items,
+    "Azure Bow": arrow_items,
 }
 
 
