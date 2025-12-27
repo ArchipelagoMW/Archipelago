@@ -2557,8 +2557,29 @@
 					"trickDifficulty": 0
 				},
 				{
-					"ballRequirement": true,
+					"ballRequirement": false,
 					"mv0": 14,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 12,
+					"mv1": 32,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 14,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 8,
+					"mv1": 13,
 					"regionIndex": 14,
 					"trickDifficulty": 0
 				}

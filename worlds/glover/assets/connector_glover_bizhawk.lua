@@ -512,12 +512,12 @@ do
 end
 
 local WAYROOM_TIPS_TABLE = {
-	0x000,
-	0x11A,
-	0x271,
-	0x3C9,
-	0x534,
-	0x671
+	"1972",
+	"282",
+	"625",
+	"969",
+	"1332",
+	"1649"
 }
 local ROM_WAYROOM_TIPS_TABLE = {} -- Reverses the Wayroom Tips Table
 for index, item in pairs(WAYROOM_TIPS_TABLE)
@@ -12528,14 +12528,10 @@ function wayroom_tip_check()
 			then
 				if(mainmemory.readbyte(wayroomBaseIndex + addr_location + GVR.wayroom_collected) == 0x01) --Collected
 				then
-					if ap_id == 0x000 then
-						check_table["1972"] = true
-					else
-						check_table[tostring(ap_id)] = true
-					end
+					check_table[ap_id] = true
 				end
 			else
-				print("Check wayroom math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
+				print("Check wayroom math: AP_ID "..ap_id..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
 			end
 		end
 		return check_table
@@ -12613,7 +12609,6 @@ function score_check()
 	local current_score = GLOVERHACK:getScore()
 	if SCORE_TABLE["TOTAL"] ~= current_score
 	then
-		print(current_score)
 		-- Update Glover's Total Score
 		local gained_score = current_score - SCORE_TABLE["TOTAL"]
 		SCORE_TABLE["TOTAL"] = current_score
@@ -13209,16 +13204,13 @@ function applyCustomTipText(tipTable)
     				    print(ap_id)
     				end
 					setTipText(tip_address, tip_text, false)
+					world_tip = true
 				end
 			end
 		end
-		if ROM_WAYROOM_TIPS_TABLE[ap_id] ~= nil or 1972 == ap_id
+		if ROM_WAYROOM_TIPS_TABLE[tostring(ap_id)] ~= nil
 		then
-			local table_id = 1
-			if 1972 ~= ap_id
-			then
-				table_id = ROM_WAYROOM_TIPS_TABLE[ap_id]
-			end
+			local table_id = ROM_WAYROOM_TIPS_TABLE[tostring(ap_id)]
 			local wayroomBaseIndex = hackPointerIndex + GVR.wayroom_locations
 			local addr_location = GVR.wayroom_size * (table_id - 1)
 			local tip_address = wayroomBaseIndex + addr_location
@@ -13298,7 +13290,6 @@ function stringToTipTable(full_string)
 		if sentence_size + string.len(word) > 20
 		then
 			word_prefix = ""
-			print(tostring(cur_line)..": "..output_lines[cur_line])
 			cur_line = cur_line + 1
 			if cur_line > 6 then
 				return output_lines
@@ -13513,7 +13504,7 @@ function send_linked_item(linkName)
 		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
 		local old_count = GVR:getItem(ITEM_TABLE["AP_CAMERA_TRAP"])
 		local total_spins = math.random(7)
-		print(total_spins)
+		print(tostring(total_spins).." Spins")
 		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], old_count + total_spins)
 	elseif linkName == "CURSE_BALL"
 	then
