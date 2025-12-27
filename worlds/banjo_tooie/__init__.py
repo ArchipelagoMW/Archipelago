@@ -592,10 +592,8 @@ class BanjoTooieWorld(World):
         if not self.options.randomize_notes.value \
                 and not self.options.randomize_signposts.value and not self.options.nestsanity.value \
                 and self.options.randomize_bk_moves.value != RandomizeBKMoveList.option_none:
-            raise OptionError(
-                "Your options are too restrictive for Randomize BK Moves. "
-                "Try randomizing notes, signs or nestsanity"
-            )
+                raise OptionError("Your options are too restrictive for Randomize BK Moves."
+                    "Try randomizing notes, signs or nestsanity")
         if self.options.victory_condition.value == VictoryCondition.option_token_hunt:
             if self.options.token_hunt_length.value > self.options.tokens_in_pool.value:
                 self.options.token_hunt_length.value = self.options.tokens_in_pool.value
@@ -632,7 +630,7 @@ class BanjoTooieWorld(World):
                     and (self.options.randomize_signposts.value or self.options.nestsanity.value)
                 ):
             raise OptionError("You cannot have progressive Shoes without randomizing moves, "
-                                "randomizing BK moves and enabling either nestanity or randomize signpost")
+                              "randomizing BK moves and enabling either nestanity or randomize signpost")
         if self.options.progressive_water_training.value != ProgressiveWaterTraining.option_none \
                 and (
                     self.options.randomize_bk_moves.value == RandomizeBKMoveList.option_none

@@ -5836,7 +5836,7 @@ local MAP_ENTRANCES = {
 
     },
     [0x12C] = {
-        ['name'] = "Chilli Willy Crater",
+        ['name'] = "Chilly Willy Crater",
         ['entranceId'] = 1,
         ['exitId'] = 0x0C,
         ['exitMap'] = 0x128,
