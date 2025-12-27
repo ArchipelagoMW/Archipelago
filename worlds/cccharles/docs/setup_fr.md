@@ -19,7 +19,7 @@ Le Mod peut être installé et joué en suivant les étapes suivantes (voir la s
 2. Lancer le jeu, si "OFFLINE" est visible dans le coin en haut à droite de l'écran, le Mod est actif
 
 ### Créer un Fichier de Configuration (.yaml)
-L'objectif d'un fichier YAML est décrit dans le [Guide d'Installation Basique du Multiworld](https://archipelago.gg/tutorial/Archipelago/setup/en#generating-a-game) (en anglais).
+L'objectif d'un fichier YAML est décrit dans le [Guide d'Installation Basique du Multiworld](/tutorial/Archipelago/setup/en#generating-a-game) (en anglais).
 
 La [page d'Options Joueur](/games/Choo-Choo%20Charles/player-options) permet de configurer des options personnelles et exporter un fichier de configuration YAML.
 
@@ -38,7 +38,7 @@ Suivre ces étapes pour héberger une session multijoueur à distance ou locale 
 1. Double-cliquer sur **cccharles.apworld** pour installer automatiquement la logique de randomisation du monde
 2. Placer le **CCCharles.yaml** dans **Archipelago/Players/** avec le YAML de chaque joueur à héberger
 3. Exécuter le lanceur Archipelago et cliquer sur "Generate" pour configurer une partie avec les YAML dans **Archipelago/output/**
-4. Pour une session multijoueur, aller à la [page Archipelago HOST GAME](https://archipelago.gg/uploads)
+4. Pour une session multijoueur, aller à la [page Archipelago HOST GAME](/uploads)
 5. Cliquer sur "Upload File" et sélectionner le **AP_\<seed\>.zip** généré dans **Archipelago/output/**
 6. Envoyer la page de la partie générée à chaque joueur
 
