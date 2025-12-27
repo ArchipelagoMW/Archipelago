@@ -14,7 +14,7 @@ from worlds.generic.Rules import add_rule, set_rule
 
 from .Options import DifficultyLogic, GaribLogic, GloverOptions, GaribSorting, StartingBall, VictoryCondition
 from .JsonReader import build_data, generate_location_name_to_id
-from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, ability_table, portalsanity_table
+from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, move_table, potion_table, portalsanity_table
 from Utils import local_path, visualize_regions
 from .Hints import create_hints
 
@@ -246,7 +246,7 @@ class GloverWorld(World):
         return output
 
     def is_garib_item(self, name : str):
-        return name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib"
+        return name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib" and name != "Locate Garibs"
 
     def get_garib_group_size(self, garibName : str):
         if garibName == "Garib":
@@ -837,26 +837,30 @@ class GloverWorld(World):
         if self.options.portalsanity and not self.options.open_levels:
             portalsanity_items = list(portalsanity_table.keys())
         
-        #Abilities
-        ability_items = list(ability_table.keys())
+        #Moves
+        move_items = list(move_table.keys())
         if not self.options.include_power_ball and self.starting_ball != "Power Ball":
-            ability_items.remove("Power Ball")
+            move_items.remove("Power Ball")
         if not self.options.randomize_jump:
-            ability_items.remove("Jump")
+            move_items.remove("Jump")
 
         #You don't need the item pool to contain your starting ball
-        ability_items.remove(self.starting_ball)
+        move_items.remove(self.starting_ball)
         
         #Golden Garibs
         if self.options.victory_condition.value == 2:
-            ability_items.append("Golden Garib")
+            move_items.append("Golden Garib")
+
+        #Potions
+        potion_items = list(potion_table.keys())
 
         #Apply all core items
         all_core_items = []
-        all_core_items.extend(ability_items)
+        all_core_items.extend(move_items)
         all_core_items.extend(checkpoint_items)
         all_core_items.extend(portalsanity_items)
         all_core_items.extend(event_items)
+        all_core_items.extend(potion_items)
         #Filler garibs can be disabled here
         if (not self.garibs_are_filler) or not self.options.disable_garib_items:
             all_core_items.extend(garib_items)

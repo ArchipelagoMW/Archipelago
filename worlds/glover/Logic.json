@@ -242,6 +242,29 @@
 				{
 					"ballRequirement": false,
 					"mv0": 25,
+					"mv1": 2,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 32,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 12,
+					"mv1": 27,
+					"mv2": 25,
 					"regionIndex": 4,
 					"trickDifficulty": 0
 				}
@@ -533,18 +556,9 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 31,
-						"mv1": 26,
-						"mv2": 27,
-						"mv3": 25,
-						"regionIndex": 0,
-						"trickDifficulty": 0
-					},
-					{
-						"ballRequirement": true,
 						"mv0": 8,
-						"mv1": 26,
-						"mv2": 27,
+						"mv1": 27,
+						"mv2": 26,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
@@ -557,19 +571,23 @@
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 12,
-						"mv1": 14,
-						"mv2": 25,
+						"mv0": 11,
+						"mv1": 25,
+						"mv2": 26,
 						"regionIndex": 0,
 						"trickDifficulty": 0
 					},
 					{
 						"ballRequirement": true,
-						"mv0": 11,
-						"mv1": 14,
-						"mv2": 25,
+						"mv0": 27,
 						"regionIndex": 0,
-						"trickDifficulty": 0
+						"trickDifficulty": 1
+					},
+					{
+						"ballRequirement": true,
+						"mv0": 31,
+						"regionIndex": 0,
+						"trickDifficulty": 1
 					}
 				],
 				"D": [
@@ -585,6 +603,11 @@
 						"mv0": 25,
 						"regionIndex": 0,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 1
 					}
 				],
 				"I": 4
@@ -753,8 +776,29 @@
 				{
 					"ballRequirement": false,
 					"mv0": 25,
+					"mv1": 2,
 					"regionIndex": 4,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"mv1": 32,
+					"regionIndex": 4,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 4,
+					"trickDifficulty": 1
 				}
 			],
 			"Pillar Garibs": [
@@ -795,8 +839,29 @@
 				{
 					"ballRequirement": false,
 					"mv0": 25,
+					"mv1": 2,
 					"regionIndex": 0,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 13,
+					"regionIndex": 0,
+					"trickDifficulty": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 32,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 25,
+					"regionIndex": 0,
+					"trickDifficulty": 1
 				}
 			],
 			"Pillars": {
@@ -1379,6 +1444,12 @@
 					"mv1": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 1
 				}
 			],
 			"End": {
@@ -1455,8 +1526,24 @@
 				{
 					"ballRequirement": true,
 					"ck0": "Gate",
+					"mv0": 24,
+					"mv1": 5,
 					"regionIndex": 8,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"ck0": "Gate",
+					"regionIndex": 8,
+					"trickDifficulty": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 14,
+					"mv1": 15,
+					"mv2": 10,
+					"regionIndex": 8,
+					"trickDifficulty": 2
 				}
 			],
 			"Hercules Potion": [
@@ -1566,6 +1653,12 @@
 					"mv1": 14,
 					"regionIndex": 4,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 14,
+					"regionIndex": 4,
+					"trickDifficulty": 1
 				}
 			],
 			"Plateau": {
@@ -1808,11 +1901,17 @@
 						"TYPE": 8
 					},
 					{
-						"ballRequirement": true,
+						"ballRequirement": false,
 						"mv0": 10,
 						"mv1": 14,
 						"regionIndex": 0,
 						"trickDifficulty": 0
+					},
+					{
+						"ballRequirement": false,
+						"mv0": 14,
+						"regionIndex": 0,
+						"trickDifficulty": 1
 					}
 				],
 				"I": 3
@@ -1844,6 +1943,12 @@
 					"mv1": 10,
 					"regionIndex": 0,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": false,
+					"mv0": 14,
+					"regionIndex": 0,
+					"trickDifficulty": 1
 				}
 			],
 			"Small Pool": {
@@ -3640,6 +3745,30 @@
 					"mv3": 25,
 					"regionIndex": 0,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 3,
+					"mv2": 10,
+					"regionIndex": 0,
+					"trickDifficulty": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 3,
+					"mv2": 12,
+					"regionIndex": 0,
+					"trickDifficulty": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 25,
+					"mv1": 3,
+					"mv2": 11,
+					"regionIndex": 0,
+					"trickDifficulty": 1
 				}
 			],
 			"Main": {
@@ -9240,32 +9369,32 @@
 				{
 					"ballRequirement": true,
 					"mv0": 11,
-					"mv1": 27,
+					"mv1": 8,
+					"mv2": 27,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 13,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
 					"regionIndex": 0,
 					"trickDifficulty": 0
 				},
 				{
 					"ballRequirement": true,
 					"mv0": 12,
-					"mv1": 27,
+					"mv1": 26,
+					"mv2": 27,
 					"regionIndex": 0,
-					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": true,
-					"mv0": 8,
-					"mv1": 10,
-					"mv2": 13,
-					"regionIndex": 0,
-					"trickDifficulty": 0
-				},
-				{
-					"ballRequirement": true,
-					"mv0": 8,
-					"mv1": 10,
-					"mv2": 32,
-					"regionIndex": 0,
-					"trickDifficulty": 0
+					"trickDifficulty": 1
 				}
 			],
 			"Main": {
@@ -14834,9 +14963,31 @@
 				},
 				{
 					"ballRequirement": true,
-					"mv0": 10,
+					"mv0": 8,
+					"mv1": 13,
 					"regionIndex": 0,
 					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 8,
+					"mv1": 32,
+					"regionIndex": 0,
+					"trickDifficulty": 0
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 26,
+					"mv1": 27,
+					"mv2": 8,
+					"regionIndex": 0,
+					"trickDifficulty": 1
+				},
+				{
+					"ballRequirement": true,
+					"mv0": 10,
+					"regionIndex": 0,
+					"trickDifficulty": 2
 				}
 			],
 			"Main": {
@@ -32247,6 +32398,11 @@
 						"NEEDS_BALL": false,
 						"REGION": 0,
 						"TYPE": 8
+					},
+					{
+						"ballRequirement": false,
+						"regionIndex": 0,
+						"trickDifficulty": 0
 					}
 				],
 				"I": 0
