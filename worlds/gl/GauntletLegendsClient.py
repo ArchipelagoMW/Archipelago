@@ -558,7 +558,7 @@ class GauntletLegendsContext(CommonContext):
                 elif self.deathlink_enabled:
                     await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
             self.var_reset()
-            if (self.current_level[1] << 4) + self.current_level[0] == 0xF1:
+            if ((self.current_level[1] << 4) + self.current_level[0]) == 0xF1:
                 self.current_level = bytes([0x2, 0xF])
                 self.var_reset()
                 self.in_portal = True
