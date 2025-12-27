@@ -803,6 +803,10 @@ class Rac3Interface(GameInterface):
                             # Give the player a bit more time to read the new appended line in case it was about to expire
                             self.notification_time += 0.33
                             display_time = int((self.notification_time - current_time)*120)
+                            # A lot of messages can cause this value to go negative and if so, set a minimum display time
+                            if display_time < 0:
+                                self.notification_time = current_time + 0.33
+                                display_time = int((self.notification_time - current_time)*120)
                             self.messagebox(msg_list, color_bytes_count, longest_line_length, theme, display_time)
                             logger.debug(f'Warning: Incorrect Display message detected')
                             logger.debug(f'Message: {merged_message}')
