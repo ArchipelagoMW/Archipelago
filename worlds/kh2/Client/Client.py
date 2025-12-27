@@ -25,7 +25,6 @@ class KH2Context(CommonContext):
     game = "Kingdom Hearts 2"
     items_handling = 0b111  # Indicates you get items sent from other worlds.
     socket: KH2Socket = None
-    check_location_IDs = []
     received_items_IDs = []
 
     def __init__(self, server_address, password):

@@ -26,7 +26,6 @@ async def checkWorldLocations(self):
                     locationId = self.kh2_loc_name_to_id[location]
                     if location in self.world_locations_checked:
                         self.sending = self.sending + [(int(locationId))]
-                        self.check_location_IDs.append((int(locationId)))
                         self.world_locations_checked.remove(location)
     except Exception as e:
         if self.kh2connected:
@@ -45,7 +44,6 @@ async def checkLevels(self):
                 if self.kh2_seed_save["Levels"]["SoraLevel"] < currentLevel:
                     self.kh2_seed_save["Levels"]["SoraLevel"] = currentLevel
                 self.sending = self.sending + [(int(locationId))]
-                self.check_location_IDs.append((int(locationId)))
         formDict = {
             0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
             3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels], 5: ["SummonLevel", SummonLevels]
@@ -61,7 +59,6 @@ async def checkLevels(self):
                         if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
                             self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
                         self.sending = self.sending + [(int(locationId))]
-                        self.check_location_IDs.append((int(locationId)))
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
@@ -76,14 +73,12 @@ async def checkSlots(self):
             if locationId not in self.locations_checked:
                 if location in self.keyblade_ability_checked:
                     self.sending = self.sending + [(int(locationId))]
-                    self.check_location_IDs.append((int(locationId)))
                     self.keyblade_ability_checked.remove(location)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked and location in self.keyblade_ability_checked:
                 self.sending = self.sending + [(int(locationId))]
-                self.check_location_IDs.append((int(locationId)))
                 self.keyblade_ability_checked.remove(location)
     except Exception as e:
         if self.kh2connected:

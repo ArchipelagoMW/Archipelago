@@ -116,7 +116,7 @@ class KH2Socket:
                 msg += ";" + str(val)
             CHUNK_SIZE = 30
             i = 0
-            if len(msg) >= 30:
+            if len(msg) > CHUNK_SIZE:
                 while i < len(msg):
                     part = msg[i: i + CHUNK_SIZE]
                     if i + CHUNK_SIZE < len(msg):
