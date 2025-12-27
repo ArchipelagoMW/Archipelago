@@ -3,8 +3,7 @@ from types import MappingProxyType
 from typing import Final, List
 
 from BaseClasses import Item, ItemClassification
-from worlds.gl import mirror_shards
-from worlds.gl.Data import item_classifications, portals, obelisks
+from .Data import item_classifications, portals, obelisks, mirror_shards
 
 
 class ItemData:
