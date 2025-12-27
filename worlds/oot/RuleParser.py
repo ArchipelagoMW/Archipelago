@@ -364,12 +364,12 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             self.current_spot = event
             # This could, in theory, create further subrules.
             access_rule = self.make_access_rule(self.visit(node))
-            if access_rule is self.rule_cache.get('NameConstant(False)'):
+            if access_rule is self.rule_cache.get('Constant(False)'):
                 event.access_rule = None
                 event.never = True
                 logging.getLogger('').debug('Dropping unreachable delayed event: %s', event.name)
             else:
-                if access_rule is self.rule_cache.get('NameConstant(True)'):
+                if access_rule is self.rule_cache.get('Constant(True)'):
                     event.always = True
                 set_rule(event, access_rule)
                 region.locations.append(event)
@@ -465,9 +465,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         access_rule = self.parse_rule(rule, spot)
         set_rule(spot, access_rule)
-        if access_rule is self.rule_cache.get('NameConstant(False)'):
+        if access_rule is self.rule_cache.get('Constant(False)'):
             spot.never = True
-        elif access_rule is self.rule_cache.get('NameConstant(True)'):
+        elif access_rule is self.rule_cache.get('Constant(True)'):
             spot.always = True
 
     # Hijacking functions
