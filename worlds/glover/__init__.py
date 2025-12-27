@@ -1,4 +1,5 @@
 import gc
+import logging
 import math
 from typing import Any, Dict
 
@@ -456,6 +457,7 @@ class GloverWorld(World):
         total_golden_garibs = self.options.golden_garib_count.value
         total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
         if total_golden_garibs < self.options.required_golden_garibs.value:
+            #logging.warning("Cannot require more golden garibs required than in your world! Reducing your total.")
             raise OptionError("Must have enough golden garibs to get the required golden garib count!")
 
         #Golden Garibs Enough Filler
@@ -656,19 +658,6 @@ class GloverWorld(World):
                 self.starting_ball = "Crystal"
             case StartingBall.option_power_ball:
                 self.starting_ball = "Power Ball"
-            case StartingBall.option_random_no_power_ball:
-                ball_options = ["Rubber Ball",
-	            "Bowling Ball",
-	            "Ball Bearing",
-	            "Crystal"]
-                self.starting_ball = self.random.choice(ball_options)
-            case StartingBall.option_random_any:
-                ball_options = ["Rubber Ball",
-	            "Bowling Ball",
-	            "Ball Bearing",
-	            "Crystal",
-	            "Power Ball"]
-                self.starting_ball = self.random.choice(ball_options)
         self.multiworld.push_precollected(self.create_item(self.starting_ball))
 
     def generate_early(self):

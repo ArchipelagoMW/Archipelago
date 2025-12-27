@@ -63,8 +63,6 @@ class StartingBall(Choice):
     option_ball_bearing = 2
     option_crystal_ball = 3
     option_power_ball = 4
-    option_random_no_power_ball = 5
-    option_random_any = 6
     default = 3
 
 class GaribLogic(Choice):
