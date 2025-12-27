@@ -14,7 +14,8 @@ class ShuffleSolSeals(DefaultOnToggle):
 class SealsForEigong(Range):
     """The number of Sol Seals needed to open the door in Central Hall to New Kunlun Control Hub, fight Eigong,
     and complete the goal.
-    Unlike the vanilla game, you don't need to visit Tiandao Research Center or trigger the "point of no return"."""
+
+    Unlike the vanilla game, you don't need to visit Tiandao Research Center or trigger the 'point of no return'."""
     display_name = "Seals For Eigong"
     range_start = 0
     range_end = 8
@@ -22,11 +23,14 @@ class SealsForEigong(Range):
 
 
 class SealsForPrison(Range):
-    """The number of Sol Seals needed for Jiequan to appear in Factory (Great Hall), allowing you to "fight" him,
+    """The number of Sol Seals needed for Jiequan in Factory (Great Hall) to allow you to 'fight' him,
     do the whole Prison escape sequence, and check most of the locations in Factory (Machine Room).
 
-    Note that you also need Mystic Nymph: Scout Mode, Grapple, and either Cloud Leap or Ledge Grab
-    before Jiequan will appear, since you can't finish the Prison escape sequence without them.
+    Note that you will also need certain progression items for Jiequan to 'fight' you,
+    since you can't finish the Prison escape sequence without them.
+    Exactly which items you need depends on whether `prevent_weakened_prison_state` is enabled,
+    but you can check what you're missing by walking up to F(GH) Jiequan, and it will be some combination of
+    Ledge Grab, Grapple, Air Dash, Cloud Leap and Mystic Nymph: Scout Mode.
 
     Unlike the vanilla game, the real Jiequan fight may be done before or after Prison.
     Also, it does not matter which Sol Seals you've collected, only the total number."""
@@ -39,6 +43,7 @@ class SealsForPrison(Range):
 class SealsForEthereal(Range):
     """The number of Sol Seals needed for the entrance to Lady Ethereal's soulscape to appear in Cortex Center.
     See also the skip_soulscape_platforming option.
+
     Unlike the vanilla game, it does not matter which Sol Seals you've collected, only the total number.
     The maximum is 7 instead of 8 because 8 would be incompatible with shuffle_sol_seals: false."""
     display_name = "Seals For Ethereal"
@@ -258,6 +263,14 @@ class PreventAnnoyingRunbacks(DefaultOnToggle):
     """
 
 
+class PreventWeakenedPrisonState(Toggle):
+    """After you 'fight' Jiequan in Factory (Great Hall) and get sent to Prison, if this option is enabled,
+    Yi will *not* be weakened the way he is in the vanilla game. You'll still be expected to do Prison,
+    but this should solve what many players find annoying about it.
+
+    This is a .yaml/generation option because it changes the logic for unlocking Prison."""
+
+
 # actual Option Groups are specified in the WebWorld in __init__.py for some reason
 @dataclass
 class NineSolsGameOptions(PerGameCommonOptions):
@@ -267,7 +280,7 @@ class NineSolsGameOptions(PerGameCommonOptions):
     shuffle_sol_seals: ShuffleSolSeals
     seals_for_eigong: SealsForEigong
     seals_for_prison: SealsForPrison
-    # skip weakened prison state?
+    prevent_weakened_prison_state: PreventWeakenedPrisonState
     seals_for_ethereal: SealsForEthereal
     skip_soulscape_platforming: SkipSoulscapePlatforming
     prevent_annoying_runbacks: PreventAnnoyingRunbacks

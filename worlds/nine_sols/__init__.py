@@ -27,6 +27,7 @@ class NineSolsWebWorld(WebWorld):
             ShuffleSolSeals,
             SealsForEigong,
             SealsForPrison,
+            PreventWeakenedPrisonState,
             SealsForEthereal,
             SkipSoulscapePlatforming,
             PreventAnnoyingRunbacks,
@@ -160,6 +161,7 @@ class NineSolsWorld(World):
             'kuafu_shop_unlock_sol_seals',
             'chiyou_shop_unlock_sol_seals',
             'kuafu_extra_inventory_unlock_sol_seals',
+            'prevent_weakened_prison_state',
         )
         slot_data["first_root_node_name"] = self.options.first_root_node.current_key  # we want strings instead of ints
         # more client/mod features, these are only in the apworld because we want them fixed per-slot/at gen time

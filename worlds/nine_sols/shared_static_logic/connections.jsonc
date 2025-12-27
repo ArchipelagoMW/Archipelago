@@ -1208,7 +1208,7 @@
     // until you have what you need to reach the root node. So we end up with the whole first
     // half of Prison being a single logical region.
     { "from": "FGH - Lower Levels & Root Node", "to": "P - Up To Root Node", "requires": [
-        { "item": "Event - Jiequan 1 Fight Unlocked" }
+        { "item": "Event - Jiequan 1 Fight Unlocked" } // see event logic for how you're expected to navigate Prison
     ] },
     {
         "from": "P - Up To Root Node", "to": "P - Kanghui Level",

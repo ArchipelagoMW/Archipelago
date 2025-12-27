@@ -23,6 +23,7 @@ class TestDefaultWorld(NineSolsTestBase):
             'kuafu_shop_unlock_sol_seals',
             'chiyou_shop_unlock_sol_seals',
             'kuafu_extra_inventory_unlock_sol_seals',
+            'prevent_weakened_prison_state',
         })
         # now for the "real" slot_data tests on our default world:
         self.assertEqual(slot_data['skip_soulscape_platforming'], 0)
@@ -36,6 +37,7 @@ class TestDefaultWorld(NineSolsTestBase):
         self.assertEqual(slot_data['kuafu_shop_unlock_sol_seals'], 1)
         self.assertEqual(slot_data['chiyou_shop_unlock_sol_seals'], 3)
         self.assertEqual(slot_data['kuafu_extra_inventory_unlock_sol_seals'], 5)
+        self.assertEqual(slot_data['prevent_weakened_prison_state'], 0)
 
         # breathing tests for logic assertion helpers
         self.assertReachableWith("Central Hall: Examine Launch Memorial", [])

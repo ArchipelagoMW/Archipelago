@@ -260,15 +260,42 @@
         ]
     },
     // No Shennong event because rando moves him into FSP immediately
-    {
-        "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
-        "region": "FGH - Lower Levels & Root Node", "requires": [
-            { "item_group": "Sol Seals", "count_option": "seals_for_prison" },
-            { "item": "Mystic Nymph: Scout Mode" },
-            { "item": "Grapple" },
-            { "anyOf": [ { "item": "Ledge Grab" }, { "item": "Cloud Leap" } ] }
-        ]
-    },
+{
+    "address": null, "name": "Event - Jiequan 1 Fight Unlocked",
+    "region": "FGH - Lower Levels & Root Node",
+    "requires": [
+        { "item_group": "Sol Seals", "count_option": "seals_for_prison" },
+        // Prison weakened state disables AD, CS, Talismans, and nerfs horizontal distance of regular jump and CL.
+        // Most of the Prison requires either N(ymph) to hack ropes/doors or CL to platform around, regardless of weakened state.
+        // The exceptions are the second horizontal gap with a grapple point and the ledge immediately after it:
+        // - weakened, the gap requires G or parry hover (LG AND CL); unweakened, it requires G OR CL OR AD
+        // - the ledge afterward requires LG OR CL regardless of weakened state
+        // Putting all that together, we get:
+        // - unweakened Prison: CL OR (LG AND N AND (G OR AD))
+        // - weakened (vanilla-logic) Prison: G AND (CL OR (LG AND N))
+        // - I won't implement this, but weakened LS-logic Prison is: (LG AND CL) OR (vanilla-logic)
+        {
+            "option": "prevent_weakened_prison_state",
+            "true": [
+                { "anyOf": [
+                    { "item": "Cloud Leap" },
+                    [
+                        { "item": "Ledge Grab" },
+                        { "item": "Mystic Nymph: Scout Mode" },
+                        { "anyOf": [ { "item": "Grapple" }, { "item": "Air Dash" } ] }
+                    ]
+                ] }
+            ],
+            "false": [
+                { "item": "Grapple" },
+                { "anyOf": [
+                    { "item": "Cloud Leap" },
+                    [ { "item": "Ledge Grab" }, { "item": "Mystic Nymph: Scout Mode" } ]
+                ] }
+            ]
+        }
+    ]
+},
     {
         "address": null, "name": "Event - Lady Ethereal Soulscape Unlocked",
         "region": "CC - Root Node", "requires": [ { "item_group": "Sol Seals", "count_option": "seals_for_ethereal" } ]
