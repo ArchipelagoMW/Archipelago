@@ -121,7 +121,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
 
         if not isinstance(item, (ast.Name, ast.Str)):
             raise Exception('Parse Error: first value must be an item. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
-        iname = item.id if isinstance(item, ast.Name) else item.s
+        iname = item.id if isinstance(item, ast.Name) else item.value
 
         if not (isinstance(count, ast.Name) or isinstance(count, ast.Num)):
             raise Exception('Parse Error: second value must be a number. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
@@ -163,7 +163,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                 elif isinstance(arg_val, ast.Constant):
                     val = repr(arg_val.value)
                 elif isinstance(arg_val, ast.Str):
-                    val = repr(arg_val.s)
+                    val = repr(arg_val.value)
                 else:
                     raise Exception('Parse Error: invalid argument %s' % ast.dump(arg_val, False),
                             self.current_spot.name, ast.dump(node, False))
@@ -282,7 +282,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # if any is False(And)/True(Or), the whole node can be replaced with it
         for elt in list(node.values):
             if isinstance(elt, ast.Str):
-                items.add(elt.s)
+                items.add(elt.value)
             elif isinstance(elt, ast.Name) and elt.id in nonaliases:
                 items.add(escaped_items[elt.id])
             else:
@@ -297,9 +297,9 @@ class Rule_AST_Transformer(ast.NodeTransformer):
                         and elt.func.attr in ('has', groupable) and len(elt.args) == 1):
                     args = elt.args[0]
                     if isinstance(args, ast.Str):
-                        items.add(args.s)
+                        items.add(args.value)
                     else:
-                        items.update(it.s for it in args.elts)
+                        items.update(it.value for it in args.elts)
                 elif isinstance(elt, ast.BoolOp) and node.op.__class__ == elt.op.__class__:
                     new_values.extend(elt.values)
                 else:
@@ -424,7 +424,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
         # Cache this under the target (region) name
         if len(node.args) < 2 or not isinstance(node.args[0], ast.Str):
             raise Exception('Parse Error: invalid at() arguments', self.current_spot.name, ast.dump(node, False))
-        return self.replace_subrule(node.args[0].s, node.args[1])
+        return self.replace_subrule(node.args[0].value, node.args[1])
 
 
     # here(rule)
