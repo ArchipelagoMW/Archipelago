@@ -123,7 +123,7 @@ class Rule_AST_Transformer(ast.NodeTransformer):
             raise Exception('Parse Error: first value must be an item. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
         iname = item.id if isinstance(item, ast.Name) else item.value
 
-        if not (isinstance(count, ast.Name) or isinstance(count, ast.Num)):
+        if not isinstance(count, (ast.Name, ast.Constant)):
             raise Exception('Parse Error: second value must be a number. Got %s' % item.__class__.__name__, self.current_spot.name, ast.dump(node, False))
 
         if isinstance(count, ast.Name):
