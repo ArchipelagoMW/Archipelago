@@ -123,7 +123,7 @@ class GameInterface:
             return False
         if game_id != self.current_game:
             logger.info(f'Detecting new game version...')
-            match game_id:  # Todo: Add other game versions
+            match game_id:
                 case RAC3STATUS.US_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: US release')
@@ -135,6 +135,21 @@ class GameInterface:
                 case RAC3STATUS.JP_ID:
                     self.current_game = game_id
                     logger.info(f'Version Detected: Japanese release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
+                case RAC3STATUS.JP_TB_ID:
+                    self.current_game = game_id
+                    logger.info(f'Version Detected: Japanese The Best release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
+                case RAC3STATUS.KO_ID:
+                    self.current_game = game_id
+                    logger.info(f'Version Detected: Korean release')
+                    logger.warning('WARNING: Game version untested, please inform apworld devs of any '
+                                   'inconsistencies found')
+                case RAC3STATUS.CH_ID:
+                    self.current_game = game_id
+                    logger.info(f'Version Detected: Chinese release')
                     logger.warning('WARNING: Game version untested, please inform apworld devs of any '
                                    'inconsistencies found')
                 case RAC3STATUS.EU_ID:
