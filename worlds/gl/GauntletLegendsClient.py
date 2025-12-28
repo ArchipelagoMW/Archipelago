@@ -4,24 +4,20 @@ import os
 import socket
 import traceback
 import subprocess
-from typing import Optional
-
 import Patch
+
+from typing import Optional
 from BaseClasses import ItemClassification
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus, NetworkItem
 
 from .Data import (
     base_count,
-    boss_level,
-    castle_id,
     characters,
-    difficulty_convert,
     item_ids,
     level_locations,
     sounds,
     colors,
-    vanilla,
     portals
 )
 from .Items import ItemData, items_by_id
@@ -30,24 +26,15 @@ from .Locations import LocationData
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
 INV_ADDR = 0xC5BF0
-ACTIVE_LEVEL = 0x4EFC0
-PLAYER_COUNT = 0x127764
-PLAYER_LEVEL = 0xFD31B
-PLAYER_ALIVE = 0xFD2EB
 PLAYER_CLASS = 0xFD30F
 PLAYER_COLOR = 0xFD30E
-PLAYER_PORTAL = 0x64A50
-PLAYER_BOSSING = 0x64A54
-PLAYER_MOVEMENT = 0xFD307
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
-PAUSED = 0xC5B18
+LEVEL_LOADING = 0x64A50
 LOCATIONS_BASE_ADDRESS = 0x64A68
-
-BOSS_ADDR = 0x289C08
-TIME = 0xC5B1C
-INPUT = 0xC5BCD
+ZONE_ID = 0x6CA58
+LEVEL_ID = 0x6CA5C
 
 MOD_ITEM_ID = 0xD0800
 MOD_QUANTITY = 0xD0804
@@ -115,11 +102,6 @@ class InventoryEntry:
         self.n_addr: int = int.from_bytes(arr[12:16], "little") & 0x00FFFFFF
 
 
-class ObjectEntry:
-    def __init__(self, arr: bytes = None):
-        self.raw = arr if arr is not None else bytes()
-
-
 def message_format(arg: str, params: str) -> str:
     return f"{arg} {params}"
 
@@ -166,7 +148,6 @@ class GauntletLegendsContext(CommonContext):
         self.deathlink_enabled: bool = False
         self.deathlink_triggered: bool = False
         self.ignore_deathlink: bool = False
-        self.difficulty: int = 0
         self.players: int = 1
         self.gl_sync_task = None
         self.glslotdata = None
@@ -175,8 +156,6 @@ class GauntletLegendsContext(CommonContext):
         self.locations_checked: list[int] = []
         self.inventory: list[list[InventoryEntry]] = []
         self.retro_connected: bool = False
-        self.level_loading: bool = False
-        self.in_game: bool = False
         self.scouted: bool = False
         self.obelisks: list[NetworkItem] = []
         self.item_locations: list[LocationData] = []
@@ -184,23 +163,21 @@ class GauntletLegendsContext(CommonContext):
         self.chest_locations: list[LocationData] = []
         self.item_address: int = 0
         self.chest_address: int = 0
-        self.limbo: bool = False
-        self.in_portal: bool = False
-        self.scaled: bool = False
-        self.offset: int = -1
-        self.clear_counts = None
-        self.current_level: bytes = b""
+        self.zone: int = 0
+        self.level: int = 0
+        self.current_zone: int = 0
+        self.current_level: int = 0
+        self.level_id: int = 0
         self.output_file: str = ""
-        self.movement: int = 0
-        self.init_refactor: bool = False
         self.location_scouts: list[NetworkItem] = []
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
         super().on_deathlink(data)
 
-    def inv_count(self, player: int) -> int:
-        return len(self.inventory[player])
+    async def update_stage(self):
+        self.zone = await self._read_ram_int(ZONE_ID, 1)
+        self.level = await self._read_ram_int(LEVEL_ID, 1)
 
     async def inv_read(self):
         self.inventory = []
@@ -241,7 +218,7 @@ class GauntletLegendsContext(CommonContext):
 
     async def item_from_name(self, name: str, player: int) -> InventoryEntry | None:
         await self.inv_read()
-        for i in range(0, self.inv_count(player)):
+        for i in range(0, len(self.inventory[player])):
             if self.inventory[player][i].name == name:
                 return self.inventory[player][i]
         return None
@@ -290,19 +267,8 @@ class GauntletLegendsContext(CommonContext):
                 self.players = 1
             self.deathlink_enabled = self.glslotdata["death_link"]
             self.update_death_link(self.deathlink_enabled)
-            self.var_reset()
             logger.info(f"Players set to {self.players}.")
             logger.info("If this is incorrect, Use /players to set the number of people playing locally.")
-        elif cmd == "Retrieved":
-            if "keys" not in args:
-                logger.warning(f"invalid Retrieved packet to GLClient: {args}")
-                return
-            cc = self.stored_data.get(f"gl_cc_T{self.team}_P{self.slot}", None)
-            if cc is not None:
-                logger.info("Received clear counts from server")
-                self.clear_counts = cc
-            else:
-                self.clear_counts = {}
         elif cmd == "LocationInfo":
             self.location_scouts = args["locations"]
         elif cmd == "RoomInfo":
@@ -367,62 +333,11 @@ class GauntletLegendsContext(CommonContext):
     async def _write_ram(self, address: int, data: bytes):
         self.socket.send(message_format(WRITE, param_format(address, data)))
 
-    async def read_time(self) -> int:
-        return await self._read_ram_int(TIME, 2)
-
-    async def read_level(self) -> bytes:
-        return await self._read_ram(ACTIVE_LEVEL, 2)
-
-    async def check_loading(self) -> bool:
-        if self.in_portal or self.level_loading:
-            return await self.read_time() == 0
-        return False
-
-    async def active_players(self) -> int:
-        return await self._read_ram_int(PLAYER_COUNT, 1)
-
-    async def player_level(self) -> int:
-        return await self._read_ram_int(PLAYER_LEVEL, 1)
-
-    async def portaling(self) -> int:
-        return await self._read_ram_int(PLAYER_PORTAL, 1)
-
-    async def limbo_check(self, offset=0) -> int:
-        return await self._read_ram_int(PLAYER_MOVEMENT + offset, 1)
-
     async def dead(self) -> bool:
         val = await self._read_ram_int(PLAYER_KILL, 1)
         if (val & 0xF) == 0x1:
             self.ignore_deathlink = True
         return ((val & 0xF) == 0x8) or ((val & 0xF) == 0x1)
-
-    async def boss(self) -> int:
-        return await self._read_ram_int(PLAYER_BOSSING, 1)
-
-    async def paused(self) -> int:
-        val = await self._read_ram_int(PAUSED, 1)
-        return val != 0x3
-
-    async def scale(self):
-        level = await self.read_level()
-        if self.movement != 0x12:
-            level = [0x1, 0xF]
-
-        players = await self.active_players()
-        player_level = await self.player_level()
-        max_value = max(self.glslotdata["max"], self.players)
-
-        scale_value = (max_value if self.glslotdata["instant_max"] == 1
-                       else min(max((player_level - difficulty_convert[level[1]]) // 5, 0), 3))
-
-        await self._write_ram(PLAYER_COUNT, int.to_bytes(min(players + scale_value, max_value), 1, "little"))
-        self.scaled = True
-
-    def _get_level_id(self, level: bytes) -> int:
-        _id = level[0]
-        if level[1] == 1:
-            _id = castle_id.index(level[0]) + 1
-        return (level[1] << 4) + _id
 
     async def get_seed_name(self) -> str:
         seed_name = await self._read_ram(0xD07F0, 0x10)
@@ -430,28 +345,7 @@ class GauntletLegendsContext(CommonContext):
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         try:
-            level = await self.read_level()
-
-            # Handle special movement case
-            if self.movement != 0x12:
-                level = [0x1, 0xF]
-
-            self.current_level = level
-            players = await self.active_players()
-            player_level = await self.player_level()
-
-            # Determine difficulty
-            self.difficulty = (min(players + (min(player_level // vanilla[level[1]], 3)), 4)
-                               if self.clear_counts.get(str(level), 0) != 0 else players)
-
-            # Filter locations by difficulty and settings
-            level_id = self._get_level_id(level)
-
-            locations_address = await self._read_ram_int(LOCATIONS_BASE_ADDRESS, 4) & 0xFFFFFF
-            self.item_address = await self._read_ram_int(locations_address + 0x14, 4) & 0xFFFFFF
-            self.chest_address = await self._read_ram_int(locations_address + 0x30, 4) & 0xFFFFFF
-
-            raw_locations = [location for location in level_locations.get(level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
+            raw_locations = [location for location in level_locations.get(self.current_zone << 4 + self.current_level, []) if "Mirror" not in location.name and "Skorne" not in location.name]
             scoutable_location_ids = [location.id for location in raw_locations if location.id in ctx.checked_locations or location.id in self.missing_locations]
 
             # Scout locations if any exist
@@ -499,6 +393,39 @@ class GauntletLegendsContext(CommonContext):
             logger.error(traceback.format_exc())
 
     async def location_loop(self) -> list[int]:
+        if self.current_zone == 0:
+            self.current_zone = self.zone
+            self.current_level = self.level
+            self.level_id = (self.current_zone << 4) + self.current_level
+        if self.zone != self.current_zone:
+            if self.current_level & 0x8 == 0x8:
+                dead = await self.dead()
+                if not dead:
+                    await self.check_locations([location.id for location in level_locations[self.level_id]
+                                                if "Mirror Shard" in location.name or "Skorne" in location.name])
+            self.current_zone = self.zone
+            self.current_level = self.level
+            self.level_id = (self.current_zone << 4)  + self.current_level
+            self.scouted = False
+        if self.current_zone == 0x8:
+            return []
+
+        if not self.scouted:
+            await self.scout_locations(self)
+
+        loading = await self._read_ram_int(LEVEL_LOADING, 1)
+        if loading == 1:
+            return []
+
+        locations_address = await self._read_ram_int(LOCATIONS_BASE_ADDRESS, 4) & 0xFFFFFF
+        self.item_address = await self._read_ram_int(locations_address + 0x14, 4)
+        self.chest_address = await self._read_ram_int(locations_address + 0x30, 4)
+        if self.item_address == 0x7FFF0BAD or self.chest_address == 0x7FFF0BAD:
+            return []
+
+        self.item_address &= 0xFFFFFF
+        self.chest_address &= 0xFFFFFF
+
         acquired = []
         item_section = await self._read_ram(self.item_address, (len(self.item_locations) * 0x18))
         for i in range(len(self.item_locations)):
@@ -523,61 +450,7 @@ class GauntletLegendsContext(CommonContext):
             if active == 1 and state != 1:
                 acquired += [self.chest_locations[i].id]
 
-        paused = await self.paused()
-        dead = await self.dead()
-        if paused or dead:
-            return []
         return acquired
-
-    async def level_status(self, ctx: "GauntletLegendsContext") -> bool:
-        portaling = await self.portaling()
-        dead = await self.dead()
-        boss = await self.boss()
-        if portaling or dead or (self.current_level in boss_level and boss == 0):
-            if portaling or (self.current_level in boss_level and boss == 0):
-                self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
-                if self.current_level in boss_level:
-                    await self.check_locations([
-                                    location.id
-                                    for location in level_locations[
-                                        (self.current_level[1] << 4) + self.current_level[0]
-                                        ]
-                                    if "Mirror" in location.name or "Skorne" in location.name
-                                ])
-            if dead and not (self.current_level in boss_level and boss == 0):
-                if self.deathlink_triggered:
-                    self.deathlink_triggered = False
-                elif self.ignore_deathlink:
-                    self.ignore_deathlink = False
-                elif self.deathlink_enabled:
-                    await ctx.send_death(f"{ctx.auth} didn't eat enough meat.")
-            self.var_reset()
-            if ((self.current_level[1] << 4) + self.current_level[0]) == 0xF1:
-                self.current_level = bytes([0x2, 0xF])
-                self.var_reset()
-                self.in_portal = True
-                return False
-            return True
-        return False
-
-    def var_reset(self):
-        self.output_file = ""
-        self.item_locations = []
-        self.chest_locations = []
-        self.obelisk_locations = []
-        self.obelisks = []
-        self.useful = []
-        self.in_game = False
-        self.level_loading = False
-        self.scaled = False
-        self.offset = -1
-        self.movement = 0
-        self.difficulty = 0
-        self.location_scouts = []
-        self.ignore_deathlink = False
-        self.item_address = 0
-        self.chest_address = 0
-        self.scouted = False
 
     async def die(self):
         """Trigger deathlink death with character-specific death sound."""
@@ -601,6 +474,76 @@ class GauntletLegendsContext(CommonContext):
         ui = super().make_gui()
         ui.base_title = "Archipelago Gauntlet Legends Client"
         return ui
+
+async def gl_sync_task(ctx: GauntletLegendsContext):
+    logger.info("Starting N64 connector...")
+    while not ctx.exit_event.is_set():
+        if ctx.retro_connected:
+            try:
+                if not ctx.rom_loaded:
+                    status = await ctx.socket.status()
+                    status = status.split(" ")
+                    if status[1] == "CONTENTLESS":
+                        logger.info("No ROM loaded, waiting...")
+                        await asyncio.sleep(3)
+                        continue
+                    else:
+                        logger.info("ROM Loaded")
+                        ctx.rom_loaded = True
+                if not ctx.auth:
+                    await asyncio.sleep(1)
+                    continue
+                seed_name = await ctx.get_seed_name()
+                if seed_name != ctx.seed_name[0:16]:
+                    logger.info(f"ROM seed does not match room seed ({seed_name} != {ctx.seed_name}), "
+                                f"please load the correct ROM.")
+                    await ctx.disconnect()
+                    continue
+                await ctx.update_stage()
+                if ctx.zone != 0x10:
+                    await ctx.handle_items()
+                    checking = await ctx.location_loop()
+                    dead = await ctx.dead()
+                    if dead and not ctx.ignore_deathlink:
+                        if ctx.deathlink_triggered:
+                            ctx.deathlink_triggered = False
+                        else:
+                            await ctx.send_death(f"{ctx.player_names[ctx.slot]} ran out of food.")
+                    if len(checking) > 0:
+                        ctx.locations_checked += checking
+                        await ctx.check_locations(checking)
+
+                    if ctx.deathlink_pending and ctx.deathlink_enabled:
+                        ctx.deathlink_pending = False
+                        await ctx.die()
+
+                    bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
+                    if not ctx.finished_game and bitwise:
+                        await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                        ctx.finished_game = True
+            except Exception as e:
+                logger.error(f"Unknown Error Occurred: {e}")
+                logger.info(traceback.format_exc())
+                ctx.socket = RetroSocket()
+                ctx.retro_connected = False
+                await asyncio.sleep(2)
+        else:
+            try:
+                logger.info("Attempting to connect to Retroarch...")
+                status = await ctx.socket.status()
+                ctx.retro_connected = True
+                status = status.split(" ")
+                if status[1] == "CONTENTLESS":
+                    ctx.rom_loaded = False
+                logger.info("Connected to Retroarch")
+                continue
+            except Exception as e:
+                logger.error(f"Unknown Error Occurred: {e}")
+                logger.info(traceback.format_exc())
+                await asyncio.sleep(2)
+                continue
+
+
 
 
 # Store original file content for restoration
@@ -713,151 +656,6 @@ async def _patch_and_launch_game(patch_file: str):
     metadata, output_file = Patch.create_rom_file(patch_file)
     await _patch_opt()
     await _launch_retroarch(output_file)
-
-
-
-
-async def gl_sync_task(ctx: GauntletLegendsContext):
-    logger.info("Starting N64 connector...")
-    while not ctx.exit_event.is_set():
-        if ctx.retro_connected:
-            try:
-                if not ctx.rom_loaded:
-                    status = await ctx.socket.status()
-                    status = status.split(" ")
-                    if status[1] == "CONTENTLESS":
-                        logger.info("No ROM loaded, waiting...")
-                        await asyncio.sleep(3)
-                        continue
-                    else:
-                        logger.info("ROM Loaded")
-                        ctx.rom_loaded = True
-                cc_str: str = f"gl_cc_T{ctx.team}_P{ctx.slot}"
-                pl_str: str = f"gl_pl_T{ctx.team}_P{ctx.slot}"
-                ctx.set_notify(cc_str)
-                if not ctx.auth:
-                    await asyncio.sleep(1)
-                    continue
-                seed_name = await ctx.get_seed_name()
-                if seed_name != ctx.seed_name[0:16]:
-                    logger.info(f"ROM seed does not match room seed ({seed_name} != {ctx.seed_name}), "
-                                f"please load the correct ROM.")
-                    await ctx.disconnect()
-                    continue
-                player_level = await ctx.player_level()
-                await ctx.send_msgs(
-                    [
-                        {
-                            "cmd": "Set",
-                            "key": pl_str,
-                            "default": {},
-                            "want_reply": True,
-                            "operations": [
-                                {
-                                    "operation": "replace",
-                                    "value": player_level,
-                                },
-                            ],
-                        },
-                    ],
-                )
-                bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
-                if not ctx.finished_game and bitwise:
-                    await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
-                    ctx.finished_game = True
-                if ctx.limbo:
-                    limbo = await ctx.limbo_check(0x78)
-                    if limbo:
-                        ctx.limbo = False
-                        await asyncio.sleep(3)
-                    else:
-                        await asyncio.sleep(0.05)
-                        continue
-                await ctx.handle_items()
-                if ctx.deathlink_pending and ctx.deathlink_enabled:
-                    ctx.deathlink_pending = False
-                    await ctx.die()
-                if not ctx.level_loading and not ctx.in_game:
-                    if not ctx.in_portal:
-                        ctx.in_portal = bool(await ctx.portaling())
-                    if ctx.in_portal:
-                        await asyncio.sleep(0.1)
-                        if ctx.movement == 0:
-                            ctx.movement = await ctx.limbo_check()
-                    ctx.level_loading = await ctx.check_loading()
-                if ctx.level_loading:
-                    ctx.in_portal = False
-                    if not ctx.scaled:
-                        await asyncio.sleep(0.2)
-                        await ctx.scale()
-                    ctx.in_game = not await ctx.check_loading()
-                if ctx.in_game:
-                    ctx.level_loading = False
-                    if not ctx.scouted:
-                        await ctx.scout_locations(ctx)
-                        await asyncio.sleep(1)
-                    status = await ctx.level_status(ctx)
-                    if status:
-                        await ctx.send_msgs(
-                            [
-                                {
-                                    "cmd": "Set",
-                                    "key": cc_str,
-                                    "default": {},
-                                    "want_reply": True,
-                                    "operations": [
-                                        {
-                                            "operation": "replace",
-                                            "value": ctx.clear_counts,
-                                        },
-                                    ],
-                                },
-                            ],
-                        )
-                        ctx.limbo = True
-                        await asyncio.sleep(0.05)
-                        continue
-                    await asyncio.sleep(0.1)
-                    if ctx.in_portal:
-                        continue
-                    checking = await ctx.location_loop()
-                    if len(checking) > 0:
-                        ctx.locations_checked += checking
-                        await ctx.check_locations(checking)
-                await asyncio.sleep(0.1)
-            except (TimeoutError, ConnectionResetError, ConnectionRefusedError) as e:
-                error_type = type(e).__name__
-                logger.info(f"{error_type.replace('Error', ' ')}, Reconnecting")
-                ctx.socket = RetroSocket()
-                ctx.retro_connected = False
-                await asyncio.sleep(2)
-            except Exception as e:
-                logger.error(f"Unknown Error Occurred: {e}")
-                logger.info(traceback.format_exc())
-                ctx.socket = RetroSocket()
-                ctx.retro_connected = False
-                await asyncio.sleep(2)
-        else:
-            try:
-                logger.info("Attempting to connect to Retroarch...")
-                status = await ctx.socket.status()
-                ctx.retro_connected = True
-                status = status.split(" ")
-                if status[1] == "CONTENTLESS":
-                    ctx.rom_loaded = False
-                logger.info("Connected to Retroarch")
-                continue
-            except (TimeoutError, ConnectionRefusedError, ConnectionResetError) as e:
-                error_type = type(e).__name__
-                logger.info(f"{error_type.replace('Error', ' ')}, Trying Again")
-                logger.info(traceback.format_exc())
-                await asyncio.sleep(2)
-                continue
-            except Exception as e:
-                logger.error(f"Unknown Error Occurred: {e}")
-                logger.info(traceback.format_exc())
-                await asyncio.sleep(2)
-                continue
 
 
 def launch(*args):

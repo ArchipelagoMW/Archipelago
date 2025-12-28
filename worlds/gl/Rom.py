@@ -327,6 +327,8 @@ class GLPatchExtension(APPatchExtension):
 
         # Write portals option
         rom[0xFFFFE0] = (0x01 if options["portals"] else 0x00)
+        rom[0xFFFFE1] = (0x01 if options["instant_max"] else 0x00)
+        rom[0xFFFFE2] = options["max"]
         return bytes(rom)
 
 
@@ -356,6 +358,8 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         "seed_name": world.multiworld.seed_name,
         "player": world.player,
         "portals": world.options.portals.value,
+        "instant_max": world.options.instant_max.value,
+        "max": world.options.max_difficulty_value.value,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))

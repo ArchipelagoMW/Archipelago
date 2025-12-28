@@ -8,7 +8,7 @@ from typing import ClassVar
 from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .Data import item_dict, local_levels, skipped_local_locations, obelisks, mirror_shards, portals, excluded_portals, \
+from .Data import local_levels, skipped_local_locations, obelisks, mirror_shards, portals, excluded_portals, \
     excluded_obelisks
 from .Items import GLItem, item_table, item_list, gauntlet_item_name_groups
 from .Locations import LocationData, all_locations, location_table
@@ -91,7 +91,6 @@ class GauntletLegendsWorld(World):
         self.unlockable = set()
         self.death = []
         self.items = []
-        self.options.max_difficulty_value.value = max(self.options.max_difficulty_value.value, self.options.local_players.value)
 
     def create_regions(self) -> None:
         if self.options.chests_barrels == "none":
