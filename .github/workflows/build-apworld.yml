@@ -463,11 +463,11 @@ jobs:
           echo "Changelog link: $changelog"
           # Only show commits between the two tags
           if [[ -n "$prev_tag" ]]; then
-            commit_list=$(git log "${prev_tag}..${new_tag}" --pretty=format:"- %s (%h)")
-            total_commits=$(git rev-list "${prev_tag}..${new_tag}" --count)
+              commit_list=$(git log "${prev_tag}..${new_tag}" --pretty=format:"- %s (%h)" -- "worlds/rac3/")
+              total_commits=$(git log "${prev_tag}..${new_tag}" -- "worlds/rac3/" --pretty=oneline | wc -l)
           else
-            commit_list=$(git log "${new_tag}" --pretty=format:"- %s (%h)")
-            total_commits=$(git rev-list "${new_tag}" --count)
+              commit_list=$(git log "$new_tag" --pretty=format:"- %s (%h)" -- "worlds/rac3/")
+              total_commits=$(git log "$new_tag" -- "worlds/rac3/" --pretty=oneline | wc -l)
           fi
 
           if [[ $total_commits -eq 0 ]]; then
