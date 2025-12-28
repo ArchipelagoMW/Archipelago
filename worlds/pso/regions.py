@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Callable
 
 from BaseClasses import Entrance, Region, CollectionState
+from .strings.region_names import Region as RegionName
+from .strings.entrance_names import Entrance as EntranceName
 
 if TYPE_CHECKING:
     from .world import PSOWorld
@@ -27,22 +29,22 @@ def create_and_connect_regions(world: PSOWorld) -> None:
 def create_all_regions(world: PSOWorld) -> None:
     # Starting with just a barebones list of the main areas in Episode 1
     region_names = [
-        "Pioneer 2",
-        "Forest 1",
-        "Forest 2",
-        "Forest Boss",
-        "Caves 1",
-        "Caves 2",
-        "Caves 3",
-        "Caves Boss",
-        "Mines 1",
-        "Mines 2",
-        "Mines Boss",
-        "Ruins Entrance",
-        "Ruins 1",
-        "Ruins 2",
-        "Ruins 3",
-        "Final Boss"
+        RegionName.pioneer_2,
+        RegionName.forest_1,
+        RegionName.forest_2,
+        RegionName.forest_boss,
+        RegionName.caves_1,
+        RegionName.caves_2,
+        RegionName.caves_3,
+        RegionName.caves_boss,
+        RegionName.mines_1,
+        RegionName.mines_2,
+        RegionName.mines_boss,
+        RegionName.ruins_entrance,
+        RegionName.ruins_1,
+        RegionName.ruins_2,
+        RegionName.ruins_3,
+        RegionName.dark_falz
     ]
 
     for region_name in region_names:
@@ -60,48 +62,48 @@ def create_all_regions(world: PSOWorld) -> None:
 
 
 def connect_regions(world: PSOWorld) -> None:
-    pioneer_2 = world.get_region("Pioneer 2")
-    forest_1 = world.get_region("Forest 1")
-    forest_2 = world.get_region("Forest 2")
-    forest_boss = world.get_region("Forest Boss")
-    caves_1 = world.get_region("Caves 1")
-    caves_2 = world.get_region("Caves 2")
-    caves_3 = world.get_region("Caves 3")
-    caves_boss = world.get_region("Caves Boss")
-    mines_1 = world.get_region("Mines 1")
-    mines_2 = world.get_region("Mines 2")
-    mines_boss = world.get_region("Mines Boss")
-    ruins_entrance = world.get_region("Ruins Entrance")
-    ruins_1 = world.get_region("Ruins 1")
-    ruins_2 = world.get_region("Ruins 2")
-    ruins_3 = world.get_region("Ruins 3")
-    dark_falz = world.get_region("Dark Falz")
+    pioneer_2 = world.get_region(RegionName.pioneer_2)
+    forest_1 = world.get_region(RegionName.forest_1)
+    forest_2 = world.get_region(RegionName.forest_2)
+    forest_boss = world.get_region(RegionName.forest_boss)
+    caves_1 = world.get_region(RegionName.caves_1)
+    caves_2 = world.get_region(RegionName.caves_2)
+    caves_3 = world.get_region(RegionName.caves_3)
+    caves_boss = world.get_region(RegionName.caves_boss)
+    mines_1 = world.get_region(RegionName.mines_1)
+    mines_2 = world.get_region(RegionName.mines_2)
+    mines_boss = world.get_region(RegionName.mines_boss)
+    ruins_entrance = world.get_region(RegionName.ruins_entrance)
+    ruins_1 = world.get_region(RegionName.ruins_1)
+    ruins_2 = world.get_region(RegionName.ruins_2)
+    ruins_3 = world.get_region(RegionName.ruins_3)
+    dark_falz = world.get_region(RegionName.dark_falz)
 
     # Pioneer 2 Entrances
-    pioneer_2.connect(forest_1, "Pioneer 2 to Forest 1", playerHas("Unlocked Forest 1"))
-    pioneer_2.connect(forest_2, "Pioneer 2 to Forest 2", playerHas("Unlocked Forest 2"))
-    pioneer_2.connect(caves_1, "Pioneer 2 to Caves 1", playerHas("Unlocked Caves 1"))
-    pioneer_2.connect(caves_2, "Pioneer 2 to Caves 2", playerHas("Unlocked Caves 2"))
-    pioneer_2.connect(caves_3, "Pioneer 2 to Caves 3", playerHas("Unlocked Caves 3"))
-    pioneer_2.connect(mines_1, "Pioneer 2 to Mines 1", playerHas("Unlocked Mines 1"))
-    pioneer_2.connect(mines_2, "Pioneer 2 to Mines 2", playerHas("Unlocked Mines 2"))
-    pioneer_2.connect(ruins_1, "Pioneer 2 to Ruins 1", playerHas("Unlocked Ruin 1"))
-    pioneer_2.connect(ruins_2, "Pioneer 2 to Ruins 2", playerHas("Unlocked Ruins 2"))
-    pioneer_2.connect(ruins_3, "Pioneer 2 to Ruins 3", playerHas("Unlocked Ruins 3"))
+    pioneer_2.connect(forest_1, EntranceName.pioneer_2_to_forest_1, playerHas("Unlocked Forest 1"))
+    pioneer_2.connect(forest_2, EntranceName.pioneer_2_to_forest_2, playerHas("Unlocked Forest 2"))
+    pioneer_2.connect(caves_1, EntranceName.pioneer_2_to_caves_1, playerHas("Unlocked Caves 1"))
+    pioneer_2.connect(caves_2, EntranceName.pioneer_2_to_caves_2, playerHas("Unlocked Caves 2"))
+    pioneer_2.connect(caves_3, EntranceName.pioneer_2_to_caves_3, playerHas("Unlocked Caves 3"))
+    pioneer_2.connect(mines_1, EntranceName.pioneer_2_to_mines_1, playerHas("Unlocked Mines 1"))
+    pioneer_2.connect(mines_2, EntranceName.pioneer_2_to_mines_2, playerHas("Unlocked Mines 2"))
+    pioneer_2.connect(ruins_1, EntranceName.pioneer_2_to_ruins_1, playerHas("Unlocked Ruin 1"))
+    pioneer_2.connect(ruins_2, EntranceName.pioneer_2_to_ruins_2, playerHas("Unlocked Ruins 2"))
+    pioneer_2.connect(ruins_3, EntranceName.pioneer_2_to_ruins_3, playerHas("Unlocked Ruins 3"))
 
     # Level Entrances
     # Technically, there are teleporters to return to Pioneer 2 in some areas, but Archipelago assumes
     # we can always return, so we leave those out.
     # This will also have to be reevaluated if / when we have non-linear progression.
-    forest_1.connect(forest_2, "Forest 1 to Forest 2", playerHas("Unlocked Forest 2"))
-    forest_2.connect(forest_boss, "Forest 2 to Forest Boss", playerHas("Unlocked Forest Boss"))
-    caves_1.connect(caves_2, "Caves 1 to Caves 2", playerHas("Unlocked Caves 2"))
-    caves_2.connect(caves_3, "Caves 2 to Caves 3", playerHas("Unlocked Caves 3"))
-    caves_3.connect(caves_boss, "Caves 3 to Caves Boss", playerHas("Unlocked Caves Boss"))
-    mines_1.connect(mines_2, "Mines 1 to Mines 2", playerHas("Unlocked Mines 2"))
-    mines_2.connect(mines_boss, "Mines 2 to Mines Boss", playerHas("Unlocked Mines Boss"))
-    mines_boss.connect(ruins_entrance, "Mines Boss to Ruins Entrance", playerHas("Unlocked Ruins Entrance"))
-    ruins_entrance.connect(ruins_1, "Ruins Entrance to Ruins 1", playerHas("Activated All Pillars"))
-    ruins_1.connect(ruins_2, "Ruins 1 to Ruins 2", playerHas("Unlocked Ruins 2"))
-    ruins_2.connect(ruins_3, "Ruins 2 to Ruins 3", playerHas("Unlocked Ruins 3"))
-    ruins_3.connect(dark_falz, "Ruins 3 to Final Boss", playerHas("Unlocked Dark Falz"))
+    forest_1.connect(forest_2, EntranceName.forest_1_to_forest_2, playerHas("Unlocked Forest 2"))
+    forest_2.connect(forest_boss, EntranceName.forest_2_to_forest_boss, playerHas("Unlocked Forest Boss"))
+    caves_1.connect(caves_2, EntranceName.caves_1_to_caves_2, playerHas("Unlocked Caves 2"))
+    caves_2.connect(caves_3, EntranceName.caves_2_to_caves_3, playerHas("Unlocked Caves 3"))
+    caves_3.connect(caves_boss, EntranceName.caves_3_to_caves_boss, playerHas("Unlocked Caves Boss"))
+    mines_1.connect(mines_2, EntranceName.mines_1_to_mines_2, playerHas("Unlocked Mines 2"))
+    mines_2.connect(mines_boss, EntranceName.mines_2_to_mines_boss, playerHas("Unlocked Mines Boss"))
+    mines_boss.connect(ruins_entrance, EntranceName.mines_boss_to_ruins_entrance, playerHas("Unlocked Ruins Entrance"))
+    ruins_entrance.connect(ruins_1, EntranceName.ruins_entrance_to_ruins_1, playerHas("Activated All Pillars"))
+    ruins_1.connect(ruins_2, EntranceName.ruins_1_to_ruins_2, playerHas("Unlocked Ruins 2"))
+    ruins_2.connect(ruins_3, EntranceName.ruins_2_to_ruins_3, playerHas("Unlocked Ruins 3"))
+    ruins_3.connect(dark_falz, EntranceName.ruins_3_to_dark_falz, playerHas("Unlocked Dark Falz"))

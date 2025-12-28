@@ -35,8 +35,8 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
 
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
-class APQuestItem(Item):
-    game = "APQuest"
+class PSOItem(Item):
+    game = "PSO"
 
 
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
@@ -55,7 +55,7 @@ def get_random_filler_item_name(world: PSOWorld) -> str:
     return "Confetti Cannon"
 
 
-def create_item_with_correct_classification(world: PSOWorld, name: str) -> APQuestItem:
+def create_item_with_correct_classification(world: PSOWorld, name: str) -> PSOItem:
     # Our world class must have a create_item() function that can create any of our items by name at any time.
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,
@@ -67,7 +67,7 @@ def create_item_with_correct_classification(world: PSOWorld, name: str) -> APQue
     if name == "Health Upgrade" and world.options.hard_mode:
         classification = ItemClassification.progression
 
-    return APQuestItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
+    return PSOItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
