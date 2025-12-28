@@ -203,6 +203,7 @@ class StardewValleyWorld(World):
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
+        self.precollect_start_inventory_items_if_needed()
         self.precollect_start_without_items()
         self.precollect_starting_season()
         self.precollect_building_items()
@@ -225,6 +226,7 @@ class StardewValleyWorld(World):
         self.multiworld.itempool += created_items
 
         setup_early_items(self.multiworld, self.options, self.content, self.player, self.random)
+
         self.setup_logic_events()
         self.setup_victory()
 
@@ -242,6 +244,17 @@ class StardewValleyWorld(World):
 
         player_state = self.multiworld.state.prog_items[self.player]
         self.update_received_progression_percent(player_state)
+
+    def precollect_start_inventory_items_if_needed(self):
+        # The only reason this is necessary, is because in an UT context, precollected items was not filled up, and this messes with the seeded random later
+        for item_name in self.options.start_inventory:
+            item_count = self.options.start_inventory[item_name]
+            precollected_count = len([precollected_item for precollected_item in self.multiworld.precollected_items[self.player]
+                                      if precollected_item.name == item_name])
+            while precollected_count < item_count:
+                self.multiworld.push_precollected(self.create_item(item_name))
+                precollected_count += 1
+
 
     def precollect_start_without_items(self):
         if StartWithoutOptionName.landslide not in self.options.start_without:
