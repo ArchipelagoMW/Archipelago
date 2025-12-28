@@ -85,7 +85,7 @@ class MultiWorld():
     local_items: Dict[int, Options.LocalItems]
     non_local_items: Dict[int, Options.NonLocalItems]
     progression_balancing: Dict[int, Options.ProgressionBalancing]
-    completion_condition: Dict[int, AccessRule]
+    completion_condition: Dict[int, CollectionRule]
     indirect_connections: Dict[Region, Set[Entrance]]
     exclude_locations: Dict[int, Options.ExcludeLocations]
     priority_locations: Dict[int, Options.PriorityLocations]
@@ -1175,8 +1175,8 @@ class CollectionState():
             self.prog_items[player][item] = count
 
 
-AccessRule = Callable[[CollectionState], bool]
-DEFAULT_ACCESS_RULE: AccessRule = staticmethod(lambda state: True)
+CollectionRule = Callable[[CollectionState], bool]
+DEFAULT_COLLECTION_RULE: CollectionRule = staticmethod(lambda state: True)
 
 
 class EntranceType(IntEnum):
@@ -1185,7 +1185,7 @@ class EntranceType(IntEnum):
 
 
 class Entrance:
-    access_rule: AccessRule = DEFAULT_ACCESS_RULE
+    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
     hide_path: bool = False
     player: int
     name: str
@@ -1372,7 +1372,7 @@ class Region:
         self,
         location_name: str,
         item_name: str | None = None,
-        rule: AccessRule | None = None,
+        rule: CollectionRule | None = None,
         location_type: type[Location] | None = None,
         item_type: type[Item] | None = None,
         show_in_spoiler: bool = True,
@@ -1411,7 +1411,7 @@ class Region:
         return event_item
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
-                rule: Optional[AccessRule] = None) -> Entrance:
+                rule: Optional[CollectionRule] = None) -> Entrance:
         """
         Connects this Region to another Region, placing the provided rule on the connection.
 
@@ -1445,7 +1445,7 @@ class Region:
         return entrance
 
     def add_exits(self, exits: Iterable[str] | Mapping[str, str | None],
-                  rules: Mapping[str, AccessRule] | None = None) -> List[Entrance]:
+                  rules: Mapping[str, CollectionRule] | None = None) -> List[Entrance]:
         """
         Connects current region to regions in exit dictionary. Passed region names must exist first.
 
@@ -1484,7 +1484,7 @@ class Location:
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
     always_allow: Callable[[CollectionState, Item], bool] = staticmethod(lambda state, item: False)
-    access_rule: AccessRule = DEFAULT_ACCESS_RULE
+    access_rule: CollectionRule = DEFAULT_COLLECTION_RULE
     item_rule: Callable[[Item], bool] = staticmethod(lambda item: True)
     item: Optional[Item] = None
 
