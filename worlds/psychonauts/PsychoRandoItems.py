@@ -113,8 +113,9 @@ PSYCHORANDO_ITEM_TABLE: Dict[str, int] = {
     ItemName.Steamertrunk: 10,
     ItemName.Dufflebag: 10,
 
-    # 19 Vaults
-    ItemName.Vault: 19,
+    # 19 Vaults Normally, 
+    # up to 101 in Archipelago
+    ItemName.Vault: 19 + 82,
 
     # 59 Rando Arrowhead Bundles Small
     # 30 are used by default

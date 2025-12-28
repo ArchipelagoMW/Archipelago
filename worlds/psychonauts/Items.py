@@ -206,6 +206,8 @@ ITEM_COUNT: Dict[str, int] = {
     **PSYCHORANDO_ITEM_TABLE,
     # Automatically added as filler items, so none are added to the item pool directly.
     ItemName.PsiCard: 0,
+    # Automatically added from Option, so none are added to the item pool directly.
+    ItemName.Vault: 0,
     **{item: 1 for item in OTHER_ITEMS},
     # Only added when DeepArrowheadShuffle is enabled.
     ItemName.DowsingRod: 0,

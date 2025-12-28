@@ -29,6 +29,14 @@ class VaultHints(DefaultOnToggle):
     display_name = "Vault Hints"
 
 
+class VaultCount(Range):
+    """How many Memory Vaults are added to the item pool."""
+    display_name = "Vaults in Item Pool"
+    range_start = 0
+    range_end = 101
+    default = 19
+
+
 class EasyMillaRace(Toggle):
     """Makes collecting figments and winning the race in Milla's Mind easier by removing everyone else from the race."""
     display_name = "Easy Milla Race"
@@ -165,6 +173,7 @@ class PsychonautsOptions(PerGameCommonOptions):
     StartingMentalMagnet: StartingMentalMagnet
     RandomStartingMinds: RandomStartingMinds
     VaultHints: VaultHints
+    VaultCount: VaultCount
     EasyMillaRace: EasyMillaRace
     EasyFlightMode: EasyFlightMode
     OtherItemsModel: OtherItemsModel

@@ -182,6 +182,10 @@ class PSYWorld(World):
         item_counts[ItemName.AHLarge] += large_count
 
     @staticmethod
+    def _add_memory_vault_items(item_counts: Dict[str, int], vault_count ):
+        item_counts[ItemName.Vault] += vault_count
+
+    @staticmethod
     def _add_mental_cobweb_shuffle_items(item_counts: Dict[str, int]):
         # A single Mental Cobweb can normally be turned into a PSI Card at the loom in Ford's Sanctuary, so add as many
         # PSI Cards to the pool as Mental Cobweb Locations.
@@ -252,6 +256,9 @@ class PSYWorld(World):
             # Reduce the count to add to the item pool.
             adjusted_item_counts[ItemName.Levitation] -= 1
             self.multiworld.push_precollected(self.create_item(ItemName.Levitation))
+
+        # Add Memory Vaults for VaultCount Option
+        self._add_memory_vault_items(adjusted_item_counts, self.options.VaultCount.value)
 
         # Add items for DeepArrowheadShuffle
         if self.options.DeepArrowheadShuffle:
