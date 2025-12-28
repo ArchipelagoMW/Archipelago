@@ -480,8 +480,8 @@ class GloverWorld(World):
         total_golden_garibs = self.options.golden_garib_count.value
         total_golden_garibs += self.get_pre_fill_items().count("Golden Garib")
         if total_golden_garibs < self.options.required_golden_garibs.value:
-            #logging.warning("Cannot require more golden garibs required than in your world! Reducing your total.")
-            raise OptionError("Must have enough golden garibs to get the required golden garib count!")
+            logging.warning("WARNING: Cannot require more golden garibs than there are in your world! Reducing your total to match.")
+            self.options.required_golden_garibs.value = total_golden_garibs
 
         #Golden Garibs Enough Filler
         move_count = 27
@@ -493,7 +493,20 @@ class GloverWorld(World):
             move_count -= 1
 
         #Filler items that always exist
-        filler_count = 89 + 33 + 1
+        filler_count = 0
+        #Lives
+        filler_count += 71
+        #Potions
+        filler_count += 24
+        #Cheat Chicken
+        filler_count += 1
+        #Ball Returns
+        filler_count += 7
+        if self.options.bonus_levels:
+            #Lives
+            filler_count += 18
+            #Potions
+            filler_count += 9
         #Portalsanity
         if self.options.portalsanity and not self.options.open_levels:
             filler_count -= 29
@@ -504,11 +517,16 @@ class GloverWorld(World):
         if self.options.mr_tip_checks:
             filler_count += 35
         if self.options.enemysanity:
-            filler_count += 117
+            filler_count += 116
+            #Pirates Bonus
+            if self.options.bonus_levels:
+                filler_count += 1
         if self.options.insectity:
-            filler_count += 11
-        #Chicken
-        filler_count += 1
+            filler_count += 8
+            #Atlantis Bonus
+            if self.options.bonus_levels:
+                filler_count += 3
+        
         #At least 1 filler item for every type
         move_count += 15
 
@@ -1171,30 +1189,34 @@ class GloverWorld(World):
             reaching_region.connect(connecting_level, loading_zone, lambda state, each_location = reaching_location: state.can_reach_location(each_location, player))
             
             #Crystal turn-ins logic
-            crystal_location : Location | None = None
+            unlocking_crystal_location : Location | None = None
             #Place gate openings
             match entrance_index:
                 case 0:
                     #Requires 1/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 1, True)
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 1, True, "A")
                 case 1:
                     #Requires 2/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 2, True, "A")
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 2, True, "A")
                 case 2:
                     #Requires 2/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 2, True, "B")
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 2, True, "B")
                 case 3:
                     #Requires 4/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 4, True, "A")
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 4, True, "A")
                 case 4:
                     #Requires 4/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 4, True, "B")
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 4, True, "B")
                 case 5:
                     #Requires 6/7 Balls Returned
-                    crystal_location = self.returning_crystal(castle_cave, 6, True)
+                    unlocking_crystal_location = self.returning_crystal(castle_cave, 6, True, "A")
             #Put the gate to it at the crystal location
-            if crystal_location != None:
-                crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
+            if unlocking_crystal_location != None:
+                unlocking_crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
+
+        #Crystal unlock locations (To reduce restrictive starts)
+        for each_crystal in range(1,8):
+            self.returning_crystal(castle_cave, each_crystal, False, "", 1945 + each_crystal)
 
     def extend_hint_information(self, hint_data : Dict[int, Dict[int, str]]):
         player = self.player
