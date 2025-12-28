@@ -452,12 +452,13 @@ class GauntletLegendsContext(CommonContext):
             self.chest_address = await self._read_ram_int(locations_address + 0x30, 4) & 0xFFFFFF
 
             raw_locations = [location for location in level_locations.get(level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
+            scoutable_location_ids = [location.id for location in raw_locations if location.id in ctx.checked_locations or location.id in self.missing_locations]
 
             # Scout locations if any exist
             if raw_locations:
                 await ctx.send_msgs([{
                     "cmd": "LocationScouts",
-                    "locations": [loc.id for loc in raw_locations],
+                    "locations": scoutable_location_ids,
                     "create_as_hint": 0,
                 }])
                 while not self.location_scouts:
@@ -536,20 +537,13 @@ class GauntletLegendsContext(CommonContext):
             if portaling or (self.current_level in boss_level and boss == 0):
                 self.clear_counts[str(self.current_level)] = self.clear_counts.get(str(self.current_level), 0) + 1
                 if self.current_level in boss_level:
-                    await ctx.send_msgs(
-                        [
-                            {
-                                "cmd": "LocationChecks",
-                                "locations": [
+                    await self.check_locations([
                                     location.id
                                     for location in level_locations[
                                         (self.current_level[1] << 4) + self.current_level[0]
                                         ]
                                     if "Mirror" in location.name or "Skorne" in location.name
-                                ],
-                            },
-                        ],
-                    )
+                                ])
             if dead and not (self.current_level in boss_level and boss == 0):
                 if self.deathlink_triggered:
                     self.deathlink_triggered = False
