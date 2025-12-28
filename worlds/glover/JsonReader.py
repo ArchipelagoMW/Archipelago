@@ -259,6 +259,7 @@ class RegionLevel(NamedTuple):
     #region : Region | None
     starting_checkpoint : int
     map_regions : List[RegionPair]
+    start_without_ball : bool
 
 def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use : int | None, checkpoint_entry_pairs : list, map_regions : List[RegionPair]):
     #By default, the region level leads to the first checkpoint's region
@@ -274,34 +275,61 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
 
     #See if you get the ball with the checkpoint
     start_without_ball : bool = level_name[3:4] == "1" or level_name[:3] == "OoW"
-    
+
+    #If you can get the ball in the level, you can use it to checkpoint warp with it to a later spot.
+    ball_regions : list[Region] = []
+    if start_without_ball:
+        ball_access_location = region.add_event(level_name + ": Ball", level_name + " Ball").location
+        for region_index, each_region_pair in enumerate(map_regions):
+            if each_region_pair.ball_region_exists:
+                ball_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
+                ball_regions.append(ball_region)
+                if region_index == 0:
+                    set_rule(ball_access_location, lambda state, in_player = player, ball_reg = ball_region.name : state.can_reach_region(ball_reg, in_player))
+                else:
+                    add_rule(ball_access_location, lambda state, in_player = player, ball_reg = ball_region.name : state.can_reach_region(ball_reg, in_player), "or")
+
     #Assign entrances required by checkpoints here
     for checkpoint_number in range(1, len(checkpoint_entry_pairs)):
         #Create a checkpoint connection
         checkpoint_name : str = level_name + " Checkpoint " + str(checkpoint_number)
-        connecting_region : Region | None = None
         for each_region_pair in map_regions:
             #If the checkpoint leads to that region
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
+                is_default = default_checkpoint == checkpoint_number
+
+                #If you normally spawn without the ball, the logic goes here
                 if start_without_ball:
-                    #And it exists
                     if each_region_pair.no_ball_region_exists:
-                        connecting_region = multiworld.get_region(each_region_pair.name, player)
-                else:
-                    #And it exists
-                    if each_region_pair.ball_region_exists:
-                        connecting_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
+                        connecting_region : Region = multiworld.get_region(each_region_pair.name, player)
+                        checkpoint_bridge(self, region, connecting_region, checkpoint_name, is_default)
+                
+                #You can theoretically always spawn with the ball, if you can reach it
+                if each_region_pair.ball_region_exists:
+                    connecting_region : Region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
+                    checkpoint_bridge(self, region, connecting_region, checkpoint_name, is_default, start_without_ball, ball_regions)
         
-        if connecting_region != None:
-            entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
-            #The default checkpoint's always useable
-            if default_checkpoint != checkpoint_number:
-                #Other ones need the checkpoint item
-                set_rule(entrance, lambda state, in_checkname = checkpoint_name, in_player = player : state.has(in_checkname, in_player))
-
-
     multiworld.regions.append(region)
-    return RegionLevel(level_name, default_checkpoint, map_regions)
+    return RegionLevel(level_name, default_checkpoint, map_regions, start_without_ball)
+
+def checkpoint_bridge(self : GloverWorld, region : Region, connecting_region : Region, checkpoint_name : str, is_default : bool, requires_ball_access = False, ball_regions : list[Region] = []):
+    name_suffix : str = ""
+    if requires_ball_access:
+        name_suffix += " W/Ball"
+    entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name + name_suffix)
+    requirements : list[str] = []
+    #The default checkpoint's always useable
+    if not is_default:
+        requirements.append(checkpoint_name)
+    if requires_ball_access:
+        ball_access = checkpoint_name.split(" ")[0]+ " Ball"
+        requirements.append(ball_access)
+        #Notify that getting the ball can let you use the checkpoint for the region sweeper
+        for each_ball_region in ball_regions:
+            self.multiworld.register_indirect_condition(each_ball_region, entrance)
+    if len(requirements) > 0:
+        #Other ones need the checkpoint item
+        set_rule(entrance, lambda state, reqs = requirements, in_player = self.player : state.has_all(reqs, in_player))
 
 def create_access_method(self, info : dict, level_name : str) -> AccessMethod:#
     required_moves : list = []

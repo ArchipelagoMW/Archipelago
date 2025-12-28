@@ -580,6 +580,9 @@ class LinkInfo():
         self.pending = False
         #self.local = False
     
+    def sent(self):
+        self.halt()
+
     def recieve_pending(self):
         self.set_timestamp()
         #if self.local:
@@ -715,8 +718,10 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     
     #Sending Links
     for link_name, link_state in triggered_links.items():
+        if not link_state:
+            continue
         if link_name in ctx.link_table:
-            if ctx.link_table[link_name].enabled and link_state:
+            if ctx.link_table[link_name].enabled:
                 match link_name:
                     case "DEATH":
                         await ctx.send_death()

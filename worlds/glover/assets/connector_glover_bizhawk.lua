@@ -13258,6 +13258,11 @@ function setTipText(tip_address, input_text, is_wayroom)
 		end
 	end
 	local text_end = text_address + GLOVERHACK.last_line
+	if furthest_line == 1
+	then
+		print("Attempting to set tip to a single line at "..tostring(text_end)..", bumping up 1 value.")
+		furthest_line = furthest_line + 1
+	end
 	mainmemory.writebyte(text_end, furthest_line)
 end
 
@@ -13459,6 +13464,7 @@ function incoming_links(triggered_links)
 	do
 		if link_triggered
 		then
+			print("Inbound link!")
 			if LINKS_TABLE[each_link] ~= nil
 			then
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
