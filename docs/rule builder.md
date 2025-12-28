@@ -77,9 +77,9 @@ self.set_completion_rule(rule)
 
 ### Restricting options
 
-Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. If you want a comparison that isn't equals, you can specify with the `operator` argument.
+Every rule allows you to specify which options it's applicable for. You can provide the argument `options` which is an iterable of `OptionFilter` instances. Rules that pass the options check will be resolved as normal, and those that fail will be resolved as `False`.
 
-The following operators are allowed:
+If you want a comparison that isn't equals, you can specify with the `operator` argument. The following operators are allowed:
 
 - `eq`: `==`
 - `ne`: `!=`
@@ -201,7 +201,7 @@ All of the default `Has*` rules define this function already.
 
 ### Region dependencies
 
-If your custom rule references other regions, it must define an `region_dependencies` function that returns a mapping of region names to the id of your rule. These will be combined to inform the caching system and indirect connections will be registered when you set this rule on an entrance.
+If your custom rule references other regions, it must define a `region_dependencies` function that returns a mapping of region names to the id of your rule. These will be combined to inform the caching system and indirect connections will be registered when you set this rule on an entrance.
 
 ```python
 @dataclasses.dataclass()
