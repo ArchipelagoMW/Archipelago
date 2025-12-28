@@ -483,6 +483,10 @@ class GloverWorld(World):
             logging.warning("WARNING: Cannot require more golden garibs than there are in your world! Reducing your total to match.")
             self.options.required_golden_garibs.value = total_golden_garibs
 
+        #Minimal?
+        if self.options.accessibility.value == Accessibility.option_minimal:
+            raise OptionError("Golden Garibs with Minimal Logic does not build solvable paths. Change one of those settings.")
+        
         #Golden Garibs Enough Filler
         move_count = 27
         #Jump Item in Pool
@@ -509,7 +513,7 @@ class GloverWorld(World):
             filler_count += 9
         #Portalsanity
         if self.options.portalsanity and not self.options.open_levels:
-            filler_count -= 29
+            move_count += 29
         else:
             #Goals
             filler_count += 31
@@ -533,9 +537,6 @@ class GloverWorld(World):
         #Check if there's enough
         if filler_count - (move_count + total_golden_garibs) < 0:
             raise OptionError("There aren't enough filler items! (" + str(move_count + total_golden_garibs) + " core items and " + str(filler_count) + " filler). Lower your golden garib count or add more filler locations!")
-        #Minimal?
-        if self.options.accessibility.value == Accessibility.option_minimal:
-            raise OptionError("Golden Garibs with Minimal Logic does not build solvable paths. Change one of those settings.")
 
 
     def valid_override_level_name(self, in_level : str, allow_bosses : bool = True, allow_bonuses : bool = True) -> bool:
