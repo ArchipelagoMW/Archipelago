@@ -12,8 +12,9 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
 from worlds.generic.Rules import add_rule, set_rule
 
+from .Presets import glover_option_presets
 from .Options import DifficultyLogic, GaribLogic, GloverOptions, GaribSorting, StartingBall, VictoryCondition
-from .JsonReader import build_data, generate_location_name_to_id
+from .JsonReader import build_data, generate_location_information
 from .ItemPool import construct_blank_world_garibs, generate_item_name_to_id, generate_item_name_groups, find_item_data, world_garib_table, decoupled_garib_table, garibsanity_world_table, checkpoint_table, level_event_table, move_table, potion_table, portalsanity_table
 from Utils import local_path, visualize_regions
 from .Hints import create_hints
@@ -83,6 +84,7 @@ class GloverWeb(WebWorld):
                      "setup/en",
                      ["Smg065"])
     tutorials = [englishTut]
+    bug_report_page = "https://github.com/Smg065/GloverArchipelago/issues"
     option_groups = [
         OptionGroup("Victory Conditions", [
             Options.VictoryCondition,
@@ -166,6 +168,27 @@ class GloverWeb(WebWorld):
             #Options.TrapTipWeight
         ])
     ]
+    theme = "grassFlowers"
+    location_descriptions = {
+        "Switch" : "An interactable element in Glover, that usually involves either getting the ball to a spot or fist-slamming the object.",
+        "Garib" : "A red and yellow card collectable. Can be grouped together or made to be checked individually.",
+        "Life": "A small symbol of a ball with blue sparkles around it.",
+        "Checkpoint": "A flat magical portal that hovers above the ground. Making the ball pass through it collects it.",
+        "Potion": "A bottle or star that, when collected, gives Glover the respective powerup if unlocked.",
+        "Goal": "The vortex at the end of the stage. In the case of bosses, the red and yellow target platform.",
+        "Tip": "A floating blue hat that gives advice when you walk up to them and press B.",
+        "Enemy": "Entities that can hurt or be an obstacle to Glover. Some enemies can only be defeated by knocking them off the map.",
+        "Inesct": "Flying insects that must be eaten as a frog. Ground insects can also be fist-slammed to be defeated."
+    }
+    item_descriptions = {
+        "Balls" : "A type of ball that you can transform the ball into. You will always start with one by default.",
+        "Garibs" : "Can be grouped together or individual. Getting all of them for a level is either a star mark (or a check in Portalsanity).",
+        "Checkpoints": "Lets you warp to that checkpoint portal in a level.",
+        "Potions": "Makes the respective bottle or star power up give Glover the intended effect.",
+        "Spells": "A one time use instant activation of a potion or star effect.",
+        "Level Events": "A map-shifting event that is normally triggered by a Switch."
+    }
+    options_presets = glover_option_presets
 
 class GloverWorld(World):
     """
@@ -199,7 +222,7 @@ class GloverWorld(World):
 
     item_name_to_id = generate_item_name_to_id(world_prefixes, level_prefixes)
     item_name_groups = generate_item_name_groups()
-    location_name_to_id = generate_location_name_to_id(world_prefixes, level_prefixes)
+    location_name_to_id, location_name_groups = generate_location_information(world_prefixes, level_prefixes)
 
     def collect(self, state, item):
         output = super().collect(state, item)

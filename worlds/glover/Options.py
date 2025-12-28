@@ -9,7 +9,8 @@ level_suffixes = tuple(["1", "2", "3", "!", "?"])
 class VictoryCondition(Choice):
     """The condition needed to beat Glover.
     Endscreen: Get to the endscreen.
-    Crystal Count: Get the number of crystals required."""
+    Crystal Count: Get the number of crystals required to the castle cave.
+    Golden Garibs: Get the number of Golden Garib items required"""
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Victory Condition"
     option_endscreen = 0
@@ -82,7 +83,7 @@ class GaribSorting(Choice):
     """Where Garibs are sent to. Default In Order. Ignored if Garib Logic is Level Garibs.
     By Level: Garibs sent to you are from specific levels, and all garibs from that level must be gotten to get a completion mark.
     In Order: Garibs are sent to levels in world order.
-    Random: Garibs are sent to levels in a random order.
+    Random Order: Garibs are sent to levels in a random order.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Garib Sorting"
@@ -629,4 +630,3 @@ class GloverOptions(DeathLinkMixin, PerGameCommonOptions):
 
     start_inventory_from_pool : StartInventoryPool
     generate_puml : GeneratePuml
-

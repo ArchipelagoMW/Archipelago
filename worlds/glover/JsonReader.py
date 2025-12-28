@@ -80,9 +80,11 @@ class AccessMethod(NamedTuple):
     difficulty : int
     required_items : list[str]
 
+location_type_lookup = ["SWITCH", "GARIB", "LIFE", "CHECKPOINT", "POTION", "GOAL", "TIP", "LOADING_ZONE", "REGION", "MISC", "ENEMY", "INSECT"]
+
 class LocationData(NamedTuple):
     name : str
-    #{ SWITCH, GARIB, LIFE, CHECKPOINT, POTION, GOAL, TIP, LOADING_ZONE, REGION, MISC, ENEMY}
+    #The same index as in location type lookup
     type : int
     default_region : int
     default_needs_ball : bool
@@ -683,7 +685,71 @@ def create_level_prefix(level_prefixes : list[str], world_index : int, level_ind
     else:
         return level_prefixes[level_index]
 
-def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : list[str]) -> dict:
+def generate_location_information(world_prefixes : list[str], level_prefixes : list[str]) -> list:
+    location_name_to_id : dict = {}
+    #Setup the location types here
+    location_name_groups : dict = {}
+    for each_type in location_type_lookup:
+        location_name_groups[each_type.title()] = []
+    location_name_groups["Score"] = []
+    #Each World
+    for each_world_index, each_world in enumerate(logic_data):
+        world_prefix : str = create_world_prefix(world_prefixes, each_world_index)
+        for level_key, level_data in each_world.items():
+            level_prefix : str = create_level_prefix(level_prefixes, each_world_index, int(level_key[-1]))
+            level_name = world_prefix + level_prefix
+            prefix : str = level_name + ": "
+            location_name_groups[level_name] = []
+            for location_name in level_data:
+                #Not regions
+                if type(level_data[location_name]) is dict:
+                    continue
+                #Only locations remain
+                ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
+                ap_ids = non_blank_ap_ids(ap_ids)
+                for each_pairing in build_location_pairings(prefix + location_name, level_data[location_name][0], ap_ids):
+                    #Name to ID
+                    location_name_to_id[each_pairing[0]] = int(each_pairing[1], 0)
+                    #Name Groups
+                    location_name_groups[level_name].append(each_pairing[0])
+                    location_type : str = location_type_lookup[level_data[location_name][0]["TYPE"]]
+                    location_name_groups[location_type.title()].append(each_pairing[0])
+                #Garib Groups
+                if level_data[location_name][0]["TYPE"] == 1 and len(ap_ids) > 1:
+                    group_id : int = int(ap_ids[0], 0) + 10000
+                    location_name_to_id[prefix + location_name] = group_id
+                #Enemy Garib Groups
+                if level_data[location_name][0]["TYPE"] == 10:
+                    enemy_count = level_data[location_name][0]["COUNT"]
+                    if enemy_count < len(ap_ids):
+                        group_id : int = int(ap_ids[enemy_count], 0) + 10000
+                        location_name_to_id[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
+            #Levels with garibs in them
+            if each_world_index < 6:
+                match level_key:
+                    case "l1":
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 1
+                    case "l2":
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 2
+                    case "l3":
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 3
+                    case "l5":
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 5
+    #Scores
+    for world_index, world_prefix in enumerate(world_prefixes, 1):
+        for level_index, level_prefix in enumerate(level_prefixes):
+            level_score_address = 100000 * ((world_index * 10) + level_index)
+            if (level_index != 4 or world_index == 6) and level_index != 0:
+                level_name = world_prefix + level_prefix
+                prefix = level_name + ": "
+                location_name_to_id[prefix + "Score"] = level_score_address
+                location_name_groups["Score"].append(prefix + "Score")
+                location_name_groups[level_name].append(prefix + "Score")
+    for each_score in range(10000, 100000000, 10000):
+        location_name_to_id[str(each_score) + " Score"] = 100000000 + each_score
+        location_name_groups["Score"].append(str(each_score) + " Score")
+    return [location_name_to_id, location_name_groups]
+
     output : dict = {}
     #Each World
     for each_world_index, each_world in enumerate(logic_data):
@@ -698,36 +764,4 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
                 #Only locations remain
                 ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
                 ap_ids = non_blank_ap_ids(ap_ids)
-                for each_pairing in build_location_pairings(prefix + location_name, level_data[location_name][0], ap_ids):
-                    output[each_pairing[0]] = int(each_pairing[1], 0)
-                #Garib Groups
-                if level_data[location_name][0]["TYPE"] == 1 and len(ap_ids) > 1:
-                    group_id : int = int(ap_ids[0], 0) + 10000
-                    output[prefix + location_name] = group_id
-                #Enemy Garib Groups
-                if level_data[location_name][0]["TYPE"] == 10:
-                    enemy_count = level_data[location_name][0]["COUNT"]
-                    if enemy_count < len(ap_ids):
-                        group_id : int = int(ap_ids[enemy_count], 0) + 10000
-                        output[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
-            #Levels with garibs in them
-            if each_world_index < 6:
-                match level_key:
-                    case "l1":
-                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 1
-                    case "l2":
-                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 2
-                    case "l3":
-                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 3
-                    case "l5":
-                        output[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 5
-    #Scores
-    for world_index, world_prefix in enumerate(world_prefixes, 1):
-        for level_index, level_prefix in enumerate(level_prefixes):
-            level_score_address = 100000 * ((world_index * 10) + level_index)
-            if (level_index != 4 or world_index == 6) and level_index != 0:
-                level_name = world_prefix + level_prefix + ": "
-                output[level_name + "Score"] = level_score_address
-    for each_score in range(10000, 100000000, 10000):
-        output[str(each_score) + " Score"] = 100000000 + each_score
     return output

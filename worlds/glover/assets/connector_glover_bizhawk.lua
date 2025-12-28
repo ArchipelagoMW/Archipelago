@@ -13235,13 +13235,11 @@ function setTipText(tip_address, input_text, is_wayroom)
 	end
 	local text_address = tip_address + text_offset
 	local tip_dialogue = stringToTipTable(input_text)
-	local furthest_line = 0
+	local furthest_line = 1
 	for line_index, line_text in pairs(tip_dialogue)
 	do
 		-- print(line_text)
-		if furthest_line < line_index then
-			furthest_line = line_index
-		end
+		furthest_line = line_index
 		local line_offset = GLOVERHACK.line1
 		if line_index == 2 then
 			line_offset = GLOVERHACK.line2
@@ -13259,7 +13257,7 @@ function setTipText(tip_address, input_text, is_wayroom)
 			mainmemory.writebyte(text_start_address + each_char, line_text:byte(each_char + 1))
 		end
 	end
-	local text_end = tip_address + text_offset + GLOVERHACK.last_line
+	local text_end = text_address + GLOVERHACK.last_line
 	mainmemory.writebyte(text_end, furthest_line)
 end
 
