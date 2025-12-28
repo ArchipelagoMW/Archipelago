@@ -6,7 +6,7 @@ class LoggingRandom:
     total_calls: int
 
     def __init__(self, seed):
-        logger.warning(f"Initializing LoggingRandom with seed: {seed}")
+        # logger.warning(f"Initializing LoggingRandom with seed: {seed}")
         self.internal_random = Random(seed)
         self.total_calls = 0
 
