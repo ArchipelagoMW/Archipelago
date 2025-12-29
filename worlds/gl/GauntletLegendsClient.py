@@ -1,6 +1,7 @@
 import asyncio
 import settings
 import os
+import re
 import socket
 import traceback
 import subprocess
@@ -21,7 +22,6 @@ from .Data import (
     portals
 )
 from .Items import ItemData, items_by_id
-from .Locations import LocationData
 
 READ = "READ_CORE_RAM"
 WRITE = "WRITE_CORE_RAM"
@@ -373,14 +373,14 @@ class GauntletLegendsContext(CommonContext):
             # Categorize scouted locations
             self.obelisks = [
                 item for item in self.location_scouts
-                if "Obelisk" in items_by_id.get(item.item, ItemData(0, "", "filler")).item_name
+                if "Obelisk" in items_by_id.get(item.item, ItemData()).item_name
                    and item.player == self.slot
             ]
 
             self.useful = [
                 item for item in self.location_scouts
-                if "Obelisk" not in items_by_id.get(item.item, ItemData(0, "", "filler")).item_name
-                   and items_by_id.get(item.item, ItemData(0, "", "filler")).progression in
+                if "Obelisk" not in items_by_id.get(item.item, ItemData()).item_name
+                   and items_by_id.get(item.item, ItemData()).progression in
                    [ItemClassification.useful, ItemClassification.progression]
                    and item.player == self.slot
             ]
@@ -599,7 +599,6 @@ async def _patch_opt():
             return
 
         # Check if CountPerOp exists with different value - replace it
-        import re
         if 'mupen64plus-CountPerOp' in content:
             logger.info("Replacing existing CountPerOp value")
             content = re.sub(

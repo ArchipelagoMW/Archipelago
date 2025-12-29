@@ -178,7 +178,7 @@ class GLPatchExtension(APPatchExtension):
                 if "Mirror" in location_name:
                     continue
                 if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0],
-                                                                                   ItemData(0, "", "filler")).item_name:
+                                                                                   ItemData()).item_name:
                     try:
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [

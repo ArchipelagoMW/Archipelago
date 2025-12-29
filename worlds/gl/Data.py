@@ -2,7 +2,6 @@ from collections.abc import Mapping, Sequence
 from types import MappingProxyType
 from typing import Final
 
-from BaseClasses import ItemClassification
 from .Locations import LocationData, get_locations_by_tags
 
 # Item name to ram value conversion
@@ -219,47 +218,6 @@ level_locations: Final[Mapping[int, Sequence[LocationData]]] = MappingProxyType(
     0xC2: get_locations_by_tags("infernal_fortress"),
 })
 
-local_levels: Final[Sequence[Sequence[LocationData]]] = (
-    get_locations_by_tags("castle_courtyard"),
-    get_locations_by_tags("dungeon_of_torment"),
-    get_locations_by_tags("tower_armory"),
-    get_locations_by_tags("castle_treasury"),
-    get_locations_by_tags("valley_of_fire"),
-    get_locations_by_tags("dagger_peak"),
-    get_locations_by_tags("cliffs_of_desolation"),
-    get_locations_by_tags("lost_cave"),
-    get_locations_by_tags("volcanic_cavern"),
-    get_locations_by_tags("poisoned_fields"),
-    get_locations_by_tags("haunted_cemetery"),
-    get_locations_by_tags("venomous_spire"),
-    get_locations_by_tags("toxic_air_ship"),
-    get_locations_by_tags("gates_of_the_underworld"),
-    get_locations_by_tags("arctic_docks"),
-    get_locations_by_tags("frozen_camp"),
-    get_locations_by_tags("crystal_mine"),
-    get_locations_by_tags("erupting_fissure"),
-    get_locations_by_tags("desecrated_temple"),
-    get_locations_by_tags("battle_trenches"),
-    get_locations_by_tags("fortified_towers"),
-    get_locations_by_tags("infernal_fortress")
-)
-
-skipped_local_locations: Final[tuple[str, ...]] = (
-    "Valley of Fire - Key 1",
-    "Valley of Fire - Key 5",
-    "Valley of Fire - Obelisk",
-    "Dagger Peak - Obelisk",
-    "Cliffs of Desolation - Obelisk",
-    "Castle Courtyard - Obelisk",
-    "Dungeon of Torment - Obelisk",
-    "Poisoned Fields - Obelisk",
-    "Haunted Cemetery - Obelisk",
-    "Dragon's Lair - Dragon Mirror Shard",
-    "Chimera's Keep - Chimera Mirror Shard",
-    "Vat of the Plague Fiend - Plague Fiend Mirror Shard",
-    "Yeti's Cavern - Yeti Mirror Shard"
-)
-
 # Compressed level size in ROM
 level_size: Final[tuple[int, ...]] = (
     0x9E0,
@@ -384,13 +342,6 @@ colors: Final[Mapping[int, int]] = MappingProxyType({
     1: 0xA6,
     2: 0x9C,
     3: 0xA4
-})
-
-item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType({
-    "filler": ItemClassification.filler,
-    "useful": ItemClassification.useful,
-    "progression": ItemClassification.progression,
-    "trap": ItemClassification.trap
 })
 
 obelisks: Final[tuple[str, ...]] = (

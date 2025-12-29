@@ -12,7 +12,8 @@
     "id": 88870002,
     "difficulty": 1,
     "tags": [
-      "valley_of_fire"
+      "valley_of_fire",
+      "skipped_local"
     ]
   },
   {
@@ -52,7 +53,8 @@
     "id": 88870007,
     "difficulty": 1,
     "tags": [
-      "valley_of_fire"
+      "valley_of_fire",
+      "skipped_local"
     ]
   },
   {
@@ -185,7 +187,8 @@
     "difficulty": 1,
     "tags": [
       "valley_of_fire",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -654,7 +657,8 @@
     "difficulty": 1,
     "tags": [
       "dagger_peak",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -1214,7 +1218,8 @@
     "difficulty": 1,
     "tags": [
       "cliffs_of_desolation",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -3064,7 +3069,8 @@
     "difficulty": 1,
     "tags": [
       "dragons_lair",
-      "no_obelisks"
+      "no_obelisks",
+      "skipped_local"
     ]
   },
   {
@@ -3376,7 +3382,8 @@
     "difficulty": 1,
     "tags": [
       "castle_courtyard",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -4024,7 +4031,8 @@
     "difficulty": 1,
     "tags": [
       "dungeon_of_torment",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -5650,7 +5658,8 @@
     "difficulty": 1,
     "tags": [
       "chimeras_keep",
-      "no_obelisks"
+      "no_obelisks",
+      "skipped_local"
     ]
   },
   {
@@ -6036,7 +6045,8 @@
     "difficulty": 1,
     "tags": [
       "poisoned_fields",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -6874,7 +6884,8 @@
     "difficulty": 1,
     "tags": [
       "haunted_cemetery",
-      "obelisk"
+      "obelisk",
+      "skipped_local"
     ]
   },
   {
@@ -8403,7 +8414,8 @@
     "difficulty": 1,
     "tags": [
       "plague_fiend",
-      "no_obelisks"
+      "no_obelisks",
+      "skipped_local"
     ]
   },
   {
@@ -11517,7 +11529,8 @@
     "difficulty": 1,
     "tags": [
       "yeti",
-      "no_obelisks"
+      "no_obelisks",
+      "skipped_local"
     ]
   },
   {

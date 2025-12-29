@@ -8,10 +8,10 @@ from typing import ClassVar
 from worlds.AutoWorld import WebWorld, World
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, launch_subprocess
-from .Data import local_levels, skipped_local_locations, obelisks, mirror_shards, portals, excluded_portals, \
-    excluded_obelisks
+from .Data import obelisks, mirror_shards, portals, excluded_portals, \
+    excluded_obelisks, level_locations
 from .Items import GLItem, item_table, item_list, gauntlet_item_name_groups
-from .Locations import LocationData, all_locations, location_table
+from .Locations import LocationData, all_locations, location_table, get_locations_by_tags
 from .Options import GLOptions, IncludedAreas
 from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
@@ -241,6 +241,8 @@ class GauntletLegendsWorld(World):
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         unfilled_names = {location.name for location in unfilled_locations}
 
+        local_levels = [levels for id_, levels in level_locations.items() if id_ & 0x8 != 0x8]
+        skipped_local_locations = get_locations_by_tags("skipped_local")
         for level in local_levels:
             available_locs = [location for location in level if
                             location.name in unfilled_names and location.name not in skipped_local_locations]
@@ -290,7 +292,7 @@ class GauntletLegendsWorld(World):
         item = item_table[name]
         return GLItem(item.item_name, item.progression, item.id, self.player)
 
-    def lock_item(self, location: str, item_name: str):
+    def lock_item(self, location: str, item_name: str) -> None:
         item = self.create_item(item_name)
         if location in self.disabled_locations:
             self.unlockable.update({item_name})
