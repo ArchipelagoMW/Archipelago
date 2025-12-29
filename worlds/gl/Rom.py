@@ -476,7 +476,7 @@ def get_level_data(stream: io.BytesIO, size: int, level: int = 0) -> tuple[io.By
         data = patch_docks(data)
     if level == 18:
         data = patch_camp(data)
-    if level == 23:
+    if level == 24:
         data = patch_trenches(data)
     data.header = bytearray(data.stream.read(0x5C))
     data.stream.seek(0)
