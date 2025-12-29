@@ -79,91 +79,6 @@ item_ids: Final[Mapping[str, int]] = MappingProxyType({
 # Character names used for slot data
 characters: Final[tuple[str, ...]] = ("Minotaur", "Falconess", "Tigress", "Jackal", "Sumner")
 
-# Item ID to rom ID conversion
-item_dict: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
-    77780000: (0x0, 0x0),
-    77780001: (0x1, 0x1),
-    77780002: (0x1, 0x2),
-    77780003: (0x1, 0x3),
-    77780004: (0x1, 0x4),
-    77780005: (0x2, 0x12),
-    77780006: (0x2, 0x11),
-    77780007: (0x2, 0x10),
-    77780008: (0x2, 0x9),
-    77780009: (0x2, 0xA),
-    77780010: (0x2, 0x8),
-    77780011: (0x2, 0x7),
-    77780012: (0x2, 0x18),
-    77780013: (0x2, 0x17),
-    77780014: (0x2, 0x5),
-    77780015: (0x2, 0x1C),
-    77780016: (0x2, 0x0),
-    77780017: (0x2, 0x4),
-    77780018: (0x2, 0xE),
-    77780019: (0x2, 0x1A),
-    77780020: (0x2, 0x2),
-    77780021: (0x2, 0x16),
-    77780022: (0x2, 0x3),
-    77780023: (0x2, 0xC),
-    77780024: (0x2, 0x13),
-    77780025: (0x2, 0x14),
-    77780026: (0x2, 0x15),
-    77780027: (0x2, 0x19),
-    77780028: (0x2, 0xD),
-    77780029: (0x2, 0x6),
-    77780030: (0x4, 0x1),
-    77780031: (0x4, 0x3),
-    77780032: (0x15, 0x1),
-    77780033: (0x15, 0x2),
-    77780034: (0x15, 0x3),
-    77780035: (0x15, 0x4),
-    77780036: (0x15, 0x5),
-    77780037: (0x15, 0x6),
-    77780038: (0x15, 0x7),
-    77780039: (0x15, 0x8),
-    77780040: (0x15, 0x9),
-    77780041: (0x15, 0xA),
-    77780042: (0x15, 0xB),
-    77780043: (0x15, 0xC),
-    77780044: (0x15, 0xD),
-    77780045: (0x2B, 0x1),
-    77780046: (0x2B, 0x2),
-    77780047: (0x2B, 0x3),
-    77780048: (0x2B, 0x4),
-    77780049: (0x29, 0x1),
-    77780050: (0x29, 0x2),
-    77780051: (0x29, 0x3),
-    77780052: (0x29, 0x4),
-    77780053: (0x29, 0x5),
-    77780054: (0x3, 0x2),
-    77780062: (0x21, 0x1),
-    77780063: (0x4, 0x2),
-})
-
-# Items that use a timer
-timers: Final[tuple[str, ...]] = (
-    "Light Amulet",
-    "Acid Amulet",
-    "Lightning Amulet",
-    "Fire Amulet",
-    "Lightning Shield",
-    "Fire Shield",
-    "Invisibility",
-    "Levitate",
-    "Speed Boots",
-    "3-Way Shot",
-    "5-Way Shot",
-    "Rapid Fire",
-    "Reflective Shot",
-    "Reflective Shield",
-    "Timestop",
-    "Phoenix Familiar",
-    "Growth",
-    "Shrink",
-    "Anti-Death Halo",
-    "Invulnerability",
-)
-
 # Base item charge count per pickup
 # Some items are bitwise
 base_count: Final[Mapping[str, int]] = MappingProxyType({
@@ -260,38 +175,48 @@ base_count: Final[Mapping[str, int]] = MappingProxyType({
     "Portal to Infernal Fortress": 2
 })
 
-# Castle level ID order
-castle_id: Final[tuple[int, ...]] = (1, 6, 3, 4, 5)
-
-# Area ID << 4 + Level ID to raw location list conversion
+# (zone_config << 4) + room_config -> location list
 level_locations: Final[Mapping[int, Sequence[LocationData]]] = MappingProxyType({
-    0x11: get_locations_by_tags("castle_courtyard"),
-    0x12: get_locations_by_tags("dungeon_of_torment"),
-    0x13: get_locations_by_tags("tower_armory"),
-    0x14: get_locations_by_tags("castle_treasury"),
-    0x15: get_locations_by_tags("chimeras_keep"),
-    0x21: get_locations_by_tags("valley_of_fire"),
-    0x22: get_locations_by_tags("dagger_peak"),
-    0x23: get_locations_by_tags("cliffs_of_desolation"),
-    0x24: get_locations_by_tags("lost_cave"),
-    0x25: get_locations_by_tags("volcanic_cavern"),
-    0x26: get_locations_by_tags("dragons_lair"),
-    0x71: get_locations_by_tags("poisoned_fields"),
-    0x72: get_locations_by_tags("haunted_cemetery"),
-    0x73: get_locations_by_tags("venomous_spire"),
-    0x74: get_locations_by_tags("toxic_air_ship"),
-    0x75: get_locations_by_tags("plague_fiend"),
-    0x81: get_locations_by_tags("gates_of_the_underworld"),
-    0x91: get_locations_by_tags("arctic_docks"),
-    0x92: get_locations_by_tags("frozen_camp"),
-    0x93: get_locations_by_tags("crystal_mine"),
-    0x94: get_locations_by_tags("erupting_fissure"),
-    0x95: get_locations_by_tags("yeti"),
-    0xF1: get_locations_by_tags("desecrated_temple"),
-    0xF2: get_locations_by_tags("altar_of_skorne"),
-    0x111: get_locations_by_tags("battle_trenches"),
-    0x112: get_locations_by_tags("fortified_towers"),
-    0x113: get_locations_by_tags("infernal_fortress")
+    # Zone 0x00 - Castle
+    0x00: get_locations_by_tags("castle_courtyard"),
+    0x01: get_locations_by_tags("dungeon_of_torment"),
+    0x02: get_locations_by_tags("tower_armory"),
+    0x03: get_locations_by_tags("castle_treasury"),
+    0x08: get_locations_by_tags("chimeras_keep"),
+
+    # Zone 0x03 - Mountain
+    0x30: get_locations_by_tags("valley_of_fire"),
+    0x31: get_locations_by_tags("dagger_peak"),
+    0x32: get_locations_by_tags("cliffs_of_desolation"),
+    0x33: get_locations_by_tags("lost_cave"),
+    0x34: get_locations_by_tags("volcanic_cavern"),
+    0x38: get_locations_by_tags("dragons_lair"),
+
+    # Zone 0x07 - Town
+    0x70: get_locations_by_tags("poisoned_fields"),
+    0x71: get_locations_by_tags("haunted_cemetery"),
+    0x72: get_locations_by_tags("venomous_spire"),
+    0x73: get_locations_by_tags("toxic_air_ship"),
+    0x78: get_locations_by_tags("plague_fiend"),
+
+    # Zone 0x05 - Underworld
+    0x50: get_locations_by_tags("gates_of_the_underworld"),
+
+    # Zone 0x06 - Ice
+    0x60: get_locations_by_tags("arctic_docks"),
+    0x61: get_locations_by_tags("frozen_camp"),
+    0x62: get_locations_by_tags("crystal_mine"),
+    0x63: get_locations_by_tags("erupting_fissure"),
+    0x68: get_locations_by_tags("yeti"),
+
+    # Zone 0x0D - Temple
+    0xD0: get_locations_by_tags("desecrated_temple"),
+    0xD8: get_locations_by_tags("altar_of_skorne"),
+
+    # Zone 0x0C - Battlefield
+    0xC0: get_locations_by_tags("battle_trenches"),
+    0xC1: get_locations_by_tags("fortified_towers"),
+    0xC2: get_locations_by_tags("infernal_fortress"),
 })
 
 local_levels: Final[Sequence[Sequence[LocationData]]] = (
@@ -428,30 +353,17 @@ level_header: Final[tuple[int, ...]] = (
     0xF9DB74
 )
 
-# Convert area to base level
-# Used for difficulty scaling
-difficulty_convert: Final[Mapping[int, int]] = MappingProxyType({0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35, 0x11: 40, 0x8: 45})
-
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
-    0x2: (0, 1, 2, 3),
-    0x1: (0, 3, 4, 5),
+    0x3: (0, 1, 2, 3),
+    0x0: (0, 3, 4, 5),
     0x7: (0, 5, 6, 7),
-    0x9: (0, 7, 8, 9),
-    0xF: (0, 9, 10, 11),
-    0x11: (0, 11, 12, 13),
-    0x8: (0, 13, 13, 13)
+    0x6: (0, 7, 8, 9),
+    0xD: (0, 9, 10, 11),
+    0xC: (0, 11, 12, 13),
+    0x5: (0, 13, 13, 13)
 })
-
-# Area ID's with bosses in them
-boss_realm: Final[tuple[int, ...]] = (2, 1, 7, 9)
-
-# Area and Level ID's for boss levels
-boss_level: Final[tuple[bytes, ...]] = (bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7]), bytes([0x2, 0xF]))
-
-# Area and Level ID's for mirror levels
-mirror_levels: Final[tuple[bytes, ...]] = (bytes([0x6, 0x2]), bytes([0x5, 0x9]), bytes([0x5, 0x1]), bytes([0x5, 0x7]))
 
 # ID's for names said by announcer
 sounds: Final[Mapping[int, int]] = MappingProxyType({
@@ -472,17 +384,6 @@ colors: Final[Mapping[int, int]] = MappingProxyType({
     1: 0xA6,
     2: 0x9C,
     3: 0xA4
-})
-
-# Level for vanilla scaling
-vanilla: Final[Mapping[int, int]] = MappingProxyType({
-    0x2: 10,
-    0x1: 25,
-    0x7: 40,
-    0x9: 50,
-    0xF: 100,
-    0x11: 70,
-    0x8: 80
 })
 
 item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType({

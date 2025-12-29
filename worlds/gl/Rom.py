@@ -129,6 +129,7 @@ class LevelData:
     chests_replaced_by_obelisks: int = 0
     chests_replaced_by_items: int = 0
     obelisks_replaced_by_items: int = 0
+    obelisks_kept: int = 0
 
     def __init__(self):
         self.items = []
@@ -192,27 +193,48 @@ class GLPatchExtension(APPatchExtension):
                         print(item[0])
                         print(e)
                     continue
+                elif "Obelisk" in location_name:
+                    # Obelisk item at obelisk location
+                    try:
+                        index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
+                        if item[1] == options["player"]:
+                            # Local player - update obelisk ID in object
+                            data.objects[index][15] = item[0] - 77780054
+                            data.obelisks_kept += 1
+                        else:
+                            # Non-local player - convert to AP item
+                            data.items += [
+                                bytearray(data.objects[index][0:6])
+                                + bytes([0x27, 0x1C])
+                                + bytes([0x0, 0x0, 0x0, 0x0]),
+                            ]
+                            del data.objects[index]
+                            data.obelisks_replaced_by_items += 1
+                    except Exception as e:
+                        print(item[0])
+                        print(e)
+                    continue
                 if item[1] is not options["player"]:
                     if "Chest" in location_name or (
                             "Barrel" in location_name and "Barrel of Gold" not in location_name
                     ):
                         data.chests[
-                            j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                            j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
                         12:14] = [0x27, 0x1C]
                         if "Chest" in location_name:
                             data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
                                 9] = 0x1
                     else:
-                        data.items[j - data.items_replaced_by_obelisks][6:8] = [0x27, 0x1C]
+                        data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][6:8] = [0x27, 0x1C]
                 else:
                     if "Obelisk" in items_by_id[item[0]].item_name and "Obelisk" not in location_name:
                         if chest_barrel(location_name):
                             slice_ = bytearray(data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
                                                0:6])
                         else:
-                            slice_ = bytearray(data.items[j - data.items_replaced_by_obelisks][0:6])
+                            slice_ = bytearray(data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][0:6])
                         data.objects += [
                             slice_
                             + bytearray(
@@ -227,15 +249,15 @@ class GLPatchExtension(APPatchExtension):
                         ]
                         if chest_barrel(location_name):
                             del data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)]
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)]
                             data.chests_replaced_by_obelisks += 1
                         else:
-                            del data.items[j - data.items_replaced_by_obelisks]
+                            del data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept]
                             data.items_replaced_by_obelisks += 1
                     elif (items_by_id[item[0]].progression == ItemClassification.useful or items_by_id[
                         item[0]].progression == ItemClassification.progression) and chest_barrel(location_name):
                         chest_index = j - (
-                                len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)
+                                len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)
                         chest = data.chests[chest_index]
                         slice_ = bytearray(chest[0:6])
                         data.items += [
@@ -249,14 +271,14 @@ class GLPatchExtension(APPatchExtension):
                     else:
                         if chest_barrel(location_name):
                             data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
                             12:14] = items_by_id[item[0]].rom_id.to_bytes(2)
                             if "Chest" in location_name:
                                 data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks)][
+                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
                                     9] = 0x2
                         else:
-                            data.items[j - data.items_replaced_by_obelisks][6:8] = items_by_id[item[0]].rom_id.to_bytes(
+                            data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][6:8] = items_by_id[item[0]].rom_id.to_bytes(
                                 2)
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
@@ -327,6 +349,8 @@ class GLPatchExtension(APPatchExtension):
 
         # Write portals option
         rom[0xFFFFE0] = (0x01 if options["portals"] else 0x00)
+        rom[0xFFFFE1] = (0x01 if options["instant_max"] else 0x00)
+        rom[0xFFFFE2] = options["max"]
         return bytes(rom)
 
 
@@ -356,6 +380,8 @@ def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
         "seed_name": world.multiworld.seed_name,
         "player": world.player,
         "portals": world.options.portals.value,
+        "instant_max": world.options.instant_max.value,
+        "max": world.options.max_difficulty_value.value,
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))
@@ -515,4 +541,4 @@ def level_data_reformat(data: LevelData) -> bytes:
 
 
 def chest_barrel(name: str):
-    return ("Chest" in name or ("Barrel" in name and "Barrel of Gold" not in name))
+    return "Chest" in name or ("Barrel" in name and "Barrel of Gold" not in name)
