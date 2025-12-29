@@ -1449,12 +1449,22 @@ class GloverWorld(World):
         options["mr_tip_text_display"] = self.options.mr_tip_text_display.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
-        options["filler_duration"] = int(self.options.filler_duration.value * 0xD)
+        options["filler_duration"] = self.calculate_duration()
 
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)
         options["version"] = self.version
         return options
+
+    def calculate_duration(self):
+        digit_count = len(str(self.options.filler_duration.value))
+        hex_output = 0
+        for each_digit in range(digit_count):
+            hex_output += pow(16, each_digit) * self.get_digit(self.options.filler_duration.value, each_digit)
+        return int(hex_output * 0xD)
+
+    def get_digit(self, input_int, digit):
+        return math.floor(input_int / pow(10, digit)) % 10
 
     def generate_hints(self):
         self.mr_tip_text = {}
