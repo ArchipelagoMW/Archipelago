@@ -141,6 +141,311 @@ factory_immaculate_defeated = "Factory - Immaculate Defeated"
 apex_gatekeeper_defeated = "Apex - Gatekeeper Defeated"
 apex_zenith_defeated = "Apex - Zenith Defeated"
 
+# Item Pickups
+prison_item_pickup_ruby_phial = "Prison - Ruby Phial Item Pickup"
+prison_item_pickup_potions_increased_1 = "Prison - Potions Increased #1 Item Pickup"
+prison_item_pickup_potions_increased_2 = "Prison - Potions Increased #2 Item Pickup"
+prison_item_pickup_map_a = "Prison - Map A Item Pickup"
+prison_item_pickup_map_b = "Prison - Map B Item Pickup"
+prison_item_pickup_relic_of_power = "Prison - Relic of Power Item Pickup"
+prison_item_pickup_great_bow = "Prison - Great Bow Item Pickup"
+prison_item_pickup_parrying_shield = "Prison - Parrying Shield Item Pickup"
+prison_item_pickup_throwing_dagger = "Prison - Throwing Dagger Item Pickup"
+prison_item_pickup_caltrops = "Prison - Caltrops Item Pickup"
+prison_item_pickup_dagger = "Prison - Dagger Item Pickup"
+prison_item_pickup_great_hammer = "Prison - Great Hammer Item Pickup"
+prison_item_pickup_prison_key = "Prison - Prison Key Item Pickup"
+prison_item_pickup_relic_of_agility = "Prison - Relic of Agility Item Pickup"
+prison_item_pickup_relic_of_colossus = "Prison - Relic of Colossus Item Pickup"
+
+prison_yard_item_pickup_gate_key = "Prison Yard - Gate Key Item Pickup"
+prison_yard_item_pickup_map = "Prison Yard - Map Item Pickup"
+prison_yard_item_pickup_glitterstone_1 = "Prison - Glitterstone #1 Item Pickup"
+prison_yard_item_pickup_glitterstone_2 = "Prison - Glittertone #2 Item Pickup"
+prison_yard_item_pickup_flaming_torch = "Prison - Flaming Torch Item Pickup"
+
+mountain_underpass_item_pickup_map = "Mountain Underpass - Map Item Pickup"
+mountain_underpass_item_pickup_mushroom = "Mountain Underpass - Mushroom Item Pickup"
+mountain_underpass_item_pickup_chewy_seaweed = "Mountain Underpass - Chewy Seaweed Item Pickup"
+
+supermax_prison_item_pickup_strange_curio_4 = "Supermax Prison - Strange Curio #4 Item Pickup"
+supermax_prison_item_pickup_east_wing_key = "Supermax Prison - East Wing Key Item Pickup"
+supermax_prison_item_pickup_infernal_key = "Supermax Prison - Infernal Key Item Pickup"
+supermax_prison_item_pickup_map_a = "Supermax Prison - Map A Item Pickup"
+supermax_prison_item_pickup_map_b = "Supermax Prison - Map B Item Pickup"
+supermax_prison_item_pickup_map_c = "Supermax Prison - Map C Item Pickup"
+supermax_prison_item_pickup_metamorphic_alloy = "Supermax Prison - Metamorphic Alloy Item Pickup"
+supermax_prison_item_pickup_pet_worm = "Supermax Prison - Pet Worm Item Pickup"
+supermax_prison_item_pickup_relic_of_dousing = "Supermax Prison - Relic of Dousing Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_major_sol_shard = "Supermax Prison - Shard Major Item Pickup"
+supermax_prison_item_pickup_stale_bread = "Supermax Prison - Stale Bread Item Pickup"
+supermax_prison_item_pickup_flaming_torch = "Supermax Prison - Flaming Torch Item Pickup"
+
+mountain_item_pickup_potions_increased = "Mountain - Potions Increased Item Pickup"
+mountain_item_pickup_hubris_of_a_hero = "Mountain - Hubris of a Hero Item Pickup"
+
+forest_item_pickup_map_a = "Forest - Map A Item Pickup"
+forest_item_pickup_fishing_rod = "Forest - Fishing Rod Item Pickup"
+forest_item_pickup_mushroom = "Forest - Mushroom Item Pickup"
+forest_item_pickup_bismuth_claw = "Forest - Bismuth Claw Item Pickup"
+forest_item_pickup_bridge_key = "Forest - Bridge Key Item Pickup"
+forest_item_pickup_riverside_shack_key = "Forest - Riverside Shack Key Item Pickup"
+forest_item_pickup_map_b = "Forest - Map B Item Pickup"
+forest_item_pickup_hunters_bow = "Forest - Hunter's Bow Item Pickup"
+forest_item_pickup_minor_sol_shard = "Forest - Minor Sol Shard Item Pickup"
+forest_item_pickup_minor_sol_shard = "Forest - Minor Sol Shard Item Pickup"
+forest_item_pickup_minor_sol_shard = "Forest - Minor Sol Shard Item Pickup"
+forest_item_pickup_snare_trap = "Forest - Snare Trap Item Pickup"
+
+apex_item_pickup_golden_clover = "Apex - Golden Clover Item Pickup"
+apex_item_pickup_strange_curio = "Apex - Strange Curio Item Pickup"
+apex_item_pickup_map_outskirts = "Apex - Outskirts Map Item Pickup"
+apex_item_pickup_relic_of_power_plus = "Apex - Relic Of Power+ Item Pickup"
+apex_item_pickup_morningstar = "Apex - Morningstar Item Pickup"
+
+village_item_pickup_iron_pineapple = "Village - Iron Pineapple Item Pickup"
+village_item_pickup_mines_lift_key = "Village - Mines Lift Key Item Pickup"
+village_item_pickup_mountain_outpost_key = "Village - Mountain Outpost Key Item Pickup"
+village_item_pickup_map = "Village - Map Item Pickup"
+village_item_pickup_minor_sol_shard = "Village - Minor Sol Shard Item Pickup"
+village_item_pickup_minor_sol_shard = "Village - Minor Sol Shard Item Pickup"
+village_item_pickup_strange_totem = "Village - Strange Totem Item Pickup"
+village_item_pickup_quiver_of_holding = "Village - Quiver of Holding Item Pickup"
+
+forest_item_pickup_alchemist_cage_key = "Forest - Alchemist Cage Key Item Pickup"
+forest_item_pickup_relic_of_mycology = "Forest - Relic Of Mycology Item Pickup"
+forest_item_pickup_major_sol_shard = "Forest - Major Sol Shard Item Pickup"
+
+apex_item_pickup_metamorphic_alloy = "Apex - Metamorphic Alloy Item Pickup"
+apex_item_pickup_town_map = "Apex - Town Map Item Pickup"
+apex_item_pickup_relic_of_balance_plus = "Apex - Relic of Balance+ Item Pickup"
+apex_item_pickup_relic_of_colossus_plus = "Apex - Relic of the Colossus+ Item Pickup"
+apex_item_pickup_sol_alembic = "Apex - Sol Alembic Item Pickup"
+
+factory_item_pickup_hubris_of_a_rogue = "Factory - Hubris of a Rogue Item Pickup"
+factory_item_pickup_sol_alembic = "Factory - Sol Alembic Item Pickup"
+factory_item_pickup_map_a = "Factory - Map A Item Pickup"
+
+factory_item_pickup_topaz_phial = "Factory - Topaz Phial Item Pickup"
+factory_item_pickup_bursting_bubble = "Factory - Bursting Bubble Item Pickup"
+factory_item_pickup_apex_outskirts_key = "Factory - Apex Outskirts Key Item Pickup"
+factory_item_pickup_metamorphic_alloy = "Factory - Metamorphic Alloy Item Pickup"
+factory_item_pickup_map_b = "Factory - Map B Item Pickup"
+factory_item_pickup_heavy_shield = "Factory - Heavy Shield Item Pickup"
+factory_item_pickup_minor_sol_shard = "Factory - Minor Sol Shard Item Pickup"
+factory_item_pickup_minor_sol_shard = "Factory - Minor Sol Shard Item Pickup"
+factory_item_pickup_dual_handaxes = "Factory - Dual Handaxes Item Pickup"
+
+apex_item_pickup_data_disc_b = "Apex - Data Disc B Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+
+apex_item_pickup_hub_map = "Apex - Hub Map Item Pickup"
+apex_item_pickup_metamorphic_alloy_BACKUP = "Apex - Metamorphic Alloy Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+
+apex_item_pickup_data_disc_r = "Apex - Data Disc R Item Pickup"
+apex_item_pickup_east_wing_key = "Apex - East Wing Key Item Pickup"
+apex_item_pickup_master_bedroom_key = "Apex - Master Bedroom Key Item Pickup"
+apex_item_pickup_restricted_access_key = "Apex - Restricted Access Key Item Pickup"
+apex_item_pickup_major_sol_shard = "Apex - Major Sol Shard Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+
+apex_item_pickup_brass_knuckles_plus = "Apex - Brass Knuckles+ Item Pickup"
+apex_item_pickup_corroded_key = "Apex - Corroded Key Item Pickup"
+apex_item_pickup_guard_captains_key = "Apex - Guard Captain's Key Item Pickup"
+apex_item_pickup_kings_emblem_left = "Apex - Kings Emblem Left Half Item Pickup"
+apex_item_pickup_kings_emblem_right = "Apex - Kings Emblem Right Half Item Pickup"
+apex_item_pickup_minor_sol_shard = "Apex - Minor Sol Shard Item Pickup"
+
+apex_item_pickup_hidden_room_map = "Apex - Hidden Room Map Item Pickup"
+
+apex_item_pickup_potions_increased = "Apex - Potions Increased Item Pickup"
+apex_item_pickup_data_disc_g = "Apex - Data Disc G Item Pickup"
+apex_item_pickup_east_map = "Apex - East Map Item Pickup"
+
+mountain_item_pickup_essence_of_a_rogue = "Mountain - Essence of a Rogue Item Pickup"
+
+mountain_item_pickup_guile_of_a_traveler = "Mountain - Guile of a Traveler Item Pickup"
+mountain_item_pickup_map_a = "Mountain - Map A Item Pickup"
+mountain_item_pickup_metamorphic_alloy = "Mountain - Metamorphic Alloy Item Pickup"
+mountain_item_pickup_ritual_needle = "Mountain - Ritual Needle Item Pickup"
+mountain_item_pickup_verdant_berry = "Mountain - Verdant Berry Item Pickup"
+
+mountain_item_pickup_jasper_chalice = "Mountain - Jasper Chalice Item Pickup"
+mountain_item_pickup_map_b = "Mountain - Map B Item Pickup"
+mountain_item_pickup_relic_of_balance = "Mountain - Relic of Balance Item Pickup"
+mountain_item_pickup_sol_alembic = "Mountain - Sol Alembic Item Pickup"
+mountain_item_pickup_minor_sol_shard = "Mountain - Minor Sol Shard Item Pickup"
+mountain_item_pickup_minor_sol_shard = "Mountain - Minor Sol Shard Item Pickup"
+mountain_item_pickup_harsh_pepper_1 = "Mountain - Harsh Pepper #1 Item Pickup"
+mountain_item_pickup_harsh_pepper_2 = "Mountain - Harsh Pepper #2 Item Pickup"
+mountain_item_pickup_halberd = "Mountain - Halberd Item Pickup"
+
+mountain_item_pickup_blizzard_talisman = "Mountain - Blizzard Talisman Item Pickup"
+mountain_item_pickup_temple_of_the_deep_key = "Mountain - Temple of the Deep Key Item Pickup"
+mountain_item_pickup_mushroom = "Mountain - Mushroom Item Pickup"
+mountain_item_pickup_scythe = "Mountain - Scythe Item Pickup"
+
+village_item_pickup_stale_bread = "Village - Stale Bread Item Pickup"
+
+swamp_item_pickup_steel_feather = "Swamp - Steel Feather Item Pickup"
+swamp_item_pickup_relic_of_agility_plus = "Swamp - Relic of Agility+ Item Pickup"
+swamp_item_pickup_relic_of_finesse_plus = "Swamp - Relic of Finesse+ Item Pickup"
+swamp_item_pickup_minor_sol_shard = "Swamp - Minor Sol Shard Item Pickup"
+swamp_item_pickup_mushroom = "Swamp - Mushroom Item Pickup"
+swamp_item_pickup_katana = "Swamp - Katana Item Pickup"
+
+swamp_item_pickup_strange_curio_2 = "Swamp - Strange Curio #2 Item Pickup"
+swamp_item_pickup_map = "Swamp - Map Item Pickup"
+swamp_item_pickup_minor_sol_shard = "Swamp - Minor Sol Shard Item Pickup"
+
+cultist_compound_item_pickup_brass_knuckles = "Cultist Compound - Brass Knuckles Item Pickup"
+cultist_compound_item_pickup_false_book_key = "Cultist Compound - False Book Key Item Pickup"
+cultist_compound_item_pickup_sol_forge_lab_key = "Cultist Compound - Sol Forge Lab Key Item Pickup"
+cultist_compound_item_pickup_map_a = "Cultist Compound - Map A Item Pickup"
+cultist_compound_item_pickup_flame_talisman = "Cultist Compound - Flame Talisman Item Pickup"
+cultist_compound_item_pickup_sol_alembic = "Cultist Compound - Sol Alembic Item Pickup"
+cultist_compound_item_pickup_minor_sol_shard = "Cultist Compound - Minor Sol Shard Item Pickup"
+cultist_compound_item_pickup_minor_sol_shard = "Cultist Compound - Minor Sol Shard Item Pickup"
+cultist_compound_item_pickup_minor_sol_shard = "Cultist Compound - Minor Sol Shard Item Pickup"
+cultist_compound_item_pickup_gauntlets = "Cultist Compound - Gauntlets Item Pickup"
+
+cultist_compound_item_pickup_garnet_aegis = "Cultist Compound - Garnet Aegis Item Pickup"
+cultist_compound_item_pickup_guile_of_a_rogue = "Cultist Compound - Guile of A Rogue Item Pickup"
+cultist_compound_item_pickup_central_cell_key = "Cultist Compound - Central Cell Key Item Pickup"
+cultist_compound_item_pickup_sacrificial_cells_master_key = "Cultist Compound - Sacrificial Cells Master Key Item Pickup"
+cultist_compound_item_pickup_metamorphic_alloy = "Cultist Compound - Metamorphic Alloy Item Pickup"
+cultist_compound_item_pickup_map_b = "Cultist Compound - Map B Item Pickup"
+cultist_compound_item_pickup_purifying_needle = "Cultist Compound - Purifying Needle Item Pickup"
+
+### Mines 1
+mines_item_pickup_obsidian_arrowhead = "Mines - Obsidian Arrowhead Item Pickup"
+mines_item_pickup_minecart_wheel = "Mines - Minecart Wheel Item Pickup"
+mines_item_pickup_metamorphic_alloy = "Mines - Metamorphic Alloy Item Pickup"
+mines_item_pickup_map_1 = "Mines - Map #1 Item Pickup"
+mines_item_pickup_relic_of_finesse = "Mines - Relic of Finesse Item Pickup"
+mines_item_pickup_glitterstone = "Mines - Glitterstone Item Pickup"
+
+### Mines 2
+mines_item_pickup_emerald_phial = "Mines - Emerald Phial Item Pickup"
+mines_item_pickup_potions_increased = "Mines - Potions Increased Item Pickup"
+mines_item_pickup_lift_key = "Mines - Lift Key Item Pickup"
+mines_item_pickup_map_2 = "Mines - Map #2 Item Pickup"
+mines_item_pickup_relic_of_redirection = "Mines - Relic of Redirection Item Pickup"
+mines_item_pickup_sol_alembic = "Mines - Sol Alembic Item Pickup"
+mines_item_pickup_dynamite_1 = "Mines - Dynamite #1 Item Pickup"
+mines_item_pickup_dynamite_2 = "Mines - Dynamite #2 Item Pickup"
+mines_item_pickup_pickaxe = "Mines - Pickaxe Item Pickup"
+mines_item_pickup_strange_curio_1 = "Mines - Strange Curio #1 Item Pickup"
+
+### Mines 3
+mines_item_pickup_glitterstone = "Mines - Glitterstone Item Pickup"
+mines_item_pickup_courage_of_a_hero = "Mines - Courage of a Hero Item Pickup"
+mines_item_pickup_pit_catwalk_key = "Mines - Pit Catwalk Item Pickup"
+mines_item_pickup_map_3 = "Mines - Map #3 Item Pickup"
+mines_item_pickup_relic_of_invigoration = "Mines - Relic of Invigoration Item Pickup"
+mines_item_pickup_crossbow = "Mines - Crossbow Item Pickup"
+mines_item_pickup_lightning_talisman = "Mines - Lightning Talisman Item Pickup"
+mines_item_pickup_minor_sol_shard = "Mines - Minor Sol Shard Item Pickup"
+mines_item_pickup_mushroom = "Mines - Mushroom Item Pickup"
+
+### Mines 4
+mines_item_pickup_courage_of_a_traveler = "Mines - Courage of a Traveler Item Pickup"
+mines_item_pickup_map_4 = "Mines - Map #4 Item Pickup"
+
+# Fish
+forest_fish_upstream = "Forest - Upstream Fish Caught"
+mountain_underpass_fish_oceanic = "Mountain Underpass - Oceanic Fish Caught"
+mountain_fish_flying = "Mountain - Flying Fish Caught"
+cultist_compound_fish_deep = "Cultist Compound - Deep Fish Caught"
+mines_fish_star = "Mines - Star Fish Caught"
+apex_fish_rich = "Apex - Rich Fish Caught"
+apex_fish_glitch = "Apex - Glitch Fish Caught"
+swamp_fish_frog = "Swamp - Frog Fish Caught"
+swamp_fish_sick = "Swamp - Sick Fish Caught"
+
+# Trader Items
+forest_trader_trade_star_fish = "Forest - Trader Trade Star Fish"
+forest_trader_trade_upstream_fish = "Forest - Trader Trade Upstream Fish"
+forest_trader_trade_deep_fish = "Forest - Trader Trade Deep Fish"
+forest_trader_trade_glitch_fish = "Forest - Trader Trade Glitch Fish"
+forest_trader_trade_flying_fish = "Forest - Trader Trade Flying Fish"
+forest_trader_trade_sick_fish = "Forest - Trader Trade Sick Fish"
+forest_trader_trade_frog_fish = "Forest - Trader Trade Frog Fish"
+forest_trader_trade_rich_fish = "Forest - Trader Trade Rich Fish"
+forest_trader_trade_oceanic_fish = "Forest - Trader Trade Oceanic Fish"
+
+# Trader Trades
+forest_trader_item_1 = "Forest - Trader Item #1"
+forest_trader_item_2 = "Forest - Trader Item #2"
+forest_trader_item_3 = "Forest - Trader Item #3"
+forest_trader_item_4 = "Forest - Trader Item #4"
+forest_trader_item_5 = "Forest - Trader Item #5"
+forest_trader_item_6 = "Forest - Trader Item #6"
+
+# Upgrades
+village_blacksmith_upgrade_1 = "Village - Blacksmith Upgrade #1"
+village_blacksmith_upgrade_2 = "Village - Blacksmith Upgrade #2"
+village_blacksmith_upgrade_3 = "Village - Blacksmith Upgrade #3"
+
+village_alchemist_upgrade_1 = "Village - Alchemist Upgrade #1"
+village_alchemist_upgrade_2 = "Village - Alchemist Upgrade #2"
+village_alchemist_upgrade_3 = "Village - Alchemist Upgrade #3"
+
+village_relics_improved_1 = "Village - Relics Improved #1"
+village_relics_improved_2 = "Village - Relics Improved #2"
+village_relics_improved_3 = "Village - Relics Improved #3"
+village_relics_improved_4 = "Village - Relics Improved #4"
+village_relics_improved_5 = "Village - Relics Improved #5"
+
+# Breakable Walls
+prison_wall_access_hallway = "Prison - Wall Near Access Hallway"
+prison_wall_sanitation = "Prison - Wall Near Sanitation"
+prison_wall_entry_hall = "Prison - Wall Near Entry Hall"
+prison_wall_portal_1 = "Prison - Wall Near Portal #1"
+prison_wall_portal_2 = "Prison - Wall Near Portal #2"
+prison_wall_portal_3 = "Prison - Wall Near Portal #3"
+
+mountain_underpass_wall_cultist_entry = "Mountain Underpass - Wall Near Cultist Entry"
+mountain_underpass_wall_portal = "Mountain Underpass - Wall Near Portal"
+
+mountain_cultist_cell_1 = "Mountain - Wall Near Cultist Cell #1"
+mountain_cultist_cell_2 = "Mountain - Wall Near Cultist Cell #2"
+
+supermax_prison_wall_observation_platform_1 = "Supermax Prison - Wall Near Observation Platform #1"
+supermax_prison_wall_observation_platform_2 = "Supermax Prison - Wall Near Observation Platform #2"
+supermax_prison_wall_security_corridor = "Supermax Prison - Wall Near Security Corridor"
+
+factory_wall_elevator = "Factory - Wall Near Elevator"
+factory_wall_portal = "Factory - Wall Near Portal"
+factory_wall_green_generator = "Factory - Wall Near Green Generator"
+
+apex_wall_portal = "Apex - Wall Near Portal"
+apex_wall_to_beach = "Apex - Wall Near Beach Access"
+apex_wall_beach = "Apex - Wall Near Beach"
+apex_wall_immunity_torch_1 = "Apex - Wall Near Immunity Torch #1"
+apex_wall_immunity_torch_2 = "Apex - Wall Near Immunity Torch #2"
+
+# Doors
+
+
+# Levels
+
+
+# Misc
 prison_yard_misc_furnace = "Prison Yard - Lit Furnace"
 forest_misc_bear_encounter = "Forest - Bear Encounter"
 village_misc_hall_of_heroes_restored = "Village - Hall of Heroes Restored"
