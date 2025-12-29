@@ -5,7 +5,6 @@ from collections.abc import Callable
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
-
 from worlds.AutoWorld import WebWorld, World
 
 from .definitions import (
@@ -28,15 +27,14 @@ from .definitions import (
     item_name_to_rat_count,
     items_by_type_by_game,
     lactose_intolerant_names,
-    lactose_names,
     location_name_groups,
     location_name_to_id,
     location_name_to_nonprogression_item,
     location_name_to_progression_item_name,
     location_name_to_requirement,
     max_required_rat_count,
+    names_with_lactose,
     total_available_rat_count,
-    version_stamp,
 )
 from .options import (
     AutopelagoGameOptions,
@@ -222,7 +220,7 @@ class AutopelagoWorld(World):
         # depending on which other games are present in the multiworld, replace some arbitrary set
         # of them with items of the same type (filler / useful / trap) with flavor that resembles
         # the items from such games. we refer to these as the "Easter eggs" of Autopelago.
-        excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
+        excluded_names = names_with_lactose if self.options.lactose_intolerant.value else lactose_intolerant_names
         nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
                                      for c, items in items_by_type_by_game[GAME_NAME].items()}
         for category, items in nonprogression_item_table.items():
@@ -298,8 +296,10 @@ class AutopelagoWorld(World):
     def fill_slot_data(self):
         return {
             # version_stamp was more important in versions where you had to download an EXE file and
-            # make sure it's compatible with the version of the APWorld file that was used.
-            "version_stamp": version_stamp,
+            # make sure it's compatible with the version of the APWorld file that was used. all it's
+            # used for today is to give 0.10.x clients a string that they definitely don't expect so
+            # that they can throw a semi-graceful error message.
+            "version_stamp": "1.0.0",
             "victory_location_name": self.victory_location,
             "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],

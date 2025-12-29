@@ -88,13 +88,19 @@ class DeathDelaySeconds(Range):
     default = 5
 
 
-# hack to avoid outputting the messages in flow style
+# hack to avoid outputting the messages in flow style. it REALLY helps readability, which matters especially now before
+# we have a GUI to edit these through the web app.
 class RatChatMessagesHack:
     items: list[tuple[str, int]]
     def __init__(self, *args: str):
         self.items = [(arg, 1) for arg in args]
 
 
+# outputs lines in any of these formats. examples:
+# - "Something that's got a single quote"
+# - 'Something without single quotes (it may even have "double quotes"!)'
+# - "Something that's got both \"single quotes\" and \"double quotes\". So obnoxious."
+# - 'Something that you want to give 4x weight to, and without any quotes of either type': 4
 def represent_rat_chat_messages(_dumper: yaml.Dumper, data: RatChatMessagesHack):
     return yaml.SequenceNode(tag="tag:yaml.org,2002:seq", value=[
         yaml.MappingNode(tag="tag:yaml.org,2002:map", value=[

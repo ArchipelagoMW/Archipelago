@@ -1,8 +1,5 @@
 # This file exists in both the client and the server projects.
 # Please make sure that it matches in both places.
-
-version_stamp: '1.0.0'
-
 items:
   moon_shoes:
     name: 'Moon Shoes'
@@ -152,7 +149,7 @@ items:
     flavor_text: 'I gotta spit some rhymes? No biggie.'
 
 
-# one MUST be called 'Menu'. ability_check_with_dc is intended to make intuitive
+# ability_check_with_dc is intended to make intuitive
 # sense to those who are familiar with the basic concept outlined on:
 # https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
 # game "feel" more "difficult" as the "player" enters the later stages.
@@ -861,7 +858,7 @@ regions:
       exits:
         - prawn_stars
 
-    Menu:
+    before_basketball:
       name_template: 'Before Basketball #{n}'
       unrandomized_items:
         key:

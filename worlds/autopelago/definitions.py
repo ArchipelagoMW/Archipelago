@@ -9,7 +9,7 @@ from BaseClasses import ItemClassification
 from Utils import parse_yaml
 
 GAME_NAME = "Autopelago"
-lactose_names = set()
+names_with_lactose = set()
 lactose_intolerant_names = set()
 Aura = Literal[
   "well_fed",
@@ -34,21 +34,30 @@ class AutopelagoItemDefinitionCls(TypedDict):
     auras_granted: NotRequired[list[str]]
 
 
+# AutopelagoItemDefinition can be in any of these formats:
+# 1: [name, [aura1, aura2]]
+# 2: [[name_with_lactose, lactose_intolerant_name], [aura1, aura2]]
+# 3:
+# - name: Yet Another Rat
+#   rat_count: 1
+#   flavor_text: Some flavor text that shows up nowhere for now.
+#   auras_granted: [aura1, aura2]
 AutopelagoItemDefinition = tuple[str | list[str], list[str]] | AutopelagoItemDefinitionCls
 AutopelagoNonProgressionItemType = Literal["useful_nonprogression", "trap", "filler"]
 autopelago_nonprogression_item_types: list[AutopelagoNonProgressionItemType] = \
     ["useful_nonprogression", "trap", "filler"]
 
-def _to_normal_name(name_or_list: str | list[str]) -> str:
+
+def _to_lactose_name(name_or_list: str | list[str]) -> str:
     if isinstance(name_or_list, str):
         return name_or_list
     return name_or_list[0]
 
 
-def _normal_name_of(item: AutopelagoItemDefinition):
+def _lactose_name_of(item: AutopelagoItemDefinition):
     return \
-        _to_normal_name(item[0]) if isinstance(item, list) else \
-        _to_normal_name(item["name"])
+        _to_lactose_name(item[0]) if isinstance(item, list) else \
+        _to_lactose_name(item["name"])
 
 
 def _to_lactose_intolerant_name(name_or_list: str | list[str]) -> str:
@@ -64,13 +73,13 @@ def _lactose_intolerant_name_of(item: AutopelagoItemDefinition):
 
 
 def _names_of(item: AutopelagoItemDefinition):
-    normal_name = _normal_name_of(item)
+    lactose_name = _lactose_name_of(item)
     lactose_intolerant_name = _lactose_intolerant_name_of(item)
-    if normal_name == lactose_intolerant_name:
-        return [normal_name]
-    lactose_names.add(normal_name)
+    if lactose_name == lactose_intolerant_name:
+        return [lactose_name]
+    names_with_lactose.add(lactose_name)
     lactose_intolerant_names.add(lactose_intolerant_name)
-    return [normal_name, lactose_intolerant_name]
+    return [lactose_name, lactose_intolerant_name]
 
 
 def _rat_count_of(item: AutopelagoItemDefinition):
@@ -128,16 +137,20 @@ class AutopelagoLandmarkRegionDefinition(TypedDict):
     exits: list[str] | None
 
 
-class AutopelagoFillerItemDefinitionCls(TypedDict):
+class AutopelagoItemKeyReferenceCls(TypedDict):
     item: str
     count: int
 
 
-AutopelagoFillerItemDefinition = str | AutopelagoFillerItemDefinitionCls
+AutopelagoItemKeyReference = str | AutopelagoItemKeyReferenceCls
 
 
+# "filler region" means that it's a region to fill out the locations, not that it's a region intended to contain filler
+# items. naming things is hard >.<
 class AutopelagoFillerRegionItemsDefinition(TypedDict):
-    key: list[AutopelagoFillerItemDefinition]
+    # "key" as in "item key", as in "the key of the item in the 'items' section of this file", not as in "key item",
+    # even though all are, in fact, progression items.
+    key: list[AutopelagoItemKeyReference]
     useful_nonprogression: int
     filler: int
 
@@ -155,7 +168,6 @@ class AutopelagoRegionDefinitions(TypedDict):
 
 
 class AutopelagoDefinitions(TypedDict):
-    version_stamp: str
     items: dict[str, AutopelagoItemDefinitionCls]
     regions: AutopelagoRegionDefinitions
 
@@ -178,7 +190,6 @@ class AutopelagoRegionDefinition:
 
 _defs: AutopelagoDefinitions = parse_yaml(pkgutil.get_data(__name__, "AutopelagoDefinitions.yml"))
 
-version_stamp = _defs["version_stamp"]
 
 def _gen_ids():
     next_id = 1
@@ -195,6 +206,14 @@ item_key_to_name: dict[str, str] = {}
 _item_id_gen = _gen_ids()
 item_name_to_id: dict[str, int] = {}
 
+# since some buffs / traps can be disabled for a particular multiworld, it would be not-quite-right to put each item
+# into a fixed "buff" / "trap" / "filler" category like earlier versions once did. instead, assign a score to each aura
+# based on what it does, and determine that category based on the combination of the item's auras *that are enabled*.
+#
+#
+#
+# TODO (before publishing PR... if I forgor, then please get me!): we still classify items the "not-quite-right" way
+# that's described above, because it's a much bigger change to fix that than what I have planned in-scope right now.
 _aura_classification_points: dict[Aura, int] = {
   "well_fed": 5,
   "lucky": 3,
@@ -240,9 +259,12 @@ def _append_items(item_definitions: list[AutopelagoItemDefinition]):
     return res
 
 
+# importlib.resources.files changed in Python 3.12 to work a bit more sensibly for our situation. it's not really worth
+# finding a way to build a string that will work here in Python 3.11 (which is essentially one foot out the door at the
+# time of writing). just do what makes 3.11 work, but build it "correctly" for the future (airbreather 2025-12-09).
 anchor = \
-    __name__ if sys.version_info.major == 3 and sys.version_info.minor >= 12 else \
-    "worlds.autopelago" # not the GREATEST thing in the world to hardcode this, but it works...
+    __name__ if sys.version_info >= (3, 12) else \
+    "worlds.autopelago"
 for package_file_or_dir in importlib.resources.files(anchor).iterdir():
     if package_file_or_dir.name != "items_by_game":
         continue
@@ -257,6 +279,7 @@ location_name_to_requirement: dict[str, AutopelagoGameRequirement] = {}
 location_name_to_id: dict[str, int] = {}
 _location_id_gen = _gen_ids()
 
+# build regions for landmarks
 for k, curr_region in _defs["regions"]["landmarks"].items():
     _name = curr_region["name"]
     location_name_to_id[_name] = next(_location_id_gen)
@@ -264,6 +287,8 @@ for k, curr_region in _defs["regions"]["landmarks"].items():
     location_name_to_requirement[_name] = curr_region["requires"]
     exits: list[str] = curr_region["exits"] if "exits" in curr_region else []
     autopelago_regions[k] = AutopelagoRegionDefinition(k, exits, [_name], curr_region["requires"], True)
+
+# build regions for fillers. these don't have any special requirements beyond region connections.
 _no_requirement: AutopelagoAllRequirement = {"all": []}
 for rk, curr_region in _defs["regions"]["fillers"].items():
     _locations: list[str] = []
@@ -271,12 +296,17 @@ for rk, curr_region in _defs["regions"]["fillers"].items():
     region_items = curr_region["unrandomized_items"]
     for k in region_items["key"] if "key" in region_items else []:
         if isinstance(k, str):
+            # key:
+            #   - pizza_rat
             _name = curr_region["name_template"].replace("{n}", f"{_cur}")
             location_name_to_id[_name] = next(_location_id_gen)
             location_name_to_progression_item_name[_name] = item_key_to_name[k]
             _locations.append(_name)
             _cur += 1
         else:
+            # key:
+            #   - item: pack_rat
+            #     count: 5
             for _ in range(k["count"]):
                 _name = curr_region["name_template"].replace("{n}", f"{_cur}")
                 location_name_to_id[_name] = next(_location_id_gen)
@@ -308,12 +338,16 @@ def _get_required_rat_count(req: AutopelagoGameRequirement):
     return 0
 
 
-max_required_rat_count = max(_get_required_rat_count(req) for req in
-                             [location_name_to_requirement.values()] + [r.requires for r in
-                                                                        autopelago_regions.values()])
+max_required_rat_count = max(
+    _get_required_rat_count(req) for req in
+        [location_name_to_requirement.values()] +
+        [r.requires for r in autopelago_regions.values()]
+)
 total_available_rat_count = sum(
-    item_name_to_rat_count[i] for i in location_name_to_progression_item_name.values() if
-    i in item_name_to_rat_count)
+    item_name_to_rat_count[i] for i in
+    location_name_to_progression_item_name.values()
+        if i in item_name_to_rat_count
+)
 
 item_name_groups: dict[str, set[str]] = {
     "Sewer Progression": set(),
@@ -323,6 +357,7 @@ item_name_groups: dict[str, set[str]] = {
     "Special Rats": {k for k, v in item_name_to_rat_count.items() if v and k != item_key_to_name["pack_rat"]},
 
     "Progression Items": set(),
+    # TODO: probably remove "Buffs", "Fillers", and "Traps" from item_name_groups because they're going to be dynamic.
     "Buffs": set(),
     "Fillers": set(),
     "Traps": set(),
@@ -386,7 +421,7 @@ def _visit_for_items(group_name: str, req: AutopelagoGameRequirement):
 
 
 q: deque[tuple[str, AutopelagoRegionDefinition | None, AutopelagoRegionDefinition]] = deque()
-q.append(("Sewer", None, autopelago_regions["Menu"]))
+q.append(("Sewer", None, autopelago_regions["before_basketball"]))
 while q:
     prev_region_from_q: AutopelagoRegionDefinition
     curr_region_from_q: AutopelagoRegionDefinition
