@@ -31,6 +31,8 @@ PLAYER_COLOR = 0xFD30E
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
+BOSS_GOAL = 0x45D34
+BOSS_GOAL_BACKUP = 0x45D3C
 LEVEL_LOADING = 0x64A50
 LOCATIONS_BASE_ADDRESS = 0x64A68
 ZONE_ID = 0x6CA58
@@ -39,6 +41,7 @@ LEVEL_ID = 0x6CA5C
 MOD_ITEM_ID = 0xD0800
 MOD_QUANTITY = 0xD0804
 MOD_PLAYER_ID = 0xD0808
+MOD_OBELISK_QUANTITY = 0xD07E7
 
 
 class RetroSocket:
@@ -119,11 +122,13 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         logger.info(f"Retroarch Connected Status: {self.ctx.retro_connected}")
 
     def _cmd_deathlink_toggle(self):
+        """Toggle Deathlink on or off"""
         self.ctx.deathlink_enabled = not self.ctx.deathlink_enabled
         self.ctx.update_death_link(self.ctx.deathlink_enabled)
         logger.info(f"Deathlink {('Enabled.' if self.ctx.deathlink_enabled else 'Disabled.')}")
 
     def _cmd_instantmax_toggle(self):
+        """Toggle InstantMax on or off"""
         if not self.ctx.glslotdata:
             logger.info("Cannot toggle InstantMax: slot data not initialized.")
             return
@@ -131,6 +136,7 @@ class GauntletLegendsCommandProcessor(ClientCommandProcessor):
         logger.info(f"InstantMax {('Enabled.' if self.ctx.glslotdata['instant_max'] else 'Disabled.')}")
 
     def _cmd_players(self, value: int):
+        """Set number of local players (max 4)"""
         value = int(value)
         logger.info(f"Players set from {self.ctx.players} to {min(value, 4)}.")
         self.ctx.players = min(value, 4)
@@ -158,9 +164,9 @@ class GauntletLegendsContext(CommonContext):
         self.retro_connected: bool = False
         self.scouted: bool = False
         self.obelisks: list[NetworkItem] = []
-        self.item_locations: list[LocationData] = []
-        self.obelisk_locations: list[LocationData] = []
-        self.chest_locations: list[LocationData] = []
+        self.item_locations: list[int] = []
+        self.obelisk_locations: list[int] = []
+        self.chest_locations: list[int] = []
         self.item_address: int = 0
         self.chest_address: int = 0
         self.zone: int = 0
@@ -178,6 +184,11 @@ class GauntletLegendsContext(CommonContext):
     async def update_stage(self):
         self.zone = await self._read_ram_int(ZONE_ID, 1)
         self.level = await self._read_ram_int(LEVEL_ID, 1)
+
+    async def check_goal(self) -> bool:
+        goal = await self._read_ram_int(BOSS_GOAL, 4)
+        backup = await self._read_ram_int(BOSS_GOAL_BACKUP, 4)
+        return goal == 0xA or backup == 0xA
 
     async def inv_read(self):
         self.inventory = []
@@ -222,12 +233,6 @@ class GauntletLegendsContext(CommonContext):
             if self.inventory[player][i].name == name:
                 return self.inventory[player][i]
         return None
-
-    async def inv_bitwise(self, name: str, bit: int, player: int) -> bool:
-        item = await self.item_from_name(name, player)
-        if item is None:
-            return False
-        return (item.count & bit) != 0
 
     def _normalize_item_name(self, name: str) -> str:
         if "Runestone" in name:
@@ -345,7 +350,14 @@ class GauntletLegendsContext(CommonContext):
 
     async def scout_locations(self, ctx: "GauntletLegendsContext") -> None:
         try:
-            raw_locations = [location for location in level_locations.get(self.current_zone << 4 + self.current_level, []) if "Mirror" not in location.name and "Skorne" not in location.name]
+            self.location_scouts = []
+            self.obelisk_locations = []
+            self.item_locations = []
+            self.chest_locations = []
+            self.useful = []
+            self.obelisks = []
+
+            raw_locations = [location for location in level_locations.get(self.level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
             scoutable_location_ids = [location.id for location in raw_locations if location.id in ctx.checked_locations or location.id in self.missing_locations]
 
             # Scout locations if any exist
@@ -376,18 +388,17 @@ class GauntletLegendsContext(CommonContext):
             obelisk_ids = {item.location for item in self.obelisks}
             useful_ids = {item.location for item in self.useful}
 
-            self.obelisk_locations = [loc for loc in raw_locations if loc.id in obelisk_ids]
+            self.obelisk_locations = [loc.id for loc in raw_locations if loc.id in obelisk_ids]
             self.item_locations = [
-                loc for loc in raw_locations
+                loc.id for loc in raw_locations
                 if (("Chest" not in loc.name and
                      ("Barrel" not in loc.name or "Barrel of Gold" in loc.name) and
-                     loc not in self.obelisk_locations) or loc.id in useful_ids)
+                     loc.id not in self.obelisk_locations) or loc.id in useful_ids)
             ]
             self.chest_locations = [
-                loc for loc in raw_locations
-                if loc not in self.obelisk_locations and loc not in self.item_locations
+                loc.id for loc in raw_locations
+                if loc.id not in self.obelisk_locations and loc.id not in self.item_locations
             ]
-
             self.scouted = True
         except Exception:
             logger.error(traceback.format_exc())
@@ -397,17 +408,18 @@ class GauntletLegendsContext(CommonContext):
             self.current_zone = self.zone
             self.current_level = self.level
             self.level_id = (self.current_zone << 4) + self.current_level
-        if self.zone != self.current_zone:
+        if self.zone != self.current_zone or self.level != self.current_level:
             if self.current_level & 0x8 == 0x8:
                 dead = await self.dead()
-                if not dead:
+                if not dead and self.level_id != 0x58:
                     await self.check_locations([location.id for location in level_locations[self.level_id]
                                                 if "Mirror Shard" in location.name or "Skorne" in location.name])
             self.current_zone = self.zone
             self.current_level = self.level
             self.level_id = (self.current_zone << 4)  + self.current_level
             self.scouted = False
-        if self.current_zone == 0x8:
+            await asyncio.sleep(2)
+        if self.current_zone == 0x8 or self.current_zone == 0xE:
             return []
 
         if not self.scouted:
@@ -434,12 +446,12 @@ class GauntletLegendsContext(CommonContext):
             if state >= 0x7F:
                 continue
             if active == 1 and state == 0:
-                acquired += [self.item_locations[i].id]
+                acquired += [self.item_locations[i]]
 
         for j in range(len(self.obelisk_locations)):
-            ob = await self.inv_bitwise("Obelisk", (1 << (base_count[items_by_id[self.obelisks[j].item].item_name] - 1)), 0)
-            if ob:
-                acquired += [self.obelisk_locations[j].id]
+            obelisk = await self._read_ram_int(MOD_OBELISK_QUANTITY, 1)
+            if obelisk & (1 << (base_count[items_by_id[self.obelisks[j].item].item_name] - 1)) != 0:
+                acquired += [self.obelisk_locations[j]]
 
         chest_section = await self._read_ram(self.chest_address, (len(self.chest_locations) * 0x18))
         for i in range(len(self.chest_locations)):
@@ -448,8 +460,11 @@ class GauntletLegendsContext(CommonContext):
             if state >= 0x7F:
                 continue
             if active == 1 and state != 1:
-                acquired += [self.chest_locations[i].id]
+                acquired += [self.chest_locations[i]]
 
+        await self.update_stage()
+        if self.zone != self.current_zone or self.level != self.current_level:
+            return []
         return acquired
 
     async def die(self):
@@ -517,8 +532,8 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
                         ctx.deathlink_pending = False
                         await ctx.die()
 
-                    bitwise = await ctx.inv_bitwise("Hell", 0x100, 0)
-                    if not ctx.finished_game and bitwise:
+                    goal = await ctx.check_goal()
+                    if not ctx.finished_game and goal:
                         await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                         ctx.finished_game = True
             except Exception as e:

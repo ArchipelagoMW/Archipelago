@@ -353,10 +353,6 @@ level_header: Final[tuple[int, ...]] = (
     0xF9DB74
 )
 
-# Convert area to base level
-# Used for difficulty scaling
-difficulty_convert: Final[Mapping[int, int]] = MappingProxyType({0x2: 0, 0x1: 10, 0x7: 20, 0x9: 30, 0xF: 35, 0x11: 40, 0x8: 45})
-
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
@@ -388,17 +384,6 @@ colors: Final[Mapping[int, int]] = MappingProxyType({
     1: 0xA6,
     2: 0x9C,
     3: 0xA4
-})
-
-# Level for vanilla scaling
-vanilla: Final[Mapping[int, int]] = MappingProxyType({
-    0x2: 10,
-    0x1: 25,
-    0x7: 40,
-    0x9: 50,
-    0xF: 100,
-    0x11: 70,
-    0x8: 80
 })
 
 item_classifications: Final[Mapping[str, ItemClassification]] = MappingProxyType({
