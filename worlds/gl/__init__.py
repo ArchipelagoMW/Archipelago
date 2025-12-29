@@ -145,16 +145,18 @@ class GauntletLegendsWorld(World):
         return {
             "player": self.player,
             "players": self.options.local_players.value,
-            "chests": bool(chests_barrels == 3 or chests_barrels == 1),
-            "barrels": bool(chests_barrels == 3 or chests_barrels == 2),
+            "chests": int(chests_barrels == 3 or chests_barrels == 1),
+            "barrels": int(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "characters": characters,
             "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
             "instant_max": self.options.instant_max.value,
-            "death_link": bool((self.options.death_link.value == 1)),
+            "death_link": self.options.death_link.value,
             "portals": self.options.portals.value,
             "included_areas": [area for area in IncludedAreas.valid_keys if area in self.options.included_areas.value],
+            "mirror_shards": self.options.mirror_shards.value,
+            "obelisks": self.options.obelisks.value,
         }
 
     def create_items(self) -> None:

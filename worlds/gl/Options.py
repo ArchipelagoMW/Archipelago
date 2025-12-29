@@ -46,9 +46,9 @@ class ChestBarrels(Choice):
 
 class Obelisks(DefaultOnToggle):
     """
-    Choose how you want Obelisks to be randomized.
-    None: Obelisks will be placed in their own locations.
-    All Obelisks: Obelisks will be shuffled into the item pool.
+    Obelisks will be added to the random pool as items.
+    Activating all of the obelisks in an area will unlock access to the next.
+    Disabling this will lock obelisks in their original locations.
     """
 
     display_name = "Obelisks"
@@ -56,9 +56,9 @@ class Obelisks(DefaultOnToggle):
 
 class MirrorShards(DefaultOnToggle):
     """
-    Choose how you want Mirror Shards to be randomized.
-    None: Mirror Shards will be placed in their own locations.
-    All Shards: Mirror Shards will be shuffled into the item pool.
+    Mirror Shards will be added to the random pool as items.
+    Collecting all four mirror shards will unlock access to the Desecrated Temple.
+    Disabling this will lock mirror shards in their original locations.
     """
 
     display_name = "Mirror Shards"

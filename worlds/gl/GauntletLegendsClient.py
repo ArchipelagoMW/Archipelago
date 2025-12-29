@@ -270,7 +270,7 @@ class GauntletLegendsContext(CommonContext):
             self.players = self.glslotdata["players"]
             if self.players is None:
                 self.players = 1
-            self.deathlink_enabled = self.glslotdata["death_link"]
+            self.deathlink_enabled = bool(self.glslotdata["death_link"])
             self.update_death_link(self.deathlink_enabled)
             logger.info(f"Players set to {self.players}.")
             logger.info("If this is incorrect, Use /players to set the number of people playing locally.")
