@@ -267,7 +267,7 @@ class GauntletLegendsContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd in {"Connected"}:
             self.glslotdata = args["slot_data"]
-            self.players = self.glslotdata["players"]
+            self.players = self.glslotdata["local_players"]
             if self.players is None:
                 self.players = 1
             self.deathlink_enabled = bool(self.glslotdata["death_link"])

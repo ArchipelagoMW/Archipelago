@@ -108,9 +108,8 @@ class GauntletLegendsWorld(World):
         elif self.options.chests_barrels == "all_barrels":
             self.disabled_locations.update([location.name for location in all_locations if "Chest" in location.name])
 
-        if self.options.max_difficulty_toggle:
-            self.disabled_locations.update([location.name for location in all_locations
-                                        if location.difficulty > self.options.max_difficulty_value])
+        self.disabled_locations.update([location.name for location in all_locations
+                                        if location.difficulty > self.options.max_difficulty])
         self.excluded_regions.update([region for region in IncludedAreas.valid_keys if region not in self.options.included_areas.value])
 
         create_regions(self)
@@ -144,13 +143,13 @@ class GauntletLegendsWorld(World):
         chests_barrels = self.options.chests_barrels.value
         return {
             "player": self.player,
-            "players": self.options.local_players.value,
+            "local_players": self.options.local_players.value,
             "chests": int(chests_barrels == 3 or chests_barrels == 1),
             "barrels": int(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
             "keys": self.options.infinite_keys.value,
             "characters": characters,
-            "max": (self.options.max_difficulty_value.value if self.options.max_difficulty_toggle else 4),
+            "max": self.options.max_difficulty.value,
             "instant_max": self.options.instant_max.value,
             "death_link": self.options.death_link.value,
             "portals": self.options.portals.value,

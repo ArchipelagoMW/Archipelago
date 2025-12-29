@@ -72,22 +72,11 @@ class Portals(DefaultOnToggle):
     display_name = "Portals"
 
 
-class MaxDifficultyToggle(Toggle):
-    """
-    Set all stages to have a maximum difficulty.
-    All locations with a difficulty higher than what is set will be excluded from the pool of locations.
-    Default max difficulty is 4.
-    """
-
-    display_name = "Change Max Difficulty"
-
-
-class MaxDifficultyRange(Range):
+class MaxDifficulty(Range):
     """
     Select the difficulty value you want to be the maximum.
-    This does nothing if Change Max Difficulty is set to false.
-    This value has a minimum based on how many local players you have.
-    If you have 3 local players, this will be adjusted to be at least 3.
+    This will affect the ammount of checks in each level as well as enemy strength and number of spawners.
+
     """
 
     display_name = "Max Difficulty Value"
@@ -99,8 +88,8 @@ class MaxDifficultyRange(Range):
 class InstantMaxDifficulty(Toggle):
     """
     All stages will load with their max difficulty on the first run through.
-    By default, stages increase in difficulty by 1 every 5 player levels.
-    The starting level for each area increases gradually as you would progress in vanilla.
+    By default, stages increase in difficulty by 1 at a set interval that changes per zone.
+    The starting level for each zone increases gradually as you would progress in vanilla.
     """
 
     display_name = "Instant Max Difficulty"
@@ -236,8 +225,7 @@ class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     obelisks: Obelisks
     mirror_shards: MirrorShards
     portals: Portals
-    max_difficulty_toggle: MaxDifficultyToggle
-    max_difficulty_value: MaxDifficultyRange
+    max_difficulty: MaxDifficulty
     instant_max: InstantMaxDifficulty
     infinite_keys: InfiniteKeys
     permanent_speed: PermaSpeed
