@@ -221,6 +221,7 @@ class APWorldContainer(APContainer):
 class APPlayerContainer(APContainer):
     """A zipfile containing at least archipelago.json meant for a player"""
     game: ClassVar[Optional[str]] = None
+    world_version: "Version | None" = None
     patch_file_ending: str = ""
 
     player: Optional[int]
@@ -235,10 +236,13 @@ class APPlayerContainer(APContainer):
         self.server = server
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> Dict[str, Any]:
+        from Utils import tuplize_version
         manifest = super().read_contents(opened_zipfile)
         self.player = manifest["player"]
         self.server = manifest["server"]
         self.player_name = manifest["player_name"]
+        if "world_version" in manifest:
+            self.world_version = tuplize_version(manifest["world_version"])
         return manifest
 
     def get_manifest(self) -> Dict[str, Any]:
@@ -250,6 +254,9 @@ class APPlayerContainer(APContainer):
             "game": self.game,
             "patch_file_ending": self.patch_file_ending,
         })
+        if self.game:
+            from .AutoWorld import AutoWorldRegister
+            manifest["world_version"] = AutoWorldRegister.world_types[self.game].world_version.as_simple_string()
         return manifest
 
 
@@ -343,7 +350,6 @@ class APProcedurePatch(APAutoPatchInterface):
         self.files[file_name] = file
 
     def patch(self, target: str) -> None:
-        self.read()
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
         assert not isinstance(self.procedure, str), f"{type(self)} must define procedures"
