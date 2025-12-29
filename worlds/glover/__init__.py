@@ -1449,7 +1449,7 @@ class GloverWorld(World):
         options["mr_tip_text_display"] = self.options.mr_tip_text_display.value
         options["chicken_hints"] = self.options.chicken_hints.value
         options["extra_garibs_value"] = self.options.extra_garibs_value.value
-        options["filler_duration"] = self.options.filler_duration.value
+        options["filler_duration"] = int(self.options.filler_duration.value * 0xD)
 
         options["player_name"] = self.multiworld.player_name[self.player]
         options["seed"] = self.random.randint(-6500000, 6500000)

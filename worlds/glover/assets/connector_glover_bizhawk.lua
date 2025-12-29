@@ -12211,8 +12211,7 @@ function GLOVERHACK:setCustomTipText(mrhints)
 end
 
 function GLOVERHACK:setFillerDuration(duration)
-	print("Duration set to "..tostring(duration).." frames!")
-	-- mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
+	mainmemory.writebyte(self.trap_timer + GLOVERHACK:getSettingPointer(), duration);
 end
 
 function GLOVERHACK:setCustomGaribSounds(garibsounds)
@@ -13520,10 +13519,14 @@ function send_linked_item(linkName)
 	elseif linkName == "CAMERA"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
-		local old_count = GVR:getItem(ITEM_TABLE["AP_CAMERA_TRAP"])
 		local total_spins = math.random(7)
-		print(tostring(total_spins).." Spins")
-		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], old_count + total_spins)
+		local trap_to_use = "AP_CAMERA_"
+		if total_spins ~= 1 then
+			trap_to_use = trap_to_use..tostring(total_spins * 45).."_"
+		end
+		trap_to_use = trap_to_use.."TRAP"
+		local old_count = GVR:getItem(ITEM_TABLE[total_spins])
+		GVR:setItem(ITEM_TABLE[total_spins], old_count + 1)
 	elseif linkName == "CURSE_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
@@ -13540,23 +13543,19 @@ function send_linked_item(linkName)
 	elseif linkName == "FISH_EYE"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] + 1
-		print("Fish Eye Unimplimented!")
-		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'])
+		GVR:setItem(ITEM_TABLE["AP_FISH_EYE_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'])
 	elseif linkName == "ENEMY_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] + 1
-		print("Enemy Ball Unimplimented!")
-		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'])
+		GVR:setItem(ITEM_TABLE["AP_ENEMY_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'])
 	elseif linkName == "CONTROL_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] + 1
-		print("Control Ball Unimplimented!")
-		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'])
+		GVR:setItem(ITEM_TABLE["AP_CONTROL_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'])
 	elseif linkName == "INVISIBALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] + 1
-		print("Invisiball Unimplimented!")
-		-- GVR:setItem(ITEM_TABLE[""], LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'])
+		GVR:setItem(ITEM_TABLE["AP_INVIS_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'])
 	-- Filler
 	elseif linkName == "CHICKEN" then
 		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
@@ -13590,12 +13589,10 @@ function send_linked_item(linkName)
         GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
     elseif linkName == "BIG_BALL" then
 		MISC_ITEMS_RECIEVED["BIG_BALL"] = MISC_ITEMS_RECIEVED["BIG_BALL"] + 1
-		print("Big Ball Unimplimented!")
-        -- GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
+        GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
     elseif linkName == "LOW_GRAVITY" then
 		MISC_ITEMS_RECIEVED["LOW_GRAVITY"] = MISC_ITEMS_RECIEVED["LOW_GRAVITY"] + 1
-		print("Low Gravity Unimplimented!")
-        -- GVR:setItem(ITEM_TABLE["AP_LOW_GRAVITY"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
+        GVR:setItem(ITEM_TABLE["AP_LOW_GRAV"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
 	else
 		print("Unknown Linked Item: "..linkName)
 	end
@@ -13779,8 +13776,7 @@ function process_slot(block)
 	end
 	if block["slot_mad_garibs"] ~= nil and block['slot_mad_garibs'] ~= 0
     then
-		print("Mad Garibs Unimplimented!")
-        -- GVR:setItem(ITEM_TABLE["AP_MAD_GARIBS"], 1)
+        GVR:setItem(ITEM_TABLE["AP_MAD_GARIBS"], 1)
     end
 	if block['slot_random_garib_sounds'] ~= nil
 	then

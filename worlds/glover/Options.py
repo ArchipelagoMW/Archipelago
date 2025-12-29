@@ -320,22 +320,16 @@ class ChickenHints(Choice):
     default = 3
 
 class FillerDuration(NamedRange):
-    """How long Filler and Trap items last, in frames.
-    Glover runs at 30 Frames/Second.
-    Defaults to 10 Seconds.
+    """How long Filler and Trap items last, in seconds.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Filler Duration"
-    range_start = 250
-    range_end = 15000
+    range_start = 4
+    range_end = 300
     special_range_names = {
-    "5_seconds": 250,
-    "10_seconds": 500,
-    "30_seconds": 1500,
-    "1_minute": 3000,
-    "5_minutes": 15000
+    "default": 0
     }
-    default = 500
+    default = "default"
 
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
