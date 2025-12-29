@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- A browser (you are probably using one right now!).
+- A browser with JavaScript enabled (you are probably using one right now!).
 
 ## Playing the game
 Open the Autopelago website. There are two options:
