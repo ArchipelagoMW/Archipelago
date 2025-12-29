@@ -19,3 +19,23 @@ class Region:
     ruins_2 = "Ruins 2"
     ruins_3 = "Ruins 3"
     dark_falz = "Dark Falz"
+
+    def all_regions(self) -> list[str]:
+        return [
+            self.pioneer_2,
+            self.forest_1,
+            self.forest_2,
+            self.forest_boss,
+            self.caves_1,
+            self.caves_2,
+            self.caves_3,
+            self.caves_boss,
+            self.mines_1,
+            self.mines_2,
+            self.mines_boss,
+            self.ruins_entrance,
+            self.ruins_1,
+            self.ruins_2,
+            self.ruins_3,
+            self.dark_falz
+        ]

@@ -2,13 +2,27 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, NamedTuple
 
+from win32comext.mapi.mapitags import pidAttachReadOnlyMin
+
 from BaseClasses import ItemClassification, Location, Region
 
 from . import items
+
 from .strings.region_names import Region as RegionName
+
+from .helpers import PSORamData
 
 if TYPE_CHECKING:
     from .world import PSOWorld
+
+
+class PSOLocationType(Enum):
+    """
+    Specifies the types of Locations that can exist as far as Archipelago is concerned
+    """
+
+    ITEM = auto()
+    EVENT = auto()
 
 # This is the initial implementation for Location Data
 # It will likely need to be expanded to include things like memory info
@@ -16,25 +30,60 @@ class PSOLocationData(NamedTuple):
     """
     Additional Data for working with Locations in PSO
 
-    :param id: Unique ID used to identify this location to Archipelago
+    :param code: Unique ID used to identify this location to Archipelago
     :param region: Which in-game Region of PSO this item resides
     """
 
-    id: int | None
+    code: int | None
     region: str
+    type: PSOLocationType
+    ram_data: PSORamData
 
 LOCATION_TABLE: dict[str, PSOLocationData] = {
-    "Forest Boss Drop": PSOLocationData(
-        0, "Forest Boss"
+    "Tyrell Intro": PSOLocationData(
+        1, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 4)
     ),
-    "Caves Boss Drop": PSOLocationData(
-        1, "Caves Boss"
+    "Irene 1": PSOLocationData(
+        2, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 3)
     ),
-    "Mines Boss Drop": PSOLocationData(
-        2, "Mines Boss"
+    "Scientist 1 - Behind Desk": PSOLocationData(
+        3, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 2)
     ),
-    "Dark Falz Drop": PSOLocationData(
-        3, "Dark Falz"
+    "Scientist 2": PSOLocationData(
+        4, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 1)
+    ),
+    "Irene 2": PSOLocationData(
+        5, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 7)
+    ),
+    "Red Ring Rico Message 1": PSOLocationData(
+        6, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 6)
+    ),
+    "Enter Forest 1": PSOLocationData(
+        7, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x805127FA, 3)
+    ),
+    "Unlock Caves": PSOLocationData(
+        8, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 7)
+    ),
+    "Unlock Mines": PSOLocationData(
+        9, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FC, 6)
+    ),
+    "Unlock Ruins": PSOLocationData(
+        10, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FE, 7)
+    ),
+
+    "Forest 2 Pillar": PSOLocationData(
+        20, RegionName.forest_2, PSOLocationType.ITEM, PSORamData()
+    ),
+    "Caves 2 Pillar": PSOLocationData(
+        21, RegionName.caves_2, PSOLocationType.ITEM, PSORamData()
+    ),
+    "Mines 2 Pillar": PSOLocationData(
+        22, RegionName.mines_2, PSOLocationType.ITEM, PSORamData()
+    ),
+
+    # TODO: Get actual data for this check
+    "Defeat Dark Falz": PSOLocationData(
+        None, RegionName.dark_falz, PSOLocationType.EVENT, PSORamData(0xFFFFFFFF)
     )
 }
 
@@ -42,10 +91,11 @@ LOCATION_TABLE: dict[str, PSOLocationData] = {
 # We will have a lookup from location name to ID here that, in world.py, we will import and bind to the world class.
 # Even if a location doesn't exist on specific options, it must be present in this lookup.
 
-# TODO: Make sure this actually extracts the ID from the PSOLocationData tuple
+# We take the location's name and ID and discard the remaining values, since they're not relevant here
 def get_location_name_to_id_dict(location_table: dict[str, PSOLocationData]) -> dict[str, int | None]:
-    name, id, _ = zip(*location_table)
-    return {name: id}
+    name = location_table.keys()
+    code, *_ = zip(*location_table.values())
+    return dict(zip(name, code))
 
 LOCATION_NAME_TO_ID: dict[str, int | None] = get_location_name_to_id_dict(LOCATION_TABLE)
 
@@ -61,80 +111,22 @@ class PSOLocation(Location):
 # Note: There is a minor typing quirk here. Some functions want location addresses to be an "int | None",
 # so while our function here only ever returns dict[str, int], we annotate it as dict[str, int | None].
 def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
-    return {location_name: LOCATION_TABLE[location_name].id for location_name in location_names}
+    return {location_name: LOCATION_TABLE[location_name].code for location_name in location_names}
     # return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
 
 
 def create_all_locations(world: PSOWorld) -> None:
-    create_regular_locations(world)
-    create_events(world)
+    """
+    Iterate through all locations and add them to each region's locations or events as appropriate.
 
-
-def create_regular_locations(world: PSOWorld) -> None:
-    forest_boss = world.get_region(RegionName.forest_boss)
-    caves_boss = world.get_region(RegionName.caves_boss)
-    mines_boss = world.get_region(RegionName.mines_boss)
-    dark_falz = world.get_region(RegionName.dark_falz)
-
-    forest_boss_locations = get_location_names_with_ids(["Forest Boss Drop"])
-    forest_boss.add_locations(forest_boss_locations, PSOLocation)
-
-    caves_boss_locations = get_location_names_with_ids(["Cave Boss Drop"])
-    caves_boss.add_locations(caves_boss_locations, PSOLocation)
-
-    mines_boss_locations = get_location_names_with_ids(["Mines Boss Drop"])
-    mines_boss.add_locations(mines_boss_locations, PSOLocation)
-
-    dark_falz_locations = get_location_names_with_ids(["Dark Falz"])
-    dark_falz.add_locations(dark_falz_locations, PSOLocation)
-
-    # Locations may be in different regions depending on the player's options.
-    # In our case, the hammer option puts the Top Middle Chest into its own room called Top Middle Room.
-    # top_middle_room_locations = get_location_names_with_ids(["Top Middle Chest"])
-    # if world.options.hammer:
-    #     top_middle_room = world.get_region("Top Middle Room")
-    #     top_middle_room.add_locations(top_middle_room_locations, PSOLocation)
-    # else:
-    #     overworld.add_locations(top_middle_room_locations, PSOLocation)
-
-    # Locations may exist only if the player enables certain options.
-    # In our case, the extra_starting_chest option adds the Bottom Left Extra Chest location.
-    # if world.options.extra_starting_chest:
-    #     # Once again, it is important to stress that even though the Bottom Left Extra Chest location doesn't always
-    #     # exist, it must still always be present in the world's location_name_to_id.
-    #     # Whether the location actually exists in the seed is purely determined by whether we create and add it here.
-    #     bottom_left_extra_chest = get_location_names_with_ids(["Bottom Left Extra Chest"])
-    #     overworld.add_locations(bottom_left_extra_chest, PSOLocation)
-
-
-def create_events(world: PSOWorld) -> None:
-    dark_falz = world.get_region("Dark Falz")
-
-    dark_falz.add_event(
-        "Dark Falz Defeated", "Victory", location_type=PSOLocation, item_type=items.PSOItem
-    )
-
-    # Sometimes, the player may perform in-game actions that allow them to progress which are not related to Items.
-    # In our case, the player must press a button in the top left room to open the final boss door.
-    # AP has something for this purpose: "Event locations" and "Event items".
-    # An event location is no different than a regular location, except it has the address "None".
-    # It is treated during generation like any other location, but then it is discarded.
-    # This location cannot be "sent" and its item cannot be "received", but the item can be used in logic rules.
-    # Since we are creating more locations and adding them to regions, we need to grab those regions again first.
-    # top_left_room = world.get_region("Top Left Room")
-    # final_boss_room = world.get_region("Final Boss Room")
-
-    # One way to create an event is simply to use one of the normal methods of creating a location.
-    # button_in_top_left_room = PSOLocation(world.player, "Top Left Room Button", None, top_left_room)
-    # top_left_room.locations.append(button_in_top_left_room)
-
-    # We then need to put an event item onto the location.
-    # An event item is an item whose code is "None" (same as the event location's address),
-    # and whose classification is "progression". Item creation will be discussed more in items.py.
-    # Note: Usually, items are created in world.create_items(), which for us happens in items.py.
-    # However, when the location of an item is known ahead of time (as is the case with an event location/item pair),
-    # it is common practice to create the item when creating the location.
-    # Since locations also have to be finalized after world.create_regions(), which runs before world.create_items(),
-    # we'll create both the event location and the event item in our locations.py code.
-    # button_item = items.PSOItem("Top Left Room Button Pressed", ItemClassification.progression, None, world.player)
-    # button_in_top_left_room.place_locked_item(button_item)
+    Events do not have code values (unique IDs) so we use this to sort them out when adding locations
+    """
+    for location_name, location_value in LOCATION_TABLE.items():
+        location_region = world.get_region(LOCATION_TABLE[location_name].region)
+        if location_value.code:
+            location_region.add_locations({location_name: location_value.code}, PSOLocation)
+        else:
+            if location_name == "Defeat Dark Falz":
+                location_region.add_event(location_name, "Victory", location_type=PSOLocation, item_type=items.PSOItem)
+            else:
+                location_region.add_event(location_name, location_type=PSOLocation)

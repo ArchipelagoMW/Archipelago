@@ -1,9 +1,9 @@
-from .bases import APQuestTestBase
+from .bases import PSOTestBase
 
 
 # When writing a test, you'll first need to subclass unittest.TestCase.
 # In our case, we'll subclass the APQuestTestBase we defined in bases.py.
-class TestEasyModeLogic(APQuestTestBase):
+class TestEasyModeLogic(PSOTestBase):
     # Our test base is a subclass of WorldTestBase.
     # WorldTestBase takes a dict of options and sets up a multiworld for you with a single world of your game.
     # The world will have the options you specified.

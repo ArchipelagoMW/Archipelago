@@ -1,7 +1,7 @@
-from .bases import APQuestTestBase
+from .bases import PSOTestBase
 
 
-class TestHardMode(APQuestTestBase):
+class TestHardMode(PSOTestBase):
     options = {
         "hard_mode": True,
     }
