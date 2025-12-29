@@ -122,7 +122,8 @@ class AutopelagoWebWorld(WebWorld):
 
 class AutopelagoWorld(World):
     """
-    An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
+    Autopelago is a game that plays itself, built specifically to help practice or bulk out your Archipelago multiworld.
+    It sends location checks automatically based on customizable time-based intervals and runs entirely in your browser.
     """
     game = GAME_NAME
     topology_present = False  # it's static, so setting this to True isn't actually helpful
