@@ -114,7 +114,7 @@ class AutopelagoWebWorld(WebWorld):
         tutorial_name="Setup Guide",
         description="A guide to playing Autopelago",
         language="English",
-        file_name="guide_en.md",
+        file_name="setup_en.md",
         link="guide/en",
         authors=["airbreather"]
     )]
