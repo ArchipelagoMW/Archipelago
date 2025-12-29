@@ -267,11 +267,12 @@
         { "item_group": "Sol Seals", "count_option": "seals_for_prison" },
         // Prison weakened state disables AD, CS, Talismans, and nerfs horizontal distance of regular jump and CL.
         // Most of the Prison requires either N(ymph) to hack ropes/doors or CL to platform around, regardless of weakened state.
-        // The exceptions are the second horizontal gap with a grapple point and the ledge immediately after it:
-        // - weakened, the gap requires G or parry hover (LG AND CL); unweakened, it requires G OR CL OR AD
+        // The exceptions are the gaps and climbs with a grapple point and the ledge immediately after the first such gap:
+        // - weakened, the first grapple gap requires G or parry hover (LG AND CL); unweakened, it requires G OR CL OR AD
         // - the ledge afterward requires LG OR CL regardless of weakened state
+        // - the grapple climbs require CL OR G
         // Putting all that together, we get:
-        // - unweakened Prison: CL OR (LG AND N AND (G OR AD))
+        // - unweakened Prison: CL OR (G AND LG AND N)
         // - weakened (vanilla-logic) Prison: G AND (CL OR (LG AND N))
         // - I won't implement this, but weakened LS-logic Prison is: (LG AND CL) OR (vanilla-logic)
         {
@@ -280,9 +281,9 @@
                 { "anyOf": [
                     { "item": "Cloud Leap" },
                     [
+                        { "item": "Grapple" },
                         { "item": "Ledge Grab" },
-                        { "item": "Mystic Nymph: Scout Mode" },
-                        { "anyOf": [ { "item": "Grapple" }, { "item": "Air Dash" } ] }
+                        { "item": "Mystic Nymph: Scout Mode" }
                     ]
                 ] }
             ],

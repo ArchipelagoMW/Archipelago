@@ -30,7 +30,7 @@ class SealsForPrison(Range):
     since you can't finish the Prison escape sequence without them.
     Exactly which items you need depends on whether `prevent_weakened_prison_state` is enabled,
     but you can check what you're missing by walking up to F(GH) Jiequan, and it will be some combination of
-    Ledge Grab, Grapple, Air Dash, Cloud Leap and Mystic Nymph: Scout Mode.
+    Ledge Grab, Grapple, Cloud Leap and Mystic Nymph: Scout Mode.
 
     Unlike the vanilla game, the real Jiequan fight may be done before or after Prison.
     Also, it does not matter which Sol Seals you've collected, only the total number."""
