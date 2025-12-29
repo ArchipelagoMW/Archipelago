@@ -8,24 +8,25 @@ config file.
 ## What is this game?
 
 Autopelago is a game that plays itself, built specifically for Archipelago. It's meant to help practice playing the game
-solo in a more realistic setting, with other players in the world that need items from the multiworld to achieve their
-goal — and vice versa.
+solo in a more realistic setting by adding other players in the world that need items from the multiworld to achieve
+their goal — and vice versa. It also helps pad out a small multiworld with more items to make it more interesting or for
+any other reason why you might want to fill more slots.
 
 The "player" is represented by a rat that moves around the map from location to location, trying to complete the task at
 that location. When it succeeds, it sends out the check and moves onto the next one.
 
 Most locations are "fillers" to bulk out the map without any special rules by themselves, but then several locations are
-"landmarks" that can only be completed if you've collected certain items.
+"landmarks" that can only be completed if the rat has collected certain items.
 
 ## What do items do?
 
-When you collect a progression item (other than a Pack Rat or the Rat Pack), then its icon in the panel on the left will
-light up to show this. *Pack Rat and the Rat Pack will just increase your rat count by 1 or 5, respectively.*
+When the rat collects a progression item (other than a Pack Rat or the Rat Pack), then its icon in the panel on the left
+will light up to show this. *Pack Rat and the Rat Pack will just increase your rat count by 1 or 5, respectively.*
 
-When you collect an item with buffs / traps on it (as enabled / disabled in your options), then the corresponding meter
-or indicator will light up accordingly — though a few have upper limits on how high they can go.
+When the rat collects an item with buffs / traps on it (as enabled / disabled in your options), then the corresponding
+meter or indicator will light up accordingly — though a few have upper limits on how high they can go.
 
-When you collect an item without any buffs / traps on it, then nothing happens.
+When the rat collects an item without any buffs / traps on it, then nothing happens.
 
 ## What can I do in the game?
 

@@ -51,7 +51,7 @@ from .options import (
     VictoryLocation,
 )
 
-the_logger = logging.getLogger(GAME_NAME)
+autopelago_logger = logging.getLogger(GAME_NAME)
 
 
 def _is_trivial(req: AutopelagoGameRequirement):
@@ -127,6 +127,7 @@ class AutopelagoWorld(World):
     """
     game = GAME_NAME
     topology_present = False  # it's static, so setting this to True isn't actually helpful
+    origin_region_name = "before_basketball"
     web = AutopelagoWebWorld()
     options_dataclass = AutopelagoGameOptions
     options: AutopelagoGameOptions
@@ -144,9 +145,10 @@ class AutopelagoWorld(World):
         ]),
     ]
 
-    # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
-    # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
-    # been able to get away with populating these just based on what we actually need.
+    # item_name_to_id and location_name_to_id must be filled VERY early. don't get any ideas about
+    # having the user's YAML file dynamically create new items / locations or anything like that. of
+    # course, we could still theoretically pre-generate arbitrarily many filler location names if we
+    # want to introduce *some* configurability there.
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
     item_name_groups = item_name_groups
@@ -169,14 +171,20 @@ class AutopelagoWorld(World):
             case _:
                 self.victory_location = "Snakes on a Planet"
 
+        # work out how many locations are in scope for this playthrough so that create_items can see
+        # which progression items are required and which regions are in scope so that we can filter
+        # which ones to generate Archipelago stuff for. there isn't a way to play the "unrandomized"
+        # version of the game, but there's still some sort of logic to where the definitions file
+        # places such "unrandomized" items, exactly to enable this kind of thing.
         self.locations_in_scope = set()
-        q = deque(("Menu",))
-        self.regions_in_scope = {"Menu",}
+        q = deque((self.origin_region_name,))
+        self.regions_in_scope = {self.origin_region_name,}
         while q:
             r = autopelago_regions[q.popleft()]
             locations_set = set(r.locations)
             self.locations_in_scope.update(locations_set)
             if self.victory_location in locations_set:
+                # don't go beyond the victory location (all "exits" are considered "forward")
                 continue
             for next_exit in r.exits:
                 if next_exit in self.regions_in_scope:
@@ -200,12 +208,20 @@ class AutopelagoWorld(World):
             key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name["pack_rat"] else 1)
         )
         for i in range(total_available_rat_count - max_required_rat_count):
-            assert rat_items[i].name == item_key_to_name[
-                "pack_rat"], "Expected there to be enough pack_rat fillers for this calculation."
+            assert rat_items[i].name == item_key_to_name["pack_rat"],\
+                "Expected there to be enough pack_rat fillers for this calculation."
             rat_items[i].classification |= ItemClassification.skip_balancing
+        # deprioritize ALL pack_rat items.
+        for item in rat_items:
+            if item.name == item_key_to_name["pack_rat"]:
+                item.classification |= ItemClassification.deprioritized
 
         self.multiworld.itempool += new_items
 
+        # for nonprogression items, we start with all the entries in the Autopelago file. then,
+        # depending on which other games are present in the multiworld, replace some arbitrary set
+        # of them with items of the same type (filler / useful / trap) with flavor that resembles
+        # the items from such games. we refer to these as the "Easter eggs" of Autopelago.
         excluded_names = lactose_names if self.options.lactose_intolerant.value else lactose_intolerant_names
         nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
                                      for c, items in items_by_type_by_game[GAME_NAME].items()}
@@ -219,10 +235,12 @@ class AutopelagoWorld(World):
                     continue
                 dlc_games.remove(game_name)
                 for item in items_by_type_by_game[game_name][category]:
-                    if item not in excluded_names:
+                    if item not in excluded_names and replacements_made < len(items):
                         items[replacements_made] = item
                         replacements_made += 1
 
+        # the "unrandomized" item placements in the definitions file don't distinguish between trap
+        # and filler, so we just alternate back and forth when we see that.
         category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = \
             dict.fromkeys(autopelago_nonprogression_item_types, 0)
         next_filler_becomes_trap = False
@@ -274,10 +292,13 @@ class AutopelagoWorld(World):
                     r.connect(new_regions[next_exit], rule=rule)
 
     def get_filler_item_name(self):
+        assert "Nothing" in self.item_name_to_id
         return "Nothing"
 
     def fill_slot_data(self):
         return {
+            # version_stamp was more important in versions where you had to download an EXE file and
+            # make sure it's compatible with the version of the APWorld file that was used.
             "version_stamp": version_stamp,
             "victory_location_name": self.victory_location,
             "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
@@ -288,9 +309,9 @@ class AutopelagoWorld(World):
             "msg_remind_bk": self.options.msg_remind_bk.value,
             "msg_exit_bk": self.options.msg_exit_bk.value,
             "msg_completed_goal": self.options.msg_completed_goal.value,
-            "lactose_intolerant": not not self.options.lactose_intolerant,
+            "lactose_intolerant": bool(self.options.lactose_intolerant),
 
             # not working yet:
-            # 'death_link': not not self.options.death_link,
-            # 'death_delay_seconds': self.options.death_delay_seconds - 0,
+            # "death_link": bool(self.options.death_link),
+            # "death_delay_seconds": self.options.death_delay_seconds - 0,
         }

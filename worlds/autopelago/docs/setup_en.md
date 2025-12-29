@@ -6,8 +6,8 @@
 
 ## Playing the game
 Open the Autopelago website. There are two options:
-- Cruise over to the [Autopelago Website](https://autopelago.app/). This is the easiest option. If the website is
-  unavailable, use the next option.
+- The easiest option is the [Autopelago Website](https://autopelago.app/). If the website is unavailable, use the next
+  option.
 - Download the latest release from [Autopelago Release](https://github.com/airbreather/Autopelago/releases/latest) and
   unzip the `dist.zip`. You will need to host the files using a web server instead of just opening `index.html` in your
   browser, because of some stuff that browsers do to prevent malicious websites from getting your secrets. Basically any
@@ -23,4 +23,5 @@ Enter the standard login information, change any settings you want (normally, th
 
 The website has a built-in client, where you can chat and send commands.
 
-For more information on generating Archipelago games and connecting to servers, please see the [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).
+For more information on generating Archipelago games and connecting to servers, please see the
+[Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en).
