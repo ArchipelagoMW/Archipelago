@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, NamedTuple
 
+from enum import Enum, auto
+
 from win32comext.mapi.mapitags import pidAttachReadOnlyMin
 
 from BaseClasses import ItemClassification, Location, Region
