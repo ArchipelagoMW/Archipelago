@@ -24,8 +24,8 @@ def create_rom_file(patch_file: str) -> Tuple[RomMeta, str]:
     if auto_handler:
         handler: APAutoPatchInterface = auto_handler(patch_file)
         handler.read()
-        game_version = AutoWorldRegister.world_types[handler.game].world_version
-        if handler.world_version and game_version != handler.world_version:
+        game_version = AutoWorldRegister.world_types[handler.game].world_version if handler.game else None
+        if game_version and handler.world_version and game_version != handler.world_version:
             info_msg = "This patch was generated with " \
                        f"{handler.game} version {handler.world_version.as_simple_string()}, " \
                        f"but its currently installed version is {game_version.as_simple_string()}. " \
