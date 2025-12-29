@@ -12774,7 +12774,7 @@ function received_misc(itemId)
     elseif itemId == 6500365 then
 		send_linked_item("FROG_SPELL")
     elseif itemId == 6500366 then
-		send_linked_item("DEATH")
+		send_linked_item("DEATH_SPELL")
     elseif itemId == 6500367 then
 		send_linked_item("STICKY")
     elseif itemId == 6500368 then
@@ -13525,8 +13525,8 @@ function send_linked_item(linkName)
 			trap_to_use = trap_to_use..tostring(total_spins * 45).."_"
 		end
 		trap_to_use = trap_to_use.."TRAP"
-		local old_count = GVR:getItem(ITEM_TABLE[total_spins])
-		GVR:setItem(ITEM_TABLE[total_spins], old_count + 1)
+		local old_count = GVR:getItem(ITEM_TABLE[trap_to_use])
+		GVR:setItem(ITEM_TABLE[trap_to_use], old_count + 1)
 	elseif linkName == "CURSE_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
@@ -13581,7 +13581,7 @@ function send_linked_item(linkName)
     elseif linkName == "FROG_SPELL" then
 		MISC_ITEMS_RECIEVED["FROG"] = MISC_ITEMS_RECIEVED["FROG"] + 1
         GVR:setItem(ITEM_TABLE["AP_FROG_TRANSFORM"], MISC_ITEMS_RECIEVED["FROG"])
-    elseif linkName == "DEATH" then
+    elseif linkName == "DEATH_SPELL" then
 		MISC_ITEMS_RECIEVED["DEATH"] = MISC_ITEMS_RECIEVED["DEATH"] + 1
         GVR:setItem(ITEM_TABLE["AP_DEATH_TRANSFORM"], MISC_ITEMS_RECIEVED["DEATH"])
     elseif linkName == "STICKY" then
