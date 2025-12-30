@@ -74,13 +74,17 @@ LOCATION_TABLE: dict[str, PSOLocationData] = {
     ),
 
     "Forest 2 Pillar": PSOLocationData(
-        20, RegionName.forest_2, PSOLocationType.ITEM, PSORamData()
+        20, RegionName.forest_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 3)
     ),
     "Caves 2 Pillar": PSOLocationData(
         21, RegionName.caves_2, PSOLocationType.ITEM, PSORamData()
     ),
     "Mines 2 Pillar": PSOLocationData(
         22, RegionName.mines_2, PSOLocationType.ITEM, PSORamData()
+    ),
+
+    "First Forest Drop": PSOLocationData(
+        23, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x801042A4)
     ),
 
     # TODO: Get actual data for this check
@@ -106,16 +110,9 @@ LOCATION_NAME_TO_ID: dict[str, int | None] = get_location_name_to_id_dict(LOCATI
 class PSOLocation(Location):
     game = "PSO"
 
-# Let's make one more helper method before we begin actually creating locations.
-# Later on in the code, we'll want specific subsections of LOCATION_NAME_TO_ID.
-# To reduce the chance of copy-paste errors writing something like {"Chest": LOCATION_NAME_TO_ID["Chest"]},
-# let's make a helper method that takes a list of location names and returns them as a dict with their IDs.
-# Note: There is a minor typing quirk here. Some functions want location addresses to be an "int | None",
-# so while our function here only ever returns dict[str, int], we annotate it as dict[str, int | None].
-def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
-    return {location_name: LOCATION_TABLE[location_name].code for location_name in location_names}
-    # return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
-
+# Helper method but may no longer be needed...
+# def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
+#     return {location_name: LOCATION_TABLE[location_name].code for location_name in location_names}
 
 def create_all_locations(world: PSOWorld) -> None:
     """

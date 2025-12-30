@@ -1,36 +1,41 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
-from BaseClasses import Item, ItemClassification
+from BaseClasses import Item, ItemClassification as IC
+
+from enum import Enum, auto
+
+from .helpers import PSORamData
+
+from .strings.item_names import Item as ItemName
 
 if TYPE_CHECKING:
     from .world import PSOWorld
 
-# Every item must have a unique integer ID associated with it.
-# We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
-# Even if an item doesn't exist on specific options, it must be present in this lookup.
-ITEM_NAME_TO_ID = {
-    "Key": 1,
-    "Sword": 2,
-    "Shield": 3,
-    "Hammer": 4,
-    "Health Upgrade": 5,
-    "Confetti Cannon": 6,
-    "Math Trap": 7,
-}
+# PSO Items show up in the world as 5 different physical items, which we differentiate here
+# We may want to expand this to include more specific typing, or do sub-typing for each category
+# But this is fine for now
+class PSOItemType(Enum):
+    """
+    Specifies the type of items in terms of PSO items
+    We want a way to delineate between different inventory items as well as world items
+    """
 
-# Items should have a defined default classification.
-# In our case, we will make a dictionary from item name to classification.
-DEFAULT_ITEM_CLASSIFICATIONS = {
-    "Key": ItemClassification.progression,
-    "Sword": ItemClassification.progression | ItemClassification.useful,  # Items can have multiple classifications.
-    "Shield": ItemClassification.progression,
-    "Hammer": ItemClassification.progression,
-    "Health Upgrade": ItemClassification.useful,
-    "Confetti Cannon": ItemClassification.filler,
-    "Math Trap": ItemClassification.trap,
-}
+    WEAPON = auto()
+    ITEM = auto()
+    ARMOR = auto()
+    RARE = auto()
+    MESETA = auto()
+    AREA = auto()
+    SWITCH = auto()
+    EVENT = auto()
+
+
+class PSOItemData(NamedTuple):
+    type: PSOItemType
+    classification: IC
+    code: int | None
 
 
 # Each Item instance must correctly report the "game" it belongs to.
@@ -39,39 +44,74 @@ class PSOItem(Item):
     game = "PSO"
 
 
+# We comment out the boss unlocks for now to keep the checks low while we figure stuff out
+ITEM_TABLE: dict[str, PSOItemData] = {
+    ItemName.unlock_forest_1:     PSOItemData(PSOItemType.AREA,     IC.progression,                   1),
+    ItemName.unlock_forest_2:     PSOItemData(PSOItemType.AREA,     IC.progression,                   2),
+    ItemName.unlock_dragon:       PSOItemData(PSOItemType.AREA,     IC.progression,                   3),
+    ItemName.unlock_caves_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   4),
+    ItemName.unlock_caves_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   5),
+    ItemName.unlock_caves_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                   6),
+    ItemName.unlock_de_rol_le:    PSOItemData(PSOItemType.AREA,     IC.progression,                   7),
+    ItemName.unlock_mines_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   8),
+    ItemName.unlock_mines_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   9),
+    ItemName.unlock_vol_opt:      PSOItemData(PSOItemType.AREA,     IC.progression,                  10),
+    ItemName.unlock_ruins_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                  11),
+    ItemName.unlock_ruins_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                  12),
+    ItemName.unlock_ruins_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                  13),
+    ItemName.unlock_dark_falz:    PSOItemData(PSOItemType.AREA,     IC.progression,                  14),
+
+    ItemName.forest_pillar:       PSOItemData(PSOItemType.SWITCH,   IC.progression,                  15),
+    ItemName.caves_pillar:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  16),
+    ItemName.mines_pillar:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  17),
+
+    "Lavis Blade":                PSOItemData(PSOItemType.WEAPON,   IC.filler | IC.useful,           18),
+
+    ItemName.victory:             PSOItemData(PSOItemType.EVENT,    IC.progression,                None),
+}
+
+
+def get_item_name_to_id_dict(item_table: dict[str, PSOItemData]) -> dict[str, int | None]:
+    name = item_table.keys()
+    *_, code = zip(*item_table.values())
+    return dict(zip(name, code))
+
+# Every item must have a unique integer ID associated with it.
+# We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
+# Even if an item doesn't exist on specific options, it must be present in this lookup.
+ITEM_NAME_TO_ID: dict[str, int | None] = get_item_name_to_id_dict(ITEM_TABLE)
+
+
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
 # To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
 # For now, let's make a function that returns the name of a random filler item here in items.py.
 def get_random_filler_item_name(world: PSOWorld) -> str:
-    # APQuest has an option called "trap_chance".
-    # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
-    # For this purpose, we need to use a random generator.
-
     # IMPORTANT: Whenever you need to use a random generator, you must use world.random.
     # This ensures that generating with the same generator seed twice yields the same output.
     # DO NOT use a bare random object from Python's built-in random module.
     if world.random.randint(0, 99) < world.options.trap_chance:
-        return "Math Trap"
-    return "Confetti Cannon"
+        # TODO: Actually put traps in here
+        return "Lavis Blade"
+    return "Lavis Blade"
 
 
 def create_item_with_correct_classification(world: PSOWorld, name: str) -> PSOItem:
-    # Our world class must have a create_item() function that can create any of our items by name at any time.
-    # So, we make this helper function that creates the item by name with the correct classification.
-    # Note: This function's content could just be the contents of world.create_item in world.py directly,
-    # but it seemed nicer to have it in its own function over here in items.py.
-    classification = DEFAULT_ITEM_CLASSIFICATIONS[name]
+    # We may rewrite this to be more straight forward, but until we know if we're using multiple
+    # classifications, we leave it for now.
+    testing = True
+    classification = ITEM_TABLE[name].classification
 
     # It is perfectly normal and valid for an item's classification to differ based on the player's options.
     # In our case, Health Upgrades are only relevant to logic (and thus labeled as "progression") in hard mode.
-    if name == "Health Upgrade" and world.options.hard_mode:
-        classification = ItemClassification.progression
+    if not testing and name == "Lavis Blade":
+        classification = IC.useful
 
     return PSOItem(name, classification, ITEM_NAME_TO_ID[name], world.player)
 
 
 # With those two helper functions defined, let's now get to actually creating and submitting our itempool.
 def create_all_items(world: PSOWorld) -> None:
+    # TODO: Write this and then move on
     # This is the function in which we will create all the items that this world submits to the multiworld item pool.
     # There must be exactly as many items as there are locations.
     # In our case, there are either six or seven locations.
