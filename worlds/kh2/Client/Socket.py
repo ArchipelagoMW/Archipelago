@@ -149,7 +149,7 @@ class KH2Socket:
             self.client.world_locations_checked.add(message[1])
 
         elif msg_type == MessageType.LevelChecked:
-            self.client.sora_form_levels[message[2]] = int(message[1])
+            self.client.sora_levels[message[2]] = int(message[1])
 
         elif msg_type == MessageType.KeybladeChecked:
             self.client.keyblade_ability_checked.add(message[1])

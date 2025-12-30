@@ -57,8 +57,6 @@ class KH2Context(CommonContext):
         self.slot_name = None
         self.disconnect_from_server = False
         self.sending = []
-        # list used to keep track of locations+items player has. Used for disconnecting
-        self.kh2_seed_save_cache = {}
         self.kh2seedname = None
         self.kh2_seed_save_path_join = None
 
@@ -96,10 +94,8 @@ class KH2Context(CommonContext):
                     # this is what is effectively doing on
                     # self.client_settings = default
 
-        self.hitlist_bounties = 0
         # hooked object
         self.kh2 = None
-        self.final_xemnas = False
         self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
             2:  TT_Checks,
@@ -123,7 +119,7 @@ class KH2Context(CommonContext):
         }
         self.last_world_int = -1
         self.current_world_int = -1
-        self.sora_form_levels = {
+        self.sora_levels = {
             "Sora": 1,
             "ValorLevel": 1,
             "WisdomLevel": 1,
@@ -226,15 +222,6 @@ class KH2Context(CommonContext):
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, Utils.get_file_safe_name(self.kh2_seed_save_path))
             if not os.path.exists(self.kh2_seed_save_path_join):
                 self.kh2_seed_save = {
-                    "Levels":        {
-                        "SoraLevel":   0,
-                        "ValorLevel":  0,
-                        "WisdomLevel": 0,
-                        "LimitLevel":  0,
-                        "MasterLevel": 0,
-                        "FinalLevel":  0,
-                        "SummonLevel": 0,
-                    },
                     # Item: Amount of them sold
                     "SoldEquipment": dict(),
                 }
@@ -248,15 +235,6 @@ class KH2Context(CommonContext):
                         self.kh2_seed_save = None
                     if self.kh2_seed_save is None or self.kh2_seed_save == {}:
                         self.kh2_seed_save = {
-                            "Levels":        {
-                                "SoraLevel":   0,
-                                "ValorLevel":  0,
-                                "WisdomLevel": 0,
-                                "LimitLevel":  0,
-                                "MasterLevel": 0,
-                                "FinalLevel":  0,
-                                "SummonLevel": 0,
-                            },
                             # Item: Amount of them sold
                             "SoldEquipment": dict(),
                         }
@@ -514,11 +492,12 @@ async def kh2_watcher(ctx: KH2Context):
                     ctx.kh2connected = True
 
             if ctx.kh2connectionconfirmed and ctx.serverconnected:
-                ctx.sending = []
-                await asyncio.create_task(ctx.checkWorldLocations())
-                await asyncio.create_task(ctx.checkLevels())
-                await asyncio.create_task(ctx.checkSlots())
-                await asyncio.create_task(ctx.is_dead())
+                ctx.sending.clear()
+                await ctx.checkWorldLocations()
+                await ctx.checkLevels()
+                await ctx.checkSlots()
+                await ctx.is_dead()
+                await asyncio.sleep(0)
 
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)

@@ -25,7 +25,7 @@ async def checkWorldLocations(self):
                 if location in self.kh2_loc_name_to_id.keys():
                     locationId = self.kh2_loc_name_to_id[location]
                     if location in self.world_locations_checked:
-                        self.sending = self.sending + [(int(locationId))]
+                        self.sending.append(int(locationId))
                         self.world_locations_checked.discard(location)
     except Exception as e:
         if self.kh2connected:
@@ -37,28 +37,24 @@ async def checkWorldLocations(self):
 async def checkLevels(self):
     try:
         for location, data in SoraLevels.items():
-            currentLevel = self.sora_form_levels["Sora"]
+            currentLevel = self.sora_levels["Sora"]
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked \
                     and currentLevel >= data.bitIndex:
-                if self.kh2_seed_save["Levels"]["SoraLevel"] < currentLevel:
-                    self.kh2_seed_save["Levels"]["SoraLevel"] = currentLevel
-                self.sending = self.sending + [(int(locationId))]
+                self.sending.append(int(locationId))
         formDict = {
             0: ["ValorLevel", ValorLevels], 1: ["WisdomLevel", WisdomLevels], 2: ["LimitLevel", LimitLevels],
             3: ["MasterLevel", MasterLevels], 4: ["FinalLevel", FinalLevels], 5: ["SummonLevel", SummonLevels]
         }
         for i in range(6):
             for location, data in formDict[i][1].items():
-                formlevel = self.sora_form_levels[formDict[i][0]]
+                formlevel = self.sora_levels[formDict[i][0]]
                 if location in self.kh2_loc_name_to_id.keys():
                     # if current form level is above other form level
                     locationId = self.kh2_loc_name_to_id[location]
                     if locationId not in self.locations_checked \
                             and formlevel >= data.bitIndex:
-                        if formlevel > self.kh2_seed_save["Levels"][formDict[i][0]]:
-                            self.kh2_seed_save["Levels"][formDict[i][0]] = formlevel
-                        self.sending = self.sending + [(int(locationId))]
+                        self.sending.append(int(locationId))
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
@@ -72,13 +68,13 @@ async def checkSlots(self):
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked:
                 if location in self.keyblade_ability_checked:
-                    self.sending = self.sending + [(int(locationId))]
+                    self.sending.append(int(locationId))
                     self.keyblade_ability_checked.discard(location)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.locations_checked and location in self.keyblade_ability_checked:
-                self.sending = self.sending + [(int(locationId))]
+                self.sending.append(int(locationId))
                 self.keyblade_ability_checked.discard(location)
     except Exception as e:
         if self.kh2connected:
