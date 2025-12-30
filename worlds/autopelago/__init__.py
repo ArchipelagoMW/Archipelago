@@ -1,13 +1,15 @@
 import logging
 import typing
 from collections import deque
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
+from typing import TypeVar
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
 from worlds.AutoWorld import WebWorld, World
 
 from .definitions_types import (
+    Aura,
     AutopelagoAllRequirement,
     AutopelagoAnyRequirement,
     AutopelagoAnyTwoRequirement,
@@ -18,12 +20,16 @@ from .definitions_types import (
     AutopelagoRegionDefinition,
 )
 from .items import (
-    autopelago_nonprogression_item_types,
-    item_name_to_classification,
+    ENABLED_AURA_SCORE_THRESHOLD,
+    classify_item_by_score,
+    item_name_to_auras,
     item_name_to_id,
-    items_by_type_by_game,
+    items_by_game,
     lactose_intolerant_names,
     names_with_lactose,
+    nonprogression_item_types,
+    progression_item_names,
+    score_item_by_auras,
 )
 from .locations import (
     autopelago_regions,
@@ -53,6 +59,7 @@ from .options import (
 from .util import GAME_NAME
 
 autopelago_logger = logging.getLogger(GAME_NAME)
+T = TypeVar("T")
 
 
 def _is_trivial(req: AutopelagoGameRequirement):
@@ -135,6 +142,8 @@ class AutopelagoWorld(World):
     victory_location: str
     regions_in_scope: set[str]
     locations_in_scope: set[str]
+    enabled_auras: set[Aura]
+    enabled_auras_by_item_name: dict[str, list[Aura]]
     option_groups: typing.ClassVar[list[OptionGroup]] = [
         OptionGroup("Message Text Replacements", [
             ChangedTargetMessages,
@@ -164,6 +173,17 @@ class AutopelagoWorld(World):
     # - hint_blacklist (should it include the goal item?)
 
     def generate_early(self):
+        self.enabled_auras = set()
+        for aura in self.options.enabled_buffs.value:
+            self.enabled_auras.add(EnabledBuffs.map[aura])
+        for aura in self.options.enabled_traps.value:
+            self.enabled_auras.add(EnabledTraps.map[aura])
+        self.enabled_auras_by_item_name = {}
+        for name, auras in item_name_to_auras.items():
+            enabled_auras = [aura for aura in auras if aura in self.enabled_auras]
+            if enabled_auras:
+                self.enabled_auras_by_item_name[name] = enabled_auras
+
         match self.options.victory_location:
             case VictoryLocation.option_captured_goldfish:
                 self.victory_location = "Captured Goldfish"
@@ -195,7 +215,9 @@ class AutopelagoWorld(World):
 
     def create_item(self, name: str):
         item_id = item_name_to_id[name]
-        classification = item_name_to_classification[name]
+        classification = \
+            ItemClassification.progression if name in progression_item_names else \
+            classify_item_by_score(score_item_by_auras(name, self.enabled_auras))
         return AutopelagoItem(name, classification, item_id, self.player)
 
     def create_items(self):
@@ -218,34 +240,19 @@ class AutopelagoWorld(World):
                 item.classification |= ItemClassification.deprioritized
 
         self.multiworld.itempool += new_items
+        excluded_names: set[str] = set(
+            names_with_lactose if self.options.lactose_intolerant.value else
+            lactose_intolerant_names
+        )
 
-        # for nonprogression items, we start with all the entries in the Autopelago file. then,
-        # depending on which other games are present in the multiworld, replace some arbitrary set
-        # of them with items of the same type (filler / useful / trap) with flavor that resembles
-        # the items from such games. we refer to these as the "Easter eggs" of Autopelago.
-        excluded_names = names_with_lactose if self.options.lactose_intolerant.value else lactose_intolerant_names
-        nonprogression_item_table = {c: [item_name for item_name in items if item_name not in excluded_names]
-                                     for c, items in items_by_type_by_game[GAME_NAME].items()}
-        for category, items in nonprogression_item_table.items():
-            dlc_games = {g for g, categories in items_by_type_by_game.items() if category in categories}
-            dlc_games.remove(GAME_NAME)
-            self.multiworld.random.shuffle(items)
-            replacements_made = 0
-            for game_name in self.multiworld.game.values():
-                if game_name not in dlc_games:
-                    continue
-                dlc_games.remove(game_name)
-                for item in items_by_type_by_game[game_name][category]:
-                    if item not in excluded_names and replacements_made < len(items):
-                        items[replacements_made] = item
-                        replacements_made += 1
+        # nonprogression items are tricky. even just picking an item to fill a slot that's marked as
+        # a buff/trap/filler is nontrivial because buffs and traps can be disabled arbitrarily.
+        item_pools = { k: self._sort_nonprogression_items_for_item_type(k) for k in nonprogression_item_types }
+        next_item_indices = dict.fromkeys(nonprogression_item_types, 0)
 
-        # the "unrandomized" item placements in the definitions file don't distinguish between trap
-        # and filler, so we just alternate back and forth when we see that.
-        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = \
-            dict.fromkeys(autopelago_nonprogression_item_types, 0)
+        # none of the "unrandomized" items at our locations actually say "trap"; instead, half of
+        # the time we're asked for a "filler", we actually mean "trap" instead.
         next_filler_becomes_trap = False
-        item_type: AutopelagoNonProgressionItemType
         for loc, original_item_type in location_name_to_nonprogression_item.items():
             if loc not in self.locations_in_scope:
                 continue
@@ -253,20 +260,20 @@ class AutopelagoWorld(World):
             item_type = original_item_type
             if item_type == "filler":
                 if next_filler_becomes_trap:
-                    item_type = "trap"
+                    item_type: AutopelagoNonProgressionItemType = "trap"
                 next_filler_becomes_trap = not next_filler_becomes_trap
 
-            # 0.x didn't have enough traps to cover half of the locations whose "unrandomized" items
-            # were fillers, so we needed to adjust slightly with this check. note that this doesn't
-            # (currently) allow us to compensate for too-few 'useful_nonprogression' items.
-            if category_to_next_offset[item_type] >= len(nonprogression_item_table[item_type]):
-                if item_type == "filler":
-                    item_type = "trap"
-                elif item_type == "trap":
-                    item_type = "filler"
-            next_item = nonprogression_item_table[item_type][category_to_next_offset[item_type]]
-            self.multiworld.itempool.append(self.create_item(next_item))
-            category_to_next_offset[item_type] += 1
+            item_pool = item_pools[item_type]
+            next_item_index = next_item_indices[item_type]
+            while next_item_index < len(item_pool):
+                next_item = item_pool[next_item_index]
+                next_item_index += 1
+                if next_item in excluded_names:
+                    continue
+                self.multiworld.itempool.append(self.create_item(next_item))
+                excluded_names.add(next_item)
+                next_item_indices[item_type] = next_item_index
+                break
 
     def create_regions(self):
         victory_region = Region("Victory", self.player, self.multiworld)
@@ -304,8 +311,6 @@ class AutopelagoWorld(World):
             # that they can throw a semi-graceful error message.
             "version_stamp": "1.0.0",
             "victory_location_name": self.victory_location,
-            "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
-            "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
             "msg_changed_target": self.options.msg_changed_target.value,
             "msg_enter_go_mode": self.options.msg_enter_go_mode.value,
             "msg_enter_bk": self.options.msg_enter_bk.value,
@@ -314,7 +319,94 @@ class AutopelagoWorld(World):
             "msg_completed_goal": self.options.msg_completed_goal.value,
             "lactose_intolerant": bool(self.options.lactose_intolerant),
 
+            # added in 1.0.0 so the client only needs to bake in knowledge of progression items:
+            "auras_by_item_name": self.enabled_auras_by_item_name,
+
+            # obsolete in 1.0.0 (auras_by_item_name does the same thing) but kept for 0.11.x client support:
+            "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
+            "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
+
             # not working yet:
             # "death_link": bool(self.options.death_link),
             # "death_delay_seconds": self.options.death_delay_seconds - 0,
         }
+
+    def _sort_nonprogression_items_for_item_type(self, item_type: AutopelagoNonProgressionItemType):
+        """
+        Returns a list of ALL non-progression items, sorted by how appropriate it would be to fill a
+        slot that expects an item of a given type.
+        """
+        items_for_base_game = self._shuffled(items_by_game[GAME_NAME])
+        included_games = set(self.multiworld.game.values()) - { GAME_NAME }
+        items_for_included_games = self._shuffled(
+            item for g, items in items_by_game.items()
+                for item in items
+            if g in included_games
+        )
+        items_for_excluded_games = self._shuffled(
+            item for g, items in items_by_game.items()
+                for item in items
+            if g not in included_games
+        )
+
+        # all ideal items (true buffs when we're asked for buffs, true traps when we're asked for
+        # traps, true fillers when we're asked for fillers) come first, starting with the Easter egg
+        # items for games present in the multiworld, followed by base game items. Easter egg items
+        # for excluded games will be used only as a last resort.
+        #
+        # "true buff" = an item whose enabled auras are net positive
+        # "true trap" = an item whose enabled auras are net negative
+        # "true filler" = an item whose enabled aura effects cancel out AND whose disabled aura
+        #                 effects also cancel out.
+        # the remaining items are fillers, but not "true"
+        items: list[str] = []
+        for items_list in (items_for_included_games, items_for_base_game):
+            items += (
+                item for item in items_list
+                if self._distance_from_ideal(item_type, item) == 0
+            )
+
+        # if item_type is "filler", then now is the time to add the non-"true" ones.
+        for items_list in (items_for_included_games, items_for_base_game):
+            items += (
+                item for item in items_list
+                if 0 < self._distance_from_ideal(item_type, item) < ENABLED_AURA_SCORE_THRESHOLD
+            )
+
+        # fill in the values for excluded games as a last resort before we move onto things like
+        # yielding fillers when we're asked for traps / buffs
+        items += (
+                item for item in items_for_excluded_games
+                if self._distance_from_ideal(item_type, item) == 0
+        )
+        items += (
+                item for item in items_for_excluded_games
+                if 0 < self._distance_from_ideal(item_type, item) < ENABLED_AURA_SCORE_THRESHOLD
+        )
+
+        # when all buffs and all traps are enabled, we don't even come close to exhausting the lists
+        # of "ideal" items we built above. once things start getting disabled, we have to dip into
+        # filler items to complete that list. depending on how things will evolve in the future, we
+        # might even need to go beyond the fillers, so let's just extend this out to EVERYTHING that
+        # we can POSSIBLY draw from.
+        for items_list in (items_for_included_games, items_for_base_game, items_for_excluded_games):
+            items += sorted((
+                item for item in items_list
+                if self._distance_from_ideal(item_type, item) >= ENABLED_AURA_SCORE_THRESHOLD
+            ), key=lambda val: self._distance_from_ideal(item_type, val))
+        return items
+
+    def _distance_from_ideal(self, item_type: AutopelagoNonProgressionItemType, item: str):
+        score = score_item_by_auras(item, self.enabled_auras)
+        match item_type:
+            case "useful_nonprogression":
+                return 0 if score > ENABLED_AURA_SCORE_THRESHOLD else abs(score) + (ENABLED_AURA_SCORE_THRESHOLD * 2)
+            case "trap":
+                return 0 if score < -ENABLED_AURA_SCORE_THRESHOLD else abs(score) + (ENABLED_AURA_SCORE_THRESHOLD * 2)
+            case _:
+                return abs(score)
+
+    def _shuffled(self, items: Iterable[T]) -> list[T]:
+        to_shuffle = list(items)
+        self.multiworld.random.shuffle(to_shuffle)
+        return to_shuffle
