@@ -878,6 +878,10 @@ class Rac3Interface(GameInterface):
         #         self._write8(status_address, 0)
 
     def health_cycler(self):
+        """
+        Enforces one HP challenge for player and vehicle if enabled in settings
+        Sets health to 1 if above 1 for the current character
+        """
         character = self.player_type
         if character == RAC3PLAYERTYPE.TYHRRANOID:
             character = RAC3PLAYERTYPE.RATCHET # Treat Tyhrranoid as Ratchet for one HP challenge
