@@ -165,6 +165,7 @@ class AutopelagoWorld(World):
     location_name_groups = location_name_groups
 
     def __init__(self, multiworld, player):
+        self.enabled_auras = set()
         super().__init__(multiworld, player)
 
     # insert other ClassVar values... suggestions include:
@@ -173,7 +174,7 @@ class AutopelagoWorld(World):
     # - hint_blacklist (should it include the goal item?)
 
     def generate_early(self):
-        self.enabled_auras = set()
+        self.enabled_auras.clear()
         for aura in self.options.enabled_buffs.value:
             self.enabled_auras.add(EnabledBuffs.map[aura])
         for aura in self.options.enabled_traps.value:
