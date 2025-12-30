@@ -332,10 +332,12 @@ class GloverContext(CommonContext):
                 "ENEMY_BALL" : {"Accepts" : ["Army Trap", "Bee Trap", "Bunyon Trap", "Fear Trap", "Gooey Bag", "Police Trap", "Spooky Time", "Tarr Trap", "Thwimp Trap"]},
                 "CONTROL_BALL" : {"Accepts" : ["Bald Trap", "Breakout Trap", "Bubble Trap", "Control Ball Trap", "Disable A Trap", "Disable Z Trap", "Ghost", "Pinball Trap", "PONG Challenge", "Pong Trap"]},
                 "INVISIBALL" : {"Accepts" : ["Depletion Trap", "Disable B Trap", "Empty Item Box Trap", "Fishin' Boo Trap", "Get Out Trap", "Invisiball Trap", "Invisible Trap", "Invisibility Trap", "No Stocks", "No Vac Trap", "Resistance Trap", "Spike Ball Trap"]},
-                # Not traps, but activated by them
+                #Misc items activated by traps
                 "STICKY" : {"Accepts" : ["Honey Trap", "Iron Boots Trap", "Sticky Floor Trap", "Sticky Hands Trap"]},
                 "SPEED" : {"Accepts" : ["Fast Trap"]},
-                "LOW_GRAVITY" : {"Accepts" : ["Gravity Trap"]}
+                "LOW_GRAVITY" : {"Accepts" : ["Gravity Trap"]},
+                #Dev Items activated by traps
+                "DEATH" : {"Accepts" : ["Instant Death Trap"]}
                 })
         }
         self.version_warning = False

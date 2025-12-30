@@ -1461,7 +1461,8 @@ class GloverWorld(World):
         hex_output = 0
         for each_digit in range(digit_count):
             hex_output += pow(16, each_digit) * self.get_digit(self.options.filler_duration.value, each_digit)
-        return int(hex_output * 0xD)
+        hex_output *= 0xD
+        return hex_output
 
     def get_digit(self, input_int, digit):
         return math.floor(input_int / pow(10, digit)) % 10
