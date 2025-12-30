@@ -7,8 +7,10 @@ class ItemClassificationTestWithOnlyWellFedAuraEnabled(WorldTestBase):
     game = GAME_NAME
     run_default_tests = False
     def setUp(self):
-        self.options["enabled_buffs"] = frozenset({"Well Fed"})
-        self.options["enabled_traps"] = frozenset()
+        self.options = {
+            "enabled_buffs": frozenset({"Well Fed"}),
+            "enabled_traps": frozenset(),
+        }
         super().setUp()
 
     def test_proper_classifications(self) -> None:
@@ -24,8 +26,10 @@ class ItemClassificationTestWithOnlyStartledTrapEnabled(WorldTestBase):
     game = GAME_NAME
     run_default_tests = False
     def setUp(self):
-        self.options["enabled_buffs"] = frozenset()
-        self.options["enabled_traps"] = frozenset({"Startled"})
+        self.options = {
+            "enabled_buffs": frozenset(),
+            "enabled_traps": frozenset({"Startled"}),
+        }
         super().setUp()
 
     def test_proper_classifications(self) -> None:
@@ -41,8 +45,10 @@ class ItemClassificationTestWithNoAurasEnabled(WorldTestBase):
     game = GAME_NAME
     run_default_tests = False
     def setUp(self):
-        self.options["enabled_buffs"] = frozenset()
-        self.options["enabled_traps"] = frozenset()
+        self.options = {
+            "enabled_buffs": frozenset(),
+            "enabled_traps": frozenset(),
+        }
         super().setUp()
 
     def test_proper_classifications(self) -> None:
