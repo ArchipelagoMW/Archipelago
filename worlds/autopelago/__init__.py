@@ -143,7 +143,7 @@ class AutopelagoWorld(World):
     regions_in_scope: set[str]
     locations_in_scope: set[str]
     enabled_auras: set[Aura]
-    enabled_auras_by_item_name: dict[str, list[Aura]]
+    enabled_auras_by_item_id: dict[int, list[Aura]]
     option_groups: typing.ClassVar[list[OptionGroup]] = [
         OptionGroup("Message Text Replacements", [
             ChangedTargetMessages,
@@ -178,11 +178,11 @@ class AutopelagoWorld(World):
             self.enabled_auras.add(EnabledBuffs.map[aura])
         for aura in self.options.enabled_traps.value:
             self.enabled_auras.add(EnabledTraps.map[aura])
-        self.enabled_auras_by_item_name = {}
+        self.enabled_auras_by_item_id = {}
         for name, auras in item_name_to_auras.items():
             enabled_auras = [aura for aura in auras if aura in self.enabled_auras]
             if enabled_auras:
-                self.enabled_auras_by_item_name[name] = enabled_auras
+                self.enabled_auras_by_item_id[item_name_to_id[name]] = enabled_auras
 
         match self.options.victory_location:
             case VictoryLocation.option_captured_goldfish:
@@ -319,10 +319,13 @@ class AutopelagoWorld(World):
             "msg_completed_goal": self.options.msg_completed_goal.value,
             "lactose_intolerant": bool(self.options.lactose_intolerant),
 
-            # added in 1.0.0 so the client only needs to bake in knowledge of progression items:
-            "auras_by_item_name": self.enabled_auras_by_item_name,
+            # added in 1.0.0 so the client only needs to bake in items unlocking specific locations
+            "auras_by_item_id": self.enabled_auras_by_item_id,
+            "rat_counts_by_item_id": {
+                item_name_to_id[name]: rat_count for name, rat_count in item_name_to_rat_count.items()
+            },
 
-            # obsolete in 1.0.0 (auras_by_item_name does the same thing) but kept for 0.11.x client support:
+            # obsolete in 1.0.0 (auras_by_item_id does the same thing) but kept for 0.11.x client support:
             "enabled_buffs": [EnabledBuffs.map[b] for b in self.options.enabled_buffs.value],
             "enabled_traps": [EnabledTraps.map[t] for t in self.options.enabled_traps.value],
 
