@@ -7,19 +7,6 @@ from BaseClasses import CollectionState, Item, ItemClassification, Location, Mul
 from Options import OptionGroup
 from worlds.AutoWorld import WebWorld, World
 
-from .definitions import (
-    autopelago_regions,
-    item_key_to_name,
-    item_name_groups,
-    item_name_to_rat_count,
-    location_name_groups,
-    location_name_to_id,
-    location_name_to_nonprogression_item,
-    location_name_to_progression_item_name,
-    location_name_to_requirement,
-    max_required_rat_count,
-    total_available_rat_count,
-)
 from .definitions_types import (
     AutopelagoAllRequirement,
     AutopelagoAnyRequirement,
@@ -37,6 +24,19 @@ from .items import (
     items_by_type_by_game,
     lactose_intolerant_names,
     names_with_lactose,
+)
+from .locations import (
+    autopelago_regions,
+    item_key_to_name,
+    item_name_groups,
+    item_name_to_rat_count,
+    location_name_groups,
+    location_name_to_id,
+    location_name_to_nonprogression_item,
+    location_name_to_progression_item_name,
+    location_name_to_requirement,
+    max_required_rat_count,
+    total_available_rat_count,
 )
 from .options import (
     AutopelagoGameOptions,
