@@ -352,6 +352,20 @@ annihilation_nation_2: list[str] = [
     RAC3LOCATION.NATION_CREMATION_STATION,
     RAC3LOCATION.NATION_THE_ANNIHILATOR,
 ]
+extra_ranger: list[str] = [
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_1,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_2,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_3,
+    RAC3LOCATION.TYHRRANOSIS_RANGERS_4,
+    RAC3TBOLT.METROPOLIS_RANGERS,
+    RAC3LOCATION.METROPOLIS_RANGERS_1,
+    RAC3LOCATION.METROPOLIS_RANGERS_2,
+    RAC3LOCATION.METROPOLIS_RANGERS_3,
+    RAC3LOCATION.METROPOLIS_RANGERS_4,
+    RAC3LOCATION.METROPOLIS_RANGERS_5,
+    RAC3LOCATION.METROPOLIS_MAP_O_MATIC,
+]
+
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
@@ -527,12 +541,17 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 elif options.nanotech_milestones.value == 3 and nanotech not in every_5_nanotech:
                     return True  # Skips nanotech milestones that are not in every 5
             case RAC3TAG.RANGERS:
+                ranger = LOCATION_FROM_AP_CODE[data.AP_CODE]
                 if options.rangers.value == 0:
-                    return True  # Skips ranger missions locations if rangers option is disabled
+                    return True  # Skips ranger missions locations if rangers option is none
+                elif options.rangers.value == 1 and ranger in extra_ranger:
+                    return True # Skips optional ranger missions locations if set to story_missions
+                elif options.rangers.value == 2 and ranger not in extra_ranger:
+                    return True # Skips story ranger missions locations if set to optional_missions
             case RAC3TAG.ARENA:
                 arena = LOCATION_FROM_AP_CODE[data.AP_CODE]
                 if options.arena.value == 0:
-                    return True  # Skips arena challenges locations if arena option is disabled
+                    return True  # Skips arena challenges locations if arena option is none
                 elif options.arena.value == 1 and arena not in annihilation_nation_1:
                     return True  # Skips AN2 challenge locations if arena option is set to first_part
                 elif options.arena.value == 2 and arena not in annihilation_nation_2:
