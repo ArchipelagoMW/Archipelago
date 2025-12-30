@@ -1443,7 +1443,8 @@
         "medium_requires": [ { "anyOf": [ // more ways of crossing the yellow water into a portal
             { "item": "Trick - Bow Hover" },
             { "item": "Cloud Leap" }, // and T-dash
-            { "item": "Air Dash" } // and T-dash
+            { "item": "Air Dash" }, // and T-dash
+            { "item": "Charged Strike" } // CS-dash and T-dash
         ] } ],
         "ls_requires": [{ "item": "Ledge Grab" }] // T-dash setup into parry hover
     },
