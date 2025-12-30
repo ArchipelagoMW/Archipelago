@@ -160,9 +160,9 @@ class MyWorld(CachedRuleBuilderWorld):
 
 ## Defining custom rules
 
-You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate to provide your world as a type argument to add correct type checking to the `_instantiate` method.
+You can create a custom rule by creating a class that inherits from `Rule` or any of the default rules. You must provide the game name as an argument to the class. It's recommended to use the `@dataclass` decorator to reduce boilerplate, and to also provide your world as a type argument to add correct type checking to the `_instantiate` method.
 
-You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. This class will automatically be converted into a frozen `dataclass`. You may need to also define one or more dependencies functions as outlined below.
+You must provide or inherit a `Resolved` child class that defines an `_evaluate` method. This class will automatically be converted into a frozen `dataclass`. If your world has caching enabled you may need to define one or more dependencies functions as outlined below.
 
 To add a rule that checks if the user has enough mcguffins to goal, with a randomized requirement:
 
@@ -180,12 +180,28 @@ class CanGoal(Rule["MyWorld"], game="My Game"):
             return state.has("McGuffin", self.player, count=self.goal)
 
         def item_dependencies(self) -> dict[str, set[int]]:
+            # this function is only required if you have caching enabled
             return {"McGuffin": {id(self)}}
+
+        def explain_json(self)
+```
+
+Your custom rule can also resolve to builtin rules instead of needing to define your own resolved rule:
+
+```python
+@dataclasses.dataclass()
+class ComplicatedFilter(Rule["MyWorld"], game="My Game"):
+    def _instantiate(self, world: "MyWorld") -> Rule.Resolved:
+        if world.some_precalculated_bool:
+            return Has("Item 1").resolve(world)
+        if world.options.some_option:
+            return CanReachRegion("Region 1").resolve(world)
+        return False_().resolve(world)
 ```
 
 ### Item dependencies
 
-If there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system.
+If your world inherits from CachedRuleBuilderWorld and there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system. It may be worthwhile to define this function even when caching is disabled as more things may use it in the future.
 
 ```python
 @dataclasses.dataclass()
@@ -202,7 +218,7 @@ All of the default `Has*` rules define this function already.
 
 ### Region dependencies
 
-If your custom rule references other regions, it must define a `region_dependencies` function that returns a mapping of region names to the id of your rule. These will be combined to inform the caching system and indirect connections will be registered when you set this rule on an entrance.
+If your custom rule references other regions, it must define a `region_dependencies` function that returns a mapping of region names to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -219,7 +235,7 @@ The default `CanReachLocation`, `CanReachRegion`, and `CanReachEntrance` rules d
 
 ### Location dependencies
 
-If your custom rule references other locations, it must define a `location_dependencies` function that returns a mapping of the location name to the id of your rule. These dependencies will be combined to inform the caching system.
+If your custom rule references other locations, it must define a `location_dependencies` function that returns a mapping of the location name to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -236,7 +252,7 @@ The default `CanReachLocation` rule defines this function already.
 
 ### Entrance dependencies
 
-If your custom rule references other entrances, it must define a `entrance_dependencies` function that returns a mapping of the entrance name to the id of your rule. These dependencies will be combined to inform the caching system.
+If your custom rule references other entrances, it must define a `entrance_dependencies` function that returns a mapping of the entrance name to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -262,7 +278,7 @@ By default your custom rule will work through the cache system as any other rule
 
 - Ensure you are passing `caching_enabled=True` in your `_instantiate` function when creating resolved rule instances if your world has opted into caching.
 - Resolved rules are forced to be frozen dataclasses. They and all their attributes must be immutable and hashable.
-- If your rule creates child rules ensure they are being resolved through the world rather than creating `Resolved` instances directly so they get registered with the world's caching system.
+- If your rule creates child rules ensure they are being resolved through the world rather than creating `Resolved` instances directly.
 
 ## Serialization
 
