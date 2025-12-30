@@ -6,7 +6,7 @@ class SkillPoints(Choice):
     """
     Determines which skill points are locations in the world.
     None: No skill points are locations.
-    Simple: 18 simple skill points are locations, 12 of the more challenging or time-consuming skill points are
+    Simple: 20 simple skill points are locations, 10 of the more challenging or time-consuming skill points are
     removed. Any Skill Points locked behind other locations such as Ranger Missions require those options to be enabled.
     These are the skill points enabled:
     - Stay Squeaky Clean
@@ -14,11 +14,13 @@ class SkillPoints(Choice):
     - Beat Helga's best time
     - Turn Up The Heat
     - Reflect on how to score
+    - Flee Flawlessly
     - Lights, camera action!
     - Search for sunken treasure
     - Be a sharpshooter
     - Bugs to Birdie
     - Get to the belt
+    - Feeling Lucky?
     - Bash the party
     - 2002 was a good year in the city
     - Aim High
