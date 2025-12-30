@@ -485,10 +485,10 @@ class GloverContext(CommonContext):
                 self.link_table["TAG"].info.pending = True
             if "TrapLink" in self.tags and source_name != self.instance_id and "TrapLink" in args.get("tags", []):
                 #Only accept traps that have the correct name in the accepts data
-                trap_name : str = args.get("trap_name", "")
+                trap_name : str = args["data"].get("trap_name", "")
                 for eachSubentry in self.link_table["TRAP"].entries:
                     if trap_name in self.link_table["TRAP"].entries[eachSubentry].data["Accepts"]:
-                        self.link_table["TRAP"].entries[eachSubentry].info.pending = True
+                        self.link_table["TRAP"].entries[eachSubentry].pending = True
 
     def on_print_json(self, args: dict):
         if self.ui:
