@@ -5,14 +5,14 @@ This document describes the API provided for the rule builder. Using this API pr
 - Rule classes that avoid all the common pitfalls
 - Logic optimization
 - Automatic result caching (opt-in)
-- Serialize/deserialize to JSON
+- Serialization/deserialization
 - Human-readable logic explanations for players
 
 ## Overview
 
 The rule builder consists of 3 main parts:
 
-1. The rules, which are classes that inherit from `rule_builder.rules.Rule`. These are what you write for your logic. They can be combined and take into account your world's options. There are a number of default rules listed blow, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
+1. The rules, which are classes that inherit from `rule_builder.rules.Rule`. These are what you write for your logic. They can be combined and take into account your world's options. There are a number of default rules listed below, and you can create as many custom rules for your world as needed. When assigning the rules to a location or entrance they must be resolved.
 1. Resolved rules, which are classes that inherit from `rule_builder.rules.Rule.Resolved`. These are the optimized rules specific to one player that are set as a location or entrance's access rule. You generally shouldn't be directly creating these but they'll be created when assigning rules to locations or entrances. These are what power the human-readable logic explanations.
 1. The optional rule builder world subclass `CachedRuleBuilderWorld`, which is a class your world can inherit from instead of `World`. It adds a caching system to the rules that will lazy evaluate and cache the result.
 
@@ -129,7 +129,7 @@ easy_filter = [OptionFilter(Difficulty, Difficulty.option_easy)]
 common_rule_only_on_easy = common_rule << easy_filter
 ```
 
-### Enabling caching
+## Enabling caching
 
 The rule builder provides a `CachedRuleBuilderWorld` base class for your `World` class that enables caching on your rules.
 
@@ -138,11 +138,11 @@ class MyWorld(CachedRuleBuilderWorld):
     game = "My Game"
 ```
 
-If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You'll have to benchmark your own world to see if it should be disabled or not.
+If your world's logic is very simple and you don't have many nested rules, the caching system may have more overhead cost than time it saves. You'll have to benchmark your own world to see if it should be enabled or not.
 
-If you enabled caching and your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
+If you enable caching and your rules use `CanReachLocation`, `CanReachEntrance` or a custom rule that depends on locations or entrances, you must call `self.register_dependencies()` after all of your locations and entrances exist to setup the caching system.
 
-## Item name mapping
+### Item name mapping
 
 If you have multiple real items that map to a single logic item, add a `item_mapping` class dict to your world that maps actual item names to real item names so the cache system knows what to invalidate.
 
@@ -169,6 +169,7 @@ To add a rule that checks if the user has enough mcguffins to goal, with a rando
 ```python
 @dataclasses.dataclass()
 class CanGoal(Rule["MyWorld"], game="My Game"):
+    @override
     def _instantiate(self, world: "MyWorld") -> Rule.Resolved:
         # caching_enabled only needs to be passed in when your world inherits from CachedRuleBuilderWorld
         return self.Resolved(world.required_mcguffins, player=world.player, caching_enabled=True)
@@ -176,17 +177,26 @@ class CanGoal(Rule["MyWorld"], game="My Game"):
     class Resolved(Rule.Resolved):
         goal: int
 
+        @override
         def _evaluate(self, state: CollectionState) -> bool:
             return state.has("McGuffin", self.player, count=self.goal)
 
+        @override
         def item_dependencies(self) -> dict[str, set[int]]:
             # this function is only required if you have caching enabled
             return {"McGuffin": {id(self)}}
 
-        def explain_json(self)
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            # this method can be overridden to display custom explanations
+            return [
+                {"type": "text", "text": "Goal with "},
+                {"type": "color", "color": "green" if state and self(state) else "salmon", "text": str(self.goal)},
+                {"type": "text", "text": " McGuffins"},
+            ]
 ```
 
-Your custom rule can also resolve to builtin rules instead of needing to define your own resolved rule:
+Your custom rule can also resolve to builtin rules instead of needing to define your own:
 
 ```python
 @dataclasses.dataclass()
@@ -201,7 +211,7 @@ class ComplicatedFilter(Rule["MyWorld"], game="My Game"):
 
 ### Item dependencies
 
-If your world inherits from CachedRuleBuilderWorld and there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system. It may be worthwhile to define this function even when caching is disabled as more things may use it in the future.
+If your world inherits from `CachedRuleBuilderWorld` and there are items that when collected will affect the result of your rule evaluation, it must define an `item_dependencies` function that returns a mapping of the item name to the id of your rule. These dependencies will be combined to inform the caching system. It may be worthwhile to define this function even when caching is disabled as more things may use it in the future.
 
 ```python
 @dataclasses.dataclass()
@@ -218,7 +228,7 @@ All of the default `Has*` rules define this function already.
 
 ### Region dependencies
 
-If your custom rule references other regions, it must define a `region_dependencies` function that returns a mapping of region names to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
+If your custom rule references other regions, it must define a `region_dependencies` function that returns a mapping of region names to the id of your rule regardless of if your world inherits from `CachedRuleBuilderWorld`. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -235,7 +245,7 @@ The default `CanReachLocation`, `CanReachRegion`, and `CanReachEntrance` rules d
 
 ### Location dependencies
 
-If your custom rule references other locations, it must define a `location_dependencies` function that returns a mapping of the location name to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
+If your custom rule references other locations, it must define a `location_dependencies` function that returns a mapping of the location name to the id of your rule regardless of if your world inherits from `CachedRuleBuilderWorld`. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -252,7 +262,7 @@ The default `CanReachLocation` rule defines this function already.
 
 ### Entrance dependencies
 
-If your custom rule references other entrances, it must define a `entrance_dependencies` function that returns a mapping of the entrance name to the id of your rule regardless of if your world inherits from CachedRuleBuilderWorld. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
+If your custom rule references other entrances, it must define a `entrance_dependencies` function that returns a mapping of the entrance name to the id of your rule regardless of if your world inherits from `CachedRuleBuilderWorld`. These dependencies will be combined to register indirect connections when you set this rule on an entrance and inform the caching system if applicable.
 
 ```python
 @dataclasses.dataclass()
@@ -266,6 +276,45 @@ class MyRule(Rule["MyWorld"], game="My Game"):
 ```
 
 The default `CanReachEntrance` rule defines this function already.
+
+### Rule explanations
+
+Resolved rules have a default implementation for `explain_json` and `explain_str` functions. The former optionally accepts a `CollectionState` and returns a list of `JSONMessagePart` appropriate for `print_json` in a client. It will display a human-readable message that explains what the rule requires. The latter is similar but returns a string. It is useful when debugging. There is also a `__str__` method defined to check what a rule is without a state.
+
+To implement a custom message with a custom rule, override the `explain_json` and/or `explain_str` method on your `Resolved` class:
+
+```python
+class MyRule(Rule, game="My Game"):
+    class Resolved(Rule.Resolved):
+        @override
+        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
+            has_item = state and state.has("growth spurt", self.player)
+            color = "yellow"
+            start = "You must be "
+            if has_item:
+                start = "You are "
+                color = "green"
+            elif state is not None:
+                start = "You are not "
+                color = "salmon"
+            return [
+                {"type": "text", "text": start},
+                {"type": "color", "color": color, "text": "THIS"},
+                {"type": "text", "text": " tall to beat the game"},
+            ]
+
+        @override
+        def explain_str(self, state: CollectionState | None = None) -> str:
+            if state is None:
+                return str(self)
+            if state.has("growth spurt", self.player):
+                return "You ARE this tall and can beat the game"
+            return "You are not THIS tall and cannot beat the game"
+
+        @override
+        def __str__(self) -> str:
+            return "You must be THIS tall to beat the game"
+```
 
 ### Cache control
 
@@ -389,45 +438,6 @@ class BasicLogicRule(Rule, game="My Game"):
     def from_dict(cls, data: Mapping[str, Any], world_cls: type[World]) -> Self:
         items = data.get("items", ())
         return cls(*items)
-```
-
-## Rule explanations
-
-Resolved rules have a default implementation for `explain_json` and `explain_str` functions. The former returns a list of `JSONMessagePart` appropriate for `print_json` in a client. It will display a human-readable message that explains what the rule requires. The latter returns similar information but as a string. It is useful when debugging.
-
-To implement a custom message with a custom rule, override the `explain_json` and/or `explain_str` method on your `Resolved` class:
-
-```python
-class MyRule(Rule, game="My Game"):
-    class Resolved(Rule.Resolved):
-        @override
-        def explain_json(self, state: CollectionState | None = None) -> list[JSONMessagePart]:
-            has_item = state and state.has("growth spurt", self.player)
-            color = "yellow"
-            start = "You must be "
-            if has_item:
-                start = "You are "
-                color = "green"
-            elif state is not None:
-                start = "You are not "
-                color = "salmon"
-            return [
-                {"type": "text", "text": start},
-                {"type": "color", "color": color, "text": "THIS"},
-                {"type": "text", "text": " tall to beat the game"},
-            ]
-
-        @override
-        def explain_str(self, state: CollectionState | None = None) -> str:
-            if state is None:
-                return str(self)
-            if state.has("growth spurt", self.player):
-                return "You ARE this tall and can beat the game"
-            return "You are not THIS tall and cannot beat the game"
-
-        @override
-        def __str__(self) -> str:
-            return "You must be THIS tall to beat the game"
 ```
 
 ## APIs
