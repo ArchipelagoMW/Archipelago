@@ -38,6 +38,7 @@ def setup_options_from_slot_data(world: "RaC3World") -> None:
             world.options.sewer_crystals.value = world.passthrough[RAC3OPTION.SEWER_CRYSTALS]
             world.options.sewer_limitation.value = world.passthrough[RAC3OPTION.SEWER_LIMITATION]
             world.options.nanotech_limitation.value = world.passthrough[RAC3OPTION.NANOTECH_LIMITATION]
+            world.options.one_hp_challenge.value = world.passthrough[RAC3OPTION.ONE_HP_CHALLENGE]
         else:
             world.using_ut = False
     else:

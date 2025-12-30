@@ -233,6 +233,7 @@ class Rac3Interface(GameInterface):
     notification_merge_count: int = 1
     message_display: bool = False
     ship_slot_limit: int = 0
+    one_hp_challenge: dict[str, bool] = None
 
     # Called at once when client started
     def init(self):
@@ -282,6 +283,7 @@ class Rac3Interface(GameInterface):
         # Proc Options
         self.multiplier_cycler()
         self.overflow_fix()
+        self.health_cycler()
         if self.weaponLevelLockFlag:
             self.weapon_exp_cycler()
         # Logic Fixes
@@ -309,6 +311,7 @@ class Rac3Interface(GameInterface):
         self.ship = slot_data[RAC3OPTION.SHIP_NOSE] + slot_data[RAC3OPTION.SHIP_WINGS]
         self.ship_skin = slot_data[RAC3OPTION.SHIP_SKIN]
         self.skin = slot_data[RAC3OPTION.SKIN]
+        self.one_hp_challenge = slot_data[RAC3OPTION.ONE_HP_CHALLENGE]
 
     def map_switch(self) -> tuple[str, str]:
         planet = RAC3_REGION_DATA_TABLE[self.planet].ID
@@ -873,6 +876,27 @@ class Rac3Interface(GameInterface):
         # for trap_name, status_address in trap_to_status.items():
         #     if trap_name not in self.trap_timers and trap_name != RAC3ITEM.LOCK_TRAP:
         #         self._write8(status_address, 0)
+
+    def health_cycler(self):
+        character = self.player_type
+        if character == RAC3PLAYERTYPE.TYHRRANOID:
+            character = RAC3PLAYERTYPE.RATCHET # Treat Tyhrranoid as Ratchet for one HP challenge
+        # Check for one HP challenge for current character
+        if self.one_hp_challenge.get(character, False):
+            if character in (RAC3PLAYERTYPE.RATCHET, RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.QWARK):
+                if self._read8(RAC3STATUS.HEALTH) > 1:
+                    self._write8(RAC3STATUS.HEALTH, 1)
+                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
+            elif character == RAC3PLAYERTYPE.GIANT:
+                if self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) > 1:
+                    self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
+
+        # Vehicle one HP challenge is independent of player_type
+        if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
+            health_addr = self._read32(self._read32(self.vehicle + 0x68))
+            if self._read_float(health_addr) > 5.0:
+                # This displays as 1 HP in-game for vehicles
+                self._write_float(health_addr, 5)
 
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)

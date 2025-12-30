@@ -30,3 +30,4 @@ class RAC3OPTION:
     SEWER_CRYSTALS = "sewer_crystals"
     SEWER_LIMITATION = "sewer_limitation"
     NANOTECH_LIMITATION = "nanotech_limitation"
+    ONE_HP_CHALLENGE = "one_hp_challenge"
