@@ -7,12 +7,14 @@ from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
+from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
+from worlds.rac3 import RAC3LOCATION
 
 if TYPE_CHECKING:
-    from worlds.rac3 import RaC3World
+    from worlds.rac3 import RaC3World, RAC3LOCATION
 
 
 class GameLocation(Location):
@@ -304,7 +306,53 @@ every_20_sewer_crystals: list[str] = [
     RAC3SEWER.TRADE_99,
     RAC3SKILLPOINT.SEWER_MOTHERLOAD,
 ]
-
+annihilation_nation_1: list[str] = [
+    RAC3TBOLT.NATION_CLIFF,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.NATION_FLEE,
+    RAC3LOCATION.NATION_TYHRRA_GUISE,
+    RAC3LOCATION.NATION_GRAND_PRIZE_BOUT,
+    RAC3LOCATION.NATION_THE_TERRIBLE_TWO,
+    RAC3LOCATION.NATION_ROBOT_RAMPAGE,
+    RAC3LOCATION.NATION_TWO_MINUTE_WARNING,
+    RAC3LOCATION.NATION_90_SECONDS,
+    RAC3LOCATION.NATION_ONSLAUGHT,
+    RAC3LOCATION.NATION_WHIP_IT_GOOD,
+    RAC3LOCATION.NATION_HYDRA_N_SEEK,
+    RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT,
+    # AN2
+    RAC3LOCATION.NATION_HEAT_STREET,
+    RAC3LOCATION.NATION_CRISPY_CRITTER,
+    RAC3LOCATION.NATION_PYRO_PLAYGROUND,
+    RAC3LOCATION.NATION_SUICIDE_RUN,
+]
+annihilation_nation_2: list[str] = [
+    RAC3TBOLT.NATION_CLIFF,
+    RAC3SKILLPOINT.NATION_CAMERA,
+    RAC3SKILLPOINT.NATION_FLEE,
+    # These 3 are doable on the second part of the challenges as well
+    RAC3SKILLPOINT.NATION_BASH,
+    RAC3LOCATION.NATION_MEET_COURTNEY,
+    RAC3LOCATION.NATION_INFOBOT_HOLOSTAR,
+    RAC3LOCATION.NATION_NINJA_CHALLENGE,
+    RAC3LOCATION.NATION_COUNTING_DUCKS,
+    RAC3LOCATION.NATION_CYCLING_WEAPONS,
+    RAC3LOCATION.NATION_ONE_HIT_WONDER,
+    RAC3LOCATION.NATION_TIME_TO_SUCK,
+    RAC3LOCATION.NATION_NAPTIME,
+    RAC3LOCATION.NATION_MORE_CYCLING_WEAPONS,
+    RAC3LOCATION.NATION_DODGE_THE_TWINS,
+    RAC3LOCATION.NATION_CHOP_CHOP,
+    RAC3LOCATION.NATION_SLEEP_INDUCER,
+    RAC3LOCATION.NATION_THE_OTHER_WHITE_MEAT,
+    RAC3LOCATION.NATION_CHAMPIONSHIP_BOUT_II,
+    RAC3LOCATION.NATION_QWARKTASTIC_BATTLE,
+    RAC3LOCATION.NATION_BBQ_BOULEVARD,
+    RAC3LOCATION.NATION_MAZE_OF_BLAZE,
+    RAC3TBOLT.NATION_PLATFORM,
+    RAC3LOCATION.NATION_CREMATION_STATION,
+    RAC3LOCATION.NATION_THE_ANNIHILATOR,
+]
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
@@ -483,8 +531,13 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.rangers.value == 0:
                     return True  # Skips ranger missions locations if rangers option is disabled
             case RAC3TAG.ARENA:
+                arena = LOCATION_FROM_AP_CODE[data.AP_CODE]
                 if options.arena.value == 0:
                     return True  # Skips arena challenges locations if arena option is disabled
+                elif options.arena.value == 1 and arena not in annihilation_nation_1:
+                    return True  # Skips AN2 challenge locations if arena option is set to first_part
+                elif options.arena.value == 2 and arena not in annihilation_nation_2:
+                    return True  # Skips AN1 challenge locations if arena option is set to second_part
             case RAC3TAG.VIDCOMIC:
                 if options.vidcomics.value == 0:
                     return True  # Skips vidcomic locations if vidcomics option is disabled
