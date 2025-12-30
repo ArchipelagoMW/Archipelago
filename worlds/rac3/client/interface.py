@@ -17,6 +17,7 @@ from worlds.rac3.constants.data.region import RAC3_REGION_DATA_TABLE
 from worlds.rac3.constants.data.status import RAC3_STATUS_DATA_TABLE
 from worlds.rac3.constants.deaths import CLANK_DEATH_FROM_ACTION, DEATH_FROM_ACTION
 from worlds.rac3.constants.input import RAC3INPUT
+from worlds.rac3.constants.instruction import RAC3INSTRUCTION
 from worlds.rac3.constants.item_tags import RAC3ITEMTAG
 from worlds.rac3.constants.items import QUICK_SELECT_LIST, RAC3ITEM, UPGRADE_DICT
 from worlds.rac3.constants.locations.general import RAC3LOCATION
@@ -887,7 +888,16 @@ class Rac3Interface(GameInterface):
             character = RAC3PLAYERTYPE.RATCHET # Treat Tyhrranoid as Ratchet for one HP challenge
         # Check for one HP challenge for current character
         if self.one_hp_challenge.get(character, False):
-            if character in (RAC3PLAYERTYPE.RATCHET, RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.QWARK):
+            if character == RAC3PLAYERTYPE.RATCHET:
+                # Ban shield charger usage if one HP challenge is active for Ratchet
+                self._write8(non_prog_weapon_data[RAC3ITEM.SHIELD_CHARGER].AMMO_ADDRESS, 0)
+                if self._read8(RAC3STATUS.HEALTH) > 1:
+                    self._write8(RAC3STATUS.HEALTH, 1)
+                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
+                if self.planet == RAC3REGION.ANNIHILATION_NATION:
+                    # Patch out sleeping gas health reduction to prevent death
+                    self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000) # addiu v0,v0,0x0
+            elif character in (RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.QWARK):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
@@ -901,6 +911,10 @@ class Rac3Interface(GameInterface):
             if self._read_float(health_addr) > 5.0:
                 # This displays as 1 HP in-game for vehicles
                 self._write_float(health_addr, 5)
+        
+        if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION:
+            # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
+            self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF) # addiu v0,v0,-0x1
 
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
