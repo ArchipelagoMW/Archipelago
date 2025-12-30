@@ -3,21 +3,12 @@ import typing
 from collections import deque
 from collections.abc import Callable
 
-from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import OptionGroup
 from worlds.AutoWorld import WebWorld, World
 
 from .definitions import (
     GAME_NAME,
-    AutopelagoAllRequirement,
-    AutopelagoAnyRequirement,
-    AutopelagoAnyTwoRequirement,
-    AutopelagoGameRequirement,
-    AutopelagoItemRequirement,
-    AutopelagoNonProgressionItemType,
-    AutopelagoRatCountRequirement,
-    AutopelagoRegionDefinition,
-    ItemClassification,
     autopelago_nonprogression_item_types,
     autopelago_regions,
     item_key_to_name,
@@ -35,6 +26,16 @@ from .definitions import (
     max_required_rat_count,
     names_with_lactose,
     total_available_rat_count,
+)
+from .definitions_types import (
+    AutopelagoAllRequirement,
+    AutopelagoAnyRequirement,
+    AutopelagoAnyTwoRequirement,
+    AutopelagoGameRequirement,
+    AutopelagoItemRequirement,
+    AutopelagoNonProgressionItemType,
+    AutopelagoRatCountRequirement,
+    AutopelagoRegionDefinition,
 )
 from .options import (
     AutopelagoGameOptions,
