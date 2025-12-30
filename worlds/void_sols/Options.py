@@ -40,16 +40,6 @@ class HiddenWallsChecks(Toggle):
 
     display_name = "Hidden Walls Checks"
 
-class BreakableWallsChecks(Toggle):
-    """ Toggle if Breakable Walls count as checks"""
-
-    display_name = "Breakable Walls Checks"
-
-class DoorOpenChecks(Toggle):
-    """ Toggle if opening doors count as checks"""
-
-    display_name = "Door Open Checks"
-
 @dataclass
 class VoidSolsOptions(PerGameCommonOptions):
     enemy_randomization: EnemyRandomization
@@ -57,5 +47,3 @@ class VoidSolsOptions(PerGameCommonOptions):
     sparks_checks: SparksChecks
     torch_checks: TorchChecks
     hidden_walls_checks: HiddenWallsChecks
-    breakable_walls_checks: BreakableWallsChecks
-    door_open_checks: DoorOpenChecks
