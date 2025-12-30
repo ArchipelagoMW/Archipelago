@@ -8,23 +8,16 @@ from Options import OptionGroup
 from worlds.AutoWorld import WebWorld, World
 
 from .definitions import (
-    GAME_NAME,
-    autopelago_nonprogression_item_types,
     autopelago_regions,
     item_key_to_name,
     item_name_groups,
-    item_name_to_classification,
-    item_name_to_id,
     item_name_to_rat_count,
-    items_by_type_by_game,
-    lactose_intolerant_names,
     location_name_groups,
     location_name_to_id,
     location_name_to_nonprogression_item,
     location_name_to_progression_item_name,
     location_name_to_requirement,
     max_required_rat_count,
-    names_with_lactose,
     total_available_rat_count,
 )
 from .definitions_types import (
@@ -36,6 +29,14 @@ from .definitions_types import (
     AutopelagoNonProgressionItemType,
     AutopelagoRatCountRequirement,
     AutopelagoRegionDefinition,
+)
+from .items import (
+    autopelago_nonprogression_item_types,
+    item_name_to_classification,
+    item_name_to_id,
+    items_by_type_by_game,
+    lactose_intolerant_names,
+    names_with_lactose,
 )
 from .options import (
     AutopelagoGameOptions,
@@ -49,6 +50,7 @@ from .options import (
     RemindBKModeMessages,
     VictoryLocation,
 )
+from .util import GAME_NAME
 
 autopelago_logger = logging.getLogger(GAME_NAME)
 
