@@ -96,7 +96,7 @@ class Rule(Generic[TWorld]):
 
     def _instantiate(self, world: TWorld) -> "Resolved":
         """Create a new resolved rule for this world"""
-        return self.Resolved(player=world.player, caching_enabled=world.rule_caching_enabled)
+        return self.Resolved(player=world.player, caching_enabled=getattr(world, "rule_caching_enabled", False))
 
     def resolve(self, world: TWorld) -> "Resolved":
         """Resolve a rule with the given world"""
@@ -305,7 +305,11 @@ class NestedRule(Rule[TWorld], game="Archipelago"):
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
         children = [c.resolve(world) for c in self.children]
-        return self.Resolved(tuple(children), player=world.player, caching_enabled=world.rule_caching_enabled)
+        return self.Resolved(
+            tuple(children),
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     @override
     def to_dict(self) -> dict[str, Any]:
@@ -435,7 +439,11 @@ class And(NestedRule[TWorld], game="Archipelago"):
         if len(clauses) == 1:
             return clauses[0]
 
-        return And.Resolved(tuple(clauses), player=world.player, caching_enabled=world.rule_caching_enabled)
+        return And.Resolved(
+            tuple(clauses),
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     class Resolved(NestedRule.Resolved):
         @override
@@ -515,7 +523,11 @@ class Or(NestedRule[TWorld], game="Archipelago"):
         if len(clauses) == 1:
             return clauses[0]
 
-        return Or.Resolved(tuple(clauses), player=world.player, caching_enabled=world.rule_caching_enabled)
+        return Or.Resolved(
+            tuple(clauses),
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     class Resolved(NestedRule.Resolved):
         @override
@@ -558,7 +570,7 @@ class WrapperRule(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             self.child.resolve(world),
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -661,7 +673,7 @@ class Has(Rule[TWorld], game="Archipelago"):
             self.item_name,
             self.count,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -730,7 +742,11 @@ class HasAll(Rule[TWorld], game="Archipelago"):
             return True_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
-        return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
+        return self.Resolved(
+            self.item_names,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     @override
     @classmethod
@@ -839,7 +855,11 @@ class HasAny(Rule[TWorld], game="Archipelago"):
             return False_().resolve(world)
         if len(self.item_names) == 1:
             return Has(self.item_names[0]).resolve(world)
-        return self.Resolved(self.item_names, player=world.player, caching_enabled=world.rule_caching_enabled)
+        return self.Resolved(
+            self.item_names,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     @override
     @classmethod
@@ -948,7 +968,7 @@ class HasAllCounts(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             tuple(self.item_counts.items()),
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1053,7 +1073,7 @@ class HasAnyCount(Rule[TWorld], game="Archipelago"):
         return self.Resolved(
             tuple(self.item_counts.items()),
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1166,7 +1186,7 @@ class HasFromList(Rule[TWorld], game="Archipelago"):
             self.item_names,
             self.count,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1294,7 +1314,7 @@ class HasFromListUnique(Rule[TWorld], game="Archipelago"):
             self.item_names,
             self.count,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1410,7 +1430,7 @@ class HasGroup(Rule[TWorld], game="Archipelago"):
             item_names,
             self.count,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1484,7 +1504,7 @@ class HasGroupUnique(Rule[TWorld], game="Archipelago"):
             item_names,
             self.count,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1566,7 +1586,7 @@ class CanReachLocation(Rule[TWorld], game="Archipelago"):
             self.location_name,
             parent_region_name,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override
@@ -1626,7 +1646,11 @@ class CanReachRegion(Rule[TWorld], game="Archipelago"):
 
     @override
     def _instantiate(self, world: TWorld) -> Rule.Resolved:
-        return self.Resolved(self.region_name, player=world.player, caching_enabled=world.rule_caching_enabled)
+        return self.Resolved(
+            self.region_name,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
 
     @override
     def __str__(self) -> str:
@@ -1691,7 +1715,7 @@ class CanReachEntrance(Rule[TWorld], game="Archipelago"):
             self.entrance_name,
             parent_region_name,
             player=world.player,
-            caching_enabled=world.rule_caching_enabled,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
         )
 
     @override

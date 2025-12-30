@@ -349,9 +349,6 @@ class World(metaclass=AutoWorldRegister):
     world_version: ClassVar[Version] = Version(0, 0, 0)
     """Optional world version loaded from archipelago.json"""
 
-    rule_caching_enabled: ClassVar[bool] = False
-    """Enable or disable the rule result caching system"""
-
     def __init__(self, multiworld: "MultiWorld", player: int):
         assert multiworld is not None
         self.multiworld = multiworld

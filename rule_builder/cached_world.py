@@ -30,7 +30,7 @@ class CachedRuleBuilderWorld(World):
     item = Item("Currency x500"), rule = Has("Currency", count=1000), item_mapping = {"Currency x500": "Currency"}"""
 
     rule_caching_enabled: ClassVar[bool] = True
-    """Enable or disable the rule result caching system"""
+    """Flag to inform rules that the caching system for this world is enabled. It should not be overridden."""
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
         super().__init__(multiworld, player)
@@ -41,8 +41,6 @@ class CachedRuleBuilderWorld(World):
 
     @override
     def register_rule_dependencies(self, resolved_rule: Rule.Resolved) -> None:
-        if not self.rule_caching_enabled:
-            return
         for item_name, rule_ids in resolved_rule.item_dependencies().items():
             self.rule_item_dependencies[item_name] |= rule_ids
         for region_name, rule_ids in resolved_rule.region_dependencies().items():
@@ -54,9 +52,6 @@ class CachedRuleBuilderWorld(World):
 
     def register_dependencies(self) -> None:
         """Register all rules that depend on locations or entrances with their dependencies"""
-        if not self.rule_caching_enabled:
-            return
-
         for location_name, rule_ids in self.rule_location_dependencies.items():
             try:
                 location = self.get_location(location_name)
@@ -84,7 +79,7 @@ class CachedRuleBuilderWorld(World):
     @override
     def collect(self, state: CollectionState, item: Item) -> bool:
         changed = super().collect(state, item)
-        if changed and self.rule_caching_enabled and self.rule_item_dependencies:
+        if changed and self.rule_item_dependencies:
             player_results = state.rule_cache[self.player]
             mapped_name = self.item_mapping.get(item.name, "")
             rule_ids = self.rule_item_dependencies[item.name] | self.rule_item_dependencies[mapped_name]
@@ -97,7 +92,7 @@ class CachedRuleBuilderWorld(World):
     @override
     def remove(self, state: CollectionState, item: Item) -> bool:
         changed = super().remove(state, item)
-        if not changed or not self.rule_caching_enabled:
+        if not changed:
             return changed
 
         player_results = state.rule_cache[self.player]
@@ -130,7 +125,7 @@ class CachedRuleBuilderWorld(World):
     @override
     def reached_region(self, state: CollectionState, region: Region) -> None:
         super().reached_region(state, region)
-        if self.rule_caching_enabled and self.rule_region_dependencies:
+        if self.rule_region_dependencies:
             player_results = state.rule_cache[self.player]
             for rule_id in self.rule_region_dependencies[region.name]:
                 player_results.pop(rule_id, None)

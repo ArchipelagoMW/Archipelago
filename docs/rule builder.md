@@ -170,7 +170,8 @@ To add a rule that checks if the user has enough mcguffins to goal, with a rando
 @dataclasses.dataclass()
 class CanGoal(Rule["MyWorld"], game="My Game"):
     def _instantiate(self, world: "MyWorld") -> Rule.Resolved:
-        return self.Resolved(world.required_mcguffins, player=world.player, caching_enabled=world.rule_caching_enabled)
+        # caching_enabled only needs to be passed in when your world inherits from CachedRuleBuilderWorld
+        return self.Resolved(world.required_mcguffins, player=world.player, caching_enabled=True)
 
     class Resolved(Rule.Resolved):
         goal: int
@@ -259,7 +260,7 @@ By default your custom rule will work through the cache system as any other rule
 
 ### Caveats
 
-- Ensure you are passing `caching_enabled=world.rule_caching_enabled` in your `_instantiate` function when creating resolved rule instances if your world has caching enabled.
+- Ensure you are passing `caching_enabled=True` in your `_instantiate` function when creating resolved rule instances if your world has opted into caching.
 - Resolved rules are forced to be frozen dataclasses. They and all their attributes must be immutable and hashable.
 - If your rule creates child rules ensure they are being resolved through the world rather than creating `Resolved` instances directly so they get registered with the world's caching system.
 
@@ -421,11 +422,6 @@ This section is provided for reference, refer to the above sections for examples
 
 These are properties and helpers that are available to you in your world.
 
-#### Properties
-
-- `item_mapping: dict[str, str]`: A mapping of actual item name to logical item name
-- `rule_caching_enabled: bool`: A boolean value to enable or disable rule caching for this world
-
 #### Methods
 
 - `rule_from_dict(data)`: Create a rule instance from a deserialized dict representation
@@ -433,6 +429,12 @@ These are properties and helpers that are available to you in your world.
 - `set_rule(spot: Location | Entrance, rule: Rule)`: Resolve a rule, register its dependencies, and set it on the given location or entrance
 - `set_completion_rule(rule: Rule)`: Sets the completion condition for this world
 - `create_entrance(from_region: Region, to_region: Region, rule: Rule | None, name: str | None = None, force_creation: bool = False)`: Attempt to create an entrance from `from_region` to `to_region`, skipping creation if `rule` is defined and evaluates to `False_()` unless force_creation is `True`
+
+#### CachedRuleBuilderWorld Properties
+
+The following property is only available when inheriting from `CachedRuleBuilderWorld`
+
+- `item_mapping: dict[str, str]`: A mapping of actual item name to logical item name
 
 ### Rule API
 
