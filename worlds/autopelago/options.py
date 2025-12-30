@@ -1,16 +1,37 @@
 import logging
-import typing
 from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, ClassVar, Literal
 
 import yaml
 
 from Options import Choice, OptionList, OptionSet, PerGameCommonOptions, Range, Toggle, Visibility
 from worlds.AutoWorld import World
 
+from .definitions_types import Aura
+
 if TYPE_CHECKING:
     from Options import PlandoOptions
+
+FriendlyBuffNames = Literal["Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"]
+buff_name_map: dict[FriendlyBuffNames, Aura] = {
+    "Well Fed": "well_fed",
+    "Lucky": "lucky",
+    "Energized": "energized",
+    "Stylish": "stylish",
+    "Confident": "confident",
+    "Smart": "smart",
+}
+
+FriendlyTrapNames = Literal["Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"]
+trap_name_map: dict[FriendlyTrapNames, Aura] = {
+    "Upset Tummy": "upset_tummy",
+    "Unlucky": "unlucky",
+    "Sluggish": "sluggish",
+    "Distracted": "distracted",
+    "Startled": "startled",
+    "Conspiratorial": "conspiratorial",
+}
 
 class FillWithDetermination(Toggle):
     """Either fills the rat with determination, or does nothing. Perhaps both.
@@ -42,16 +63,9 @@ class EnabledBuffs(OptionSet):
     - **Confident:** Ignore a trap
     - **Smart:** Next check is progression"""
     display_name = "Enabled Buffs"
-    valid_keys = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
-    default = frozenset({"Well Fed", "Lucky", "Energized", "Stylish", "Confident", "Smart"})
-    map: typing.ClassVar[dict[str, str]] = {
-        "Well Fed": "well_fed",
-        "Lucky": "lucky",
-        "Energized": "energized",
-        "Stylish": "stylish",
-        "Confident": "confident",
-        "Smart": "smart",
-    }
+    value: frozenset[FriendlyBuffNames]
+    valid_keys = default = frozenset(buff_name_map.keys())
+    map: ClassVar[dict[FriendlyBuffNames, Aura]] = buff_name_map
 
 
 class EnabledTraps(OptionSet):
@@ -64,17 +78,9 @@ class EnabledTraps(OptionSet):
     - **Startled:** Run towards start
     - **Conspiratorial:** Next check is trap"""
     display_name = "Enabled Traps"
-    valid_keys = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
-    default = frozenset({"Upset Tummy", "Unlucky", "Sluggish", "Distracted", "Startled", "Conspiratorial"})
-
-    map: typing.ClassVar[dict[str, str]] = {
-        "Upset Tummy": "upset_tummy",
-        "Unlucky": "unlucky",
-        "Sluggish": "sluggish",
-        "Distracted": "distracted",
-        "Startled": "startled",
-        "Conspiratorial": "conspiratorial",
-    }
+    value: frozenset[FriendlyTrapNames]
+    valid_keys = default = frozenset(trap_name_map.keys())
+    map: ClassVar[dict[FriendlyTrapNames, Aura]] = trap_name_map
 
 
 class DeathDelaySeconds(Range):
