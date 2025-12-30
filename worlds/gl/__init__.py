@@ -200,10 +200,8 @@ class GauntletLegendsWorld(World):
                      and ItemClassification.useful not in item_.progression
                      and item_.item_name not in skipped_items]:
 
-            freq = item.frequency + (30 if self.options.infinite_keys else 0) + (5 if self.options.permanent_speed else 0)
-            if item.item_name == "Invulnerability" or item.item_name == "Anti-Death Halo":
-                freq = item.frequency
-            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency >= 50:
+            freq = item.frequency
+            if item.item_name == "Anti-Death Halo" and "Death" not in skipped_items and self.options.traps_frequency.value >= 30:
                 freq *= 2
 
             filler_items += [item.item_name for _ in range(freq)]
