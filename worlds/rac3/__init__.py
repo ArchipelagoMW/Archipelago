@@ -11,7 +11,7 @@ from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.items import create_item, create_itempool, get_filler_item_selection, starting_weapons
 from worlds.rac3.locations import (get_level_locations, get_location_names, get_regions, get_total_locations,
                                    location_groups)
-from worlds.rac3.rac3options import RaC3Options
+from worlds.rac3.rac3options import RaC3Options, rac3_option_groups
 from worlds.rac3.regions import create_regions
 from worlds.rac3.rules import set_rules
 from worlds.rac3.universal_tracker import setup_options_from_slot_data, tracker_world
@@ -42,6 +42,7 @@ class RaC3Web(WebWorld):
         "setup/en",
         ["Bread"]
     )]
+    option_groups = rac3_option_groups
 
 
 rac3_logger = getLogger(RAC3OPTION.GAME_TITLE_FULL)

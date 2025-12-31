@@ -66,13 +66,46 @@ class RaC3Options(PerGameCommonOptions):
     skin: RatchetSkin
 
 
-rac3_option_groups: dict[str, list] = {
-    "Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-                     ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-                     TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation, NanotechLimitation, WeaponVendors],
-    "Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
-    "Generic Options": [Deathlink, RAC3ExcludeLocations],
-}
+#rac3_option_groups: dict[str, list] = {
+    #"Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
+    #                 ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
+    #                 TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation, NanotechLimitation, WeaponVendors],
+    #"Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
+    #"Generic Options": [Deathlink, RAC3ExcludeLocations],
+#}
+rac3_option_groups = [
+    OptionGroup("Game Options", [
+        #StartInventoryPool,
+        StartingWeapons,
+        BoltAndXPMultiplier,
+        EnableProgressiveWeapons,
+        ExtraArmorUpgrade,
+        SkillPoints,
+        Trophies,
+        TitaniumBolts,
+        NanotechMilestones,
+        EnableTraps,
+        TrapWeight,
+        Rangers,
+        Arena,
+        VidComics,
+        VRChallenges,
+        SewerCrystals,
+        SewerLimitation,
+        NanotechLimitation,
+        WeaponVendors
+    ]),
+    OptionGroup("Cosmetic Options", [
+        ShipNose,
+        ShipSkin,
+        ShipWings,
+        RatchetSkin
+    ]),
+    OptionGroup("Generic Options", [
+        Deathlink,
+        RAC3ExcludeLocations
+    ])
+]
 
 slot_data_options: list[str] = [
     RAC3OPTION.DEATHLINK,
