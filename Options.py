@@ -1134,14 +1134,14 @@ class ConnectionsMeta(AssembleOptions):
 
 
 class PlandoConnection(typing.NamedTuple):
-    class Direction:
+    class Direction(enum.StrEnum):
         entrance = "entrance"
         exit = "exit"
         both = "both"
 
     entrance: str
     exit: str
-    direction: typing.Literal["entrance", "exit", "both"]  # TODO: convert Direction to StrEnum once 3.10 is dropped
+    direction: Direction
     percentage: int = 100
 
 
