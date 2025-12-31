@@ -177,6 +177,7 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
+        self.checked_chests.clear()
         self.world_locations_checked.clear()
         self.keyblade_ability_checked.clear()
         if self.kh2seedname not in {None} and self.auth not in {None}:
@@ -247,7 +248,8 @@ class KH2Context(CommonContext):
             else:
                 asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
 
-            self.send_slot_data_event.set()
+            if self.kh2connectionconfirmed:
+                self.send_slot_data_event.set()
 
         if cmd == "ReceivedItems":
             index = args["index"]
@@ -298,8 +300,8 @@ class KH2Context(CommonContext):
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
-                new_locations = set(args["checked_locations"])
-                for location in new_locations:
+                checked = args["checked_locations"]
+                for location in checked:
                     chest = self.lookup_id_to_location[location]
                     if chest in self.chest_set and chest not in self.checked_chests:
                         self.socket.send(MessageType.ChestsOpened, [str(chest)])
@@ -468,6 +470,7 @@ class KH2Context(CommonContext):
                 chest = self.lookup_id_to_location[location]
                 if chest in self.chest_set:
                     self.socket.send(MessageType.ChestsOpened, [str(chest)])
+                    self.checked_chests.add(chest)
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
