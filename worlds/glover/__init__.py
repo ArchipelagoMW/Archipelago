@@ -178,7 +178,7 @@ class GloverWeb(WebWorld):
         "Goal": "The vortex at the end of the stage. In the case of bosses, the red and yellow target platform.",
         "Tip": "A floating blue hat that gives advice when you walk up to them and press B.",
         "Enemy": "Entities that can hurt or be an obstacle to Glover. Some enemies can only be defeated by knocking them off the map.",
-        "Inesct": "Flying insects that must be eaten as a frog. Ground insects can also be fist-slammed to be defeated."
+        "Insect": "Flying insects that must be eaten as a frog. Ground insects can also be fist-slammed to be defeated."
     }
     item_descriptions = {
         "Balls" : "A type of ball that you can transform the ball into. You will always start with one by default.",
