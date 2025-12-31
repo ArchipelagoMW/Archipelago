@@ -4,18 +4,6 @@ from Options import Choice, PerGameCommonOptions, StartInventoryPool, Toggle, Ra
     OptionSet
 
 
-class PlayerCount(Range):
-    """
-    Select how many players will be playing this world locally.
-    If 3 players will be active then change this to 3, etc.
-    """
-
-    display_name = "Local Players"
-    range_start = 1
-    range_end = 4
-    default = 1
-
-
 class IncludedAreas(OptionSet):
     """
     Select which areas will have their locations included in the randomization pool.
@@ -63,6 +51,7 @@ class MirrorShards(DefaultOnToggle):
 
     display_name = "Mirror Shards"
 
+
 class Portals(DefaultOnToggle):
     """
     Level portals will be added to the random pool as items.
@@ -70,6 +59,31 @@ class Portals(DefaultOnToggle):
     Levels will no longer unlock in succession when clearing the previous level.
     """
     display_name = "Portals"
+
+
+class Goal(Choice):
+    """
+    Choose your objective required to goal.
+    Defeat Skorne: Collect all 13 stones to unlock and defeat Skorne in the Underworld.
+    Defeat X Bosses: Defeat X number of bosses to goal.
+    """
+
+    display_name = "Goal"
+    option_defeat_skorne = 1
+    option_defeat_x_bosses =2
+    default = 1
+
+
+class BossGoalCount(Range):
+    """
+    Choose how many bosses you must defeat to goal if 'Defeat X Bosses' is selected as your goal.
+    This includes both Temple and Underworld Skorne.
+    """
+
+    display_name = "Boss Goal Count"
+    range_start = 1
+    range_end = 6
+    default = 6
 
 
 class MaxDifficulty(Range):
@@ -219,12 +233,13 @@ class UnlockCharacterFour(Choice):
 @dataclass
 class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
-    local_players: PlayerCount
     included_areas: IncludedAreas
     chests_barrels: ChestBarrels
     obelisks: Obelisks
     mirror_shards: MirrorShards
     portals: Portals
+    goal: Goal
+    boss_goal_count: BossGoalCount
     max_difficulty: MaxDifficulty
     instant_max: InstantMaxDifficulty
     infinite_keys: InfiniteKeys

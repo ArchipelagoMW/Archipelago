@@ -1,10 +1,12 @@
 import io
 import json
+import logging
 import os
 import pkgutil
 import traceback
 import typing
 import zlib
+from random import Random
 
 import Utils
 from BaseClasses import Location, ItemClassification
@@ -165,6 +167,7 @@ class GLPatchExtension(APPatchExtension):
     def patch_items(caller: APProcedurePatch, rom: bytes):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
+        local_random = Random(options["seed"])
         for i in range(len(level_locations)):
             level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             level_address_ = level_address[i]
@@ -172,9 +175,17 @@ class GLPatchExtension(APPatchExtension):
                 continue
             stream.seek(level_address_, 0)
             stream, data = get_level_data(stream, level_size[i], i)
+            for h in range(len(data.objects)):
+                obj = int.from_bytes(data.objects[h][8:10], "big")
+                logging.info(f"Level {i} Object {h} - ID: {hex(obj)}")
+                if obj == 0x1004:
+                    data.objects[h][8:10] = (0x1401).to_bytes(2, "big")
             for j, (location_name, item) in enumerate(level.items()):
                 if item[0] == 0:
                     continue
+                rom_id = items_by_id.get(item[0], ItemData()).rom_id
+                if rom_id == 0x0302:
+                    rom_id = local_random.choices([0x0300, 0x0301, 0x0302, 0x0303, 0x0304], weights=[10, 20, 40, 20, 10])[0]
                 if "Mirror" in location_name:
                     continue
                 if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0],
@@ -183,7 +194,7 @@ class GLPatchExtension(APPatchExtension):
                         index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
                         data.items += [
                             bytearray(data.objects[index][0:6])
-                            + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
+                            + (rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
                                 [0x27, 0x1C]))
                             + bytes([0x0, 0x0, 0x0, 0x0]),
                         ]
@@ -262,7 +273,7 @@ class GLPatchExtension(APPatchExtension):
                         slice_ = bytearray(chest[0:6])
                         data.items += [
                             slice_
-                            + (items_by_id[item[0]].rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
+                            + (rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
                                 [0x27, 0x1C]))
                             + bytes([chest[11], 0x0, 0x0, 0x0]),
                         ]
@@ -272,7 +283,7 @@ class GLPatchExtension(APPatchExtension):
                         if chest_barrel(location_name):
                             data.chests[j - (
                                     len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                            12:14] = items_by_id[item[0]].rom_id.to_bytes(2)
+                            12:14] = rom_id.to_bytes(2)
                             if "Chest" in location_name:
                                 data.chests[j - (
                                         len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
@@ -296,6 +307,7 @@ class GLPatchExtension(APPatchExtension):
     def patch_bins(caller: APProcedurePatch, rom: bytes) -> bytes:
         boss_items_data = json.loads(caller.get_file("boss_items.json").decode("UTF-8"))
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
+        local_random = Random(options["seed"])
 
         boss_entry_offset = TABLE_START_OFFSET + (2 * 0x30)
 
@@ -321,6 +333,9 @@ class GLPatchExtension(APPatchExtension):
                 rom_id = FILLER_ROM_ID
             else:
                 rom_id = items_by_id[item_code].rom_id
+
+            if rom_id == 0x0302:
+                rom_id = local_random.choices([0x0300, 0x0301, 0x0302, 0x0303, 0x0304], weights=[10, 20, 40, 20, 10])[0]
 
             hi_byte = (rom_id >> 8) & 0xFF
             lo_byte = rom_id & 0xFF
@@ -348,9 +363,14 @@ class GLPatchExtension(APPatchExtension):
                 rom[leftover_start:leftover_end] = bytes(leftover_end - leftover_start)
 
         # Write portals option
-        rom[0xFFFFE0] = (0x01 if options["portals"] else 0x00)
-        rom[0xFFFFE1] = (0x01 if options["instant_max"] else 0x00)
+        rom[0xFFFFE0] = options["portals"]
+        rom[0xFFFFE1] = options["instant_max"]
         rom[0xFFFFE2] = options["max"]
+        rom[0xFFFFE4] = options["keys"]
+        rom[0xFFFFE5] = options["speed"]
+        characters = options["characters"].copy()
+        characters.reverse()
+        rom[0xFFFFE8:0xFFFFEC] = characters
         return bytes(rom)
 
 
@@ -377,11 +397,16 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
 # Also save options
 def write_files(world: "GauntletLegendsWorld", patch: GLProcedurePatch) -> None:
     options_dict = {
+        "seed": world.multiworld.seed,
         "seed_name": world.multiworld.seed_name,
         "player": world.player,
         "portals": world.options.portals.value,
         "instant_max": world.options.instant_max.value,
         "max": world.options.max_difficulty.value,
+        "keys": world.options.infinite_keys.value,
+        "speed": world.options.permanent_speed.value,
+        "characters": [world.options.unlock_character_one.value, world.options.unlock_character_two.value,
+                       world.options.unlock_character_three.value, world.options.unlock_character_four.value]
     }
     patch.write_file("options.json", json.dumps(options_dict).encode("UTF-8"))
     patch.write_file("basepatch.bsdiff4", pkgutil.get_data(__name__, "data/basepatch.bsdiff4"))

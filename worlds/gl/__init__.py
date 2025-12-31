@@ -15,7 +15,7 @@ from .Locations import LocationData, all_locations, location_table, get_location
 from .Options import GLOptions, IncludedAreas
 from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
-from .Rules import set_rules
+from .Rules import set_rules, goal_conditions
 
 
 def launch_client(*args):
@@ -111,6 +111,8 @@ class GauntletLegendsWorld(World):
         self.disabled_locations.update([location.name for location in all_locations
                                         if location.difficulty > self.options.max_difficulty])
         self.excluded_regions.update([region for region in IncludedAreas.valid_keys if region not in self.options.included_areas.value])
+        self.options.boss_goal_count.value = min(self.options.boss_goal_count.value,
+                                                 6 - len([region for region in self.excluded_regions if region != "Battlefield"]))
 
         create_regions(self)
         connect_regions(self)
@@ -143,7 +145,6 @@ class GauntletLegendsWorld(World):
         chests_barrels = self.options.chests_barrels.value
         return {
             "player": self.player,
-            "local_players": self.options.local_players.value,
             "chests": int(chests_barrels == 3 or chests_barrels == 1),
             "barrels": int(chests_barrels == 3 or chests_barrels == 2),
             "speed": self.options.permanent_speed.value,
@@ -156,6 +157,8 @@ class GauntletLegendsWorld(World):
             "included_areas": [area for area in IncludedAreas.valid_keys if area in self.options.included_areas.value],
             "mirror_shards": self.options.mirror_shards.value,
             "obelisks": self.options.obelisks.value,
+            "goal": self.options.goal.value,
+            "boss_goal_count": self.options.boss_goal_count.value,
         }
 
     def create_items(self) -> None:
@@ -229,58 +232,79 @@ class GauntletLegendsWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self)
-        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(
-            "Gates of the Underworld", "Region", self.player,
-        )
+        self.multiworld.completion_condition[self.player] = lambda state: goal_conditions(state, self)
 
     def pre_fill(self) -> None:
         local_item_count = len(self.items) + len(self.death)
-        local_locations = []
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
-        unfilled_names = {location.name for location in unfilled_locations}
+        unfilled_names = {loc.name for loc in unfilled_locations}
+        skipped = get_locations_by_tags("skipped_local")
+        no_obelisk_locs = get_locations_by_tags("no_obelisks")
 
-        local_levels = [levels for id_, levels in level_locations.items() if id_ & 0x8 != 0x8]
-        skipped_local_locations = get_locations_by_tags("skipped_local")
-        for level in local_levels:
-            available_locs = [location for location in level if
-                            location.name in unfilled_names and location.name not in skipped_local_locations]
-            if not available_locs:
+        # Group available locations by level
+        level_locs = {}
+        for level_id, level in level_locations.items():
+            if level_id & 0x8 == 0x8:
                 continue
+            available = [loc for loc in level if loc.name in unfilled_names and loc.name not in skipped]
+            if available:
+                level_locs[level_id] = sorted(available, key=lambda l: l.difficulty, reverse=True)
 
-            available_locs.sort(key=lambda loc: loc.difficulty, reverse=True)
-            target_count = min(len(available_locs), (local_item_count // len(local_levels)) + 2)
-            harder_count = int(target_count * 0.6)
-            easier_count = target_count - harder_count
+        all_available = [loc for locs in level_locs.values() for loc in locs]
 
-            harder_half = available_locs[:len(available_locs) // 2]
-            easier_half = available_locs[len(available_locs) // 2:]
-            self.random.shuffle(harder_half)
-            self.random.shuffle(easier_half)
+        # Calculate target per level, ensuring we don't fill entire regions
+        target_per_level = (local_item_count // len(level_locs)) + 2 if level_locs else 0
+        local_locations = []
 
-            for i in range(min(harder_count, len(harder_half))):
-                local_locations.append(self.get_location(harder_half[i].name))
-            for i in range(min(easier_count, len(easier_half))):
-                local_locations.append(self.get_location(easier_half[i].name))
+        for level_id, locs in level_locs.items():
+            # Leave at least 1 location unfilled per region if possible
+            max_from_level = max(1, len(locs) - 1) if len(locs) > 1 else len(locs)
+            count = min(target_per_level, max_from_level)
 
+            # Split into harder/easier halves
+            mid = len(locs) // 2
+            harder, easier = locs[:mid], locs[mid:]
+            self.random.shuffle(harder)
+            self.random.shuffle(easier)
+
+            # Take 60% from harder, 40% from easier
+            harder_count = int(count * 0.6)
+            easier_count = count - harder_count
+            local_locations.extend(self.get_location(l.name) for l in harder[:harder_count])
+            local_locations.extend(self.get_location(l.name) for l in easier[:easier_count])
+
+        # If still need more, pull from levels with most remaining availability
         if len(local_locations) < local_item_count:
-            used_location_names = {loc.name for loc in local_locations}
-            remaining_unfilled = [loc for loc in unfilled_locations
-                                  if loc.name not in used_location_names
-                                  and loc.name not in skipped_local_locations]
+            used_names = {loc.name for loc in local_locations}
+            remaining = []
+            for level_id, locs in level_locs.items():
+                available = [l for l in locs if l.name not in used_names]
+                for loc in available:
+                    remaining.append((loc, len(available)))
 
-            remaining_with_difficulty = []
-            for loc in remaining_unfilled:
-                loc_data = next((l for l in all_locations if l.name == loc.name), None)
-                if loc_data:
-                    remaining_with_difficulty.append((loc, loc_data.difficulty))
-
-            remaining_with_difficulty.sort(key=lambda x: x[1], reverse=True)
-            self.random.shuffle(remaining_with_difficulty)
-
+            remaining.sort(key=lambda x: x[1], reverse=True)
             needed = local_item_count - len(local_locations)
-            for i in range(min(needed, len(remaining_with_difficulty))):
-                local_locations.append(remaining_with_difficulty[i][0])
+            local_locations.extend(self.get_location(loc.name) for loc, _ in remaining[:needed])
 
+        # Ensure obelisk accessibility
+        used_names = {loc.name for loc in local_locations}
+        remaining_unfilled = [loc.name for loc in all_available if loc.name not in used_names]
+
+        if remaining_unfilled and all(name in no_obelisk_locs for name in remaining_unfilled):
+            chosen_no_obelisk = [loc for loc in local_locations if loc.name in no_obelisk_locs]
+            unchosen_obelisk_ok = [loc for loc in all_available
+                                   if loc.name not in used_names and loc.name not in no_obelisk_locs]
+
+            swap_count = min(len(chosen_no_obelisk) // 2, len(unchosen_obelisk_ok))
+            if swap_count > 0:
+                self.random.shuffle(chosen_no_obelisk)
+                self.random.shuffle(unchosen_obelisk_ok)
+
+                for i in range(swap_count):
+                    local_locations.remove(chosen_no_obelisk[i])
+                    local_locations.append(self.get_location(unchosen_obelisk_ok[i].name))
+
+        # Final shuffle and fill
         local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)
@@ -301,7 +325,7 @@ class GauntletLegendsWorld(World):
         change = super().collect(state, item)
         if change and "Runestone" in item.name:
             state.prog_items[item.player]["stones"] += 1
-        if change and ("Runestone" in item.name or "Portal" in item.name):
+        if change and (ItemClassification.progression in item.classification):
             state.prog_items[item.player]["progression"] += 1
         return change
 
@@ -309,7 +333,7 @@ class GauntletLegendsWorld(World):
         change = super().remove(state, item)
         if change and "Runestone" in item.name:
             state.prog_items[item.player]["stones"] -= 1
-        if change and ("Runestone" in item.name or "Portal" in item.name):
+        if change and (ItemClassification.progression in item.classification):
             state.prog_items[item.player]["progression"] -= 1
         return change
 

@@ -314,13 +314,13 @@ level_header: Final[tuple[int, ...]] = (
 # Runestones required to access difficulties
 # Used in Rules.py for access calculation
 difficulty_lambda: Final[Mapping[int, Sequence[int]]] = MappingProxyType({
-    0x3: (0, 1, 2, 3),
-    0x0: (0, 3, 4, 5),
-    0x7: (0, 5, 6, 7),
-    0x6: (0, 7, 8, 9),
-    0xD: (0, 9, 10, 11),
-    0xC: (0, 11, 12, 13),
-    0x5: (0, 13, 13, 13)
+    0x3: (0, 2, 3, 4),
+    0x0: (0, 5, 6, 7),
+    0x7: (0, 8, 9, 10),
+    0x6: (0, 11, 12, 13),
+    0xD: (0, 14, 15, 16),
+    0xC: (0, 17, 18, 19),
+    0x5: (0, 20, 21, 22)
 })
 
 # ID's for names said by announcer
@@ -415,4 +415,13 @@ boss_location_offsets: Final[Mapping[str, int]] = MappingProxyType({
     "Altar of Skorne - Skorne's Left Gauntlet": 0x9C68,
     "Altar of Skorne - Skorne's Right Gauntlet": 0x9C78
 })
+
+boss_regions: Final[tuple[str, ...]] = (
+    "Dragon's Lair",
+    "Yeti's Cavern",
+    "Chimera's Keep",
+    "Vat of the Plague Fiend",
+    "Altar of Skorne",
+    "Gates of the Underworld",
+)
 

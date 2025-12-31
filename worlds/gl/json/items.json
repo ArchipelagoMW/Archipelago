@@ -4,84 +4,84 @@
     "item_name": "Key",
     "progression": 0,
     "rom_id": "0x0000",
-    "frequency": 500
+    "frequency": 650
   },
   {
     "id": 77780001,
     "item_name": "Lightning Potion",
     "progression": 0,
     "rom_id": "0x0101",
-    "frequency": 20
+    "frequency": 25
   },
   {
     "id": 77780002,
     "item_name": "Light Potion",
     "progression": 0,
     "rom_id": "0x0102",
-    "frequency": 20
+    "frequency": 25
   },
   {
     "id": 77780003,
     "item_name": "Acid Potion",
     "progression": 0,
     "rom_id": "0x0103",
-    "frequency": 20
+    "frequency": 25
   },
   {
     "id": 77780004,
     "item_name": "Fire Potion",
     "progression": 0,
     "rom_id": "0x0104",
-    "frequency": 20
+    "frequency": 25
   },
   {
     "id": 77780005,
     "item_name": "Acid Breath",
     "progression": 0,
     "rom_id": "0x0212",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780006,
     "item_name": "Lightning Breath",
     "progression": 0,
     "rom_id": "0x0211",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780007,
     "item_name": "Fire Breath",
     "progression": 0,
     "rom_id": "0x0210",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780008,
     "item_name": "Light Amulet",
     "progression": 0,
     "rom_id": "0x0209",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780009,
     "item_name": "Acid Amulet",
     "progression": 0,
     "rom_id": "0x020A",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780010,
     "item_name": "Lightning Amulet",
     "progression": 0,
     "rom_id": "0x0208",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780011,
     "item_name": "Fire Amulet",
     "progression": 0,
     "rom_id": "0x0207",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780012,
@@ -109,21 +109,21 @@
     "item_name": "Levitate",
     "progression": 0,
     "rom_id": "0x021C",
-    "frequency": 10
+    "frequency": 5
   },
   {
     "id": 77780016,
     "item_name": "Speed Boots",
     "progression": 0,
     "rom_id": "0x0200",
-    "frequency": 10
+    "frequency": 30
   },
   {
     "id": 77780017,
     "item_name": "3-Way Shot",
     "progression": 0,
     "rom_id": "0x0204",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780018,
@@ -137,21 +137,21 @@
     "item_name": "Rapid Fire",
     "progression": 0,
     "rom_id": "0x021A",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780020,
     "item_name": "Reflective Shot",
     "progression": 0,
     "rom_id": "0x0202",
-    "frequency": 10
+    "frequency": 5
   },
   {
     "id": 77780021,
     "item_name": "Reflective Shield",
     "progression": 0,
     "rom_id": "0x0216",
-    "frequency": 10
+    "frequency": 5
   },
   {
     "id": 77780022,
@@ -165,28 +165,28 @@
     "item_name": "Timestop",
     "progression": 0,
     "rom_id": "0x020C",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780024,
     "item_name": "Phoenix Familiar",
     "progression": 0,
     "rom_id": "0x0213",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780025,
     "item_name": "Growth",
     "progression": 0,
     "rom_id": "0x0214",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780026,
     "item_name": "Shrink",
     "progression": 0,
     "rom_id": "0x0215",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780027,
@@ -200,14 +200,14 @@
     "item_name": "Anti-Death Halo",
     "progression": 0,
     "rom_id": "0x020D",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780029,
     "item_name": "Invulnerability",
     "progression": 0,
     "rom_id": "0x0206",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780030,
@@ -221,7 +221,7 @@
     "item_name": "Meat",
     "progression": 0,
     "rom_id": "0x0403",
-    "frequency": 300
+    "frequency": 250
   },
   {
     "id": 77780032,
