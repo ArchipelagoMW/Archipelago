@@ -67,6 +67,12 @@ class StartWithOneConfettiCannon(Toggle):
 
     display_name = "Start With One Confetti Cannon"
 
+class StartWithLavisBlade(Toggle):
+    """
+    You know you want one.
+    """
+
+    display_name = "Start with Lavis Blade"
 
 # A Range is a numeric option with a min and max value. This will be represented by a slider on the website.
 class ConfettiExplosiveness(Range):
@@ -115,6 +121,7 @@ class APQuestOptions(PerGameCommonOptions):
     trap_chance: TrapChance
     confetti_explosiveness: ConfettiExplosiveness
     player_sprite: PlayerSprite
+    start_with_lavis_blade: StartWithLavisBlade
 
 
 # If we want to group our options by similar type, we can do so as well. This looks nice on the website.

@@ -63,29 +63,41 @@ LOCATION_TABLE: dict[str, PSOLocationData] = {
     "Enter Forest 1": PSOLocationData(
         7, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x805127FA, 3)
     ),
+    "Defeat Dragon": PSOLocationData(
+        8, RegionName.forest_boss, PSOLocationType.ITEM, PSORamData(0x805127FA, 0)
+    ),
     "Unlock Caves": PSOLocationData(
-        8, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 7)
+        9, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 7)
+    ),
+    "Scientist 1 - After Dragon": PSOLocationData(
+        10, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 6)
+    ),
+    "Defeat De Rol Le": PSOLocationData(
+        11, RegionName.caves_boss, PSOLocationType.ITEM, PSORamData(0x805127FC, 7)
     ),
     "Unlock Mines": PSOLocationData(
-        9, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FC, 6)
+        12, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FC, 6)
+    ),
+    "Defeat Vol Opt": PSOLocationData(
+        13, RegionName.mines_boss, PSOLocationType.ITEM, PSORamData(0x805127FD, 5)
     ),
     "Unlock Ruins": PSOLocationData(
-        10, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FE, 7)
+        14, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FE, 7)
     ),
 
     "Forest 2 Pillar": PSOLocationData(
         20, RegionName.forest_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 3)
     ),
     "Caves 2 Pillar": PSOLocationData(
-        21, RegionName.caves_2, PSOLocationType.ITEM, PSORamData()
+        21, RegionName.caves_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 2)
     ),
     "Mines 2 Pillar": PSOLocationData(
-        22, RegionName.mines_2, PSOLocationType.ITEM, PSORamData()
+        22, RegionName.mines_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 1)
     ),
 
-    "First Forest Drop": PSOLocationData(
-        23, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x801042A4)
-    ),
+    # "First Forest Drop": PSOLocationData(
+    #     23, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x801042A4)
+    # ),
 
     # TODO: Get actual data for this check
     "Defeat Dark Falz": PSOLocationData(
