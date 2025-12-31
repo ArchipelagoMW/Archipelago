@@ -39,7 +39,7 @@ async def checkLevels(self):
         for location, data in SoraLevels.items():
             currentLevel = self.sora_levels["Sora"]
             locationId = self.kh2_loc_name_to_id[location]
-            if locationId not in self.locations_checked \
+            if locationId not in self.checked_locations \
                     and currentLevel >= data.bitIndex:
                 self.sending.append(int(locationId))
         formDict = {
@@ -52,7 +52,7 @@ async def checkLevels(self):
                 if location in self.kh2_loc_name_to_id.keys():
                     # if current form level is above other form level
                     locationId = self.kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
+                    if locationId not in self.checked_locations \
                             and formlevel >= data.bitIndex:
                         self.sending.append(int(locationId))
     except Exception as e:
@@ -66,14 +66,14 @@ async def checkSlots(self):
     try:
         for location, data in weaponSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
-            if locationId not in self.locations_checked:
+            if locationId not in self.checked_locations:
                 if location in self.keyblade_ability_checked:
                     self.sending.append(int(locationId))
                     self.keyblade_ability_checked.discard(location)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
-            if locationId not in self.locations_checked and location in self.keyblade_ability_checked:
+            if locationId not in self.checked_locations and location in self.keyblade_ability_checked:
                 self.sending.append(int(locationId))
                 self.keyblade_ability_checked.discard(location)
     except Exception as e:

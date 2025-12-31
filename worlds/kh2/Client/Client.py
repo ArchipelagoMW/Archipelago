@@ -135,6 +135,7 @@ class KH2Context(CommonContext):
         self.SoraDied = False
         self.chest_set = set(exclusion_table["Chests"])
         self.keyblade_ability_checked = set()
+        self.checked_chests = set()
 
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
@@ -176,7 +177,6 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.serverconnected = False
-        self.locations_checked.clear()
         self.world_locations_checked.clear()
         self.keyblade_ability_checked.clear()
         if self.kh2seedname not in {None} and self.auth not in {None}:
@@ -211,13 +211,7 @@ class KH2Context(CommonContext):
                 return
 
         if cmd == "RoomInfo":
-            if not self.kh2seedname:
-                self.kh2seedname = args["seed_name"]
-            elif self.kh2seedname != args["seed_name"]:
-                self.disconnect_from_server = True
-                self.serverconnected = False
-                logger.info("Connection to the wrong seed, connect to the correct seed or close the client.")
-                return
+            self.kh2seedname = args["seed_name"]
             self.kh2_seed_save_path = f"kh2save2{self.kh2seedname}{self.auth}.json"
             self.kh2_seed_save_path_join = os.path.join(self.game_communication_path, Utils.get_file_safe_name(self.kh2_seed_save_path))
             if not os.path.exists(self.kh2_seed_save_path_join):
@@ -253,66 +247,63 @@ class KH2Context(CommonContext):
             else:
                 asyncio.create_task(self.send_msgs([{"cmd": "GetDataPackage", "games": ["Kingdom Hearts 2"]}]))
 
-            self.locations_checked = set(args["checked_locations"])
-
             self.send_slot_data_event.set()
 
         if cmd == "ReceivedItems":
             index = args["index"]
-            if self.serverconnected:
-                converted_items = list()
-                for item in args["items"]:
-                    name = self.lookup_id_to_item[item.item]
-                    item_to_send = self.item_name_to_data[name]
-                    msg_to_send = list()
-                    if item_to_send.ability:
-                        if item.location in self.all_weapon_location_id:
-                            continue
+            converted_items = list()
+            for item in args["items"]:
+                name = self.lookup_id_to_item[item.item]
+                item_to_send = self.item_name_to_data[name]
+                msg_to_send = list()
+                if item_to_send.ability:
+                    if item.location in self.all_weapon_location_id:
+                        continue
 
-                        ability_found = self.number_of_abilities_sent.get(name)
-                        if not ability_found:
-                            self.number_of_abilities_sent[name] = 1
-                        else:
-                            self.number_of_abilities_sent[name] += 1
-                        if name not in self.master_growth:
-                            if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
-                                if "Donald" in name or name in ["Flare Force", "Fantasia"]:
-                                    msg_to_send = [str(item_to_send.kh2id), "Donald", str(index)]
-                                    converted_items.append(msg_to_send)
-                                    self.received_items_IDs.append(msg_to_send)
-                                elif "Goofy" in name or name in ["Tornado Fusion", "Teamwork"]:
-                                    msg_to_send = [str(item_to_send.kh2id), "Goofy", str(index)]
-                                    converted_items.append(msg_to_send)
-                                    self.received_items_IDs.append(msg_to_send)
-                                else:
-                                    msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
-                                    converted_items.append(msg_to_send)
-                                    self.received_items_IDs.append(msg_to_send)
-                        else:
-                            msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
-                            converted_items.append(msg_to_send)
-                            self.received_items_IDs.append(msg_to_send)
+                    ability_found = self.number_of_abilities_sent.get(name)
+                    if not ability_found:
+                        self.number_of_abilities_sent[name] = 1
                     else:
-                        msg_to_send = [str(item_to_send.kh2id), "false", str(index)]
+                        self.number_of_abilities_sent[name] += 1
+                    if name not in self.master_growth:
+                        if self.number_of_abilities_sent.get(name) <= self.all_party_abilities.get(name):
+                            if "Donald" in name or name in ["Flare Force", "Fantasia"]:
+                                msg_to_send = [str(item_to_send.kh2id), "Donald", str(index)]
+                                converted_items.append(msg_to_send)
+                                self.received_items_IDs.append(msg_to_send)
+                            elif "Goofy" in name or name in ["Tornado Fusion", "Teamwork"]:
+                                msg_to_send = [str(item_to_send.kh2id), "Goofy", str(index)]
+                                converted_items.append(msg_to_send)
+                                self.received_items_IDs.append(msg_to_send)
+                            else:
+                                msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
+                                converted_items.append(msg_to_send)
+                                self.received_items_IDs.append(msg_to_send)
+                    else:
+                        msg_to_send = [str(item_to_send.kh2id), "Sora", str(index)]
                         converted_items.append(msg_to_send)
                         self.received_items_IDs.append(msg_to_send)
-                    index += 1
-                if self.kh2connectionconfirmed:
-                    #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
-                    while not self.lookup_id_to_item:
-                        time.sleep(0.5)
-                    while len(converted_items) >= 1:
-                        self.socket.send_item(converted_items[0])
-                        converted_items.pop(0)
+                else:
+                    msg_to_send = [str(item_to_send.kh2id), "false", str(index)]
+                    converted_items.append(msg_to_send)
+                    self.received_items_IDs.append(msg_to_send)
+                index += 1
+            if self.kh2connectionconfirmed:
+                #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
+                while not self.lookup_id_to_item:
+                    time.sleep(0.5)
+                while len(converted_items) >= 1:
+                    self.socket.send_item(converted_items[0])
+                    converted_items.pop(0)
 
         if cmd == "RoomUpdate":
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
-                self.locations_checked |= new_locations
                 for location in new_locations:
                     chest = self.lookup_id_to_location[location]
-                    if chest in self.chest_set:
+                    if chest in self.chest_set and chest not in self.checked_chests:
                         self.socket.send(MessageType.ChestsOpened, [str(chest)])
+                        self.checked_chests.add(chest)
 
         if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
@@ -445,7 +436,6 @@ class KH2Context(CommonContext):
         for item in self.received_items_IDs:
             self.socket.send_item(item)
 
-
     async def send_slot_data(self):
         while not self.exit_event.is_set():
             await self.send_slot_data_event.wait()
@@ -474,7 +464,7 @@ class KH2Context(CommonContext):
             self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
             for item in self.kh2_seed_save["SoldEquipment"]:
                 self.socket.send(MessageType.SoldItems, (str(item), str(self.kh2_seed_save["SoldEquipment"][item])))
-            for location in self.locations_checked:
+            for location in self.checked_locations:
                 chest = self.lookup_id_to_location[location]
                 if chest in self.chest_set:
                     self.socket.send(MessageType.ChestsOpened, [str(chest)])
