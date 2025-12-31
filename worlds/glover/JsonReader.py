@@ -718,7 +718,10 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
     #Setup the location types here
     location_name_groups : dict = {}
     for each_type in location_type_lookup:
-        location_name_groups[each_type.title()] = []
+        if each_type == "LOADING_ZONE":
+            continue
+        group_name = each_type.title()
+        location_name_groups[group_name] = []
     location_name_groups["Score"] = []
     location_name_groups["Crystals"] = []
     #Each World

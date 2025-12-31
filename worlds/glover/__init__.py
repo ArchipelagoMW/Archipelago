@@ -12,6 +12,7 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
 from worlds.generic.Rules import add_rule, set_rule
 
+from . import Options
 from .Presets import glover_option_presets
 from .Options import DifficultyLogic, GaribLogic, GloverOptions, GaribSorting, StartingBall, VictoryCondition
 from .JsonReader import build_data, generate_location_information
@@ -260,7 +261,7 @@ class GloverWorld(World):
         if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
             progressive_count = state.count(name, self.player)
             state.remove_item(name + " " + str(progressive_count), self.player)
-            state.remove(item)
+            #state.remove(item)
         #Garib counting
         if not self.garibs_are_filler:
             if self.is_garib_item(name):
@@ -1221,7 +1222,7 @@ class GloverWorld(World):
                 unlocking_crystal_location.place_locked_item(self.create_event(hub_gates[entrance_index]))
 
         #Crystal unlock locations (To reduce restrictive starts)
-        for each_crystal in range(1,8):
+        for each_crystal in range(1, 8):
             self.returning_crystal(castle_cave, each_crystal, False, "", 1945 + each_crystal)
 
     def extend_hint_information(self, hint_data : Dict[int, Dict[int, str]]):
