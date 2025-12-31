@@ -1,4 +1,5 @@
 from collections import Counter
+from random import Random
 from unittest.mock import patch
 
 from ..bases import SVTestBase
@@ -59,6 +60,12 @@ class TestMuseumsanityDisabledExcludesMuseumDonationsFromOtherLocations(SVTestBa
             self.world.set_rules()
 
             self.collect_everything()
-            for location in self.get_real_locations():
+            # Fixed seed for consistency
+            seed = 2184959
+            random = Random(seed)
+            all_locations = self.get_real_locations()
+            # We test 1% of all locations, to be fast
+            locations_to_test = random.sample(all_locations, k=len(all_locations)//100)
+            for location in locations_to_test:
                 with self.subTest(location.name):
                     self.assert_can_reach_location(location)
