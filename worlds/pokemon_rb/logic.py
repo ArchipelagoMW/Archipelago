@@ -84,6 +84,8 @@ def has_pokemon(state, count, player):
 
 
 def fossil_checks(state, count, player):
+    if state.has("ut_glitch", player):
+        return state.has("Mt Moon Fossils", player)
     return (state.has_all(["Mt Moon Fossils", "Cinnabar Lab", "Cinnabar Island"], player) and len(
         [item for item in ["Dome Fossil", "Helix Fossil", "Old Amber"] if state.has(item, player)]) >= count)
 
@@ -113,6 +115,8 @@ def route3(state, world, player):
 
 
 def evolve_level(state, level, player):
+    if state.has("ut_glitch", player):
+        return True
     return len([item for item in (
         "Defeat Brock", "Defeat Misty", "Defeat Lt. Surge", "Defeat Erika", "Defeat Koga", "Defeat Blaine",
         "Defeat Sabrina", "Defeat Viridian Gym Giovanni") if state.has(item, player)]) > level / 7

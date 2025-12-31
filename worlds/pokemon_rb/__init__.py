@@ -80,12 +80,15 @@ class PokemonRedBlueWorld(World):
     required_client_version = (0, 4, 2)
 
     topology_present = True
+    ut_can_gen_without_yaml = True
 
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {location.name: location.address for location in location_data if location.type == "Item"
                            and location.address is not None}
     item_name_groups = item_groups
     location_name_groups = location_groups
+
+    glitches_item_name = "ut_glitch"
 
     web = PokemonWebWorld()
 
@@ -113,7 +116,10 @@ class PokemonRedBlueWorld(World):
         self.local_locs = []
         self.rock_tunnel_1f_data = None
         self.rock_tunnel_b1f_data = None
+        self.gen_seed = None
+        self.region_seed = None
         self.rock_tunnel_seed = None
+        self.ut = False
 
     @classmethod
     def stage_generate_early(cls, multiworld: MultiWorld):
@@ -214,6 +220,20 @@ class PokemonRedBlueWorld(World):
             multiworld.worlds[player].type_chart = copy_chart_worlds[player].type_chart
 
     def generate_early(self):
+
+        if hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            self.ut = True
+            for key, value in self.multiworld.re_gen_passthrough[self.game].items():
+                if hasattr(self.options, key):
+                    getattr(self.options, key).value = value
+                else:
+                    setattr(self, key, value)
+            seed = self.gen_seed
+        else:
+            seed = self.random.randint(0, 999999999999999999)
+        self.gen_seed = seed
+        self.random.seed(seed)
+
         def encode_name(name, t):
             try:
                 if len(encode_text(name)) > 7:
@@ -249,15 +269,22 @@ class PokemonRedBlueWorld(World):
         process_move_data(self)
         process_pokemon_data(self)
 
+        if hasattr(self.multiworld, "generation_is_fake"):
+            dex_count = 151
+            trainersanity_count = 317
+        else:
+            dex_count = self.options.dexsanity.value
+            trainersanity_count = self.options.trainersanity.value
+
         self.dexsanity_table = [
-            *(True for _ in range(round(self.options.dexsanity.value))),
-            *(False for _ in range(151 - round(self.options.dexsanity.value)))
+            *(True for _ in range(dex_count)),
+            *(False for _ in range(151 - dex_count))
         ]
         self.random.shuffle(self.dexsanity_table)
 
         self.trainersanity_table = [
-            *(True for _ in range(self.options.trainersanity.value)),
-            *(False for _ in range(317 - self.options.trainersanity.value))
+            *(True for _ in range(trainersanity_count)),
+            *(False for _ in range(317 - trainersanity_count))
         ]
         self.random.shuffle(self.trainersanity_table)
 
@@ -378,7 +405,6 @@ class PokemonRedBlueWorld(World):
                     raise Exception("Missing Gym Leader data")
 
     def pre_fill(self) -> None:
-        process_pokemon_locations(self)
         process_trainer_data(self)
         locs = [location.name for location in location_data if location.type != "Item"]
         for location in self.multiworld.get_locations(self.player):
@@ -530,25 +556,29 @@ class PokemonRedBlueWorld(World):
                         location.item.classification = ItemClassification.useful
 
     def create_regions(self):
-        if (self.options.old_man == "vanilla" or
-                self.options.door_shuffle in ("full", "insanity")):
-            fly_map_codes = self.random.sample(range(2, 11), 2)
-        elif (self.options.door_shuffle == "simple" or
-                self.options.route_3_condition == "boulder_badge" or
-              (self.options.route_3_condition == "any_badge" and
-               self.options.badgesanity)):
-            fly_map_codes = self.random.sample(range(3, 11), 2)
+        if self.ut:
+            fly_map_code = self.free_fly_map
+            town_map_fly_map_code = self.town_map_fly_map
+        else:
+            if (self.options.old_man == "vanilla" or
+                    self.options.door_shuffle in ("full", "insanity")):
+                fly_map_codes = self.random.sample(range(2, 11), 2)
+            elif (self.options.door_shuffle == "simple" or
+                    self.options.route_3_condition == "boulder_badge" or
+                  (self.options.route_3_condition == "any_badge" and
+                   self.options.badgesanity)):
+                fly_map_codes = self.random.sample(range(3, 11), 2)
 
-        else:
-            fly_map_codes = self.random.sample([4, 6, 7, 8, 9, 10], 2)
-        if self.options.free_fly_location:
-            fly_map_code = fly_map_codes[0]
-        else:
-            fly_map_code = 0
-        if self.options.town_map_fly_location:
-            town_map_fly_map_code = fly_map_codes[1]
-        else:
-            town_map_fly_map_code = 0
+            else:
+                fly_map_codes = self.random.sample([4, 6, 7, 8, 9, 10], 2)
+            if self.options.free_fly_location:
+                fly_map_code = fly_map_codes[0]
+            else:
+                fly_map_code = 0
+            if self.options.town_map_fly_location:
+                town_map_fly_map_code = fly_map_codes[1]
+            else:
+                town_map_fly_map_code = 0
         fly_maps = ["Pallet Town", "Viridian City", "Pewter City", "Cerulean City", "Lavender Town",
                     "Vermilion City", "Celadon City", "Fuchsia City", "Cinnabar Island", "Indigo Plateau",
                     "Saffron City"]
@@ -558,10 +588,11 @@ class PokemonRedBlueWorld(World):
         self.town_map_fly_map_code = town_map_fly_map_code
 
         create_regions(self)
-        self.multiworld.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
+        process_pokemon_locations(self)
 
     def set_rules(self):
         set_rules(self.multiworld, self, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state, player=self.player: state.has("Become Champion", player=player)
 
     def create_item(self, name: str) -> Item:
         return PokemonRBItem(name, self.player)
@@ -664,54 +695,36 @@ class PokemonRedBlueWorld(World):
                     hint_data[self.player][location.address] = location.parent_region.entrance_hint
 
     def fill_slot_data(self) -> dict:
-        ret = {
-            "second_fossil_check_condition": self.options.second_fossil_check_condition.value,
-            "require_item_finder": self.options.require_item_finder.value,
-            "randomize_hidden_items": self.options.randomize_hidden_items.value,
-            "badges_needed_for_hm_moves": self.options.badges_needed_for_hm_moves.value,
-            "oaks_aide_rt_2": self.options.oaks_aide_rt_2.value,
-            "oaks_aide_rt_11": self.options.oaks_aide_rt_11.value,
-            "oaks_aide_rt_15": self.options.oaks_aide_rt_15.value,
-            "extra_key_items": self.options.extra_key_items.value,
-            "extra_strength_boulders": self.options.extra_strength_boulders.value,
-            "tea": self.options.tea.value,
-            "old_man": self.options.old_man.value,
-            "elite_four_badges_condition": self.options.elite_four_badges_condition.value,
-            "elite_four_key_items_condition": self.options.elite_four_key_items_condition.total,
-            "elite_four_pokedex_condition": self.options.elite_four_pokedex_condition.total,
-            "victory_road_condition": self.options.victory_road_condition.value,
-            "route_22_gate_condition": self.options.route_22_gate_condition.value,
-            "route_3_condition": self.options.route_3_condition.value,
-            "robbed_house_officer": self.options.robbed_house_officer.value,
-            "viridian_gym_condition": self.options.viridian_gym_condition.value,
-            "cerulean_cave_badges_condition": self.options.cerulean_cave_badges_condition.value,
-            "cerulean_cave_key_items_condition": self.options.cerulean_cave_key_items_condition.total,
+        ret = self.options.as_dict(
+            "second_fossil_check_condition", "require_item_finder", "randomize_hidden_items",
+            "badges_needed_for_hm_moves", "oaks_aide_rt_2", "oaks_aide_rt_11", "oaks_aide_rt_15",
+            "extra_key_items", "extra_strength_boulders", "tea", "old_man", "elite_four_badges_condition",
+            "elite_four_key_items_condition", "elite_four_pokedex_condition", "victory_road_condition",
+            "route_22_gate_condition", "route_3_condition", "robbed_house_officer", "viridian_gym_condition",
+            "cerulean_cave_badges_condition", "cerulean_cave_key_items_condition", "randomize_pokedex", "trainersanity",
+            "death_link", "prizesanity", "poke_doll_skip", "bicycle_gate_skips", "stonesanity", "door_shuffle",
+            "warp_tile_shuffle", "dark_rock_tunnel_logic", "split_card_key", "all_elevators_locked", "require_pokedex",
+            "area_1_to_1_mapping", "blind_trainers", "game_version", "exp_all", "randomize_pokemon_locations",
+            "randomize_legendary_pokemon", "catch_em_all", "hm_same_type_compatibility", "hm_normal_type_compatibility",
+            "hm_other_type_compatibility", "inherit_tm_hm_compatibility", "randomize_move_types",
+            "randomize_pokemon_types", "secondary_type_chance"
+        )
+        ret |= {
             "free_fly_map": self.fly_map_code,
             "town_map_fly_map": self.town_map_fly_map_code,
             "extra_badges": self.extra_badges,
-            "randomize_pokedex": self.options.randomize_pokedex.value,
-            "trainersanity": self.options.trainersanity.value,
-            "death_link": self.options.death_link.value,
-            "prizesanity": self.options.prizesanity.value,
-            "poke_doll_skip": self.options.poke_doll_skip.value,
-            "bicycle_gate_skips": self.options.bicycle_gate_skips.value,
-            "stonesanity": self.options.stonesanity.value,
-            "door_shuffle": self.options.door_shuffle.value,
-            "warp_tile_shuffle": self.options.warp_tile_shuffle.value,
-            "dark_rock_tunnel_logic": self.options.dark_rock_tunnel_logic.value,
-            "split_card_key": self.options.split_card_key.value,
-            "all_elevators_locked": self.options.all_elevators_locked.value,
-            "require_pokedex": self.options.require_pokedex.value,
-            "area_1_to_1_mapping": self.options.area_1_to_1_mapping.value,
-            "blind_trainers": self.options.blind_trainers.value,
-            "game_version": self.options.game_version.value,
-            "exp_all": self.options.exp_all.value,
-
+            "gen_seed": self.gen_seed,
+            "region_seed": self.region_seed,
+            "rock_tunnel_seed": self.rock_tunnel_seed
         }
         if self.options.type_chart_seed == "random" or self.options.type_chart_seed.value.isdigit():
             ret["type_chart"] = self.type_chart
 
         return ret
+
+    @staticmethod
+    def interpret_slot_data(slot_data: typing.Dict[str, typing.Any]) -> typing.Dict[str, typing.Any]:
+        return slot_data
 
 class PokemonRBItem(Item):
     game = "Pokemon Red and Blue"

@@ -140,8 +140,6 @@ def find_regions(layout, warps, objects):
 
 
 def randomize_rock_tunnel(random: random.Random):
-    seed = random.randint(0, 999999999999999999)
-    random.seed(seed)
 
     map1f = [row.copy() for row in layout1F]
     mapb1f = [row.copy() for row in layout2F]
@@ -424,4 +422,4 @@ def randomize_rock_tunnel(random: random.Random):
                    + find_regions(mapb1f, warps_b1f, objects_b1f))
     regions = {region_name: data for region_name, data in zip(region_names, region_data)}
 
-    return regions, seed, bytes([b for row in map1f for b in row]), bytes([b for row in mapb1f for b in row])
+    return regions, bytes([b for row in map1f for b in row]), bytes([b for row in mapb1f for b in row])

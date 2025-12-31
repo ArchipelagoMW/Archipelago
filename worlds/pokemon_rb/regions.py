@@ -1523,12 +1523,19 @@ def create_regions(world):
 
     stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
 
+    if world.ut:
+        seed = world.rock_tunnel_seed
+    else:
+        seed = world.random.randint(0, 999999999999999999)
+        world.rock_tunnel_seed = seed
+    world.random.seed(seed)
+
     if world.options.randomize_rock_tunnel:
-        (rock_tunnel_regions, world.rock_tunnel_seed, world.rock_tunnel_1f_data,
+        (rock_tunnel_regions, world.rock_tunnel_1f_data,
          world.rock_tunnel_b1f_data) = randomize_rock_tunnel(world.random)
 
     for location in location_data:
-        if location.inclusion(world, player):
+        if location.inclusion(world, player) or hasattr(multiworld, "generation_is_fake"):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
                                                 location.type, location.level, location.level_address)
             location_region = location.region
@@ -1588,8 +1595,6 @@ def create_regions(world):
                             location_object.party_data = deepcopy(location.party_data)
                 else:
                     world.item_pool.append(item)
-
-
 
     advancement_items = [item.name for item in world.item_pool if item.advancement] \
                         + [item.name for item in world.multiworld.precollected_items[world.player] if
@@ -1986,6 +1991,14 @@ def create_regions(world):
             "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
             "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
         ]]
+
+    if world.ut:
+        seed = world.region_seed
+    else:
+        seed = world.random.randint(0, 999999999999999999)
+        world.region_seed = seed
+    world.random.seed(seed)
+
     for attempt in range(10):
         try:
             door_shuffle(world, multiworld, player, badges, badge_locs)

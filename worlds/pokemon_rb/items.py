@@ -197,6 +197,8 @@ item_table = {
     "Mt Moon Fossils": ItemData(None, ItemClassification.progression, []),
     "Cinnabar Lab": ItemData(None, ItemClassification.progression, []),
 
+    "ut_glitch": ItemData(None, ItemClassification.progression, []),
+
     "Trainer Parties": ItemData(None, ItemClassification.filler, [])
 }
 
