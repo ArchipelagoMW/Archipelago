@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import OptionGroup, StartInventoryPool
+from Options import OptionGroup, StartInventoryPool, ProgressionBalancing, Accessibility
 from worlds.AutoWorld import PerGameCommonOptions
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.options.arena_options import Arena
@@ -27,6 +27,7 @@ from worlds.rac3.options.trophies_options import Trophies
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
 from worlds.rac3.options.weapon_vendors_options import WeaponVendors
+from worlds.tloz.Items import progression
 
 
 def create_option_groups() -> list[OptionGroup]:
@@ -74,36 +75,39 @@ class RaC3Options(PerGameCommonOptions):
     #"Generic Options": [Deathlink, RAC3ExcludeLocations],
 #}
 rac3_option_groups = [
+    OptionGroup("Generic Options", [
+        ProgressionBalancing,
+        Accessibility,
+        Deathlink,
+        RAC3ExcludeLocations
+    ]),
     OptionGroup("Game Options", [
         #StartInventoryPool,
         StartingWeapons,
         BoltAndXPMultiplier,
         EnableProgressiveWeapons,
         ExtraArmorUpgrade,
+        EnableTraps,
+        TrapWeight,
+        WeaponVendors,
         SkillPoints,
         Trophies,
         TitaniumBolts,
-        NanotechMilestones,
-        EnableTraps,
-        TrapWeight,
         Rangers,
-        Arena,
         VidComics,
         VRChallenges,
+        Arena,
         SewerCrystals,
         SewerLimitation,
-        NanotechLimitation,
-        WeaponVendors
+        NanotechMilestones,
+        NanotechLimitation
+
     ]),
     OptionGroup("Cosmetic Options", [
         ShipNose,
-        ShipSkin,
         ShipWings,
+        ShipSkin,
         RatchetSkin
-    ]),
-    OptionGroup("Generic Options", [
-        Deathlink,
-        RAC3ExcludeLocations
     ])
 ]
 
