@@ -442,6 +442,8 @@ class GloverWorld(World):
 
         #All the scores are actual scores
         for each_score in self.options.total_scores.value:
+            if each_score == 'None':
+                continue
             if not each_score.isdigit():
                 OptionError("\""+ each_score + "\" is not a valid score!")
             each_score_int = int(each_score)
@@ -773,6 +775,8 @@ class GloverWorld(World):
         score_locations : list[Location] = []
         menu_region = self.get_region("Menu")
         for each_score in self.options.total_scores.value:
+            if each_score == 'None':
+                continue
             score_address = int(each_score) + 100000000
             each_location = Location(self.player, each_score + " Score", score_address, menu_region)
             menu_region.locations.append(each_location)
@@ -1497,6 +1501,8 @@ class GloverWorld(World):
         if len(self.options.total_scores.value):
             slot_scores["TOTAL"] = []
             for each_score in self.options.total_scores.value:
+                if each_score == 'None':
+                    continue
                 slot_scores["TOTAL"].append(int(each_score))
         return slot_scores
 
