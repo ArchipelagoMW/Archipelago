@@ -260,6 +260,7 @@ class GloverWorld(World):
         if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
             progressive_count = state.count(name, self.player)
             state.remove_item(name + " " + str(progressive_count), self.player)
+            state.remove(item)
         #Garib counting
         if not self.garibs_are_filler:
             if self.is_garib_item(name):

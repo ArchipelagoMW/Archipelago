@@ -20,7 +20,7 @@ glover_option_presets = {
         "filler_life_weight" : 0,
         "filler_boomerang_weight" : 0,
         "filler_beachball_weight" : 0,
-        "filler_hercules_weight " : 0,
+        "filler_hercules_weight" : 0,
         "filler_helicopter_weight" : 0,
         "filler_speed_weight" : 0,
         "filler_frog_weight" : 0,
