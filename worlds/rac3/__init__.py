@@ -152,6 +152,7 @@ class RaC3World(World):
             RAC3OPTION.SEWER_CRYSTALS: self.options.sewer_crystals.value,
             RAC3OPTION.SEWER_LIMITATION: self.options.sewer_limitation.value,
             RAC3OPTION.NANOTECH_LIMITATION: self.options.nanotech_limitation.value,
+            RAC3OPTION.WEAPON_VENDORS: self.options.weapon_vendors.value,
             RAC3OPTION.TOTAL_LOCATIONS: get_total_locations(self),
         }
 

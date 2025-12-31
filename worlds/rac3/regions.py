@@ -366,6 +366,11 @@ extra_ranger: list[str] = [
     RAC3LOCATION.METROPOLIS_MAP_O_MATIC,
 ]
 
+veldin_weapons: list[str] = [
+    RAC3LOCATION.VELDIN_FIRST_RANGER,
+    RAC3LOCATION.VELDIN_SECOND_RANGER,
+]
+
 def create_regions(world: "RaC3World"):
     # ----- Introduction Sequence -----#
     menu = create_region(world, RAC3REGION.MENU)
@@ -574,5 +579,8 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skip sewer crystal locations that are not in every 10
                 elif options.sewer_crystals.value == 3 and crystal not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
+            case RAC3TAG.WEAPONS:
+                if options.weapon_vendors.value == 0 and LOCATION_FROM_AP_CODE[data.AP_CODE] not in veldin_weapons:
+                    return True #Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
     return False
