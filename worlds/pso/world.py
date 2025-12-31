@@ -39,8 +39,8 @@ class PSOWorld(World):
 
     # This is how we associate the options defined in our options.py with our world.
     # (Note: options.py has been imported as "apquest_options" at the top of this file to avoid a name conflict)
-    options_dataclass = apquest_options.APQuestOptions
-    options: apquest_options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+    options_dataclass = apquest_options.PSOOptions
+    options: apquest_options.PSOOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
