@@ -6,7 +6,8 @@ from worlds.AutoWorld import World
 
 # Imports of your world's files must be relative.
 from . import items, locations, regions, rules, web_world
-from . import options as apquest_options  # rename due to a name conflict with World.options
+from . import options as pso_options  # rename due to a name conflict with World.options
+from .strings.region_names import Region
 
 # APQuest will go through all the parts of the world api one step at a time,
 # with many examples and comments across multiple files.
@@ -35,12 +36,12 @@ class PSOWorld(World):
     game = "PSO"
 
     # The WebWorld is a definition class that governs how this world will be displayed on the website.
-    web = web_world.APQuestWebWorld()
+    web = web_world.PSOWebWorld()
 
     # This is how we associate the options defined in our options.py with our world.
-    # (Note: options.py has been imported as "apquest_options" at the top of this file to avoid a name conflict)
-    options_dataclass = apquest_options.PSOOptions
-    options: apquest_options.PSOOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+    # (Note: options.py has been imported as "pso_options" at the top of this file to avoid a name conflict)
+    options_dataclass = pso_options.PSOOptions
+    options: pso_options.PSOOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.
@@ -49,7 +50,7 @@ class PSOWorld(World):
 
     # There is always one region that the generator starts from & assumes you can always go back to.
     # This defaults to "Menu", but you can change it by overriding origin_region_name.
-    origin_region_name = "Overworld"
+    origin_region_name = Region.pioneer_2
 
     # Our world class must have certain functions ("steps") that get called during generation.
     # The main ones are: create_regions, set_rules, create_items.
@@ -83,5 +84,5 @@ class PSOWorld(World):
     def fill_slot_data(self) -> Mapping[str, Any]:
         # If you need access to the player's chosen options on the client side, there is a helper for that.
         return self.options.as_dict(
-            "hard_mode", "hammer", "extra_starting_chest", "confetti_explosiveness", "player_sprite"
+            "goal", "quests_required", "start_with_lavis_blade"
         )

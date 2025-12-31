@@ -3,12 +3,12 @@ from worlds.AutoWorld import WebWorld
 
 from .options import option_groups, option_presets
 
-
+# TODO: Actually write a setup guide... once we know how to set it up!
 # For our game to display correctly on the website, we need to define a WebWorld subclass.
-class APQuestWebWorld(WebWorld):
+class PSOWebWorld(WebWorld):
     # We need to override the "game" field of the WebWorld superclass.
     # This must be the same string as the regular World class.
-    game = "APQuest"
+    game = "PSO"
 
     # Your game pages will have a visual theme (affecting e.g. the background image).
     # You can choose between dirt, grass, grassFlowers, ice, jungle, ocean, partyTime, and stone.
