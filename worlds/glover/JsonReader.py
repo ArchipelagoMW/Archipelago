@@ -734,6 +734,8 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
             level_prefix : str = create_level_prefix(level_prefixes, each_world_index, int(level_key[-1]))
             level_name = world_prefix + level_prefix
             prefix : str = level_name + ": "
+            if prefix == "Castle Cave: ":
+                continue
             location_name_groups[level_name] = []
             for location_name in level_data:
                 #Not regions

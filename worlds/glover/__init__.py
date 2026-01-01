@@ -1005,7 +1005,7 @@ class GloverWorld(World):
                 output = max(percentage_offsets, key=percentage_offsets.get)
             else:
                 #Item Link falls back to lives.
-                output = "Life"
+                return "Life"
 
         #Return the next expected item
         self.filler_item_counts[output] += 1
