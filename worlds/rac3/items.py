@@ -56,7 +56,7 @@ def create_itempool(world: "RaC3World") -> list[Item]:
         if RAC3ITEMTAG.ARMOR in item_tags:
             if name != RAC3ITEM.PROGRESSIVE_ARMOR:
                 continue
-            item_amount += options.extra_armor_upgrade.value
+            item_amount = options.armor_upgrade.value
 
         # Catch accidental duplicates
         if item_amount is None:

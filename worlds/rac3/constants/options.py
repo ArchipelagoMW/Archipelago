@@ -8,7 +8,7 @@ class RAC3OPTION:
     STARTING_WEAPONS = "starting_weapons"
     BOLT_AND_XP_MULTIPLIER = "bolt_and_xp_multiplier"
     ENABLE_PROGRESSIVE_WEAPONS = "enable_progressive_weapons"
-    EXTRA_ARMOR_UPGRADE = "extra_armor_upgrade"
+    ARMOR_UPGRADE = "armor_upgrade"
     SKILL_POINTS = "skill_points"
     TROPHIES = "trophies"
     TITANIUM_BOLTS = "titanium_bolts"
