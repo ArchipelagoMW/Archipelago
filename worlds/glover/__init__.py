@@ -1001,7 +1001,11 @@ class GloverWorld(World):
                 each_percent = self.filler_item_counts[each_item] / self.total_filler
                 #The offset is the target percentage minus the current percentage
                 percentage_offsets[each_item] = self.filler_percent_table[each_item] - each_percent
-            output = max(percentage_offsets, key=percentage_offsets.get)
+            if len(percentage_offsets) > 0:
+                output = max(percentage_offsets, key=percentage_offsets.get)
+            else:
+                #Item Link falls back to lives.
+                output = "Life"
 
         #Return the next expected item
         self.filler_item_counts[output] += 1

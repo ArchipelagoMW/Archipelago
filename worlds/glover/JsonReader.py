@@ -788,7 +788,7 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
         for each_loc, each_id in location_name_groups.items():
             if each_id == 1945 + each_crystal:
                 each_loc
-        #turn_in_name = "Ball Turn-In " + str(each_crystal)
-        #location_name_groups[turn_in_name] = 1945 + each_crystal
-        #location_name_groups["Crystals"].append(turn_in_name)
+        turn_in_name = "Ball Turn-In " + str(each_crystal)
+        location_name_groups[turn_in_name] = 1945 + each_crystal
+        location_name_groups["Crystals"].append(turn_in_name)
     return [location_name_to_id, location_name_groups]
