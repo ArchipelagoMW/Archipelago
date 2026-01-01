@@ -125,21 +125,15 @@ class InfiniteKeys(Toggle):
     display_name = "Infinite Keys"
 
 
-class TrapsChoice(Choice):
+class IncludedTraps(OptionSet):
     """
     Choose what traps will be put in the item pool.
-    All Active: Both Death and Poison Fruit will be added to the item pool.
-    Only Death: Death will be added to the item pool.
-    Only Fruit: Poison Fruit will be added to the item pool.
-    None Active: No Traps will be added to the item pool.
+    Valid Keys: Death, Poison Fruit, Crossbow Shooter, Bomb Thrower, Bomb Runner, Golem
     """
 
-    display_name = "Active Traps"
-    option_all_active = 0
-    option_only_death = 1
-    option_only_fruit = 2
-    option_none_active = 3
-    default = 0
+    display_name = "Included Traps"
+    valid_keys = ["Death", "Poison Fruit", "Crossbow Shooter", "Bomb Thrower", "Bomb Runner", "Golem"]
+    default = ["Death", "Poison Fruit", "Crossbow Shooter", "Bomb Thrower", "Bomb Runner", "Golem"]
 
 
 class TrapsFrequency(Range):
@@ -244,7 +238,7 @@ class GLOptions(DeathLinkMixin, PerGameCommonOptions):
     instant_max: InstantMaxDifficulty
     infinite_keys: InfiniteKeys
     permanent_speed: PermaSpeed
-    traps_choice: TrapsChoice
+    included_traps: IncludedTraps
     traps_frequency: TrapsFrequency
     local_filler_frequency: LocalFillerFrequency
     unlock_character_one: UnlockCharacterOne

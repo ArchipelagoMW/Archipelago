@@ -18,7 +18,9 @@ from .Data import (
     level_locations,
     sounds,
     colors,
-    portals
+    portals,
+    spawner_trap_ids,
+    player_compass_index
 )
 from .Items import ItemData, items_by_id
 
@@ -29,9 +31,9 @@ PLAYER_COLOR = 0xFD30E
 SOUND_ADDRESS = 0xAE740
 SOUND_START = 0xEEFC
 PLAYER_KILL = 0xFD300
+PLAYER_ACTIVE = 0xFD36E
 BOSS_GOAL = 0x45D34
 BOSS_GOAL_BACKUP = 0x45D3C
-LEVEL_LOADING = 0x64A50
 LOCATIONS_BASE_ADDRESS = 0x64A68
 ZONE_ID = 0x6CA58
 LEVEL_ID = 0x6CA5C
@@ -122,14 +124,19 @@ class GauntletLegendsContext(CommonContext):
         self.item_locations: list[int] = []
         self.obelisk_locations: list[int] = []
         self.chest_locations: list[int] = []
+        self.spawner_locations: list[int] = []
         self.item_address: int = 0
         self.chest_address: int = 0
+        self.spawner_address: int = 0
+        self.vanilla_spawner_count: int = 0
         self.zone: int = 0
         self.level: int = 0
         self.current_zone: int = 0
         self.current_level: int = 0
         self.level_id: int = 0
         self.location_scouts: list[NetworkItem] = []
+        self.players: list[int] = []
+        self.queued_traps: list[tuple[str, int, bool]] = []
 
     def on_deathlink(self, data: dict):
         self.deathlink_pending = True
@@ -165,7 +172,9 @@ class GauntletLegendsContext(CommonContext):
 
     async def update_item(self, name: str, count: int, player: int = None, infinite_count: bool = False):
         name = self._normalize_item_name(name)
-        await self._write_ram(MOD_ITEM_ID, int.to_bytes((item_ids[name] if not infinite_count else item_ids[name] & 0xFFFF), 4, "little"))
+        await self._write_ram(MOD_ITEM_ID,
+                              int.to_bytes((item_ids[name] if not infinite_count else item_ids[name] & 0xFFFF), 4,
+                                           "little"))
         await self._write_ram(MOD_QUANTITY, int.to_bytes(count, 4, "little", signed=True))
         await self._write_ram(MOD_PLAYER_ID, int.to_bytes(player, 4, "little"))
 
@@ -188,25 +197,28 @@ class GauntletLegendsContext(CommonContext):
     # Update inventory based on items received from server
     # Also adds starting items based on a few yaml options
     async def handle_items(self):
-        players = await self._read_ram(MOD_PLAYERS_LIST, 4)
-        players = [player for player in players if player != 0]
+        self.players = list(await self._read_ram(MOD_PLAYERS_LIST, 4))
+        players = [player for player in self.players if player != 0]
         for player in players:
-            compass = await self._read_ram_int(MOD_COMPASS_COUNT + (2 * (player - 1)), 2)
+            compass = await self._read_ram_int(MOD_COMPASS_COUNT + (2 * player_compass_index[player]), 2)
             if compass - 1 < len(self.items_received):
                 for index in range(compass - 1, len(self.items_received)):
                     item = self.items_received[index].item
-                    item_name = items_by_id[item].item_name
-
-                    if item_name == "Death":
+                    if player != players[0] and item in spawner_trap_ids:
                         continue
-
-                    await self.wait_for_mod_clear()
-                    await asyncio.sleep(0.02)
-                    await self.update_item(item_name, base_count[item_name], player)
-                    await self.wait_for_mod_clear()
-                    await asyncio.sleep(0.02)
+                    item_name = items_by_id[item].item_name
+                    if self.current_zone in (0x8, 0xE) and item in spawner_trap_ids:
+                        if len([trap for trap in self.queued_traps if trap[1] != index]) < 1:
+                            self.queued_traps.append((item_name, index, False))
+                    await self.give_item(item_name, player)
                     await self.update_item("Compass", 1, player)
 
+    async def give_item(self, item_name: str, player: int):
+        await self.wait_for_mod_clear()
+        await asyncio.sleep(0.02)
+        await self.update_item(item_name, base_count[item_name], player)
+        await self.wait_for_mod_clear()
+        await asyncio.sleep(0.02)
 
     async def wait_for_mod_clear(self, poll_interval: float = 0.05):
         while True:
@@ -241,11 +253,15 @@ class GauntletLegendsContext(CommonContext):
             self.obelisk_locations = []
             self.item_locations = []
             self.chest_locations = []
+            self.spawner_locations = []
             self.useful = []
             self.obelisks = []
+            self.vanilla_spawner_count = 0
 
-            raw_locations = [location for location in level_locations.get(self.level_id, []) if "Mirror" not in location.name and "Skorne" not in location.name]
-            scoutable_location_ids = [location.id for location in raw_locations if location.id in ctx.checked_locations or location.id in self.missing_locations]
+            raw_locations = [location for location in level_locations.get(self.level_id, []) if
+                             "Mirror" not in location.name and "Skorne" not in location.name]
+            scoutable_location_ids = [location.id for location in raw_locations if
+                                      location.id in ctx.checked_locations or location.id in self.missing_locations]
 
             # Scout locations if any exist
             if raw_locations:
@@ -257,35 +273,59 @@ class GauntletLegendsContext(CommonContext):
                 while not self.location_scouts:
                     await asyncio.sleep(0.1)
 
-            # Categorize scouted locations
-            self.obelisks = [
-                item for item in self.location_scouts
-                if "Obelisk" in items_by_id.get(item.item, ItemData()).item_name
-                   and item.player == self.slot
-            ]
+            # Build lookup for scouted items by location
+            scouted_by_location = {item.location: item for item in self.location_scouts}
 
-            self.useful = [
-                item for item in self.location_scouts
-                if "Obelisk" not in items_by_id.get(item.item, ItemData()).item_name
-                   and items_by_id.get(item.item, ItemData()).progression in
-                   [ItemClassification.useful, ItemClassification.progression]
-                   and item.player == self.slot
-            ]
+            # Categorize scouted locations - mirror ROM's patch_items logic exactly
+            for loc in raw_locations:
+                scouted_item = scouted_by_location.get(loc.id)
+                if not scouted_item:
+                    continue  # No item at this location (item[0] == 0 in ROM)
 
-            obelisk_ids = {item.location for item in self.obelisks}
-            useful_ids = {item.location for item in self.useful}
+                item_id = scouted_item.item
+                item_player = scouted_item.player
+                item_data = items_by_id.get(item_id, ItemData())
+                is_chest = "Chest" in loc.name or ("Barrel" in loc.name and "Barrel of Gold" not in loc.name)
 
-            self.obelisk_locations = [loc.id for loc in raw_locations if loc.id in obelisk_ids]
-            self.item_locations = [
-                loc.id for loc in raw_locations
-                if (("Chest" not in loc.name and
-                     ("Barrel" not in loc.name or "Barrel of Gold" in loc.name) and
-                     loc.id not in self.obelisk_locations) or loc.id in useful_ids)
-            ]
-            self.chest_locations = [
-                loc.id for loc in raw_locations
-                if loc.id not in self.obelisk_locations and loc.id not in self.item_locations
-            ]
+                # Skip obelisk locations (ROM handles separately with continue)
+                if "Obelisk" in loc.name:
+                    if "Obelisk" in item_data.item_name and item_player == self.slot:
+                        self.obelisk_locations.append(loc.id)
+                        self.obelisks.append(scouted_item)
+                    # else: obelisk location becomes item, handled below as item_location
+                    continue
+
+                # Check spawner (ROM: item[1] == player and item[0] in SPAWNER_TRAP_IDS)
+                if item_player == self.slot and item_id in spawner_trap_ids:
+                    self.spawner_locations.append(loc.id)
+                    continue
+
+                # Check non-local player (ROM: item[1] != player) - stays as item/chest
+                if item_player != self.slot:
+                    if is_chest:
+                        self.chest_locations.append(loc.id)
+                    else:
+                        self.item_locations.append(loc.id)
+                    continue
+
+                # Check obelisk item at non-obelisk location (ROM: "Obelisk" in item_name)
+                if "Obelisk" in item_data.item_name:
+                    self.obelisk_locations.append(loc.id)
+                    self.obelisks.append(scouted_item)
+                    continue
+
+                # Check useful/progression chest -> item conversion
+                if item_data.progression in (ItemClassification.useful, ItemClassification.progression) and is_chest:
+                    self.item_locations.append(loc.id)
+                    self.useful.append(scouted_item)
+                    continue
+
+                # Regular item/chest
+                if is_chest:
+                    self.chest_locations.append(loc.id)
+                else:
+                    self.item_locations.append(loc.id)
+
             self.scouted = True
         except Exception:
             logger.error(traceback.format_exc())
@@ -313,17 +353,35 @@ class GauntletLegendsContext(CommonContext):
         if not self.scouted:
             await self.scout_locations(self)
 
-        loading = await self._read_ram_int(LEVEL_LOADING, 1)
-        if loading == 1:
+        active = await self._read_ram_int(PLAYER_ACTIVE, 1)
+        if active == 0:
             return []
+
+        if len(self.queued_traps) > 0:
+            for i, trap_name, index, triggered in enumerate(self.queued_traps):
+                if not triggered:
+                    await self.give_item(trap_name, self.players[0])
+                    self.queued_traps[i] = (trap_name, index, True)
+
+            self.queued_traps = []
 
         locations_address = await self._read_ram_int(LOCATIONS_BASE_ADDRESS, 4) & 0xFFFFFF
         self.item_address = await self._read_ram_int(locations_address + 0x14, 4)
+        self.spawner_address = await self._read_ram_int(locations_address + 0x1C, 4)
         self.chest_address = await self._read_ram_int(locations_address + 0x30, 4)
-        if 0x7FFF0BAD in (self.item_address, self.chest_address):
+
+        # Read vanilla spawner count from level header (2 bytes at offset 0x28)
+        spawner_count_data = await self._read_ram(locations_address + 0x6, 2)
+        if spawner_count_data and not self.vanilla_spawner_count:
+            total_spawner_count = int.from_bytes(spawner_count_data, "little")
+            # Vanilla count is total minus the ones we added
+            self.vanilla_spawner_count = total_spawner_count - len(self.spawner_locations)
+
+        if 0x7FFF0BAD in (self.item_address, self.chest_address, self.spawner_address):
             return []
 
         self.item_address &= 0xFFFFFF
+        self.spawner_address &= 0xFFFFFF
         self.chest_address &= 0xFFFFFF
 
         acquired = []
@@ -347,6 +405,17 @@ class GauntletLegendsContext(CommonContext):
             active, state = chest_section[offset + 0x2], chest_section[offset + 0x3]
             if state < 0x7F and active == 1 and state != 1:
                 acquired.append(loc_id)
+
+        # Check spawner locations - these are added after vanilla spawners
+        # Read spawners starting after vanilla_spawner_count
+        if self.spawner_locations:
+            spawner_start = self.spawner_address + (self.vanilla_spawner_count * 0x1C)
+            spawner_section = await self._read_ram(spawner_start, len(self.spawner_locations) * 0x1C)
+            for i, loc_id in enumerate(self.spawner_locations):
+                offset = i * 0x1C
+                active, state, hit = spawner_section[offset + 0x2], spawner_section[offset + 0x3], spawner_section[offset + 0x1A]
+                if active == 1 and hit == 1:
+                    acquired.append(loc_id)
 
         await self.update_stage()
         return [] if self.zone != self.current_zone or self.level != self.current_level else acquired
@@ -373,6 +442,7 @@ class GauntletLegendsContext(CommonContext):
         ui = super().make_gui()
         ui.base_title = "Archipelago Gauntlet Legends Client"
         return ui
+
 
 async def gl_sync_task(ctx: GauntletLegendsContext):
     logger.info("Starting N64 connector...")
@@ -435,8 +505,6 @@ async def gl_sync_task(ctx: GauntletLegendsContext):
             ctx.socket = RetroSocket()
             ctx.retro_connected = False
             await asyncio.sleep(2)
-
-
 
 
 _original_opt_content: dict[str, str | None] = {}

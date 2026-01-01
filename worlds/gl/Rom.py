@@ -1,6 +1,5 @@
 import io
 import json
-import logging
 import os
 import pkgutil
 import traceback
@@ -13,7 +12,7 @@ from BaseClasses import Location, ItemClassification
 
 from worlds.Files import APPatchExtension, APProcedurePatch, APTokenMixin
 
-from .Data import level_address, level_header, level_locations, level_size, boss_location_offsets
+from .Data import level_address, level_header, level_locations, level_size, boss_location_offsets, spawner_trap_ids
 from .Items import ItemData, items_by_id
 from .Locations import locationName_to_data, GLLocation
 
@@ -22,6 +21,28 @@ if typing.TYPE_CHECKING:
 
 TABLE_START_OFFSET = 0x12E0
 EXPANDED_GAME_ROM_OFFSET = 0x1000000  # 16MB mark
+
+
+def create_spawner_from_item(item_data: bytearray, spawner_rom_id: int, difficulty: int) -> bytearray:
+    spawner = bytearray(16)
+    spawner[0:6] = item_data[0:6]
+    spawner[6:8] = (0).to_bytes(2, "big")
+    spawner[8:12] = spawner_rom_id.to_bytes(4, "big")
+    spawner[12:14] = (0x0003).to_bytes(2, "big")
+    spawner[14] = difficulty
+    spawner[15] = 0x00
+    return spawner
+
+
+def create_spawner_from_chest(chest_data: bytearray, spawner_rom_id: int, difficulty: int) -> bytearray:
+    spawner = bytearray(16)
+    spawner[0:6] = chest_data[0:6]
+    spawner[6:8] = chest_data[6:8]
+    spawner[8:12] = spawner_rom_id.to_bytes(4, "big")
+    spawner[12:14] = (0x0003).to_bytes(2, "big")
+    spawner[14] = difficulty
+    spawner[15] = 0x00
+    return spawner
 
 
 def be32(b: bytes) -> int:
@@ -132,6 +153,8 @@ class LevelData:
     chests_replaced_by_items: int = 0
     obelisks_replaced_by_items: int = 0
     obelisks_kept: int = 0
+    items_replaced_by_spawners: int = 0
+    chests_replaced_by_spawners: int = 0
 
     def __init__(self):
         self.items = []
@@ -168,6 +191,8 @@ class GLPatchExtension(APPatchExtension):
         stream = io.BytesIO(rom)
         options = json.loads(caller.get_file("options.json").decode("UTF-8"))
         local_random = Random(options["seed"])
+        player = options["player"]
+
         for i in range(len(level_locations)):
             level: dict[str, tuple] = json.loads(caller.get_file(f"level_{i}.json").decode("utf-8"))
             level_address_ = level_address[i]
@@ -175,122 +200,135 @@ class GLPatchExtension(APPatchExtension):
                 continue
             stream.seek(level_address_, 0)
             stream, data = get_level_data(stream, level_size[i], i)
-            for h in range(len(data.objects)):
-                obj = int.from_bytes(data.objects[h][8:10], "big")
-                logging.info(f"Level {i} Object {h} - ID: {hex(obj)}")
-                if obj == 0x1004:
-                    data.objects[h][8:10] = (0x1401).to_bytes(2, "big")
+
+            # Track deletions for index calculations
+            items_deleted = 0
+            chests_deleted = 0
+            chests_seen = 0
+
             for j, (location_name, item) in enumerate(level.items()):
                 if item[0] == 0:
                     continue
-                rom_id = items_by_id.get(item[0], ItemData()).rom_id
+
+                item_data = items_by_id.get(item[0], ItemData())
+                rom_id = item_data.rom_id
                 if rom_id == 0x0302:
-                    rom_id = local_random.choices([0x0300, 0x0301, 0x0302, 0x0303, 0x0304], weights=[10, 20, 40, 20, 10])[0]
+                    rom_id = local_random.choices(
+                        [0x0300, 0x0301, 0x0302, 0x0303, 0x0304],
+                        weights=[10, 20, 40, 20, 10]
+                    )[0]
+
                 if "Mirror" in location_name:
                     continue
-                if "Obelisk" in location_name and "Obelisk" not in items_by_id.get(item[0],
-                                                                                   ItemData()).item_name:
-                    try:
-                        index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
-                        data.items += [
-                            bytearray(data.objects[index][0:6])
-                            + (rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
-                                [0x27, 0x1C]))
-                            + bytes([0x0, 0x0, 0x0, 0x0]),
-                        ]
-                        del data.objects[index]
-                        data.obelisks_replaced_by_items += 1
-                    except Exception as e:
-                        print(item[0])
-                        print(e)
-                    continue
-                elif "Obelisk" in location_name:
-                    # Obelisk item at obelisk location
-                    try:
-                        index = [index for index in range(len(data.objects)) if data.objects[index][8] == 0x26][0]
-                        if item[1] == options["player"]:
-                            # Local player - update obelisk ID in object
-                            data.objects[index][15] = item[0] - 77780054
-                            data.obelisks_kept += 1
-                        else:
-                            # Non-local player - convert to AP item
-                            data.items += [
+
+                # Handle obelisk locations
+                if "Obelisk" in location_name:
+                    if "Obelisk" not in item_data.item_name:
+                        # Non-obelisk item at obelisk location - convert obelisk to item
+                        try:
+                            index = next(idx for idx in range(len(data.objects)) if data.objects[idx][8] == 0x26)
+                            data.items.append(
                                 bytearray(data.objects[index][0:6])
-                                + bytes([0x27, 0x1C])
-                                + bytes([0x0, 0x0, 0x0, 0x0]),
-                            ]
+                                + (rom_id.to_bytes(2) if item[1] == player else bytes([0x27, 0x1C]))
+                                + bytes([0x0, 0x0, 0x0, 0x0])
+                            )
                             del data.objects[index]
                             data.obelisks_replaced_by_items += 1
-                    except Exception as e:
-                        print(item[0])
-                        print(e)
+                        except (StopIteration, Exception):
+                            pass
+                    else:
+                        # Obelisk item at obelisk location
+                        try:
+                            index = next(idx for idx in range(len(data.objects)) if data.objects[idx][8] == 0x26)
+                            if item[1] == player:
+                                data.objects[index][15] = item[0] - 77780054
+                                data.obelisks_kept += 1
+                            else:
+                                data.items.append(
+                                    bytearray(data.objects[index][0:6])
+                                    + bytes([0x27, 0x1C, 0x0, 0x0, 0x0, 0x0])
+                                )
+                                del data.objects[index]
+                                data.obelisks_replaced_by_items += 1
+                        except (StopIteration, Exception):
+                            pass
                     continue
-                if item[1] is not options["player"]:
-                    if "Chest" in location_name or (
-                            "Barrel" in location_name and "Barrel of Gold" not in location_name
-                    ):
-                        data.chests[
-                            j - (len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                        12:14] = [0x27, 0x1C]
-                        if "Chest" in location_name:
-                            data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                                9] = 0x1
-                    else:
-                        data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][6:8] = [0x27, 0x1C]
-                else:
-                    if "Obelisk" in items_by_id[item[0]].item_name and "Obelisk" not in location_name:
-                        if chest_barrel(location_name):
-                            slice_ = bytearray(data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                                               0:6])
-                        else:
-                            slice_ = bytearray(data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][0:6])
-                        data.objects += [
-                            slice_
-                            + bytearray(
-                                [
-                                    0x0, 0x0, 0x26, 0x1, 0x0,
-                                    locationName_to_data[location_name].difficulty,
-                                    0x0, 0x0, 0x0,
-                                    item[0] - 77780054,
-                                    0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
-                                ],
-                            ),
-                        ]
-                        if chest_barrel(location_name):
-                            del data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)]
-                            data.chests_replaced_by_obelisks += 1
-                        else:
-                            del data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept]
-                            data.items_replaced_by_obelisks += 1
-                    elif (items_by_id[item[0]].progression == ItemClassification.useful or items_by_id[
-                        item[0]].progression == ItemClassification.progression) and chest_barrel(location_name):
-                        chest_index = j - (
-                                len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)
-                        chest = data.chests[chest_index]
-                        slice_ = bytearray(chest[0:6])
-                        data.items += [
-                            slice_
-                            + (rom_id.to_bytes(2) if item[1] == options["player"] else bytes(
-                                [0x27, 0x1C]))
-                            + bytes([chest[11], 0x0, 0x0, 0x0]),
-                        ]
+
+                # Calculate indices
+                is_chest = chest_barrel(location_name)
+                item_index = j - data.obelisks_kept - items_deleted
+                if is_chest:
+                    chest_index = chests_seen - chests_deleted
+                    chests_seen += 1
+
+                # Handle spawner trap items (local player only)
+                if item[1] == player and item[0] in spawner_trap_ids:
+                    difficulty = locationName_to_data[location_name].difficulty
+                    spawner_rom_id = items_by_id[item[0]].rom_id
+                    if is_chest:
+                        data.spawners.append(create_spawner_from_chest(data.chests[chest_index], spawner_rom_id, difficulty))
                         del data.chests[chest_index]
-                        data.chests_replaced_by_items += 1
+                        chests_deleted += 1
+                        data.chests_replaced_by_spawners += 1
                     else:
-                        if chest_barrel(location_name):
-                            data.chests[j - (
-                                    len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                            12:14] = rom_id.to_bytes(2)
-                            if "Chest" in location_name:
-                                data.chests[j - (
-                                        len(data.items) + data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks + data.obelisks_kept)][
-                                    9] = 0x2
-                        else:
-                            data.items[j - data.items_replaced_by_obelisks - data.obelisks_kept][6:8] = items_by_id[item[0]].rom_id.to_bytes(
-                                2)
+                        data.spawners.append(create_spawner_from_item(data.items[item_index], spawner_rom_id, difficulty))
+                        del data.items[item_index]
+                        items_deleted += 1
+                        data.items_replaced_by_spawners += 1
+                    continue
+
+                # Handle non-local player items
+                if item[1] != player:
+                    if is_chest:
+                        data.chests[chest_index][12:14] = [0x27, 0x1C]
+                        if "Chest" in location_name:
+                            data.chests[chest_index][9] = 0x1
+                    else:
+                        data.items[item_index][6:8] = [0x27, 0x1C]
+                    continue
+
+                # Handle local player items
+                if "Obelisk" in items_by_id[item[0]].item_name:
+                    # Convert item/chest to obelisk
+                    if is_chest:
+                        slice_ = bytearray(data.chests[chest_index][0:6])
+                        del data.chests[chest_index]
+                        chests_deleted += 1
+                        data.chests_replaced_by_obelisks += 1
+                    else:
+                        slice_ = bytearray(data.items[item_index][0:6])
+                        del data.items[item_index]
+                        items_deleted += 1
+                        data.items_replaced_by_obelisks += 1
+                    data.objects.append(
+                        slice_ + bytearray([
+                            0x0, 0x0, 0x26, 0x1, 0x0,
+                            locationName_to_data[location_name].difficulty,
+                            0x0, 0x0, 0x0, item[0] - 77780054,
+                            0x3F, 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                        ])
+                    )
+                elif item_data.progression in (ItemClassification.useful, ItemClassification.progression) and is_chest:
+                    # Convert chest to item for useful/progression items
+                    chest = data.chests[chest_index]
+                    data.items.append(
+                        bytearray(chest[0:6])
+                        + rom_id.to_bytes(2)
+                        + bytes([chest[11], 0x0, 0x0, 0x0])
+                    )
+                    del data.chests[chest_index]
+                    chests_deleted += 1
+                    data.chests_replaced_by_items += 1
+                else:
+                    # Regular item placement
+                    if is_chest:
+                        data.chests[chest_index][12:14] = rom_id.to_bytes(2)
+                        if "Chest" in location_name:
+                            data.chests[chest_index][9] = 0x2
+                    else:
+                        data.items[item_index][6:8] = item_data.rom_id.to_bytes(2)
+
+            # Write level data
             uncompressed = level_data_reformat(data)
             compressed = zenc(uncompressed)
             stream.seek(level_header[i] + 4, 0)
@@ -372,7 +410,6 @@ class GLPatchExtension(APPatchExtension):
         characters.reverse()
         rom[0xFFFFE8:0xFFFFEC] = characters
         return bytes(rom)
-
 
 
 class GLProcedurePatch(APProcedurePatch, APTokenMixin):
@@ -538,23 +575,26 @@ def level_data_reformat(data: LevelData) -> bytes:
     obelisk_offset = 24 * (
             data.items_replaced_by_obelisks + data.chests_replaced_by_obelisks - data.obelisks_replaced_by_items)
     item_offset = 12 * (
-            data.chests_replaced_by_items + data.obelisks_replaced_by_items - data.items_replaced_by_obelisks)
-    chest_offset = 16 * (data.chests_replaced_by_obelisks + data.chests_replaced_by_items)
+            data.chests_replaced_by_items + data.obelisks_replaced_by_items - data.items_replaced_by_obelisks - data.items_replaced_by_spawners)
+    chest_offset = 16 * (
+                data.chests_replaced_by_obelisks + data.chests_replaced_by_items + data.chests_replaced_by_spawners)
+    spawner_offset = 16 * (data.items_replaced_by_spawners + data.chests_replaced_by_spawners)
+
     stream.write(int.to_bytes(0x5C, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))
     stream.write(int.to_bytes(data.spawner_addr + item_offset, 4, "big"))
-    stream.write(int.to_bytes(data.obj_addr + item_offset, 4, "big"))
-    stream.write(int.to_bytes(data.end_addr + item_offset + obelisk_offset - chest_offset, 4, "big"))
-    stream.write(int.to_bytes(data.portal_addr + item_offset + obelisk_offset - chest_offset, 4, "big"))
-    stream.write(int.to_bytes(data.chest_addr + item_offset + obelisk_offset, 4, "big"))
-    stream.write(int.to_bytes(data.end_addr2 + item_offset + obelisk_offset - chest_offset, 4, "big"))
-    stream.write(int.to_bytes(data.end_addr3 + item_offset + obelisk_offset - chest_offset, 4, "big"))
-    stream.seek(1, 1)
-    stream.write(bytes([len(data.items)]))
-    stream.write(bytes([0x0, 0x0, 0x0]))
-    stream.write(bytes([len(data.spawners)]))
-    stream.write(bytes([0x0]))
-    stream.write(bytes([len(data.objects)]))
+    stream.write(int.to_bytes(data.obj_addr + item_offset + spawner_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr + item_offset + spawner_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(
+        int.to_bytes(data.portal_addr + item_offset + spawner_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(int.to_bytes(data.chest_addr + item_offset + spawner_offset + obelisk_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr2 + item_offset + spawner_offset + obelisk_offset - chest_offset, 4, "big"))
+    stream.write(int.to_bytes(data.end_addr3 + item_offset + spawner_offset + obelisk_offset - chest_offset, 4, "big"))
+    # Counts are 2 bytes each, big-endian
+    stream.write(len(data.items).to_bytes(2, "big"))
+    stream.write(bytes([0x0, 0x0]))
+    stream.write(len(data.spawners).to_bytes(2, "big"))
+    stream.write(len(data.objects).to_bytes(2, "big"))
     data.stream.seek(stream.tell())
     temp = bytearray(data.stream.read(48))
     temp[7] = len(data.chests)

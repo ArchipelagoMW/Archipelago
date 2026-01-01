@@ -73,6 +73,11 @@ item_ids: Final[Mapping[str, int]] = MappingProxyType({
     "Skorne's Horns": 0x840630,
     "Skorne's Right Gauntlet": 0x840A40,
     "Skorne's Left Gauntlet": 0x840A50,
+    "Death": 0x0000F0,
+    "Crossbow Shooter": 0x0000F1,
+    "Bomb Thrower": 0x0000F2,
+    "Bomb Runner": 0x0000F3,
+    "Golem": 0x0000F4,
 })
 
 # Character names used for slot data
@@ -171,7 +176,12 @@ base_count: Final[Mapping[str, int]] = MappingProxyType({
     "Portal to Erupting Fissure": 3,
     "Portal to Yeti's Cavern": 5,
     "Portal to Fortified Towers": 1,
-    "Portal to Infernal Fortress": 2
+    "Portal to Infernal Fortress": 2,
+    "Death": 1,
+    "Crossbow Shooter": 1,
+    "Bomb Thrower": 1,
+    "Bomb Runner": 1,
+    "Golem": 1
 })
 
 # (zone_config << 4) + room_config -> location list
@@ -425,3 +435,13 @@ boss_regions: Final[tuple[str, ...]] = (
     "Gates of the Underworld",
 )
 
+
+# Item IDs for spawner traps (77780087-77780090)
+spawner_trap_ids: Final[tuple[int, ...]] = (77780087, 77780088, 77780089, 77780090)
+
+player_compass_index: Final[Mapping[int, int]] = MappingProxyType({
+    1: 1,
+    2: 0,
+    3: 3,
+    4: 2
+})

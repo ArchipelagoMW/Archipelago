@@ -1,4 +1,5 @@
 import os
+
 import settings
 
 from BaseClasses import ItemClassification, Tutorial, Item, CollectionState
@@ -12,7 +13,7 @@ from .Data import obelisks, mirror_shards, portals, excluded_portals, \
     excluded_obelisks, level_locations
 from .Items import GLItem, item_table, item_list, gauntlet_item_name_groups
 from .Locations import LocationData, all_locations, location_table, get_locations_by_tags
-from .Options import GLOptions, IncludedAreas
+from .Options import GLOptions, IncludedAreas, IncludedTraps
 from .Regions import connect_regions, create_regions
 from .Rom import GLProcedurePatch, write_files
 from .Rules import set_rules, goal_conditions
@@ -79,7 +80,6 @@ class GauntletLegendsWorld(World):
     item_name_to_id = {name: data.id for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     excluded_regions: set
-    death: list[Item]
     items: list[Item]
     unlockable: set
 
@@ -89,7 +89,6 @@ class GauntletLegendsWorld(World):
         self.disabled_locations = set()
         self.excluded_regions = set()
         self.unlockable = set()
-        self.death = []
         self.items = []
 
     def create_regions(self) -> None:
@@ -171,10 +170,7 @@ class GauntletLegendsWorld(World):
             skipped_items.add("Key")
         if self.options.permanent_speed:
             skipped_items.add("Speed Boots")
-        if self.options.traps_choice == "only_death" or self.options.traps_choice == "none_active":
-            skipped_items.add("Poison Fruit")
-        if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "none_active":
-            skipped_items.add("Death")
+        skipped_items.update([item for item in IncludedTraps.valid_keys if item not in self.options.included_traps.value])
         if not self.options.obelisks:
             skipped_items.update([obelisk for obelisk in obelisks if obelisk not in self.unlockable])
         if not self.options.mirror_shards:
@@ -210,15 +206,11 @@ class GauntletLegendsWorld(World):
             filler_items += [item.item_name for _ in range(freq)]
             self.random.shuffle(filler_items)
 
-        traps_frequency = int(len(self.get_locations()) * (self.options.traps_frequency / 100))
-        if self.options.traps_choice == "all_active":
-            traps_frequency //= 2
-        if self.options.traps_choice == "only_death" or self.options.traps_choice == "all_active":
-            self.death += [self.create_item("Death") for _ in range(traps_frequency)]
-            item_required_count -= traps_frequency
-        if self.options.traps_choice == "only_fruit" or self.options.traps_choice == "all_active":
-            self.multiworld.itempool += [self.create_item("Poison Fruit") for _ in range(traps_frequency)]
-            item_required_count -= traps_frequency
+        if len(self.options.included_traps.value) != 0:
+            traps_frequency = int(len(self.get_locations()) * (self.options.traps_frequency / 100)) // len(self.options.included_traps.value)
+            for item in self.options.included_traps.value:
+                self.multiworld.itempool += [self.create_item(item) for _ in range(traps_frequency)]
+                item_required_count -= traps_frequency
 
         for i in range(item_required_count):
             if i < int(item_required_count * (self.options.local_filler_frequency / 100)):
@@ -235,7 +227,7 @@ class GauntletLegendsWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: goal_conditions(state, self)
 
     def pre_fill(self) -> None:
-        local_item_count = len(self.items) + len(self.death)
+        local_item_count = len(self.items)
         unfilled_locations = self.multiworld.get_unfilled_locations(self.player)
         unfilled_names = {loc.name for loc in unfilled_locations}
         skipped = get_locations_by_tags("skipped_local")
@@ -308,7 +300,7 @@ class GauntletLegendsWorld(World):
         local_locations = local_locations[:local_item_count]
         self.random.shuffle(self.items)
         self.random.shuffle(local_locations)
-        fast_fill(self.multiworld, self.items + self.death, local_locations)
+        fast_fill(self.multiworld, self.items, local_locations)
 
     def create_item(self, name: str) -> GLItem:
         item = item_table[name]

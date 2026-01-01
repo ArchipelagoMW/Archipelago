@@ -39,77 +39,77 @@
     "item_name": "Acid Breath",
     "progression": 0,
     "rom_id": "0x0212",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780006,
     "item_name": "Lightning Breath",
     "progression": 0,
     "rom_id": "0x0211",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780007,
     "item_name": "Fire Breath",
     "progression": 0,
     "rom_id": "0x0210",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780008,
     "item_name": "Light Amulet",
     "progression": 0,
     "rom_id": "0x0209",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780009,
     "item_name": "Acid Amulet",
     "progression": 0,
     "rom_id": "0x020A",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780010,
     "item_name": "Lightning Amulet",
     "progression": 0,
     "rom_id": "0x0208",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780011,
     "item_name": "Fire Amulet",
     "progression": 0,
     "rom_id": "0x0207",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780012,
     "item_name": "Lightning Shield",
     "progression": 0,
     "rom_id": "0x0218",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780013,
     "item_name": "Fire Shield",
     "progression": 0,
     "rom_id": "0x0217",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780014,
     "item_name": "Invisibility",
     "progression": 0,
     "rom_id": "0x0205",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780015,
     "item_name": "Levitate",
     "progression": 0,
     "rom_id": "0x021C",
-    "frequency": 5
+    "frequency": 10
   },
   {
     "id": 77780016,
@@ -130,7 +130,7 @@
     "item_name": "5-Way Shot",
     "progression": 0,
     "rom_id": "0x020E",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780019,
@@ -144,21 +144,21 @@
     "item_name": "Reflective Shot",
     "progression": 0,
     "rom_id": "0x0202",
-    "frequency": 5
+    "frequency": 10
   },
   {
     "id": 77780021,
     "item_name": "Reflective Shield",
     "progression": 0,
     "rom_id": "0x0216",
-    "frequency": 5
+    "frequency": 10
   },
   {
     "id": 77780022,
     "item_name": "Super Shot",
     "progression": 0,
     "rom_id": "0x0203",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780023,
@@ -172,14 +172,14 @@
     "item_name": "Phoenix Familiar",
     "progression": 0,
     "rom_id": "0x0213",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780025,
     "item_name": "Growth",
     "progression": 0,
     "rom_id": "0x0214",
-    "frequency": 15
+    "frequency": 20
   },
   {
     "id": 77780026,
@@ -193,7 +193,7 @@
     "item_name": "Thunder Hammer",
     "progression": 0,
     "rom_id": "0x0219",
-    "frequency": 10
+    "frequency": 15
   },
   {
     "id": 77780028,
@@ -546,5 +546,29 @@
     "item_name": "Portal to Infernal Fortress",
     "progression": 1,
     "rom_id": "0x271B"
+  },
+  {
+    "id": 77780087,
+    "item_name": "Crossbow Shooter",
+    "progression": 4,
+    "rom_id": "0x05030412"
+  },
+  {
+    "id": 77780088,
+    "item_name": "Bomb Thrower",
+    "progression": 4,
+    "rom_id": "0x05030512"
+  },
+  {
+    "id": 77780089,
+    "item_name": "Bomb Runner",
+    "progression": 4,
+    "rom_id": "0x05030612"
+  },
+  {
+    "id": 77780090,
+    "item_name": "Golem",
+    "progression": 4,
+    "rom_id": "0x05080113"
   }
 ]
