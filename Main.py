@@ -353,7 +353,7 @@ def main(args, seed=None, baked_server_options: dict[str, object] | None = None)
                 multidata = zlib.compress(restricted_dumps(multidata), 9)
 
                 with open(os.path.join(temp_dir, f'{outfilebase}.archipelago'), 'wb') as f:
-                    f.write(bytes([3]))  # version of format
+                    f.write(bytes([4]))  # version of format
                     f.write(multidata)
 
             output_file_futures.append(pool.submit(write_multidata))
