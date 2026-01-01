@@ -727,6 +727,8 @@ class GloverWorld(World):
         #Jump randomization is so easy it can just be done here
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
+        #You can always grab
+        self.multiworld.push_precollected(self.create_item("Grab"))
         #Create fake items
         self.fake_item_names.extend(dynamic_trap_name_table(self))
         #Create the Mr. Tip Table
@@ -897,7 +899,7 @@ class GloverWorld(World):
             move_items.remove("Power Ball")
         if not self.options.randomize_jump:
             move_items.remove("Jump")
-
+        move_items.remove("Grab")
         #You don't need the item pool to contain your starting ball
         move_items.remove(self.starting_ball)
         
