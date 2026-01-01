@@ -211,9 +211,8 @@ class TWWContext(CommonContext):
             Utils.async_start(self.send_msgs([{"cmd": "Get", "keys": [visited_stages_key]}]))
         elif cmd == "ReceivedItems":
             # Loop through all received items and check for the index of the first progressive magic meter.
-            magic_meter_id = ITEM_TABLE["Progressive Magic Meter"].code
             for idx, item in enumerate(self.items_received):
-                if item.item == magic_meter_id:
+                if LOOKUP_ID_TO_NAME.get(item.item) == "Progressive Magic Meter":
                     self.received_magic_idx = idx
                     break
         elif cmd == "Retrieved":
