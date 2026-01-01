@@ -29,14 +29,16 @@ from .Rules import set_rules
 VERSION: tuple[int, int, int] = (3, 0, 0)
 
 
-def run_client() -> None:
+def run_client(*args: str) -> None:
     """
     Launch the The Wind Waker client.
+
+    :param *args: Variable length argument list passed to the client.
     """
     print("Running The Wind Waker Client")
     from .TWWClient import main
 
-    launch_subprocess(main, name="TheWindWakerClient")
+    launch_subprocess(main, name="TheWindWakerClient", args=args)
 
 
 components.append(
