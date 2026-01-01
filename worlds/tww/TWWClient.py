@@ -174,6 +174,7 @@ class TWWContext(CommonContext):
 
         """
         self.auth = None
+        self.received_magic_idx = -1
         self.salvage_locations_map = {}
         self.current_stage_name = ""
         self.visited_stage_names = None
