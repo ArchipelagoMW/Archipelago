@@ -8,6 +8,7 @@ from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.options import RAC3OPTION
+from worlds.rac3.constants.player_type import RAC3PLAYERTYPE
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
 
@@ -504,4 +505,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 elif options.sewer_crystals.value == 3 and crystal not in every_5_sewer_crystals:
                     return True  # Skip sewer crystal locations that are not in every 5
             # Add more conditions here if needed in the future
+            case RAC3TAG.ONE_HP_UNSTABLE:
+                if options.one_hp_challenge.value[RAC3PLAYERTYPE.RATCHET]:
+                    return True  # Skip all unstable locations in One HP Challenge
     return False

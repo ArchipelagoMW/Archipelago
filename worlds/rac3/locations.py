@@ -166,7 +166,8 @@ all_tags: list[str] = [
     RAC3TAG.WEAPONS,
     RAC3TAG.GADGETS,
     RAC3TAG.INFOBOT,
-    RAC3TAG.VR
+    RAC3TAG.VR,
+    RAC3TAG.ONE_HP_UNSTABLE,
 ]
 
 location_groups: dict[str, set[str]] = {
@@ -202,6 +203,7 @@ location_groups: dict[str, set[str]] = {
     RAC3TAG.WEAPONS: get_from_tag(RAC3TAG.WEAPONS),
     RAC3TAG.GADGETS: get_from_tag(RAC3TAG.GADGETS),
     RAC3TAG.INFOBOT: get_from_tag(RAC3TAG.INFOBOT),
+    RAC3TAG.ONE_HP_UNSTABLE: get_from_tag(RAC3TAG.ONE_HP_UNSTABLE),
 }
 
 

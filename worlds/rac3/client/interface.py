@@ -894,9 +894,10 @@ class Rac3Interface(GameInterface):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
                     self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-                if self.planet == RAC3REGION.ANNIHILATION_NATION:
+                if self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
                     # Patch out sleeping gas health reduction to prevent death
                     self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000) # addiu v0,v0,0x0
+                    self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000) # nop
             elif character in (RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.QWARK):
                 if self._read8(RAC3STATUS.HEALTH) > 1:
                     self._write8(RAC3STATUS.HEALTH, 1)
@@ -912,9 +913,10 @@ class Rac3Interface(GameInterface):
                 # This displays as 1 HP in-game for vehicles
                 self._write_float(health_addr, 5)
         
-        if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION:
+        if not self.one_hp_challenge.get(character, False) and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
             # Restore sleeping gas health reduction if one HP challenge is not active for Ratchet
             self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x2442FFFF) # addiu v0,v0,-0x1
+            self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0xAC652850) # sw a1,0x2850(v1)
 
     def overflow_fix(self):
         nanotech_exp = self._read32(RAC3STATUS.NANOTECH_EXP)
