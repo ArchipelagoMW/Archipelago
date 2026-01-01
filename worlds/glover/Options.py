@@ -327,9 +327,9 @@ class FillerDuration(NamedRange):
     range_start = 4
     range_end = 300
     special_range_names = {
-    "default": 0
+    "default": 14
     }
-    default = "default"
+    default = 14
 
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
