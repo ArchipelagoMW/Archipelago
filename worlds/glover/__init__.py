@@ -364,6 +364,9 @@ class GloverWorld(World):
 
         #Garibs are Filler
         self.garibs_are_filler = False
+        
+        #Filler Item Counts
+        self.filler_item_counts : dict[str, int] = {}
 
         super(GloverWorld, self).__init__(world, player)
 
@@ -978,7 +981,6 @@ class GloverWorld(World):
         self.filler_percent_table = {key:val for key, val in self.filler_percent_table.items() if val > 0}
         
         #Create the counter of filler items for comparision
-        self.filler_item_counts : dict[str, int] = {}
         for each_entry in self.filler_percent_table:
             self.filler_item_counts[each_entry] = 0
         self.total_filler : float = 0.0

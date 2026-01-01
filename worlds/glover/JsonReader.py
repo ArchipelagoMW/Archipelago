@@ -136,8 +136,8 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
             rom_ids.append(-1)
     
     #Is it an enemy?
-    enemy_with_garibs : bool = check_info[0]["TYPE"] == 10
-    if enemy_with_garibs:
+    enemy_with_garibs : bool = False
+    if check_info[0]["TYPE"] == 10:
         #If so, are there garibs with this enemy?
         enemy_with_garibs = len(ap_ids) > check_info[0]["COUNT"]
 
@@ -151,7 +151,10 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
             garib_rom_ids.append(rom_ids.pop())
         garib_ap_ids.reverse()
         garib_rom_ids.reverse()
-        outputs.append(LocationData(prefix + check_name.removesuffix("s") + " Garibs", 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
+        garib_suffix = " Garib"
+        if check_info[0]["COUNT"] > 1:
+            garib_suffix += "s"
+        outputs.append(LocationData(prefix + check_name.removesuffix("s") + garib_suffix, 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
         outputs.append(LocationData(prefix + check_name, 10, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods))
     #All other checks
     else:
