@@ -1472,15 +1472,7 @@ class GloverWorld(World):
         return options
 
     def calculate_duration(self):
-        digit_count = len(str(self.options.filler_duration.value))
-        hex_output = 0
-        for each_digit in range(digit_count):
-            hex_output += pow(16, each_digit) * self.get_digit(self.options.filler_duration.value, each_digit)
-        hex_output *= 0xD
-        return hex_output
-
-    def get_digit(self, input_int, digit):
-        return math.floor(input_int / pow(10, digit)) % 10
+        return self.options.filler_duration.value - 1
 
     def generate_hints(self):
         self.mr_tip_text = {}

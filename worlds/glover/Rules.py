@@ -140,10 +140,10 @@ def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
                 items_list[each_req] = 1
         #Start with the rule set
         if index == 0:
-            set_rule(spot, lambda state, required_items = items_list : state.has_all(required_items, self.player))
+            set_rule(spot, lambda state, required_items = items_list : state.has_all_counts(required_items, self.player))
             continue
         #Otherwise, this is an alternate method
-        add_rule(spot, lambda state, required_items = items_list : state.has_all(required_items, self.player), "or")
+        add_rule(spot, lambda state, required_items = items_list : state.has_all_counts(required_items, self.player), "or")
 
 #Move all methods that require switches to the end of the list
 def sort_access_method(in_method):

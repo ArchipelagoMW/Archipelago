@@ -319,17 +319,15 @@ class ChickenHints(Choice):
     option_progression = 6
     default = 3
 
-class FillerDuration(NamedRange):
-    """How long Filler and Trap items last, in seconds.
+class FillerDuration(Range):
+    """On a scale from 1-5, how full the potion bottle gets when you are given a filler effect.
+    This also changes the duration of traps.
     """
     visibility = Visibility.template | Visibility.spoiler | Visibility.simple_ui
     display_name = "Filler Duration"
-    range_start = 4
-    range_end = 300
-    special_range_names = {
-    "default": 14
-    }
-    default = 14
+    range_start = 1
+    range_end = 5
+    default = 1
 
 class ExtraGaribsValue(Range):
     """How many Garibs 'Extra Garibs' are worth. Only applies if Garib Sorting is not By Level.
