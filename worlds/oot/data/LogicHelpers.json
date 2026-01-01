@@ -1,0 +1,143 @@
+{
+    # Rules here define replacement "functions" or item aliases.
+    # The alias itself must always be alphanumeric only--string items bypass the aliasing.
+    # Rules should be simple python and can invoke other aliases or even the
+    # at/here metarules.
+    "Hookshot": "Progressive_Hookshot",
+    "Longshot": "(Progressive_Hookshot, 2)",
+    "Silver_Gauntlets": "(Progressive_Strength_Upgrade, 2)",
+    "Golden_Gauntlets": "(Progressive_Strength_Upgrade, 3)",
+    "Scarecrow": "Progressive_Hookshot and can_play(Scarecrow_Song)",
+    "Distant_Scarecrow": "(Progressive_Hookshot, 2) and can_play(Scarecrow_Song)",
+    # Items can be directly aliased, so all occurrences of that item name get replaced,
+    # but make sure that inside the rule you use the string 'item' form
+    # to avoid infinite recursion.
+    "Goron_Tunic": "'Goron Tunic' or Buy_Goron_Tunic",
+    "Zora_Tunic": "'Zora Tunic' or Buy_Zora_Tunic",
+
+    # Refill aliases. If we start considering Bow etc refills we can enable these aliases
+    # without editing all logic files.
+    # "Bow": "'Bow'",
+    # "Slingshot": "'Slingshot'",
+    "Bombs": "Bomb_Bag",
+    "Deku_Shield": "Buy_Deku_Shield or Deku_Shield_Drop",
+    "Hylian_Shield": "Buy_Hylian_Shield",
+    "Nuts": "Buy_Deku_Nut_5 or Buy_Deku_Nut_10 or Deku_Nut_Drop",
+    "Sticks": "Buy_Deku_Stick_1 or Deku_Stick_Drop",
+    "Bugs": "'Bugs' or Buy_Bottle_Bug",
+    "Blue_Fire": "'Blue Fire' or Buy_Blue_Fire or (blue_fire_arrows and can_use(Ice_Arrows))",
+    "Fish": "'Fish' or Buy_Fish",
+    "Fairy": "'Fairy' or Buy_Fairys_Spirit",
+    "Big_Poe": "'Big Poe'",
+
+    "has_bombchus": "(Buy_Bombchu_5 or Buy_Bombchu_10 or Buy_Bombchu_20 or Bombchu_Drop) and (bombchus_in_logic or Bomb_Bag)",
+    "found_bombchus": "(bombchus_in_logic and (Bombchus or Bombchus_5 or Bombchus_10 or Bombchus_20)) or (not bombchus_in_logic and Bomb_Bag)",
+    "has_explosives": "Bombs or (bombchus_in_logic and has_bombchus)",
+    "is_child": "current_spot_child_access",
+    "is_adult": "current_spot_adult_access",
+    "is_starting_age": "current_spot_starting_age_access",
+    "is_glitched": "logic_rules != 'glitchless'",
+    "can_blast_or_smash": "has_explosives or can_use(Megaton_Hammer)",
+    "can_child_attack": "is_child and (Slingshot or Boomerang or Sticks or Kokiri_Sword or has_explosives or can_use(Dins_Fire))",
+    "can_child_damage": "is_child and (Slingshot or Sticks or Kokiri_Sword or has_explosives or can_use(Dins_Fire))",
+    "can_cut_shrubs": "is_adult or Sticks or Kokiri_Sword or Boomerang or has_explosives",
+    "can_dive": "Progressive_Scale",
+    "can_leave_forest": "open_forest != 'closed' or is_adult or is_glitched or Deku_Tree_Clear",
+    "can_plant_bugs": "is_child and Bugs",
+    "can_ride_epona": "is_adult and Epona and (can_play(Eponas_Song) or (is_glitched and can_hover))",
+    "can_stun_deku": "is_adult or (Slingshot or Boomerang or Sticks or Kokiri_Sword or has_explosives or can_use(Dins_Fire) or Nuts or Deku_Shield)",
+    "can_summon_gossip_fairy": "Ocarina and (Zeldas_Lullaby or Eponas_Song or Song_of_Time or Suns_Song)",
+    "can_summon_gossip_fairy_without_suns": "Ocarina and (Zeldas_Lullaby or Eponas_Song or Song_of_Time)",
+    "can_take_damage": "damage_multiplier != 'ohko' or Fairy or can_use(Nayrus_Love)",
+    "can_plant_bean": "plant_beans or (is_child and _oot_has_beans)",
+    "can_play(song)": "Ocarina and song",
+    "can_open_bomb_grotto": "can_blast_or_smash and (Stone_of_Agony or logic_grottos_without_agony)",
+    "can_open_storm_grotto": "can_play(Song_of_Storms) and (Stone_of_Agony or logic_grottos_without_agony)",
+    # The last case in a conditional still needs a check, to prevent failure from falling through
+    # into what should be the 'else' case.
+    "can_use_projectile": "has_explosives or (is_adult and (Bow or Hookshot)) or (is_child and (Slingshot or Boomerang))",
+    "has_projectile(for_age)": "has_explosives
+            or (for_age == child and (Slingshot or Boomerang))
+            or (for_age == adult and (Bow or Hookshot))
+            or (for_age == both and (Slingshot or Boomerang) and (Bow or Hookshot))
+            or (for_age == either and (Slingshot or Boomerang or Bow or Hookshot))",
+    "can_bonk": "deadly_bonks != 'ohko' or Fairy or can_use(Nayrus_Love)",
+    "can_break_crate": "can_bonk or can_blast_or_smash",
+    "can_break_heated_crate": "deadly_bonks != 'ohko' or (Fairy and (can_use(Goron_Tunic) or damage_multiplier != 'ohko')) or can_use(Nayrus_Love) or can_blast_or_smash",
+    "can_break_lower_beehive": "can_use(Boomerang) or can_use(Hookshot) or Bombs or (logic_beehives_bombchus and has_bombchus)",
+    "can_break_upper_beehive": "can_use(Boomerang) or can_use(Hookshot) or (logic_beehives_bombchus and has_bombchus)",
+    "can_break_upper_beehive_child": "can_use(Boomerang) or (logic_beehives_bombchus and has_bombchus and is_child)",
+    # can_use and helpers
+    # The parser reduces this to smallest form based on item category.
+    # Note that can_use(item) is False for any item not covered here.
+    "can_use(item)": "(_is_magic_item(item) and item and Magic_Meter)
+            or (_is_adult_item(item) and is_adult and item)
+            or (_is_magic_arrow(item) and is_adult and item and Bow and Magic_Meter)
+            or (_is_child_item(item) and is_child and item)",
+    "_is_magic_item(item)": "item == Dins_Fire or item == Farores_Wind or item == Nayrus_Love or item == Lens_of_Truth",
+    "_is_adult_item(item)": "item == Bow or item == Megaton_Hammer or item == Iron_Boots or item == Hover_Boots or item == Hookshot or item == Longshot or item == Silver_Gauntlets or item == Golden_Gauntlets or item == Goron_Tunic or item == Zora_Tunic or item == Scarecrow or item == Distant_Scarecrow or item == Mirror_Shield",
+    "_is_child_item(item)": "item == Slingshot or item == Boomerang or item == Kokiri_Sword or item == Sticks or item == Deku_Shield",
+    "_is_magic_arrow(item)": "item == Fire_Arrows or item == Light_Arrows or (blue_fire_arrows and item == Ice_Arrows)",
+
+    # Biggoron's trade path
+    # ER with certain settings disables timers and prevents items from reverting on save warp.
+    # Otherwise, to get to Biggoron requires: a trick, clearing boulders on DMT, or Darunia's Chamber
+    "guarantee_trade_path": "disable_trade_revert or can_blast_or_smash or 'Stop GC Rolling Goron as Adult' or (logic_dmt_climb_hovers and can_use(Hover_Boots)) or (logic_biggoron_bolero and not warp_songs and can_play(Bolero_of_Fire) and at('DMC Central Local', can_use(Hookshot) or can_use(Hover_Boots) or can_plant_bean))",
+    "guarantee_hint": "(hints == 'mask' and Mask_of_Truth) or (hints == 'agony' and Stone_of_Agony) or (hints != 'mask' and hints != 'agony')",
+    "has_fire_source": "can_use(Dins_Fire) or can_use(Fire_Arrows)",
+    "has_fire_source_with_torch": "has_fire_source or (is_child and Sticks)",
+
+    # Gerudo Fortress
+    "can_finish_GerudoFortress": "(gerudo_fortress == 'normal' and
+            'Hideout 1 Torch Jail Carpenter' and 'Hideout 2 Torches Jail Carpenter'
+            and 'Hideout 3 Torches Jail Carpenter' and 'Hideout 4 Torches Jail Carpenter')
+        or (gerudo_fortress == 'fast' and 'Hideout 1 Torch Jail Carpenter')
+        or (gerudo_fortress != 'normal' and gerudo_fortress != 'fast')",
+    # Mirror shield does not count because it cannot reflect scrub attack.
+    "has_shield": "(is_adult and Hylian_Shield) or (is_child and Deku_Shield)",
+    "can_shield": "(is_adult and (Hylian_Shield or Mirror_Shield)) or (is_child and Deku_Shield)",
+    "can_mega": "has_explosives and can_shield",
+    "can_isg": "can_shield and (is_adult or Sticks or Kokiri_Sword)",
+    "can_hover": "can_mega and can_isg",
+    "can_weirdshot": "can_mega and can_use(Hookshot)",
+    "can_jumpslash": "is_adult or Sticks or Kokiri_Sword",
+
+    # Bridge Requirements
+    "has_all_stones": "Kokiri_Emerald and Goron_Ruby and Zora_Sapphire",
+    "has_all_medallions": "Forest_Medallion and Fire_Medallion and Water_Medallion and Shadow_Medallion and Spirit_Medallion and Light_Medallion",
+    "can_build_rainbow_bridge": "(
+        (bridge == 'open') or
+        (bridge == 'vanilla' and Shadow_Medallion and Spirit_Medallion and Light_Arrows) or
+        (bridge == 'stones' and _oot_has_stones(bridge_stones)) or
+        (bridge == 'medallions' and _oot_has_medallions(bridge_medallions)) or
+        (bridge == 'dungeons' and _oot_has_dungeon_rewards(bridge_rewards)) or
+        (bridge == 'tokens' and (Gold_Skulltula_Token, bridge_tokens)) or
+        (bridge == 'hearts' and _oot_has_hearts(bridge_hearts)))",
+    "can_trigger_lacs": "(
+        (lacs_condition == 'vanilla' and Shadow_Medallion and Spirit_Medallion) or
+        (lacs_condition == 'stones' and _oot_has_stones(lacs_stones)) or
+        (lacs_condition == 'medallions' and _oot_has_medallions(lacs_medallions)) or
+        (lacs_condition == 'dungeons' and _oot_has_dungeon_rewards(lacs_rewards)) or
+        (lacs_condition == 'tokens' and (Gold_Skulltula_Token, lacs_tokens)) or
+        (lacs_condition == 'hearts' and _oot_has_hearts(lacs_hearts)))",
+    "can_receive_ganon_bosskey": "(
+        (shuffle_ganon_bosskey == 'stones' and _oot_has_stones(ganon_bosskey_stones)) or
+        (shuffle_ganon_bosskey == 'medallions' and _oot_has_medallions(ganon_bosskey_medallions)) or
+        (shuffle_ganon_bosskey == 'dungeons' and _oot_has_dungeon_rewards(ganon_bosskey_rewards)) or
+        (shuffle_ganon_bosskey == 'tokens' and (Gold_Skulltula_Token, ganon_bosskey_tokens)) or
+        (shuffle_ganon_bosskey == 'hearts' and _oot_has_hearts(ganon_bosskey_hearts))) or
+        (shuffle_ganon_bosskey == 'triforce' and (Triforce_Piece, triforce_goal_per_world)) or
+        (shuffle_ganon_bosskey != 'stones' and shuffle_ganon_bosskey != 'medallions' and
+        shuffle_ganon_bosskey != 'dungeons' and shuffle_ganon_bosskey != 'tokens' and
+        shuffle_ganon_bosskey != 'hearts' and shuffle_ganon_bosskey != 'triforce')",
+
+    # Dungeon Shortcuts
+    "deku_tree_shortcuts": "'Deku Tree' in dungeon_shortcuts",
+    "dodongos_cavern_shortcuts": "'Dodongos Cavern' in dungeon_shortcuts",
+    "jabu_shortcuts": "'Jabu Jabus Belly' in dungeon_shortcuts",
+    "forest_temple_shortcuts": "'Forest Temple' in dungeon_shortcuts",
+    "fire_temple_shortcuts": "'Fire Temple' in dungeon_shortcuts",
+    "shadow_temple_shortcuts": "'Shadow Temple' in dungeon_shortcuts",
+    "spirit_temple_shortcuts": "'Spirit Temple' in dungeon_shortcuts",
+    "king_dodongo_shortcuts": "region_has_shortcuts('King Dodongo Boss Room')"
+}

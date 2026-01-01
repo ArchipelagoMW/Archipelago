@@ -2,7 +2,7 @@
 
 ## Where is the options page?
 
-The [player options page (todo)](www.youtube.com/watch?v=dQw4w9WgXcQ) for Glover contains all the options you need to create a config file.
+The [player options page (todo)](../player-options) for Glover contains all the options you need to create a config file.
 
 ## What does randomization do to Glover?
 
@@ -13,6 +13,8 @@ The [player options page (todo)](www.youtube.com/watch?v=dQw4w9WgXcQ) for Glover
 - Option to disable bonus levels.
 - Option to put your jump in the item pool.
 - Option to include Power Ball in the item pool.
+- Option to include score as checks.
+- Ability to choose a win condition.
 - The Cheat Chicken can give hints. The hint types can be modified.
 - Mr. Tip can both give checks and hints. The hint types can be modified.
 - Puts a star above levels you've gotten all Garibs for without requiring you complete the level.
@@ -20,19 +22,25 @@ The [player options page (todo)](www.youtube.com/watch?v=dQw4w9WgXcQ) for Glover
 ---
 ### What locations can get shuffled?
 - Garibs
+- All Garibs in Level
 - Lives
 - Potions
 - Level Goals
+- Checkpoints
 - Switches
 - Enemies
 - Insects
 - Mr. Tips
+- Score
 ---
 ### What items can get shuffled?
 - Garibs
 - Lives
 - Potion Use
 - Instant Potion Effects
+- Level Doors
+- Level Star Marks
+- Checkpoints
 - Level Events (Atlantis 3's Waterwheel)
 - Ball Transformations
 - Glover's Moves

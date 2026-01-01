@@ -118,20 +118,37 @@ switches_to_event_items = {
 }
 
 def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
-    valid_methods = []
+    nonblank_methods = []
     for each_method in all_methods:
         if len(each_method.required_items) == 0:
             continue
-        valid_methods.append(each_method)
-    #If there's no valid methods, it must be open
-    if len(valid_methods) == 0:
+        nonblank_methods.append(each_method)
+    #If there's no nonblank methods at this step, it must be open
+    if len(nonblank_methods) == 0:
         return
-    
+    #Reorder the access methods to get around the 'or'ing problem
+    nonblank_methods.sort(key=sort_access_method)
     #Otherwise, go over each valid method and assign
-    for index, each_method in enumerate(valid_methods):
+    for index, each_method in enumerate(nonblank_methods):
+        items_list = {}
+        for each_req in each_method.required_items:
+            if each_req.startswith(tuple(["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"])):
+                prog_switch_name = each_req[:-2]
+                prog_switch_count = int(each_req[-1:])
+                items_list[prog_switch_name] = prog_switch_count
+            else:
+                items_list[each_req] = 1
         #Start with the rule set
         if index == 0:
-            set_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player))
+            set_rule(spot, lambda state, required_items = items_list : state.has_all_counts(required_items, self.player))
             continue
         #Otherwise, this is an alternate method
-        add_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player), "or")
+        add_rule(spot, lambda state, required_items = items_list : state.has_all_counts(required_items, self.player), "or")
+
+#Move all methods that require switches to the end of the list
+def sort_access_method(in_method):
+    for each_requirement in in_method.required_items:
+        #Switches
+        if not each_requirement in move_lookup:
+            return 1
+    return 0

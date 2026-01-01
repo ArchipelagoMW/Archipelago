@@ -63,6 +63,7 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
+/datapackage_export.json
 /custom_worlds
 
 # Byte-compiled / optimized / DLL files
@@ -198,3 +199,8 @@ Thumbs.db
 /data/lua
 /worlds/arcardelago
 worlds/glover.apworld
+fuzz.py
+out/Glover/Glover.png
+glovermeta.yaml
+out/Glover/Glover.png
+/fuzz_output

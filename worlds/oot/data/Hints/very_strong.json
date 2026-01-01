@@ -1,0 +1,33 @@
+{
+    "name":                  "very_strong",
+    "gui_name":              "Very Strong",
+    "description":           "Many powerful hints.",
+    "add_locations":         [],
+    "remove_locations":      [],
+    "add_items":             [],
+    "remove_items":          [],
+    "dungeons_woth_limit":   40,
+    "dungeons_barren_limit": 40,
+    "named_items_required":  true,
+    "vague_named_items":     false,
+    "use_default_goals":     true,
+    "distribution":          {
+        "trial":           {"order":  1, "weight": 0.0, "fixed": 0, "copies": 1},
+        "entrance_always": {"order":  2, "weight": 0.0, "fixed": 0, "copies": 2},
+        "always":          {"order":  3, "weight": 0.0, "fixed": 0, "copies": 2},
+        "woth":            {"order":  4, "weight": 3.0, "fixed": 0, "copies": 2},
+        "barren":          {"order":  5, "weight": 3.0, "fixed": 0, "copies": 1},
+        "entrance":        {"order":  6, "weight": 2.0, "fixed": 0, "copies": 1},
+        "sometimes":       {"order":  7, "weight": 0.0, "fixed": 0, "copies": 1},
+        "random":          {"order":  8, "weight": 0.0, "fixed": 0, "copies": 1},
+        "item":            {"order":  9, "weight": 1.0, "fixed": 0, "copies": 1},
+        "song":            {"order": 10, "weight": 0.5, "fixed": 0, "copies": 1},
+        "overworld":       {"order": 11, "weight": 1.5, "fixed": 0, "copies": 1},
+        "dungeon":         {"order": 12, "weight": 1.5, "fixed": 0, "copies": 1},
+        "junk":            {"order": 13, "weight": 0.0, "fixed": 0, "copies": 1},
+        "named-item":      {"order": 14, "weight": 0.0, "fixed": 0, "copies": 1},
+        "goal":            {"order": 15, "weight": 0.0, "fixed": 0, "copies": 1},
+        "dual_always":     {"order": 16, "weight": 0.0, "fixed": 0, "copies": 0},
+        "dual":            {"order": 17, "weight": 0.0, "fixed": 0, "copies": 0}
+    }
+}

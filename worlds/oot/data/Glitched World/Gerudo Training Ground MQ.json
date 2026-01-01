@@ -1,0 +1,79 @@
+[
+    {
+        "region_name": "Gerudo Training Ground Lobby",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ Lobby Left Chest": "True",
+            "Gerudo Training Ground MQ Lobby Right Chest": "True",
+            "Gerudo Training Ground MQ Hidden Ceiling Chest": "logic_lens_gtg_mq or can_use(Lens_of_Truth)",
+            "Gerudo Training Ground MQ Maze Path First Chest": "True",
+            "Gerudo Training Ground MQ Maze Path Second Chest": "True",
+            "Gerudo Training Ground MQ Maze Path Third Chest": "(Small_Key_Gerudo_Training_Ground, 1)"
+        },
+        "exits": {
+            "Gerudo Fortress": "True",
+            "Gerudo Training Ground Left Side": "has_fire_source",
+            "Gerudo Training Ground Right Side": "Bow"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Right Side",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ Dinolfos Chest": "True",
+            "Gerudo Training Ground MQ Underwater Silver Rupee Chest": "
+                (Hover_Boots or at('Gerudo Training Ground Central Maze Right', can_use(Longshot) or Bow)) and 
+                has_fire_source and Iron_Boots and (logic_fewer_tunic_requirements or can_use(Zora_Tunic)) and 
+                can_take_damage",
+            "Wall Fairy": "has_bottle and can_use(Bow)" #in the Dinalfos room shoot the Gerudo symbol above the door to the lava room.
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Left Side",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ First Iron Knuckle Chest": "True"
+        },
+        "exits": {
+            "Gerudo Training Ground Stalfos Room": "can_use(Longshot) or (logic_gtg_mq_with_hookshot and can_use(Hookshot))"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Stalfos Room",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ Before Heavy Block Chest": "True",
+            "Gerudo Training Ground MQ Heavy Block Chest": "can_use(Silver_Gauntlets)",
+            "Blue Fire": "has_bottle"
+        },
+        "exits": {
+            "Gerudo Training Ground Back Areas": "can_play(Song_of_Time) and (logic_lens_gtg_mq or can_use(Lens_of_Truth)) and Blue_Fire"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Back Areas",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ Eye Statue Chest": "Bow",
+            "Gerudo Training Ground MQ Second Iron Knuckle Chest": "True",
+            "Gerudo Training Ground MQ Flame Circle Chest": "True"
+        },
+        "exits": {
+            "Gerudo Training Ground Central Maze Right": "Megaton_Hammer",
+            "Gerudo Training Ground Right Side": "can_use(Longshot)"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Central Maze Right",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground MQ Maze Right Central Chest": "True",
+            "Gerudo Training Ground MQ Maze Right Side Chest": "True",
+            "Gerudo Training Ground MQ Ice Arrows Chest": "
+                (Small_Key_Gerudo_Training_Ground, 3)"
+        },
+        "exits": {
+            "Gerudo Training Ground Right Side": "True"
+        }
+    }
+]

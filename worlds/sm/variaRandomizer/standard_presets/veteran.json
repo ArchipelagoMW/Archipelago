@@ -1,0 +1,388 @@
+{
+ "Knows": {
+  "WallJump": [
+   false,
+   0
+  ],
+  "ShineSpark": [
+   false,
+   0
+  ],
+  "MidAirMorph": [
+   false,
+   0
+  ],
+  "CrouchJump": [
+   false,
+   0
+  ],
+  "Mockball": [
+   true,
+   1
+  ],
+  "SimpleShortCharge": [
+   true,
+   1
+  ],
+  "InfiniteBombJump": [
+   true,
+   1
+  ],
+  "GreenGateGlitch": [
+   true,
+   5
+  ],
+  "ShortCharge": [
+   false,
+   0
+  ],
+  "GravityJump": [
+   true,
+   5
+  ],
+  "SpringBallJump": [
+   true,
+   5
+  ],
+  "SpringBallJumpFromWall": [
+   true,
+   10
+  ],
+  "GetAroundWallJump": [
+   true,
+   1
+  ],
+  "DraygonGrappleKill": [
+   true,
+   1
+  ],
+  "DraygonSparkKill": [
+   true,
+   5
+  ],
+  "MicrowaveDraygon": [
+   true,
+   1
+  ],
+  "MicrowavePhantoon": [
+   true,
+   5
+  ],
+  "LowAmmoCroc": [
+   false,
+   0
+  ],
+  "LowStuffBotwoon": [
+   true,
+   25
+  ],
+  "LowStuffGT": [
+   false,
+   0
+  ],
+  "IceZebSkip": [
+   true,
+   5
+  ],
+  "SpeedZebSkip": [
+   false,
+   0
+  ],
+  "HiJumpMamaTurtle": [
+   true,
+   5
+  ],
+  "MaridiaWallJumps": [
+   true,
+   1
+  ],
+  "MtEverestGravJump": [
+   true,
+   10
+  ],
+  "GravLessLevel1": [
+   true,
+   10
+  ],
+  "GravLessLevel2": [
+   true,
+   100
+  ],
+  "GravLessLevel3": [
+   false,
+   0
+  ],
+  "CeilingDBoost": [
+   true,
+   1
+  ],
+  "BillyMays": [
+   true,
+   1
+  ],
+  "AlcatrazEscape": [
+   true,
+   1
+  ],
+  "ReverseGateGlitch": [
+   true,
+   1
+  ],
+  "ReverseGateGlitchHiJumpLess": [
+   true,
+   10
+  ],
+  "EarlyKraid": [
+   true,
+   1
+  ],
+  "XrayDboost": [
+   true,
+   25
+  ],
+  "XrayIce": [
+   true,
+   10
+  ],
+  "RedTowerClimb": [
+   true,
+   1
+  ],
+  "RonPopeilScrew": [
+   false,
+   0
+  ],
+  "OldMBWithSpeed": [
+   false,
+   0
+  ],
+  "Moondance": [
+   false,
+   0
+  ],
+  "HiJumpLessGauntletAccess": [
+   true,
+   5
+  ],
+  "HiJumpGauntletAccess": [
+   true,
+   1
+  ],
+  "LowGauntlet": [
+   false,
+   0
+  ],
+  "IceEscape": [
+   false,
+   0
+  ],
+  "WallJumpCathedralExit": [
+   true,
+   1
+  ],
+  "BubbleMountainWallJump": [
+   true,
+   5
+  ],
+  "NovaBoost": [
+   false,
+   0
+  ],
+  "NorfairReserveDBoost": [
+   true,
+   50
+  ],
+  "CrocPBsDBoost": [
+   false,
+   0
+  ],
+  "CrocPBsIce": [
+   true,
+   10
+  ],
+  "IceMissileFromCroc": [
+   false,
+   0
+  ],
+  "FrogSpeedwayWithoutSpeed": [
+   false,
+   0
+  ],
+  "LavaDive": [
+   true,
+   5
+  ],
+  "LavaDiveNoHiJump": [
+   false,
+   0
+  ],
+  "WorstRoomIceCharge": [
+   true,
+   25
+  ],
+  "WorstRoomWallJump": [
+   false,
+   0
+  ],
+  "ScrewAttackExit": [
+   true,
+   5
+  ],
+  "ScrewAttackExitWithoutScrew": [
+   false,
+   0
+  ],
+  "FirefleasWalljump": [
+   true,
+   10
+  ],
+  "DodgeLowerNorfairEnemies": [
+   false,
+   0
+  ],
+  "ContinuousWallJump": [
+   true,
+   50
+  ],
+  "DiagonalBombJump": [
+   true,
+   50
+  ],
+  "MockballWs": [
+   true,
+   10
+  ],
+  "SpongeBathBombJump": [
+   true,
+   50
+  ],
+  "SpongeBathHiJump": [
+   true,
+   1
+  ],
+  "SpongeBathSpeed": [
+   true,
+   1
+  ],
+  "TediousMountEverest": [
+   false,
+   0
+  ],
+  "DoubleSpringBallJump": [
+   false,
+   0
+  ],
+  "BotwoonToDraygonWithIce": [
+   false,
+   0
+  ],
+  "WestSandHoleSuitlessWallJumps": [
+   false,
+   0
+  ],
+  "DraygonRoomGrappleExit": [
+   false,
+   0
+  ],
+  "DraygonRoomCrystalFlash": [
+   false,
+   0
+  ],
+  "PreciousRoomXRayExit": [
+   false,
+   0
+  ],
+  "PreciousRoomGravJumpExit": [
+   false,
+   0
+  ],
+  "MochtroidClip": [
+   true,
+   1
+  ],
+  "PuyoClip": [
+   false,
+   0
+  ],
+  "PuyoClipXRay": [
+   true,
+   10
+  ],
+  "SnailClip": [
+   true,
+   10
+  ],
+  "SuitlessPuyoClip": [
+   false,
+   0
+  ],
+  "CrystalFlashClip": [
+   false,
+   0
+  ],
+  "SuitlessCrystalFlashClip": [
+   false,
+   0
+  ],
+  "KillPlasmaPiratesWithSpark": [
+   true,
+   10
+  ],
+  "KillPlasmaPiratesWithCharge": [
+   true,
+   1
+  ],
+  "AccessSpringBallWithHiJump": [
+   true,
+   1
+  ],
+  "AccessSpringBallWithSpringBallBombJumps": [
+   true,
+   5
+  ],
+  "AccessSpringBallWithBombJumps": [
+   true,
+   100
+  ],
+  "AccessSpringBallWithSpringBallJump": [
+   true,
+   25
+  ],
+  "AccessSpringBallWithXRayClimb": [
+   false,
+   0
+  ],
+  "AccessSpringBallWithGravJump": [
+   false,
+   0
+  ],
+  "AccessSpringBallWithFlatley": [
+   false,
+   0
+  ]
+ },
+ "Settings": {
+  "Ice": "Default",
+  "MainUpperNorfair": "Default",
+  "LowerNorfair": "Default",
+  "Kraid": "Default",
+  "Phantoon": "Used to it",
+  "Draygon": "Used to it",
+  "Ridley": "Used to it",
+  "MotherBrain": "Is this really the last boss?",
+  "X-Ray": "Default",
+  "Gauntlet": "Default"
+ },
+ "Controller": {
+  "A": "Jump",
+  "B": "Dash",
+  "X": "Shoot",
+  "Y": "Item Cancel",
+  "L": "Angle Down",
+  "R": "Angle Up",
+  "Select": "Item Select",
+  "Moonwalk": false
+ },
+ "password": "c27373b41e8a43a0af6f9d7285bac03fe8e3f2300e2e008991b78e9e2658453e",
+ "score": 272
+}

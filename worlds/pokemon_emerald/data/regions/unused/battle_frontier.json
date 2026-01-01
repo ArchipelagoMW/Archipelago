@@ -1,0 +1,52 @@
+{
+  "REGION_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM/MAIN": {
+    "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_BATTLE_FRONTIER_BATTLE_DOME_PRE_BATTLE_ROOM:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:1!"
+    ]
+  },
+  "REGION_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR/MAIN": {
+    "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_BATTLE_FRONTIER_BATTLE_DOME_CORRIDOR:0,1/MAP_BATTLE_FRONTIER_OUTSIDE_WEST:1!"
+    ]
+  },
+  "REGION_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR/MAIN": {
+    "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:2/MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM:0",
+      "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:0,1/MAP_BATTLE_FRONTIER_BATTLE_PALACE_LOBBY:2",
+      "MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:3/MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM:0!"
+    ]
+  },
+  "REGION_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM/MAIN": {
+    "parent_map": "MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_BATTLE_FRONTIER_BATTLE_PALACE_BATTLE_ROOM:0,1/MAP_BATTLE_FRONTIER_BATTLE_PALACE_CORRIDOR:2"
+    ]
+  }
+}

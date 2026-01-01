@@ -1,4 +1,6 @@
 from typing import NamedTuple
+
+from Options import OptionError
 from .Options import GaribLogic, GaribSorting
 
 class ItemData(NamedTuple):
@@ -59,8 +61,10 @@ def find_item_data(self, name : str) -> ItemData:
 		else:
 			modified_item = checkpoint_table[name]
 			return ItemData(None, modified_item.qty, modified_item.type, modified_item.default_location)
-	if name in ability_table:
-		return ability_table[name]
+	if name in potion_table:
+		return potion_table[name]
+	if name in move_table:
+		return move_table[name]
 	
 	#Filler
 	if name in filler_table:
@@ -68,72 +72,75 @@ def find_item_data(self, name : str) -> ItemData:
 	if name in trap_table:
 		return trap_table[name]
 	
+	#Golden Garibs
+	if name == "Golden Garib":
+		out_data : ItemData = misc_table["Golden Garib"]
+		return ItemData(out_data.glid, self.options.golden_garib_count.value, out_data.type, out_data.default_location)
+
 	#Fallthrough
 	return ItemData()
 
 BASE_ID = 6500000
 
+misc_table = {
+	"Golden Garib" :							ItemData(BASE_ID + 99999, -1, "Proguseful", None)
+	}
+
 portalsanity_table = {
-	"AtlH 1 Star" : 						ItemData(BASE_ID + 0, 1, "Progression", "Atl1: All Garibs"),
+	"AtlH 1 Star" : 						ItemData(BASE_ID + 0, 1, "Star", "Atl1: All Garibs"),
 	"AtlH 2 Gate" : 						ItemData(BASE_ID + 1, 1, "Progression", "Atl1: Goal"),
-	"AtlH 2 Star" : 						ItemData(BASE_ID + 2, 1, "Progression", "Atl2: All Garibs"),
+	"AtlH 2 Star" : 						ItemData(BASE_ID + 2, 1, "Star", "Atl2: All Garibs"),
 	"AtlH 3 Gate" : 						ItemData(BASE_ID + 3, 1, "Progression", "Atl2: Goal"),
-	"AtlH 3 Star" : 						ItemData(BASE_ID + 4, 1, "Progression", "Atl3: All Garibs"),
+	"AtlH 3 Star" : 						ItemData(BASE_ID + 4, 1, "Star", "Atl3: All Garibs"),
 	"AtlH Boss Gate" : 						ItemData(BASE_ID + 5, 1, "Progression", "Atl3: Goal"),
-	"AtlH Boss Star" : 						ItemData(BASE_ID + 6, 1, "Progression", "Atl!: Goal"),
+	"AtlH Boss Star" : 						ItemData(BASE_ID + 6, 1, "Star", "Atl!: Goal"),
 	"AtlH Bonus Gate" : 					ItemData(BASE_ID + 7, 1, "Progression", "AtlH: Bonus Unlock"),
-	"AtlH Bonus Star" : 					ItemData(BASE_ID + 8, 1, "Progression", "Atl?: All Garibs"),
-	"CrnH 1 Star" : 						ItemData(BASE_ID + 15, 1, "Progression", "Crn1: All Garibs"),
+	"AtlH Bonus Star" : 					ItemData(BASE_ID + 8, 1, "Star", "Atl?: All Garibs"),
+	"CrnH 1 Star" : 						ItemData(BASE_ID + 15, 1, "Star", "Crn1: All Garibs"),
 	"CrnH 2 Gate" : 						ItemData(BASE_ID + 16, 1, "Progression", "Crn1: Goal"),
-	"CrnH 2 Star" : 						ItemData(BASE_ID + 17, 1, "Progression", "Crn2: All Garibs"),
+	"CrnH 2 Star" : 						ItemData(BASE_ID + 17, 1, "Star", "Crn2: All Garibs"),
 	"CrnH 3 Gate" : 						ItemData(BASE_ID + 18, 1, "Progression", "Crn2: Goal"),
-	"CrnH 3 Star" : 						ItemData(BASE_ID + 19, 1, "Progression", "Crn3: All Garibs"),
+	"CrnH 3 Star" : 						ItemData(BASE_ID + 19, 1, "Star", "Crn3: All Garibs"),
 	"CrnH Boss Gate" : 						ItemData(BASE_ID + 20, 1, "Progression", "Crn3: Goal"),
-	"CrnH Boss Star" : 						ItemData(BASE_ID + 21, 1, "Progression", "Crn!: Goal"),
+	"CrnH Boss Star" : 						ItemData(BASE_ID + 21, 1, "Star", "Crn!: Goal"),
 	"CrnH Bonus Gate" : 					ItemData(BASE_ID + 22, 1, "Progression", "CrnH: Bonus Unlock"),
-	"CrnH Bonus Star" : 					ItemData(BASE_ID + 23, 1, "Progression", "Crn?: All Garibs"),
-	"PrtH 1 Star" : 						ItemData(BASE_ID + 36, 1, "Progression", "Prt1: All Garibs"),
+	"CrnH Bonus Star" : 					ItemData(BASE_ID + 23, 1, "Star", "Crn?: All Garibs"),
+	"PrtH 1 Star" : 						ItemData(BASE_ID + 36, 1, "Star", "Prt1: All Garibs"),
 	"PrtH 2 Gate" : 						ItemData(BASE_ID + 37, 1, "Progression", "Prt1: Goal"),
-	"PrtH 2 Star" : 						ItemData(BASE_ID + 38, 1, "Progression", "Prt2: All Garibs"),
+	"PrtH 2 Star" : 						ItemData(BASE_ID + 38, 1, "Star", "Prt2: All Garibs"),
 	"PrtH 3 Gate" : 						ItemData(BASE_ID + 39, 1, "Progression", "Prt2: Goal"),
-	"PrtH 3 Star" : 						ItemData(BASE_ID + 40, 1, "Progression", "Prt3: All Garibs"),
+	"PrtH 3 Star" : 						ItemData(BASE_ID + 40, 1, "Star", "Prt3: All Garibs"),
 	"PrtH Boss Gate" : 						ItemData(BASE_ID + 41, 1, "Progression", "Prt3: Goal"),
-	"PrtH Boss Star" : 						ItemData(BASE_ID + 42, 1, "Progression", "Prt!: Goal"),
+	"PrtH Boss Star" : 						ItemData(BASE_ID + 42, 1, "Star", "Prt!: Goal"),
 	"PrtH Bonus Gate" : 					ItemData(BASE_ID + 43, 1, "Progression", "PrtH: Bonus Unlock"),
-	"PrtH Bonus Star" : 					ItemData(BASE_ID + 44, 1, "Progression", "Prt?: All Garibs"),
-	"PhtH 1 Star" : 						ItemData(BASE_ID + 60, 1, "Progression", "Pht1: All Garibs"),
+	"PrtH Bonus Star" : 					ItemData(BASE_ID + 44, 1, "Star", "Prt?: All Garibs"),
+	"PhtH 1 Star" : 						ItemData(BASE_ID + 60, 1, "Star", "Pht1: All Garibs"),
 	"PhtH 2 Gate" : 						ItemData(BASE_ID + 61, 1, "Progression", "Pht1: Goal"),
-	"PhtH 2 Star" : 						ItemData(BASE_ID + 62, 1, "Progression", "Pht2: All Garibs"),
+	"PhtH 2 Star" : 						ItemData(BASE_ID + 62, 1, "Star", "Pht2: All Garibs"),
 	"PhtH 3 Gate" : 						ItemData(BASE_ID + 63, 1, "Progression", "Pht2: Goal"),
-	"PhtH 3 Star" : 						ItemData(BASE_ID + 64, 1, "Progression", "Pht3: All Garibs"),
+	"PhtH 3 Star" : 						ItemData(BASE_ID + 64, 1, "Star", "Pht3: All Garibs"),
 	"PhtH Boss Gate" : 						ItemData(BASE_ID + 65, 1, "Progression", "Pht3: Goal"),
-	"PhtH Boss Star" : 						ItemData(BASE_ID + 66, 1, "Progression", "Pht!: Goal"),
+	"PhtH Boss Star" : 						ItemData(BASE_ID + 66, 1, "Star", "Pht!: Goal"),
 	"PhtH Bonus Gate" : 					ItemData(BASE_ID + 67, 1, "Progression", "PhtH: Bonus Unlock"),
-	"PhtH Bonus Star" : 					ItemData(BASE_ID + 68, 1, "Progression", "Pht?: All Garibs"),
-	"FoFH 1 Star" : 						ItemData(BASE_ID + 82, 1, "Progression", "FoF1: All Garibs"),
+	"PhtH Bonus Star" : 					ItemData(BASE_ID + 68, 1, "Star", "Pht?: All Garibs"),
+	"FoFH 1 Star" : 						ItemData(BASE_ID + 82, 1, "Star", "FoF1: All Garibs"),
 	"FoFH 2 Gate" : 						ItemData(BASE_ID + 83, 1, "Progression", "FoF1: Goal"),
-	"FoFH 2 Star" : 						ItemData(BASE_ID + 84, 1, "Progression", "FoF2: All Garibs"),
+	"FoFH 2 Star" : 						ItemData(BASE_ID + 84, 1, "Star", "FoF2: All Garibs"),
 	"FoFH 3 Gate" : 						ItemData(BASE_ID + 85, 1, "Progression", "FoF2: Goal"),
-	"FoFH 3 Star" : 						ItemData(BASE_ID + 86, 1, "Progression", "FoF3: All Garibs"),
+	"FoFH 3 Star" : 						ItemData(BASE_ID + 86, 1, "Star", "FoF3: All Garibs"),
 	"FoFH Boss Gate" : 						ItemData(BASE_ID + 87, 1, "Progression", "FoF3: Goal"),
-	"FoFH Boss Star" : 						ItemData(BASE_ID + 88, 1, "Progression", "FoF!: Goal"),
+	"FoFH Boss Star" : 						ItemData(BASE_ID + 88, 1, "Star", "FoF!: Goal"),
 	"FoFH Bonus Gate" : 					ItemData(BASE_ID + 89, 1, "Progression", "FoFH: Bonus Unlock"),
-	"FoFH Bonus Star" : 					ItemData(BASE_ID + 90, 1, "Progression", "FoF?: All Garibs"),
-	"OtwH 1 Star" : 						ItemData(BASE_ID + 99, 1, "Progression", "Otw1: All Garibs"),
+	"FoFH Bonus Star" : 					ItemData(BASE_ID + 90, 1, "Star", "FoF?: All Garibs"),
+	"OtwH 1 Star" : 						ItemData(BASE_ID + 99, 1, "Star", "Otw1: All Garibs"),
 	"OtwH 2 Gate" : 						ItemData(BASE_ID + 100, 1, "Progression", "Otw1: Goal"),
-	"OtwH 2 Star" : 						ItemData(BASE_ID + 101, 1, "Progression", "Otw2: All Garibs"),
+	"OtwH 2 Star" : 						ItemData(BASE_ID + 101, 1, "Star", "Otw2: All Garibs"),
 	"OtwH 3 Gate" : 						ItemData(BASE_ID + 102, 1, "Progression", "Otw2: Goal"),
-	"OtwH 3 Star" : 						ItemData(BASE_ID + 103, 1, "Progression", "Otw3: All Garibs"),
+	"OtwH 3 Star" : 						ItemData(BASE_ID + 103, 1, "Star", "Otw3: All Garibs"),
 	"OtwH Boss Gate" : 						ItemData(BASE_ID + 104, 1, "Progression", "Otw3: Goal"),
-	"OtwH Boss Star" : 						ItemData(BASE_ID + 105, 1, "Progression", "Otw!: Goal"),
+	"OtwH Boss Star" : 						ItemData(BASE_ID + 105, 1, "Star", "Otw!: Goal"),
 	"OtwH Bonus Gate" : 					ItemData(BASE_ID + 106, 1, "Progression", "OtwH: Bonus Unlock"),
-	"OtwH Bonus Star" : 					ItemData(BASE_ID + 107, 1, "Progression", "Otw?: All Garibs"),
-	"Hubworld Atlantis Gate" : 				ItemData(BASE_ID + 121, 1, "Progression", "Ball Turn-In 1"),
-	"Hubworld Carnival Gate" : 				ItemData(BASE_ID + 122, 1, "Progression", "Ball Turn-In 2A"),
-	"Hubworld Pirate's Cove Gate" : 		ItemData(BASE_ID + 123, 1, "Progression", "Ball Turn-In 2B"),
-	"Hubworld Prehistoric Gate" : 			ItemData(BASE_ID + 124, 1, "Progression", "Ball Turn-In 4A"),
-	"Hubworld Fortress of Fear Gate" : 		ItemData(BASE_ID + 125, 1, "Progression", "Ball Turn-In 4B"),
-	"Hubworld Out of This World Gate" : 	ItemData(BASE_ID + 126, 1, "Progression", "Ball Turn-In 6"),
+	"OtwH Bonus Star" : 					ItemData(BASE_ID + 107, 1, "Star", "Otw?: All Garibs")
 }
 
 level_event_table = {
@@ -437,35 +444,37 @@ def construct_blank_world_garibs(world_prefixes : list[str], level_prefixes : li
 				output_table[garib_level + garib_suffix] = ItemData(item_id, 0, "Filler", None)
 	return output_table
 
-ability_table = {
+move_table = {
 	"Jump" : 									ItemData(BASE_ID + 329, 1, "Proguseful", None),
-	"Cartwheel" : 								ItemData(BASE_ID + 330, 1, "Progression", None),
-	"Crawl" : 									ItemData(BASE_ID + 331, 1, "Progression", None),
-	"Double Jump" : 							ItemData(BASE_ID + 332, 1, "Progression", None),
 	"Fist Slam" : 								ItemData(BASE_ID + 333, 1, "Proguseful", None),
-	"Ledge Grab" : 								ItemData(BASE_ID + 334, 1, "Progression", None),
-	"Push" : 									ItemData(BASE_ID + 335, 1, "Progression", None),
-	"Locate Garibs" : 							ItemData(BASE_ID + 336, 1, "Useful", None),
-	"Locate Ball" : 							ItemData(BASE_ID + 337, 1, "Progression", None),
 	"Dribble" : 								ItemData(BASE_ID + 338, 1, "Proguseful", None),
-	"Quick Swap" : 								ItemData(BASE_ID + 339, 1, "Progression", None),
+	"Power Ball" : 								ItemData(BASE_ID + 356, 1, "Proguseful", None),
+	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1, "Proguseful", None),
+	"Ball Bearing" : 							ItemData(BASE_ID + 354, 1, "Proguseful", None),
+	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1, "Proguseful", None),
+	"Crystal" : 								ItemData(BASE_ID + 355, 1, "Proguseful", None),
 	"Slap" : 									ItemData(BASE_ID + 340, 1, "Proguseful", None),
 	"Throw" : 									ItemData(BASE_ID + 341, 1, "Proguseful", None),
 	"Ball Toss" : 								ItemData(BASE_ID + 342, 1, "Proguseful", None),
-	"Beachball Potion" : 						ItemData(BASE_ID + 343, 1, "Progression", None),
-	"Death Potion" : 							ItemData(BASE_ID + 344, 1, "Progression", None),
-	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1, "Progression", None),
-	"Frog Potion" : 							ItemData(BASE_ID + 346, 1, "Progression", None),
-	"Boomerang Ball Potion" : 					ItemData(BASE_ID + 347, 1, "Progression", None),
-	"Speed Potion" : 							ItemData(BASE_ID + 348, 1, "Progression", None),
-	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1, "Progression", None),
-	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1, "Progression", None),
+	"Double Jump" : 							ItemData(BASE_ID + 332, 1, "Progression", None),
+	"Ledge Grab" : 								ItemData(BASE_ID + 334, 1, "Progression", None),
+	"Cartwheel" : 								ItemData(BASE_ID + 330, 1, "Progression", None),
+	"Crawl" : 									ItemData(BASE_ID + 331, 1, "Progression", None),
+	"Push" : 									ItemData(BASE_ID + 335, 1, "Progression", None),
 	"Grab" : 									ItemData(BASE_ID + 351, 1, "Progression", None),
-	"Rubber Ball" : 							ItemData(BASE_ID + 352, 1, "Proguseful", None),
-	"Bowling Ball" : 							ItemData(BASE_ID + 353, 1, "Proguseful", None),
-	"Ball Bearing" : 							ItemData(BASE_ID + 354, 1, "Proguseful", None),
-	"Crystal" : 								ItemData(BASE_ID + 355, 1, "Progression", None),
-	"Power Ball" : 								ItemData(BASE_ID + 356, 1, "Proguseful", None)
+	"Quick Swap" : 								ItemData(BASE_ID + 339, 1, "Progression", None),
+	"Locate Ball" : 							ItemData(BASE_ID + 337, 1, "Progression", None),
+	"Locate Garibs" : 							ItemData(BASE_ID + 336, 1, "Useful", None),
+}
+potion_table = {
+	"Helicopter Potion" : 						ItemData(BASE_ID + 345, 1, "Progression", None),
+	"Sticky Potion" : 							ItemData(BASE_ID + 349, 1, "Progression", None),
+	"Beachball Potion" : 						ItemData(BASE_ID + 343, 1, "Progression", None),
+	"Boomerang Ball Potion" : 					ItemData(BASE_ID + 347, 1, "Progression", None),
+	"Frog Potion" : 							ItemData(BASE_ID + 346, 1, "Progression", None),
+	"Speed Potion" : 							ItemData(BASE_ID + 348, 1, "Progression", None),
+	"Hercules Potion" : 						ItemData(BASE_ID + 350, 1, "Progression", None),
+	"Death Potion" : 							ItemData(BASE_ID + 344, 1, "Progression", None)
 	}
 
 filler_table = {
@@ -479,15 +488,21 @@ filler_table = {
 	"Speed Spell" : 							ItemData(BASE_ID + 364, -1, "Filler", None),
 	"Frog Spell" : 								ItemData(BASE_ID + 365, -1, "Filler", None),
 	"Death Spell" : 							ItemData(BASE_ID + 366, -1, "Filler", None),
-	"Sticky Spell" : 							ItemData(BASE_ID + 367, -1, "Filler", None)
+	"Sticky Spell" : 							ItemData(BASE_ID + 367, -1, "Filler", None),
+	"Big Ball" : 								ItemData(BASE_ID + 368, -1, "Filler", None),
+	"Low Gravity" : 							ItemData(BASE_ID + 369, -1, "Filler", None)
 	}
 
 trap_table = {
-	"Frog Trap" : 								ItemData(BASE_ID + 368, -1, "Trap", None),
-	"Cursed Ball Trap" :						ItemData(BASE_ID + 369, -1, "Trap", None),
-	"Instant Crystal Trap" :					ItemData(BASE_ID + 370, -1, "Trap", None),
-	"Camera Rotate Trap" :						ItemData(BASE_ID + 371, -1, "Trap", None),
-	"Tip Trap" :								ItemData(BASE_ID + 372, -1, "Trap", None)
+	"Frog Trap" : 								ItemData(BASE_ID + 370, -1, "Trap", None),
+	"Cursed Ball Trap" :						ItemData(BASE_ID + 371, -1, "Trap", None),
+	"Instant Crystal Trap" :					ItemData(BASE_ID + 372, -1, "Trap", None),
+	"Camera Rotate Trap" :						ItemData(BASE_ID + 373, -1, "Trap", None),
+	"Tip Trap" :								ItemData(BASE_ID + 374, -1, "Trap", None),
+	"Fish Eye Trap" :	 						ItemData(BASE_ID + 375, -1, "Trap", None),
+	"Enemy Ball Trap" :	 						ItemData(BASE_ID + 376, -1, "Trap", None),
+	"Control Ball Trap" :						ItemData(BASE_ID + 377, -1, "Trap", None),
+	"Invisiball Trap" : 						ItemData(BASE_ID + 378, -1, "Trap", None)
 	}
 
 garibsanity_world_table = {
@@ -520,7 +535,7 @@ garibsanity_world_table = {
 garbinsanity = ItemData(BASE_ID + 10001, 1496, "Garib", None)
 
 decoupled_garib_table = {
-	"1 Garib" : 								ItemData(BASE_ID + 10001, 42, "Garib", None),
+	"Garib" : 								ItemData(BASE_ID + 10001, 42, "Garib", None),
 	"2 Garibs" : 								ItemData(BASE_ID + 10002, 31, "Garib", None),
 	"3 Garibs" : 								ItemData(BASE_ID + 10003, 61, "Garib", None),
 	"4 Garibs" : 								ItemData(BASE_ID + 10004, 64, "Garib", None),
@@ -532,8 +547,8 @@ decoupled_garib_table = {
 	"10 Garibs" : 								ItemData(BASE_ID + 10010, 13, "Garib", None),
 	"11 Garibs" : 								ItemData(BASE_ID + 10011, 2, "Garib", None),
 	"12 Garibs" : 								ItemData(BASE_ID + 10012, 7, "Garib", None),
-	#"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
-	#"14 Garibs" : 								ItemData(BASE_ID + 10014, 0, "Garib", None),
+	"13 Garibs" : 								ItemData(BASE_ID + 10013, 0, "Garib", None),
+	"14 Garibs" : 								ItemData(BASE_ID + 10014, 0, "Garib", None),
 	"15 Garibs" : 								ItemData(BASE_ID + 10015, 1, "Garib", None),
 	"16 Garibs" : 								ItemData(BASE_ID + 10016, 3, "Garib", None)
 } 
@@ -548,20 +563,22 @@ decoupled_garib_bonus_count = {
 	"12 Garibs" :		1#,
 }
 
-garbinsanity_bonus_count = 155
+garbinsanity_bonus_count = 261
 
 
 all_items = {
 	**portalsanity_table,
 	**level_event_table, 
 	**checkpoint_table, 
-	**ability_table, 
+	**move_table, 
+	**potion_table, 
 	**filler_table, 
 	**trap_table, 
 	**world_garib_table, 
 	**garibsanity_world_table,
 	**{"Garib" : garbinsanity},
-	**decoupled_garib_table
+	**decoupled_garib_table,
+	**misc_table
 }
 
 def generate_item_name_to_id(world_prefixes : list[str], level_prefixes : list[str]) -> dict:
@@ -580,284 +597,23 @@ def generate_item_name_groups() -> dict:
 		"Not Bowling or Crystal" :		["Rubber Ball", "Ball Bearing", "Power Ball"],
 		"Sinks" :						["Bowling Ball", "Ball Bearing"],
 		"Floats" :						["Rubber Ball", "Crystal", "Power Ball"],
-		"Ball Up" :						["Throw", "Dribble", "Lob Ball"]
+		"Ball Up" :						["Throw", "Dribble", "Ball Toss"],
+		"Balls" :						["Rubber Ball", "Bowling Ball", "Ball Bearing", "Crystal", "Power Ball"],
+		"Potions" :						potion_table.keys(),
+		"Garibs" :						list(garibsanity_world_table.keys())+list(decoupled_garib_table.keys())+list(world_garib_table.keys()),
+		"Moves" :						move_table.keys(),
+		"Spells" : 						["Boomerang Spell", "Beachball Spell", "Hercules Spell", "Helicopter Spell", "Speed Spell", "Frog Spell", "Death Spell", "Sticky Spell"]
 	}
 	return output
 
-def select_trap_item_name(self, original_name : str) -> str:
-	#Just give the actual item name
-	if self.random.randint(0, 99) == 0:
-		return original_name
-	fake_name = self.random.choice(self.fake_item_names)
-	#Word 'Garib' corruption
-	if fake_name.count("Garib") > 0:
-		#50/50 the name corrupts
-		match self.random.randint(0, 11):
-			case 0:
-				fake_name.replace("Garib", "Garid")
-			case 1:
-				fake_name.replace("Garib", "Gerib")
-			case 2:
-				fake_name.replace("Garib", "Ganib")
-			case 3:
-				fake_name.replace("Garib", "Garip")
-			case 4:
-				fake_name.replace("Garib", "Carib")
-			case 5:
-				fake_name.replace("Garib", "Garlb")
-	
-	#Level prefix corruption
-	if fake_name.startswith(tuple(self.world_prefixes)):
-		#1 in every 20 of these has funny prefixes
-		if self.random.randint(1, 20) == 20:
-			level_swaps = [
-			#Plumber
-				"BoB",
-			#The Blue Ninja
-				"TBN",
-			#Hill Zone
-				"GHZ",
-			#Glitter Gulch
-				"GGM",
-			#Burgered
-				"BKd",
-			#Wrong prefix
-				"Alt",
-				"Crm",
-				"Prc",
-				"Phc",
-				"F0F",
-				"Otm",
-				]
-			fake_name = self.random.choice(level_swaps) + fake_name[3:]
-	return fake_name
-
-def create_trap_name_table(self) -> list[str]:
-	trap_name_table = [
-		#Fake balls
-		"Basketball",
-		"Snow Ball",
-		"Tennis Ball",
-		"Disco Ball",
-		"Monkey Ball",
-		"Golf Ball",
-		"Dodgeball",
-		"Soccer Ball",
-		"Pebball",
-		"Football",
-		"Hockey Puck",
-		"Master Ball",
-		#Fake glover moves
-		"Triple Jump",
-		"Backflip",
-		#Fake Tools
-		"Golf Club",
-		"Tennis Racket",
-		"Curling Broom",
-		"Shovel",
-		"Lawnmower",
-		"Bus",
-		"Magic Wand",
-		#Fake ball moves
-		"Spin Ball",
-		"Flick Ball",
-		"Juggle",
-		#Funny
-		"Cross-Stitch",
-		"Free Wizard",
-		"Permission to Cheat",
-		"Running Boots",
-		"Trap (WOULD Be Funny)",
-		#Fake potions
-		"Awkward Potion",
-		"Strength Potion",
-		"Toad Potion",
-		"Invisibility Potion",
-		"Cauldron Potion",
-		"Mana Potion",
-		"Health Potion",
-		"Potion Bottle",
-		"Boornerang Ball Potion",
-		#Lotions
-		"Beachball Lotion",
-		"Death Lotion",
-		"Helicopter Lotion",
-		"Frog Lotion",
-		"Boomerang Ball Lotion",
-		"Speed Lotion",
-		"Sticky Lotion",
-		"Hercules Lotion",
-		#Fake Filler
-		"Line",
-		"Lice",
-		"Lime",
-		"Live",
-		"Like",
-		"Chicken Song",
-		#Things you already have
-		"Garib Counter",
-		"Lives Display",
-		"Roll Ball",
-		"Drop Ball",
-		"Ledge Sit",
-		"Transform Ball",
-		#Not Traps
-		"Not a Frog Trap",
-		"Not a Cursed Ball Trap",
-		"Not an Instant Crystal Trap",
-		"Not a Camera Rotate Trap",
-		"Not a Tip Trap"
-	]
-	
-	#Fake portal entries
-	if self.options.portalsanity:
-		for each_prefix in self.level_prefixes:
-			trap_name_table.append(each_prefix + "H Exit Gate")
-			trap_name_table.append(each_prefix + "H 1 Gate")
-			trap_name_table.append(each_prefix + "H 4 Gate")
-			trap_name_table.append(each_prefix + "H 2 Stars")
-			trap_name_table.append(each_prefix + "H Secret Star")
-			trap_name_table.append(each_prefix + "H Secret Gate")
-		trap_name_table.extend([
-			"Hubworld Tree Gate",
-			"Hubworld Castle Cave Gate",
-			"OtwH Final Boss Gate"
-		])
-	
-	#Fake level events
-	if self.options.switches_checks:
-		trap_name_table.extend([
-			"Atl1 Raise Water",
-			"Atl2 Free Mermaid",
-			"Atl3 Yellow Submarine",
-			"Crn1 Fireworks",
-			"Crn2 Baseball Minigame",
-			"Crn3 Ferris Wheel",
-			"Prt1 Dirt Jar",
-			"Prt2 Sink Ship",
-			"Prt3 Release Kraken",
-			"Pht1 Melt Ice",
-			"Pht2 Erupt Volcano",
-			"Pht3 Dino Wedding",
-			"FoF1 Mr Bones",
-			"FoF2 Green Castle",
-			"FoF3 Drawbridge",
-			"Otw1 Ancienter Aliens",
-			"Otw2 Bomb",
-			"Otw3 Second Magnet",
-			"Training Wheel"
-		])
-	else:
-		trap_name_table.extend(level_event_table.keys())
-
-	#Fake Checkpoints
-	if not self.options.checkpoint_checks:
-		trap_name_table.extend(checkpoint_table.keys())
-	elif not self.options.spawning_checkpoint_randomizer:
-		for each_prefix in self.level_prefixes:
-			trap_name_table.extend([
-				each_prefix + "1 Checkpoint 1",
-				each_prefix + "2 Checkpoint 1",
-				each_prefix + "3 Checkpoint 1"
-			])
-	
-	#Fake Garibs
-	match self.options.garib_logic:
-		#Garibs shouldn't be items at all, add ALL of them
-		case GaribLogic.option_level_garibs:
-			trap_name_table.extend(garibsanity_world_table.keys())
-			trap_name_table.extend(world_garib_table.keys())
-			trap_name_table.extend(decoupled_garib_table.keys())
-		#Groups can show up, exclude those
-		case GaribLogic.option_garib_groups:
-			if self.options.garib_sorting != GaribSorting.option_by_level:
-				#Anything but the world garib table
-				trap_name_table.extend(garibsanity_world_table.keys())
-				trap_name_table.extend(decoupled_garib_table.keys())
-			else:
-				#Anything but decoupled garibs
-				trap_name_table.extend(garibsanity_world_table.keys())
-				trap_name_table.extend(world_garib_table.keys())
-		#Garibsanity exists, exclude singles
-		case GaribLogic.option_garibsanity:
-			if self.options.garib_sorting != GaribSorting.option_by_level:
-				#Anything but the garibsanity world table
-				trap_name_table.extend(decoupled_garib_table.keys())
-				trap_name_table.extend(world_garib_table.keys())
-			else:
-				#Anything but a single decoupled garib
-				trap_name_table.extend(garibsanity_world_table.keys())
-				trap_name_table.extend(world_garib_table.keys())
-				trap_name_table.extend(decoupled_garib_table.keys())
-	#'Jump'
-	if not self.options.randomize_jump:
-		trap_name_table.append("Jump")
-	else:
-		trap_name_table.append("Lump")
-	
-	#Misnamed Balls
-	not_spawning_balls = [
-		"Rubber Ball",
-		"Bowling Ball",
-		"Ball Bearing",
-		"Crystal",
-		"Power Ball"]
-	#Remove the default ball from the list of misnamed balls
-	not_spawning_balls.remove(self.starting_ball)
-	#Make it an item you can find though, spelled correctly
-	trap_name_table.append(self.starting_ball)
-	for other_balls in not_spawning_balls:
-		trap_name_table.append(other_balls)
-		#Ball Mispellings
-		if other_balls.count("Ball") > 0:
-			trap_name_table.append(other_balls.replace("Ball", "Bell"))
-			trap_name_table.append(other_balls.replace("Ball", "Bill"))
-			trap_name_table.append(other_balls.replace("Ball", "Bull"))
-			trap_name_table.append(other_balls.replace("Ball", "").removeprefix(" ").removesuffix(" "))
-		#Other Mispellings
-		match other_balls:
-			case "Rubber Ball":
-				trap_name_table.extend([
-					"Robber Ball",
-					"Rudder Ball"
-					])
-			case "Bowling Ball":
-				trap_name_table.extend([
-					"Bowling Pin",
-					"Bowing Ball"
-					])
-			case "Ball Bearing":
-				trap_name_table.extend([
-					"Ball Baering",
-					"Ball Pearing"
-					])
-			case "Crystal":
-				trap_name_table.extend([
-					"Crystal Ball",
-					"Christal",
-					"Krystal",
-					"Crystall",
-					"Cryztal",
-					"Crstal",
-					])
-			case "Power Ball":
-				trap_name_table.extend([
-					"Powder Ball",
-					"Powerball"
-				])
-	return trap_name_table
-
 def convert_extra_garibs(self) -> ItemData:
-	#Level garibs shouldn't show up
-	if self.options.garib_logic == GaribLogic.option_level_garibs:
-		raise ValueError("Extra garibs cannot show up while garib logic is by level! Set your Filler Extra Garibs to 0.")
 	#Get the garib count
 	extra_garibs_value : int = self.options.extra_garibs_value.value
 	if self.options.garib_sorting != GaribSorting.option_by_level:
 		#"Garibs" or "Garib"?
 		garib_name = " Garibs"
 		if extra_garibs_value == 1:
-			garib_name = " Garib"
+			return decoupled_garib_table["Garib"]
 		#Index to name
 		return decoupled_garib_table[str(extra_garibs_value) + garib_name]
 	#Level Garib Groups

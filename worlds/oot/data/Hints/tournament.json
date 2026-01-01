@@ -1,0 +1,43 @@
+{
+    "name":                  "tournament",
+    "gui_name":              "Tournament",
+    "description":           "Hint Distribution for the S6 Tournament. 5 Goal hints, 7 Sometimes hints, 8 Always hints (including Skull Mask and Sheik in Kakariko).",
+    "add_locations":         [
+        { "location": "Deku Theater Skull Mask", "types": ["always"] },
+        { "location": "Sheik in Kakariko", "types": ["always"] }
+    ],
+    "remove_locations":      [
+        { "location": "Ganons Castle Shadow Trial Golden Gauntlets Chest", "types": ["sometimes"] },
+        { "location": "Sheik in Forest", "types": ["sometimes"] },
+        { "location": "Sheik at Temple", "types": ["sometimes"] },
+        { "location": "Sheik in Crater", "types": ["sometimes"] },
+        { "location": "Sheik at Colossus", "types": ["sometimes"] },
+        { "location": "Song from Royal Familys Tomb", "types": ["sometimes"] }
+    ],
+    "add_items":             [],
+    "remove_items":          [
+        { "item": "Zeldas Lullaby", "types": ["goal"] }
+    ],
+    "named_items_required":  true,
+    "vague_named_items":     false,
+    "use_default_goals":     true,
+    "distribution":          {
+        "trial":           {"order": 1, "weight": 0.0, "fixed":   0, "copies": 2},
+        "entrance_always": {"order": 2, "weight": 0.0, "fixed":   0, "copies": 2},
+        "always":          {"order": 3, "weight": 0.0, "fixed":   0, "copies": 2},
+        "goal":            {"order": 4, "weight": 0.0, "fixed":   5, "copies": 2},
+        "barren":          {"order": 0, "weight": 0.0, "fixed":   0, "copies": 0},
+        "entrance":        {"order": 5, "weight": 0.0, "fixed":   4, "copies": 2},
+        "sometimes":       {"order": 6, "weight": 0.0, "fixed": 100, "copies": 2},
+        "random":          {"order": 7, "weight": 9.0, "fixed":   0, "copies": 2},
+        "item":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "song":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "overworld":       {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "dungeon":         {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "junk":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "named-item":      {"order": 8, "weight": 0.0, "fixed":   0, "copies": 2},
+        "woth":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "dual_always":     {"order": 0, "weight": 0.0, "fixed":   0, "copies": 0},
+        "dual":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 0}
+    }
+}

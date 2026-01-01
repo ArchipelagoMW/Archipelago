@@ -1,0 +1,112 @@
+[
+    {
+        "region_name": "Gerudo Training Ground Lobby",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Lobby Left Chest": "can_use(Bow) or can_use(Slingshot)",
+            "Gerudo Training Ground Lobby Right Chest": "can_use(Bow) or can_use(Slingshot)",
+            "Gerudo Training Ground Stalfos Chest": "can_jumpslash",
+            "Gerudo Training Ground Beamos Chest": "has_explosives and can_jumpslash",
+            "Wall Fairy": "has_bottle and can_use(Bow)" #in the Beamos room shoot the Gerudo symbol above the door to the lava room.
+        },
+        "exits": {
+            "Gerudo Training Ground Heavy Block Room": "True",
+            "Gerudo Training Ground Lava Room": "
+                here(has_explosives and can_jumpslash)",
+            "Gerudo Training Ground Central Maze": "True"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Central Maze",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Hidden Ceiling Chest": "(Small_Key_Gerudo_Training_Ground, 3)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives and (can_live_dmg(0.5) or can_use(Nayrus_Love)))",
+            "Gerudo Training Ground Maze Path First Chest": "(Small_Key_Gerudo_Training_Ground, 4)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives and (can_live_dmg(1.0) or can_use(Nayrus_Love)))",
+            "Gerudo Training Ground Maze Path Second Chest": "(Small_Key_Gerudo_Training_Ground, 6)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives and (can_live_dmg(1.0) or can_use(Nayrus_Love)))",
+            "Gerudo Training Ground Maze Path Third Chest": "(Small_Key_Gerudo_Training_Ground, 7)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives and (can_live_dmg(0.5) or can_use(Nayrus_Love)))",
+            "Gerudo Training Ground Maze Path Final Chest": "(Small_Key_Gerudo_Training_Ground, 9)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives and (can_live_dmg(0.5) or can_use(Nayrus_Love)))"
+        },
+        "exits": {
+            "Gerudo Training Ground Central Maze Right": "(Small_Key_Gerudo_Training_Ground, 9)
+                or (can_use(Hookshot) and can_mega) or (is_child and has_explosives)"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Central Maze Right",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Maze Right Central Chest": "True",
+            "Gerudo Training Ground Maze Right Side Chest": "True",
+            "Gerudo Training Ground Freestanding Key": "True"
+        },
+        "exits": {
+            "Gerudo Training Ground Lava Room": "True"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Lava Room",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Underwater Silver Rupee Chest": "
+                can_use(Hookshot) and (can_play(Song_of_Time) or can_mega) and Iron_Boots"
+        },
+        "exits": {
+            "Gerudo Training Ground Central Maze Right": "can_play(Song_of_Time) or is_child
+                or (can_use(Hookshot) and can_use(Hover_Boots) and can_shield and Bombs)",
+            "Gerudo Training Ground Hammer Room": "can_use(Hookshot)"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Hammer Room",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Hammer Room Clear Chest": "True",
+            "Gerudo Training Ground Hammer Room Switch Chest": "can_use(Megaton_Hammer) or 
+                can_live_dmg(0.5) or can_use(Nayrus_Love)"
+        },
+        "exits": {
+            "Gerudo Training Ground Eye Statue Lower": "can_use(Bow)",
+            "Gerudo Training Ground Lava Room": "True"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Eye Statue Lower",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Eye Statue Chest": "can_use(Bow)"
+        },
+        "exits": {
+            "Gerudo Training Ground Hammer Room": "True"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Eye Statue Upper",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Near Scarecrow Chest": "can_use(Bow)"
+        },
+        "exits": {
+            "Gerudo Training Ground Eye Statue Lower": "True"
+        }
+    },
+    {
+        "region_name": "Gerudo Training Ground Heavy Block Room",
+        "dungeon": "Gerudo Training Ground",
+        "locations": {
+            "Gerudo Training Ground Before Heavy Block Chest": "True",
+            "Gerudo Training Ground Heavy Block First Chest": "can_use(Silver_Gauntlets)",
+            "Gerudo Training Ground Heavy Block Second Chest": "can_use(Silver_Gauntlets)",
+            "Gerudo Training Ground Heavy Block Third Chest": "can_use(Silver_Gauntlets)",
+            "Gerudo Training Ground Heavy Block Fourth Chest": "can_use(Silver_Gauntlets)"
+        },
+        "exits": {
+            "Gerudo Training Ground Eye Statue Upper": "can_use(Hookshot) or can_hover or
+                (is_adult and (Hover_Boots or (can_shield and Bombs)))"
+        }
+    }
+]

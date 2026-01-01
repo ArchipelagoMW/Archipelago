@@ -65,8 +65,8 @@ deathlink_sent_this_death: we interacted with the multiworld on this death, wait
 loc_name_to_id = network_data_package["games"]["Glover"]["location_name_to_id"]
 itm_name_to_id = network_data_package["games"]["Glover"]["item_name_to_id"]
 script_version: int = 1
-version: str = "V0.1"
-patch_md5: str = "d411b152f0bd5e83070c2a078edd89b6"
+version: str = "V1.0"
+patch_md5: str = "4a9c28b24e66159c2af37d64676839b2"
 gvr_options = settings.get_settings().glover_options
 program = None
 
@@ -104,7 +104,7 @@ def patch_rom(rom_path, dst_path, patch_path):
       swapped[i+1] = rom[i]
     rom = bytes(swapped)
   elif md5 != "87aa5740dff79291ee97832da1f86205":
-    logger.error(f"Unknown ROM! Please use /patch or restart the {game_name} Client to try again.")
+    logger.error(f"Unknown ROM! Please use /patch or restart the Glover Client to try again.")
     return False
   with open_world_file(patch_path) as f:
     patch = f.read()
@@ -296,7 +296,7 @@ class GloverContext(CommonContext):
     def __init__(self, server_address, password):
         super().__init__(server_address, password)
         self.game = "Glover"
-        self.n64_streams: (StreamReader, StreamWriter) = None # type: ignore
+        self.n64_streams: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None = None
         self.n64_sync_task = None
         self.n64_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
@@ -312,8 +312,10 @@ class GloverContext(CommonContext):
         self.checkpoint_table = {}
         self.switch_table = {}
         self.goal_table = {}
+        self.garib_completion_table = {}
         self.ball_return_list = {}
         self.chicken = False
+        self.score_table = {}
 
         self.current_world = 0
         self.current_hub = 0
@@ -321,11 +323,21 @@ class GloverContext(CommonContext):
             "DEATH" : BounceLink("DEATH", "DeathLink"),
             "TAG" : BounceLink("TAG", "TagLink"),
             "TRAP" : MultiLink("TRAP", "TrapLink", {
-                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap"]},
-                "CRYSTAL" : {"Accepts" : ["Disable Tag Trap", "Double Damage", "Eject Ability", "Instant Crystal Trap", "One Hit KO"]},
-                "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Screen Flip Trap"]},
-                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "Spike Ball Trap"]}#,
-                #"TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Tutorial Trap", "Spam Trap"]},
+                "FROG" : {"Accepts" : ["Animal Trap", "Animal Bonus Trap", "Fishing Trap", "Frog Trap", "Jump Trap", "Jumping Jacks Trap", "No Guarding", "Snake Trap", "Slow Trap", "Slowness Trap", "Tiny Trap"]},
+                "CRYSTAL" : {"Accepts" : ["Damage Trap", "Double Damage", "Eject Ability", "Energy Drain Trap", "Gadget Shuffle Trap", "Items to Bombs", "Instant Crystal Trap", "One Hit KO", "Radiation Trap", "Swap Trap", "Whoops! Trap"]},
+                "CAMERA" : {"Accepts" : ["Camera Rotate Trap", "Confound Trap", "Confuse Trap", "Deisometric Trap", "Flip Trap", "Mirror Trap", "Reversal Trap", "Reverse Trap", "Screen Flip Trap"]},
+                "CURSE_BALL" : {"Accepts" : ["Banana Peel Trap", "Banana Trap", "Blue Balls Curse", "Confusion Trap", "Controller Drift Trap", "Cursed Ball Trap", "Ice Floor Trap", "Ice Trap", "Monkey Mash Trap", "My Turn! Trap", "Slip Trap"]},
+                "TIP" : {"Accepts" : ["Aaa Trap", "Cutscene Trap", "Exposition Trap", "Ghost Chat", "Literature Trap", "OmoTrap", "Phone Trap", "Tip Trap", "Trivia Trap", "Tutorial Trap", "Spam Trap"]},
+                "FISH_EYE" : {"Accepts" : ["144p Trap", "Fish Eye Trap", "Fuzzy Trap", "Pixelate Trap", "Pixellation Trap", "Spotlight Trap", "Underwater Trap", "W I D E Trap", "Zoom Trap"]},
+                "ENEMY_BALL" : {"Accepts" : ["Army Trap", "Bee Trap", "Bunyon Trap", "Fear Trap", "Gooey Bag", "Police Trap", "Spooky Time", "Tarr Trap", "Thwimp Trap"]},
+                "CONTROL_BALL" : {"Accepts" : ["Bald Trap", "Breakout Trap", "Bubble Trap", "Control Ball Trap", "Disable A Trap", "Disable Z Trap", "Ghost", "Pinball Trap", "PONG Challenge", "Pong Trap"]},
+                "INVISIBALL" : {"Accepts" : ["Depletion Trap", "Disable B Trap", "Empty Item Box Trap", "Fishin' Boo Trap", "Get Out Trap", "Invisiball Trap", "Invisible Trap", "Invisibility Trap", "No Stocks", "No Vac Trap", "Resistance Trap", "Spike Ball Trap"]},
+                #Misc items activated by traps
+                "STICKY" : {"Accepts" : ["Honey Trap", "Iron Boots Trap", "Sticky Floor Trap", "Sticky Hands Trap"]},
+                "SPEED" : {"Accepts" : ["Fast Trap"]},
+                "LOW_GRAVITY" : {"Accepts" : ["Gravity Trap"]},
+                #Dev Items activated by traps
+                "DEATH" : {"Accepts" : ["Instant Death Trap"]}
                 })
         }
         self.version_warning = False
@@ -473,10 +485,10 @@ class GloverContext(CommonContext):
                 self.link_table["TAG"].info.pending = True
             if "TrapLink" in self.tags and source_name != self.instance_id and "TrapLink" in args.get("tags", []):
                 #Only accept traps that have the correct name in the accepts data
-                trap_name : str = args.get("trap_name", "")
+                trap_name : str = args["data"].get("trap_name", "")
                 for eachSubentry in self.link_table["TRAP"].entries:
                     if trap_name in self.link_table["TRAP"].entries[eachSubentry].data["Accepts"]:
-                        self.link_table["TRAP"].entries[eachSubentry].info.pending = True
+                        self.link_table["TRAP"].entries[eachSubentry].pending = True
 
     def on_print_json(self, args: dict):
         if self.ui:
@@ -568,13 +580,19 @@ class LinkInfo():
         """Sets pending and local to false."""
         self.set_timestamp()
         self.pending = False
-        self.local = False
+        #self.local = False
     
+    def sent(self):
+        self.halt()
+
     def recieve_pending(self):
         self.set_timestamp()
+        #if self.local:
+        #    self.local = False
+        #    return False
         if self.pending:
             self.pending = False
-            self.local = True
+        #    self.local = True
             return True
         return False
 
@@ -646,12 +664,22 @@ def get_slot_payload(ctx: GloverContext):
             "slot_traplink": ctx.link_table["TRAP"].enabled,
             "slot_version": version,
             "slot_garib_logic": ctx.slot_data["garib_logic"],
+            "slot_portalsanity": ctx.slot_data["portalsanity"],
+            "slot_open_worlds": ctx.slot_data["open_worlds"],
+            "slot_open_levels": ctx.slot_data["open_levels"],
             #"slot_garib_sorting": ctx.slot_data["garib_sorting"],
+            "slot_mad_garibs" : ctx.slot_data["mad_garibs"],
+            "slot_random_garib_sounds" : ctx.slot_data["random_garib_sounds"],
             "slot_garib_order": ctx.slot_data["garib_order"],
             "slot_spawning_checkpoints": ctx.slot_data["spawning_checkpoints"],
             "slot_world_lookup": ctx.slot_data["world_lookup"],
             "slot_switches": ctx.slot_data["switches_checks"],
+            "slot_easy_ball_walk": ctx.slot_data["easy_ball_walk"],
+            "slot_checkpoint_checks": ctx.slot_data["checkpoint_checks"],
             "slot_randomized_spawns": ctx.slot_data["randomized_spawns"],
+            "slot_mr_tip_text_display":ctx.slot_data["mr_tip_text_display"],
+            "slot_mr_tips_text":ctx.slot_data["mr_tips_text"],
+            "slot_filler_duration":ctx.slot_data["filler_duration"],
             "slot_checked_locations": [get_location_value(locations) for locations in ctx.locations_checked],
         })
     ctx.sendSlot = False
@@ -692,8 +720,10 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     
     #Sending Links
     for link_name, link_state in triggered_links.items():
+        if not link_state:
+            continue
         if link_name in ctx.link_table:
-            if ctx.link_table[link_name].enabled and link_state:
+            if ctx.link_table[link_name].enabled:
                 match link_name:
                     case "DEATH":
                         await ctx.send_death()
@@ -714,8 +744,16 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                                         await ctx.send_traplink("Camera Rotate Trap")
                                     case "CURSE_BALL":
                                         await ctx.send_traplink("Cursed Ball Trap")
-                                    #case "TIP":
-                                    #    await ctx.send_traplink("Tip Trap")
+                                    case "TIP":
+                                        await ctx.send_traplink("Tip Trap")
+                                    case "FISH_EYE":
+                                        await ctx.send_traplink("Fish Eye Trap")
+                                    case "ENEMY_BALL":
+                                        await ctx.send_traplink("Enemy Ball Trap")
+                                    case "CONTROL_BALL":
+                                        await ctx.send_traplink("Control Ball Trap")
+                                    case "INVISIBALL":
+                                        await ctx.send_traplink("Invisiball Trap")
 
     # Locations handling
     demo = payload["DEMO"]
@@ -724,6 +762,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     enemylist = payload["enemy"]
     potionlist = payload["potions"]
     goallist = payload["goal"]
+    garibcompletionlist = payload["garib_completion"]
     garibgrouplist = payload["garib_groups"]
     lifeslist = payload["life"]
     tipslist = payload["tip"]
@@ -731,6 +770,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
     checkpointslist = payload["checkpoint"]
     switchslist = payload["switch"]
     ball_return_list = payload["ball_returns"]
+    score_table = payload["scores"]
 
     glover_world = payload["glover_world"]
     glover_hub = payload["glover_hub"]
@@ -767,8 +807,12 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
         glover_hub = 0
     if isinstance(goallist, list):
         goallist = {}
+    if isinstance(garibcompletionlist, list):
+        garibcompletionlist = {}
     if isinstance(ball_return_list, list):
         ball_return_list = {}
+    if isinstance(score_table, list):
+        score_table = {}
     
     if demo == False and ctx.sync_ready == True:
         locs1 = []
@@ -799,6 +843,11 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             for locationId, value in garibgrouplist.items():
                 if value == True:
                     locs1.append(int(locationId))
+        if ctx.garib_completion_table != garibcompletionlist:
+            ctx.garib_completion_table = garibcompletionlist
+            for locationId, value in garibcompletionlist.items():
+                if value == True:
+                    locs1.append(int(locationId))
         if ctx.life_table != lifeslist:
             ctx.life_table = lifeslist
             for locationId, value in lifeslist.items():
@@ -816,8 +865,8 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                     locs1.append(int(locationId))
                     #Mr. Tip Hints
                     hint = tip_hints.get(str(locationId), None)
-                    #If the hint should render
-                    if not hint == None and tip_hints_type != 0:
+                    #If the hint should render in the multiworld
+                    if not hint == None and tip_hints_type != 0 and ctx.slot_data["mr_hints_scouts"]:
                         #And you are aware of the player
                         if ctx.slot_concerns_self(hint["player_id"]):
                             id = hint['location_id']
@@ -829,7 +878,7 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                             else:
                                 if not id in ctx.handled_scouts:
                                     scoutsVague.append(id)
-                                    logger.info(hint['vague_hint'])
+                                    logger.info("Mr. Tip Says\n" + ctx.slot_data["mr_tips_text"][locationId])
         if ctx.checkpoint_table != checkpointslist:
             ctx.checkpoint_table = checkpointslist
             for locationId, value in checkpointslist.items():
@@ -874,8 +923,49 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
                             else:
                                 if not id in ctx.handled_scouts:
                                     scoutsVague.append(id)
-                                    logger.info(hint['vague_hint'])
+                                    logger.info(ctx.slot_data["vague_chicken_text"][locationId])
         #TODO: Make it so rechecking Chicken Hint at later hubs works in-game
+        if ctx.score_table != score_table:
+            ctx.score_table = score_table
+            if ctx.slot_data["score_checks"] != {}:
+                for scoreLevel, scoreValue in score_table.items():
+                    #Only scores you care about should be checked
+                    if not scoreLevel in ctx.slot_data["score_checks"]:
+                        continue
+
+                    if scoreLevel != "TOTAL":
+                        if ctx.slot_data["score_checks"][scoreLevel] <= scoreValue:
+                            levelInfo = scoreLevel.split("_")
+                            endPair = 0
+                            match levelInfo[2]:
+                                case "L1":
+                                    endPair += 1
+                                case "L2":
+                                    endPair += 2
+                                case "L3":
+                                    endPair += 3
+                                case "BOSS":
+                                    endPair += 4
+                                case "BONUS":
+                                    endPair += 5
+                            match levelInfo[1]:
+                                case "ATLANTIS":
+                                    endPair += 10
+                                case "CARNIVAL":
+                                    endPair += 20
+                                case "PIRATES":
+                                    endPair += 30
+                                case "PREHISTORIC":
+                                    endPair += 40
+                                case "FORTRESS":
+                                    endPair += 50
+                                case "SPACE":
+                                    endPair += 60
+                            locs1.append(int(100000 * endPair))
+                    else:
+                        for requiredScore in ctx.slot_data["score_checks"][scoreLevel]:
+                            if requiredScore <= scoreValue:
+                                locs1.append(int(100000000 + requiredScore))
 
         if len(locs1) > 0:
             await ctx.send_msgs([{
@@ -900,13 +990,26 @@ async def parse_payload(payload: dict, ctx: GloverContext, force: bool):
             ctx.handled_scouts.extend(scoutsVague)
         
         #GAME VICTORY
-        if payload["outro"] == True and not ctx.finished_game:
+        won_game : bool = False
+        match ctx.slot_data["victory_condition"]:
+            case 0:
+                won_game = payload["outro"] == True
+            case 1:
+                crystal_address = str(int(0x79A) + int(ctx.slot_data["required_crystals"]) - 1)
+                if crystal_address in ball_return_list:
+                    won_game = ball_return_list[crystal_address] == True
+            case 2:
+                if "Golden Garib" in ctx.tracker.items:
+                    current_golden_garibs = ctx.tracker.items["Golden Garib"]
+                    won_game = current_golden_garibs >= ctx.slot_data["required_golden_garibs"]
+        if won_game and not ctx.finished_game:
             await ctx.send_msgs([{
                 "cmd": "StatusUpdate",
                 "status": 30
             }])
             ctx.finished_game = True
             ctx._set_message("You have completed your goal", None)
+
 
         # Tracker
         if ctx.current_world != glover_world:

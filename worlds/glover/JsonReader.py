@@ -6,7 +6,7 @@ from operator import attrgetter
 
 from .Options import GaribLogic, DifficultyLogic
 from .Rules import move_lookup, switches_to_event_items, access_methods_to_rules
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import add_rule, set_rule
 
 if TYPE_CHECKING:
     from . import GloverWorld
@@ -80,9 +80,11 @@ class AccessMethod(NamedTuple):
     difficulty : int
     required_items : list[str]
 
+location_type_lookup = ["SWITCH", "GARIB", "LIFE", "CHECKPOINT", "POTION", "GOAL", "TIP", "LOADING_ZONE", "REGION", "MISC", "ENEMY", "INSECT"]
+
 class LocationData(NamedTuple):
     name : str
-    #{ SWITCH, GARIB, LIFE, CHECKPOINT, POTION, GOAL, TIP, LOADING_ZONE, REGION, MISC, ENEMY}
+    #The same index as in location type lookup
     type : int
     default_region : int
     default_needs_ball : bool
@@ -114,7 +116,9 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
     methods : List[AccessMethod] = []
     for check_index in range(1, len(check_info)):
         check_method = check_info[check_index]
-        methods.append(create_access_method(check_method, level_name))
+        new_method = create_access_method(self, check_method, level_name)
+        if new_method != None:
+            methods.append(new_method)
     #Only create if there's a method for it
     methods = remove_higher_difficulty_methods(self, methods)
     if len(methods) == 0:
@@ -132,8 +136,8 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
             rom_ids.append(-1)
     
     #Is it an enemy?
-    enemy_with_garibs : bool = check_info[0]["TYPE"] == 10
-    if enemy_with_garibs:
+    enemy_with_garibs : bool = False
+    if check_info[0]["TYPE"] == 10:
         #If so, are there garibs with this enemy?
         enemy_with_garibs = len(ap_ids) > check_info[0]["COUNT"]
 
@@ -147,7 +151,10 @@ def create_location_data(self : GloverWorld, check_name : str, check_info : list
             garib_rom_ids.append(rom_ids.pop())
         garib_ap_ids.reverse()
         garib_rom_ids.reverse()
-        outputs.append(LocationData(prefix + check_name.removesuffix("s") + " Garibs", 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
+        garib_suffix = " Garib"
+        if check_info[0]["COUNT"] > 1:
+            garib_suffix += "s"
+        outputs.append(LocationData(prefix + check_name.removesuffix("s") + garib_suffix, 1, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], garib_ap_ids, garib_rom_ids, methods))
         outputs.append(LocationData(prefix + check_name, 10, check_info[0]["REGION"], check_info[0]["NEEDS_BALL"], ap_ids, rom_ids, methods))
     #All other checks
     else:
@@ -176,14 +183,18 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         if index == 0:
             continue
         #All other entries are methods
-        ball_region_methods.append(create_access_method(check_pairing, level_name))
+        new_method = create_access_method(self, check_pairing, level_name)
+        if new_method != None:
+            ball_region_methods.append(new_method)
     
     no_ball_region = Region(region_name, player, multiworld, level_name)
     for index, check_pairing in enumerate(check_info["D"]):
         #Skip the settings entry
         if index == 0:
             continue
-        no_ball_region_methods.append(create_access_method(check_pairing, level_name))
+        new_method = create_access_method(self, check_pairing, level_name)
+        if new_method != None:
+            no_ball_region_methods.append(new_method)
     
     #Ball regions that work
     ball_region_exists : bool = False
@@ -192,7 +203,7 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         multiworld.regions.append(ball_region)
         ball_region_exists = True
         ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), ball_region_methods))
-    
+
     #No ball regions that exist
     no_ball_region_exists : bool = False
     no_ball_region_methods = remove_higher_difficulty_methods(self, no_ball_region_methods)
@@ -200,7 +211,7 @@ def create_region_pair(self : GloverWorld, check_info : dict, check_name : str, 
         multiworld.regions.append(no_ball_region)
         no_ball_region_exists = True
         no_ball_region_methods = list(filter(lambda a, b = base_id, c = True: self_ref_region(a, b, c), no_ball_region_methods))
-    
+
     return RegionPair(region_name, base_id, ball_region_methods, no_ball_region_methods, ball_region_exists, no_ball_region_exists)
 
 def self_ref_region(check_method : AccessMethod, base_region : int, base_ball : bool) -> bool:
@@ -218,6 +229,8 @@ def connect_region_pairs(self : GloverWorld, pairs : List[RegionPair]):
             pair_ball_connections : dict[Region, list[AccessMethod]] = {}
             for each_method in each_pair.ball_region_methods:
                 region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if region_to_connect == None:
+                    continue
                 if not region_to_connect in pair_ball_connections.keys():
                     pair_ball_connections[region_to_connect] = [each_method]
             #Create the rules using methods
@@ -230,6 +243,8 @@ def connect_region_pairs(self : GloverWorld, pairs : List[RegionPair]):
             pair_no_ball_connections : dict[Region, list[AccessMethod]] = {}
             for each_method in each_pair.no_ball_region_methods:
                 region_to_connect : Region = get_region_from_method(multiworld, player, pairs, each_method)
+                if region_to_connect == None:
+                    continue
                 if not region_to_connect in pair_no_ball_connections.keys():
                     pair_no_ball_connections[region_to_connect] = [each_method]
             no_ball_region = multiworld.get_region(each_pair.name, player)
@@ -247,6 +262,7 @@ class RegionLevel(NamedTuple):
     #region : Region | None
     starting_checkpoint : int
     map_regions : List[RegionPair]
+    start_without_ball : bool
 
 def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use : int | None, checkpoint_entry_pairs : list, map_regions : List[RegionPair]):
     #By default, the region level leads to the first checkpoint's region
@@ -262,57 +278,88 @@ def create_region_level(self : GloverWorld, level_name : str, checkpoint_for_use
 
     #See if you get the ball with the checkpoint
     start_without_ball : bool = level_name[3:4] == "1" or level_name[:3] == "OoW"
-    
+
+    #If you can get the ball in the level, you can use it to checkpoint warp with it to a later spot.
+    ball_regions : list[Region] = []
+    if start_without_ball:
+        ball_access_location = region.add_event(level_name + ": Ball", level_name + " Ball").location
+        for region_index, each_region_pair in enumerate(map_regions):
+            if each_region_pair.ball_region_exists:
+                ball_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
+                ball_regions.append(ball_region)
+                if region_index == 0:
+                    set_rule(ball_access_location, lambda state, in_player = player, ball_reg = ball_region.name : state.can_reach_region(ball_reg, in_player))
+                else:
+                    add_rule(ball_access_location, lambda state, in_player = player, ball_reg = ball_region.name : state.can_reach_region(ball_reg, in_player), "or")
+
     #Assign entrances required by checkpoints here
     for checkpoint_number in range(1, len(checkpoint_entry_pairs)):
-
         #Create a checkpoint connection
         checkpoint_name : str = level_name + " Checkpoint " + str(checkpoint_number)
-        connecting_region : Region | None = None
         for each_region_pair in map_regions:
             #If the checkpoint leads to that region
             if each_region_pair.base_id == checkpoint_entry_pairs[checkpoint_number]:
+                is_default = default_checkpoint == checkpoint_number
+
+                #If you normally spawn without the ball, the logic goes here
                 if start_without_ball:
-                    #And it exists
                     if each_region_pair.no_ball_region_exists:
-                        connecting_region = multiworld.get_region(each_region_pair.name, player)
-                else:
-                    #And it exists
-                    if each_region_pair.ball_region_exists:
-                        connecting_region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
-                break
+                        connecting_region : Region = multiworld.get_region(each_region_pair.name, player)
+                        checkpoint_bridge(self, region, connecting_region, checkpoint_name, is_default)
+                
+                #You can theoretically always spawn with the ball, if you can reach it
+                if each_region_pair.ball_region_exists:
+                    connecting_region : Region = multiworld.get_region(each_region_pair.name + " W/Ball", player)
+                    checkpoint_bridge(self, region, connecting_region, checkpoint_name, is_default, start_without_ball, ball_regions)
         
-        if connecting_region != None:
-            entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name)
-            #The default checkpoint's always useable
-            if default_checkpoint != checkpoint_number:
-                #Other ones need the checkpoint item
-                set_rule(entrance, lambda state : state.has(checkpoint_name, player))
-
     multiworld.regions.append(region)
-    return RegionLevel(level_name, default_checkpoint, map_regions)
+    return RegionLevel(level_name, default_checkpoint, map_regions, start_without_ball)
 
-def create_access_method(info : dict, level_name : str) -> AccessMethod:
+def checkpoint_bridge(self : GloverWorld, region : Region, connecting_region : Region, checkpoint_name : str, is_default : bool, requires_ball_access = False, ball_regions : list[Region] = []):
+    name_suffix : str = ""
+    if requires_ball_access:
+        name_suffix += " W/Ball"
+    entrance : Entrance | Any = region.connect(connecting_region, checkpoint_name + name_suffix)
+    requirements : list[str] = []
+    #The default checkpoint's always useable
+    if not is_default:
+        requirements.append(checkpoint_name)
+    if requires_ball_access:
+        ball_access = checkpoint_name.split(" ")[0]+ " Ball"
+        requirements.append(ball_access)
+        #Notify that getting the ball can let you use the checkpoint for the region sweeper
+        for each_ball_region in ball_regions:
+            self.multiworld.register_indirect_condition(each_ball_region, entrance)
+    if len(requirements) > 0:
+        #Other ones need the checkpoint item
+        set_rule(entrance, lambda state, reqs = requirements, in_player = self.player : state.has_all(reqs, in_player))
+
+def create_access_method(self, info : dict, level_name : str) -> AccessMethod:#
     required_moves : list = []
     for each_key, each_result in info.items():
         if each_key.startswith("mv"):
-            required_moves.append(move_lookup[each_result])
+            each_move = move_lookup[each_result]
+            required_moves.append(each_move)
         if each_key.startswith("ck"):
             required_moves.append(level_name + " " + each_result)
+    #Remove Power Ball methods
+    if "Power Ball" in required_moves and (not self.options.include_power_ball and self.starting_ball != "Power Ball"):
+        return None
     #Combine Not Bowling and Not Crystal into Not Bowling Or Crystal
     if "Not Bowling" in required_moves and "Not Crystal" in required_moves:
         required_moves.remove("Not Bowling")
         required_moves.remove("Not Crystal")
         required_moves.append("Not Bowling or Crystal")
-    #Make sure there's a jump required for double jumps and fist slams
-    if not "Jump" in required_moves and ("Double Jump" in required_moves or "Fist Slam" in required_moves):
+    #Make sure there's a jump required for double jumps
+    if not "Jump" in required_moves and ("Double Jump" in required_moves):
         required_moves.append("Jump")
     #Here's the access method!
     return AccessMethod(info["regionIndex"], info["ballRequirement"], info["trickDifficulty"], required_moves)
 
-def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData]):
+def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, map_regions : List[RegionPair], location_data_list : List[LocationData], target_score : int):
     player : int = self.player
     multiworld : MultiWorld = self.multiworld
+    score_locations : list[Location] = []
     for each_location_data in location_data_list:
         #Should this location be generated?
         ap_ids : list[int] = each_location_data.ap_ids
@@ -331,7 +378,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
             case 6:
                 #Tip hints
                 if self.options.mr_hints:
-                    self.tip_locations.append(each_location_data.name)
+                    self.tip_locations[each_location_data.name] = ap_ids[0]
                 #Tips
                 if not self.options.mr_tip_checks:
                     continue
@@ -346,11 +393,11 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
             case 10:
                 #Enemysanity
                 if not self.options.enemysanity:
-                    continue
+                    ap_ids.clear()
             case 11:
                 #Insectity
                 if not self.options.insectity:
-                    continue
+                    ap_ids.clear()
                 
         rules_applied : bool = False
 
@@ -392,13 +439,6 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
         else:
             #If there are no methods, continue
             continue
-            #region_name : str
-            #for each_pair in map_regions:
-            #    if each_pair.base_id == each_location_data.default_region:
-            #        region_name = each_pair.name
-            #if each_location_data.default_needs_ball:
-            #    region_name = region_name + " W/Ball"
-            #region_for_use = multiworld.get_region(region_name, player)
         
         #Construct location data
         if each_location_data.type == 1:
@@ -412,6 +452,8 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     region_for_use.locations.append(location)
                     if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                    #Garibs give score
+                    score_locations.append(location)
             #Garib Groups
             elif self.options.garib_logic == GaribLogic.option_garib_groups:
                 #Regular Locations
@@ -422,6 +464,8 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 region_for_use.locations.append(location)
                 if not rules_applied:
                     access_methods_to_rules(self, each_location_data.methods, location)
+                #Garibs give score
+                score_locations.append(location)
             #All Garibs in Level
             else:
                 #It's an event location, with an event item
@@ -431,6 +475,7 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     access_methods_to_rules(self, each_location_data.methods, location)
                 #These are used to create star gate unlock logic
                 location.place_locked_item(self.create_event(each_location_data.name + " Reached"))
+                score_locations.append(location)
         else:
             #Regular Locations
             address : int | None = None
@@ -441,6 +486,10 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                 region_for_use.locations.append(location)
                 if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                #Lives, Potions and Enemies give Score
+                if each_location_data.type in [2, 4, 10]:
+                    score_locations.append(location)
+                    score_locations.append(location)
             #Multiple AP Items
             elif len(each_location_data.ap_ids) > 1:
                 for each_index in range(len(each_location_data.ap_ids)):
@@ -451,26 +500,51 @@ def assign_locations_to_regions(self : GloverWorld, region_level : RegionLevel, 
                     region_for_use.locations.append(location)
                     if not rules_applied:
                         access_methods_to_rules(self, each_location_data.methods, location)
+                    #Lives, Potions and Enemies give Score
+                    if each_location_data.type in [2, 4, 10]:
+                        score_locations.append(location)
+                        score_locations.append(location)
             else:
                 #Event Item
                 location : Location = Location(player, each_location_data.name, address, region_for_use)
                 region_for_use.locations.append(location)
                 if not rules_applied:
-                        access_methods_to_rules(self, each_location_data.methods, location)
+                    access_methods_to_rules(self, each_location_data.methods, location)
                 match each_location_data.type:
                     #Switches with no paired level event store their level event 
                     #items as event items rather than AP items.
                     case 0:
                         new_event_item : str = switches_to_event_items[each_location_data.name]
                         location.place_locked_item(self.create_event(new_event_item))
-                    #Checkpoints act likewise
-                    case 3:
+                    #Enemies contribute to score even if disabled
+                    case 10:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
-                    #Level Warps
-                    case 7:
+                        score_locations.append(location)
+                    #Checkpoints & Level Warps
+                    case _:
                         new_event_item : str = each_location_data.name.replace(":", "")
                         location.place_locked_item(self.create_event(new_event_item))
+    
+    #Create score addresses anywhere that score is something you can get
+    #(AKA any non-boss level, excluding Space Boss)
+    world_index = 1 + self.world_from_string(region_level.name)
+    level_index = self.level_from_string(region_level.name)
+    if (world_index == 6 or level_index != 4) and level_index != 0:
+        #Score location at root
+        score_address = None
+        if target_score != 0:
+            score_address = ((world_index * 10) + level_index) * 100000
+        level_root = self.get_region(region_level.name)
+        score_location = Location(player, region_level.name + ": Score", score_address, level_root)
+        if score_address == None:
+            score_location.place_locked_item(self.create_event(region_level.name + " Score"))
+        level_root.locations.append(score_location)
+        for each_index, each_location in enumerate(score_locations):
+            if each_index == 0:
+                set_rule(score_location, lambda state, plr = player, scl = each_location: state.can_reach(scl, plr))
+            else:
+                add_rule(score_location, lambda state, plr = player, scl = each_location: state.can_reach(scl, plr), "or")
 
 def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs : List[RegionPair], method : AccessMethod) -> Region:
     for each_pair in region_pairs:
@@ -478,6 +552,11 @@ def get_region_from_method(multiworld : MultiWorld, player : int, region_pairs :
         if method.ball_in_region:
             lookup_name += " W/Ball"
         if each_pair.base_id == method.region_index:
+            if method.ball_in_region:
+                if not each_pair.ball_region_exists:
+                    return None
+            elif not each_pair.no_ball_region_exists:
+                return None
             return multiworld.get_region(lookup_name, player)
     raise IndexError(region_pairs[0].name.split(':')[0] + " method calls for region indexed " + str(method.region_index) + " that does not exist!")
 
@@ -491,6 +570,7 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
         #Go over the Glover worlds
         for level_index, level_key in enumerate(each_world):
             if level_index == 5 and not self.options.bonus_levels:
+                loc_con_index += 1
                 continue
             each_level = each_world[level_key]
             checkpoint_entry_pairs : list = levels_in_order[loc_con_index]
@@ -501,7 +581,7 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
             map_regions : List[RegionPair] = []
             location_data_list : List[LocationData] = []
             
-            #Bonus levels are off by default
+            #Bonus levels
             if not (level_index == 5 and not self.options.bonus_levels):
                 for check_name in each_level:
                     check_info = each_level[check_name]
@@ -512,12 +592,6 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                     if type(check_info) is dict:
                         new_region_pair = create_region_pair(self, check_info, check_name, level_name)
                         map_regions.append(new_region_pair)
-                        #You get the one from checkpoints by default
-                        region_checkpoints = []
-                        for check_index in range(1, len(checkpoint_entry_pairs)):
-                            matching_name = checkpoint_entry_pairs[check_index]
-                            if matching_name == check_name:
-                                region_checkpoints.append(prefix + "Checkpoint" + str(check_index))
             
             #Sort the in-level regions
             map_regions = sorted(map_regions, key=attrgetter('base_id'))
@@ -529,26 +603,31 @@ def build_data(self : GloverWorld) -> List[RegionLevel]:
                 checkpoint_for_use = self.spawn_checkpoint[(world_index * 3) + (level_index - 1)]
             region_level : RegionLevel = create_region_level(self, level_name, checkpoint_for_use, checkpoint_entry_pairs, map_regions)
             
+            #Target Score
+            target_score = 0
+            if level_name in self.options.level_scores.value:
+                target_score = self.options.level_scores.value[level_name]
+
             #Attach the locations to the regions
-            assign_locations_to_regions(self, region_level, map_regions, location_data_list)
+            assign_locations_to_regions(self, region_level, map_regions, location_data_list, target_score)
             
             #Aside from the wayrooms, the hubworld and the castle cave, levels have star marks
             if (world_index < 6 and not level_index == 0) or level_index == 2:
-                create_star_mark(self, level_index, world_index, level_name, prefix, location_data_list)
+                create_star_mark(self, level_index, world_index, prefix, location_data_list)
             
             #Append it to the level list
             all_levels.append(region_level)
 
     return all_levels
 
-def create_star_mark(self, level_index : int, world_index : int, level_name : str, prefix : str, location_data_list : List[LocationData]):
+def create_star_mark(self, level_index : int, world_index : int, prefix : str, location_data_list : List[LocationData]):
     player : int = self.player
     
     #Does this location have a star mark item, or a random one?
     star_mark_ap_id : int | None = None
     if self.options.portalsanity:
         #They contain a random item
-        star_mark_ap_id = 3000 + level_index + (world_index * 10)
+        star_mark_ap_id = 30000 + level_index + (world_index * 10)
     secondary_condition : str
     #Does it unlock via garibs?
     level_has_garibs : bool = level_index != 4 and world_index < 6
@@ -558,9 +637,11 @@ def create_star_mark(self, level_index : int, world_index : int, level_name : st
     else:
         #No
         secondary_condition = "Completion"
+        #Which means, don't give them a second item here
+        star_mark_ap_id = None
     #Otherwise, they contain the star marks
-    level_base_region : Region = self.multiworld.get_region(level_name, player)
-    star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, level_base_region)
+    menu_region : Region = self.multiworld.get_region("Menu", player)
+    star_mark_location = Location(player, prefix + secondary_condition, star_mark_ap_id, menu_region)
     #Boss levels and the well just give you it if you reach the goal
     if not level_has_garibs:
         goal_location : Location
@@ -574,7 +655,7 @@ def create_star_mark(self, level_index : int, world_index : int, level_name : st
     #Level garibs means you take all garib methods from before
     elif self.options.garib_logic == GaribLogic.option_level_garibs:
         all_garibs_rule(self, star_mark_location, location_data_list)
-    level_base_region.locations.append(star_mark_location)
+    menu_region.locations.append(star_mark_location)
 
 def all_garibs_rule(self, star_mark_location : Location, location_data_list : List[LocationData]):
     #If it's all garibs in level logic, logic construction looks diffrent
@@ -635,14 +716,27 @@ def create_level_prefix(level_prefixes : list[str], world_index : int, level_ind
     else:
         return level_prefixes[level_index]
 
-def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : list[str]) -> dict:
-    output : dict = {}
+def generate_location_information(world_prefixes : list[str], level_prefixes : list[str]) -> list:
+    location_name_to_id : dict = {}
+    #Setup the location types here
+    location_name_groups : dict = {}
+    for each_type in location_type_lookup:
+        if each_type == "LOADING_ZONE" or each_type == "REGION":
+            continue
+        group_name = each_type.title()
+        location_name_groups[group_name] = []
+    location_name_groups["Score"] = []
+    location_name_groups["Crystals"] = []
     #Each World
     for each_world_index, each_world in enumerate(logic_data):
         world_prefix : str = create_world_prefix(world_prefixes, each_world_index)
         for level_key, level_data in each_world.items():
             level_prefix : str = create_level_prefix(level_prefixes, each_world_index, int(level_key[-1]))
-            prefix : str = world_prefix + level_prefix + ": "
+            level_name = world_prefix + level_prefix
+            prefix : str = level_name + ": "
+            if prefix == "Castle Cave: ":
+                continue
+            location_name_groups[level_name] = []
             for location_name in level_data:
                 #Not regions
                 if type(level_data[location_name]) is dict:
@@ -651,26 +745,52 @@ def generate_location_name_to_id(world_prefixes : list[str], level_prefixes : li
                 ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
                 ap_ids = non_blank_ap_ids(ap_ids)
                 for each_pairing in build_location_pairings(prefix + location_name, level_data[location_name][0], ap_ids):
-                    output[each_pairing[0]] = int(each_pairing[1], 0)
+                    #Name to ID
+                    location_name_to_id[each_pairing[0]] = int(each_pairing[1], 0)
+                    #Name Groups
+                    location_name_groups[level_name].append(each_pairing[0])
+                    location_type : str = location_type_lookup[level_data[location_name][0]["TYPE"]]
+                    location_name_groups[location_type.title()].append(each_pairing[0])
                 #Garib Groups
                 if level_data[location_name][0]["TYPE"] == 1 and len(ap_ids) > 1:
                     group_id : int = int(ap_ids[0], 0) + 10000
-                    output[prefix + location_name] = group_id
+                    location_name_to_id[prefix + location_name] = group_id
                 #Enemy Garib Groups
                 if level_data[location_name][0]["TYPE"] == 10:
                     enemy_count = level_data[location_name][0]["COUNT"]
-                    if enemy_count < len(ap_ids):
+                    if enemy_count < len(ap_ids) and enemy_count > 1:
                         group_id : int = int(ap_ids[enemy_count], 0) + 10000
-                        output[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
+                        location_name_to_id[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
             #Levels with garibs in them
             if each_world_index < 6:
                 match level_key:
                     case "l1":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 1
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 1
                     case "l2":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 2
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 2
                     case "l3":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 3
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 3
                     case "l5":
-                        output[prefix + "All Garibs"] = 3000 + (each_world_index * 10) + 5
-    return output
+                        location_name_to_id[prefix + "All Garibs"] = 30000 + (each_world_index * 10) + 5
+    #Scores
+    for world_index, world_prefix in enumerate(world_prefixes, 1):
+        for level_index, level_prefix in enumerate(level_prefixes):
+            level_score_address = 100000 * ((world_index * 10) + level_index)
+            if (level_index != 4 or world_index == 6) and level_index != 0:
+                level_name = world_prefix + level_prefix
+                prefix = level_name + ": "
+                location_name_to_id[prefix + "Score"] = level_score_address
+                location_name_groups["Score"].append(prefix + "Score")
+                location_name_groups[level_name].append(prefix + "Score")
+    for each_score in range(10000, 100000000, 10000):
+        location_name_to_id[str(each_score) + " Score"] = 100000000 + each_score
+        location_name_groups["Score"].append(str(each_score) + " Score")
+    
+    for each_crystal in range(1,8):
+        #for each_loc, each_id in location_name_groups.items():
+        #    if each_id == 1945 + each_crystal:
+        #        each_loc
+        turn_in_name = "Ball Turn-In " + str(each_crystal)
+        location_name_to_id[turn_in_name] = 1945 + each_crystal
+        location_name_groups["Crystals"].append(turn_in_name)
+    return [location_name_to_id, location_name_groups]

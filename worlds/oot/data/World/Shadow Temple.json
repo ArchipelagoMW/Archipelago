@@ -1,0 +1,203 @@
+[
+    {
+        "region_name": "Shadow Temple Entryway",
+        "dungeon": "Shadow Temple",
+        "exits": {
+            "Graveyard Warp Pad Region": "True",
+            "Shadow Temple Beginning": "
+                (logic_lens_shadow or can_use(Lens_of_Truth)) and
+                (can_use(Hover_Boots) or can_use(Hookshot))"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beginning",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Map Chest": "True",
+            "Shadow Temple Hover Boots Chest": "True",
+            "Shadow Temple Whispering Walls Front Pot 1": "True",
+            "Shadow Temple Whispering Walls Front Pot 2": "True",
+            "Shadow Temple Whispering Walls Left Pot 1": "True",
+            "Shadow Temple Whispering Walls Left Pot 2": "True",
+            "Shadow Temple Whispering Walls Left Pot 3": "True",
+            "Shadow Temple Whispering Walls Flying Pot": "True",
+            "Shadow Temple Whispering Walls Near Dead Hand Pot": "True",
+            "Shadow Temple Map Chest Room Pot 1": "True",
+            "Shadow Temple Map Chest Room Pot 2": "True",
+            "Nut Pot": "True"
+        },
+        "exits": {
+            "Shadow Temple First Beamos": "Hover_Boots"
+        }
+    },
+    {
+        "region_name": "Shadow Temple First Beamos",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Compass Chest": "True",
+            "Shadow Temple Early Silver Rupee Chest": "True"
+        },
+        "exits": {
+            # If the shortcut is open, reverse shadow becomes an option, so we need to check for 4 keys with Lens/trick
+            # or all 5 keys. If the moving platform lens trick is off, forward shadow is the only way to access
+            # the huge pit checks without Lens of Truth. Getting to the invisible blades room in reverse uses the falling
+            # elevator near the Beamos.
+            # Also, we only need to check shortcut keys here and at boat, since key requirements are always the same.
+            "Shadow Temple Huge Pit": "
+                has_explosives and
+                    (((Small_Key_Shadow_Temple, 1) and not shadow_temple_shortcuts) or
+                    (Small_Key_Shadow_Temple, 5) or
+                    ((Small_Key_Shadow_Temple, 4) and (logic_lens_shadow_platform or can_use(Lens_of_Truth))))",
+            "Shadow Temple Boat": "shadow_temple_shortcuts"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Huge Pit",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Invisible Blades Visible Chest": "True",
+            "Shadow Temple Invisible Blades Invisible Chest": "True",
+            "Shadow Temple Falling Spikes Lower Chest": "True",
+            "Shadow Temple Falling Spikes Upper Chest": "logic_shadow_umbrella or Progressive_Strength_Upgrade",
+            "Shadow Temple Falling Spikes Switch Chest": "logic_shadow_umbrella or Progressive_Strength_Upgrade",
+            "Shadow Temple Invisible Blades Recovery Heart 1": "can_play(Song_of_Time)",
+            "Shadow Temple Invisible Blades Recovery Heart 2": "can_play(Song_of_Time)",
+            "Shadow Temple Falling Spikes Lower Pot 1": "True",
+            "Shadow Temple Falling Spikes Lower Pot 2": "True",
+            "Shadow Temple Falling Spikes Upper Pot 1": "logic_shadow_umbrella or Progressive_Strength_Upgrade",
+            "Shadow Temple Falling Spikes Upper Pot 2": "logic_shadow_umbrella or Progressive_Strength_Upgrade",
+            "Shadow Temple GS Invisible Blades Room": "True",
+            "Shadow Temple GS Falling Spikes Room": "logic_shadow_umbrella_gs or Hookshot"
+        },
+        "exits": {
+            "Shadow Temple Invisible Spikes": "
+                (Small_Key_Shadow_Temple, 2) and (logic_lens_shadow_platform or can_use(Lens_of_Truth))"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Invisible Spikes",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Invisible Spikes Chest": "True",
+            "Shadow Temple Freestanding Key": "
+                Hookshot and
+                (Bombs or Progressive_Strength_Upgrade or
+                    (logic_shadow_freestanding_key and has_bombchus))",
+            "Shadow Temple GS Single Giant Pot": "Hookshot"
+        },
+        "exits": {
+            "Shadow Temple Wind Tunnel": "Hookshot and (Small_Key_Shadow_Temple, 3)",
+            "Shadow Temple Huge Pit": "logic_lens_shadow_platform or can_use(Lens_of_Truth)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Wind Tunnel",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Wind Hint Chest": "True"
+        },
+        "exits": {
+            "Shadow Temple After Wind": "True",
+            # Reverse Shadow assumes 4 keys at both ends, so no need to check keys here
+            "Shadow Temple Invisible Spikes": "Hookshot"
+        }
+    },
+    {
+        "region_name": "Shadow Temple After Wind",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple After Wind Enemy Chest": "True",
+            "Shadow Temple After Wind Hidden Chest": "has_explosives",
+            "Shadow Temple After Wind Pot 1": "True",
+            "Shadow Temple After Wind Pot 2": "True",
+            "Shadow Temple After Wind Flying Pot 1": "True",
+            "Shadow Temple After Wind Flying Pot 2": "True"
+        },
+        "exits": {
+            "Shadow Temple Boat": "(Small_Key_Shadow_Temple, 4)",
+            "Shadow Temple Wind Tunnel": "True"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Boat",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Before Boat Recovery Heart 1": "can_use(Distant_Scarecrow)",
+            "Shadow Temple Before Boat Recovery Heart 2": "can_use(Distant_Scarecrow)",
+            "Shadow Temple GS Near Ship": "Longshot"
+        },
+        "exits": {
+            "Shadow Temple After Wind": "(Small_Key_Shadow_Temple, 4)",
+            "Shadow Temple Beyond Boat": "can_play(Zeldas_Lullaby)"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beyond Boat",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Invisible Floormaster Chest": "True",
+            "Shadow Temple Spike Walls Left Chest": "can_use(Dins_Fire)",
+            "Shadow Temple Boss Key Chest": "can_use(Dins_Fire)",
+            "Shadow Temple After Boat Pot": "True",
+            "Shadow Temple Invisible Floormaster Pot 1": "True",
+            "Shadow Temple Invisible Floormaster Pot 2": "True",
+            "Shadow Temple Spike Walls Pot": "True",
+            "Shadow Temple GS Triple Giant Pot": "True"
+        },
+        "exits": {
+            "Shadow Temple 3 Spinning Pots Rupees": "Bombs or Progressive_Strength_Upgrade",
+            "Shadow Temple Beyond Boat Scarecrow": "can_use(Distant_Scarecrow)",
+            "Shadow Temple Before Boss": "
+                Bow or (logic_shadow_statue and has_bombchus) or shadow_temple_shortcuts"
+        }
+    },
+    {
+        "region_name": "Shadow Temple 3 Spinning Pots Rupees",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple 3 Spinning Pots Rupee 1": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 2": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 3": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 4": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 5": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 6": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 7": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 8": "True",
+            "Shadow Temple 3 Spinning Pots Rupee 9": "True"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beyond Boat Scarecrow",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple After Boat Upper Recovery Heart 1": "True",
+            "Shadow Temple After Boat Upper Recovery Heart 2": "True"
+        },
+        "exits": {
+            "Shadow Temple Beyond Boat SoT Block": "True"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Beyond Boat SoT Block",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple After Boat Lower Recovery Heart": "True"
+        },
+        "exits": {
+            "Shadow Temple Beyond Boat Scarecrow": "can_use(Scarecrow)",
+            "Shadow Temple Before Boss": "True"
+        }
+    },
+    {
+        "region_name": "Shadow Temple Before Boss",
+        "dungeon": "Shadow Temple",
+        "locations": {
+            "Shadow Temple Near Boss Pot 1": "True",
+            "Shadow Temple Near Boss Pot 2": "True"
+        },
+        "exits": {
+            "Shadow Temple Beyond Boat SoT Block": "can_play(Song_of_Time)",
+            "Shadow Temple Boss Door": "(Small_Key_Shadow_Temple, 5)"
+        }
+    }
+]

@@ -1,0 +1,49 @@
+[
+    {
+        "region_name": "Deku Tree Lobby",
+        "dungeon": "Deku Tree",
+        "locations": {
+            "Deku Tree MQ Map Chest": "True",
+            "Deku Tree MQ Slingshot Chest": "can_child_attack",
+            "Deku Tree MQ Slingshot Room Back Chest": "Sticks or can_use(Dins_Fire)",
+            "Deku Tree MQ Basement Chest": "Sticks or can_use(Dins_Fire)",
+            "Deku Tree MQ GS Lobby": "can_child_attack"
+        },
+        "exits": {
+            "KF Outside Deku Tree": "True",
+            "Deku Tree Compass Room": "Slingshot and (Sticks or can_use(Dins_Fire))",
+            "Deku Tree Boss Room": "Slingshot and (Sticks or can_use(Dins_Fire))"
+        }
+    },
+    {
+        "region_name": "Deku Tree Compass Room",
+        "dungeon": "Deku Tree",
+        "locations": {
+            "Deku Tree MQ Compass Chest": "True",
+            "Deku Tree MQ GS Compass Room": "
+                Boomerang and ((Bombs and can_play(Song_of_Time)) or has_bombchus)"
+        },
+        "exits": {
+            "Deku Tree Lobby": "True"
+        }
+    },
+    {
+        "region_name": "Deku Tree Boss Room",
+        "dungeon": "Deku Tree",
+        "events": {
+            "Deku Tree Clear": "Deku_Shield and (Kokiri_Sword or Sticks)"
+        },
+        "locations": {
+            "Deku Tree MQ Before Spinning Log Chest": "True",
+            "Deku Tree MQ After Spinning Log Chest": "can_play(Song_of_Time)",
+            "Deku Tree MQ GS Basement Graves Room": "Boomerang and can_play(Song_of_Time)",
+            "Deku Tree MQ GS Basement Back Room": "Boomerang",
+            "Deku Tree MQ Deku Scrub": "True",
+            "Deku Tree Queen Gohma Heart": "Deku_Shield and (Kokiri_Sword or Sticks)",
+            "Queen Gohma": "Deku_Shield and (Kokiri_Sword or Sticks)"
+        },
+        "exits": {
+            "Deku Tree Lobby": "True"
+        }
+    }
+]

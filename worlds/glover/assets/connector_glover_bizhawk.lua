@@ -11,7 +11,7 @@ local math = require('math')
 require('common')
 
 local SCRIPT_VERSION = 1
-local GVR_VERSION = "V0.1"
+local GVR_VERSION = "V1.0"
 local PLAYER = ""
 local SEED = 0
 
@@ -39,6 +39,7 @@ local WORLD_NAME = "";
 
 -------------- GARIB LOGIC -----------
 
+local LEVEL_GARIBS = false
 local GARIB_GROUPS = false
 local GARIB_ORDER = {}
 
@@ -102,6 +103,34 @@ local TOTAL_PROGRESSIVE_LEVEL_EVENTS = {
 	['AP_FORTRESS_L1_PROGRESSIVE_DOOR'] = 0,
 	['AP_FORTRESS_L2_PROGRESSIVE_GATE'] = 0
 }
+local SCORE_TABLE = {
+	['TOTAL'] = 0,
+	['AP_ATLANTIS_L1'] = 0,
+	['AP_ATLANTIS_L2'] = 0,
+	['AP_ATLANTIS_L3'] = 0,
+	['AP_ATLANTIS_BONUS'] = 0,
+	['AP_CARNIVAL_L1'] = 0,
+	['AP_CARNIVAL_L2'] = 0,
+	['AP_CARNIVAL_L3'] = 0,
+	['AP_CARNIVAL_BONUS'] = 0,
+	['AP_PIRATES_L1'] = 0,
+	['AP_PIRATES_L2'] = 0,
+	['AP_PIRATES_L3'] = 0,
+	['AP_PIRATES_BONUS'] = 0,
+	['AP_PREHISTORIC_L1'] = 0,
+	['AP_PREHISTORIC_L2'] = 0,
+	['AP_PREHISTORIC_L3'] = 0,
+	['AP_PREHISTORIC_BONUS'] = 0,
+	['AP_FORTRESS_L1'] = 0,
+	['AP_FORTRESS_L2'] = 0,
+	['AP_FORTRESS_L3'] = 0,
+	['AP_FORTRESS_BONUS'] = 0,
+	['AP_SPACE_L1'] = 0,
+	['AP_SPACE_L2'] = 0,
+	['AP_SPACE_L3'] = 0,
+	['AP_SPACE_BOSS'] = 0,
+	['AP_SPACE_BONUS'] = 0
+}
 local MISC_ITEMS_RECIEVED = {
     ["CHICKEN"] = 0,
     ["LIFE"] = 0,
@@ -110,9 +139,11 @@ local MISC_ITEMS_RECIEVED = {
     ["HERCULES"] = 0,
     ["HELICOPTER"] = 0,
     ["SPEED"] = 0,
-	["FROG"] = 0,
-	["DEATH"] = 0,
-    ["STICKY"] = 0
+	["FROG_SPELL"] = 0,
+	["DEATH_SPELL"] = 0,
+    ["STICKY"] = 0,
+	["BIG_BALL"] = 0,
+	["LOW_GRAVITY"] = 0
 }
 
 --------------- LINKS ----------------------
@@ -143,6 +174,26 @@ local LINKS_TABLE = {
 				['AP'] = 0
 			},
 			['CRYSTAL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['TIP'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['FISH_EYE'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['ENEMY_BALL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['CONTROL_BALL'] = {
+				['LOCAL'] = 0,
+				['AP'] = 0
+			},
+			['INVISIBALL'] = {
 				['LOCAL'] = 0,
 				['AP'] = 0
 			}
@@ -281,6 +332,12 @@ local ROM_ITEM_TABLE = {
 	"AP_TRAINING_WORLD_STAIRS",
 	"AP_FROG_TRAP",
     "AP_CAMERA_TRAP",
+	"AP_CAMERA_90_TRAP",
+    "AP_CAMERA_135_TRAP",
+    "AP_CAMERA_180_TRAP",
+    "AP_CAMERA_225_TRAP",
+    "AP_CAMERA_270_TRAP",
+    "AP_CAMERA_315_TRAP",
     "AP_CURSE_BALL",
     "AP_CBALL_TRAP",
 	"AP_GLOVER_DEATH",
@@ -294,6 +351,128 @@ local ROM_ITEM_TABLE = {
     "AP_BEACHBALL_TRANSFORM",
     "AP_HELICOPTER_TRANSFORM",
     "AP_DEATH_TRANSFORM",
+	"AP_MAD_GARIBS",
+    "AP_FISH_EYE_TRAP",
+    "AP_ENEMY_BALL_TRAP",
+    "AP_CONTROL_BALL_TRAP",
+    "AP_INVIS_BALL_TRAP",
+    "AP_BIG_BALL",
+    "AP_LOW_GRAV",
+	"AP_ATLANTIS_L1_CHECKPOINT1",
+    "AP_ATLANTIS_L1_CHECKPOINT2",
+    "AP_ATLANTIS_L2_CHECKPOINT1",
+    "AP_ATLANTIS_L2_CHECKPOINT2",
+    "AP_ATLANTIS_L2_CHECKPOINT3",
+    "AP_ATLANTIS_L3_CHECKPOINT1",
+    "AP_ATLANTIS_L3_CHECKPOINT2",
+    "AP_ATLANTIS_L3_CHECKPOINT3",
+    "AP_CARNIVAL_L1_CHECKPOINT1",
+    "AP_CARNIVAL_L1_CHECKPOINT2",
+    "AP_CARNIVAL_L1_CHECKPOINT3",
+    "AP_CARNIVAL_L1_CHECKPOINT4",
+    "AP_CARNIVAL_L2_CHECKPOINT1",
+    "AP_CARNIVAL_L2_CHECKPOINT2",
+    "AP_CARNIVAL_L2_CHECKPOINT3",
+    "AP_CARNIVAL_L2_CHECKPOINT4",
+    "AP_CARNIVAL_L2_CHECKPOINT5",
+    "AP_CARNIVAL_L3_CHECKPOINT1",
+    "AP_CARNIVAL_L3_CHECKPOINT2",
+    "AP_CARNIVAL_L3_CHECKPOINT3",
+    "AP_CARNIVAL_L3_CHECKPOINT4",
+    "AP_PIRATES_L1_CHECKPOINT1",
+    "AP_PIRATES_L1_CHECKPOINT2",
+    "AP_PIRATES_L1_CHECKPOINT3",
+    "AP_PIRATES_L2_CHECKPOINT1",
+    "AP_PIRATES_L2_CHECKPOINT2",
+    "AP_PIRATES_L2_CHECKPOINT3",
+    "AP_PIRATES_L3_CHECKPOINT1",
+    "AP_PIRATES_L3_CHECKPOINT2",
+    "AP_PIRATES_L3_CHECKPOINT3",
+    "AP_PIRATES_L3_CHECKPOINT4",
+    "AP_PREHISTORIC_L1_CHECKPOINT1",
+    "AP_PREHISTORIC_L1_CHECKPOINT2",
+    "AP_PREHISTORIC_L1_CHECKPOINT3",
+    "AP_PREHISTORIC_L2_CHECKPOINT1",
+    "AP_PREHISTORIC_L2_CHECKPOINT2",
+    "AP_PREHISTORIC_L2_CHECKPOINT3",
+    "AP_PREHISTORIC_L2_CHECKPOINT4",
+    "AP_PREHISTORIC_L3_CHECKPOINT1",
+    "AP_PREHISTORIC_L3_CHECKPOINT2",
+    "AP_PREHISTORIC_L3_CHECKPOINT3",
+    "AP_PREHISTORIC_L3_CHECKPOINT4",
+    "AP_FORTRESS_L1_CHECKPOINT1",
+    "AP_FORTRESS_L1_CHECKPOINT2",
+    "AP_FORTRESS_L1_CHECKPOINT3",
+    "AP_FORTRESS_L2_CHECKPOINT1",
+    "AP_FORTRESS_L2_CHECKPOINT2",
+    "AP_FORTRESS_L2_CHECKPOINT3",
+    "AP_FORTRESS_L3_CHECKPOINT1",
+    "AP_FORTRESS_L3_CHECKPOINT2",
+    "AP_FORTRESS_L3_CHECKPOINT3",
+    "AP_FORTRESS_L3_CHECKPOINT4",
+    "AP_FORTRESS_L3_CHECKPOINT5",
+    "AP_SPACE_L1_CHECKPOINT1",
+    "AP_SPACE_L1_CHECKPOINT2",
+    "AP_SPACE_L3_CHECKPOINT1",
+    "AP_SPACE_L3_CHECKPOINT2",
+    "AP_SPACE_L3_CHECKPOINT3",
+    "AP_SPACE_L3_CHECKPOINT4",
+	"AP_OPEN_HUBS",
+    "AP_OPEN_WORLDS",
+	"AP_ATLANTIS_DOOR1_STAR",
+    "AP_ATLANTIS_DOOR2_STAR",
+    "AP_ATLANTIS_DOOR3_STAR",
+    "AP_ATLANTIS_DOOR4_STAR",
+    "AP_ATLANTIS_DOOR5_STAR",
+    "AP_CARNIVAL_DOOR1_STAR",
+    "AP_CARNIVAL_DOOR2_STAR",
+    "AP_CARNIVAL_DOOR3_STAR",
+    "AP_CARNIVAL_DOOR4_STAR",
+    "AP_CARNIVAL_DOOR5_STAR",
+    "AP_PIRATES_DOOR1_STAR",
+    "AP_PIRATES_DOOR2_STAR",
+    "AP_PIRATES_DOOR3_STAR",
+    "AP_PIRATES_DOOR4_STAR",
+    "AP_PIRATES_DOOR5_STAR",
+    "AP_PREHISTORIC_DOOR1_STAR",
+    "AP_PREHISTORIC_DOOR2_STAR",
+    "AP_PREHISTORIC_DOOR3_STAR",
+    "AP_PREHISTORIC_DOOR4_STAR",
+    "AP_PREHISTORIC_DOOR5_STAR",
+    "AP_FORTRESS_DOOR1_STAR",
+    "AP_FORTRESS_DOOR2_STAR",
+    "AP_FORTRESS_DOOR3_STAR",
+    "AP_FORTRESS_DOOR4_STAR",
+    "AP_FORTRESS_DOOR5_STAR",
+    "AP_SPACE_DOOR1_STAR",
+    "AP_SPACE_DOOR2_STAR",
+    "AP_SPACE_DOOR3_STAR",
+    "AP_SPACE_DOOR4_STAR",
+    "AP_SPACE_DOOR5_STAR",
+    "AP_ATLANTIS_DOOR2_OPEN",
+    "AP_ATLANTIS_DOOR3_OPEN",
+    "AP_ATLANTIS_DOOR4_OPEN",
+    "AP_ATLANTIS_DOOR5_OPEN",
+    "AP_CARNIVAL_DOOR2_OPEN",
+    "AP_CARNIVAL_DOOR3_OPEN",
+    "AP_CARNIVAL_DOOR4_OPEN",
+    "AP_CARNIVAL_DOOR5_OPEN",
+    "AP_PIRATES_DOOR2_OPEN",
+    "AP_PIRATES_DOOR3_OPEN",
+    "AP_PIRATES_DOOR4_OPEN",
+    "AP_PIRATES_DOOR5_OPEN",
+    "AP_PREHISTORIC_DOOR2_OPEN",
+    "AP_PREHISTORIC_DOOR3_OPEN",
+    "AP_PREHISTORIC_DOOR4_OPEN",
+    "AP_PREHISTORIC_DOOR5_OPEN",
+    "AP_FORTRESS_DOOR2_OPEN",
+    "AP_FORTRESS_DOOR3_OPEN",
+    "AP_FORTRESS_DOOR4_OPEN",
+    "AP_FORTRESS_DOOR5_OPEN",
+    "AP_SPACE_DOOR2_OPEN",
+    "AP_SPACE_DOOR3_OPEN",
+    "AP_SPACE_DOOR4_OPEN",
+    "AP_SPACE_DOOR5_OPEN",
 	"AP_DEBUG",
     "AP_MAX_ITEM",
 };
@@ -346,14 +525,18 @@ do
 end
 
 local WAYROOM_TIPS_TABLE = {
-	0x000,
-	0x11A,
-	0x271,
-	0x3C9,
-	0x534,
-	0x671
+	"1972",
+	"282",
+	"625",
+	"969",
+	"1332",
+	"1649"
 }
-
+local ROM_WAYROOM_TIPS_TABLE = {} -- Reverses the Wayroom Tips Table
+for index, item in pairs(WAYROOM_TIPS_TABLE)
+do
+    ROM_WAYROOM_TIPS_TABLE[item] = index
+end
 -- Address Map for Glover
 local ADDRESS_MAP = {
 	["AP_ATLANTIS_L1"] = {
@@ -11695,10 +11878,12 @@ GLOVERHACK = {
     RDRAMBase = 0x80000000,
     RDRAMSize = 0x800000,
 
+	score = 0x290188,
+
 	base_pointer = 0x400000,
     pc = 0x0,
-    ap_items = 0x9B,
-    ap_world = 0x7C0,
+    ap_items = 0xA2,
+    ap_world = 0xED4,
       hub_entrance = 0x0,
       door_number = 0x1,
       warp_spawn_offset = 0x2,
@@ -11719,41 +11904,66 @@ GLOVERHACK = {
       tip_locations = 0x490,
         tip_id = 0x4,
         tip_collected = 0x6,
-      tip_size = 0x8,
-      checkpoint_locations = 0x508,
+        tip_text = 0x8,
+          line1 = 0x0,
+          line2 = 0x15,
+          line3 = 0x2A,
+          line4 = 0x3F,
+          line5 = 0x54,
+          line6 = 0x69,
+         last_line = 0x7E,
+      tip_size = 0x88,
+      checkpoint_locations = 0xC88,
         checkpoint_id = 0x4,
         checkpoint_collected = 0x6,
       checkpoint_size = 0xC,
-      switch_locations = 0x544,
+      switch_locations = 0xCC4,
         switch_id = 0x4,
         switch_collected = 0x6,
       switch_size = 0xC,
-      potion_locations = 0x5C8,
+      potion_locations = 0xD48,
         potion_id = 0x4,
         potion_collected = 0x6,
       potion_size = 0x8,
-      goal = 0x610,
-    ap_world_offset = 0x614,
+      goal = 0xD90,
+      starred = 0xD91,
+    ap_world_offset = 0xD94,
     ap_hub_order = 0x0,
     garib_totals = 0xE,
-    wayroom_locations = 0xCA40,
+    wayroom_locations = 0x1C154,
       wayroom_id = 0x4,
       wayroom_collected = 0x6,
-    wayroom_size = 0x8,
-    chicken_collected = 0xCA70,
+        wr_tip_text = 0x8,
+          wr_line1 = 0x0,
+          wr_line2 = 0x15,
+          wr_line3 = 0x2A,
+          wr_line4 = 0x3F,
+          wr_line5 = 0x54,
+          wr_line6 = 0x69,
+         wr_last_line = 0x7E,
+    wayroom_size = 0x88,
+    chicken_collected = 0x1C484,
+    wayroom_completed_stars = 0x8E,
+    wayroom_completed_size = 0x1,
     settings = 0x96,
       garib_logic = 0x0,
       randomize_checkpoints = 0x1,
-      randomize_switches = 0x2,
-      deathlink = 0x3,
-      taglink = 0x4,
+      checkpoint_items = 0x2,
+      randomize_switches = 0x3,
+      deathlink = 0x4,
+      taglink = 0x5,
+      tip_hints = 0x6,
+      inverse = 0x7,
+      random_garib_sounds = 0x8,
+      portalsanity = 0x9,
+      trap_timer = 0xA,
     hub_map = 0x8,
     world_map = 0x9,
-    n64_deathlink = 0x733,
-    n64_taglink = 0x734,
-    ROM_MAJOR_VERSION = 0x7BA,
-    ROM_MINOR_VERSION = 0x7BB,
-    ROM_PATCH_VERSION = 0x7BC
+    n64_deathlink = 0xDC8,
+    n64_taglink = 0xDC9,
+    ROM_MAJOR_VERSION = 0xECF,
+    ROM_MINOR_VERSION = 0xED0,
+    ROM_PATCH_VERSION = 0xED1
 }
 
 function GLOVERHACK:new(t)
@@ -11975,6 +12185,10 @@ function GLOVERHACK:checkEnemyGaribLocationFlag(world_id, offset_list, ap_id)
     return false
 end
 
+function GLOVERHACK:getScore()
+	return mainmemory.read_u32_be(self.score)
+end
+
 function GLOVERHACK:getSettingPointer()
     local hackPointerIndex = GLOVERHACK:dereferencePointer(self.base_pointer);
     if hackPointerIndex == nil
@@ -11988,6 +12202,26 @@ function GLOVERHACK:setGaribLogic(glogic)
     mainmemory.writebyte(self.garib_logic + GLOVERHACK:getSettingPointer(), glogic);
 end
 
+function GLOVERHACK:setInverseBall(binvert)
+	mainmemory.writebyte(self.inverse + GLOVERHACK:getSettingPointer(), binvert);
+end
+
+function GLOVERHACK:setCustomTipText(mrhints)
+	mainmemory.writebyte(self.tip_hints + GLOVERHACK:getSettingPointer(), mrhints);
+end
+
+function GLOVERHACK:setFillerDuration(duration)
+	mainmemory.writebyte(self.trap_timer + GLOVERHACK:getSettingPointer(), duration);
+end
+
+function GLOVERHACK:setCustomGaribSounds(garibsounds)
+	mainmemory.writebyte(self.random_garib_sounds + GLOVERHACK:getSettingPointer(), garibsounds);
+end
+
+function GLOVERHACK:setPortalsanity(portalsanity)
+	mainmemory.writebyte(self.portalsanity + GLOVERHACK:getSettingPointer(), portalsanity);
+end
+
 -- function GLOVERHACK:setGaribSorting(gsort)
 --     mainmemory.writebyte(self.garib_sorting + GLOVERHACK:getSettingPointer(), gsort);
 -- end
@@ -11996,8 +12230,11 @@ function GLOVERHACK:setRandomizeSwitches(switch)
     mainmemory.writebyte(self.randomize_switches + GLOVERHACK:getSettingPointer(), switch);
 end
 
+function GLOVERHACK:setCheckpointChecks(checkpoints)
+	mainmemory.writebyte(self.checkpoint_items + GLOVERHACK:getSettingPointer(), checkpoints);
+end
+
 function GLOVERHACK:setRandomizeCheckpoint(checkpoint)
-	print("Randomize Checkpoint is set to "..tostring(checkpoint).."!")
     mainmemory.writebyte(self.randomize_checkpoints + GLOVERHACK:getSettingPointer(), checkpoint);
 end
 
@@ -12179,6 +12416,40 @@ function garib_group_contruction()
     return checks
 end
 
+function garib_completion_check()
+    local checks = {}
+	if LEVEL_GARIBS then
+		-- Level All Garibs Checks
+		if TOTAL_WORLD_GARIBS[WORLD_NAME.."_GARIBS"] ~= nil
+		then
+    		local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer);
+    		local world_address = hackPointerIndex + GVR:getWorldOffset(WORLD_ID)
+			local starred_address = world_address + GVR.starred
+    		local check_value = mainmemory.readbyte(starred_address)
+			local world_id = WORLDS_TABLE[WORLD_NAME]
+			local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
+			local apId = address_mod + 30000
+    		checks[tostring(apId)] = check_value
+		end
+	else
+		-- Garib Items All Garibs Checks
+		for each_world, current_garibs in pairs(TOTAL_WORLD_GARIBS)
+		do
+			if MAX_WORLD_GARIBS[each_world] <= current_garibs then
+				local base_name = each_world:sub(1, -8)
+				if WORLDS_TABLE[base_name] ~= nil
+				then
+					local world_id = WORLDS_TABLE[base_name]
+					local address_mod = (math.floor(world_id / 5) * 10) + (world_id % 5)
+					local apId = address_mod + 30000
+					checks[tostring(apId)] = true
+				end
+			end
+		end
+	end
+	return checks
+end
+
 function life_check()
     local checks = {}
         if ADDRESS_MAP[WORLD_NAME] ~= nil
@@ -12270,14 +12541,10 @@ function wayroom_tip_check()
 			then
 				if(mainmemory.readbyte(wayroomBaseIndex + addr_location + GVR.wayroom_collected) == 0x01) --Collected
 				then
-					if ap_id == 0x000 then
-						check_table["1972"] = true
-					else
-						check_table[tostring(ap_id)] = true
-					end
+					check_table[ap_id] = true
 				end
 			else
-				print("Check wayroom math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
+				print("Check wayroom math: AP_ID "..ap_id..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
 			end
 		end
 		return check_table
@@ -12340,11 +12607,31 @@ end
 function ball_returned_check()
     local check = {}
 	local highest_returned = mainmemory.readbyte(0x1EAA57)
+	-- Only run this in the crystal cave
+	if CURRENT_MAP ~= 0x08 then
+		return check
+	end
 	for i=1,7
 	do
 		check[tostring(0x79A + (i - 1))] = i <= highest_returned
 	end
 	return check
+end
+
+function score_check()
+	local current_score = GLOVERHACK:getScore()
+	if SCORE_TABLE["TOTAL"] ~= current_score
+	then
+		-- Update Glover's Total Score
+		local gained_score = current_score - SCORE_TABLE["TOTAL"]
+		SCORE_TABLE["TOTAL"] = current_score
+		-- Update Level-Specific Total Scores
+		if SCORE_TABLE[WORLD_NAME] ~= nil
+		then
+			SCORE_TABLE[WORLD_NAME] = SCORE_TABLE[WORLD_NAME] + gained_score
+		end
+	end
+	return SCORE_TABLE
 end
 
 function received_garibs(itemId)
@@ -12471,52 +12758,52 @@ end
 
 function received_misc(itemId)
     if itemId == 6500358 then
-		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
-        GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], MISC_ITEMS_RECIEVED["CHICKEN"])
+		send_linked_item("CHICKEN")
     elseif itemId == 6500359 then
-		MISC_ITEMS_RECIEVED["LIFE"] = MISC_ITEMS_RECIEVED["LIFE"] + 1
-        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], MISC_ITEMS_RECIEVED["LIFE"])
+		send_linked_item("LIFE")
     elseif itemId == 6500360 then
-		MISC_ITEMS_RECIEVED["BOOMERANG"] = MISC_ITEMS_RECIEVED["BOOMERANG"] + 1
-        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_TRANSFORM"], MISC_ITEMS_RECIEVED["BOOMERANG"])
+		send_linked_item("BOOMERANG")
     elseif itemId == 6500361 then
-		MISC_ITEMS_RECIEVED["BEACHBALL"] = MISC_ITEMS_RECIEVED["BEACHBALL"] + 1
-        GVR:setItem(ITEM_TABLE["AP_BEACHBALL_TRANSFORM"], MISC_ITEMS_RECIEVED["BEACHBALL"])
+		send_linked_item("BEACHBALL")
     elseif itemId == 6500362 then
-		MISC_ITEMS_RECIEVED["HERCULES"] = MISC_ITEMS_RECIEVED["HERCULES"] + 1
-        GVR:setItem(ITEM_TABLE["AP_HERCULES_TRANSFORM"], MISC_ITEMS_RECIEVED["HERCULES"])
+		send_linked_item("HERCULES")
     elseif itemId == 6500363 then
-		MISC_ITEMS_RECIEVED["HELICOPTER"] = MISC_ITEMS_RECIEVED["HELICOPTER"] + 1
-        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_TRANSFORM"], MISC_ITEMS_RECIEVED["HELICOPTER"])
+		send_linked_item("HELICOPTER")
     elseif itemId == 6500364 then
-		MISC_ITEMS_RECIEVED["SPEED"] = MISC_ITEMS_RECIEVED["SPEED"] + 1
-        GVR:setItem(ITEM_TABLE["AP_SPEED_TRANSFORM"], MISC_ITEMS_RECIEVED["SPEED"])
+		send_linked_item("SPEED")
     elseif itemId == 6500365 then
-		MISC_ITEMS_RECIEVED["FROG"] = MISC_ITEMS_RECIEVED["FROG"] + 1
-        GVR:setItem(ITEM_TABLE["AP_FROG_TRANSFORM"], MISC_ITEMS_RECIEVED["FROG"])
+		send_linked_item("FROG_SPELL")
     elseif itemId == 6500366 then
-		MISC_ITEMS_RECIEVED["DEATH"] = MISC_ITEMS_RECIEVED["DEATH"] + 1
-        GVR:setItem(ITEM_TABLE["AP_DEATH_TRANSFORM"], MISC_ITEMS_RECIEVED["DEATH"])
+		send_linked_item("DEATH_SPELL")
     elseif itemId == 6500367 then
-		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
-        GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
+		send_linked_item("STICKY")
+    elseif itemId == 6500368 then
+		send_linked_item("BIG_BALL")
+    elseif itemId == 6500369 then
+		send_linked_item("LOW_GRAVITY")
     end
 end
 
 function received_traps(itemId)
-	if itemId == 6500368 then
+	if itemId == 6500370 then
 		send_linked_item("FROG")
-    elseif itemId == 6500369 then
-		send_linked_item("CURSE_BALL")
-    elseif itemId == 6500370 then
-		send_linked_item("CRYSTAL")
     elseif itemId == 6500371 then
+		send_linked_item("CURSE_BALL")
+    elseif itemId == 6500372 then
+		send_linked_item("CRYSTAL")
+    elseif itemId == 6500373 then
 		send_linked_item("CAMERA")
-	else
-		print("Tip Trap Unimplimented")
-    -- elseif itemId == 6500372 then
-    --     GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], )
-    end
+    elseif itemId == 6500374 then
+		send_linked_item("TIP")
+    elseif itemId == 6500375 then
+		send_linked_item("FISH_EYE")
+    elseif itemId == 6500376 then
+		send_linked_item("ENEMY_BALL")
+    elseif itemId == 6500377 then
+		send_linked_item("CONTROL_BALL")
+    elseif itemId == 6500378 then
+		send_linked_item("INVISIBALL")
+	end
 end
 
 function received_events(itemId)
@@ -12659,6 +12946,140 @@ function received_events(itemId)
     end
 end
 
+function received_checkpoints(itemId)
+	local checkpoint_index = itemId + 1 - 6500130
+	for world_index, max_checkpoints in pairs({2,3,3,4,5,4,3,3,4,3,4,4,3,3,5,2,1,4})
+	do
+		if checkpoint_index <= max_checkpoints
+		then
+			receive_checkpoint(world_index, checkpoint_index)
+			break
+		end
+		checkpoint_index = checkpoint_index - max_checkpoints
+	end
+end
+
+function receive_checkpoint(world_index, checkpoint_number)
+	local world_id = numericLevelToWorldId(world_index)
+	local item_name = ROM_WORLDS_TABLE[world_id].."_CHECKPOINT"..tostring(checkpoint_number)
+	-- Ignore Space 2
+	if world_id ~= 27
+	then
+		GVR:setItem(ITEM_TABLE[item_name], 1)
+	end
+end
+
+function recieve_portalsanity(itemId)
+    if itemId == 6500000 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR1_STAR"], 1)
+    elseif itemId == 6500001 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR2_OPEN"], 1)
+    elseif itemId == 6500002 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR2_STAR"], 1)
+    elseif itemId == 6500003 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR3_OPEN"], 1)
+    elseif itemId == 6500004 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR3_STAR"], 1)
+    elseif itemId == 6500005 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR4_OPEN"], 1)
+    elseif itemId == 6500006 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR4_STAR"], 1)
+    elseif itemId == 6500007 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR5_OPEN"], 1)
+    elseif itemId == 6500008 then
+        GVR:setItem(ITEM_TABLE["AP_ATLANTIS_DOOR5_STAR"], 1)
+    elseif itemId == 6500015 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR1_STAR"], 1)
+    elseif itemId == 6500016 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR2_OPEN"], 1)
+    elseif itemId == 6500017 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR2_STAR"], 1)
+    elseif itemId == 6500018 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR3_OPEN"], 1)
+    elseif itemId == 6500019 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR3_STAR"], 1)
+    elseif itemId == 6500020 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR4_OPEN"], 1)
+    elseif itemId == 6500021 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR4_STAR"], 1)
+    elseif itemId == 6500022 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR5_OPEN"], 1)
+    elseif itemId == 6500023 then
+        GVR:setItem(ITEM_TABLE["AP_CARNIVAL_DOOR5_STAR"], 1)
+    elseif itemId == 6500036 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR1_STAR"], 1)
+    elseif itemId == 6500037 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR2_OPEN"], 1)
+    elseif itemId == 6500038 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR2_STAR"], 1)
+    elseif itemId == 6500039 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR3_OPEN"], 1)
+    elseif itemId == 6500040 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR3_STAR"], 1)
+    elseif itemId == 6500041 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR4_OPEN"], 1)
+    elseif itemId == 6500042 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR4_STAR"], 1)
+    elseif itemId == 6500043 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR5_OPEN"], 1)
+    elseif itemId == 6500044 then
+        GVR:setItem(ITEM_TABLE["AP_PIRATES_DOOR5_STAR"], 1)
+    elseif itemId == 6500060 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR1_STAR"], 1)
+    elseif itemId == 6500061 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR2_OPEN"], 1)
+    elseif itemId == 6500062 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR2_STAR"], 1)
+    elseif itemId == 6500063 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR3_OPEN"], 1)
+    elseif itemId == 6500064 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR3_STAR"], 1)
+    elseif itemId == 6500065 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR4_OPEN"], 1)
+    elseif itemId == 6500066 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR4_STAR"], 1)
+    elseif itemId == 6500067 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR5_OPEN"], 1)
+    elseif itemId == 6500068 then
+        GVR:setItem(ITEM_TABLE["AP_PREHISTORIC_DOOR5_STAR"], 1)
+    elseif itemId == 6500082 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR1_STAR"], 1)
+    elseif itemId == 6500083 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR2_OPEN"], 1)
+    elseif itemId == 6500084 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR2_STAR"], 1)
+    elseif itemId == 6500085 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR3_OPEN"], 1)
+    elseif itemId == 6500086 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR3_STAR"], 1)
+    elseif itemId == 6500087 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR4_OPEN"], 1)
+    elseif itemId == 6500088 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR4_STAR"], 1)
+    elseif itemId == 6500089 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR5_OPEN"], 1)
+    elseif itemId == 6500090 then
+        GVR:setItem(ITEM_TABLE["AP_FORTRESS_DOOR5_STAR"], 1)
+    elseif itemId == 6500099 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR1_STAR"], 1)
+    elseif itemId == 6500100 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR2_OPEN"], 1)
+    elseif itemId == 6500101 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR2_STAR"], 1)
+    elseif itemId == 6500102 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR3_OPEN"], 1)
+    elseif itemId == 6500103 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR3_STAR"], 1)
+    elseif itemId == 6500104 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR4_OPEN"], 1)
+    elseif itemId == 6500105 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR4_STAR"], 1)
+    elseif itemId == 6500106 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR5_OPEN"], 1)
+    elseif itemId == 6500107 then
+        GVR:setItem(ITEM_TABLE["AP_SPACE_DOOR5_STAR"], 1)
+	end
+end
 ---------------------------------- MAP FUNCTIONS -----------------------------------
 
 function set_map(map)
@@ -12765,15 +13186,142 @@ end
 function setSpawningCheckpoints(IN_CHECKPOINT)
 	for eachIndex, checkpoint_number in pairs(IN_CHECKPOINT)
 	do
-		local level_number = ((eachIndex - 1) % 3) + 1
-		local world_number = (eachIndex - 1) // 3
-		local world_id = level_number + (world_number * 5)
+		local world_id = numericLevelToWorldId(eachIndex)
     	local hackPointerIndex = GLOVERHACK:dereferencePointer(GLOVERHACK.base_pointer);
     	local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
 		local spawn_checkpoint_address = world_address + GLOVERHACK.warp_spawn_offset
 		mainmemory.writebyte(spawn_checkpoint_address, checkpoint_number - 1)
-		print(ROM_WORLDS_TABLE[world_id].."'s Spawning Checkpoint: "..tostring(checkpoint_number).."("..tostring(spawn_checkpoint_address)..")")
+		receive_checkpoint(eachIndex, checkpoint_number)
 	end
+end
+
+function applyCustomTipText(tipTable)
+	local hackPointerIndex = GLOVERHACK:dereferencePointer(GVR.base_pointer)
+	for ap_id, tip_text in pairs(tipTable)
+	do
+		for map_name, map_info in pairs(ADDRESS_MAP)
+		do
+			if map_info["TIP"] ~= nil
+			then
+				if map_info["TIP"][ap_id] ~= nil
+				then
+					local world_id = WORLDS_TABLE[map_name]
+    				local world_address = hackPointerIndex + GLOVERHACK:getWorldOffset(world_id)
+					local offset = map_info["TIP"][ap_id]['offset']
+					local offset_location = GLOVERHACK:getOffsetLocation(GLOVERHACK.tip_locations, offset, "tip")
+					local tip_address = world_address + offset_location
+    				local check_id = mainmemory.read_u16_be(tip_address + GLOVERHACK.tip_id)
+    				if check_id ~= tonumber(ap_id) then
+    				    print("TIP Text ID DOES NOT MATCH! CHECK OFFSET FOR ID")
+						print(check_id)
+    				    print(ap_id)
+    				end
+					setTipText(tip_address, tip_text, false)
+					world_tip = true
+				end
+			end
+		end
+		if ROM_WAYROOM_TIPS_TABLE[tostring(ap_id)] ~= nil
+		then
+			local table_id = ROM_WAYROOM_TIPS_TABLE[tostring(ap_id)]
+			local wayroomBaseIndex = hackPointerIndex + GVR.wayroom_locations
+			local addr_location = GVR.wayroom_size * (table_id - 1)
+			local tip_address = wayroomBaseIndex + addr_location
+			local rom_id = mainmemory.readbyte(tip_address + GVR.wayroom_id)
+			if rom_id > 4
+			then
+				rom_id = rom_id - 1
+			end
+			if(rom_id ~= table_id - 1)
+			then
+				print("Check wayroom text math: AP_ID "..tostring(ap_id)..", TABLE ID "..tostring(table_id)..", ROM ID "..tostring(rom_id))
+			end
+			setTipText(tip_address, tip_text, true)
+		end
+	end
+end
+
+function setTipText(tip_address, input_text, is_wayroom)
+	local text_offset = GLOVERHACK.tip_text
+	if is_wayroom then
+		text_offset = GLOVERHACK.wr_tip_text
+	end
+	local text_address = tip_address + text_offset
+	local tip_dialogue = stringToTipTable(input_text)
+	local furthest_line = 1
+	for line_index, line_text in pairs(tip_dialogue)
+	do
+		-- print(line_text)
+		furthest_line = line_index
+		local line_offset = GLOVERHACK.line1
+		if line_index == 2 then
+			line_offset = GLOVERHACK.line2
+		elseif line_index == 3 then
+			line_offset = GLOVERHACK.line3
+		elseif line_index == 4 then
+			line_offset = GLOVERHACK.line4
+		elseif line_index == 5 then
+			line_offset = GLOVERHACK.line5
+		elseif line_index == 6 then
+			line_offset = GLOVERHACK.line6
+		end
+		local text_start_address = text_address + line_offset
+		for each_char = 0, string.len(line_text) - 1 do
+			mainmemory.writebyte(text_start_address + each_char, line_text:byte(each_char + 1))
+		end
+	end
+	local text_end = text_address + GLOVERHACK.last_line
+	if furthest_line == 1
+	then
+		print("Attempting to set tip to a single line at "..tostring(text_end)..", bumping up 1 value.")
+		furthest_line = furthest_line + 1
+	end
+	mainmemory.writebyte(text_end, furthest_line)
+end
+
+function stringToTipTable(full_string)
+	local cur_line = 1
+	local output_lines = {[1]=""}
+	for word in full_string:gmatch("%S+")
+	do
+		-- Uppercase it
+		word = string.upper(word)
+		-- Validate it
+		word = string.gsub(word, "[^A-Z0-9%.%%%?%-%+:;×ÄÜÖÉ£¤¥¬ª«¨©¦',]", "")
+		local sentence_size = string.len(output_lines[cur_line])
+		local first_word = sentence_size == 0
+		local word_prefix = " "
+		if first_word
+		then
+			word_prefix = ""
+		else
+			sentence_size = sentence_size + 1
+		end
+		--Truncate oversized words
+		if string.len(word) > 20
+		then
+			word = word:sub(1, 20)
+		end
+		--Line steps
+		if sentence_size + string.len(word) > 20
+		then
+			word_prefix = ""
+			cur_line = cur_line + 1
+			if cur_line > 6 then
+				return output_lines
+			end
+			output_lines[cur_line] = ""
+			sentence_size = 0
+		end
+		output_lines[cur_line] = output_lines[cur_line]..word_prefix..word
+	end
+	return output_lines
+end
+
+function numericLevelToWorldId(input)
+	local level_number = ((input - 1) % 3) + 1
+	local world_number = (input - 1) // 3
+	return level_number + (world_number * 5)
 end
 ---------------------- ARCHIPELAGO FUNCTIONS -------------
 
@@ -12789,15 +13337,19 @@ function processAGIItem(item_list)
             elseif(6500329 <= memlocation and memlocation <= 6500356) -- Moves and Balls
             then
                 received_moves(memlocation)
-            elseif(6500358 <= memlocation and memlocation <= 6500367) -- Misc
+            elseif(6500358 <= memlocation and memlocation <= 6500369) -- Misc
             then
                 received_misc(memlocation)
-            elseif(6500368 <= memlocation and memlocation <= 6500372) -- Traps
+            elseif(6500370 <= memlocation and memlocation <= 6500378) -- Traps
             then
                 received_traps(memlocation)
-            elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events
+            elseif(6500000 <= memlocation and memlocation <= 6500129) -- Events/Portalsanity
             then
+                recieve_portalsanity(memlocation)
                 received_events(memlocation)
+            elseif(6500130 <= memlocation and memlocation <= 6500189) -- Checkpoints
+            then
+                received_checkpoints(memlocation)
             end
             receive_map[tostring(ap_id)] = tostring(memlocation)
         end
@@ -12860,6 +13412,7 @@ function SendToClient()
     retTable["triggered_links"] = outbound_links()
     retTable["garibs"] = garib_check()
     retTable["garib_groups"] =  garib_group_contruction()
+	retTable["garib_completion"] = garib_completion_check()
     retTable["life"] = life_check()
     retTable["tip"] = tip_check()
     retTable["checkpoint"] = checkpoint_check()
@@ -12870,6 +13423,7 @@ function SendToClient()
 	retTable["goal"] = goal_check()
 	retTable["ball_returns"] = ball_returned_check()
 	retTable["chicken_collected"] = cheat_chicken_check()
+	retTable["scores"] = score_check()
 	retTable["outro"] = WORLD_NAME == "AP_OUTRO"
     retTable["DEMO"] = false;
     retTable["sync_ready"] = "true"
@@ -12923,6 +13477,7 @@ function incoming_links(triggered_links)
 	do
 		if link_triggered
 		then
+			print("Inbound link!")
 			if LINKS_TABLE[each_link] ~= nil
 			then
 				LINKS_TABLE[each_link]['AP'] = LINKS_TABLE[each_link]['AP'] + 1
@@ -12936,6 +13491,8 @@ function incoming_links(triggered_links)
 						then
 							LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] = LINKS_TABLE[each_table]['ENTRIES'][each_link]['AP'] + 1
 							send_linked_item(each_link)
+						elseif MISC_ITEMS_RECIEVED[each_link] ~= nil then
+							send_linked_item(each_link)
 						end
 					end
 				end
@@ -12946,6 +13503,7 @@ end
 
 -- Sends an itemized version of the link to the Glover Rom
 function send_linked_item(linkName)
+	-- Traps
 	if linkName == "DEATH"
 	then
 		LINKS_TABLE["DEATH"]['LOCAL'] = LINKS_TABLE["DEATH"]['LOCAL'] + 1
@@ -12961,7 +13519,14 @@ function send_linked_item(linkName)
 	elseif linkName == "CAMERA"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'] + 1
-		GVR:setItem(ITEM_TABLE["AP_CAMERA_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CAMERA']['LOCAL'])
+		local total_spins = math.random(7)
+		local trap_to_use = "AP_CAMERA_"
+		if total_spins ~= 1 then
+			trap_to_use = trap_to_use..tostring(total_spins * 45).."_"
+		end
+		trap_to_use = trap_to_use.."TRAP"
+		local old_count = GVR:getItem(ITEM_TABLE[trap_to_use])
+		GVR:setItem(ITEM_TABLE[trap_to_use], old_count + 1)
 	elseif linkName == "CURSE_BALL"
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CURSE_BALL']['LOCAL'] + 1
@@ -12970,6 +13535,64 @@ function send_linked_item(linkName)
 	then
 		LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'] + 1
 		GVR:setItem(ITEM_TABLE["AP_CBALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CRYSTAL']['LOCAL'])
+	elseif linkName == "TIP"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'] + 1
+		print("Tip Trap Unimplimented!")
+		-- GVR:setItem(ITEM_TABLE["AP_TIP_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['TIP']['LOCAL'])
+	elseif linkName == "FISH_EYE"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_FISH_EYE_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['FISH_EYE']['LOCAL'])
+	elseif linkName == "ENEMY_BALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_ENEMY_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['ENEMY_BALL']['LOCAL'])
+	elseif linkName == "CONTROL_BALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_CONTROL_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['CONTROL_BALL']['LOCAL'])
+	elseif linkName == "INVISIBALL"
+	then
+		LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] = LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'] + 1
+		GVR:setItem(ITEM_TABLE["AP_INVIS_BALL_TRAP"], LINKS_TABLE['TRAP']['ENTRIES']['INVISIBALL']['LOCAL'])
+	-- Filler
+	elseif linkName == "CHICKEN" then
+		MISC_ITEMS_RECIEVED["CHICKEN"] = MISC_ITEMS_RECIEVED["CHICKEN"] + 1
+        GVR:setItem(ITEM_TABLE["AP_CHICKEN_SOUND"], MISC_ITEMS_RECIEVED["CHICKEN"])
+    elseif linkName == "LIFE" then
+		MISC_ITEMS_RECIEVED["LIFE"] = MISC_ITEMS_RECIEVED["LIFE"] + 1
+        GVR:setItem(ITEM_TABLE["AP_LIFE_UP"], MISC_ITEMS_RECIEVED["LIFE"])
+    elseif linkName == "BOOMERANG" then
+		MISC_ITEMS_RECIEVED["BOOMERANG"] = MISC_ITEMS_RECIEVED["BOOMERANG"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BOOMERANG_TRANSFORM"], MISC_ITEMS_RECIEVED["BOOMERANG"])
+    elseif linkName == "BEACHBALL" then
+		MISC_ITEMS_RECIEVED["BEACHBALL"] = MISC_ITEMS_RECIEVED["BEACHBALL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BEACHBALL_TRANSFORM"], MISC_ITEMS_RECIEVED["BEACHBALL"])
+    elseif linkName == "HERCULES" then
+		MISC_ITEMS_RECIEVED["HERCULES"] = MISC_ITEMS_RECIEVED["HERCULES"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HERCULES_TRANSFORM"], MISC_ITEMS_RECIEVED["HERCULES"])
+    elseif linkName == "HELICOPTER" then
+		MISC_ITEMS_RECIEVED["HELICOPTER"] = MISC_ITEMS_RECIEVED["HELICOPTER"] + 1
+        GVR:setItem(ITEM_TABLE["AP_HELICOPTER_TRANSFORM"], MISC_ITEMS_RECIEVED["HELICOPTER"])
+    elseif linkName == "SPEED" then
+		MISC_ITEMS_RECIEVED["SPEED"] = MISC_ITEMS_RECIEVED["SPEED"] + 1
+        GVR:setItem(ITEM_TABLE["AP_SPEED_TRANSFORM"], MISC_ITEMS_RECIEVED["SPEED"])
+    elseif linkName == "FROG_SPELL" then
+		MISC_ITEMS_RECIEVED["FROG_SPELL"] = MISC_ITEMS_RECIEVED["FROG_SPELL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_FROG_TRANSFORM"], MISC_ITEMS_RECIEVED["FROG_SPELL"])
+    elseif linkName == "DEATH_SPELL" then
+		MISC_ITEMS_RECIEVED["DEATH_SPELL"] = MISC_ITEMS_RECIEVED["DEATH_SPELL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_DEATH_TRANSFORM"], MISC_ITEMS_RECIEVED["DEATH_SPELL"])
+    elseif linkName == "STICKY" then
+		MISC_ITEMS_RECIEVED["STICKY"] = MISC_ITEMS_RECIEVED["STICKY"] + 1
+        GVR:setItem(ITEM_TABLE["AP_STICKY_TRANSFORM"], MISC_ITEMS_RECIEVED["STICKY"])
+    elseif linkName == "BIG_BALL" then
+		MISC_ITEMS_RECIEVED["BIG_BALL"] = MISC_ITEMS_RECIEVED["BIG_BALL"] + 1
+        GVR:setItem(ITEM_TABLE["AP_BIG_BALL"], MISC_ITEMS_RECIEVED["BIG_BALL"])
+    elseif linkName == "LOW_GRAVITY" then
+		MISC_ITEMS_RECIEVED["LOW_GRAVITY"] = MISC_ITEMS_RECIEVED["LOW_GRAVITY"] + 1
+        GVR:setItem(ITEM_TABLE["AP_LOW_GRAV"], MISC_ITEMS_RECIEVED["LOW_GRAVITY"])
 	else
 		print("Unknown Linked Item: "..linkName)
 	end
@@ -13089,7 +13712,7 @@ function process_slot(block)
 	end
     if block['slot_taglink'] ~= nil and block['slot_taglink'] ~= ""
 	then
-		LINKS_TABLE['TAG']['ENABLED'] =block['slot_taglink']
+		LINKS_TABLE['TAG']['ENABLED'] = block['slot_taglink']
 	end
     if block['slot_traplink'] ~= nil and block['slot_traplink'] ~= ""
 	then
@@ -13099,7 +13722,10 @@ function process_slot(block)
 	if block['slot_garib_logic'] ~= nil
     then
         GVR:setGaribLogic(block['slot_garib_logic'])
-        if block['slot_garib_logic'] == 1
+		if block['slot_garib_logic'] == 0
+		then
+            LEVEL_GARIBS = true
+		elseif block['slot_garib_logic'] == 1
         then
             GARIB_GROUPS = true
         end
@@ -13116,6 +13742,14 @@ function process_slot(block)
 	then
 		setSpawningCheckpoints(block['slot_spawning_checkpoints'])
 	end
+	if block['slot_open_worlds'] ~= nil and block['slot_open_worlds'] ~=0
+	then
+		GVR:setItem(ITEM_TABLE["AP_OPEN_HUBS"], 1)
+	end
+	if block['slot_open_levels'] ~= nil and block['slot_open_levels'] ~=0
+	then
+		GVR:setItem(ITEM_TABLE["AP_OPEN_WORLDS"], 1)
+	end
 	if block['slot_world_lookup'] ~= nil
 	then
 		setRandomizedWorlds(block['slot_world_lookup'])
@@ -13124,9 +13758,41 @@ function process_slot(block)
     then
         GVR:setRandomizeSwitches(block['slot_switches'])
     end
+	if block['slot_easy_ball_walk'] ~= nil and block['slot_easy_ball_walk'] ~= 0
+	then
+		GVR:setInverseBall(block['slot_easy_ball_walk'])
+	end
+    if block['slot_mr_tip_text_display'] ~= nil and block['slot_mr_tip_text_display'] ~= 0
+    then
+        GVR:setCustomTipText(1)
+    end
+	if block['slot_mr_tips_text'] ~= nil
+	then
+		applyCustomTipText(block['slot_mr_tips_text'])
+	end
+	if block['slot_portalsanity'] ~= nil and block['slot_portalsanity'] ~=0
+	then
+		GVR:setPortalsanity(block['slot_portalsanity'])
+	end
+	if block["slot_mad_garibs"] ~= nil and block['slot_mad_garibs'] ~= 0
+    then
+        GVR:setItem(ITEM_TABLE["AP_MAD_GARIBS"], 1)
+    end
+	if block['slot_random_garib_sounds'] ~= nil
+	then
+		GVR:setCustomGaribSounds(block['slot_random_garib_sounds'])
+	end
+	if block["slot_filler_duration"] ~= nil
+	then
+		GVR:setFillerDuration(block['slot_filler_duration'])
+	end
+    if block['slot_checkpoint_checks'] ~= nil and block['slot_checkpoint_checks'] ~= 0
+    then
+        GVR:setCheckpointChecks(block['slot_checkpoint_checks'])
+    end
     if block['slot_randomized_spawns'] ~= nil and block['slot_randomized_spawns'] ~= 0
     then
-        GVR:setRandomizeCheckpoint(block['slot_randomized_spawns'])
+        GVR:setRandomizeCheckpoint(1)
     end
 	if block['checkedLocations'] ~= nil then
 		flagCheckedLocations(block['checkedLocations'])
