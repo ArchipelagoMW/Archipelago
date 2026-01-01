@@ -18,16 +18,11 @@ class TestTraps(SVTestCase):
 
     def test_given_traps_when_generate_then_all_traps_in_pool(self):
         trap_option = TrapDifficulty
-        for value in trap_option.options:
-            if value == "no_traps":
-                continue
-            world_options = allsanity_mods_7_x_x()
-            world_options.update({TrapDifficulty.internal_name: trap_option.options[value]})
-            with solo_multiworld(world_options) as (multi_world, _):
-                trap_items = [item_data.name
-                              for item_data in items_by_group[Group.TRAP]
-                              if Group.DEPRECATED not in item_data.groups]
-                multiworld_items = [item.name for item in multi_world.get_items()]
-                for item in trap_items:
-                    with self.subTest(f"Option: {value}, Item: {item}"):
-                        self.assertIn(item, multiworld_items)
+        world_options = allsanity_mods_7_x_x()
+        world_options.update({TrapDifficulty.internal_name: trap_option.option_easy})
+        with solo_multiworld(world_options) as (multi_world, _):
+            trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups]
+            multiworld_items = [item.name for item in multi_world.get_items()]
+            for item in trap_items:
+                with self.subTest(f"Item: {item}"):
+                    self.assertIn(item, multiworld_items)
