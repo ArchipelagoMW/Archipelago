@@ -1,0 +1,456 @@
+﻿SahasrahlaReveal: |-
+  Want something
+  for free? Go
+  earn the green
+  pendant in
+  <dungeon>
+  and I'll give
+  you something.
+
+BombShopReveal: |-
+  Bring me the
+  crystals from
+  <first>
+  and
+  <second>
+  so I can make
+  a big bomb!
+
+GanonSilversReveal:
+  single:
+    local: |-
+      Did you find
+      the arrows in
+      my tower?
+    remote: |-
+      Did you find
+      the arrows in
+      <region>
+  multi:
+    local: |-
+      Seek the
+      arrows in
+      this world
+    remote: |-
+      Seek the sage
+      <player>
+      for the arrows
+
+Items:
+
+  BigKeyEP: |-
+    The big key
+    of the east
+  BigKeyDP: |-
+    Sand spills
+    out of this
+    big key
+  BigKeyTH: |-
+    The big key
+    to moldorm's
+    heart
+  BigKeyPD: |-
+    Hammeryump
+    with this
+    big key
+  BigKeySP: |-
+    The big key
+    to the swamp
+  BigKeySW: |-
+    The big key
+    of the dark
+    forest
+  BigKeyTT: |-
+    The big key
+    of rogues
+  BigKeyIP: |-
+    A frozen
+    big key
+    rests here
+  BigKeyMM: |-
+    The big key
+    to Vitreous
+  BigKeyTR: |-
+    The big key
+    of terrapins
+  BigKeyGT: |-
+    The big key
+    of evil's bane
+
+  KeyHC: |-
+    The key to
+    the castle
+  KeyCT: |-
+    Agahanim
+    halfway
+    unlocked
+  KeyDP: |-
+    Sand spills
+    out of this
+    small key
+  KeyTH: |-
+    The key
+    to moldorm's
+    basement
+  KeyPD: |-
+    A small key
+    that steals
+    light
+  KeySP: |-
+    Access to
+    the swamp
+    is granted
+  KeySW: |-
+    The small key
+    of the dark
+    forest
+  KeyTT: |-
+    The small key
+    of rogues
+  KeyIP: |-
+    A frozen
+    small key
+    rests here
+  KeyMM: |-
+    The small key
+    to Vitreous
+  KeyTR: |-
+    The small key
+    of terrapins
+  KeyGT: |-
+    The small key
+    of evil's bane
+
+  Map: |-
+    You can now
+    find your way
+    home!
+  Compass: |-
+    Now you know
+    where the boss
+    hides!
+
+  ProgressiveTunic: |-
+    Time for a
+    change of
+    clothes?
+  ProgressiveShield: |-
+    Have a better
+    defense in
+    front of you
+  ProgressiveSword: |-
+    A better copy
+    of your sword
+    for your time
+  Bow: |-
+    You have
+    chosen the
+    archer class.
+  SilverArrows: |-
+    Do you fancy
+    silver tipped
+    arrows?
+  BlueBoomerang: |-
+    No matter what
+    you do, blue
+    returns to you
+  RedBoomerang: |-
+    No matter what
+    you do, red
+    returns to you
+  Hookshot: |-
+    BOING!!!
+    BOING!!!
+    BOING!!!
+  Mushroom: |-
+    I'm a fun guy!
+
+    I'm a funghi!
+  Powder: |-
+    You can turn
+    anti-faeries
+    into faeries
+  Firerod: |-
+    I'm the hot
+    rod. I make
+    things burn!
+  Icerod: |-
+    I'm the cold
+    rod. I make
+    things freeze!
+  Bombos: |-
+    Burn, baby,
+    burn! Fear my
+    ring of fire!
+  Ether: |-
+    This magic
+    coin freezes
+    everything!
+  Quake: |-
+    Maxing out the
+    Richter scale
+    is what I do!
+  Lamp: |-
+    Baby, baby,
+    baby.
+    Light my way!
+  Hammer: |-
+    Stop!
+    Hammer time!
+  Shovel: |-
+    Can
+       You
+          Dig it?
+  Flute: |-
+    Save the duck
+    and fly to
+    freedom!
+  Bugnet: |-
+    Let's catch
+    some bees and
+    faeries!
+  Book: |-
+    This is a
+    paradox?!
+  Bottle: |-
+    Now you can
+    store potions
+    and stuff!
+  BottleWithRedPotion: |-
+    You see red
+    goo in a
+    bottle?
+  BottleWithGreenPotion: |-
+    You see green
+    goo in a
+    bottle?
+  BottleWithBluePotion: |-
+    You see blue
+    goo in a
+    bottle?
+  BottleWithBee: |-
+    Release me
+    so I can go
+    bzzzzz!
+  BottleWithFairy: |-
+    If you die
+    I will revive
+    you!
+  Somaria: |-
+    I make blocks
+    to hold down
+    switches!
+  Byrna: |-
+    Use this to
+    become
+    invincible!
+  Cape: |-
+    Wear this to
+    become
+    invisible!
+  Mirror: |-
+    Isn't your
+    reflection so
+    pretty?
+  Boots: |-
+    Gotta go fast!
+  ProgressiveGlove: |-
+    A way to lift
+    heavier things
+  Flippers: |-
+    Fancy a swim?
+  MoonPearl: |-2
+      Bunny Link
+          be
+         gone!
+  HalfMagic: |-
+    Your magic
+    power has been
+    doubled!
+  HeartPiece: |-
+    Just a little
+    piece of love!
+  HeartContainer: |-
+    Maximum health
+    increased!
+    Yeah!
+  ThreeBombs: |-
+    I make things
+    go triple
+    BOOM!!!
+  Arrow: |-
+    A lonely arrow
+    sits here.
+  TenArrows: |-
+    This will give
+    you ten shots
+    with your bow!
+  PocketRupees: |-
+    Just pocket
+    change. Move
+    right along.
+  CouchRupees: |-
+    Just couch
+    cash. Move
+    right along.
+  OneHundredRupees: |-
+    A rupee stash!
+    Hell yeah!
+  ThreeHundredRupees: |-
+    A rupee hoard!
+    Hell yeah!
+  BombUpgrade: |-
+    Increase bomb
+    storage, low
+    low price
+  ArrowUpgrade: |-
+    Increase arrow
+    storage, low
+    low price
+
+  Missile: |-
+    Some kind of
+    flying bomb?
+  Super: |-
+    A really big
+    flying bomb!
+  PowerBomb: |-
+    Big bada boom!
+  Grapple: |-
+    Some kind of
+    futuristic
+    hookshot?
+  XRay: |-
+    THIS LENS OF
+    TRUTH IS MADE
+    IN ZEBES!
+  ETank: |-
+    A heart from
+    the future?
+  ReserveTank: |-
+    A fairy from
+    the future?
+  Charge: |-
+    IM'A CHARGIN
+    MA LAZER!
+  Ice: |-
+    Some kind of
+    ice rod for
+    aliens?
+  Wave: |-
+    Trigonometry gun.
+  Spazer: |-
+    Even space
+    lasers can
+    be sucky.
+  Plasma: |-
+    Some kind of
+    fire rod for
+    aliens?
+  Varia: |-
+    Alien armor?
+  Gravity: |-
+    No more water
+    physics.
+  Morph: |-
+    Why can't
+    Metroid crawl?
+  Bombs: |-
+    Bombs from
+    the future.
+  SpringBall: |-
+    Bouncy bouncy
+    bouncy bouncy
+    bounce.
+  ScrewAttack: |-
+    U spin me right
+    round baby
+    right round
+  HiJump: |-
+    This would be
+    great if I
+    could jump.
+  SpaceJump: |-
+    I believe
+    I can fly.
+  SpeedBooster: |-
+    THE GREEN
+    BOOMERANG IS
+    THE FASTEST!
+
+  CardCrateriaL1: |-
+    An Alien Key!
+    It says On top
+    of the world!
+  CardCrateriaL2: |-
+    An Alien Key!
+    It says Lower
+    the drawbridge
+  CardCrateriaBoss: |-
+    An Alien Key!
+    It says The First
+    and The Last
+  CardBrinstarL1: |-
+    An Alien Key!
+    It says But wait
+    there's more!
+  CardBrinstarL2: |-
+    An Alien Key!
+    It says
+    Green Monkeys
+  CardBrinstarBoss: |-
+    An Alien Key!
+    It says
+    Metroid DLC
+  CardNorfairL1: |-
+    An Alien Key!
+    It says ice?
+    In this heat?
+  CardNorfairL2: |-
+    An Alien Key!
+    It says
+    THE BUBBLES!
+  CardNorfairBoss: |-
+    An Alien Key!
+    It says
+    Place your bets
+  CardMaridiaL1: |-
+    An Alien Key!
+    It says A
+    Day at the Beach
+  CardMaridiaL2: |-
+    An Alien Key!
+    It says
+    That's a Moray
+  CardMaridiaBoss: |-
+    An Alien Key!
+    It says Shrimp
+    for dinner?
+  CardWreckedShipL1: |-
+    An Alien Key!
+    It says
+    Gutter Ball
+  CardWreckedShipBoss: |-
+    An Alien Key!
+    It says The
+    Ghost of Arrghus
+  CardLowerNorfairL1: |-
+    An Alien Key!
+    It says Worst
+    Key in the Game
+  CardLowerNorfairBoss: |-
+    An Alien Key!
+    It says
+    This guy again?
+
+  SmMap: |-
+    You can now
+    find your way
+    to the stars!
+
+  Something: |-
+    A small victory!
+    
+  default: |-
+    Don't waste
+    your time!

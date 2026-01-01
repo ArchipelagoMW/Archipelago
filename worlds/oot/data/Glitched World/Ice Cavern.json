@@ -1,0 +1,31 @@
+[
+    {   ##Child must be able to hover to get in here so can_hover is always true as child
+        "region_name": "Ice Cavern Beginning",
+        "dungeon": "Ice Cavern",
+        "exits": {
+            "Ice Cavern": "is_adult or Sticks or can_use(Dins_Fire)"
+        }
+    },
+    {
+        "region_name": "Ice Cavern",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            # because child can always hover here, access to this chest is ageless and True
+            "Ice Cavern Map Chest": "Blue_Fire or (has_explosives and (can_live_dmg(0.5) or can_use(Nayrus_Love)))",
+            "Ice Cavern Compass Chest": "(is_adult or (is_child and (can_live_dmg(0.5) or can_use(Nayrus_Love)) )) and
+                (Blue_Fire or (has_explosives and (can_live_dmg(0.5) or can_use(Nayrus_Love)) ))",
+            "Ice Cavern Freestanding PoH": "(is_adult or (is_child and (can_live_dmg(0.5) or can_use(Nayrus_Love)))) and
+                (Blue_Fire or (is_adult and Bombs and can_shield and (can_live_dmg(0.5) or can_use(Nayrus_Love)))
+                or can_use(Boomerang))",
+            "Ice Cavern Iron Boots Chest": "(can_jumpslash or can_use(Slingshot) or can_use(Dins_Fire)) and (Blue_Fire or (can_use(Hover_Boots) and can_shield) or can_mega)",
+            "Sheik in Ice Cavern": "(can_jumpslash or can_use(Slingshot) or can_use(Dins_Fire)) and (Blue_Fire or (can_use(Hover_Boots) and can_shield) or can_mega)",
+            "Ice Cavern GS Spinning Scythe Room": "can_use(Hookshot) or can_use(Boomerang) or
+                (can_use(Hover_Boots) and can_mega)",
+            "Ice Cavern GS Heart Piece Room": "(is_adult or (is_child and (can_live_dmg(0.5) or can_use(Nayrus_Love)) )) and
+                (can_use(Boomerang) or can_use(Hookshot))",
+            "Ice Cavern GS Push Block Room": "(Blue_Fire or (can_use(Hover_Boots) and can_shield) or (is_adult and can_mega) or (is_child and can_live_dmg(0.5) and has_explosives))
+                and (can_use(Hookshot) or can_use(Boomerang) or can_hover)",
+            "Blue Fire": "has_bottle"
+        }
+    }
+]

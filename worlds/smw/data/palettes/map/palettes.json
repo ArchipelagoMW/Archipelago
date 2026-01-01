@@ -1,0 +1,92 @@
+{
+    "main": [
+        "atardecer.mw3",
+        "brawler.mw3",
+        "cake_frosting.mw3",
+        "invertido.mw3",
+        "mono.mw3",
+        "morning.mw3",
+        "night.mw3",
+        "night_time.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "sepia.mw3",
+        "snow_day.mw3"
+    ],
+    "yoshi": [
+        "atardecer.mw3",
+        "gum.mw3",
+        "lava_island.mw3",
+        "mono.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "sepia.mw3",
+        "snow_day.mw3",
+        "sunset.mw3",
+        "tritanopia.mw3",
+        "yochis_ailand.mw3"
+    ],
+    "vanilla": [
+        "aqua_marine.mw3",
+        "dark cave.mw3",
+        "DOMO.mw3",
+        "fire cave.mw3",
+        "gold_mine.mw3",
+        "invertido.mw3",
+        "mono.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "purple.mw3",
+        "sepia.mw3",
+        "witches_cauldron.mw3"
+    ],
+    "forest": [
+        "atardecer.mw3",
+        "burnt_forest.mw3",
+        "dark_forest.mw3",
+        "halloween.mw3",
+        "ice_forest.mw3",
+        "lost_woods.mw3",
+        "mono.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "sepia.mw3",
+        "snow_day.mw3"
+    ],
+    "valley": [
+        "bowser.mw3",
+        "castle_colors.mw3",
+        "dark cave.mw3",
+        "dream_world.mw3",
+        "fire cave.mw3",
+        "invertido.mw3",
+        "mono.mw3",
+        "orange.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "purple_blue.mw3",
+        "sepia.mw3",
+        "snow.mw3",
+        "Tamaulipas.mw3"
+    ],
+    "special": [
+        "black_out.mw3",
+        "blood_star.mw3",
+        "brawler.mw3",
+        "green.mw3",
+        "light_pollution_map.mw3",
+        "original.mw3",
+        "purple.mw3",
+        "white_special.mw3"
+    ],
+    "star": [
+        "blood_moon.mw3",
+        "mono.mw3",
+        "mountain_top.mw3",
+        "original.mw3",
+        "original_special.mw3",
+        "pink_star.mw3",
+        "sepia.mw3",
+        "yellow_star.mw3"
+    ]
+}

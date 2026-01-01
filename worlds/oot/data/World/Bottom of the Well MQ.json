@@ -1,0 +1,55 @@
+[
+    {
+        "region_name": "Bottom of the Well",
+        "dungeon": "Bottom of the Well",
+        "exits": {
+            "Kakariko Village": "True",
+            "Bottom of the Well Perimeter": "is_child"
+        }
+    },
+    {
+        "region_name": "Bottom of the Well Perimeter",
+        "dungeon": "Bottom of the Well",
+        "locations": {
+            "Bottom of the Well MQ Compass Chest": "
+                Kokiri_Sword or (Sticks and logic_child_deadhand)",
+            "Bottom of the Well MQ Dead Hand Freestanding Key": "
+                has_explosives or (logic_botw_mq_dead_hand_key and Boomerang)",
+            "Bottom of the Well MQ Bombable Recovery Heart 1": "has_explosives",
+            "Bottom of the Well MQ Bombable Recovery Heart 2": "has_explosives",
+            "Bottom of the Well MQ Basement Recovery Heart 1": "True",
+            "Bottom of the Well MQ Basement Recovery Heart 2": "True",
+            "Bottom of the Well MQ Basement Recovery Heart 3": "True",
+            "Bottom of the Well MQ Coffin Recovery Heart 1": "
+                (Small_Key_Bottom_of_the_Well, 2) and (Sticks or can_use(Dins_Fire))",
+            "Bottom of the Well MQ Coffin Recovery Heart 2": "
+                (Small_Key_Bottom_of_the_Well, 2) and (Sticks or can_use(Dins_Fire))",
+            "Bottom of the Well MQ GS Basement": "can_child_attack",
+            "Bottom of the Well MQ GS Coffin Room": "
+                (Small_Key_Bottom_of_the_Well, 2) and can_child_attack",
+            "Wall Fairy": "has_bottle and Slingshot" # The fairy pot is obsolete
+        },
+        "exits": {
+            "Bottom of the Well Middle": "
+                can_play(Zeldas_Lullaby) or (logic_botw_mq_pits and has_explosives)"
+        }
+    },
+    {
+        "region_name": "Bottom of the Well Middle",
+        "dungeon": "Bottom of the Well",
+        "locations": {
+            "Bottom of the Well MQ Map Chest": "True",
+            "Bottom of the Well MQ East Inner Room Freestanding Key": "True",
+            "Bottom of the Well MQ Lens of Truth Chest": "
+                (Small_Key_Bottom_of_the_Well, 2) and has_explosives",
+            "Bottom of the Well MQ Center Room Right Pot 1": "True",
+            "Bottom of the Well MQ Center Room Right Pot 2": "True",
+            "Bottom of the Well MQ Center Room Right Pot 3": "True",
+            "Bottom of the Well MQ East Inner Room Pot 1": "True",
+            "Bottom of the Well MQ East Inner Room Pot 2": "True",
+            "Bottom of the Well MQ East Inner Room Pot 3": "True",
+            "Bottom of the Well MQ GS West Inner Room": "
+                can_child_attack and (logic_botw_mq_pits or has_explosives)"
+        }
+    }
+]

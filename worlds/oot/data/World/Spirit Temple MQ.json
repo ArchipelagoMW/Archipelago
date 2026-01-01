@@ -1,0 +1,208 @@
+[
+    {
+        "region_name": "Spirit Temple Lobby",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Entrance Front Left Chest": "True",
+            "Spirit Temple MQ Entrance Back Left Chest": "
+                here(can_blast_or_smash) and (can_use(Slingshot) or can_use(Bow))",
+            "Spirit Temple MQ Entrance Back Right Chest": "
+                has_bombchus or can_use(Bow) or can_use(Hookshot) or
+                can_use(Slingshot) or can_use(Boomerang)",
+            "Spirit Temple MQ Lobby Pot 1": "True",
+            "Spirit Temple MQ Lobby Pot 2": "True",
+            "Spirit Temple MQ Lobby Pot 3": "True",
+            "Spirit Temple MQ Lobby Pot 4": "True"
+        },
+        "exits": {
+            "Desert Colossus From Spirit Lobby": "True",
+            "Child Spirit Temple": "is_child",
+            "Adult Spirit Temple": "
+                can_use(Longshot) and
+                ((can_use(Silver_Gauntlets) and has_bombchus) or spirit_temple_shortcuts)"
+        }
+    },
+    {
+        "region_name": "Child Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Child Hammer Switch Chest": "
+                at('Adult Spirit Temple', (Small_Key_Spirit_Temple, 7) and Megaton_Hammer)",
+            "Spirit Temple MQ Map Chest": "Sticks or Kokiri_Sword or Bombs",
+            "Spirit Temple MQ Map Room Enemy Chest": "
+                (Sticks or Kokiri_Sword) and has_bombchus and Slingshot and can_use(Dins_Fire)",
+            "Spirit Temple MQ Silver Block Hallway Chest": "
+                has_bombchus and (Small_Key_Spirit_Temple, 7) and Slingshot and
+                (can_use(Dins_Fire) or
+                    at('Adult Spirit Temple', (can_use(Fire_Arrows) or
+                        (logic_spirit_mq_frozen_eye and can_use(Bow) and can_play(Song_of_Time)))))",
+            "Spirit Temple MQ Child Recovery Heart 1": "can_use(Slingshot) or can_use(Boomerang)",
+            "Spirit Temple MQ Child Recovery Heart 2": "can_use(Slingshot) or can_use(Boomerang)",
+            "Spirit Temple MQ Child Torch Slugs Room Pot": "True",
+            "Spirit Temple MQ Child 3 Gibdo Room Pot 1": "
+                (Sticks or Kokiri_Sword or (Bombs and can_use(Dins_Fire))) and has_bombchus and Slingshot",
+            "Spirit Temple MQ Child 3 Gibdo Room Pot 2": "
+                (Sticks or Kokiri_Sword or (Bombs and can_use(Dins_Fire))) and has_bombchus and Slingshot",
+            "Spirit Temple MQ Child Stalfos Fight Pot 1": "
+                (Sticks or Kokiri_Sword) and has_bombchus and Slingshot",
+            "Spirit Temple MQ Child Stalfos Fight Pot 2": "
+                (Sticks or Kokiri_Sword) and has_bombchus and Slingshot",
+            "Spirit Temple MQ Child Stalfos Fight Pot 3": "
+                (Sticks or Kokiri_Sword) and has_bombchus and Slingshot",
+            "Fairy Pot": "
+                has_bottle and (Sticks or Kokiri_Sword) and has_bombchus and Slingshot"
+        },
+        "exits": {
+            "Spirit Temple Shared": "has_bombchus and (Small_Key_Spirit_Temple, 2)"
+        }
+    },
+    {
+        "region_name": "Adult Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Child Climb South Chest": "(Small_Key_Spirit_Temple, 7) and has_explosives",
+            "Spirit Temple MQ Statue Room Lullaby Chest": "can_play(Zeldas_Lullaby) and can_break_crate",
+            "Spirit Temple MQ Statue Room Invisible Chest": "logic_lens_spirit_mq or can_use(Lens_of_Truth)"
+        },
+        "exits": {
+            "Spirit Temple Shared": "True",
+            "Lower Adult Spirit Temple": "
+                Mirror_Shield and
+                (can_use(Fire_Arrows) or (logic_spirit_mq_lower_adult and can_use(Dins_Fire)))",
+            "Spirit Temple Beamos Room": "(Small_Key_Spirit_Temple, 5)",
+            "Spirit Temple Boss Door": "spirit_temple_shortcuts"
+        }
+    },
+    {
+        # In this region, child reachability really means age-unknown, but with the caveat that child has
+        # as least entered the dungeon. is_adult means is_adult as usual. All child specific logic must be
+        # anded with 7 keys to convert child-as-unknown-age back to child.
+        "region_name": "Spirit Temple Shared",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Child Climb North Chest": "(Small_Key_Spirit_Temple, 6) and has_explosives",
+            "Spirit Temple MQ Compass Chest": "
+                (can_use(Slingshot) and (Small_Key_Spirit_Temple, 7)) or
+                can_use(Bow) or
+                (Bow and Slingshot)",
+            "Spirit Temple MQ Sun Block Room Chest": "
+                can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot or
+                is_adult",
+            "Spirit Temple Silver Gauntlets Chest": "
+                ((Small_Key_Spirit_Temple, 7) and
+                    (can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot or is_adult)) or
+                ((Small_Key_Spirit_Temple, 4) and can_play(Song_of_Time) and (has_explosives or Nuts) and
+                    (logic_lens_spirit_mq or can_use(Lens_of_Truth)))",
+            "Spirit Temple MQ Child Climb Pot": "(Small_Key_Spirit_Temple, 6)",
+            "Spirit Temple MQ Central Chamber Floor Pot 1": "True",
+            "Spirit Temple MQ Central Chamber Floor Pot 2": "True",
+            "Spirit Temple MQ Central Chamber Floor Pot 3": "True",
+            "Spirit Temple MQ Central Chamber Top Left Pot (Left)": "
+                (is_adult and (Hover_Boots or logic_spirit_lobby_jump)) or
+                can_play(Song_of_Time)",
+            "Spirit Temple MQ Central Chamber Top Left Pot (Right)": "
+                (is_child and Boomerang and (Kokiri_Sword or Sticks) and (Small_Key_Spirit_Temple, 7)) or
+                (is_adult and (Hover_Boots or logic_spirit_lobby_jump)) or
+                can_play(Song_of_Time) or
+                (Boomerang and (Kokiri_Sword or Sticks) and (Hover_Boots or logic_spirit_lobby_jump))",
+            "Spirit Temple MQ Sun Block Room Pot 1": "
+                can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot or
+                is_adult",
+            "Spirit Temple MQ Sun Block Room Pot 2": "
+                can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot or
+                is_adult",
+            "Spirit Temple MQ Central Chamber Crate 1": "can_break_crate",
+            "Spirit Temple MQ Central Chamber Crate 2": "can_break_crate",
+            "Spirit Temple MQ GS Sun Block Room": "
+                (logic_spirit_mq_sun_block_gs and Boomerang and
+                    (can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot)) or
+                is_adult"
+        },
+        "exits": {
+            "Desert Colossus": "
+                ((Small_Key_Spirit_Temple, 7) and
+                    (can_play(Song_of_Time) or logic_spirit_mq_sun_block_sot or is_adult)) or
+                ((Small_Key_Spirit_Temple, 4) and can_play(Song_of_Time) and (has_explosives or Nuts) and
+                    (logic_lens_spirit_mq or can_use(Lens_of_Truth)) and is_adult)"
+        }
+    },
+    {
+        "region_name": "Lower Adult Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Leever Room Chest": "True",
+            "Spirit Temple MQ Symphony Room Chest": "
+                (Small_Key_Spirit_Temple, 7) and Megaton_Hammer and Ocarina and
+                Song_of_Time and Eponas_Song and Suns_Song and Song_of_Storms and Zeldas_Lullaby",
+            "Spirit Temple MQ Entrance Front Right Chest": "Megaton_Hammer",
+            "Spirit Temple MQ Below 4 Wallmasters Pot 1": "True",
+            "Spirit Temple MQ Below 4 Wallmasters Pot 2": "True",
+            "Spirit Temple MQ GS Leever Room": "True",
+            "Spirit Temple MQ GS Symphony Room": "
+                (Small_Key_Spirit_Temple, 7) and Megaton_Hammer and Ocarina and
+                Song_of_Time and Eponas_Song and Suns_Song and Song_of_Storms and Zeldas_Lullaby"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Beamos Room",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Beamos Room Chest": "has_explosives"
+        },
+        "exits": {
+            "Spirit Temple Beyond Beamos Room": "can_play(Song_of_Time) and (has_explosives or Nuts)",
+            "Spirit Temple Shifting Wall": "(Small_Key_Spirit_Temple, 6)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Beyond Beamos Room",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Chest Switch Chest": "True",
+            "Spirit Temple MQ Boss Key Chest": "Mirror_Shield",
+            "Spirit Temple Mirror Shield Chest": "logic_lens_spirit_mq or can_use(Lens_of_Truth)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Shifting Wall",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Shifting Wall Pot 1": "True",
+            "Spirit Temple MQ Shifting Wall Pot 2": "True",
+            "Spirit Temple MQ After Shifting Wall Room Pot 1": "True",
+            "Spirit Temple MQ After Shifting Wall Room Pot 2": "True",
+            "Spirit Temple MQ GS Nine Thrones Room West": "(Small_Key_Spirit_Temple, 7)",
+            "Spirit Temple MQ GS Nine Thrones Room North": "(Small_Key_Spirit_Temple, 7)"
+        },
+        "exits": {
+            "Spirit Temple Big Mirror Room": "can_play(Zeldas_Lullaby)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Big Mirror Room",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Big Mirror Pot 1": "True",
+            "Spirit Temple MQ Big Mirror Pot 2": "True",
+            "Spirit Temple MQ Big Mirror Pot 3": "True",
+            "Spirit Temple MQ Big Mirror Pot 4": "True",
+            "Spirit Temple MQ Big Mirror Crate 1": "can_break_crate",
+            "Spirit Temple MQ Big Mirror Crate 2": "can_break_crate",
+            "Spirit Temple MQ Big Mirror Crate 3": "can_break_crate",
+            "Spirit Temple MQ Big Mirror Crate 4": "can_break_crate"
+        },
+        "exits": {
+            "Spirit Temple Mirror Puzzle": "Megaton_Hammer"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Mirror Puzzle",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple MQ Mirror Puzzle Invisible Chest": "logic_lens_spirit_mq or can_use(Lens_of_Truth)"
+        },
+        "exits": {
+            "Spirit Temple Boss Door": "Mirror_Shield"
+        }
+    }
+]

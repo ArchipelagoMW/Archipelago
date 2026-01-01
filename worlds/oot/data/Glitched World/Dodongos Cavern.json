@@ -1,0 +1,99 @@
+[
+    {
+        "region_name": "Dodongos Cavern Beginning",
+        "dungeon": "Dodongos Cavern",
+        "exits": {
+            "Dodongos Cavern Lobby": "
+                here(can_blast_or_smash or Blue_Fire) or Progressive_Strength_Upgrade"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Lobby",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Map Chest": "True",
+            "Dodongos Cavern Compass Chest": "
+                is_adult or Sticks or 
+                (can_use(Dins_Fire) and (Slingshot or has_explosives or Kokiri_Sword))
+                or can_shield",
+            "Dodongos Cavern GS Side Room Near Lower Lizalfos": "
+                has_explosives or is_adult or can_child_attack or Blue_Fire",
+            "Dodongos Cavern GS Scarecrow": "True",
+            "Dodongos Cavern Deku Scrub Side Room Near Dodongos": "
+                is_adult or Slingshot or Sticks or 
+                has_explosives or Kokiri_Sword or can_shield",
+            "Dodongos Cavern Deku Scrub Lobby": "True",
+            "Dodongos Cavern Gossip Stone": "True"
+        },
+        "exits": {
+            "Dodongos Cavern Beginning": "True",
+            "Dodongos Cavern Climb": "
+                here(
+                    (is_adult or can_shield or
+                        ( (Sticks or can_use(Dins_Fire)) and 
+                            (Slingshot or Sticks or has_explosives or Kokiri_Sword) 
+                        )
+                    )
+                ) and 
+                    (has_explosives or Progressive_Strength_Upgrade or 
+                        can_use(Dins_Fire) or can_use(Bow) )"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Climb",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Bomb Flower Platform Chest": "True",
+            "Dodongos Cavern GS Vines Above Stairs": "True",
+            "Dodongos Cavern Deku Scrub Near Bomb Bag Right": "can_blast_or_smash or (Blue_Fire and can_stun_deku)",
+            "Dodongos Cavern Deku Scrub Near Bomb Bag Left": "can_blast_or_smash or (Blue_Fire and can_stun_deku)"
+        },
+        "exits": {
+            "Dodongos Cavern Lobby": "True",
+            "Dodongos Cavern Far Bridge": "True"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Far Bridge",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Bomb Bag Chest": "True",
+            "Dodongos Cavern End of Bridge Chest": "can_blast_or_smash or Blue_Fire",
+            "Dodongos Cavern GS Alcove Above Stairs": "can_use(Hookshot) or can_use(Boomerang)
+                or (can_live_dmg(0.5) and can_use(Hover_Boots)) or can_hover"
+        },
+        "exits": {
+            "Dodongos Cavern Boss Door": "has_explosives",
+            "Dodongos Cavern Lobby": "True"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Boss Door",
+        "scene": "Dodongos Cavern",
+        "dungeon": "Dodongos Cavern",
+        "exits": {
+            "King Dodongo Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "King Dodongo Boss Room",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern Boss Room Chest": "True",
+            "Dodongos Cavern King Dodongo Heart": "
+                (Bombs or Progressive_Strength_Upgrade or
+                    (has_bombchus and ((is_adult and can_shield) or (is_child and can_isg)))
+                ) and 
+                (is_adult or Sticks or Kokiri_Sword)",
+            "King Dodongo": "
+            (Bombs or Progressive_Strength_Upgrade or
+                (has_bombchus and ((is_adult and can_shield) or (is_child and can_isg)))
+            ) and 
+            (is_adult or Sticks or Kokiri_Sword)",
+            "Dodongos Cavern GS Back Room": "True"
+        },
+        "exits": {
+            "Dodongos Cavern Lobby": "True"
+        }
+    }
+]

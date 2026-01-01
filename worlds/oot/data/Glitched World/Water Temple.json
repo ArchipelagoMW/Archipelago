@@ -1,0 +1,182 @@
+[    
+    {
+        "region_name": "Water Temple Lobby",
+        "dungeon": "Water Temple",
+        "locations": {},
+        "exits": {
+            "High Alcove": "is_adult or can_hover",
+            "Water Temple Boss Door": "can_use(Longshot) or can_hover or (can_use(Hover_Boots) and (can_mega or Megaton_Hammer))",
+            "Dark Link Area": "(at('High Alcove', can_play(Zeldas_Lullaby)) or 
+                    (can_use(Hover_Boots) and (can_mega or Megaton_Hammer)))
+                and (Small_Key_Water_Temple, 4)",
+            "Under Entrance Block": "can_use(Hookshot) and Iron_Boots",
+            "Central Pillar from Lobby": "can_use(Hookshot) and Iron_Boots and
+                (Small_Key_Water_Temple, 4)",
+            "Compass Room": "can_use(Iron_Boots) and can_use(Hookshot)",
+            "Ruto Column": "can_use(Iron_Boots) or can_use(Longshot) or can_jumpslash"
+        }
+    },
+    {
+        "region_name": "High Alcove",
+        "dungeon":  "Water Temple",
+        "locations": {},
+        "exits": {            
+            "Compass Room": "is_adult",
+            "Ruto Column": "is_adult",
+            "Under Entrance Block": "can_use(Iron_Boots) and can_use(Hookshot)",
+            "Caged Skulltula": "is_adult",
+            "Dragon Head Area": "is_adult",
+            "Boss Key Area": "is_adult and 
+                (Small_Key_Water_Temple, 4)
+                and (can_use(Longshot) or can_hover or Hover_Boots)",
+            "Water Temple Boss Door": "can_play(Zeldas_Lullaby) and can_use(Longshot)",
+            "Water Temple Lobby": "can_play(Zeldas_Lullaby)"
+
+        }
+    },
+    {
+        "region_name": "Caged Skulltula",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple GS Behind Gate": "(can_use(Hover_Boots) or can_hover or can_use(Hookshot)) and 
+                (can_jumpslash or has_explosives)"
+        }
+    },
+    {
+        "region_name": "Compass Room",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Compass Chest": "True"
+        }
+    },
+    {
+        "region_name": "Under Entrance Block",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Central Bow Target Chest": "True"
+        }
+    },
+    {
+        "region_name": "Ruto Column",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Map Chest": "is_adult or can_child_damage",
+            "Water Temple Cracked Wall Chest": "(can_use(Hookshot) and Iron_Boots) or
+                (can_play(Zeldas_Lullaby) and (can_use(Hookshot) or has_explosives)) ",
+            "Water Temple Torches Chest": "(here(is_child and can_use(Sticks)) or has_fire_source or can_use(Bow))
+                and can_play(Zeldas_Lullaby)"
+        },
+        "exits": {
+            "Central Pillar": "can_play(Zeldas_Lullaby) and 
+                ((Small_Key_Water_Temple, 5)
+                or here(is_child and can_use(Sticks)) or has_fire_source or can_use(Bow))",
+            "Boss Key Area": "(Small_Key_Water_Temple, 4) and
+                (can_use(Longshot) or can_hover or can_use(Hover_Boots)) and can_play(Zeldas_Lullaby)",
+            "Dragon Head Area": "Progressive_Strength_Upgrade and (is_adult or can_child_attack) and can_play(Zeldas_Lullaby)",
+            "Caged Skulltula": "has_explosives and can_play(Zeldas_Lullaby)",
+            "Compass Room": "can_play(Zeldas_Lullaby) and can_use(Hookshot)",
+            "Under Entrance Block": "can_play(Zeldas_Lullaby) and 
+            ( (can_use(Hookshot) and can_mega) or (can_use(Bow) and (Hover_Boots or can_use(Longshot)) 
+                and (Progressive_Strength_Upgrade or (can_use(Hookshot) and can_mega))))",
+            "High Alcove": "(can_use(Hover_Boots) or can_use(Hookshot) or (is_adult and can_mega) or can_hover)
+                and can_play(Zeldas_Lullaby)"
+        }
+    },
+    {
+        "region_name": "Central Pillar from Lobby",
+        "dungeon": "Water Temple",
+        "exits": {
+            "Central Pillar": "True"
+        }
+    },
+    {
+        "region_name": "Central Pillar",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Central Pillar Chest": "can_use(Iron_Boots) and can_use(Hookshot) and
+                (at('Central Pillar from Lobby', True) or can_play(Zeldas_Lullaby))",
+            "Water Temple GS Central Pillar": "at('Central Pillar from Lobby', True) or
+                can_use(Longshot) or
+                at('High Alcove',
+                    can_use(Farores_Wind) and can_play(Zeldas_Lullaby)
+                    and (can_use(Hookshot) or can_use(Boomerang)))"
+        },
+        "exits": {
+            "High Alcove": "(can_use(Hover_Boots) or can_use(Hookshot) or (is_adult and can_mega) or can_hover
+                or has_projectile(either))
+            and can_play(Zeldas_Lullaby)",
+            "Compass Room": "can_play(Zeldas_Lullaby) and can_use(Hookshot)"
+        }
+    },
+    {
+        "region_name": "Boss Key Area",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Boss Key Chest": "(Small_Key_Water_Temple, 5) and
+                (is_adult or can_hover)",
+            "Water Temple GS Near Boss Key Chest": "(is_adult or can_hover) and
+                (can_use(Hookshot) or can_use(Boomerang) or can_mega)"
+        }
+    },
+    {
+        "region_name": "Dark Link Area",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Longshot Chest": "can_use(Hookshot)",
+            "Water Temple GS Falling Platform Room": "can_use(Hookshot)"
+        },
+        "exits": {
+            "River": "can_play(Song_of_Time) or (can_use(Hookshot) and (Hover_Boots or (Bombs and can_live_dmg(0.5))))"
+        }
+    },
+    {
+        "region_name": "River",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple GS River": "can_use(Longshot) or (Iron_Boots and can_use(Hookshot))"
+        },
+        "exits": {
+            "River Chest": "can_use(Bow) or (can_use(Longshot) and has_bottle and Iron_Boots)"
+        }
+    },
+    {
+        "region_name": "River Chest",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple River Chest": "True"
+        },
+        "exits": {
+            "Dragon Head Area": "True",
+            "River": "(can_use(Longshot) or can_use(Bow)) and can_mega"
+        }
+    },
+    {
+        "region_name": "Dragon Head Area",
+        "dungeon": "Water Temple",
+        "locations": {
+            "Water Temple Dragon Chest": "at('River Chest', is_adult) or has_bombchus or (Iron_Boots and can_use(Hookshot))"
+        },
+        "exits": {
+            "River Chest": "can_hover"
+        }
+    },
+    {
+        "region_name": "Water Temple Boss Door",
+        "scene": "Water Temple",
+        "dungeon": "Water Temple",
+        "exits": {
+            "Morpha Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Morpha Boss Room",
+        "dungeon": "Water Temple",
+        "events": {
+            "Water Temple Clear": "can_jumpslash and (can_hover or Boss_Key_Water_Temple)"
+        },
+        "locations": {
+            "Morpha": "can_jumpslash and (can_hover or Boss_Key_Water_Temple)",
+            "Water Temple Morpha Heart": "can_jumpslash and (can_hover or Boss_Key_Water_Temple)"
+        }
+    }
+]

@@ -1,0 +1,116 @@
+[
+    {
+        "region_name": "Jabu Jabus Belly Beginning",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Map Chest": "can_blast_or_smash",
+            "Jabu Jabus Belly MQ First Room Side Chest": "can_use(Slingshot)",
+            "Jabu Jabus Belly MQ First Room Pot 1": "True",
+            "Jabu Jabus Belly MQ First Room Pot 2": "True",
+            "Nut Pot": "True"
+        },
+        "exits": {
+            "Zoras Fountain": "True",
+            "Jabu Jabus Belly Elevator Room": "here(can_use(Slingshot)) or jabu_shortcuts"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Elevator Room",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Second Room Lower Chest": "True",
+            "Jabu Jabus Belly MQ Second Room Upper Chest": "
+                here(can_use(Slingshot)) and
+                (can_use(Hover_Boots) or can_use(Hookshot) or
+                'Jabu Jabus Belly Floor Lowered' or jabu_shortcuts)",
+            "Jabu Jabus Belly MQ Compass Chest": "
+                (is_child or can_dive or Iron_Boots or logic_jabu_alcove_jump_dive) and
+                (can_use(Slingshot) or has_bombchus or can_use(Bow) or can_use(Hookshot) or
+                   (logic_jabu_mq_rang_jump and can_use(Boomerang)))",
+            "Jabu Jabus Belly MQ Recovery Heart 1": "True",
+            "Jabu Jabus Belly MQ Recovery Heart 2": "True",
+            "Jabu Jabus Belly MQ Underwater Green Rupee 1": "
+                can_use(Boomerang) or (Progressive_Scale, 2) or can_use(Iron_Boots)",
+            "Jabu Jabus Belly MQ Underwater Green Rupee 2": "
+                can_use(Boomerang) or can_dive or can_use(Iron_Boots)",
+            "Jabu Jabus Belly MQ Underwater Green Rupee 3": "True",
+            "Jabu Jabus Belly MQ Elevator Room Pot 1": "True",
+            "Jabu Jabus Belly MQ Elevator Room Pot 2": "True"
+        },
+        "exits": {
+            "Jabu Jabus Belly Main": "
+                here(is_child or can_dive or Iron_Boots or logic_jabu_alcove_jump_dive)",
+            "Jabu Jabus Belly Before Boss": "
+                jabu_shortcuts or 'Jabu Jabus Belly Floor Lowered' or
+                ('Jabu Jabus Belly Parasitic Tentacle Cleared' and
+                    (can_use(Hover_Boots) or can_use(Hookshot)))"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Main",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Basement Near Vines Chest": "can_use(Slingshot)",
+            "Jabu Jabus Belly MQ Basement Near Switches Chest": "can_use(Slingshot)",
+            "Jabu Jabus Belly MQ Boomerang Room Small Chest": "True",
+            "Jabu Jabus Belly MQ Boomerang Chest": "
+                Kokiri_Sword or Slingshot or Bombs or Sticks or is_adult",
+            "Jabu Jabus Belly MQ Boomerang Room Pot 1": "True",
+            "Jabu Jabus Belly MQ Boomerang Room Pot 2": "True",
+            "Jabu Jabus Belly MQ GS Boomerang Chest Room": "
+                (can_play(Song_of_Time) and (can_child_attack or is_adult)) or
+                (logic_jabu_mq_sot_gs and can_use(Boomerang))",
+            "Jabu Jabus Belly MQ GS Invisible Enemies Room": "
+                (at('Jabu Jabus Belly Depths', True) or jabu_shortcuts) and
+                ((can_use(Hookshot) and can_use(Hover_Boots)) or
+                    (here((logic_lens_jabu_mq or can_use(Lens_of_Truth)) and
+                            (can_use(Slingshot) or can_use(Bow) or can_use(Longshot) or
+                            (can_use(Hookshot) and can_use(Iron_Boots) and logic_lens_jabu_mq))) and
+                        (can_use(Boomerang) or (can_use(Hookshot) and can_use(Iron_Boots)))))"
+            # Lens of Truth cannot be used underwater.
+            # Adult's legs are too long to swim directly onto the Hookshot pillar.
+        },
+        "exits": {
+            "Jabu Jabus Belly Depths": "has_explosives and can_use(Boomerang) and can_use(Slingshot)"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Depths",
+        "dungeon": "Jabu Jabus Belly",
+        "events": {
+            "Jabu Jabus Belly Parasitic Tentacle Cleared": "True"
+        },
+        "locations": {
+            "Jabu Jabus Belly MQ Falling Like Like Room Chest": "True",
+            "Jabu Jabus Belly MQ Falling Like Like Room Pot 1": "True",
+            "Jabu Jabus Belly MQ Falling Like Like Room Pot 2": "True",
+            "Jabu Jabus Belly MQ GS Tailpasaran Room": "Sticks or can_use(Dins_Fire)"
+        },
+        "exits": {
+            "Jabu Jabus Belly Past Big Octo": "Sticks or (can_use(Dins_Fire) and Kokiri_Sword)"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Past Big Octo",
+        "dungeon": "Jabu Jabus Belly",
+        "events": {
+            "Jabu Jabus Belly Floor Lowered": "True"
+        },
+        "locations": {
+            "Jabu Jabus Belly MQ Cow": "can_play(Eponas_Song)"
+        }
+    },
+    {
+        "region_name": "Jabu Jabus Belly Before Boss",
+        "dungeon": "Jabu Jabus Belly",
+        "locations": {
+            "Jabu Jabus Belly MQ Near Boss Chest": "can_use(Slingshot)",
+            "Jabu Jabus Belly MQ GS Near Boss": "
+                can_use(Boomerang) or (logic_jabu_near_boss_ranged and can_use(Hookshot))",
+            "Fairy Pot": "has_bottle"
+        },
+        "exits": {
+            "Jabu Jabus Belly Boss Door": "here(can_use(Slingshot)) or jabu_shortcuts"
+        }
+    }
+]

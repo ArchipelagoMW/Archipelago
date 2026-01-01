@@ -1,0 +1,378 @@
+{
+  "REGION_SOUTHERN_ISLAND_EXTERIOR/MAIN": {
+    "parent_map": "MAP_SOUTHERN_ISLAND_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
+    "warps": [
+      "MAP_SOUTHERN_ISLAND_EXTERIOR:0,1/MAP_SOUTHERN_ISLAND_INTERIOR:0,1"
+    ]
+  },
+  "REGION_SOUTHERN_ISLAND_INTERIOR/MAIN": {
+    "parent_map": "MAP_SOUTHERN_ISLAND_INTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_LATIAS"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_SOUTHERN_ISLAND_INTERIOR:0,1/MAP_SOUTHERN_ISLAND_EXTERIOR:0,1"
+    ]
+  },
+  "REGION_FARAWAY_ISLAND_ENTRANCE/MAIN": {
+    "parent_map": "MAP_FARAWAY_ISLAND_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
+    "warps": [
+      "MAP_FARAWAY_ISLAND_ENTRANCE:0,1/MAP_FARAWAY_ISLAND_INTERIOR:0,1"
+    ]
+  },
+  "REGION_FARAWAY_ISLAND_INTERIOR/MAIN": {
+    "parent_map": "MAP_FARAWAY_ISLAND_INTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_MEW"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_FARAWAY_ISLAND_INTERIOR:0,1/MAP_FARAWAY_ISLAND_ENTRANCE:0,1"
+    ]
+  },
+  "REGION_BIRTH_ISLAND_HARBOR/MAIN": {
+    "parent_map": "MAP_BIRTH_ISLAND_HARBOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
+    "warps": [
+      "MAP_BIRTH_ISLAND_HARBOR:0/MAP_BIRTH_ISLAND_EXTERIOR:0"
+    ]
+  },
+  "REGION_BIRTH_ISLAND_EXTERIOR/MAIN": {
+    "parent_map": "MAP_BIRTH_ISLAND_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_DEOXYS"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_BIRTH_ISLAND_EXTERIOR:0/MAP_BIRTH_ISLAND_HARBOR:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_HARBOR/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_HARBOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_LILYCOVE_CITY_HARBOR/MAIN"
+    ],
+    "warps": [
+      "MAP_NAVEL_ROCK_HARBOR:0/MAP_NAVEL_ROCK_EXTERIOR:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_EXTERIOR/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_EXTERIOR",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_EXTERIOR:0/MAP_NAVEL_ROCK_HARBOR:0",
+      "MAP_NAVEL_ROCK_EXTERIOR:1/MAP_NAVEL_ROCK_ENTRANCE:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_ENTRANCE/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_ENTRANCE",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_ENTRANCE:0/MAP_NAVEL_ROCK_B1F:0",
+      "MAP_NAVEL_ROCK_ENTRANCE:1/MAP_NAVEL_ROCK_EXTERIOR:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_B1F/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_B1F",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_B1F:0/MAP_NAVEL_ROCK_ENTRANCE:0",
+      "MAP_NAVEL_ROCK_B1F:1/MAP_NAVEL_ROCK_FORK:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_FORK/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_FORK",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_FORK:0/MAP_NAVEL_ROCK_UP1:0",
+      "MAP_NAVEL_ROCK_FORK:1/MAP_NAVEL_ROCK_B1F:1",
+      "MAP_NAVEL_ROCK_FORK:2/MAP_NAVEL_ROCK_DOWN01:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN01/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN01",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN01:0/MAP_NAVEL_ROCK_FORK:2",
+      "MAP_NAVEL_ROCK_DOWN01:1/MAP_NAVEL_ROCK_DOWN02:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN02/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN02",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN02:1/MAP_NAVEL_ROCK_DOWN03:0",
+      "MAP_NAVEL_ROCK_DOWN02:0/MAP_NAVEL_ROCK_DOWN01:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN03/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN03",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN03:0/MAP_NAVEL_ROCK_DOWN02:1",
+      "MAP_NAVEL_ROCK_DOWN03:1/MAP_NAVEL_ROCK_DOWN04:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN04/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN04",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN04:1/MAP_NAVEL_ROCK_DOWN05:0",
+      "MAP_NAVEL_ROCK_DOWN04:0/MAP_NAVEL_ROCK_DOWN03:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN05/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN05",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN05:0/MAP_NAVEL_ROCK_DOWN04:1",
+      "MAP_NAVEL_ROCK_DOWN05:1/MAP_NAVEL_ROCK_DOWN06:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN06/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN06",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN06:1/MAP_NAVEL_ROCK_DOWN07:0",
+      "MAP_NAVEL_ROCK_DOWN06:0/MAP_NAVEL_ROCK_DOWN05:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN07/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN07",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN07:0/MAP_NAVEL_ROCK_DOWN06:1",
+      "MAP_NAVEL_ROCK_DOWN07:1/MAP_NAVEL_ROCK_DOWN08:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN08/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN08",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN08:1/MAP_NAVEL_ROCK_DOWN09:0",
+      "MAP_NAVEL_ROCK_DOWN08:0/MAP_NAVEL_ROCK_DOWN07:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN09/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN09",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN09:0/MAP_NAVEL_ROCK_DOWN08:1",
+      "MAP_NAVEL_ROCK_DOWN09:1/MAP_NAVEL_ROCK_DOWN10:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN10/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN10",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN10:1/MAP_NAVEL_ROCK_DOWN11:1",
+      "MAP_NAVEL_ROCK_DOWN10:0/MAP_NAVEL_ROCK_DOWN09:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_DOWN11/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_DOWN11",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_DOWN11:1/MAP_NAVEL_ROCK_DOWN10:1",
+      "MAP_NAVEL_ROCK_DOWN11:0/MAP_NAVEL_ROCK_BOTTOM:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_BOTTOM/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_BOTTOM",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [
+      "EVENT_ENCOUNTER_LUGIA"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_BOTTOM:0/MAP_NAVEL_ROCK_DOWN11:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_UP1/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_UP1",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_UP1:1/MAP_NAVEL_ROCK_UP2:0",
+      "MAP_NAVEL_ROCK_UP1:0/MAP_NAVEL_ROCK_FORK:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_UP2/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_UP2",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_UP2:0/MAP_NAVEL_ROCK_UP1:1",
+      "MAP_NAVEL_ROCK_UP2:1/MAP_NAVEL_ROCK_UP3:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_UP3/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_UP3",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_UP3:1/MAP_NAVEL_ROCK_UP4:0",
+      "MAP_NAVEL_ROCK_UP3:0/MAP_NAVEL_ROCK_UP2:1"
+    ]
+  },
+  "REGION_NAVEL_ROCK_UP4/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_UP4",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [],
+    "events": [],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_UP4:0/MAP_NAVEL_ROCK_UP3:1",
+      "MAP_NAVEL_ROCK_UP4:1/MAP_NAVEL_ROCK_TOP:0"
+    ]
+  },
+  "REGION_NAVEL_ROCK_TOP/MAIN": {
+    "parent_map": "MAP_NAVEL_ROCK_TOP",
+    "has_grass": false,
+    "has_water": false,
+    "has_fishing": false,
+    "locations": [
+      "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH"
+    ],
+    "events": [
+      "EVENT_ENCOUNTER_HO_OH"
+    ],
+    "exits": [],
+    "warps": [
+      "MAP_NAVEL_ROCK_TOP:0/MAP_NAVEL_ROCK_UP4:1"
+    ]
+  }
+}

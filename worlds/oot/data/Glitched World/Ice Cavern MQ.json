@@ -1,0 +1,35 @@
+[
+    {
+        "region_name": "Ice Cavern Beginning",
+        "dungeon": "Ice Cavern",
+        "exits": {
+            "Zoras Fountain": "True",
+            "Ice Cavern": "True"
+        }
+    },
+    {
+        "region_name": "Ice Cavern",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Blue Fire": "is_adult and has_bottle"
+        },
+        "exits": {
+            "Ice Cavern Interior": "Blue_Fire"
+        }
+    },
+    {
+        "region_name": "Ice Cavern Interior",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern MQ Map Chest": "True",
+            "Ice Cavern MQ Compass Chest": "True",
+            "Ice Cavern MQ Iron Boots Chest": "True",
+            "Ice Cavern MQ Freestanding PoH": "has_explosives",
+            "Sheik in Ice Cavern": "True",
+            "Ice Cavern MQ GS Red Ice": "can_play(Song_of_Time)",
+            "Ice Cavern MQ GS Ice Block": "True",
+            "Ice Cavern MQ GS Scarecrow": "
+                can_use(Scarecrow) or (Hover_Boots and can_use(Longshot))"
+        }
+    }
+]

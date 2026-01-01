@@ -1,0 +1,12 @@
+class Animal:
+    chicken = "Chicken"
+    cow = "Cow"
+    pig = "Pig"
+    duck = "Duck"
+    sheep = "Sheep"
+    dinosaur = "Dinosaur"
+    rabbit = "Rabbit"
+    goat = "Goat"
+    ostrich = "Ostrich"
+    void_chicken = "Void Chicken"
+    golden_chicken = "Golden Chicken"

@@ -1,0 +1,186 @@
+[
+    {
+        "region_name": "Spirit Temple Lobby",
+        "dungeon": "Spirit Temple",
+        "exits": {
+            "Desert Colossus": "True",
+            "Child Spirit Temple": "is_child or (is_adult and (can_mega or Hover_Boots))",
+            "Early Adult Spirit Temple": "can_use(Silver_Gauntlets) or can_use(Hover_Boots) or (is_adult and can_shield)"
+        }
+    },
+    {
+        "region_name": "Child Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Child Bridge Chest": "is_adult or
+                (
+                (can_use(Boomerang) or Slingshot or has_bombchus or can_mega) and 
+                (Sticks or has_explosives or 
+                    ( (Nuts or can_use(Boomerang)) and 
+                        (can_use(Kokiri_Sword) or Slingshot) ) ))",
+            "Deku Shield Pot": "
+                fix_broken_drops and
+                (is_adult or (
+                (can_use(Boomerang) or Slingshot or has_bombchus or can_mega) and 
+                (Sticks or has_explosives or 
+                    ( (Nuts or can_use(Boomerang)) and 
+                        (can_use(Kokiri_Sword) or Slingshot) ) )))",
+            "Spirit Temple Child Early Torches Chest": "(is_adult and has_fire_source) or 
+                (has_fire_source_with_torch and (here(is_adult) or
+                (
+                (can_use(Boomerang) or Slingshot or has_bombchus or can_mega) and 
+                (Sticks or has_explosives or 
+                    ( (Nuts or can_use(Boomerang)) and 
+                        (can_use(Kokiri_Sword) or Slingshot) ) ))))",
+            "Spirit Temple GS Metal Fence": "is_adult or
+                (
+                (can_use(Boomerang) or Slingshot or has_bombchus or can_mega) and 
+                (Sticks or has_explosives or 
+                    ( (Nuts or can_use(Boomerang)) and 
+                        (can_use(Kokiri_Sword) or Slingshot) ) ))",
+            "Nut Crate": "True"
+        },
+        "exits": {
+            "Child Spirit Temple Climb": "(Small_Key_Spirit_Temple, 2) and
+                (is_child or ((can_mega and can_use(Longshot)) or can_use(Hover_Boots))
+                )"
+        }
+    },
+    {
+        "region_name": "Child Spirit Temple Climb",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Child Climb North Chest": "at('Spirit Temple Central Chamber', True)
+                or is_child or has_projectile(adult)",
+            "Spirit Temple Child Climb East Chest": "at('Spirit Temple Central Chamber', True)
+                or is_child or has_projectile(adult)",
+            "Spirit Temple GS Sun on Floor Room": "can_use(Boomerang) or can_use(Hookshot) or
+                (can_child_damage and (can_live_dmg(0.5) or Fairy or can_use(Nayrus_Love))) or 
+                (is_adult and (can_live_dmg(0.5) or Fairy or can_use(Nayrus_Love)))"
+        },
+        "exits": {
+            "Spirit Temple Central Chamber": "has_explosives"
+        }
+    },
+    {
+        "region_name": "Early Adult Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Compass Chest": "can_play(Zeldas_Lullaby) and
+                (can_use(Hookshot) or can_hover) and has_projectile(either)",
+            "Spirit Temple Early Adult Right Chest": "has_projectile(either)",
+            "Spirit Temple First Mirror Left Chest": "(Small_Key_Spirit_Temple, 2)",
+            "Spirit Temple First Mirror Right Chest": "(Small_Key_Spirit_Temple, 2)",
+            "Spirit Temple GS Boulder Room": "has_projectile(either) and
+                (can_play(Song_of_Time) or can_use(Hover_Boots))"
+        },
+        "exits": {
+            "Spirit Temple Central Chamber": "(Small_Key_Spirit_Temple, 2)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Central Chamber",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Map Chest": "can_use(Bow) or has_fire_source_with_torch",
+            "Spirit Temple Sun Block Room Chest": "has_fire_source_with_torch or can_use(Bow)",
+            "Spirit Temple Statue Room Hand Chest": "can_play(Zeldas_Lullaby)
+                and can_jumpslash",
+            "Spirit Temple Statue Room Northeast Chest": "can_play(Zeldas_Lullaby) and can_jumpslash and
+                (can_use(Hookshot) or can_use(Hover_Boots) or can_mega)",
+            "Spirit Temple GS Hall After Sun Block Room": "can_use(Hookshot) or can_use(Boomerang) or can_hover",
+            "Spirit Temple GS Lobby": "can_use(Hookshot) or can_use(Boomerang) or can_hover
+                or can_use(Hover_Boots)"
+        },
+        "exits": {
+            "Silver Gauntlets Hand": "True",
+            # access via Early Adult Spirit Temple requires 2 keys (+ jumpslash + explosives)
+            # access to Early Adult Spirit Temple guaranteed via can_jumpslash from here
+            "Spirit Temple Beyond Central Locked Door": "can_jumpslash and (
+                (Small_Key_Spirit_Temple, 2) or
+                can_hover or
+                can_use(Hookshot)) and has_explosives",
+            "Child Spirit Temple Climb": "True",
+            "Spirit Temple Boss Door": "can_use(Hookshot) and can_live_dmg(0.5) and Mirror_Shield and has_explosives",
+            "Early Adult Spirit Temple": "can_jumpslash or can_hover or can_use(Hookshot)"
+        }
+    },
+    {
+        "region_name": "Mirror Shield Hand",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Mirror Shield Chest": "True"
+        },
+        "exits": {
+            "Desert Colossus": "True",
+            "Silver Gauntlets Hand": "
+                can_hover or can_use(Hookshot) or (can_use(Hover_Boots) and can_mega)",
+            "Spirit Temple Beyond Central Locked Door": "True"
+        }
+    },
+    {
+        "region_name": "Silver Gauntlets Hand",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Silver Gauntlets Chest": "True"
+        },
+        "exits": {
+            "Desert Colossus": "True",
+            "Mirror Shield Hand": "can_hover or (can_use(Hover_Boots) and can_mega)",
+            "Spirit Temple Central Chamber": "(Small_Key_Spirit_Temple, 2)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Outdoor Hands",
+        "dungeon": "Spirit Temple",
+        "exits": {
+            "Silver Gauntlets Hand": "True",
+            "Mirror Shield Hand": "True"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Beyond Central Locked Door",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Near Four Armos Chest": "can_use(Mirror_Shield)",
+            "Spirit Temple Hallway Right Invisible Chest": "True",
+            "Spirit Temple Hallway Left Invisible Chest": "True"
+        },
+        "exits": {
+            "Spirit Temple Beyond Final Locked Door": "(Small_Key_Spirit_Temple,5) and
+                (can_use(Hookshot) or has_explosives)",
+            "Mirror Shield Hand": "True",
+            "Spirit Temple Central Chamber": "has_explosives"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Beyond Final Locked Door",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Boss Key Chest": "
+                can_play(Zeldas_Lullaby) and (can_live_dmg(1.0) or (Bow and 
+                Progressive_Hookshot))",
+            "Spirit Temple Topmost Chest": "can_use(Mirror_Shield)"
+        },
+        "exits": {
+            "Spirit Temple Boss Door": "can_use(Mirror_Shield)",
+            "Spirit Temple Central Chamber": "can_use(Mirror_Shield) or can_use(Hookshot)"
+        }
+    },
+    {
+        "region_name": "Spirit Temple Boss Door",
+        "scene": "Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "exits": {
+            "Twinrova Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Twinrova Boss Room",
+        "dungeon": "Spirit Temple",
+        "locations": {
+            "Spirit Temple Twinrova Heart": "True",
+            "Twinrova": "True"
+        }
+    }
+]

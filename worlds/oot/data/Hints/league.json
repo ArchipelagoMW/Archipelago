@@ -1,0 +1,58 @@
+{
+    "name":                  "league",
+    "gui_name":              "League S3",
+    "description":           "Hint Distribution for the S3 of League. 5 Goal Hints, 3 Barren Hints, 5 Sometimes hints, 7 Always hints (including skull mask), Several hints removed from the Sometimes hint pool.",
+    "add_locations":         [
+        { "location": "Deku Theater Skull Mask", "types": ["always"] }
+    ],
+    "remove_locations":      [
+        {"location": "Sheik in Crater", "types": ["sometimes"]},
+        {"location": "Song from Royal Familys Tomb", "types": ["sometimes"]},
+        {"location": "Sheik in Forest", "types": ["sometimes"]},
+        {"location": "Sheik at Temple", "types": ["sometimes"]},
+        {"location": "Sheik at Colossus", "types": ["sometimes"]},
+        {"location": "LH Sun", "types": ["sometimes"]},
+        {"location": "GF HBA 1500 Points", "types": ["sometimes"]},
+        {"location": "GC Maze Left Chest", "types": ["sometimes"]},
+        {"location": "GV Chest", "types": ["sometimes"]},
+        {"location": "Graveyard Royal Familys Tomb Chest", "types": ["sometimes"]},
+        {"location": "GC Pot Freestanding PoH", "types": ["sometimes"]},
+        {"location": "LH Lab Dive", "types": ["sometimes"]},
+        {"location": "Fire Temple Megaton Hammer Chest", "types": ["sometimes"]},
+        {"location": "Water Temple Boss Key Chest", "types": ["sometimes"]},
+        {"location": "Gerudo Training Ground Maze Path Final Chest", "types": ["sometimes"]},
+        {"location": "Spirit Temple Silver Gauntlets Chest", "types": ["sometimes"]},
+        {"location": "Spirit Temple Mirror Shield Chest", "types": ["sometimes"]},
+        {"location": "Shadow Temple Freestanding Key", "types": ["sometimes"]},
+        {"location": "Ice Cavern Iron Boots Chest", "types": ["sometimes"]},
+        {"location": "Ganons Castle Shadow Trial Golden Gauntlets Chest", "types": ["sometimes"]}
+    ],
+    "add_items":             [],
+    "remove_items":          [
+        { "item": "Zeldas Lullaby", "types": ["goal"] }
+    ],
+    "dungeons_woth_limit":   2,
+    "dungeons_barren_limit": 1,
+    "named_items_required":  true,
+    "vague_named_items":     false,
+    "use_default_goals":     true,
+    "distribution":          {
+        "trial":           {"order": 1, "weight": 0.0, "fixed":   0, "copies": 2},
+        "entrance_always": {"order": 2, "weight": 0.0, "fixed":   0, "copies": 2},
+        "always":          {"order": 3, "weight": 0.0, "fixed":   0, "copies": 2},
+        "goal":            {"order": 4, "weight": 0.0, "fixed":   5, "copies": 2},
+        "barren":          {"order": 5, "weight": 0.0, "fixed":   3, "copies": 2},
+        "entrance":        {"order": 6, "weight": 0.0, "fixed":   4, "copies": 2},
+        "sometimes":       {"order": 7, "weight": 0.0, "fixed": 100, "copies": 2},
+        "random":          {"order": 8, "weight": 9.0, "fixed":   0, "copies": 2},
+        "item":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "song":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "overworld":       {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "dungeon":         {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "junk":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "named-item":      {"order": 9, "weight": 0.0, "fixed":   0, "copies": 2},
+        "woth":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 2},
+        "dual_always":     {"order": 0, "weight": 0.0, "fixed":   0, "copies": 0},
+        "dual":            {"order": 0, "weight": 0.0, "fixed":   0, "copies": 0}
+    }
+}

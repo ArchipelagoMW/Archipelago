@@ -1,0 +1,56 @@
+{
+    "name":                  "ddr",
+    "gui_name":              "DDR",
+    "description":           "DDR weekly race hints. Duplicates of each hint, 2 WotH, 3 Barren, 3 Named-Item, remainder of hints are Sometimes. Prevents some items from being hinted in WotH or Sometimes.",
+    "add_locations":         [
+        { "location": "Deku Theater Skull Mask", "types": ["always"] }
+    ],
+    "remove_locations":      [],
+    "add_items":             [
+        { "item": "Hover Boots", "types": ["named-item"] },
+        { "item": "Progressive Hookshot", "types": ["named-item"] },
+        { "item": "Dins Fire", "types": ["named-item"] },
+        { "item": "Bomb Bag", "types": ["named-item"] },
+        { "item": "Boomerang", "types": ["named-item"] },
+        { "item": "Bow", "types": ["named-item"] },
+        { "item": "Megaton Hammer", "types": ["named-item"] },
+        { "item": "Iron Boots", "types": ["named-item"] },
+        { "item": "Magic Meter", "types": ["named-item"] },
+        { "item": "Mirror Shield", "types": ["named-item"] },
+        { "item": "Fire Arrows", "types": ["named-item"] },
+        { "item": "Progressive Strength Upgrade", "types": ["named-item"] }
+    ],
+    "remove_items":          [
+        { "item": "Zeldas Lullaby", "types": ["woth", "sometimes"] },
+        { "item": "Rutos Letter", "types": ["woth", "sometimes"] },
+        { "item": "Goron Tunic", "types": ["woth", "sometimes"] },
+        { "item": "Zora Tunic", "types": ["woth", "sometimes"] },
+        { "item": "Bow", "types": ["barren"] },
+        { "item": "Bomb Bag", "types": ["barren"] },
+        { "item": "Magic Meter", "types": ["barren"] }
+    ],
+    "dungeons_woth_limit":   1,
+    "dungeons_barren_limit": 1,
+    "named_items_required":  false,
+    "vague_named_items":     true,
+    "use_default_goals":     true,
+    "distribution":          {
+        "trial":           {"order":  1, "weight": 0.0, "fixed":  0, "copies": 1},
+        "entrance_always": {"order":  2, "weight": 0.0, "fixed":  0, "copies": 2},
+        "always":          {"order":  3, "weight": 0.0, "fixed":  0, "copies": 2},
+        "woth":            {"order":  4, "weight": 0.0, "fixed":  2, "copies": 2},
+        "barren":          {"order":  5, "weight": 0.0, "fixed":  3, "copies": 2},
+        "entrance":        {"order":  6, "weight": 0.0, "fixed":  0, "copies": 2},
+        "sometimes":       {"order": 14, "weight": 0.0, "fixed": 99, "copies": 2},
+        "random":          {"order":  8, "weight": 0.0, "fixed":  0, "copies": 2},
+        "item":            {"order":  9, "weight": 0.0, "fixed":  0, "copies": 2},
+        "song":            {"order": 10, "weight": 0.0, "fixed":  0, "copies": 2},
+        "overworld":       {"order": 11, "weight": 0.0, "fixed":  0, "copies": 2},
+        "dungeon":         {"order": 12, "weight": 0.0, "fixed":  0, "copies": 2},
+        "junk":            {"order": 13, "weight": 0.0, "fixed":  0, "copies": 1},
+        "named-item":      {"order":  7, "weight": 0.0, "fixed":  3, "copies": 2},
+        "goal":            {"order": 15, "weight": 0.0, "fixed":  0, "copies": 1},
+        "dual_always":     {"order": 16, "weight": 0.0, "fixed":  0, "copies": 0},
+        "dual":            {"order": 17, "weight": 0.0, "fixed":  0, "copies": 0}
+    }
+}

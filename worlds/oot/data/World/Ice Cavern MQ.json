@@ -1,0 +1,57 @@
+[
+    {
+        "region_name": "Ice Cavern Beginning",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern MQ First Hall Pot": "True",
+            "Ice Cavern MQ Tektite Room Pot 1": "True",
+            "Ice Cavern MQ Tektite Room Pot 2": "True",
+            # The crystal switch in the tektite room can be hit with the pot in the first hall.
+            "Ice Cavern MQ Center Room Pot 1": "True",
+            "Ice Cavern MQ Center Room Pot 2": "True",
+            "Fairy Pot": "has_bottle"
+        },
+        "exits": {
+            "ZF Ice Ledge": "True",
+            "Ice Cavern Map Room": "
+                is_adult or can_use(Dins_Fire) or
+                (has_explosives and (can_use(Sticks) or can_use(Slingshot) or Kokiri_Sword))",
+            "Ice Cavern Compass Room": "is_adult and Blue_Fire",
+            "Ice Cavern Iron Boots Region": "Blue_Fire"
+        }
+    },
+    {
+        "region_name": "Ice Cavern Map Room",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern MQ Map Chest": "
+                Blue_Fire and
+                (is_adult or can_use(Sticks) or Kokiri_Sword or can_use_projectile)",
+            "Blue Fire": "has_bottle"
+        }
+    },
+    {
+        "region_name": "Ice Cavern Compass Room",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern MQ Compass Chest": "True",
+            "Ice Cavern MQ Freestanding PoH": "has_explosives",
+            "Ice Cavern MQ Compass Room Pot 1": "True",
+            "Ice Cavern MQ Compass Room Pot 2": "True",
+            "Ice Cavern MQ GS Red Ice": "can_play(Song_of_Time) or logic_ice_mq_red_ice_gs"
+        }
+    },
+    {
+        "region_name": "Ice Cavern Iron Boots Region",
+        "dungeon": "Ice Cavern",
+        "locations": {
+            "Ice Cavern MQ Iron Boots Chest": "is_adult",
+            "Sheik in Ice Cavern": "is_adult",
+            "Ice Cavern MQ Near End Pot": "is_adult",
+            "Ice Cavern MQ GS Ice Block": "is_adult or can_child_attack",
+            "Ice Cavern MQ GS Scarecrow": "
+                can_use(Scarecrow) or (Hover_Boots and can_use(Longshot)) or
+                (logic_ice_mq_scarecrow and is_adult)"
+        }
+    }
+]

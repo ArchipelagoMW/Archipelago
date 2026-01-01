@@ -1,0 +1,65 @@
+[
+    {
+        "region_name": "Dodongos Cavern Beginning",
+        "dungeon": "Dodongos Cavern",
+        "exits": {
+            "Dodongos Cavern Entryway": "True",
+            "Dodongos Cavern Lobby": "can_blast_or_smash or Progressive_Strength_Upgrade"
+        }
+    },
+    {
+        "region_name": "Dodongos Cavern Lobby",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern MQ Map Chest": "True",
+            "Dodongos Cavern MQ Compass Chest": "is_adult or can_child_attack or Nuts",
+            "Dodongos Cavern MQ Larvae Room Chest": "can_use(Sticks) or has_fire_source",
+            "Dodongos Cavern MQ Torch Puzzle Room Chest": "
+                can_blast_or_smash or can_use(Sticks) or can_use(Dins_Fire) or 
+                (is_adult and (logic_dc_jump or Hover_Boots or Progressive_Hookshot))",
+            "Dodongos Cavern MQ Bomb Bag Chest": "
+                is_adult or 
+                (Slingshot and 
+                    (has_explosives or 
+                        ((Sticks or can_use(Dins_Fire)) and can_take_damage)))",
+            "Dodongos Cavern MQ GS Song of Time Block Room": "
+                can_play(Song_of_Time) and (can_child_attack or is_adult)",
+            "Dodongos Cavern MQ GS Larvae Room": "can_use(Sticks) or has_fire_source",
+            "Dodongos Cavern MQ GS Lizalfos Room": "can_blast_or_smash",
+            "Dodongos Cavern MQ GS Scrub Room": "
+                (can_use(Boomerang) and (Slingshot or (can_become_adult and has_explosives)) and 
+                    (has_explosives or (Progressive_Strength_Upgrade and 
+                        (Megaton_Hammer or 
+                            ((Sticks or can_use(Dins_Fire) or 
+                                (can_become_adult and (logic_dc_jump or Hover_Boots))) and 
+                            can_take_damage))))) or 
+                (can_use(Hookshot) and (has_explosives or Progressive_Strength_Upgrade or 
+                    Bow or can_use(Dins_Fire)))",
+            "Dodongos Cavern MQ Deku Scrub Lobby Rear": "can_stun_deku",
+            "Dodongos Cavern MQ Deku Scrub Lobby Front": "can_stun_deku",
+            "Dodongos Cavern MQ Deku Scrub Staircase": "can_stun_deku",
+            "Dodongos Cavern MQ Deku Scrub Side Room Near Lower Lizalfos": "
+                is_adult or has_explosives or 
+                ((Sticks or can_use(Dins_Fire)) and can_take_damage)",
+            "Dodongos Cavern Gossip Stone": "True"
+        },
+        "exits": {
+            "King Dodongo Boss Room": "has_explosives"
+        }
+    },
+    {
+        "region_name": "King Dodongo Boss Room",
+        "dungeon": "Dodongos Cavern",
+        "locations": {
+            "Dodongos Cavern MQ Under Grave Chest": "True",
+            "Dodongos Cavern Boss Room Chest": "True",
+            "Dodongos Cavern King Dodongo Heart": "
+                (Bombs or Progressive_Strength_Upgrade) and 
+                (is_adult or Sticks or Kokiri_Sword)",
+            "King Dodongo": "
+                (Bombs or Progressive_Strength_Upgrade) and 
+                (is_adult or Sticks or Kokiri_Sword)",
+            "Dodongos Cavern MQ GS Back Area": "True"
+        }
+    }
+]

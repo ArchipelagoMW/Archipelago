@@ -1,0 +1,467 @@
+[
+    {
+        "id": 47001,
+        "progression": false,
+        "name": "Backpack"
+    },
+    {
+        "id": 47002,
+        "progression": false,
+        "name": "Big backpack"
+    },
+    {
+        "id": 47003,
+        "progression": false,
+        "name": "Leather helmet"
+    },
+    {
+        "id": 47004,
+        "progression": false,
+        "name": "Leather body armor"
+    },
+    {
+        "id": 47005,
+        "progression": false,
+        "name": "Leather greaves"
+    },
+    {
+        "id": 47006,
+        "progression": false,
+        "name": "Flippers"
+    },
+    {
+        "id": 47007,
+        "progression": false,
+        "name": "Head light"
+    },
+    {
+        "id": 47008,
+        "progression": false,
+        "name": "Advanced head light"
+    },
+    {
+        "id": 47009,
+        "progression": false,
+        "name": "Oxygen bottle"
+    },
+    {
+        "id": 47010,
+        "progression": true,
+        "name": "Zipline tool"
+    },
+    {
+        "id": 47011,
+        "progression": false,
+        "name": "Electric zipline tool"
+    },
+    {
+        "id": 47012,
+        "progression": true,
+        "name": "Empty bottle"
+    },
+    {
+        "id": 47013,
+        "progression": false,
+        "name": "Empty canteen"
+    },
+    {
+        "id": 47014,
+        "progression": false,
+        "name": "Bucket"
+    },
+    {
+        "id": 47015,
+        "progression": false,
+        "name": "Clay bowl"
+    },
+    {
+        "id": 47016,
+        "progression": false,
+        "name": "Drinking glass"
+    },
+    {
+        "id": 47017,
+        "progression": false,
+        "name": "Healing salve"
+    },
+    {
+        "id": 47018,
+        "progression": false,
+        "name": "Good healing salve"
+    },
+    {
+        "id": 47019,
+        "progression": false,
+        "name": "Cookingpot"
+    },
+    {
+        "id": 47020,
+        "progression": false,
+        "name": "Juicer"
+    },
+    {
+        "id": 47021,
+        "progression": false,
+        "name": "Advanced grill"
+    },
+    {
+        "id": 47022,
+        "progression": false,
+        "name": "Electric grill"
+    },
+    {
+        "id": 47023,
+        "progression": false,
+        "name": "Advanced purifier"
+    },
+    {
+        "id": 47024,
+        "progression": false,
+        "name": "Electric purifier"
+    },
+    {
+        "id": 47025,
+        "progression": false,
+        "name": "Advanced small crop plot"
+    },
+    {
+        "id": 47026,
+        "progression": false,
+        "name": "Advanced medium crop plot"
+    },
+    {
+        "id": 47027,
+        "progression": false,
+        "name": "Advanced large crop plot"
+    },
+    {
+        "id": 47028,
+        "progression": true,
+        "name": "Grass plot"
+    },
+    {
+        "id": 47029,
+        "progression": false,
+        "name": "Medium crop plot"
+    },
+    {
+        "id": 47030,
+        "progression": false,
+        "name": "Large crop plot"
+    },
+    {
+        "id": 47031,
+        "progression": false,
+        "name": "Scarecrow"
+    },
+    {
+        "id": 47032,
+        "progression": false,
+        "name": "Advanced Scarecrow"
+    },
+    {
+        "id": 47033,
+        "progression": false,
+        "name": "Sprinkler"
+    },
+    {
+        "id": 47034,
+        "progression": false,
+        "name": "Honey"
+    },
+    {
+        "id": 47035,
+        "progression": true,
+        "name": "Battery"
+    },
+    {
+        "id": 47036,
+        "progression": false,
+        "name": "Advanced Battery"
+    },
+    {
+        "id": 47037,
+        "progression": true,
+        "name": "Bolt"
+    },
+    {
+        "id": 47038,
+        "progression": true,
+        "name": "Circuit board"
+    },
+    {
+        "id": 47039,
+        "progression": true,
+        "name": "Hinge"
+    },
+    {
+        "id": 47040,
+        "progression": false,
+        "name": "Stationary anchor"
+    },
+    {
+        "id": 47041,
+        "progression": false,
+        "name": "Advanced stationary anchor"
+    },
+    {
+        "id": 47042,
+        "progression": false,
+        "name": "Engine controls"
+    },
+    {
+        "id": 47043,
+        "progression": true,
+        "name": "Engine"
+    },
+    {
+        "id": 47044,
+        "progression": true,
+        "name": "Receiver"
+    },
+    {
+        "id": 47045,
+        "progression": true,
+        "name": "Antenna"
+    },
+    {
+        "id": 47046,
+        "progression": true,
+        "name": "Steering Wheel"
+    },
+    {
+        "id": 47047,
+        "progression": false,
+        "name": "Battery charger"
+    },
+    {
+        "id": 47048,
+        "progression": false,
+        "name": "Wind turbine"
+    },
+    {
+        "id": 47049,
+        "progression": false,
+        "name": "Hammock"
+    },
+    {
+        "id": 47050,
+        "progression": false,
+        "name": "Beehive"
+    },
+    {
+        "id": 47051,
+        "progression": false,
+        "name": "Biofuel refiner"
+    },
+    {
+        "id": 47052,
+        "progression": false,
+        "name": "Advanced biofuel refiner"
+    },
+    {
+        "id": 47053,
+        "progression": true,
+        "name": "Birds nest"
+    },
+    {
+        "id": 47054,
+        "progression": false,
+        "name": "Simple collection net"
+    },
+    {
+        "id": 47055,
+        "progression": false,
+        "name": "Advanced collection net"
+    },
+    {
+        "id": 47056,
+        "progression": true,
+        "name": "Smelter"
+    },
+    {
+        "id": 47057,
+        "progression": false,
+        "name": "Electric Smelter"
+    },
+    {
+        "id": 47058,
+        "progression": false,
+        "name": "Fuel tank"
+    },
+    {
+        "id": 47059,
+        "progression": false,
+        "name": "Water tank"
+    },
+    {
+        "id": 47060,
+        "progression": false,
+        "name": "Fuel pipe"
+    },
+    {
+        "id": 47061,
+        "progression": false,
+        "name": "Water pipe"
+    },
+    {
+        "id": 47062,
+        "progression": false,
+        "name": "Recycler"
+    },
+    {
+        "id": 47063,
+        "progression": false,
+        "name": "Storage"
+    },
+    {
+        "id": 47064,
+        "progression": false,
+        "name": "Large Storage"
+    },
+    {
+        "id": 47065,
+        "progression": false,
+        "name": "Trashcan"
+    },
+    {
+        "id": 47066,
+        "progression": false,
+        "name": "Zipline"
+    },
+    {
+        "id": 47067,
+        "progression": false,
+        "name": "Firework"
+    },
+    {
+        "id": 47068,
+        "progression": false,
+        "name": "Metal axe"
+    },
+    {
+        "id": 47069,
+        "progression": false,
+        "name": "Titanium axe"
+    },
+    {
+        "id": 47070,
+        "progression": false,
+        "name": "Binoculars"
+    },
+    {
+        "id": 47071,
+        "progression": false,
+        "name": "Metal fishing rod"
+    },
+    {
+        "id": 47072,
+        "progression": false,
+        "name": "Scrap hook"
+    },
+    {
+        "id": 47073,
+        "progression": false,
+        "name": "Titanium hook"
+    },
+    {
+        "id": 47074,
+        "progression": true,
+        "name": "Metal detector"
+    },
+    {
+        "id": 47075,
+        "progression": true,
+        "name": "Shear"
+    },
+    {
+        "id": 47076,
+        "progression": true,
+        "name": "Shovel"
+    },
+    {
+        "id": 47077,
+        "progression": false,
+        "name": "Sweep net"
+    },
+    {
+        "id": 47078,
+        "progression": false,
+        "name": "Basic bow"
+    },
+    {
+        "id": 47079,
+        "progression": false,
+        "name": "Stone arrow"
+    },
+    {
+        "id": 47080,
+        "progression": false,
+        "name": "Metal arrow"
+    },
+    {
+        "id": 47081,
+        "progression": false,
+        "name": "Titanium arrow"
+    },
+    {
+        "id": 47082,
+        "progression": true,
+        "name": "Metal spear"
+    },
+    {
+        "id": 47083,
+        "progression": true,
+        "name": "Machete"
+    },
+    {
+        "id": 47084,
+        "progression": false,
+        "name": "Titanium sword"
+    },
+    {
+        "id": 47085,
+        "progression": true,
+        "name": "Net launcher"
+    },
+    {
+        "id": 47086,
+        "progression": true,
+        "name": "Net canister"
+    },
+    {
+        "id": 47087,
+        "progression": true,
+        "name": "Vasagatan Frequency"
+    },
+    {
+        "id": 47088,
+        "progression": true,
+        "name": "Balboa Island Frequency"
+    },
+    {
+        "id": 47089,
+        "progression": true,
+        "name": "Tangaroa Frequency"
+    },
+    {
+        "id": 47090,
+        "progression": true,
+        "name": "Varuna Point Frequency"
+    },
+    {
+        "id": 47091,
+        "progression": true,
+        "name": "Temperance Frequency"
+    },
+    {
+        "id": 47092,
+        "progression": true,
+        "name": "Utopia Frequency"
+    },
+    {
+        "id": 47093,
+        "progression": true,
+        "name": "Caravan Island Frequency"
+    }
+]
