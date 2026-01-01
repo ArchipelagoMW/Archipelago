@@ -46,11 +46,6 @@ wand_tiers: list[str] = [
     "Wand (Tier 6)",    # Temple of the Art
 ]
 
-
-items_hidden_from_shops: set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
-                                     "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
-                                     "Powder Pouch"}
-
 perk_list: list[str] = list(filter(lambda item: items.item_table[item].group == "Perks", items.item_table.keys()))
 
 
@@ -76,7 +71,7 @@ def forbid_items_at_locations(world: "NoitaWorld", shop_locations: set[str], for
 #         if "Shop Item" in location_name:
 #             forbid_items_at_location(world, location_name, items_hidden_from_shops)
 def ban_items_from_shops(world: "NoitaWorld") -> None:
-    forbid_items_at_locations(world, locations.shop_locations, items_hidden_from_shops)
+    forbid_items_at_locations(world, locations.shop_locations, items.items_hidden_from_shops)
 
 
 # Prevent high tier wands from appearing in early Holy Mountain shops
