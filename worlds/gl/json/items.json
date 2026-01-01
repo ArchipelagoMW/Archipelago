@@ -551,13 +551,13 @@
     "id": 77780087,
     "item_name": "Crossbow Shooter",
     "progression": 4,
-    "rom_id": "0x05030412"
+    "rom_id": "0x05030411"
   },
   {
     "id": 77780088,
     "item_name": "Bomb Thrower",
     "progression": 4,
-    "rom_id": "0x05030512"
+    "rom_id": "0x05030511"
   },
   {
     "id": 77780089,
