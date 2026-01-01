@@ -377,25 +377,30 @@ async def give_items(ctx: TWWContext) -> None:
 
         # Attempt to give the player the next item they have yet to receive.
         item = ctx.items_received[expected_idx]
-        item_name = LOOKUP_ID_TO_NAME[item.item]
-        item_id = ITEM_TABLE[item_name].item_id
-
-        if item_id is None:
-            logger.warning(f'Item "{item_name}" does not have an associated item ID!')
-
+        item_name = LOOKUP_ID_TO_NAME.get(item.item)
+        if item_name is None:
             # Skip ahead to the next item since we cannot give this one.
+            logger.warning(f"Received item with unknown item ID: {item.item}, skipping")
             write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
-        else:
-            # Special case: Use a different item ID for the second progressive magic meter.
-            if item_name == "Progressive Magic Meter":
-                if ctx.received_magic_idx == -1:
-                    ctx.received_magic_idx = expected_idx
-                elif expected_idx > ctx.received_magic_idx:
-                    item_id = 0xB2
+            return
 
-            # Attempt to give the item and increment the expected index.
-            if _try_give_item(ctx, item_id):
-                write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
+        item_id = ITEM_TABLE[item_name].item_id
+        if item_id is None:
+            # Skip ahead to the next item since we cannot give this one.
+            logger.warning(f"Received item with invalid item ID: {item_name}, skipping")
+            write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
+            return
+
+        # Special case: Use a different item ID for the second progressive magic meter.
+        if item_name == "Progressive Magic Meter":
+            if ctx.received_magic_idx == -1:
+                ctx.received_magic_idx = expected_idx
+            elif expected_idx > ctx.received_magic_idx:
+                item_id = 0xB2
+
+        # Attempt to give the item and increment the expected index.
+        if _try_give_item(ctx, item_id):
+            write_short(EXPECTED_INDEX_ADDR, expected_idx + 1)
 
 
 def check_special_location(location_name: str, data: TWWLocationData) -> bool:
