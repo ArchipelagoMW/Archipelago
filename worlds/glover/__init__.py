@@ -6,7 +6,7 @@ from typing import Any, Dict
 from BaseClasses import ItemClassification, Location, MultiWorld, Tutorial, Item, Region
 from Options import Accessibility, OptionError, OptionGroup
 from .MrTipText import generate_tip_table
-from .TrapText import create_trap_name_table, select_trap_item_name
+from .TrapText import static_trap_name_table, dynamic_trap_name_table, select_trap_item_name
 import settings
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, icon_paths, Type, launch_subprocess
@@ -357,7 +357,7 @@ class GloverWorld(World):
         self.mr_hints = {}
         self.chicken_hints = {}
         #Fake item names
-        self.fake_item_names = []
+        self.fake_item_names : list = static_trap_name_table()
 
         #Create null items for the table
         world_garib_table.update(construct_blank_world_garibs(self.world_prefixes, self.level_prefixes))
@@ -724,7 +724,7 @@ class GloverWorld(World):
         if not self.options.randomize_jump:
             self.multiworld.push_precollected(self.create_item("Jump"))
         #Create fake items
-        self.fake_item_names = create_trap_name_table(self)
+        self.fake_item_names.extend(dynamic_trap_name_table(self))
         #Create the Mr. Tip Table
         self.mr_tip_table : list[str] = generate_tip_table(self)
 

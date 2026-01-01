@@ -753,7 +753,7 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
                 #Enemy Garib Groups
                 if level_data[location_name][0]["TYPE"] == 10:
                     enemy_count = level_data[location_name][0]["COUNT"]
-                    if enemy_count < len(ap_ids):
+                    if enemy_count < len(ap_ids) and enemy_count > 1:
                         group_id : int = int(ap_ids[enemy_count], 0) + 10000
                         location_name_to_id[prefix + location_name.removesuffix("s") + " Garibs"] = group_id
             #Levels with garibs in them

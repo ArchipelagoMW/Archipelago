@@ -51,6 +51,8 @@ def select_trap_item_name(self, original_name : str) -> str:
             #The Blue Ninja
                 "TBN",
             #Hill Zone
+                "Chaotix Rail Canyon",
+            #Hill Zone
                 "GHZ",
             #Glitter Gulch
                 "GGM",
@@ -64,85 +66,15 @@ def select_trap_item_name(self, original_name : str) -> str:
                 "F0F",
                 "Otm",
                 ]
-            fake_name = self.random.choice(level_swaps) + fake_name[3:]
+            chosen_prefix = self.random.choice(level_swaps)
+            if len(chosen_prefix) > 3:
+                fake_name = self.random.choice(level_swaps) + fake_name[4:]
+            else:
+                fake_name = self.random.choice(level_swaps) + fake_name[3:]
     return fake_name
 
-def create_trap_name_table(self) -> list[str]:
-    trap_name_table = [
-        #Fake balls
-        "Basketball",
-        "Snow Ball",
-        "Tennis Ball",
-        "Disco Ball",
-        "Monkey Ball",
-        "Golf Ball",
-        "Dodgeball",
-        "Soccer Ball",
-        "Pebball",
-        "Football",
-        "Hockey Puck",
-        "Master Ball",
-        #Fake glover moves
-        "Triple Jump",
-        "Backflip",
-        #Fake Tools
-        "Golf Club",
-        "Tennis Racket",
-        "Curling Broom",
-        "Shovel",
-        "Lawnmower",
-        "Bus",
-        "Magic Wand",
-        #Fake ball moves
-        "Spin Ball",
-        "Flick Ball",
-        "Juggle",
-        #Funny
-        "Cross-Stitch",
-        "Free Wizard",
-        "Permission to Cheat",
-        "Running Boots",
-        "Trap (WOULD Be Funny)",
-        #Fake potions
-        "Awkward Potion",
-        "Strength Potion",
-        "Toad Potion",
-        "Invisibility Potion",
-        "Cauldron Potion",
-        "Mana Potion",
-        "Health Potion",
-        "Potion Bottle",
-        "Boornerang Ball Potion",
-        #Lotions
-        "Beachball Lotion",
-        "Death Lotion",
-        "Helicopter Lotion",
-        "Frog Lotion",
-        "Boomerang Ball Lotion",
-        "Speed Lotion",
-        "Sticky Lotion",
-        "Hercules Lotion",
-        #Fake Filler
-        "Line",
-        "Lice",
-        "Lime",
-        "Live",
-        "Like",
-        "Chicken Song",
-        #Things you already have
-        "Garib Counter",
-        "Lives Display",
-        "Roll Ball",
-        "Drop Ball",
-        "Ledge Sit",
-        "Transform Ball",
-        #Not Traps
-        "Not a Frog Trap",
-        "Not a Cursed Ball Trap",
-        "Not an Instant Crystal Trap",
-        "Not a Camera Rotate Trap",
-        "Not a Tip Trap"
-    ]
+def dynamic_trap_name_table(self) -> list[str]:
+    trap_name_table = []
     
     #Fake goal items
     if self.options.victory_condition.value != 2:
@@ -285,3 +217,80 @@ def create_trap_name_table(self) -> list[str]:
                     "Powerball"
                 ])
     return trap_name_table
+
+def static_trap_name_table() -> list[str]:
+    return [
+        #Fake balls
+        "Basketball",
+        "Snow Ball",
+        "Tennis Ball",
+        "Disco Ball",
+        "Monkey Ball",
+        "Golf Ball",
+        "Dodgeball",
+        "Soccer Ball",
+        "Pebball",
+        "Football",
+        "Hockey Puck",
+        "Master Ball",
+        #Fake glover moves
+        "Triple Jump",
+        "Backflip",
+        #Fake Tools
+        "Golf Club",
+        "Tennis Racket",
+        "Curling Broom",
+        "Shovel",
+        "Lawnmower",
+        "Bus",
+        "Magic Wand",
+        #Fake ball moves
+        "Spin Ball",
+        "Flick Ball",
+        "Juggle",
+        #Funny
+        "Cross-Stitch",
+        "Free Wizard",
+        "Permission to Cheat",
+        "Running Boots",
+        "Trap (WOULD Be Funny)",
+        #Fake potions
+        "Awkward Potion",
+        "Strength Potion",
+        "Toad Potion",
+        "Invisibility Potion",
+        "Cauldron Potion",
+        "Mana Potion",
+        "Health Potion",
+        "Potion Bottle",
+        "Boornerang Ball Potion",
+        #Lotions
+        "Beachball Lotion",
+        "Death Lotion",
+        "Helicopter Lotion",
+        "Frog Lotion",
+        "Boomerang Ball Lotion",
+        "Speed Lotion",
+        "Sticky Lotion",
+        "Hercules Lotion",
+        #Fake Filler
+        "Line",
+        "Lice",
+        "Lime",
+        "Live",
+        "Like",
+        "Chicken Song",
+        #Things you already have
+        "Garib Counter",
+        "Lives Display",
+        "Roll Ball",
+        "Drop Ball",
+        "Ledge Sit",
+        "Transform Ball",
+        #Not Traps
+        "Not a Frog Trap",
+        "Not a Cursed Ball Trap",
+        "Not an Instant Crystal Trap",
+        "Not a Camera Rotate Trap",
+        "Not a Tip Trap"
+    ]
