@@ -25,7 +25,7 @@ so the typical recommendation for first-time AP developers is:
 - Next, make a "trivial" APWorld, i.e. an APWorld that always generates the same items and locations
   - If you've never done this before, likely the fastest approach is to copy-paste [APQuest](<../worlds/apquest>), and read the many
     comments in there until you understand how to edit the items and locations.
-- Then you can do your first "end-to-end test": generate a multiworld using your APWorld, [run a local server](<webhost%20api.md>)
+- Then you can do your first "end-to-end test": generate a multiworld using your APWorld, [run a local server](<running%20from%20source.md>)
   to host it, connect to that local server from your game client, actually check a location in the game,
   and finally make sure the client successfully sent that location check to the AP server
   as well as received an item from it.
