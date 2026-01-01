@@ -235,10 +235,6 @@ class GloverWorld(World):
         #You've gotten a ball by beating the level in the 4th gate
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.add_item("Returned Balls", self.player)
-        #Progressive Events
-        if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
-            progressive_count = state.count(name, self.player)
-            state.add_item(name + " " + str(progressive_count), self.player)
         #Garib counting
         if not self.garibs_are_filler:
             if self.is_garib_item(name):
@@ -257,11 +253,6 @@ class GloverWorld(World):
         #You've gotten a ball by beating the level in the 4th gate
         if name.endswith("H Ball") and name.startswith(tuple(self.world_prefixes)) and item.code == None:
             state.remove_item("Returned Balls", self.player)
-        #Progressive Events
-        if name in ["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"]:
-            progressive_count = state.count(name, self.player)
-            state.remove_item(name + " " + str(progressive_count), self.player)
-            #state.remove(item)
         #Garib counting
         if not self.garibs_are_filler:
             if self.is_garib_item(name):
@@ -816,14 +807,20 @@ class GloverWorld(World):
                 item_classification = ItemClassification.trap
             case "Garib":
                 #If the garibs have no use, they're filler
-                if self.garibs_are_filler:
+                if self == None:
+                    #ItemLink Fallback
+                    item_classification = ItemClassification.progression_deprioritized_skip_balancing
+                elif self.garibs_are_filler:
                     item_classification = ItemClassification.filler
                 #If they're part of World Sorting logic, don't skip balancing for them
-                else: #if self.options.garib_sorting.value == 0:
+                else:
                     item_classification = ItemClassification.progression_deprioritized_skip_balancing
             case "Star":
                 #Star Marks are filler if you're on Intended
-                if self.options.difficulty_logic.value == 0:
+                if self == None:
+                    #ItemLink Fallback
+                    item_classification = ItemClassification.progression
+                elif self.options.difficulty_logic.value == 0:
                     item_classification = ItemClassification.filler
                 else:
                     item_classification = ItemClassification.progression

@@ -130,12 +130,20 @@ def access_methods_to_rules(self, all_methods, spot : Location | Entrance):
     nonblank_methods.sort(key=sort_access_method)
     #Otherwise, go over each valid method and assign
     for index, each_method in enumerate(nonblank_methods):
+        items_list = {}
+        for each_req in each_method.required_items:
+            if each_req.startswith(tuple(["Crn1 Rocket", "Pht3 Lower Monolith", "FoF1 Progressive Doorway", "FoF2 Progressive Gate"])):
+                prog_switch_name = each_req[:-2]
+                prog_switch_count = int(each_req[-1:])
+                items_list[prog_switch_name] = prog_switch_count
+            else:
+                items_list[each_req] = 1
         #Start with the rule set
         if index == 0:
-            set_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player))
+            set_rule(spot, lambda state, required_items = items_list : state.has_all(required_items, self.player))
             continue
         #Otherwise, this is an alternate method
-        add_rule(spot, lambda state, required_items = each_method.required_items : state.has_all(required_items, self.player), "or")
+        add_rule(spot, lambda state, required_items = items_list : state.has_all(required_items, self.player), "or")
 
 #Move all methods that require switches to the end of the list
 def sort_access_method(in_method):
