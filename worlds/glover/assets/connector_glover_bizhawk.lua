@@ -12211,8 +12211,7 @@ function GLOVERHACK:setCustomTipText(mrhints)
 end
 
 function GLOVERHACK:setFillerDuration(duration)
-	print(duration)
-	mainmemory.writebyte(self.trap_timer + GLOVERHACK:getSettingPointer(), 5);
+	mainmemory.writebyte(self.trap_timer + GLOVERHACK:getSettingPointer(), duration);
 end
 
 function GLOVERHACK:setCustomGaribSounds(garibsounds)
