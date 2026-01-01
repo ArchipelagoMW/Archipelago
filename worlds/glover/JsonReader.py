@@ -718,7 +718,7 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
     #Setup the location types here
     location_name_groups : dict = {}
     for each_type in location_type_lookup:
-        if each_type == "LOADING_ZONE":
+        if each_type == "LOADING_ZONE" or each_type == "REGION":
             continue
         group_name = each_type.title()
         location_name_groups[group_name] = []
@@ -780,25 +780,8 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
     for each_score in range(10000, 100000000, 10000):
         location_name_to_id[str(each_score) + " Score"] = 100000000 + each_score
         location_name_groups["Score"].append(str(each_score) + " Score")
-            #Crystal unlock locations (To reduce restrictive starts)
+    
     for each_crystal in range(1,8):
-        turn_in_name = "Ball Turn-In " + str(each_crystal)
-        location_name_to_id[turn_in_name] = 1945 + each_crystal
+        turn_in_name = "Crystal Cave: Ball Turn-In " + str(each_crystal)
         location_name_groups["Crystals"].append(turn_in_name)
     return [location_name_to_id, location_name_groups]
-
-    output : dict = {}
-    #Each World
-    for each_world_index, each_world in enumerate(logic_data):
-        world_prefix : str = create_world_prefix(world_prefixes, each_world_index)
-        for level_key, level_data in each_world.items():
-            level_prefix : str = create_level_prefix(level_prefixes, each_world_index, int(level_key[-1]))
-            prefix : str = world_prefix + level_prefix + ": "
-            for location_name in level_data:
-                #Not regions
-                if type(level_data[location_name]) is dict:
-                    continue
-                #Only locations remain
-                ap_ids : list[str] = level_data[location_name][0]["AP_IDS"]
-                ap_ids = non_blank_ap_ids(ap_ids)
-    return output

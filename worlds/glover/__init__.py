@@ -833,7 +833,7 @@ class GloverWorld(World):
         #    name_for_use = convert_extra_garibs(self)
         item_output : GloverItem = GloverItem(name_for_use, item_classification, item_id, self.player)
         #Rename traps on pedestals
-        if item_data.type == "Trap":
+        if item_data.type == "Trap" and self != None:
             fake_item_name = select_trap_item_name(self, name_for_use)
             item_output.fake_name = fake_item_name
         return item_output

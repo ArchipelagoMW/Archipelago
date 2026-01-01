@@ -535,7 +535,7 @@ garibsanity_world_table = {
 garbinsanity = ItemData(BASE_ID + 10001, 1496, "Garib", None)
 
 decoupled_garib_table = {
-	"1 Garib" : 								ItemData(BASE_ID + 10001, 42, "Garib", None),
+	"Garib" : 								ItemData(BASE_ID + 10001, 42, "Garib", None),
 	"2 Garibs" : 								ItemData(BASE_ID + 10002, 31, "Garib", None),
 	"3 Garibs" : 								ItemData(BASE_ID + 10003, 61, "Garib", None),
 	"4 Garibs" : 								ItemData(BASE_ID + 10004, 64, "Garib", None),
@@ -613,7 +613,7 @@ def convert_extra_garibs(self) -> ItemData:
 		#"Garibs" or "Garib"?
 		garib_name = " Garibs"
 		if extra_garibs_value == 1:
-			garib_name = " Garib"
+			return decoupled_garib_table["Garib"]
 		#Index to name
 		return decoupled_garib_table[str(extra_garibs_value) + garib_name]
 	#Level Garib Groups
