@@ -78,9 +78,13 @@ rac3_option_groups = [
         StartingWeapons,
         BoltAndXPMultiplier,
         EnableProgressiveWeapons,
-        ArmorUpgrade,
+        ArmorUpgrade
+    ]),
+    OptionGroup("Trap Options", [
         EnableTraps,
-        TrapWeight,
+        TrapWeight
+    ]),
+    OptionGroup("Location Options", [
         WeaponVendors,
         SkillPoints,
         Trophies,
@@ -88,12 +92,13 @@ rac3_option_groups = [
         Rangers,
         VidComics,
         VRChallenges,
-        Arena,
+        Arena
+    ]),
+    OptionGroup("Sanity Options", [
         SewerCrystals,
         SewerLimitation,
         NanotechMilestones,
         NanotechLimitation
-
     ]),
     OptionGroup("Cosmetic Options", [
         ShipNose,
