@@ -27,7 +27,6 @@ from worlds.rac3.options.trophies_options import Trophies
 from worlds.rac3.options.vidcomics_options import VidComics
 from worlds.rac3.options.vr_challenges_options import VRChallenges
 from worlds.rac3.options.weapon_vendors_options import WeaponVendors
-from worlds.tloz.Items import progression
 
 
 def create_option_groups() -> list[OptionGroup]:
@@ -67,13 +66,6 @@ class RaC3Options(PerGameCommonOptions):
     skin: RatchetSkin
 
 
-#rac3_option_groups: dict[str, list] = {
-    #"Game Options": [StartInventoryPool, StartingWeapons, BoltAndXPMultiplier, EnableProgressiveWeapons,
-    #                 ExtraArmorUpgrade, SkillPoints, Trophies, TitaniumBolts, NanotechMilestones, EnableTraps,
-    #                 TrapWeight, Rangers, Arena, VidComics, VRChallenges, SewerCrystals, SewerLimitation, NanotechLimitation, WeaponVendors],
-    #"Cosmetic Options": [ShipNose, ShipWings, ShipSkin, RatchetSkin],
-    #"Generic Options": [Deathlink, RAC3ExcludeLocations],
-#}
 rac3_option_groups = [
     OptionGroup("Generic Options", [
         ProgressionBalancing,
