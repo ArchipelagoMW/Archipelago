@@ -1,5 +1,7 @@
 import datetime
 import os
+import warnings
+from enum import StrEnum
 from typing import Any, IO, Dict, Iterator, List, Tuple, Union
 
 import jinja2.exceptions
@@ -13,11 +15,25 @@ from .markdown import render_markdown
 from .models import Seed, Room, Command, UUID, uuid4
 from Utils import title_sorted
 
+class WebWorldTheme(StrEnum):
+    DIRT = "dirt"
+    GRASS = "grass"
+    GRASS_FLOWERS = "grassFlowers"
+    ICE = "ice"
+    JUNGLE = "jungle"
+    OCEAN = "ocean"
+    PARTY_TIME = "partyTime"
+    STONE = "stone"
 
 def get_world_theme(game_name: str) -> str:
-    if game_name in AutoWorldRegister.world_types:
-        return AutoWorldRegister.world_types[game_name].web.theme
-    return 'grass'
+    if game_name not in AutoWorldRegister.world_types:
+        return "grass"
+    chosen_theme = AutoWorldRegister.world_types[game_name].web.theme
+    available_themes = [theme.value for theme in WebWorldTheme]
+    if chosen_theme not in available_themes:
+        warnings.warn(f"Theme '{chosen_theme}' for {game_name} not valid, switching to default 'grass' theme.")
+        return "grass"
+    return chosen_theme
 
 
 def get_visible_worlds() -> dict[str, type(World)]:
