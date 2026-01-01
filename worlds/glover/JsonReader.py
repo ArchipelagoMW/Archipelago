@@ -782,6 +782,6 @@ def generate_location_information(world_prefixes : list[str], level_prefixes : l
         location_name_groups["Score"].append(str(each_score) + " Score")
     
     for each_crystal in range(1,8):
-        turn_in_name = "Crystal Cave: Ball Turn-In " + str(each_crystal)
+        turn_in_name = "Castle Cave: Ball Turn-In " + str(each_crystal)
         location_name_groups["Crystals"].append(turn_in_name)
     return [location_name_to_id, location_name_groups]

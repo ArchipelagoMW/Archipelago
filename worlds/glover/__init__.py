@@ -237,7 +237,7 @@ class GloverWorld(World):
             state.add_item("Returned Balls", self.player)
         #Garib counting
         if not self.garibs_are_filler:
-            if self.is_garib_item(name):
+            if self.is_garib_item(name, False):
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.add_item("Total Garibs", self.player, garibs_number)
@@ -255,19 +255,21 @@ class GloverWorld(World):
             state.remove_item("Returned Balls", self.player)
         #Garib counting
         if not self.garibs_are_filler:
-            if self.is_garib_item(name):
+            if self.is_garib_item(name, False):
                 garibs_number : int = self.get_garib_group_size(name)
                 if garibs_number >= 0:
                     state.remove_item("Total Garibs", self.player, garibs_number)
         return output
 
-    def is_garib_item(self, name : str):
+    def is_garib_item(self, name : str, include_level_locked : bool = True):
+        if not include_level_locked and (name.count(" ") >= 2):
+            return False
         return name.endswith("Garib") or name.endswith("Garibs") and name != "Golden Garib" and name != "Locate Garibs"
 
     def get_garib_group_size(self, garibName : str):
         if garibName == "Garib":
             return 1
-        nameDigit : str = garibName.removesuffix(" Garib").removesuffix(" Garibs")[-2:].removeprefix(" ")
+        nameDigit : str = garibName.removesuffix("s").removesuffix(" Garib")[-2:].removeprefix(" ")
         if nameDigit.isdigit():
             return int(nameDigit)
         return -1
@@ -359,6 +361,9 @@ class GloverWorld(World):
 
         #Create null items for the table
         world_garib_table.update(construct_blank_world_garibs(self.world_prefixes, self.level_prefixes))
+
+        #Garibs are Filler
+        self.garibs_are_filler = False
 
         super(GloverWorld, self).__init__(world, player)
 
