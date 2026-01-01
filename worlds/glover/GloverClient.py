@@ -104,7 +104,7 @@ def patch_rom(rom_path, dst_path, patch_path):
       swapped[i+1] = rom[i]
     rom = bytes(swapped)
   elif md5 != "87aa5740dff79291ee97832da1f86205":
-    logger.error(f"Unknown ROM! Please use /patch or restart the {game_name} Client to try again.")
+    logger.error(f"Unknown ROM! Please use /patch or restart the Glover Client to try again.")
     return False
   with open_world_file(patch_path) as f:
     patch = f.read()
