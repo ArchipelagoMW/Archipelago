@@ -413,7 +413,7 @@ class PokemonRedBlueWorld(World):
         verify_hm_moves(self.multiworld, self, self.player)
 
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
-        # fail. Re-use test_state from previous final loop.
+        # fail.
         all_state = self.multiworld.get_all_state(False, True, False)
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
         for location in evolutions_region.locations.copy():
