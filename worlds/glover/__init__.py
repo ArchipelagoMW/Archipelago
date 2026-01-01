@@ -367,6 +367,7 @@ class GloverWorld(World):
         
         #Filler Item Counts
         self.filler_item_counts : dict[str, int] = {}
+        self.filler_percent_table : dict[str, float] = {}
 
         super(GloverWorld, self).__init__(world, player)
 
@@ -976,7 +977,7 @@ class GloverWorld(World):
                 trap_percentages[each_trap] *= trap_percentage
         
         #Create the percentage table for calculation
-        self.filler_percent_table : dict[str, float] = {**filler_percentages, **trap_percentages}
+        self.filler_percent_table = {**filler_percentages, **trap_percentages}
         #Trim 0 entries
         self.filler_percent_table = {key:val for key, val in self.filler_percent_table.items() if val > 0}
         
