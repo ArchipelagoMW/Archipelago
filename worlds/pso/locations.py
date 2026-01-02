@@ -43,56 +43,56 @@ class PSOLocationData(NamedTuple):
 
 LOCATION_TABLE: dict[str, PSOLocationData] = {
     "Tyrell Intro": PSOLocationData(
-        1, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 4)
+        1, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 4)
     ),
     "Irene 1": PSOLocationData(
-        2, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 3)
+        2, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 3)
     ),
     "Scientist 1 - Behind Desk": PSOLocationData(
-        3, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 2)
+        3, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 2)
     ),
     "Scientist 2": PSOLocationData(
-        4, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 1)
+        4, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127F9, 1)
     ),
     "Irene 2": PSOLocationData(
-        5, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 7)
+        5, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 7)
     ),
     "Red Ring Rico Message 1": PSOLocationData(
-        6, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 6)
+        6, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FA, 6)
     ),
     "Enter Forest 1": PSOLocationData(
-        7, RegionName.forest_1, PSOLocationType.ITEM, PSORamData(0x805127FA, 3)
+        7, RegionName.FOREST_1, PSOLocationType.ITEM, PSORamData(0x805127FA, 3)
     ),
     "Defeat Dragon": PSOLocationData(
-        8, RegionName.forest_boss, PSOLocationType.ITEM, PSORamData(0x805127FA, 0)
+        8, RegionName.DRAGON, PSOLocationType.ITEM, PSORamData(0x805127FA, 0)
     ),
     "Unlock Caves": PSOLocationData(
-        9, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 7)
+        9, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 7)
     ),
     "Scientist 1 - After Dragon": PSOLocationData(
-        10, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 6)
+        10, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FB, 6)
     ),
     "Defeat De Rol Le": PSOLocationData(
-        11, RegionName.caves_boss, PSOLocationType.ITEM, PSORamData(0x805127FC, 7)
+        11, RegionName.DE_ROL_LE, PSOLocationType.ITEM, PSORamData(0x805127FC, 7)
     ),
     "Unlock Mines": PSOLocationData(
-        12, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FC, 6)
+        12, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FC, 6)
     ),
     "Defeat Vol Opt": PSOLocationData(
-        13, RegionName.mines_boss, PSOLocationType.ITEM, PSORamData(0x805127FD, 5)
+        13, RegionName.VOL_OPT, PSOLocationType.ITEM, PSORamData(0x805127FD, 5)
     ),
     "Unlock Ruins": PSOLocationData(
-        14, RegionName.pioneer_2, PSOLocationType.ITEM, PSORamData(0x805127FE, 7)
+        14, RegionName.PIONEER_2, PSOLocationType.ITEM, PSORamData(0x805127FE, 7)
     ),
 
     "Forest 2 Pillar": PSOLocationData(
-        20, RegionName.forest_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 3)
+        20, RegionName.FOREST_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 3)
     ),
     "Caves 2 Pillar": PSOLocationData(
-        21, RegionName.caves_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 2)
+        21, RegionName.CAVES_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 2)
     ),
     "Mines 2 Pillar": PSOLocationData(
-        22, RegionName.mines_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 1)
+        22, RegionName.MINES_2, PSOLocationType.ITEM, PSORamData(0x805127FD, 1)
     ),
 
     # "First Forest Drop": PSOLocationData(
@@ -101,7 +101,7 @@ LOCATION_TABLE: dict[str, PSOLocationData] = {
 
     # TODO: Get actual data for this check
     "Defeat Dark Falz": PSOLocationData(
-        None, RegionName.dark_falz, PSOLocationType.EVENT, PSORamData(0xFFFFFFFF)
+        None, RegionName.DARK_FALZ, PSOLocationType.EVENT, PSORamData(0xFFFFFFFF)
     )
 }
 

@@ -46,28 +46,28 @@ class PSOItem(Item):
 
 # We comment out the boss unlocks for now to keep the checks low while we figure stuff out
 ITEM_TABLE: dict[str, PSOItemData] = {
-    ItemName.unlock_forest_1:     PSOItemData(PSOItemType.AREA,     IC.progression,                   1),
-    ItemName.unlock_forest_2:     PSOItemData(PSOItemType.AREA,     IC.progression,                   2),
-    ItemName.unlock_dragon:       PSOItemData(PSOItemType.AREA,     IC.progression,                   3),
-    ItemName.unlock_caves_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   4),
-    ItemName.unlock_caves_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   5),
-    ItemName.unlock_caves_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                   6),
-    ItemName.unlock_de_rol_le:    PSOItemData(PSOItemType.AREA,     IC.progression,                   7),
-    ItemName.unlock_mines_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                   8),
-    ItemName.unlock_mines_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                   9),
-    ItemName.unlock_vol_opt:      PSOItemData(PSOItemType.AREA,     IC.progression,                  10),
-    ItemName.unlock_ruins_1:      PSOItemData(PSOItemType.AREA,     IC.progression,                  11),
-    ItemName.unlock_ruins_2:      PSOItemData(PSOItemType.AREA,     IC.progression,                  12),
-    ItemName.unlock_ruins_3:      PSOItemData(PSOItemType.AREA,     IC.progression,                  13),
-    ItemName.unlock_dark_falz:    PSOItemData(PSOItemType.AREA,     IC.progression,                  14),
+    ItemName.UNLOCK_FOREST_1:     PSOItemData(PSOItemType.AREA, IC.progression, 1),
+    ItemName.UNLOCK_FOREST_2:     PSOItemData(PSOItemType.AREA, IC.progression, 2),
+    ItemName.UNLOCK_DRAGON:       PSOItemData(PSOItemType.AREA, IC.progression, 3),
+    ItemName.UNLOCK_CAVES_1:      PSOItemData(PSOItemType.AREA, IC.progression, 4),
+    ItemName.UNLOCK_CAVES_2:      PSOItemData(PSOItemType.AREA, IC.progression, 5),
+    ItemName.UNLOCK_CAVES_3:      PSOItemData(PSOItemType.AREA, IC.progression, 6),
+    ItemName.UNLOCK_DE_ROL_LE:    PSOItemData(PSOItemType.AREA, IC.progression, 7),
+    ItemName.UNLOCK_MINES_1:      PSOItemData(PSOItemType.AREA, IC.progression, 8),
+    ItemName.UNLOCK_MINES_2:      PSOItemData(PSOItemType.AREA, IC.progression, 9),
+    ItemName.UNLOCK_VOL_OPT:      PSOItemData(PSOItemType.AREA, IC.progression, 10),
+    ItemName.UNLOCK_RUINS_1:      PSOItemData(PSOItemType.AREA, IC.progression, 11),
+    ItemName.UNLOCK_RUINS_2:      PSOItemData(PSOItemType.AREA, IC.progression, 12),
+    ItemName.UNLOCK_RUINS_3:      PSOItemData(PSOItemType.AREA, IC.progression, 13),
+    ItemName.UNLOCK_DARK_FALZ:    PSOItemData(PSOItemType.AREA, IC.progression, 14),
 
-    ItemName.forest_pillar:       PSOItemData(PSOItemType.SWITCH,   IC.progression,                  15),
-    ItemName.caves_pillar:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  16),
-    ItemName.mines_pillar:        PSOItemData(PSOItemType.SWITCH,   IC.progression,                  17),
+    ItemName.FOREST_PILLAR:       PSOItemData(PSOItemType.SWITCH, IC.progression, 15),
+    ItemName.CAVES_PILLAR:        PSOItemData(PSOItemType.SWITCH, IC.progression, 16),
+    ItemName.MINES_PILLAR:        PSOItemData(PSOItemType.SWITCH, IC.progression, 17),
 
     "Lavis Blade":                PSOItemData(PSOItemType.WEAPON,   IC.filler | IC.useful,           18),
 
-    ItemName.victory:             PSOItemData(PSOItemType.EVENT,    IC.progression,                None),
+    ItemName.VICTORY:             PSOItemData(PSOItemType.EVENT, IC.progression, None),
 }
 
 
@@ -121,7 +121,7 @@ def create_all_items(world: PSOWorld) -> None:
     # This way we don't end up having too many items and not enough places to put them
     for name in progression_item_names:
         # Keep the Victory item out of the drop pool, otherwise things might get wonky
-        if name == ItemName.victory:
+        if name == ItemName.VICTORY:
             continue
         itempool.append(world.create_item(name))
 

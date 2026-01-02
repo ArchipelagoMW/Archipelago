@@ -3,39 +3,39 @@ class Region:
     Store string information for all regions
     """
 
-    pioneer_2 = "Pioneer 2"
-    forest_1 = "Forest 1"
-    forest_2 = "Forest 2"
-    forest_boss = "Forest Boss"
-    caves_1 = "Caves 1"
-    caves_2 = "Caves 2"
-    caves_3 = "Caves 3"
-    caves_boss = "Caves Boss"
-    mines_1 = "Mines 1"
-    mines_2 = "Mines 2"
-    mines_boss = "Mines Boss"
-    ruins_entrance = "Ruins Entrance"
-    ruins_1 = "Ruins 1"
-    ruins_2 = "Ruins 2"
-    ruins_3 = "Ruins 3"
-    dark_falz = "Dark Falz"
+    PIONEER_2 = "Pioneer 2"
+    FOREST_1 = "Forest 1"
+    FOREST_2 = "Forest 2"
+    DRAGON = "The Dragon"
+    CAVES_1 = "Caves 1"
+    CAVES_2 = "Caves 2"
+    CAVES_3 = "Caves 3"
+    DE_ROL_LE = "De Rol Le"
+    MINES_1 = "Mines 1"
+    MINES_2 = "Mines 2"
+    VOL_OPT = "Vol Opt"
+    RUINS_ENTRANCE = "Ruins Entrance"
+    RUINS_1 = "Ruins 1"
+    RUINS_2 = "Ruins 2"
+    RUINS_3 = "Ruins 3"
+    DARK_FALZ = "Dark Falz"
 
     def all_regions(self) -> list[str]:
         return [
-            self.pioneer_2,
-            self.forest_1,
-            self.forest_2,
-            self.forest_boss,
-            self.caves_1,
-            self.caves_2,
-            self.caves_3,
-            self.caves_boss,
-            self.mines_1,
-            self.mines_2,
-            self.mines_boss,
-            self.ruins_entrance,
-            self.ruins_1,
-            self.ruins_2,
-            self.ruins_3,
-            self.dark_falz
+            self.PIONEER_2,
+            self.FOREST_1,
+            self.FOREST_2,
+            self.DRAGON,
+            self.CAVES_1,
+            self.CAVES_2,
+            self.CAVES_3,
+            self.DE_ROL_LE,
+            self.MINES_1,
+            self.MINES_2,
+            self.VOL_OPT,
+            self.RUINS_ENTRANCE,
+            self.RUINS_1,
+            self.RUINS_2,
+            self.RUINS_3,
+            self.DARK_FALZ
         ]
