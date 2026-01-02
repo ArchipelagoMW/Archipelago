@@ -8,7 +8,7 @@ import yaml
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
-from BaseClasses import MultiWorld, Region, Tutorial
+from BaseClasses import MultiWorld, Region, Tutorial, Entrance
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 from worlds.Files import APPlayerContainer
@@ -118,12 +118,15 @@ class TWWWorld(World):
 
     options_dataclass = TWWOptions
     options: TWWOptions
+    disconnected_entrances: dict[Entrance, Region]
+    entrance_to_region: dict[Entrance, Region]
 
     game: ClassVar[str] = "The Wind Waker"
     topology_present: bool = True
 
     ut_can_gen_without_yaml = True
     glitches_item_name = "Glitched" # TODO: Enum this.
+
 
     item_name_to_id: ClassVar[dict[str, int]] = {
         name: TWWItem.get_apid(data.code) for name, data in ITEM_TABLE.items() if data.code is not None
@@ -139,6 +142,69 @@ class TWWWorld(World):
     web: ClassVar[TWWWeb] = TWWWeb()
 
     origin_region_name: str = "The Great Sea"
+
+    # Mapping from game stage names (from memory) to region/exit names
+    # This is used for deferred entrance tracking - when the client sends a visited stage,
+    # we can map it to the corresponding entrance exit using this mapping.
+    # Based on stage names from https://github.com/LagoLunatic/wwrando/blob/master/data/stage_names.txt
+    stage_name_to_exit: ClassVar[dict[str, str]] = {
+        # The Great Sea and related areas
+        "sea": "The Great Sea",
+        "Abesso": "Cabana Interior",
+        "Adanmae": "Dragon Roost Cavern",
+        "A_mori": "Outset Island Fairy Woods",
+        "Cave01": "Bomb Island Secret Cave",
+        "Cave02": "Star Island Secret Cave",
+        "Cave03": "Cliff Plateau Isles Secret Cave",
+        "Cave04": "Rock Spire Isle Secret Cave",
+        "Cave05": "Horseshoe Island Secret Cave",
+        "Cave07": "Pawprint Isle Wizzrobe Cave",
+        "Cave09": "Savage Labyrinth",
+        "Cave10": "Savage Labyrinth",
+        "Cave11": "Savage Labyrinth",
+        "Edaichi": "Earth Temple Entrance",
+        "Ekaze": "Wind Temple Entrance",
+        "Fairy01": "Northern Fairy Fountain",
+        "Fairy02": "Eastern Fairy Fountain",
+        "Fairy03": "Western Fairy Fountain",
+        "Fairy04": "Outset Fairy Fountain",
+        "Fairy05": "Thorned Fairy Fountain",
+        "Fairy06": "Southern Fairy Fountain",
+        "ITest62": "Ice Ring Isle Inner Cave",
+        "ITest63": "Shark Island Secret Cave",
+        "kenroom": "Master Sword Chamber",
+        "MiniHyo": "Ice Ring Isle Secret Cave",
+        "MiniKaz": "Fire Mountain Secret Cave",
+        "SubD42": "Needle Rock Isle Secret Cave",
+        "SubD43": "Angular Isles Secret Cave",
+        "SubD71": "Boating Course Secret Cave",
+        "TF_01": "Stone Watcher Island Secret Cave",
+        "TF_02": "Overlook Island Secret Cave",
+        "TF_03": "Bird's Peak Rock Secret Cave",
+        "TF_04": "Cabana Labyrinth",
+        "TF_06": "Dragon Roost Island Secret Cave",
+        "TyuTyu": "Pawprint Isle Chuchu Cave",
+        "WarpD": "Diamond Steppe Island Warp Maze Cave",
+        "CliPlaH": "Cliff Plateau Isles Inner Cave",
+        # Dungeon stages
+        "M_Dra09": "Dragon Roost Cavern Miniboss Arena",
+        "M_DragB": "Gohma Boss Arena",
+        "M_NewD2": "Dragon Roost Cavern",
+        "kinBOSS": "Kalle Demos Boss Arena",
+        "kindan": "Forbidden Woods",
+        "kinMB": "Forbidden Woods Miniboss Arena",
+        "Siren": "Tower of the Gods",
+        "SirenB": "Gohdan Boss Arena",
+        "SirenMB": "Tower of the Gods Miniboss Arena",
+        "M2tower": "Helmaroc King Boss Arena",
+        "ma2room": "Forsaken Fortress",
+        "M_Dai": "Earth Temple",
+        "M_DaiB": "Jalhalla Boss Arena",
+        "M_DaiMB": "Earth Temple Miniboss Arena",
+        "kaze": "Wind Temple",
+        "kazeB": "Molgera Boss Arena",
+        "kazeMB": "Wind Temple Miniboss Arena",
+    }
 
     create_items = generate_itempool
 
@@ -167,6 +233,9 @@ class TWWWorld(World):
 
         self.useful_pool: list[str] = []
         self.filler_pool: list[str] = []
+
+        self.disconnected_entrances: dict[Entrance, Region] = {}
+        self.entrance_to_region: dict[Entrance, Region] = {}
 
         self.charts = ChartRandomizer(self)
         self.entrances = EntranceRandomizer(self)
@@ -439,6 +508,61 @@ class TWWWorld(World):
         # Set additional rules on dungeon locations as necessary.
         modify_dungeon_location_rules(multiworld)
 
+    def connect_entrances(self) -> None:
+        """
+        Connect entrances with deferred entrance support for Universal Tracker.
+
+        During UT generation with enforce_deferred_connections enabled, entrances
+        are disconnected so they're not revealed until the player visits regions.
+        """
+        # Check if we're in UT generation with deferred connections enabled
+        if (hasattr(self.multiworld, "generation_is_fake") and
+            hasattr(self.multiworld, "enforce_deferred_connections") and
+            self.multiworld.enforce_deferred_connections in ("on", "default") and
+            self._is_any_entrance_randomized()):
+            self._disconnect_entrances()
+
+    def _is_any_entrance_randomized(self) -> bool:
+        """
+        Check if any of the entrance randomization options are enabled.
+
+        :return: True if any entrance randomization option is enabled, False otherwise.
+        """
+        options = self.options
+        return (
+            options.randomize_dungeon_entrances
+            or options.randomize_secret_cave_entrances
+            or options.randomize_miniboss_entrances
+            or options.randomize_boss_entrances
+            or options.randomize_secret_cave_inner_entrances
+            or options.randomize_fairy_fountain_entrances
+        )
+
+    def _disconnect_entrances(self) -> None:
+        """
+        Disconnect all randomized entrances to enable deferred spoilers.
+
+        When entrances are disconnected, PopTracker will show them as hidden (???)
+        until the player actually visits the destination region in-game. The client
+        will send stage visit information via datastorage, which PopTracker scripts
+        can use to reveal entrances.
+        """
+        self.disconnected_entrances = {}
+        self.entrance_to_region = {}
+
+        # Build a set of randomized entrance names
+        randomized_entrance_names = {zone_entrance.entrance_name
+                                     for zone_entrance in self.entrances.done_entrances_to_exits.keys()}
+
+        # Disconnect matching entrances and store mappings
+        for entrance in self.get_entrances():
+            if entrance.connected_region and any(entrance.name.startswith(ent_name)
+                                                   for ent_name in randomized_entrance_names):
+                original_region = entrance.connected_region
+                self.disconnected_entrances[entrance] = original_region
+                self.entrance_to_region[entrance] = original_region
+                entrance.connected_region = None
+
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
         """
@@ -610,6 +734,18 @@ class TWWWorld(World):
             for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items()
         }
         slot_data["entrances"] = entrances
+
+        # If entrances are disconnected for deferred spoilers, include the mapping
+        # so the client/tracker can reconnect them when regions are visited
+        if self.disconnected_entrances:
+            # Build a mapping of entrance names to their original destination regions
+            deferred_entrances = {
+                entrance.name: region.name
+                for entrance, region in self.entrance_to_region.items()
+            }
+            slot_data["deferred_entrances"] = deferred_entrances
+            # Include the stage name to exit mapping so PopTracker can map visited stages to entrances
+            slot_data["stage_name_to_exit"] = self.stage_name_to_exit
 
         return slot_data
 
