@@ -646,6 +646,50 @@ class OpenRCT2World(World):
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f'Starting Ride:       {self.starting_ride}\n')
 
+        # Writes the Unlock Shop to the Spoiler Log
+        spoiler_handle.write("___________________Unlock Shop___________________\n")
+        for location, shop_item in enumerate(self.location_prices):
+            # Place correct color in the shop
+            if location < 8:
+                branch_name = f"White_{location}"
+            else:
+                color_map = {
+                    0: "Black",
+                    1: "Green",
+                    2: "Blue",
+                    3: "Yellow",
+                    4: "Gold",
+                    5: "Silver",
+                    6: "Celadon",
+                    7: "Pink",
+                }
+                color = color_map[location % 8]
+                branch_name = f"{color}_{math.floor(location/8 - 1)}"
+                # Add the prereqs if there are any
+            if shop_item["RidePrereq"]:
+                prerequisites = str(shop_item["RidePrereq"][0]) + " "
+                if shop_item["RidePrereq"][1] in item_info["Rides"]:
+                    prerequisites += shop_item["RidePrereq"][1] + "(s)"
+                else:
+                    if shop_item["RidePrereq"][1] == "rollercoaster":
+                        prerequisites += "Roller Coaster(s)"
+                    else: 
+                        prerequisites += shop_item["RidePrereq"][1].capitalize() + " Ride(s)"
+                if shop_item["RidePrereq"][2] > 0:
+                    prerequisites += f"(>{shop_item["RidePrereq"][2]} Excitement)"
+                if shop_item["RidePrereq"][3] > 0:
+                    prerequisites += f"(>{shop_item["RidePrereq"][3]} Intensity)"
+                if shop_item["RidePrereq"][4] > 0:
+                    prerequisites += f"(>{shop_item["RidePrereq"][4]} Nausea)"
+                if shop_item["RidePrereq"][5] > 0:
+                    prerequisites += f"(>{shop_item["RidePrereq"][5]} Meters)"
+                if shop_item["RidePrereq"][6] > 0:
+                    prerequisites += f"(>{shop_item["RidePrereq"][6]} Total Guests Combined)"
+            else:
+                prerequisites = "None!"
+            spoiler_handle.write(branch_name + f" | Price:{shop_item["Price"]} | Lives:{shop_item["Lives"]} | Prerequisites:{prerequisites}\n")
+            
+
     def fill_slot_data(self):
         # Sets up the objectives for the player, as determined in the YAML
         guests = self.options.guest_objective.value
