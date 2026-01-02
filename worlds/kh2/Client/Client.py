@@ -19,6 +19,7 @@ from .WorldLocations import *
 from worlds.kh2 import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, \
     SupportAbility_Table, ActionAbility_Table, all_weapon_slot, Summon_Checks, popups_set
 from worlds.kh2.Names import ItemName
+from .SendChecks import finishedGame
 
 
 class KH2Context(CommonContext):
@@ -94,8 +95,13 @@ class KH2Context(CommonContext):
                     # this is what is effectively doing on
                     # self.client_settings = default
 
-        # hooked object
-        self.kh2 = None
+        self.final_xemnas_defeated = False
+        self.proof_of_nonexistence = False
+        self.proof_of_connection = False
+        self.proof_of_peace = False
+        self.give_proofs = False
+        self.lucky_emblems = 0
+        self.bounties = set()
         self.worldid_to_locations = {
             #  1:   {},  # world of darkness (story cutscenes)
             2:  TT_Checks,
@@ -180,6 +186,13 @@ class KH2Context(CommonContext):
         self.checked_chests.clear()
         self.world_locations_checked.clear()
         self.keyblade_ability_checked.clear()
+        self.bounties.clear()
+        self.final_xemnas_defeated = False
+        self.proof_of_nonexistence = False
+        self.proof_of_connection = False
+        self.proof_of_peace = False
+        self.give_proofs = False
+        self.lucky_emblems = 0
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(self.kh2_seed_save_path_join, "w") as f:
                 f.write(json.dumps(self.kh2_seed_save, indent=4))
@@ -286,9 +299,27 @@ class KH2Context(CommonContext):
                         converted_items.append(msg_to_send)
                         self.received_items_IDs.append(msg_to_send)
                 else:
+                    if name == "Bounty" and item.location < 0:
+                        index += 1
+                        continue
                     msg_to_send = [str(item_to_send.kh2id), "false", str(index)]
                     converted_items.append(msg_to_send)
                     self.received_items_IDs.append(msg_to_send)
+
+                    if not self.kh2_finished_game:
+                        goal = self.kh2slotdata['Goal']
+                        if goal == 0:
+                            match name:
+                                case "Proof of Nonexistence":
+                                    self.proof_of_nonexistence = True
+                                case "Proof of Connection":
+                                    self.proof_of_connection = True
+                                case "Proof of Peace":
+                                    self.proof_of_peace = True
+                        elif goal in (1, 3) and name == "Lucky Emblem":
+                            self.lucky_emblems += 1
+                        elif goal in (2, 3) and name == "Bounty":
+                            self.bounties.add(item.location)
                 index += 1
             if self.kh2connectionconfirmed:
                 #sleep so we can get the datapackage and not miss any items that were sent to us while we didnt have our item id dicts
@@ -454,13 +485,6 @@ class KH2Context(CommonContext):
                 return
 
             print("sending slot data")
-            if self.kh2slotdata["BountyBosses"]:
-                for location in self.kh2slotdata["BountyBosses"]:
-                    self.socket.send(MessageType.BountyList, [location])
-            self.socket.send_slot_data("Final Xemnas;" + str(self.kh2slotdata["FinalXemnas"]))
-            self.socket.send_slot_data("Goal;" +str(self.kh2slotdata["Goal"]))
-            self.socket.send_slot_data("LuckyEmblemsRequired;" + str(self.kh2slotdata["LuckyEmblemsRequired"]))
-            self.socket.send_slot_data("BountyRequired;" + str(self.kh2slotdata["BountyRequired"]))
             self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
             self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
             self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
@@ -495,8 +519,9 @@ async def kh2_watcher(ctx: KH2Context):
                 if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
                     await ctx.update_death_link(ctx.deathlink_toggle)
 
-                if ctx.kh2_finished_game:
+                if finishedGame(ctx) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+                    ctx.kh2_finished_game = True
 
                 if ctx.sending:
                     ctx.sending = list(await ctx.check_locations(ctx.sending))

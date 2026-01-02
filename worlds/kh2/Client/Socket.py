@@ -25,8 +25,9 @@ class MessageType(IntEnum):
     ChestsOpened = 10
     ReceiveItem = 11
     RequestAllItems = 12
-    Handshake = 13
-    Victory = 19
+    GiveProofs = 17
+    FinalXemnasDefeated = 18
+    Handshake = 19
     Closed = 20
 
 class KH2Socket:
@@ -166,12 +167,11 @@ class KH2Socket:
         elif msg_type == MessageType.SoldItems:
             self.client.kh2_seed_save["SoldEquipment"][message[1]] = message[2]
 
-        elif msg_type == MessageType.Victory:
-            self.client.kh2_finished_game = True
-            self.send(MessageType.Victory, ["Victory Received"])
-
         elif msg_type == MessageType.RequestAllItems:
             self.client.get_items()
+
+        elif msg_type == MessageType.FinalXemnasDefeated:
+            self.client.final_xemnas_defeated = True
 
         elif msg_type == MessageType.Handshake:
             self.client.kh2connectionconfirmed = True

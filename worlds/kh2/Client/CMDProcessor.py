@@ -13,10 +13,6 @@ class KH2CommandProcessor(ClientCommandProcessor):
     ctx: KH2Context
     VALID_NOTIF_TYPES = {"puzzle", "info", "chest", "none"}
 
-    def _cmd_test(self, msg: str = ""):
-        """test"""
-        self.ctx.socket.send(MessageType.Test,[str(msg)])
-
     def _cmd_receive_notif(self, notification_type: str = ""):
         """Change receive notification type.Valid Inputs:Puzzle, Info, Chest and None
         Puzzle: Puzzle Piece Popup when you receive an item.
@@ -73,13 +69,12 @@ class KH2CommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
         if self.ctx.deathlink_toggle:
-            # self.ctx.tags.add("DeathLink")
             self.ctx.deathlink_toggle = False
             self.output(f"Death Link turned off")
         else:
             self.ctx.deathlink_toggle = True
             self.output(f"Death Link turned on")
-        self.ctx.socket.send(6,[str(self.ctx.deathlink_toggle)])
+        self.ctx.socket.send(MessageType.Deathlink,[str(self.ctx.deathlink_toggle)])
 
     def _cmd_add_to_blacklist(self, player_name: str = ""):
         """Adds player to deathlink blacklist"""
@@ -93,4 +88,4 @@ class KH2CommandProcessor(ClientCommandProcessor):
 
     #def _cmd_kill(self):
     #    """Test deathlink"""
-    #    self.ctx.socket.send(6,())
+    #    self.ctx.socket.send(MessageType.Deathlink,())
