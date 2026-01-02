@@ -267,6 +267,8 @@ ITEM_TABLE: dict[str, TWWItemData] = {
     "WT Compass":                TWWItemData("Compass",   IC.filler,                     153,  1, 0x85),
 
     "Victory":                   TWWItemData("Event",     IC.progression,               None,  1, None),
+    # Intentionally place the glitched item without a value, and keep this at the bottom.
+    "Glitched":                  TWWItemData("Event",     IC.progression,               None,  1, None),
 }
 
 ISLAND_NUMBER_TO_CHART_NAME = {

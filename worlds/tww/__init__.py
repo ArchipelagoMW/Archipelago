@@ -121,6 +121,9 @@ class TWWWorld(World):
     game: ClassVar[str] = "The Wind Waker"
     topology_present: bool = True
 
+    ut_can_gen_without_yaml = False # TODO: Replace this.
+    glitches_item_name = "Glitched" # TODO: Enum this.
+
     item_name_to_id: ClassVar[dict[str, int]] = {
         name: TWWItem.get_apid(data.code) for name, data in ITEM_TABLE.items() if data.code is not None
     }
