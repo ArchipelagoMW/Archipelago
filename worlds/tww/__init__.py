@@ -121,7 +121,7 @@ class TWWWorld(World):
     game: ClassVar[str] = "The Wind Waker"
     topology_present: bool = True
 
-    ut_can_gen_without_yaml = False # TODO: Replace this.
+    ut_can_gen_without_yaml = True
     glitches_item_name = "Glitched" # TODO: Enum this.
 
     item_name_to_id: ClassVar[dict[str, int]] = {
@@ -606,4 +606,9 @@ class TWWWorld(World):
         }
         slot_data["entrances"] = entrances
 
+        return slot_data
+
+    @staticmethod
+    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
+        # Trigger a regen in UT
         return slot_data
