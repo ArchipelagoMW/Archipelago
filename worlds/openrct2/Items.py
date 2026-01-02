@@ -63,6 +63,9 @@ def set_openRCT2_items(world):
     for each in range(world.options.loan_shark_traps.value):
         openRCT2_items.append("Loan Shark Trap")
 
+    for each in range(world.options.food_poisioning_traps.value):
+        openRCT2_items.append("Food Poisioning Trap")
+
     for each in range(world.options.skips.value):
         openRCT2_items.append("Skip")
 
@@ -80,11 +83,11 @@ def set_openRCT2_items(world):
 
     # Add extra traps if there's not enough for the negative awards.
     if world.options.awards == 0: # 0: all awards
-        #Add extra traps if there's fewer than 4.
+        #Add extra traps if there's fewer than 5.
         if(sum(1 for item in openRCT2_items if item in item_info["trap_items"]) < 5):
             openRCT2_items.append("Bathroom Trap")
             openRCT2_items.append("Furry Convention Trap")
-            openRCT2_items.append("Furry Convention Trap")
+            openRCT2_items.append("Food Poisioning Trap")
             openRCT2_items.append("Spam Trap")
             openRCT2_items.append("Loan Shark Trap")
 

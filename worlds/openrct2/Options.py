@@ -789,6 +789,13 @@ class LoanSharkTraps(Range):
     range_end = 20
     default = 5
 
+class FoodPoisioningTraps(Range):
+    """When found, gives everybody with food in the park Norovirus! Adding traps will increase the total number of items in the world."""
+    display_name = "Food Poisioning Trap"
+    range_start = 0
+    range_end = 20
+    default = 5
+
 class Filler(Range):
     """How many extra filler items to add to the mix as a percentage. This will mostly consist of Cash Bonuses."""
     display_name = "Filler"
@@ -879,6 +886,7 @@ openrct2_option_groups = [
         BathroomTraps,
         SpamTraps,
         LoanSharkTraps,
+        FoodPoisioningTraps,
         AllRidesAndSceneryBase,
         AllRidesAndSceneryExpansion
     ]),
@@ -920,6 +928,7 @@ class openRCT2Options(PerGameCommonOptions):
     bathroom_traps: BathroomTraps
     spam_traps: SpamTraps
     loan_shark_traps: LoanSharkTraps
+    food_poisioning_traps: FoodPoisioningTraps
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
     randomization_range: SelectedRandomizationRange

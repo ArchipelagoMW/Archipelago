@@ -122,7 +122,8 @@ item_info = {
         "Bathroom Trap",
         "Furry Convention Trap",
         "Spam Trap",
-        "Loan Shark Trap"
+        "Loan Shark Trap",
+        "Food Poisioning Trap"
 	],
 	"park_rules": [
 		"Easier Guest Generation",
@@ -187,7 +188,8 @@ item_info = {
 		"Bathroom Trap",
         "Furry Convention Trap",
         "Spam Trap",
-        "Loan Shark Trap"
+        "Loan Shark Trap",
+        "Food Poisioning Trap"
 	],
     "Rides": [
         "Spiral Roller Coaster",
