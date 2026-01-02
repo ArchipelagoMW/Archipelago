@@ -524,9 +524,7 @@ async def kh2_watcher(ctx: KH2Context):
                     ctx.kh2_finished_game = True
 
                 if ctx.sending:
-                    ctx.sending = list(await ctx.check_locations(ctx.sending))
-                    message = [{"cmd": "LocationChecks", "locations": ctx.sending}]
-                    await ctx.send_msgs(message)
+                    await ctx.check_locations(ctx.sending)
             if ctx.disconnect_from_server:
                 ctx.disconnect_from_server = False
                 await ctx.disconnect()
