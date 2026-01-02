@@ -232,18 +232,6 @@ class ForbidTreeRemoval(IntEnum):
     unlockable = 1
     on = 2
 
-class OpenRCT2OnToggle(DefaultOnToggle):
-    @property
-    def result(self) -> bool:
-        return self.value
-
-
-class OpenRCT2Toggle(Toggle):
-    @property
-    def result(self) -> bool:
-        return self.value
-
-
 class SelectedScenario(Choice):
     """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
     Future updates will allow custom scenarios.
@@ -449,7 +437,7 @@ class Awards(Choice):
     option_none = Awards.none.value
     default = Awards.all_awards.value
 
-class ExcludeSafestPark(OpenRCT2Toggle):
+class ExcludeSafestPark(Toggle):
     """Exclude the Safest Park Award from having a check. This may be useful depending on deathlink settings."""
     display_name = "Exclude Safest Park Award"
 
@@ -488,7 +476,7 @@ class SelectedRandomizationRange(Choice):
     option_extreme = RandomizationRange.extreme.value
     default = RandomizationRange.medium.value
 
-class IgnoreRideStatChanges(OpenRCT2Toggle):
+class IgnoreRideStatChanges(Toggle):
     """Disables changes to base ride stats. If enabled, rides will always behave like they do in the base game."""
     display_name = "Ignore Ride Stat Changes"
 
@@ -567,11 +555,11 @@ class SelectedForbidTreeRemoval(Choice):
     default = ForbidTreeRemoval.unlockable.value
 
 
-class RandomizeParkValues(OpenRCT2OnToggle):
+class RandomizeParkValues(DefaultOnToggle):
     """Randomizes values such as starting cash, starting bank loan amount, and the max bank loan"""
     display_name = "Randomize Park Values"
 
-# class Include_Guest_Objective(OpenRCT2OnToggle):
+# class Include_Guest_Objective(DefaultOnToggle):
 #     """Include an objective to reach a certain number of guests. Multiple objectives can be enabled!"""
 #     display_name = "Include Guest Objective"
 
@@ -582,7 +570,7 @@ class GuestObjective(Range):
     range_end = 7500
     default = 1000
 
-# class Include_Park_Value_Objective(OpenRCT2OnToggle):
+# class Include_Park_Value_Objective(DefaultOnToggle):
 #     """Include an objective to achieve a certain park value in Dollars (The game will adjust to your local currency). Multiple objectives can be enabled!"""
 #     display_name = "Include Park Value Objective"
 
@@ -593,7 +581,7 @@ class ParkValueObjective(Range):
     range_end = 1000000
     default = 200000
 
-# class Include_Roller_Coaster_Objective(OpenRCT2OnToggle):
+# class Include_Roller_Coaster_Objective(DefaultOnToggle):
 #     """Include an objective to build a certain number of Roller Coasters with optional parameters. Multiple objectives can be enabled!"""
 #     display_name = "Include Roller Coaster Objective"
 
@@ -714,7 +702,7 @@ class ShopMaximumTotalCustomers(Range):
     range_end = 1000
     default = 400
 
-class BalanceGuestCounts(OpenRCT2OnToggle):
+class BalanceGuestCounts(DefaultOnToggle):
     """Attempts to balance the minimum guest requirements to the ride they're attached to. Low throughput rides
     like Spiral Slides will tend towards the minimum, while high throughput rides like roller coasters will 
     tend towards the maximum.
@@ -745,19 +733,19 @@ class ParkRatingObjective(Range):
     range_end = 999
     default = 800
 
-class PayOffLoan(OpenRCT2OnToggle):
+class PayOffLoan(DefaultOnToggle):
     """Require Loan to be paid off before scenario completion is awarded. Multiple objectives can be enabled!"""
     display_name = "Pay Off Loan"
 
-class MonopolyMode(OpenRCT2Toggle):
+class MonopolyMode(Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
-class Fireworks(OpenRCT2OnToggle):
+class Fireworks(DefaultOnToggle):
     """Have an explosive firework display on victory! Strongly discouraged if you intend to keep playing after victory or if you expect to have a huge park."""
     display_name = "Fireworks"
 
-class IncludeGamespeedItems(OpenRCT2OnToggle):
+class IncludeGamespeedItems(DefaultOnToggle):
     """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
     display_name = "Include Gamespeed Items"
 
@@ -803,19 +791,19 @@ class Filler(Range):
     range_end = 50
     default = 10
 
-class IncludeATM(OpenRCT2OnToggle):
+class IncludeATM(DefaultOnToggle):
     """Includes an ATM in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include ATM"
 
-class IncludeFirstAid(OpenRCT2OnToggle):
+class IncludeFirstAid(DefaultOnToggle):
     """Includes a First Aid Room in the item list, regardless of whether it normally appears in the chosen scenario."""
     display_name = "Include First Aid Room"
 
-class AllRidesAndSceneryBase(OpenRCT2Toggle):
+class AllRidesAndSceneryBase(Toggle):
     """Adds every ride and scenery pack in the base game to the item pool. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Base Game)"
 
-class AllRidesAndSceneryExpansion(OpenRCT2Toggle):
+class AllRidesAndSceneryExpansion(Toggle):
     """Adds every ride and scenery pack in the RCT2 Expansion Packs to the item pool. If this is true the base game rides and 
     scenery will also be included. This will make for a significantly longer scenario."""
     display_name = "Include All Rides and Scenery (Expansion Packs)"

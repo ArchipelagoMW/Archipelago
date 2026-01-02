@@ -166,7 +166,7 @@ class OpenRCT2World(World):
             scenario = Scenario[new_scenario].value  # Reassign the scenario option to the randomly selected choice
             self.options.scenario.value = scenario
 
-        self.item_table, self.starting_ride = set_openRCT2_items(self)
+        self.item_table, self.starting_ride = set_openRCT2_items(self.options, self.random)
 
 
     def create_regions(self) -> None:
@@ -364,9 +364,7 @@ class OpenRCT2World(World):
             #Connect the award region to the unlock shop
             s.connect(positive_awards_region)
     def create_items(self) -> None:
-        for item in self.item_table:
-            self.multiworld.itempool.append(self.create_item(item))
-
+        self.multiworld.itempool += [self.create_item(item) for item in self.item_table]
         # Adds the starting ride to precollected items
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
         # If the user doesn't want to buy speed, give it to em for free
@@ -406,7 +404,6 @@ class OpenRCT2World(World):
                     if items_removed == items_to_remove:
                         break
                     
-        self.random.shuffle(self.item_table)
         # print(self.item_table)
 
         def set_openRCT2_rule(rule_type, selected_item, location_number):
@@ -619,7 +616,7 @@ class OpenRCT2World(World):
 
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
-        eligible_rides = [item for index, item in enumerate(self.item_table) if
+        eligible_rides = [item for item in self.item_table if
                           item in item_info["Rides"] and item not in item_info["non_starters"]]
         eligible_rides = list(dict.fromkeys(eligible_rides))
         self.random.shuffle(eligible_rides)
