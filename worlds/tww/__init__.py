@@ -17,11 +17,12 @@ from worlds.LauncherComponents import Component, SuffixIdentifier, Type, compone
 
 from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_groups
 from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
+from .Macros import *
 from .Options import TWWOptions, tww_option_groups
 from .Presets import tww_options_presets
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
-from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer
+from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer, ZoneEntrance
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
 from .Rules import set_rules
@@ -332,6 +333,8 @@ class TWWWorld(World):
         multiworld = self.multiworld
         player = self.player
         options = self.options
+        is_real_gen = not hasattr(self.multiworld, "generation_is_fake")
+
 
         # "The Great Sea" region contains all locations that are not in a randomizable region.
         great_sea_region = Region("The Great Sea", player, multiworld)
@@ -382,7 +385,9 @@ class TWWWorld(World):
         self.charts.update_chart_location_flags()
 
         # Connect the regions in the multiworld. Randomize entrances to exits if the option is set.
-        self.entrances.randomize_entrances()
+        # Skip entrance randomization during UT generation (it will be done in interpret_slot_data instead)
+        if is_real_gen:
+            self.entrances.randomize_entrances()
 
     def set_rules(self) -> None:
         """
@@ -608,7 +613,50 @@ class TWWWorld(World):
 
         return slot_data
 
-    @staticmethod
-    def interpret_slot_data(slot_data: dict[str, Any]) -> dict[str, Any]:
-        # Trigger a regen in UT
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Apply entrance shuffles to the multiworld regions based on the slot_data.
+
+        This method is called by the client to establish entrance connections after the world
+        has been created. It reads the entrance mappings from slot_data and connects the
+        parent regions to their destination regions with appropriate access rules.
+
+        :param slot_data: The slot data containing entrance mappings
+        :return: The modified slot_data
+        """
+        if "entrances" not in slot_data:
+            return slot_data
+
+        entrance_mappings = slot_data["entrances"]
+        great_sea_region = self.get_region("The Great Sea")
+
+        for entrance_name, exit_name in entrance_mappings.items():
+            # Find the ZoneEntrance object
+            zone_entrance = ZoneEntrance.all.get(entrance_name)
+            if zone_entrance is None:
+                continue
+
+            # Determine the parent region
+            if zone_entrance.island_name is not None:
+                parent_region = great_sea_region
+            else:
+                parent_region = self.get_region(zone_entrance.nested_in.unique_name)
+
+            # Get the destination region
+            exit_region = self.get_region(exit_name)
+            if exit_region is None:
+                continue
+
+            # Connect the regions with the appropriate access rule
+            def get_access_rule(entrance: ZoneEntrance) -> str:
+                snake_case_region = entrance.entrance_name.lower().replace("'", "").replace(" ", "_")
+                return getattr(Macros, f"can_access_{snake_case_region}")
+
+            rule = get_access_rule(zone_entrance)
+            parent_region.connect(
+                exit_region,
+                f"{zone_entrance.entrance_name} -> {exit_name}",
+                rule=lambda state, rule=rule, player=self.player: rule(state, player),
+            )
+
         return slot_data
