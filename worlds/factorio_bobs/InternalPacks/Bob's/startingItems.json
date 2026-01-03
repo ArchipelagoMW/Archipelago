@@ -1,0 +1,23 @@
+{
+  "recipes": [
+    "bob-burner-lab",
+    "copper-cable",
+    "small-electric-pole",
+    "bob-burner-generator",
+    "pipe",
+    "pipe-to-ground",
+    "offshore-pump",
+    "boiler",
+    "bob-steam-inserter",
+    "bob-steam-mining-drill",
+    "bob-steam-assembling-machine",
+    "bob-copper-pipe",
+    "bob-copper-pipe-to-ground",
+    "bob-stone-pipe",
+    "bob-stone-pipe-to-ground",
+    "stone-wall",
+    "bob-basic-underground-belt",
+    "bob-basic-splitter",
+    "automation-science-pack"
+  ]
+}

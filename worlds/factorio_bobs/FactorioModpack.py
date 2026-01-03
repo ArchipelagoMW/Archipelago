@@ -3,6 +3,7 @@ from functools import cached_property
 from pathlib import Path
 
 from . import APModpackManager, Technology
+from .Technology import TechnologyData, ProgressiveTechnologyData
 
 MAX_LOCATIONS_PER_SCIENCE_PACK = 999
 
@@ -35,30 +36,42 @@ class FactorioModpack(APModpackManager.BaseModpack):
             self.location_pools.append(pool)
 
     @cached_property
-    def base_technologies(self) -> dict[str, Technology]:
+    def base_technologies(self) -> dict[str, TechnologyData]:
         with self.open_file("techs.json") as file:
             raw_techs = json.load(file)
-        technologies: dict[str, Technology] = {}
+        technologies: dict[str, TechnologyData] = {}
         for technology_name, data in raw_techs.items():
-            technologies[technology_name] = Technology(
+            technologies[technology_name] = TechnologyData(
                 technology_name,
-                modifiers=data.get("modifiers", []),
-                unlocks=set(data["unlocks"])
+                set(data["unlocks"]),
+                set(data.get("modifiers", {}))
             )
         return technologies
 
     @cached_property
-    def progressive_technologies(self) -> dict[str, Technology]:
-        # todo progressive_technologies
-        return {}
+    def progressive_technologies(self) -> dict[str, ProgressiveTechnologyData]:
+        try:
+            with self.open_file("progressive.json") as file:
+                raw_techs = json.load(file)
+        except FileNotFoundError:
+            return {}
+        output = {}
+        for progressive_name, technologies in raw_techs.items():
+            assert all(tech in self.base_technologies for tech in technologies), \
+                (f"In {self.packName}'s progressive.json"
+                 f"{progressive_name} contains { {tech for tech in technologies if tech not in self.base_technologies} }\n"
+                 f"which is not a technology in the pack.")
+            output[progressive_name] = ProgressiveTechnologyData(progressive_name,
+                                                                 [self.base_technologies[tech] for tech in technologies])
+        return output
 
     @cached_property
-    def custom_technologies(self) -> dict[str, Technology]:
+    def custom_technologies(self) -> dict[str, TechnologyData]:
         # todo custom_technologies
         return {}
 
     @cached_property
-    def all_technologies(self) -> dict[str, Technology]:
+    def all_technologies(self) -> dict[str, TechnologyData]:
         """includes normal and progressive and custom technologies"""
         all_techs = {}
         all_techs.update(self.base_technologies)
