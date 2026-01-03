@@ -618,7 +618,6 @@ class OpenRCT2World(World):
         # and make them required for completion, if that's required.
         eligible_rides = [item for item in self.item_table if
                           item in item_info["Rides"] and item not in item_info["non_starters"]]
-        eligible_rides = list(dict.fromkeys(eligible_rides))
         self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
             count = 0
@@ -711,24 +710,24 @@ class OpenRCT2World(World):
         # Fixes Location Prices for OpenRCT2
         for index, location in enumerate(self.location_prices):
             # print("Here's the category! Maybe.")
-            if self.location_prices[index]["RidePrereq"]:
-                category = self.location_prices[index]["RidePrereq"][1]
-                # print(self.location_prices[index]["RidePrereq"][1])
+            if location["RidePrereq"]:
+                category = location["RidePrereq"][1]
+                # print(location["RidePrereq"][1])
             else:
                 category = None
             # If the item has a prereq that's a category instead of a specific ride, convert that to what
             # the in-game plugin will read
             if category in item_info["ride_types"]:
                 if category == "Roller Coasters":
-                    self.location_prices[index]["RidePrereq"][1] = "rollercoaster"
+                    location["RidePrereq"][1] = "rollercoaster"
                 elif category == "Transport Rides":
-                    self.location_prices[index]["RidePrereq"][1] = "transport"
+                    location["RidePrereq"][1] = "transport"
                 elif category == "Gentle Rides":
-                    self.location_prices[index]["RidePrereq"][1] = "gentle"
+                    location["RidePrereq"][1] = "gentle"
                 elif category == "Thrill Rides":
-                    self.location_prices[index]["RidePrereq"][1] = "thrill"
+                    location["RidePrereq"][1] = "thrill"
                 else:
-                    self.location_prices[index]["RidePrereq"][1] = "water"
+                    location["RidePrereq"][1] = "water"
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         # print("Here's the final unlock shop:")
