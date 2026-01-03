@@ -54,25 +54,269 @@ class TWWLogic(LogicMixin):
         return not self.multiworld.worlds[player].logic_in_required_bosses_mode
 
     def _tww_obscure_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_1
+        return self.multiworld.worlds[player].logic_obscure_1 or has_glitched_item(self, player)
 
     def _tww_obscure_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_2
+        return self.multiworld.worlds[player].logic_obscure_2 or has_glitched_item(self, player)
 
     def _tww_obscure_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_3
+        return self.multiworld.worlds[player].logic_obscure_3 or has_glitched_item(self, player)
 
     def _tww_precise_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_1
+        return self.multiworld.worlds[player].logic_precise_1 or has_glitched_item(self, player)
 
     def _tww_precise_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_2
+        return self.multiworld.worlds[player].logic_precise_2 or has_glitched_item(self, player)
 
     def _tww_precise_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_3
+        return self.multiworld.worlds[player].logic_precise_3 or has_glitched_item(self, player)
 
     def _tww_tuner_logic_enabled(self, player: int) -> bool:
         return self.multiworld.worlds[player].logic_tuner_logic_enabled
+
+
+def _set_sunken_treasure_rules(world: "TWWWorld", set_rule_if_exists) -> None:  # noqa: F405
+    """
+    Define the logic rules for Sunken Treasure locations.
+
+    :param world: The Wind Waker game world.
+    :param set_rule_if_exists: Function to set rules for locations that exist.
+    """
+    player = world.player
+
+    # Sunken Treasure
+    set_rule_if_exists(
+        "Forsaken Fortress Sector - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 1),
+    )
+    set_rule_if_exists(
+        "Star Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 2),
+    )
+    set_rule_if_exists(
+        "Northern Fairy Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 3),
+    )
+    set_rule_if_exists(
+        "Gale Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 4),
+    )
+    set_rule_if_exists(
+        "Crescent Moon Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 5),
+    )
+    set_rule_if_exists(
+        "Seven-Star Isles - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 6)
+        and (has_bombs(state, player) or state._tww_precise_1(player)),
+    )
+    set_rule_if_exists(
+        "Overlook Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 7),
+    )
+    set_rule_if_exists(
+        "Four-Eye Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 8)
+        and (
+            has_bombs(state, player)
+            or state._tww_precise_1(player)
+            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
+        ),
+    )
+    set_rule_if_exists(
+        "Mother and Child Isles - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 9),
+    )
+    set_rule_if_exists(
+        "Spectacle Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 10),
+    )
+    set_rule_if_exists(
+        "Windfall Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 11),
+    )
+    set_rule_if_exists(
+        "Pawprint Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 12),
+    )
+    set_rule_if_exists(
+        "Dragon Roost Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 13),
+    )
+    set_rule_if_exists(
+        "Flight Control Platform - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 14),
+    )
+    set_rule_if_exists(
+        "Western Fairy Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 15),
+    )
+    set_rule_if_exists(
+        "Rock Spire Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 16),
+    )
+    set_rule_if_exists(
+        "Tingle Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 17),
+    )
+    set_rule_if_exists(
+        "Northern Triangle Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 18),
+    )
+    set_rule_if_exists(
+        "Eastern Fairy Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 19),
+    )
+    set_rule_if_exists(
+        "Fire Mountain - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 20),
+    )
+    set_rule_if_exists(
+        "Star Belt Archipelago - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 21),
+    )
+    set_rule_if_exists(
+        "Three-Eye Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 22)
+        and (
+            has_bombs(state, player)
+            or state._tww_precise_1(player)
+            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
+        ),
+    )
+    set_rule_if_exists(
+        "Greatfish Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 23),
+    )
+    set_rule_if_exists(
+        "Cyclops Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 24)
+        and (
+            has_bombs(state, player)
+            or state._tww_precise_1(player)
+            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
+        ),
+    )
+    set_rule_if_exists(
+        "Six-Eye Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 25)
+        and (
+            has_bombs(state, player)
+            or state._tww_precise_1(player)
+            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
+        ),
+    )
+    set_rule_if_exists(
+        "Tower of the Gods Sector - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 26),
+    )
+    set_rule_if_exists(
+        "Eastern Triangle Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 27),
+    )
+    set_rule_if_exists(
+        "Thorned Fairy Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 28),
+    )
+    set_rule_if_exists(
+        "Needle Rock Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 29),
+    )
+    set_rule_if_exists(
+        "Islet of Steel - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 30),
+    )
+    set_rule_if_exists(
+        "Stone Watcher Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 31),
+    )
+    set_rule_if_exists(
+        "Southern Triangle Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 32)
+        and (can_defeat_seahats(state, player) or state._tww_precise_1(player)),
+    )
+    set_rule_if_exists(
+        "Private Oasis - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 33),
+    )
+    set_rule_if_exists(
+        "Bomb Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 34),
+    )
+    set_rule_if_exists(
+        "Bird's Peak Rock - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 35),
+    )
+    set_rule_if_exists(
+        "Diamond Steppe Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 36),
+    )
+    set_rule_if_exists(
+        "Five-Eye Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 37)
+        and can_destroy_cannons(state, player),
+    )
+    set_rule_if_exists(
+        "Shark Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 38),
+    )
+    set_rule_if_exists(
+        "Southern Fairy Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 39),
+    )
+    set_rule_if_exists(
+        "Ice Ring Isle - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 40),
+    )
+    set_rule_if_exists(
+        "Forest Haven - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 41),
+    )
+    set_rule_if_exists(
+        "Cliff Plateau Isles - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 42),
+    )
+    set_rule_if_exists(
+        "Horseshoe Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 43),
+    )
+    set_rule_if_exists(
+        "Outset Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 44),
+    )
+    set_rule_if_exists(
+        "Headstone Island - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 45),
+    )
+    set_rule_if_exists(
+        "Two-Eye Reef - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player)
+        and state._tww_has_chart_for_island(player, 46)
+        and (
+            has_bombs(state, player)
+            or state._tww_precise_1(player)
+            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
+        ),
+    )
+    set_rule_if_exists(
+        "Angular Isles - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 47),
+    )
+    set_rule_if_exists(
+        "Boating Course - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 48),
+    )
+    set_rule_if_exists(
+        "Five-Star Isles - Sunken Treasure",
+        lambda state: has_grappling_hook(state, player) and state._tww_has_chart_for_island(player, 49),
+    )
 
 
 def set_rules(world: "TWWWorld") -> None:  # noqa: F405
@@ -94,7 +338,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Outset Island - Mesa the Grasscutter's House", lambda state: True)
     set_rule_if_exists(
         "Outset Island - Orca - Give 10 Knight's Crests",
-        lambda state: state.has("Spoils Bag", player)
+        lambda state: has_spoils_bag(state, player)
         and can_sword_fight_with_orca(state, player)
         and has_magic_meter(state, player)
         and can_farm_knights_crests(state, player),
@@ -103,9 +347,9 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Outset Island - Great Fairy", lambda state: state.can_reach_region("Outset Fairy Fountain", player)
     )
-    set_rule_if_exists("Outset Island - Jabun's Cave", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Outset Island - Jabun's Cave", lambda state: has_bombs(state, player))
     set_rule_if_exists(
-        "Outset Island - Dig up Black Soil", lambda state: state.has_all(["Bait Bag", "Power Bracelets"], player)
+        "Outset Island - Dig up Black Soil", lambda state: state.has_all([ItemName.BAIT_BAG, ItemName.POWER_BRACELETS], player)
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 30",
@@ -125,7 +369,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_defeat_red_bubbles(state, player)
         and can_defeat_darknuts(state, player)
         and can_play_winds_requiem(state, player)
-        and (state.has_any(["Grappling Hook", "Skull Hammer"], player) or has_heros_sword(state, player)),
+        and (state.has_any([ItemName.GRAPPLING_HOOK, ItemName.SKULL_HAMMER], player) or has_heros_sword(state, player)),
     )
     set_rule_if_exists(
         "Outset Island - Savage Labyrinth - Floor 50",
@@ -145,12 +389,12 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and can_defeat_red_bubbles(state, player)
         and can_defeat_darknuts(state, player)
         and can_play_winds_requiem(state, player)
-        and (state.has_any(["Grappling Hook", "Skull Hammer"], player) or has_heros_sword(state, player))
+        and (state.has_any([ItemName.GRAPPLING_HOOK, ItemName.SKULL_HAMMER], player) or has_heros_sword(state, player))
         and can_aim_mirror_shield(state, player)
         and can_defeat_redeads(state, player)
         and can_defeat_blue_bubbles(state, player)
         and can_defeat_stalfos(state, player)
-        and state.has("Skull Hammer", player),
+        and has_skull_hammer(state, player),
     )
 
     # Windfall Island
@@ -171,15 +415,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Windfall Island - Mrs. Marie - Give 1 Joy Pendant",
         # In Archipelago, the non-randomized Joy Pendant on Windfall is not obtainable, so require the player to have
         # a way to collect Joy Pendants.
-        lambda state: state.has("Spoils Bag", player) and can_farm_joy_pendants(state, player),
+        lambda state: has_spoils_bag(state, player) and can_farm_joy_pendants(state, player),
     )
     set_rule_if_exists(
         "Windfall Island - Mrs. Marie - Give 21 Joy Pendants",
-        lambda state: state.has("Spoils Bag", player) and can_farm_joy_pendants(state, player),
+        lambda state: has_spoils_bag(state, player) and can_farm_joy_pendants(state, player),
     )
     set_rule_if_exists(
         "Windfall Island - Mrs. Marie - Give 40 Joy Pendants",
-        lambda state: state.has("Spoils Bag", player) and can_farm_joy_pendants(state, player),
+        lambda state: has_spoils_bag(state, player) and can_farm_joy_pendants(state, player),
     )
     set_rule_if_exists(
         "Windfall Island - Lenzo's House - Left Chest",
@@ -195,21 +439,21 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Windfall Island - Lenzo's House - Bring Forest Firefly",
         lambda state: has_picto_box(state, player)
-        and state.has("Empty Bottle", player)
+        and state.has(ItemName.EMPTY_BOTTLE, player)
         and can_access_forest_haven(state, player),
     )
     set_rule_if_exists("Windfall Island - House of Wealth Chest", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Maggie's Father - Give 20 Skull Necklaces",
-        lambda state: state.has("Spoils Bag", player) and can_farm_skull_necklaces(state, player),
+        lambda state: has_spoils_bag(state, player) and can_farm_skull_necklaces(state, player),
     )
     set_rule_if_exists("Windfall Island - Maggie - Free Item", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Maggie - Delivery Reward",
-        lambda state: state.has_all(["Delivery Bag", "Moblin's Letter"], player),
+        lambda state: state.has_all([ItemName.DELIVERY_BAG, ItemName.MOBLIN_S_LETTER], player),
     )
     set_rule_if_exists(
-        "Windfall Island - Cafe Bar - Postman", lambda state: state.has_all(["Delivery Bag", "Maggie's Letter"], player)
+        "Windfall Island - Cafe Bar - Postman", lambda state: state.has_all([ItemName.DELIVERY_BAG, ItemName.MAGGIE_S_LETTER], player)
     )
     set_rule_if_exists(
         "Windfall Island - Kreeb - Light Up Lighthouse",
@@ -219,9 +463,9 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Windfall Island - Transparent Chest",
         lambda state: can_play_winds_requiem(state, player)
         and has_fire_arrows(state, player)
-        and (can_fly_with_deku_leaf_outdoors(state, player) or state.has("Hookshot", player)),
+        and (can_fly_with_deku_leaf_outdoors(state, player) or has_hookshot(state, player)),
     )
-    set_rule_if_exists("Windfall Island - Tott - Teach Rhythm", lambda state: state.has("Wind Waker", player))
+    set_rule_if_exists("Windfall Island - Tott - Teach Rhythm", lambda state: state.has(ItemName.WIND_WAKER, player))
     set_rule_if_exists("Windfall Island - Pirate Ship", lambda state: True)
     set_rule_if_exists("Windfall Island - 5 Rupee Auction", lambda state: True)
     set_rule_if_exists("Windfall Island - 40 Rupee Auction", lambda state: True)
@@ -229,20 +473,20 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Windfall Island - 80 Rupee Auction", lambda state: True)
     set_rule_if_exists(
         "Windfall Island - Zunari - Stock Exotic Flower in Zunari's Shop",
-        lambda state: state.has("Delivery Bag", player),
+        lambda state: has_delivery_bag(state, player),
     )
-    set_rule_if_exists("Windfall Island - Sam - Decorate the Town", lambda state: state.has("Delivery Bag", player))
+    set_rule_if_exists("Windfall Island - Sam - Decorate the Town", lambda state: has_delivery_bag(state, player))
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Shop Guru Statue on Gate", lambda state: state.has("Delivery Bag", player)
+    #     "Windfall Island - Kane - Place Shop Guru Statue on Gate", lambda state: has_delivery_bag(state, player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Postman Statue on Gate", lambda state: state.has("Delivery Bag", player)
+    #     "Windfall Island - Kane - Place Postman Statue on Gate", lambda state: has_delivery_bag(state, player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Six Flags on Gate", lambda state: state.has("Delivery Bag", player)
+    #     "Windfall Island - Kane - Place Six Flags on Gate", lambda state: has_delivery_bag(state, player)
     # )
     # set_rule_if_exists(
-    #     "Windfall Island - Kane - Place Six Idols on Gate", lambda state: state.has("Delivery Bag", player)
+    #     "Windfall Island - Kane - Place Six Idols on Gate", lambda state: has_delivery_bag(state, player)
     # )
     set_rule_if_exists("Windfall Island - Mila - Follow the Thief", lambda state: True)
     set_rule_if_exists("Windfall Island - Battlesquid - First Prize", lambda state: True)
@@ -265,14 +509,14 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
 
     # Dragon Roost Island
-    set_rule_if_exists("Dragon Roost Island - Wind Shrine", lambda state: state.has("Wind Waker", player))
+    set_rule_if_exists("Dragon Roost Island - Wind Shrine", lambda state: state.has(ItemName.WIND_WAKER, player))
     set_rule_if_exists(
         "Dragon Roost Island - Rito Aerie - Give Hoskit 20 Golden Feathers",
-        lambda state: state.has("Spoils Bag", player) and can_farm_golden_feathers(state, player),
+        lambda state: has_spoils_bag(state, player) and can_farm_golden_feathers(state, player),
     )
     set_rule_if_exists(
         "Dragon Roost Island - Chest on Top of Boulder",
-        lambda state: state.has_any(["Boomerang", "Bombs", "Bait Bag"], player) or has_heros_bow(state, player),
+        lambda state: state.has_any([ItemName.BOOMERANG, ItemName.BOMBS, ItemName.BAIT_BAG], player) or has_heros_bow(state, player),
     )
     set_rule_if_exists(
         "Dragon Roost Island - Fly Across Platforms Around Island",
@@ -288,51 +532,51 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Dragon Roost Cavern
     set_rule_if_exists("Dragon Roost Cavern - First Room", lambda state: True)
     set_rule_if_exists(
-        "Dragon Roost Cavern - Alcove With Water Jugs", lambda state: state.has("DRC Small Key", player, 1)
+        "Dragon Roost Cavern - Alcove With Water Jugs", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 1)
     )
     set_rule_if_exists(
-        "Dragon Roost Cavern - Water Jug on Upper Shelf", lambda state: state.has("DRC Small Key", player, 1)
+        "Dragon Roost Cavern - Water Jug on Upper Shelf", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 1)
     )
-    set_rule_if_exists("Dragon Roost Cavern - Boarded Up Chest", lambda state: state.has("DRC Small Key", player, 1))
+    set_rule_if_exists("Dragon Roost Cavern - Boarded Up Chest", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 1))
     set_rule_if_exists(
         "Dragon Roost Cavern - Chest Across Lava Pit",
-        lambda state: state.has("DRC Small Key", player, 2)
+        lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 2)
         and (
-            state.has("Grappling Hook", player)
+            has_grappling_hook(state, player)
             or can_fly_with_deku_leaf_indoors(state, player)
-            or (state.has("Hookshot", player) and state._tww_obscure_1(player))
+            or (has_hookshot(state, player) and state._tww_obscure_1(player))
         ),
     )
-    set_rule_if_exists("Dragon Roost Cavern - Rat Room", lambda state: state.has("DRC Small Key", player, 2))
+    set_rule_if_exists("Dragon Roost Cavern - Rat Room", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 2))
     set_rule_if_exists(
-        "Dragon Roost Cavern - Rat Room Boarded Up Chest", lambda state: state.has("DRC Small Key", player, 2)
+        "Dragon Roost Cavern - Rat Room Boarded Up Chest", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 2)
     )
-    set_rule_if_exists("Dragon Roost Cavern - Bird's Nest", lambda state: state.has("DRC Small Key", player, 3))
-    set_rule_if_exists("Dragon Roost Cavern - Dark Room", lambda state: state.has("DRC Small Key", player, 4))
+    set_rule_if_exists("Dragon Roost Cavern - Bird's Nest", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 3))
+    set_rule_if_exists("Dragon Roost Cavern - Dark Room", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4))
     set_rule_if_exists(
         "Dragon Roost Cavern - Tingle Chest in Hub Room",
-        lambda state: state.has("DRC Small Key", player, 4) and has_tingle_bombs(state, player),
+        lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4) and has_tingle_bombs(state, player),
     )
     set_rule_if_exists(
-        "Dragon Roost Cavern - Pot on Upper Shelf in Pot Room", lambda state: state.has("DRC Small Key", player, 4)
+        "Dragon Roost Cavern - Pot on Upper Shelf in Pot Room", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4)
     )
-    set_rule_if_exists("Dragon Roost Cavern - Pot Room Chest", lambda state: state.has("DRC Small Key", player, 4))
-    set_rule_if_exists("Dragon Roost Cavern - Miniboss", lambda state: state.has("DRC Small Key", player, 4))
+    set_rule_if_exists("Dragon Roost Cavern - Pot Room Chest", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4))
+    set_rule_if_exists("Dragon Roost Cavern - Miniboss", lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4))
     set_rule_if_exists(
         "Dragon Roost Cavern - Under Rope Bridge",
-        lambda state: state.has("DRC Small Key", player, 4)
-        and (state.has("Grappling Hook", player) or can_fly_with_deku_leaf_outdoors(state, player)),
+        lambda state: state.has(ItemName.DRC_SMALL_KEY, player, 4)
+        and (has_grappling_hook(state, player) or can_fly_with_deku_leaf_outdoors(state, player)),
     )
     set_rule_if_exists(
         "Dragon Roost Cavern - Tingle Statue Chest",
         lambda state: can_reach_dragon_roost_cavern_gaping_maw(state, player)
-        and state.has("Grappling Hook", player)
+        and has_grappling_hook(state, player)
         and has_tingle_bombs(state, player),
     )
     set_rule_if_exists(
         "Dragon Roost Cavern - Big Key Chest",
         lambda state: can_reach_dragon_roost_cavern_gaping_maw(state, player)
-        and state.has("Grappling Hook", player)
+        and has_grappling_hook(state, player)
         and can_stun_magtails(state, player),
     )
     set_rule_if_exists(
@@ -354,7 +598,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forest Haven - On Tree Branch",
         lambda state: can_access_forest_haven(state, player)
         and (
-            state.has("Grappling Hook", player)
+            has_grappling_hook(state, player)
             or (
                 can_fly_with_deku_leaf_indoors(state, player)
                 and can_fly_with_deku_leaf_outdoors(state, player)
@@ -370,7 +614,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forest Haven - Small Island Chest",
         lambda state: can_access_forest_haven(state, player)
         and (
-            state.has("Grappling Hook", player)
+            has_grappling_hook(state, player)
             or (
                 can_fly_with_deku_leaf_indoors(state, player)
                 and can_fly_with_deku_leaf_outdoors(state, player)
@@ -406,31 +650,31 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forbidden Woods - Morth Pit",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has("Grappling Hook", player),
+        and has_grappling_hook(state, player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Vine Maze Left Chest",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has("Grappling Hook", player),
+        and has_grappling_hook(state, player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Vine Maze Right Chest",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has("Grappling Hook", player),
+        and has_grappling_hook(state, player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Highest Pot in Vine Maze",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has("Grappling Hook", player),
+        and has_grappling_hook(state, player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Tall Room Before Miniboss",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "FW Small Key"], player)
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.FW_SMALL_KEY], player)
         and (can_defeat_peahats(state, player) or state._tww_precise_2(player)),
     )
     set_rule_if_exists(
@@ -440,7 +684,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forbidden Woods - Past Seeds Hanging by Vines",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "FW Small Key"], player)
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.FW_SMALL_KEY], player)
         and can_defeat_door_flowers(state, player)
         and (can_destroy_seeds_hanging_by_vines(state, player) or state._tww_precise_1(player)),
     )
@@ -448,30 +692,30 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Forbidden Woods - Chest Across Red Hanging Flower",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "Boomerang"], player),
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG], player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Tingle Statue Chest",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
-        and state.has_all(["Grappling Hook", "Boomerang"], player),
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG], player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Chest in Locked Tree Trunk",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "Boomerang"], player),
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG], player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Big Key Chest",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "Boomerang"], player),
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG], player),
     )
     set_rule_if_exists(
         "Forbidden Woods - Double Mothula Room",
         lambda state: can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and (can_defeat_door_flowers(state, player) or state.has("Grappling Hook", player))
+        and (can_defeat_door_flowers(state, player) or has_grappling_hook(state, player))
         and can_defeat_mothulas(state, player),
     )
     set_rule_if_exists(
@@ -482,14 +726,14 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Greatfish Isle - Hidden Chest", lambda state: can_fly_with_deku_leaf_outdoors(state, player))
 
     # Tower of the Gods
-    set_rule_if_exists("Tower of the Gods - Chest Behind Bombable Walls", lambda state: state.has("Bombs", player))
-    set_rule_if_exists("Tower of the Gods - Pot Behind Bombable Walls", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Tower of the Gods - Chest Behind Bombable Walls", lambda state: has_bombs(state, player))
+    set_rule_if_exists("Tower of the Gods - Pot Behind Bombable Walls", lambda state: has_bombs(state, player))
     set_rule_if_exists("Tower of the Gods - Hop Across Floating Boxes", lambda state: True)
-    set_rule_if_exists("Tower of the Gods - Light Two Torches", lambda state: state.has("Bombs", player))
-    set_rule_if_exists("Tower of the Gods - Skulls Room Chest", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Tower of the Gods - Light Two Torches", lambda state: has_bombs(state, player))
+    set_rule_if_exists("Tower of the Gods - Skulls Room Chest", lambda state: has_bombs(state, player))
     set_rule_if_exists(
         "Tower of the Gods - Shoot Eye Above Skulls Room Chest",
-        lambda state: state.has("Bombs", player) and has_heros_bow(state, player),
+        lambda state: has_bombs(state, player) and has_heros_bow(state, player),
     )
     set_rule_if_exists(
         "Tower of the Gods - Tingle Statue Chest",
@@ -501,13 +745,13 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Tower of the Gods - Stone Tablet",
-        lambda state: can_reach_tower_of_the_gods_second_floor(state, player) and state.has("Wind Waker", player),
+        lambda state: can_reach_tower_of_the_gods_second_floor(state, player) and state.has(ItemName.WIND_WAKER, player),
     )
     set_rule_if_exists("Tower of the Gods - Darknut Miniboss Room", lambda state: can_defeat_darknuts(state, player))
     set_rule_if_exists(
         "Tower of the Gods - Second Chest Guarded by Armos Knights",
         lambda state: can_reach_tower_of_the_gods_second_floor(state, player)
-        and state.has("Bombs", player)
+        and has_bombs(state, player)
         and can_play_winds_requiem(state, player),
     )
     set_rule_if_exists(
@@ -516,7 +760,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         and (
             has_heros_bow(state, player)
             or (can_fly_with_deku_leaf_indoors(state, player) and state._tww_precise_1(player))
-            or (state.has("Hookshot", player) and state._tww_obscure_1(player))
+            or (has_hookshot(state, player) and state._tww_obscure_1(player))
         ),
     )
     set_rule_if_exists(
@@ -544,7 +788,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: can_get_inside_forsaken_fortress(state, player)
         and (
             can_fly_with_deku_leaf_indoors(state, player)
-            or state.has("Hookshot", player)
+            or has_hookshot(state, player)
             or state._tww_obscure_1(player)
         ),
     )
@@ -575,7 +819,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Fire Mountain - Big Octo",
-        lambda state: can_defeat_big_octos(state, player) and state.has("Grappling Hook", player),
+        lambda state: can_defeat_big_octos(state, player) and has_grappling_hook(state, player),
     )
 
     # Ice Ring Isle
@@ -584,7 +828,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Ice Ring Isle - Inner Cave - Chest", lambda state: has_fire_arrows(state, player))
 
     # Headstone Island
-    set_rule_if_exists("Headstone Island - Top of the Island", lambda state: state.has("Bait Bag", player))
+    set_rule_if_exists("Headstone Island - Top of the Island", lambda state: has_bait_bag(state, player))
     set_rule_if_exists("Headstone Island - Submarine", lambda state: can_defeat_bombchus(state, player))
 
     # Earth Temple
@@ -595,12 +839,12 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Earth Temple - Behind Curtain In Warp Pot Room",
         lambda state: can_play_command_melody(state, player)
         and has_fire_arrows(state, player)
-        and state.has_any(["Boomerang", "Hookshot"], player),
+        and state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT], player),
     )
     set_rule_if_exists(
         "Earth Temple - Transparent Chest in First Crypt",
         lambda state: can_reach_earth_temple_right_path(state, player)
-        and state.has("Power Bracelets", player)
+        and has_power_bracelets(state, player)
         and (can_play_command_melody(state, player) or has_mirror_shield(state, player)),
     )
     set_rule_if_exists(
@@ -611,7 +855,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Earth Temple - Chest In Three Blocks Room",
         lambda state: can_reach_earth_temple_left_path(state, player)
         and has_fire_arrows(state, player)
-        and state.has("Power Bracelets", player)
+        and has_power_bracelets(state, player)
         and can_defeat_floormasters(state, player)
         and (can_play_command_melody(state, player) or can_aim_mirror_shield(state, player)),
     )
@@ -626,7 +870,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Earth Temple - Stalfos Miniboss Room",
-        lambda state: can_defeat_stalfos(state, player) or state.has("Hookshot", player),
+        lambda state: can_defeat_stalfos(state, player) or has_hookshot(state, player),
     )
     set_rule_if_exists(
         "Earth Temple - Tingle Statue Chest",
@@ -648,7 +892,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: can_reach_earth_temple_redead_hub_room(state, player)
         and (can_play_command_melody(state, player) or can_aim_mirror_shield(state, player))
         and has_fire_arrows(state, player)
-        and state.has_any(["Boomerang", "Hookshot"], player),
+        and state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT], player),
     )
     set_rule_if_exists(
         "Earth Temple - Chest in Third Crypt", lambda state: can_reach_earth_temple_third_crypt(state, player)
@@ -661,7 +905,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Earth Temple - Many Mirrors Room Left Chest",
         lambda state: can_reach_earth_temple_many_mirrors_room(state, player)
-        and state.has("Power Bracelets", player)
+        and has_power_bracelets(state, player)
         and can_play_command_melody(state, player)
         and can_aim_mirror_shield(state, player),
     )
@@ -672,7 +916,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Earth Temple - Big Key Chest",
         lambda state: can_reach_earth_temple_many_mirrors_room(state, player)
-        and state.has("Power Bracelets", player)
+        and has_power_bracelets(state, player)
         and can_play_command_melody(state, player)
         and can_aim_mirror_shield(state, player)
         and (
@@ -682,7 +926,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
                 (
                     has_heros_sword(state, player)
                     or has_any_master_sword(state, player)
-                    or state.has("Skull Hammer", player)
+                    or has_skull_hammer(state, player)
                 )
                 and state._tww_obscure_1(player)
                 and state._tww_precise_1(player)
@@ -699,7 +943,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Wind Temple - Behind Stone Head in Hidden Upper Room",
         lambda state: can_play_command_melody(state, player)
-        and state.has_all(["Iron Boots", "Hookshot"], player)
+        and state.has_all([ItemName.IRON_BOOTS, ItemName.HOOKSHOT], player)
         and can_fly_with_deku_leaf_indoors(state, player),
     )
     set_rule_if_exists(
@@ -709,18 +953,18 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Wind Temple - Chest Behind Stone Head",
         lambda state: can_reach_wind_temple_kidnapping_room(state, player)
-        and state.has_all(["Iron Boots", "Hookshot"], player),
+        and state.has_all([ItemName.IRON_BOOTS, ItemName.HOOKSHOT], player),
     )
     set_rule_if_exists(
         "Wind Temple - Chest in Left Alcove",
         lambda state: can_reach_wind_temple_kidnapping_room(state, player)
-        and state.has("Iron Boots", player)
+        and state.has(ItemName.IRON_BOOTS, player)
         and can_fan_with_deku_leaf(state, player),
     )
     set_rule_if_exists(
         "Wind Temple - Big Key Chest",
         lambda state: can_reach_wind_temple_kidnapping_room(state, player)
-        and state.has("Iron Boots", player)
+        and state.has(ItemName.IRON_BOOTS, player)
         and can_fan_with_deku_leaf(state, player)
         and can_play_wind_gods_aria(state, player)
         and can_defeat_darknuts(state, player),
@@ -730,18 +974,18 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         lambda state: can_reach_wind_temple_kidnapping_room(state, player)
         and (
             (
-                state.has("Iron Boots", player)
+                state.has(ItemName.IRON_BOOTS, player)
                 and can_fan_with_deku_leaf(state, player)
                 and can_fly_with_deku_leaf_indoors(state, player)
                 and (can_cut_grass(state, player) or has_magic_meter_upgrade(state, player))
             )
             or (
-                state.has("Hookshot", player)
+                has_hookshot(state, player)
                 and can_defeat_blue_bubbles(state, player)
                 and can_fly_with_deku_leaf_indoors(state, player)
             )
             or (
-                state.has("Hookshot", player)
+                has_hookshot(state, player)
                 and can_fly_with_deku_leaf_indoors(state, player)
                 and state._tww_obscure_1(player)
                 and state._tww_precise_2(player)
@@ -750,18 +994,18 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Wind Temple - Behind Stone Head in Many Cyclones Room",
-        lambda state: can_reach_end_of_wind_temple_many_cyclones_room(state, player) and state.has("Hookshot", player),
+        lambda state: can_reach_end_of_wind_temple_many_cyclones_room(state, player) and has_hookshot(state, player),
     )
     set_rule_if_exists(
         "Wind Temple - Chest In Middle Of Hub Room", lambda state: can_open_wind_temple_upper_giant_grate(state, player)
     )
     set_rule_if_exists(
         "Wind Temple - Spike Wall Room - First Chest",
-        lambda state: can_open_wind_temple_upper_giant_grate(state, player) and state.has("Iron Boots", player),
+        lambda state: can_open_wind_temple_upper_giant_grate(state, player) and state.has(ItemName.IRON_BOOTS, player),
     )
     set_rule_if_exists(
         "Wind Temple - Spike Wall Room - Destroy All Cracked Floors",
-        lambda state: can_open_wind_temple_upper_giant_grate(state, player) and state.has("Iron Boots", player),
+        lambda state: can_open_wind_temple_upper_giant_grate(state, player) and state.has(ItemName.IRON_BOOTS, player),
     )
     set_rule_if_exists(
         "Wind Temple - Wizzrobe Miniboss Room",
@@ -793,34 +1037,34 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Mailbox
     set_rule_if_exists(
         "Mailbox - Letter from Hoskit's Girlfriend",
-        lambda state: state.has("Spoils Bag", player)
+        lambda state: has_spoils_bag(state, player)
         and can_farm_golden_feathers(state, player)
         and can_play_song_of_passing(state, player),
     )
     set_rule_if_exists(
         "Mailbox - Letter from Baito's Mother",
-        lambda state: state.has_all(["Delivery Bag", "Note to Mom"], player)
+        lambda state: state.has_all([ItemName.DELIVERY_BAG, ItemName.NOTE_TO_MOM], player)
         and can_play_song_of_passing(state, player),
     )
     set_rule_if_exists(
         "Mailbox - Letter from Baito",
-        lambda state: state.has_all(["Delivery Bag", "Note to Mom"], player)
+        lambda state: state.has_all([ItemName.DELIVERY_BAG, ItemName.NOTE_TO_MOM], player)
         and state.can_reach_region("Jalhalla Boss Arena", player)
         and can_defeat_jalhalla(state, player),
     )
-    set_rule_if_exists("Mailbox - Letter from Komali's Father", lambda state: state.has("Farore's Pearl", player))
-    set_rule_if_exists("Mailbox - Letter Advertising Bombs in Beedle's Shop", lambda state: state.has("Bombs", player))
+    set_rule_if_exists("Mailbox - Letter from Komali's Father", lambda state: state.has(ItemName.FARORE_S_PEARL, player))
+    set_rule_if_exists("Mailbox - Letter Advertising Bombs in Beedle's Shop", lambda state: has_bombs(state, player))
     set_rule_if_exists(
         "Mailbox - Letter Advertising Rock Spire Shop Ship", lambda state: has_any_wallet_upgrade(state, player)
     )
     # set_rule_if_exists(
     #     "Mailbox - Beedle's Silver Membership Reward",
-    #     lambda state: (state.has_any(["Bait Bag", "Bombs", "Empty Bottle"], player) or has_heros_bow(state, player))
+    #     lambda state: (state.has_any([ItemName.BAIT_BAG, ItemName.BOMBS, ItemName.EMPTY_BOTTLE], player) or has_heros_bow(state, player))
     #     and can_play_song_of_passing(state, player),
     # )
     # set_rule_if_exists(
     #     "Mailbox - Beedle's Gold Membership Reward",
-    #     lambda state: (state.has_any(["Bait Bag", "Bombs", "Empty Bottle"], player) or has_heros_bow(state, player))
+    #     lambda state: (state.has_any([ItemName.BAIT_BAG, ItemName.BOMBS, ItemName.EMPTY_BOTTLE], player) or has_heros_bow(state, player))
     #     and can_play_song_of_passing(state, player),
     # )
     set_rule_if_exists(
@@ -830,7 +1074,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Mailbox - Letter from Grandma",
-        lambda state: state.has("Empty Bottle", player) and can_play_song_of_passing(state, player),
+        lambda state: state.has(ItemName.EMPTY_BOTTLE, player) and can_play_song_of_passing(state, player),
     )
     set_rule_if_exists(
         "Mailbox - Letter from Aryll",
@@ -850,17 +1094,17 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("The Great Sea - Beedle's Shop Ship - 20 Rupee Item", lambda state: True)
     set_rule_if_exists("The Great Sea - Salvage Corp Gift", lambda state: True)
     set_rule_if_exists("The Great Sea - Cyclos", lambda state: has_heros_bow(state, player))
-    set_rule_if_exists("The Great Sea - Goron Trading Reward", lambda state: state.has("Delivery Bag", player))
+    set_rule_if_exists("The Great Sea - Goron Trading Reward", lambda state: has_delivery_bag(state, player))
     set_rule_if_exists(
         "The Great Sea - Withered Trees",
         lambda state: can_access_forest_haven(state, player)
-        and state.has("Empty Bottle", player)
+        and state.has(ItemName.EMPTY_BOTTLE, player)
         and can_play_ballad_of_gales(state, player)
         and state.can_reach_region("Cliff Plateau Isles Inner Cave", player),
     )
     set_rule_if_exists(
         "The Great Sea - Ghost Ship",
-        lambda state: state.has("Ghost Ship Chart", player)
+        lambda state: state.has(ItemName.GHOST_SHIP_CHART, player)
         and can_play_ballad_of_gales(state, player)
         and can_defeat_wizzrobes(state, player)
         and can_defeat_redeads(state, player)
@@ -870,18 +1114,18 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Private Oasis
     set_rule_if_exists(
         "Private Oasis - Chest at Top of Waterfall",
-        lambda state: state.has("Hookshot", player) or can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_hookshot(state, player) or can_fly_with_deku_leaf_outdoors(state, player),
     )
     set_rule_if_exists(
-        "Private Oasis - Cabana Labyrinth - Lower Floor Chest", lambda state: state.has("Skull Hammer", player)
+        "Private Oasis - Cabana Labyrinth - Lower Floor Chest", lambda state: has_skull_hammer(state, player)
     )
     set_rule_if_exists(
         "Private Oasis - Cabana Labyrinth - Upper Floor Chest",
-        lambda state: state.has("Skull Hammer", player) and can_play_winds_requiem(state, player),
+        lambda state: has_skull_hammer(state, player) and can_play_winds_requiem(state, player),
     )
     set_rule_if_exists(
         "Private Oasis - Big Octo",
-        lambda state: can_defeat_big_octos(state, player) and state.has("Grappling Hook", player),
+        lambda state: can_defeat_big_octos(state, player) and has_grappling_hook(state, player),
     )
 
     # Spectacle Island
@@ -889,10 +1133,10 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Spectacle Island - Barrel Shooting - Second Prize", lambda state: True)
 
     # Needle Rock Isle
-    set_rule_if_exists("Needle Rock Isle - Chest", lambda state: state.has("Bait Bag", player))
+    set_rule_if_exists("Needle Rock Isle - Chest", lambda state: has_bait_bag(state, player))
     set_rule_if_exists("Needle Rock Isle - Cave", lambda state: has_fire_arrows(state, player))
     set_rule_if_exists(
-        "Needle Rock Isle - Golden Gunboat", lambda state: state.has_all(["Bombs", "Grappling Hook"], player)
+        "Needle Rock Isle - Golden Gunboat", lambda state: state.has_all([ItemName.BOMBS, ItemName.GRAPPLING_HOOK], player)
     )
 
     # Angular Isles
@@ -900,7 +1144,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Angular Isles - Cave",
         lambda state: can_aim_mirror_shield(state, player)
-        and (can_fly_with_deku_leaf_indoors(state, player) or state.has("Hookshot", player)),
+        and (can_fly_with_deku_leaf_indoors(state, player) or has_hookshot(state, player)),
     )
 
     # Boating Course
@@ -927,7 +1171,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
 
     # Islet of Steel
     set_rule_if_exists(
-        "Islet of Steel - Interior", lambda state: state.has("Bombs", player) and can_play_winds_requiem(state, player)
+        "Islet of Steel - Interior", lambda state: has_bombs(state, player) and can_play_winds_requiem(state, player)
     )
     set_rule_if_exists(
         "Islet of Steel - Lookout Platform - Defeat the Enemies",
@@ -961,7 +1205,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
         "Pawprint Isle - Chuchu Cave - Behind Right Boulder", lambda state: can_move_boulders(state, player)
     )
     set_rule_if_exists(
-        "Pawprint Isle - Chuchu Cave - Scale the Wall", lambda state: state.has("Grappling Hook", player)
+        "Pawprint Isle - Chuchu Cave - Scale the Wall", lambda state: has_grappling_hook(state, player)
     )
     set_rule_if_exists(
         "Pawprint Isle - Wizzrobe Cave",
@@ -1020,7 +1264,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Tingle Island - Big Octo",
-        lambda state: can_defeat_12_eye_big_octos(state, player) and state.has("Grappling Hook", player),
+        lambda state: can_defeat_12_eye_big_octos(state, player) and has_grappling_hook(state, player),
     )
 
     # Diamond Steppe Island
@@ -1028,7 +1272,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists("Diamond Steppe Island - Warp Maze Cave - Second Chest", lambda state: True)
     set_rule_if_exists(
         "Diamond Steppe Island - Big Octo",
-        lambda state: can_defeat_big_octos(state, player) and state.has("Grappling Hook", player),
+        lambda state: can_defeat_big_octos(state, player) and has_grappling_hook(state, player),
     )
 
     # Bomb Island
@@ -1060,7 +1304,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists("Rock Spire Isle - Center Lookout Platform", lambda state: True)
     set_rule_if_exists(
-        "Rock Spire Isle - Southeast Gunboat", lambda state: state.has_all(["Bombs", "Grappling Hook"], player)
+        "Rock Spire Isle - Southeast Gunboat", lambda state: state.has_all([ItemName.BOMBS, ItemName.GRAPPLING_HOOK], player)
     )
 
     # Shark Island
@@ -1070,7 +1314,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Cliff Plateau Isles - Cave",
         lambda state: can_defeat_boko_babas(state, player)
-        or (state.has("Grappling Hook", player) and state._tww_obscure_1(player) and state._tww_precise_1(player)),
+        or (has_grappling_hook(state, player) and state._tww_obscure_1(player) and state._tww_precise_1(player)),
     )
     set_rule_if_exists("Cliff Plateau Isles - Highest Isle", lambda state: True)
     set_rule_if_exists("Cliff Plateau Isles - Lookout Platform", lambda state: True)
@@ -1083,7 +1327,7 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     set_rule_if_exists(
         "Horseshoe Island - Play Golf",
         lambda state: can_fan_with_deku_leaf(state, player)
-        and (can_fly_with_deku_leaf_outdoors(state, player) or state.has("Hookshot", player)),
+        and (can_fly_with_deku_leaf_outdoors(state, player) or has_hookshot(state, player)),
     )
     set_rule_if_exists(
         "Horseshoe Island - Cave",
@@ -1128,20 +1372,20 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     )
     set_rule_if_exists(
         "Seven-Star Isles - Big Octo",
-        lambda state: can_defeat_12_eye_big_octos(state, player) and state.has("Grappling Hook", player),
+        lambda state: can_defeat_12_eye_big_octos(state, player) and has_grappling_hook(state, player),
     )
 
     # Cyclops Reef
     set_rule_if_exists(
         "Cyclops Reef - Destroy the Cannons and Gunboats",
-        lambda state: state.has("Bombs", player) and can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_bombs(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
     )
     set_rule_if_exists("Cyclops Reef - Lookout Platform - Defeat the Enemies", lambda state: True)
 
     # Two-Eye Reef
     set_rule_if_exists(
         "Two-Eye Reef - Destroy the Cannons and Gunboats",
-        lambda state: state.has("Bombs", player) and can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_bombs(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
     )
     set_rule_if_exists("Two-Eye Reef - Lookout Platform", lambda state: True)
     set_rule_if_exists("Two-Eye Reef - Big Octo Great Fairy", lambda state: can_defeat_big_octos(state, player))
@@ -1149,13 +1393,13 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Three-Eye Reef
     set_rule_if_exists(
         "Three-Eye Reef - Destroy the Cannons and Gunboats",
-        lambda state: state.has("Bombs", player) and can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_bombs(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
     )
 
     # Four-Eye Reef
     set_rule_if_exists(
         "Four-Eye Reef - Destroy the Cannons and Gunboats",
-        lambda state: state.has("Bombs", player) and can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_bombs(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
     )
 
     # Five-Eye Reef
@@ -1168,247 +1412,15 @@ def set_rules(world: "TWWWorld") -> None:  # noqa: F405
     # Six-Eye Reef
     set_rule_if_exists(
         "Six-Eye Reef - Destroy the Cannons and Gunboats",
-        lambda state: state.has("Bombs", player) and can_fly_with_deku_leaf_outdoors(state, player),
+        lambda state: has_bombs(state, player) and can_fly_with_deku_leaf_outdoors(state, player),
     )
     set_rule_if_exists(
         "Six-Eye Reef - Lookout Platform - Destroy the Cannons", lambda state: can_destroy_cannons(state, player)
     )
     set_rule_if_exists("Six-Eye Reef - Submarine", lambda state: True)
 
-    # Sunken Treasure
-    set_rule_if_exists(
-        "Forsaken Fortress Sector - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 1),
-    )
-    set_rule_if_exists(
-        "Star Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 2),
-    )
-    set_rule_if_exists(
-        "Northern Fairy Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 3),
-    )
-    set_rule_if_exists(
-        "Gale Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 4),
-    )
-    set_rule_if_exists(
-        "Crescent Moon Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 5),
-    )
-    set_rule_if_exists(
-        "Seven-Star Isles - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 6)
-        and (state.has("Bombs", player) or state._tww_precise_1(player)),
-    )
-    set_rule_if_exists(
-        "Overlook Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 7),
-    )
-    set_rule_if_exists(
-        "Four-Eye Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 8)
-        and (
-            state.has("Bombs", player)
-            or state._tww_precise_1(player)
-            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
-        ),
-    )
-    set_rule_if_exists(
-        "Mother and Child Isles - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 9),
-    )
-    set_rule_if_exists(
-        "Spectacle Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 10),
-    )
-    set_rule_if_exists(
-        "Windfall Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 11),
-    )
-    set_rule_if_exists(
-        "Pawprint Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 12),
-    )
-    set_rule_if_exists(
-        "Dragon Roost Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 13),
-    )
-    set_rule_if_exists(
-        "Flight Control Platform - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 14),
-    )
-    set_rule_if_exists(
-        "Western Fairy Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 15),
-    )
-    set_rule_if_exists(
-        "Rock Spire Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 16),
-    )
-    set_rule_if_exists(
-        "Tingle Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 17),
-    )
-    set_rule_if_exists(
-        "Northern Triangle Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 18),
-    )
-    set_rule_if_exists(
-        "Eastern Fairy Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 19),
-    )
-    set_rule_if_exists(
-        "Fire Mountain - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 20),
-    )
-    set_rule_if_exists(
-        "Star Belt Archipelago - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 21),
-    )
-    set_rule_if_exists(
-        "Three-Eye Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 22)
-        and (
-            state.has("Bombs", player)
-            or state._tww_precise_1(player)
-            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
-        ),
-    )
-    set_rule_if_exists(
-        "Greatfish Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 23),
-    )
-    set_rule_if_exists(
-        "Cyclops Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 24)
-        and (
-            state.has("Bombs", player)
-            or state._tww_precise_1(player)
-            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
-        ),
-    )
-    set_rule_if_exists(
-        "Six-Eye Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 25)
-        and (
-            state.has("Bombs", player)
-            or state._tww_precise_1(player)
-            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
-        ),
-    )
-    set_rule_if_exists(
-        "Tower of the Gods Sector - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 26),
-    )
-    set_rule_if_exists(
-        "Eastern Triangle Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 27),
-    )
-    set_rule_if_exists(
-        "Thorned Fairy Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 28),
-    )
-    set_rule_if_exists(
-        "Needle Rock Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 29),
-    )
-    set_rule_if_exists(
-        "Islet of Steel - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 30),
-    )
-    set_rule_if_exists(
-        "Stone Watcher Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 31),
-    )
-    set_rule_if_exists(
-        "Southern Triangle Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 32)
-        and (can_defeat_seahats(state, player) or state._tww_precise_1(player)),
-    )
-    set_rule_if_exists(
-        "Private Oasis - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 33),
-    )
-    set_rule_if_exists(
-        "Bomb Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 34),
-    )
-    set_rule_if_exists(
-        "Bird's Peak Rock - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 35),
-    )
-    set_rule_if_exists(
-        "Diamond Steppe Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 36),
-    )
-    set_rule_if_exists(
-        "Five-Eye Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 37)
-        and can_destroy_cannons(state, player),
-    )
-    set_rule_if_exists(
-        "Shark Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 38),
-    )
-    set_rule_if_exists(
-        "Southern Fairy Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 39),
-    )
-    set_rule_if_exists(
-        "Ice Ring Isle - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 40),
-    )
-    set_rule_if_exists(
-        "Forest Haven - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 41),
-    )
-    set_rule_if_exists(
-        "Cliff Plateau Isles - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 42),
-    )
-    set_rule_if_exists(
-        "Horseshoe Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 43),
-    )
-    set_rule_if_exists(
-        "Outset Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 44),
-    )
-    set_rule_if_exists(
-        "Headstone Island - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 45),
-    )
-    set_rule_if_exists(
-        "Two-Eye Reef - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player)
-        and state._tww_has_chart_for_island(player, 46)
-        and (
-            state.has("Bombs", player)
-            or state._tww_precise_1(player)
-            or (can_use_magic_armor(state, player) and state._tww_obscure_1(player))
-        ),
-    )
-    set_rule_if_exists(
-        "Angular Isles - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 47),
-    )
-    set_rule_if_exists(
-        "Boating Course - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 48),
-    )
-    set_rule_if_exists(
-        "Five-Star Isles - Sunken Treasure",
-        lambda state: state.has("Grappling Hook", player) and state._tww_has_chart_for_island(player, 49),
-    )
+    _set_sunken_treasure_rules(world, set_rule_if_exists)
 
     set_rule_if_exists("Defeat Ganondorf", lambda state: can_reach_and_defeat_ganondorf(state, player))
 
-    world.multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
+    world.multiworld.completion_condition[player] = lambda state: state.has(ItemName.VICTORY, player)

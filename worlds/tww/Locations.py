@@ -1,7 +1,10 @@
 from enum import Enum, Flag, auto
-from typing import TYPE_CHECKING, NamedTuple, Optional
+from typing import TYPE_CHECKING, NamedTuple
 
 from BaseClasses import Location, Region
+
+from .Constants import GAME_NAME
+from .Enums import SectorName
 
 if TYPE_CHECKING:
     from .randomizers.Dungeons import Dungeon
@@ -71,13 +74,13 @@ class TWWLocationData(NamedTuple):
     that location. Defaults to `None`.
     """
 
-    code: Optional[int]
+    code: int | None
     flags: TWWFlag
     region: str
     stage_id: int
     type: TWWLocationType
     bit: int
-    address: Optional[int] = None
+    address: int | None = None
 
 
 class TWWLocation(Location):
@@ -90,8 +93,8 @@ class TWWLocation(Location):
     :param data: The data associated with this location.
     """
 
-    game: str = "The Wind Waker"
-    dungeon: Optional["Dungeon"] = None
+    game: str = GAME_NAME
+    dungeon: "Dungeon | None" = None
 
     def __init__(self, player: int, name: str, parent: Region, data: TWWLocationData):
         address = None if data.code is None else TWWLocation.get_apid(data.code)
@@ -1205,55 +1208,55 @@ LOCATION_TABLE: dict[str, TWWLocationData] = {
 
 
 ISLAND_NAME_TO_SALVAGE_BIT: dict[str, int] = {
-    "Forsaken Fortress Sector": 8,
-    "Star Island": 18,
-    "Northern Fairy Island": 51,
-    "Gale Isle": 33,
-    "Crescent Moon Island": 40,
-    "Seven-Star Isles": 38,
-    "Overlook Island": 15,
-    "Four-Eye Reef": 12,
-    "Mother and Child Isles": 56,
-    "Spectacle Island": 5,
-    "Windfall Island": 58,
-    "Pawprint Isle": 42,
-    "Dragon Roost Island": 50,
-    "Flight Control Platform": 13,
-    "Western Fairy Island": 10,
-    "Rock Spire Isle": 48,
-    "Tingle Island": 0,
-    "Northern Triangle Island": 11,
-    "Eastern Fairy Island": 62,
-    "Fire Mountain": 9,
-    "Star Belt Archipelago": 17,
-    "Three-Eye Reef": 49,
-    "Greatfish Isle": 32,
-    "Cyclops Reef": 16,
-    "Six-Eye Reef": 52,
-    "Tower of the Gods Sector": 1,
-    "Eastern Triangle Island": 57,
-    "Thorned Fairy Island": 44,
-    "Needle Rock Isle": 60,
-    "Islet of Steel": 54,
-    "Stone Watcher Island": 34,
-    "Southern Triangle Island": 37,
-    "Private Oasis": 55,
-    "Bomb Island": 43,
-    "Bird's Peak Rock": 6,
-    "Diamond Steppe Island": 45,
-    "Five-Eye Reef": 53,
-    "Shark Island": 59,
-    "Southern Fairy Island": 61,
-    "Ice Ring Isle": 7,
-    "Forest Haven": 46,
-    "Cliff Plateau Isles": 36,
-    "Horseshoe Island": 4,
-    "Outset Island": 35,
-    "Headstone Island": 63,
-    "Two-Eye Reef": 39,
-    "Angular Isles": 41,
-    "Boating Course": 14,
-    "Five-Star Isles": 47,
+    SectorName.FORSAKEN_FORTRESS_SECTOR.value: 8,
+    SectorName.STAR_ISLAND.value: 18,
+    SectorName.NORTHERN_FAIRY_ISLAND.value: 51,
+    SectorName.GALE_ISLE.value: 33,
+    SectorName.CRESCENT_MOON_ISLAND.value: 40,
+    SectorName.SEVEN_STAR_ISLES.value: 38,
+    SectorName.OVERLOOK_ISLAND.value: 15,
+    SectorName.FOUR_EYE_REEF.value: 12,
+    SectorName.MOTHER_AND_CHILD_ISLES.value: 56,
+    SectorName.SPECTACLE_ISLAND.value: 5,
+    SectorName.WINDFALL_ISLAND.value: 58,
+    SectorName.PAWPRINT_ISLE.value: 42,
+    SectorName.DRAGON_ROOST_ISLAND.value: 50,
+    SectorName.FLIGHT_CONTROL_PLATFORM.value: 13,
+    SectorName.WESTERN_FAIRY_ISLAND.value: 10,
+    SectorName.ROCK_SPIRE_ISLE.value: 48,
+    SectorName.TINGLE_ISLAND.value: 0,
+    SectorName.NORTHERN_TRIANGLE_ISLAND.value: 11,
+    SectorName.EASTERN_FAIRY_ISLAND.value: 62,
+    SectorName.FIRE_MOUNTAIN.value: 9,
+    SectorName.STAR_BELT_ARCHIPELAGO.value: 17,
+    SectorName.THREE_EYE_REEF.value: 49,
+    SectorName.GREATFISH_ISLE.value: 32,
+    SectorName.CYCLOPS_REEF.value: 16,
+    SectorName.SIX_EYE_REEF.value: 52,
+    SectorName.TOWER_OF_THE_GODS_SECTOR.value: 1,
+    SectorName.EASTERN_TRIANGLE_ISLAND.value: 57,
+    SectorName.THORNED_FAIRY_ISLAND.value: 44,
+    SectorName.NEEDLE_ROCK_ISLE.value: 60,
+    SectorName.ISLET_OF_STEEL.value: 54,
+    SectorName.STONE_WATCHER_ISLAND.value: 34,
+    SectorName.SOUTHERN_TRIANGLE_ISLAND.value: 37,
+    SectorName.PRIVATE_OASIS.value: 55,
+    SectorName.BOMB_ISLAND.value: 43,
+    SectorName.BIRD_S_PEAK_ROCK.value: 6,
+    SectorName.DIAMOND_STEPPE_ISLAND.value: 45,
+    SectorName.FIVE_EYE_REEF.value: 53,
+    SectorName.SHARK_ISLAND.value: 59,
+    SectorName.SOUTHERN_FAIRY_ISLAND.value: 61,
+    SectorName.ICE_RING_ISLE.value: 7,
+    SectorName.FOREST_HAVEN.value: 46,
+    SectorName.CLIFF_PLATEAU_ISLES.value: 36,
+    SectorName.HORSESHOE_ISLAND.value: 4,
+    SectorName.OUTSET_ISLAND.value: 35,
+    SectorName.HEADSTONE_ISLAND.value: 63,
+    SectorName.TWO_EYE_REEF.value: 39,
+    SectorName.ANGULAR_ISLES.value: 41,
+    SectorName.BOATING_COURSE.value: 14,
+    SectorName.FIVE_STAR_ISLES.value: 47,
 }
 
 

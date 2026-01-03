@@ -45,12 +45,21 @@ class RequiredBossesRandomizer:
                 "A conflict was found in the lists of required and banned dungeons for required bosses mode."
             )
 
-    def randomize_required_bosses(self) -> None:
+    def randomize_required_bosses(self, skip_randomization: bool = False) -> None:
         """
         Randomize the required bosses based on user-defined constraints and options.
 
+        If skip_randomization is True, required bosses will not be randomized but will still
+        be set up. This is used when required bosses were pre-loaded from UT slot_data to
+        preserve the server's original configuration.
+
+        :param skip_randomization: Whether to skip randomization and only use pre-loaded configuration.
         :raises OptionError: If the randomization fails to meet user-defined constraints.
         """
+        # If required bosses were pre-loaded from server (UT mode), skip randomization
+        if skip_randomization:
+            return
+
         options = self.world.options
 
         # Validate constraints on required bosses options.

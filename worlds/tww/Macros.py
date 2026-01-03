@@ -1,128 +1,162 @@
 from BaseClasses import CollectionState
+from .Constants import GLITCHED_ITEM
+from .Enums import ItemName
 
 
 def can_play_winds_requiem(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Wind's Requiem"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.WIND_S_REQUIEM], player)
 
 
 def can_play_ballad_of_gales(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Ballad of Gales"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.BALLAD_OF_GALES], player)
 
 
 def can_play_command_melody(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Command Melody"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.COMMAND_MELODY], player)
 
 
 def can_play_earth_gods_lyric(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Earth God's Lyric"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.EARTH_GOD_S_LYRIC], player)
 
 
 def can_play_wind_gods_aria(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Wind God's Aria"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.WIND_GOD_S_ARIA], player)
 
 
 def can_play_song_of_passing(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Wind Waker", "Song of Passing"], player)
+    return state.has_all([ItemName.WIND_WAKER, ItemName.SONG_OF_PASSING], player)
 
 
 def can_fan_with_deku_leaf(state: CollectionState, player: int) -> bool:
-    return state.has("Deku Leaf", player)
+    return state.has(ItemName.DEKU_LEAF, player)
 
 
 def can_fly_with_deku_leaf_indoors(state: CollectionState, player: int) -> bool:
-    return state.has("Deku Leaf", player) and has_magic_meter(state, player)
+    return state.has(ItemName.DEKU_LEAF, player) and has_magic_meter(state, player)
 
 
 def can_fly_with_deku_leaf_outdoors(state: CollectionState, player: int) -> bool:
-    return state.has("Deku Leaf", player) and has_magic_meter(state, player) and can_play_winds_requiem(state, player)
+    return state.has(ItemName.DEKU_LEAF, player) and has_magic_meter(state, player) and can_play_winds_requiem(state, player)
 
 
 def can_use_magic_armor(state: CollectionState, player: int) -> bool:
-    return state.has("Magic Armor", player) and has_magic_meter(state, player)
+    return state.has(ItemName.MAGIC_ARMOR, player) and has_magic_meter(state, player)
 
 
 def can_aim_mirror_shield(state: CollectionState, player: int) -> bool:
     return has_mirror_shield(state, player) and (
-        state.has_any(["Wind Waker", "Grappling Hook", "Boomerang", "Deku Leaf", "Hookshot"], player)
+        state.has_any([ItemName.WIND_WAKER, ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG, ItemName.DEKU_LEAF, ItemName.HOOKSHOT], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_move_boulders(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Bombs", "Power Bracelets"], player)
+    return state.has_any([ItemName.BOMBS, ItemName.POWER_BRACELETS], player)
 
 
 def can_defeat_door_flowers(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Bombs", "Hookshot"], player) or has_heros_bow(state, player)
+    return state.has_any([ItemName.BOOMERANG, ItemName.BOMBS, ItemName.HOOKSHOT], player) or has_heros_bow(state, player)
 
 
 def can_hit_diamond_switches_at_range(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Hookshot"], player) or has_heros_bow(state, player)
+    return state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT], player) or has_heros_bow(state, player)
 
 
 def can_destroy_seeds_hanging_by_vines(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Bombs", "Hookshot"], player) or has_heros_bow(state, player)
+    return state.has_any([ItemName.BOOMERANG, ItemName.BOMBS, ItemName.HOOKSHOT], player) or has_heros_bow(state, player)
 
 
 def has_heros_sword(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Sword", player, 1)
+    return state.has(ItemName.PROGRESSIVE_SWORD, player, 1)
 
 
 def has_any_master_sword(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Sword", player, 2)
+    return state.has(ItemName.PROGRESSIVE_SWORD, player, 2)
 
 
 def has_full_power_master_sword(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Sword", player, 4)
+    return state.has(ItemName.PROGRESSIVE_SWORD, player, 4)
 
 
 def has_heros_shield(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Shield", player, 1)
+    return state.has(ItemName.PROGRESSIVE_SHIELD, player, 1)
 
 
 def has_mirror_shield(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Shield", player, 2)
+    return state.has(ItemName.PROGRESSIVE_SHIELD, player, 2)
 
 
 def has_heros_bow(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bow", player, 1)
+    return state.has(ItemName.PROGRESSIVE_BOW, player, 1)
 
 
 def has_fire_arrows(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bow", player, 2) and has_magic_meter(state, player)
+    return state.has(ItemName.PROGRESSIVE_BOW, player, 2) and has_magic_meter(state, player)
 
 
 def has_ice_arrows(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bow", player, 2) and has_magic_meter(state, player)
+    return state.has(ItemName.PROGRESSIVE_BOW, player, 2) and has_magic_meter(state, player)
 
 
 def has_light_arrows(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Bow", player, 3) and has_magic_meter(state, player)
+    return state.has(ItemName.PROGRESSIVE_BOW, player, 3) and has_magic_meter(state, player)
+
+
+def has_grappling_hook(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.GRAPPLING_HOOK, player)
+
+
+def has_bombs(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.BOMBS, player)
+
+
+def has_delivery_bag(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.DELIVERY_BAG, player)
+
+
+def has_spoils_bag(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.SPOILS_BAG, player)
+
+
+def has_bait_bag(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.BAIT_BAG, player)
+
+
+def has_skull_hammer(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.SKULL_HAMMER, player)
+
+
+def has_power_bracelets(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.POWER_BRACELETS, player)
+
+
+def has_hookshot(state: CollectionState, player: int) -> bool:
+    return state.has(ItemName.HOOKSHOT, player)
 
 
 def has_any_wallet_upgrade(state: CollectionState, player: int) -> bool:
-    return state.has("Wallet Capacity Upgrade", player, 1)
+    return state.has(ItemName.WALLET_CAPACITY_UPGRADE, player, 1)
 
 
 def has_picto_box(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Picto Box", player, 1)
+    return state.has(ItemName.PROGRESSIVE_PICTO_BOX, player, 1)
 
 
 def has_deluxe_picto_box(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Picto Box", player, 2)
+    return state.has(ItemName.PROGRESSIVE_PICTO_BOX, player, 2)
 
 
 def has_any_quiver_upgrade(state: CollectionState, player: int) -> bool:
-    return state.has("Quiver Capacity Upgrade", player, 1)
+    return state.has(ItemName.QUIVER_CAPACITY_UPGRADE, player, 1)
 
 
 def has_magic_meter(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Magic Meter", player, 1)
+    return state.has(ItemName.PROGRESSIVE_MAGIC_METER, player, 1)
 
 
 def has_magic_meter_upgrade(state: CollectionState, player: int) -> bool:
-    return state.has("Progressive Magic Meter", player, 2)
+    return state.has(ItemName.PROGRESSIVE_MAGIC_METER, player, 2)
 
 
 def has_all_8_triforce_shards(state: CollectionState, player: int) -> bool:
@@ -130,8 +164,11 @@ def has_all_8_triforce_shards(state: CollectionState, player: int) -> bool:
 
 
 def has_tingle_bombs(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player) or (state._tww_tuner_logic_enabled(player) and state.has("Tingle Tuner", player))
+    return has_bombs(state, player) or (state._tww_tuner_logic_enabled(player) and state.has(ItemName.TINGLE_TUNER, player))
 
+
+def has_glitched_item(state: CollectionState, player: int) -> bool:
+    return state.has(GLITCHED_ITEM, player)
 
 def can_reach_outset_island_upper_level(state: CollectionState, player: int) -> bool:
     return can_cut_down_outset_trees(state, player) or (
@@ -144,23 +181,23 @@ def can_access_forest_of_fairies(state: CollectionState, player: int) -> bool:
 
 
 def can_reach_dragon_roost_cavern_gaping_maw(state: CollectionState, player: int) -> bool:
-    return state.has("DRC Small Key", player, 1) and (
-        (state.has("DRC Small Key", player, 4) and can_cut_down_hanging_drc_platform(state, player))
+    return state.has(ItemName.DRC_SMALL_KEY, player, 1) and (
+        (state.has(ItemName.DRC_SMALL_KEY, player, 4) and can_cut_down_hanging_drc_platform(state, player))
         or (can_fly_with_deku_leaf_indoors(state, player) and state._tww_obscure_2(player))
         or (has_ice_arrows(state, player) and state._tww_obscure_2(player) and state._tww_precise_1(player))
     )
 
 
 def can_reach_dragon_roost_cavern_boss_stairs(state: CollectionState, player: int) -> bool:
-    return state.has("DRC Small Key", player, 4) and (
-        state.has_any(["Grappling Hook", "Hookshot"], player)
+    return state.has(ItemName.DRC_SMALL_KEY, player, 4) and (
+        state.has_any([ItemName.GRAPPLING_HOOK, ItemName.HOOKSHOT], player)
         or can_fly_with_deku_leaf_indoors(state, player)
         or has_ice_arrows(state, player)
     )
 
 
 def can_reach_tower_of_the_gods_second_floor(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Bombs", "TotG Small Key"], player) and can_defeat_yellow_chuchus(state, player)
+    return state.has_all([ItemName.BOMBS, ItemName.TOTG_SMALL_KEY], player) and can_defeat_yellow_chuchus(state, player)
 
 
 def can_reach_tower_of_the_gods_third_floor(state: CollectionState, player: int) -> bool:
@@ -168,13 +205,13 @@ def can_reach_tower_of_the_gods_third_floor(state: CollectionState, player: int)
         can_reach_tower_of_the_gods_second_floor(state, player)
         and can_bring_west_servant_of_the_tower(state, player)
         and can_bring_north_servant_of_the_tower(state, player)
-        and state.has("Wind Waker", player)
+        and state.has(ItemName.WIND_WAKER, player)
     )
 
 
 def can_bring_west_servant_of_the_tower(state: CollectionState, player: int) -> bool:
     return (
-        (state.has("Grappling Hook", player) or can_fly_with_deku_leaf_indoors(state, player))
+        (state.has(ItemName.GRAPPLING_HOOK, player) or can_fly_with_deku_leaf_indoors(state, player))
         and can_play_command_melody(state, player)
         and has_heros_bow(state, player)
     )
@@ -182,7 +219,7 @@ def can_bring_west_servant_of_the_tower(state: CollectionState, player: int) -> 
 
 def can_bring_north_servant_of_the_tower(state: CollectionState, player: int) -> bool:
     return (
-        state.has("TotG Small Key", player, 2)
+        state.has(ItemName.TOTG_SMALL_KEY, player, 2)
         and (can_fly_with_deku_leaf_indoors(state, player) or state._tww_obscure_1(player))
         and can_play_command_melody(state, player)
     )
@@ -200,19 +237,19 @@ def can_reach_earth_temple_right_path(state: CollectionState, player: int) -> bo
     return (
         can_reach_earth_temple_sun_statue_room(state, player)
         and can_play_command_melody(state, player)
-        and state.has("Skull Hammer", player)
+        and state.has(ItemName.SKULL_HAMMER, player)
     )
 
 
 def can_reach_earth_temple_left_path(state: CollectionState, player: int) -> bool:
-    return can_reach_earth_temple_sun_statue_room(state, player) and state.has("ET Small Key", player, 2)
+    return can_reach_earth_temple_sun_statue_room(state, player) and state.has(ItemName.ET_SMALL_KEY, player, 2)
 
 
 def can_reach_earth_temple_moblins_and_poes_room(state: CollectionState, player: int) -> bool:
     return (
         can_reach_earth_temple_left_path(state, player)
         and has_fire_arrows(state, player)
-        and state.has("Power Bracelets", player)
+        and state.has(ItemName.POWER_BRACELETS, player)
         and can_defeat_floormasters(state, player)
         and (can_play_command_melody(state, player) or has_mirror_shield(state, player))
     )
@@ -234,7 +271,7 @@ def can_reach_earth_temple_third_crypt(state: CollectionState, player: int) -> b
     return (
         can_reach_earth_temple_redead_hub_room(state, player)
         and (can_play_command_melody(state, player) or can_aim_mirror_shield(state, player))
-        and state.has_all_counts({"Power Bracelets": 1, "Skull Hammer": 1, "ET Small Key": 3}, player)
+        and state.has_all_counts({ItemName.POWER_BRACELETS: 1, ItemName.SKULL_HAMMER: 1, ItemName.ET_SMALL_KEY: 3}, player)
         and (can_defeat_red_bubbles(state, player) or state._tww_precise_2(player))
         and can_play_command_melody(state, player)
         and can_aim_mirror_shield(state, player)
@@ -252,7 +289,7 @@ def can_reach_earth_temple_many_mirrors_room(state: CollectionState, player: int
 def can_reach_wind_temple_kidnapping_room(state: CollectionState, player: int) -> bool:
     return (
         can_play_command_melody(state, player)
-        and state.has("Iron Boots", player)
+        and state.has(ItemName.IRON_BOOTS, player)
         and can_fly_with_deku_leaf_indoors(state, player)
     )
 
@@ -260,18 +297,18 @@ def can_reach_wind_temple_kidnapping_room(state: CollectionState, player: int) -
 def can_reach_end_of_wind_temple_many_cyclones_room(state: CollectionState, player: int) -> bool:
     return can_reach_wind_temple_kidnapping_room(state, player) and (
         (
-            state.has("Iron Boots", player)
+            state.has(ItemName.IRON_BOOTS, player)
             and can_fan_with_deku_leaf(state, player)
             and can_fly_with_deku_leaf_indoors(state, player)
             and can_cut_grass(state, player)
         )
         or (
-            state.has("Hookshot", player)
+            state.has(ItemName.HOOKSHOT, player)
             and can_defeat_blue_bubbles(state, player)
             and can_fly_with_deku_leaf_indoors(state, player)
         )
         or (
-            state.has("Hookshot", player)
+            state.has(ItemName.HOOKSHOT, player)
             and can_fly_with_deku_leaf_indoors(state, player)
             and state._tww_obscure_1(player)
             and state._tww_precise_2(player)
@@ -280,7 +317,7 @@ def can_reach_end_of_wind_temple_many_cyclones_room(state: CollectionState, play
 
 
 def can_open_wind_temple_upper_giant_grate(state: CollectionState, player: int) -> bool:
-    return can_reach_end_of_wind_temple_many_cyclones_room(state, player) and state.has("Iron Boots", player)
+    return can_reach_end_of_wind_temple_many_cyclones_room(state, player) and state.has(ItemName.IRON_BOOTS, player)
 
 
 def can_activate_wind_temple_giant_fan(state: CollectionState, player: int) -> bool:
@@ -290,7 +327,7 @@ def can_activate_wind_temple_giant_fan(state: CollectionState, player: int) -> b
 def can_open_wind_temple_lower_giant_grate(state: CollectionState, player: int) -> bool:
     return (
         can_reach_wind_temple_kidnapping_room(state, player)
-        and state.has("Hookshot", player)
+        and state.has(ItemName.HOOKSHOT, player)
         and can_defeat_blue_bubbles(state, player)
     )
 
@@ -299,7 +336,7 @@ def can_reach_wind_temple_tall_basement_room(state: CollectionState, player: int
     return (
         can_open_wind_temple_upper_giant_grate(state, player)
         and can_open_wind_temple_lower_giant_grate(state, player)
-        and state.has("WT Small Key", player, 2)
+        and state.has(ItemName.WT_SMALL_KEY, player, 2)
     )
 
 
@@ -308,14 +345,14 @@ def can_access_dungeon_entrance_on_dragon_roost_island(state: CollectionState, p
 
 
 def can_access_forest_haven(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player) or can_fly_with_deku_leaf_outdoors(state, player)
+    return state.has(ItemName.GRAPPLING_HOOK, player) or can_fly_with_deku_leaf_outdoors(state, player)
 
 
 def can_access_dungeon_entrance_in_forest_haven_sector(state: CollectionState, player: int) -> bool:
     return (
         can_access_forest_haven(state, player)
         and (
-            state.has("Grappling Hook", player)
+            state.has(ItemName.GRAPPLING_HOOK, player)
             or (
                 can_fly_with_deku_leaf_indoors(state, player)
                 and can_fly_with_deku_leaf_outdoors(state, player)
@@ -337,35 +374,35 @@ def can_access_dungeon_entrance_in_forsaken_fortress_sector(state: CollectionSta
 
 
 def can_access_dungeon_entrance_on_headstone_island(state: CollectionState, player: int) -> bool:
-    return state.has("Power Bracelets", player)
+    return state.has(ItemName.POWER_BRACELETS, player)
 
 
 def can_access_dungeon_entrance_on_gale_isle(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Iron Boots", "Skull Hammer"], player)
+    return state.has_all([ItemName.IRON_BOOTS, ItemName.SKULL_HAMMER], player)
 
 
 def can_access_miniboss_entrance_in_forbidden_woods(state: CollectionState, player: int) -> bool:
     return (
         can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and state.has_all(["Grappling Hook", "FW Small Key"], player)
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.FW_SMALL_KEY], player)
     )
 
 
 def can_access_miniboss_entrance_in_tower_of_the_gods(state: CollectionState, player: int) -> bool:
     return (
         can_reach_tower_of_the_gods_second_floor(state, player)
-        and (state.has("Grappling Hook", player) or can_fly_with_deku_leaf_indoors(state, player))
+        and (state.has(ItemName.GRAPPLING_HOOK, player) or can_fly_with_deku_leaf_indoors(state, player))
         and (can_play_command_melody(state, player) or has_heros_bow(state, player))
     )
 
 
 def can_access_miniboss_entrance_in_earth_temple(state: CollectionState, player: int) -> bool:
-    return can_reach_earth_temple_moblins_and_poes_room(state, player) and state.has("ET Small Key", player, 3)
+    return can_reach_earth_temple_moblins_and_poes_room(state, player) and state.has(ItemName.ET_SMALL_KEY, player, 3)
 
 
 def can_access_miniboss_entrance_in_wind_temple(state: CollectionState, player: int) -> bool:
-    return can_open_wind_temple_upper_giant_grate(state, player) and state.has("WT Small Key", player, 2)
+    return can_open_wind_temple_upper_giant_grate(state, player) and state.has(ItemName.WT_SMALL_KEY, player, 2)
 
 
 def can_access_miniboss_entrance_in_hyrule_castle(state: CollectionState, player: int) -> bool:
@@ -373,16 +410,16 @@ def can_access_miniboss_entrance_in_hyrule_castle(state: CollectionState, player
 
 
 def can_access_boss_entrance_in_dragon_roost_cavern(state: CollectionState, player: int) -> bool:
-    return can_reach_dragon_roost_cavern_boss_stairs(state, player) and state.has("DRC Big Key", player)
+    return can_reach_dragon_roost_cavern_boss_stairs(state, player) and state.has(ItemName.DRC_BIG_KEY, player)
 
 
 def can_access_boss_entrance_in_forbidden_woods(state: CollectionState, player: int) -> bool:
     return (
         can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_boko_babas(state, player)
-        and (can_defeat_door_flowers(state, player) or state.has("Grappling Hook", player))
+        and (can_defeat_door_flowers(state, player) or state.has(ItemName.GRAPPLING_HOOK, player))
         and can_defeat_mothulas(state, player)
-        and state.has("FW Big Key", player)
+        and state.has(ItemName.FW_BIG_KEY, player)
     )
 
 
@@ -390,35 +427,35 @@ def can_access_boss_entrance_in_tower_of_the_gods(state: CollectionState, player
     return (
         can_reach_tower_of_the_gods_third_floor(state, player)
         and can_defeat_armos(state, player)
-        and state.has("TotG Big Key", player)
+        and state.has(ItemName.TOTG_BIG_KEY, player)
     )
 
 
 def can_access_boss_entrance_in_forsaken_fortress(state: CollectionState, player: int) -> bool:
     return (
         can_get_inside_forsaken_fortress(state, player)
-        and state.has("Skull Hammer", player)
+        and state.has(ItemName.SKULL_HAMMER, player)
         and (
             can_fly_with_deku_leaf_indoors(state, player)
-            or state.has("Hookshot", player)
+            or state.has(ItemName.HOOKSHOT, player)
             or (state._tww_obscure_2(player) and state._tww_precise_2(player))
         )
         and (
             can_defeat_bokoblins(state, player)
             or can_fly_with_deku_leaf_outdoors(state, player)
-            or state.has("Grappling Hook", player)
+            or state.has(ItemName.GRAPPLING_HOOK, player)
         )
     )
 
 
 def can_access_boss_entrance_in_earth_temple(state: CollectionState, player: int) -> bool:
-    return can_reach_earth_temple_tall_vine_room(state, player) and state.has("ET Big Key", player)
+    return can_reach_earth_temple_tall_vine_room(state, player) and state.has(ItemName.ET_BIG_KEY, player)
 
 
 def can_access_boss_entrance_in_wind_temple(state: CollectionState, player: int) -> bool:
     return (
         can_reach_wind_temple_tall_basement_room(state, player)
-        and state.has_all(["Hookshot", "Iron Boots", "WT Big Key"], player)
+        and state.has_all([ItemName.HOOKSHOT, ItemName.IRON_BOOTS, ItemName.WT_BIG_KEY], player)
         and can_play_command_melody(state, player)
         and can_play_wind_gods_aria(state, player)
     )
@@ -427,8 +464,8 @@ def can_access_boss_entrance_in_wind_temple(state: CollectionState, player: int)
 def can_access_secret_cave_entrance_on_outset_island(state: CollectionState, player: int) -> bool:
     return (
         (can_reach_outset_island_upper_level(state, player) and can_fly_with_deku_leaf_outdoors(state, player))
-        or state.has("Hookshot", player)
-    ) and state.has("Power Bracelets", player)
+        or state.has(ItemName.HOOKSHOT, player)
+    ) and state.has(ItemName.POWER_BRACELETS, player)
 
 
 def can_access_secret_cave_entrance_on_dragon_roost_island(state: CollectionState, player: int) -> bool:
@@ -444,7 +481,7 @@ def can_access_secret_cave_entrance_on_ice_ring_isle(state: CollectionState, pla
 
 
 def can_access_secret_cave_entrance_on_private_oasis(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Delivery Bag", "Cabana Deed", "Grappling Hook"], player)
+    return state.has_all([ItemName.DELIVERY_BAG, ItemName.CABANA_DEED, ItemName.GRAPPLING_HOOK], player)
 
 
 def can_access_secret_cave_entrance_on_needle_rock_isle(state: CollectionState, player: int) -> bool:
@@ -452,23 +489,23 @@ def can_access_secret_cave_entrance_on_needle_rock_isle(state: CollectionState, 
 
 
 def can_access_secret_cave_entrance_on_angular_isles(state: CollectionState, player: int) -> bool:
-    return can_fly_with_deku_leaf_outdoors(state, player) or state.has("Hookshot", player)
+    return can_fly_with_deku_leaf_outdoors(state, player) or state.has(ItemName.HOOKSHOT, player)
 
 
 def can_access_secret_cave_entrance_on_boating_course(state: CollectionState, player: int) -> bool:
-    return can_fly_with_deku_leaf_outdoors(state, player) or state.has("Hookshot", player)
+    return can_fly_with_deku_leaf_outdoors(state, player) or state.has(ItemName.HOOKSHOT, player)
 
 
 def can_access_secret_cave_entrance_on_stone_watcher_island(state: CollectionState, player: int) -> bool:
-    return state.has("Power Bracelets", player)
+    return state.has(ItemName.POWER_BRACELETS, player)
 
 
 def can_access_secret_cave_entrance_on_overlook_island(state: CollectionState, player: int) -> bool:
-    return state.has("Hookshot", player)
+    return state.has(ItemName.HOOKSHOT, player)
 
 
 def can_access_secret_cave_entrance_on_birds_peak_rock(state: CollectionState, player: int) -> bool:
-    return state.has("Bait Bag", player)
+    return state.has(ItemName.BAIT_BAG, player)
 
 
 def can_access_secret_cave_entrance_on_pawprint_isle(state: CollectionState, player: int) -> bool:
@@ -476,11 +513,11 @@ def can_access_secret_cave_entrance_on_pawprint_isle(state: CollectionState, pla
 
 
 def can_access_secret_cave_entrance_on_pawprint_isle_side_isle(state: CollectionState, player: int) -> bool:
-    return state.has("Hookshot", player)
+    return state.has(ItemName.HOOKSHOT, player)
 
 
 def can_access_secret_cave_entrance_on_diamond_steppe_island(state: CollectionState, player: int) -> bool:
-    return state.has("Hookshot", player)
+    return state.has(ItemName.HOOKSHOT, player)
 
 
 def can_access_secret_cave_entrance_on_bomb_island(state: CollectionState, player: int) -> bool:
@@ -488,11 +525,11 @@ def can_access_secret_cave_entrance_on_bomb_island(state: CollectionState, playe
 
 
 def can_access_secret_cave_entrance_on_rock_spire_isle(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player)
+    return has_bombs(state, player)
 
 
 def can_access_secret_cave_entrance_on_shark_island(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Iron Boots", "Skull Hammer"], player)
+    return state.has_all([ItemName.IRON_BOOTS, ItemName.SKULL_HAMMER], player)
 
 
 def can_access_secret_cave_entrance_on_cliff_plateau_isles(state: CollectionState, player: int) -> bool:
@@ -508,7 +545,7 @@ def can_access_secret_cave_entrance_on_star_island(state: CollectionState, playe
 
 
 def can_access_inner_entrance_in_ice_ring_isle_secret_cave(state: CollectionState, player: int) -> bool:
-    return state.has("Iron Boots", player)
+    return state.has(ItemName.IRON_BOOTS, player)
 
 
 def can_access_inner_entrance_in_cliff_plateau_isles_secret_cave(state: CollectionState, player: int) -> bool:
@@ -520,7 +557,7 @@ def can_access_fairy_fountain_entrance_on_outset_island(state: CollectionState, 
 
 
 def can_access_fairy_fountain_entrance_on_thorned_fairy_island(state: CollectionState, player: int) -> bool:
-    return state.has("Skull Hammer", player)
+    return state.has(ItemName.SKULL_HAMMER, player)
 
 
 def can_access_fairy_fountain_entrance_on_eastern_fairy_island(state: CollectionState, player: int) -> bool:
@@ -528,11 +565,11 @@ def can_access_fairy_fountain_entrance_on_eastern_fairy_island(state: Collection
 
 
 def can_access_fairy_fountain_entrance_on_western_fairy_island(state: CollectionState, player: int) -> bool:
-    return state.has("Skull Hammer", player)
+    return state.has(ItemName.SKULL_HAMMER, player)
 
 
 def can_access_fairy_fountain_entrance_on_southern_fairy_island(state: CollectionState, player: int) -> bool:
-    return state.has("Bombs", player) or has_fire_arrows(state, player)
+    return has_bombs(state, player) or has_fire_arrows(state, player)
 
 
 def can_access_fairy_fountain_entrance_on_northern_fairy_island(state: CollectionState, player: int) -> bool:
@@ -541,14 +578,14 @@ def can_access_fairy_fountain_entrance_on_northern_fairy_island(state: Collectio
 
 def can_get_past_forsaken_fortress_gate(state: CollectionState, player: int) -> bool:
     return (
-        state.has("Bombs", player)
+        has_bombs(state, player)
         or (state._tww_obscure_1(player) and state._tww_precise_1(player))
         or (can_open_ganons_tower_dark_portal(state, player) and state._tww_obscure_1(player))
     )
 
 
 def can_get_inside_forsaken_fortress(state: CollectionState, player: int) -> bool:
-    return can_get_past_forsaken_fortress_gate(state, player) and state.has("Skull Hammer", player)
+    return can_get_past_forsaken_fortress_gate(state, player) and state.has(ItemName.SKULL_HAMMER, player)
 
 
 def can_reach_and_defeat_phantom_ganon(state: CollectionState, player: int) -> bool:
@@ -557,7 +594,7 @@ def can_reach_and_defeat_phantom_ganon(state: CollectionState, player: int) -> b
 
 def can_defeat_phantom_ganon(state: CollectionState, player: int) -> bool:
     return (state._tww_outside_swordless_mode(player) and has_any_master_sword(state, player)) or (
-        state._tww_in_swordless_mode(player) and state.has("Skull Hammer", player)
+        state._tww_in_swordless_mode(player) and state.has(ItemName.SKULL_HAMMER, player)
     )
 
 
@@ -573,13 +610,13 @@ def can_get_past_hyrule_barrier(state: CollectionState, player: int) -> bool:
 
 def can_access_ganons_tower(state: CollectionState, player: int) -> bool:
     return can_get_past_hyrule_barrier(state, player) and (
-        state.has("Hookshot", player) or can_fly_with_deku_leaf_indoors(state, player)
+        state.has(ItemName.HOOKSHOT, player) or can_fly_with_deku_leaf_indoors(state, player)
     )
 
 
 def can_complete_memory_dragon_roost_cavern_and_gohma(state: CollectionState, player: int) -> bool:
     return (
-        state.has("Grappling Hook", player)
+        state.has(ItemName.GRAPPLING_HOOK, player)
         and can_fly_with_deku_leaf_indoors(state, player)
         and can_defeat_gohma(state, player)
     )
@@ -619,7 +656,7 @@ def can_reach_ganons_tower_phantom_ganon_room(state: CollectionState, player: in
 
 
 def can_open_ganons_tower_dark_portal(state: CollectionState, player: int) -> bool:
-    return can_reach_ganons_tower_phantom_ganon_room(state, player) and state.has("Boomerang", player)
+    return can_reach_ganons_tower_phantom_ganon_room(state, player) and state.has(ItemName.BOOMERANG, player)
 
 
 def can_reach_and_defeat_puppet_ganon(state: CollectionState, player: int) -> bool:
@@ -643,25 +680,25 @@ def can_unlock_puppet_ganon_door(state: CollectionState, player: int) -> bool:
 
 
 def can_defeat_puppet_ganon(state: CollectionState, player: int) -> bool:
-    return has_light_arrows(state, player) and (state.has("Boomerang", player) or state._tww_precise_2(player))
+    return has_light_arrows(state, player) and (state.has(ItemName.BOOMERANG, player) or state._tww_precise_2(player))
 
 
 def can_reach_and_defeat_ganondorf(state: CollectionState, player: int) -> bool:
     return (
         can_reach_and_defeat_puppet_ganon(state, player)
-        and state.has_all(["Grappling Hook", "Hookshot"], player)
+        and state.has_all([ItemName.GRAPPLING_HOOK, ItemName.HOOKSHOT], player)
         and can_defeat_ganondorf(state, player)
     )
 
 
 def can_defeat_ganondorf(state: CollectionState, player: int) -> bool:
     return (has_heros_sword(state, player) or state._tww_in_swordless_mode(player)) and (
-        has_heros_shield(state, player) or (state.has("Skull Hammer", player) and state._tww_obscure_2(player))
+        has_heros_shield(state, player) or (state.has(ItemName.SKULL_HAMMER, player) and state._tww_obscure_2(player))
     )
 
 
 def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Grappling Hook", "Spoils Bag"], player) and (
+    return state.has_all([ItemName.GRAPPLING_HOOK, ItemName.SPOILS_BAG], player) and (
         # (Can Access Item Location "Ice Ring Isle - Inner Cave - Chest")
         (state.can_reach_region("Ice Ring Isle Inner Cave", player) and has_fire_arrows(state, player))
         # | (Can Access Item Location "Outset Island - Savage Labyrinth - Floor 30")
@@ -683,13 +720,13 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
             and can_defeat_red_bubbles(state, player)
             and can_defeat_darknuts(state, player)
             and can_play_winds_requiem(state, player)
-            and (state.has_any(["Grappling Hook", "Skull Hammer"], player) or has_heros_sword(state, player))
+            and (state.has_any([ItemName.GRAPPLING_HOOK, ItemName.SKULL_HAMMER], player) or has_heros_sword(state, player))
         )
         # | (Can Access Item Location "Earth Temple - Big Key Chest" & Can Defeat Darknuts Easily)
         or (
             state.can_reach_region("Earth Temple", player)
             and can_reach_earth_temple_many_mirrors_room(state, player)
-            and state.has("Power Bracelets", player)
+            and state.has(ItemName.POWER_BRACELETS, player)
             and can_play_command_melody(state, player)
             and can_aim_mirror_shield(state, player)
             and (
@@ -699,7 +736,7 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
                     (
                         has_heros_sword(state, player)
                         or has_any_master_sword(state, player)
-                        or state.has("Skull Hammer", player)
+                        or state.has(ItemName.SKULL_HAMMER, player)
                     )
                     and state._tww_obscure_1(player)
                     and state._tww_precise_1(player)
@@ -711,7 +748,7 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
         or (
             state.can_reach_region("Wind Temple", player)
             and can_reach_wind_temple_kidnapping_room(state, player)
-            and state.has("Iron Boots", player)
+            and state.has(ItemName.IRON_BOOTS, player)
             and can_fan_with_deku_leaf(state, player)
             and can_play_wind_gods_aria(state, player)
             and can_defeat_darknuts_easily(state, player)
@@ -746,26 +783,26 @@ def can_farm_knights_crests(state: CollectionState, player: int) -> bool:
 
 
 def can_farm_joy_pendants(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
+    return state.has_all([ItemName.GRAPPLING_HOOK, ItemName.SPOILS_BAG], player)
 
 
 def can_farm_skull_necklaces(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
+    return state.has_all([ItemName.GRAPPLING_HOOK, ItemName.SPOILS_BAG], player)
 
 
 def can_farm_golden_feathers(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
+    return state.has_all([ItemName.GRAPPLING_HOOK, ItemName.SPOILS_BAG], player)
 
 
 def can_farm_green_chu_jelly(state: CollectionState, player: int) -> bool:
-    return state.has_all(["Grappling Hook", "Spoils Bag"], player)
+    return state.has_all([ItemName.GRAPPLING_HOOK, ItemName.SPOILS_BAG], player)
 
 
 def can_obtain_15_blue_chu_jelly(state: CollectionState, player: int) -> bool:
     return (
         can_get_blue_chu_jelly_from_blue_chuchus(state, player)
         and (
-            state.has_any(["Hookshot", "Bombs", "Grappling Hook"], player)
+            state.has_any([ItemName.HOOKSHOT, ItemName.BOMBS, ItemName.GRAPPLING_HOOK], player)
             or can_move_boulders(state, player)
             or (
                 can_access_secret_cave_entrance_on_shark_island(state, player)
@@ -775,13 +812,13 @@ def can_obtain_15_blue_chu_jelly(state: CollectionState, player: int) -> bool:
             or can_fan_with_deku_leaf(state, player)
             or can_access_secret_cave_entrance_on_boating_course(state, player)
         )
-        and state.has("Spoils Bag", player)
+        and state.has(ItemName.SPOILS_BAG, player)
     )
 
 
 def can_defeat_bokoblins(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -789,14 +826,14 @@ def can_defeat_bokoblins(state: CollectionState, player: int) -> bool:
 
 def can_defeat_moblins(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_defeat_darknuts(state: CollectionState, player: int) -> bool:
-    return has_heros_sword(state, player) or has_light_arrows(state, player) or state.has("Skull Hammer", player)
+    return has_heros_sword(state, player) or has_light_arrows(state, player) or state.has(ItemName.SKULL_HAMMER, player)
 
 
 def can_defeat_darknuts_easily(state: CollectionState, player: int) -> bool:
@@ -805,13 +842,13 @@ def can_defeat_darknuts_easily(state: CollectionState, player: int) -> bool:
 
 def can_defeat_mighty_darknuts(state: CollectionState, player: int) -> bool:
     return can_defeat_darknuts_easily(state, player) or (
-        state.has("Skull Hammer", player) and state._tww_precise_3(player)
+        state.has(ItemName.SKULL_HAMMER, player) and state._tww_precise_3(player)
     )
 
 
 def can_defeat_miniblins(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Grappling Hook", "Boomerang", "Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG, ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -819,7 +856,7 @@ def can_defeat_miniblins(state: CollectionState, player: int) -> bool:
 
 def can_defeat_miniblins_easily(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -827,7 +864,7 @@ def can_defeat_miniblins_easily(state: CollectionState, player: int) -> bool:
 
 def can_defeat_red_chuchus(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Skull Hammer", "Bombs"], player)
+        state.has_any([ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -839,12 +876,12 @@ def can_defeat_green_chuchus(state: CollectionState, player: int) -> bool:
 
 def can_defeat_yellow_chuchus(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
-        or (state.has("Boomerang", player) and has_heros_sword(state, player))
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
+        or (state.has(ItemName.BOOMERANG, player) and has_heros_sword(state, player))
         or has_heros_bow(state, player)
         or (can_fan_with_deku_leaf(state, player) and has_heros_sword(state, player))
         or (
-            state.has("Grappling Hook", player)
+            state.has(ItemName.GRAPPLING_HOOK, player)
             and has_heros_sword(state, player)
             and state._tww_obscure_1(player)
             and state._tww_precise_2(player)
@@ -857,12 +894,12 @@ def can_defeat_blue_chuchus(state: CollectionState, player: int) -> bool:
 
 
 def can_get_blue_chu_jelly_from_blue_chuchus(state: CollectionState, player: int) -> bool:
-    return can_defeat_blue_chuchus(state, player) or state.has("Grappling Hook", player)
+    return can_defeat_blue_chuchus(state, player) or state.has(ItemName.GRAPPLING_HOOK, player)
 
 
 def can_defeat_keese(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Hookshot", "Grappling Hook", "Boomerang", "Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.HOOKSHOT, ItemName.GRAPPLING_HOOK, ItemName.BOOMERANG, ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -874,7 +911,7 @@ def can_defeat_fire_keese(state: CollectionState, player: int) -> bool:
 
 def can_defeat_magtails(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Skull Hammer", "Boomerang", "Hookshot", "Bombs", "Grappling Hook"], player)
+        state.has_any([ItemName.SKULL_HAMMER, ItemName.BOOMERANG, ItemName.HOOKSHOT, ItemName.BOMBS, ItemName.GRAPPLING_HOOK], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -882,7 +919,7 @@ def can_defeat_magtails(state: CollectionState, player: int) -> bool:
 
 def can_stun_magtails(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Skull Hammer", "Boomerang", "Hookshot", "Bombs", "Grappling Hook"], player)
+        state.has_any([ItemName.SKULL_HAMMER, ItemName.BOOMERANG, ItemName.HOOKSHOT, ItemName.BOMBS, ItemName.GRAPPLING_HOOK], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -890,7 +927,7 @@ def can_stun_magtails(state: CollectionState, player: int) -> bool:
 
 def can_defeat_kargarocs(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Skull Hammer", "Bombs"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -898,8 +935,8 @@ def can_defeat_kargarocs(state: CollectionState, player: int) -> bool:
 
 def can_defeat_peahats(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Skull Hammer", "Bombs"], player)
-        or (state.has("Hookshot", player) and has_heros_sword(state, player))
+        state.has_any([ItemName.BOOMERANG, ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
+        or (state.has(ItemName.HOOKSHOT, player) and has_heros_sword(state, player))
         or (can_fan_with_deku_leaf(state, player) and has_heros_sword(state, player))
         or has_heros_bow(state, player)
     )
@@ -907,28 +944,28 @@ def can_defeat_peahats(state: CollectionState, player: int) -> bool:
 
 def can_remove_peahat_armor(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Hookshot", "Skull Hammer", "Bombs"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT, ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or can_fan_with_deku_leaf(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_defeat_seahats(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Boomerang", "Hookshot", "Bombs"], player) or has_heros_bow(state, player)
+    return state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT, ItemName.BOMBS], player) or has_heros_bow(state, player)
 
 
 def can_defeat_boko_babas(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Skull Hammer", "Hookshot", "Bombs"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.SKULL_HAMMER, ItemName.HOOKSHOT, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
-        or (can_fan_with_deku_leaf(state, player) and state.has("Grappling Hook", player))
+        or (can_fan_with_deku_leaf(state, player) and state.has(ItemName.GRAPPLING_HOOK, player))
     )
 
 
 def can_defeat_mothulas(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -936,7 +973,7 @@ def can_defeat_mothulas(state: CollectionState, player: int) -> bool:
 
 def can_defeat_winged_mothulas(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -944,31 +981,31 @@ def can_defeat_winged_mothulas(state: CollectionState, player: int) -> bool:
 
 def can_defeat_wizzrobes(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Hookshot", "Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.HOOKSHOT, ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_defeat_wizzrobes_at_range(state: CollectionState, player: int) -> bool:
-    return has_heros_bow(state, player) or (state.has("Hookshot", player) and state._tww_precise_1(player))
+    return has_heros_bow(state, player) or (state.has(ItemName.HOOKSHOT, player) and state._tww_precise_1(player))
 
 
 def can_defeat_armos(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer", "Hookshot"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER, ItemName.HOOKSHOT], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_defeat_big_octos(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Bombs", "Boomerang"], player) or has_heros_bow(state, player)
+    return state.has_any([ItemName.BOMBS, ItemName.BOOMERANG], player) or has_heros_bow(state, player)
 
 
 def can_defeat_12_eye_big_octos(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Boomerang"], player)
+        state.has_any([ItemName.BOMBS, ItemName.BOOMERANG], player)
         or (has_heros_bow(state, player) and has_any_quiver_upgrade(state, player))
         or has_light_arrows(state, player)
     )
@@ -976,12 +1013,12 @@ def can_defeat_12_eye_big_octos(state: CollectionState, player: int) -> bool:
 
 def can_defeat_red_bubbles(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Skull Hammer", "Bombs"], player)
+        state.has_any([ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
         or (
-            (can_fan_with_deku_leaf(state, player) or state.has("Hookshot", player))
-            and state.has("Grappling Hook", player)
+            (can_fan_with_deku_leaf(state, player) or state.has(ItemName.HOOKSHOT, player))
+            and state.has(ItemName.GRAPPLING_HOOK, player)
         )
     )
 
@@ -989,11 +1026,11 @@ def can_defeat_red_bubbles(state: CollectionState, player: int) -> bool:
 def can_defeat_blue_bubbles(state: CollectionState, player: int) -> bool:
     return (
         has_ice_arrows(state, player)
-        or state.has("Bombs", player)
+        or has_bombs(state, player)
         or (
-            (can_fan_with_deku_leaf(state, player) or state.has("Hookshot", player))
+            (can_fan_with_deku_leaf(state, player) or state.has(ItemName.HOOKSHOT, player))
             and (
-                state.has_any(["Grappling Hook", "Skull Hammer"], player)
+                state.has_any([ItemName.GRAPPLING_HOOK, ItemName.SKULL_HAMMER], player)
                 or has_heros_sword(state, player)
                 or has_heros_bow(state, player)
             )
@@ -1003,7 +1040,7 @@ def can_defeat_blue_bubbles(state: CollectionState, player: int) -> bool:
 
 def can_defeat_redeads(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Skull Hammer", "Bombs"], player)
+        state.has_any([ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_light_arrows(state, player)
     )
@@ -1011,7 +1048,7 @@ def can_defeat_redeads(state: CollectionState, player: int) -> bool:
 
 def can_defeat_jalhalla_poes(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -1019,7 +1056,7 @@ def can_defeat_jalhalla_poes(state: CollectionState, player: int) -> bool:
 
 def can_defeat_stalfos(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_light_arrows(state, player)
     )
@@ -1029,13 +1066,13 @@ def can_defeat_floormasters(state: CollectionState, player: int) -> bool:
     return (
         has_heros_sword(state, player)
         or has_heros_bow(state, player)
-        or (state.has("Skull Hammer", player) and state._tww_precise_1(player))
+        or (state.has(ItemName.SKULL_HAMMER, player) and state._tww_precise_1(player))
     )
 
 
 def can_defeat_morths(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Hookshot"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.HOOKSHOT], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
@@ -1043,71 +1080,71 @@ def can_defeat_morths(state: CollectionState, player: int) -> bool:
 
 def can_defeat_bombchus(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Skull Hammer", "Grappling Hook"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.SKULL_HAMMER, ItemName.GRAPPLING_HOOK], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_defeat_gohma(state: CollectionState, player: int) -> bool:
-    return state.has("Grappling Hook", player)
+    return state.has(ItemName.GRAPPLING_HOOK, player)
 
 
 def can_defeat_kalle_demos(state: CollectionState, player: int) -> bool:
-    return state.has("Boomerang", player)
+    return state.has(ItemName.BOOMERANG, player)
 
 
 def can_defeat_gohdan(state: CollectionState, player: int) -> bool:
     return (
         has_heros_bow(state, player)
-        or (state.has("Hookshot", player) and state._tww_obscure_1(player) and state._tww_precise_2(player))
-    ) and state.has("Bombs", player)
+        or (state.has(ItemName.HOOKSHOT, player) and state._tww_obscure_1(player) and state._tww_precise_2(player))
+    ) and has_bombs(state, player)
 
 
 def can_defeat_helmaroc_king(state: CollectionState, player: int) -> bool:
-    return state.has("Skull Hammer", player)
+    return state.has(ItemName.SKULL_HAMMER, player)
 
 
 def can_defeat_jalhalla(state: CollectionState, player: int) -> bool:
     return (
         (can_aim_mirror_shield(state, player) or has_light_arrows(state, player))
-        and state.has("Power Bracelets", player)
+        and state.has(ItemName.POWER_BRACELETS, player)
         and can_defeat_jalhalla_poes(state, player)
     )
 
 
 def can_defeat_molgera(state: CollectionState, player: int) -> bool:
-    return state.has("Hookshot", player) and (
-        state.has_any(["Boomerang", "Grappling Hook", "Skull Hammer", "Bombs"], player)
+    return state.has(ItemName.HOOKSHOT, player) and (
+        state.has_any([ItemName.BOOMERANG, ItemName.GRAPPLING_HOOK, ItemName.SKULL_HAMMER, ItemName.BOMBS], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
     )
 
 
 def can_destroy_cannons(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Bombs", "Boomerang"], player)
+    return state.has_any([ItemName.BOMBS, ItemName.BOOMERANG], player)
 
 
 def can_cut_down_outset_trees(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Boomerang", "Skull Hammer"], player)
+        state.has_any([ItemName.BOOMERANG, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
-        or (state.has("Power Bracelets", player) and state._tww_obscure_3(player))
+        or (state.has(ItemName.POWER_BRACELETS, player) and state._tww_obscure_3(player))
     )
 
 
 def can_cut_down_hanging_drc_platform(state: CollectionState, player: int) -> bool:
     return (
-        state.has_any(["Bombs", "Skull Hammer"], player)
+        state.has_any([ItemName.BOMBS, ItemName.SKULL_HAMMER], player)
         or has_heros_sword(state, player)
         or has_heros_bow(state, player)
-        or (state.has("Hookshot", player) and state._tww_precise_1(player))
-        or (state.has("Grappling Hook", player) and state._tww_precise_1(player))
+        or (state.has(ItemName.HOOKSHOT, player) and state._tww_precise_1(player))
+        or (state.has(ItemName.GRAPPLING_HOOK, player) and state._tww_precise_1(player))
     )
 
 
 def can_cut_grass(state: CollectionState, player: int) -> bool:
-    return state.has_any(["Skull Hammer", "Boomerang", "Bombs"], player) or has_heros_sword(state, player)
+    return state.has_any([ItemName.SKULL_HAMMER, ItemName.BOOMERANG, ItemName.BOMBS], player) or has_heros_sword(state, player)
 
 
 def can_sword_fight_with_orca(state: CollectionState, player: int) -> bool:

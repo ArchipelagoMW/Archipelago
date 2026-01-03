@@ -1,9 +1,11 @@
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 from BaseClasses import CollectionState, Item, Location, MultiWorld
 from Fill import fill_restrictive
 from worlds.generic.Rules import add_item_rule
 
+from ..Constants import GAME_NAME
+from ..Enums import ItemName
 from ..Items import item_factory
 
 if TYPE_CHECKING:
@@ -24,7 +26,7 @@ class Dungeon:
     def __init__(
         self,
         name: str,
-        big_key: Optional[Item],
+        big_key: Item | None,
         small_keys: list[Item],
         dungeon_items: list[Item],
         player: int,
@@ -90,7 +92,7 @@ def create_dungeons(world: "TWWWorld") -> None:
     player = world.player
     options = world.options
 
-    def make_dungeon(name: str, big_key: Optional[Item], small_keys: list[Item], dungeon_items: list[Item]) -> Dungeon:
+    def make_dungeon(name: str, big_key: Item | None, small_keys: list[Item], dungeon_items: list[Item]) -> Dungeon:
         dungeon = Dungeon(name, big_key, small_keys, dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon
@@ -100,25 +102,25 @@ def create_dungeons(world: "TWWWorld") -> None:
         if not options.required_bosses or "Dragon Roost Cavern" in world.boss_reqs.required_dungeons:
             world.dungeons["Dragon Roost Cavern"] = make_dungeon(
                 "Dragon Roost Cavern",
-                item_factory("DRC Big Key", world),
-                item_factory(["DRC Small Key"] * 4, world),
-                item_factory(["DRC Dungeon Map", "DRC Compass"], world),
+                item_factory(ItemName.DRC_BIG_KEY.value, world),
+                item_factory([ItemName.DRC_SMALL_KEY.value] * 4, world),
+                item_factory([ItemName.DRC_DUNGEON_MAP.value, ItemName.DRC_COMPASS.value], world),
             )
 
         if not options.required_bosses or "Forbidden Woods" in world.boss_reqs.required_dungeons:
             world.dungeons["Forbidden Woods"] = make_dungeon(
                 "Forbidden Woods",
-                item_factory("FW Big Key", world),
-                item_factory(["FW Small Key"] * 1, world),
-                item_factory(["FW Dungeon Map", "FW Compass"], world),
+                item_factory(ItemName.FW_BIG_KEY.value, world),
+                item_factory([ItemName.FW_SMALL_KEY.value] * 1, world),
+                item_factory([ItemName.FW_DUNGEON_MAP.value, ItemName.FW_COMPASS.value], world),
             )
 
         if not options.required_bosses or "Tower of the Gods" in world.boss_reqs.required_dungeons:
             world.dungeons["Tower of the Gods"] = make_dungeon(
                 "Tower of the Gods",
-                item_factory("TotG Big Key", world),
-                item_factory(["TotG Small Key"] * 2, world),
-                item_factory(["TotG Dungeon Map", "TotG Compass"], world),
+                item_factory(ItemName.TOTG_BIG_KEY.value, world),
+                item_factory([ItemName.TOTG_SMALL_KEY.value] * 2, world),
+                item_factory([ItemName.TOTG_DUNGEON_MAP.value, ItemName.TOTG_COMPASS.value], world),
             )
 
         if not options.required_bosses or "Forsaken Fortress" in world.boss_reqs.required_dungeons:
@@ -126,23 +128,23 @@ def create_dungeons(world: "TWWWorld") -> None:
                 "Forsaken Fortress",
                 None,
                 [],
-                item_factory(["FF Dungeon Map", "FF Compass"], world),
+                item_factory([ItemName.FF_DUNGEON_MAP.value, ItemName.FF_COMPASS.value], world),
             )
 
         if not options.required_bosses or "Earth Temple" in world.boss_reqs.required_dungeons:
             world.dungeons["Earth Temple"] = make_dungeon(
                 "Earth Temple",
-                item_factory("ET Big Key", world),
-                item_factory(["ET Small Key"] * 3, world),
-                item_factory(["ET Dungeon Map", "ET Compass"], world),
+                item_factory(ItemName.ET_BIG_KEY.value, world),
+                item_factory([ItemName.ET_SMALL_KEY.value] * 3, world),
+                item_factory([ItemName.ET_DUNGEON_MAP.value, ItemName.ET_COMPASS.value], world),
             )
 
         if not options.required_bosses or "Wind Temple" in world.boss_reqs.required_dungeons:
             world.dungeons["Wind Temple"] = make_dungeon(
                 "Wind Temple",
-                item_factory("WT Big Key", world),
-                item_factory(["WT Small Key"] * 2, world),
-                item_factory(["WT Dungeon Map", "WT Compass"], world),
+                item_factory(ItemName.WT_BIG_KEY.value, world),
+                item_factory([ItemName.WT_SMALL_KEY.value] * 2, world),
+                item_factory([ItemName.WT_DUNGEON_MAP.value, ItemName.WT_COMPASS.value], world),
             )
 
 
@@ -154,7 +156,7 @@ def get_dungeon_item_pool(multiworld: MultiWorld) -> list[Item]:
     :return: List of dungeon items across all The Wind Waker dungeons.
     """
     return [
-        item for world in multiworld.get_game_worlds("The Wind Waker") for item in get_dungeon_item_pool_player(world)
+        item for world in multiworld.get_game_worlds(GAME_NAME) for item in get_dungeon_item_pool_player(world)
     ]
 
 
@@ -177,7 +179,7 @@ def get_unfilled_dungeon_locations(multiworld: MultiWorld) -> list[Location]:
     """
     return [
         location
-        for world in multiworld.get_game_worlds("The Wind Waker")
+        for world in multiworld.get_game_worlds(GAME_NAME)
         for location in multiworld.get_locations(world.player)
         if location.dungeon and not location.item
     ]
@@ -191,7 +193,7 @@ def modify_dungeon_location_rules(multiworld: MultiWorld) -> None:
     """
     localized: set[tuple[int, str]] = set()
     dungeon_specific: set[tuple[int, str]] = set()
-    for subworld in multiworld.get_game_worlds("The Wind Waker"):
+    for subworld in multiworld.get_game_worlds(GAME_NAME):
         player = subworld.player
         if player not in multiworld.groups:
             localized |= {(player, item_name) for item_name in subworld.dungeon_local_item_names}
@@ -209,8 +211,8 @@ def modify_dungeon_location_rules(multiworld: MultiWorld) -> None:
                     if location.name == "Dragon Roost Cavern - First Room":
                         add_item_rule(
                             location,
-                            lambda item: item.name != "DRC Big Key"
-                            or (item.player, "DRC Small Key") in dungeon_specific,
+                            lambda item: item.name != ItemName.DRC_BIG_KEY.value
+                            or (item.player, ItemName.DRC_SMALL_KEY.value) in dungeon_specific,
                         )
 
                     # Add item rule to ensure dungeon items are in their own dungeon when they should be.
@@ -229,7 +231,7 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
     """
     localized: set[tuple[int, str]] = set()
     dungeon_specific: set[tuple[int, str]] = set()
-    for subworld in multiworld.get_game_worlds("The Wind Waker"):
+    for subworld in multiworld.get_game_worlds(GAME_NAME):
         player = subworld.player
         if player not in multiworld.groups:
             localized |= {(player, item_name) for item_name in subworld.dungeon_local_item_names}
@@ -270,8 +272,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld) -> None:
 
             # Remove the completion condition so that minimal-accessibility words place keys correctly.
             for player in (item.player for item in in_dungeon_items):
-                if all_state_base.has("Victory", player):
-                    all_state_base.remove(multiworld.worlds[player].create_item("Victory"))
+                if all_state_base.has(ItemName.VICTORY.value, player):
+                    all_state_base.remove(multiworld.worlds[player].create_item(ItemName.VICTORY.value))
 
             fill_restrictive(
                 multiworld,

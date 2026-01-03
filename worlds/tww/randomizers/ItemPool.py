@@ -4,6 +4,7 @@ from BaseClasses import ItemClassification as IC
 from Fill import FillError
 
 from ..Items import ITEM_TABLE, item_factory
+from ..Enums import ItemName
 from ..Options import DungeonItem
 from .Dungeons import get_dungeon_item_pool_player
 
@@ -72,7 +73,7 @@ def generate_itempool(world: "TWWWorld") -> None:
         multiworld.push_precollected(item_factory(item, world))
 
     # Place a "Victory" item on "Defeat Ganondorf" for the spoiler log.
-    world.get_location("Defeat Ganondorf").place_locked_item(item_factory("Victory", world))
+    world.get_location("Defeat Ganondorf").place_locked_item(item_factory(ItemName.VICTORY.value, world))
 
     # Create the pool of the remaining shuffled items.
     items = item_factory(pool, world)

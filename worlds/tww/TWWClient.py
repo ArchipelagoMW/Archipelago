@@ -1,7 +1,7 @@
 import asyncio
 import time
 import traceback
-from typing import TYPE_CHECKING, Any, Optional
+from typing import TYPE_CHECKING, Any
 
 import dolphin_memory_engine
 
@@ -9,6 +9,7 @@ import Utils
 from CommonClient import ClientCommandProcessor, CommonContext, get_base_parser, gui_enabled, logger, server_loop
 from NetUtils import ClientStatus
 
+from .Constants import GAME_ABBR, GAME_NAME
 from .Items import ITEM_TABLE, LOOKUP_ID_TO_NAME
 from .Locations import ISLAND_NAME_TO_SALVAGE_BIT, LOCATION_TABLE, TWWLocation, TWWLocationData, TWWLocationType
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME
@@ -86,7 +87,7 @@ CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_SPAWN_ID = 1  # As a note, the lower isle's spa
 CLIFF_PLATEAU_ISLES_HIGHEST_ISLE_DUMMY_STAGE_NAME = "CliPlaH"
 
 # Data storage key
-AP_VISITED_STAGE_NAMES_KEY_FORMAT = "tww_visited_stages_%i"
+AP_VISITED_STAGE_NAMES_KEY_FORMAT = f"{GAME_ABBR}_visited_stages_%i"
 
 
 class TWWCommandProcessor(ClientCommandProcessor):
@@ -120,10 +121,10 @@ class TWWContext(CommonContext):
     """
 
     command_processor = TWWCommandProcessor
-    game: str = "The Wind Waker"
+    game: str = GAME_NAME
     items_handling: int = 0b111
 
-    def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
+    def __init__(self, server_address: str | None, password: str | None) -> None:
         """
         Initialize the TWW context.
 
@@ -132,7 +133,7 @@ class TWWContext(CommonContext):
         """
 
         super().__init__(server_address, password)
-        self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
+        self.dolphin_sync_task: asyncio.Task[None] | None = None
         self.dolphin_status: str = CONNECTION_INITIAL_STATUS
         self.awaiting_rom: bool = False
         self.has_send_death: bool = False
@@ -161,7 +162,7 @@ class TWWContext(CommonContext):
         # cause the server's data storage to update, the TWW AP Client keeps track of the visited stages in a set.
         # Trackers can request the dictionary from data storage to see which stages the player has visited.
         # It starts as `None` until it has been read from the server.
-        self.visited_stage_names: Optional[set[str]] = None
+        self.visited_stage_names: set[str] | None = None
 
         # Length of the item get array in memory.
         self.len_give_item_array: int = 0x10
@@ -249,21 +250,38 @@ class TWWContext(CommonContext):
         """
         Update the server's data storage of the visited stage names to include the newly visited stage name.
 
+        This sends two types of messages:
+        1. A dict-based update to tww_visited_stages_<slot> for PopTracker compatibility
+        2. Individual SET messages for tww_<team>_<slot>_<stagename> to trigger server-side reconnection
+
         :param newly_visited_stage_name: The name of the stage recently visited.
         """
         if self.slot is not None:
+            messages_to_send = []
+
+            # Message 1: Update the visited_stages dict (for PopTracker)
             visited_stages_key = AP_VISITED_STAGE_NAMES_KEY_FORMAT % self.slot
-            await self.send_msgs(
-                [
-                    {
-                        "cmd": "Set",
-                        "key": visited_stages_key,
-                        "default": {},
-                        "want_reply": False,
-                        "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
-                    }
-                ]
-            )
+            messages_to_send.append({
+                "cmd": "Set",
+                "key": visited_stages_key,
+                "default": {},
+                "want_reply": False,
+                "operations": [{"operation": "update", "value": {newly_visited_stage_name: True}}],
+            })
+
+            # Message 2: Set individual stage key to trigger server-side world callback
+            # This matches the format expected by reconnect_found_entrances(): <GAME_ABBR>_<team>_<slot>_<stagename>
+            if self.team is not None:
+                stage_key = f"{GAME_ABBR}_{self.team}_{self.slot}_{newly_visited_stage_name}"
+                messages_to_send.append({
+                    "cmd": "Set",
+                    "key": stage_key,
+                    "default": 0,
+                    "want_reply": False,
+                    "operations": [{"operation": "replace", "value": 1}],
+                })
+
+            await self.send_msgs(messages_to_send)
 
     def update_salvage_locations_map(self) -> None:
         """
@@ -696,7 +714,7 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
             continue
 
 
-def main(connect: Optional[str] = None, password: Optional[str] = None) -> None:
+def main(connect: str | None = None, password: str | None = None) -> None:
     """
     Run the main async loop for the Wind Waker client.
 
@@ -705,7 +723,7 @@ def main(connect: Optional[str] = None, password: Optional[str] = None) -> None:
     """
     Utils.init_logging("The Wind Waker Client")
 
-    async def _main(connect: Optional[str], password: Optional[str]) -> None:
+    async def _main(connect: str | None, password: str | None) -> None:
         ctx = TWWContext(connect, password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
         if gui_enabled:

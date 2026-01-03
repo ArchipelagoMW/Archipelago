@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from ..Enums import SectorName
 from ..Items import ISLAND_NUMBER_TO_CHART_NAME
 from ..Locations import TWWFlag, TWWLocation
 
@@ -7,55 +8,55 @@ if TYPE_CHECKING:
     from .. import TWWWorld
 
 ISLAND_NUMBER_TO_NAME: dict[int, str] = {
-    1: "Forsaken Fortress Sector",
-    2: "Star Island",
-    3: "Northern Fairy Island",
-    4: "Gale Isle",
-    5: "Crescent Moon Island",
-    6: "Seven-Star Isles",
-    7: "Overlook Island",
-    8: "Four-Eye Reef",
-    9: "Mother and Child Isles",
-    10: "Spectacle Island",
-    11: "Windfall Island",
-    12: "Pawprint Isle",
-    13: "Dragon Roost Island",
-    14: "Flight Control Platform",
-    15: "Western Fairy Island",
-    16: "Rock Spire Isle",
-    17: "Tingle Island",
-    18: "Northern Triangle Island",
-    19: "Eastern Fairy Island",
-    20: "Fire Mountain",
-    21: "Star Belt Archipelago",
-    22: "Three-Eye Reef",
-    23: "Greatfish Isle",
-    24: "Cyclops Reef",
-    25: "Six-Eye Reef",
-    26: "Tower of the Gods Sector",
-    27: "Eastern Triangle Island",
-    28: "Thorned Fairy Island",
-    29: "Needle Rock Isle",
-    30: "Islet of Steel",
-    31: "Stone Watcher Island",
-    32: "Southern Triangle Island",
-    33: "Private Oasis",
-    34: "Bomb Island",
-    35: "Bird's Peak Rock",
-    36: "Diamond Steppe Island",
-    37: "Five-Eye Reef",
-    38: "Shark Island",
-    39: "Southern Fairy Island",
-    40: "Ice Ring Isle",
-    41: "Forest Haven",
-    42: "Cliff Plateau Isles",
-    43: "Horseshoe Island",
-    44: "Outset Island",
-    45: "Headstone Island",
-    46: "Two-Eye Reef",
-    47: "Angular Isles",
-    48: "Boating Course",
-    49: "Five-Star Isles",
+    1: SectorName.FORSAKEN_FORTRESS_SECTOR.value,
+    2: SectorName.STAR_ISLAND.value,
+    3: SectorName.NORTHERN_FAIRY_ISLAND.value,
+    4: SectorName.GALE_ISLE.value,
+    5: SectorName.CRESCENT_MOON_ISLAND.value,
+    6: SectorName.SEVEN_STAR_ISLES.value,
+    7: SectorName.OVERLOOK_ISLAND.value,
+    8: SectorName.FOUR_EYE_REEF.value,
+    9: SectorName.MOTHER_AND_CHILD_ISLES.value,
+    10: SectorName.SPECTACLE_ISLAND.value,
+    11: SectorName.WINDFALL_ISLAND.value,
+    12: SectorName.PAWPRINT_ISLE.value,
+    13: SectorName.DRAGON_ROOST_ISLAND.value,
+    14: SectorName.FLIGHT_CONTROL_PLATFORM.value,
+    15: SectorName.WESTERN_FAIRY_ISLAND.value,
+    16: SectorName.ROCK_SPIRE_ISLE.value,
+    17: SectorName.TINGLE_ISLAND.value,
+    18: SectorName.NORTHERN_TRIANGLE_ISLAND.value,
+    19: SectorName.EASTERN_FAIRY_ISLAND.value,
+    20: SectorName.FIRE_MOUNTAIN.value,
+    21: SectorName.STAR_BELT_ARCHIPELAGO.value,
+    22: SectorName.THREE_EYE_REEF.value,
+    23: SectorName.GREATFISH_ISLE.value,
+    24: SectorName.CYCLOPS_REEF.value,
+    25: SectorName.SIX_EYE_REEF.value,
+    26: SectorName.TOWER_OF_THE_GODS_SECTOR.value,
+    27: SectorName.EASTERN_TRIANGLE_ISLAND.value,
+    28: SectorName.THORNED_FAIRY_ISLAND.value,
+    29: SectorName.NEEDLE_ROCK_ISLE.value,
+    30: SectorName.ISLET_OF_STEEL.value,
+    31: SectorName.STONE_WATCHER_ISLAND.value,
+    32: SectorName.SOUTHERN_TRIANGLE_ISLAND.value,
+    33: SectorName.PRIVATE_OASIS.value,
+    34: SectorName.BOMB_ISLAND.value,
+    35: SectorName.BIRD_S_PEAK_ROCK.value,
+    36: SectorName.DIAMOND_STEPPE_ISLAND.value,
+    37: SectorName.FIVE_EYE_REEF.value,
+    38: SectorName.SHARK_ISLAND.value,
+    39: SectorName.SOUTHERN_FAIRY_ISLAND.value,
+    40: SectorName.ICE_RING_ISLE.value,
+    41: SectorName.FOREST_HAVEN.value,
+    42: SectorName.CLIFF_PLATEAU_ISLES.value,
+    43: SectorName.HORSESHOE_ISLAND.value,
+    44: SectorName.OUTSET_ISLAND.value,
+    45: SectorName.HEADSTONE_ISLAND.value,
+    46: SectorName.TWO_EYE_REEF.value,
+    47: SectorName.ANGULAR_ISLES.value,
+    48: SectorName.BOATING_COURSE.value,
+    49: SectorName.FIVE_STAR_ISLES.value,
 }
 
 
@@ -73,10 +74,12 @@ class ChartRandomizer:
 
         self.island_number_to_chart_name = ISLAND_NUMBER_TO_CHART_NAME.copy()
 
-    def setup_progress_sunken_treasure_locations(self) -> None:
+    def setup_progress_sunken_treasure_locations(self, skip_randomization: bool = False) -> None:
         """
         Create the locations for sunken treasure locations and update them as progression and non-progression
         appropriately. If the option is enabled, randomize which charts point to which sector.
+
+        :param skip_randomization: If True, skip chart randomization (used during UT restoration).
         """
         options = self.world.options
 
@@ -84,8 +87,9 @@ class ChartRandomizer:
 
         # Shuffles the list of island numbers if charts are randomized.
         # The shuffled island numbers determine which sector each chart points to.
+        # However, if skip_randomization is True, the charts remain in their pre-loaded state.
         shuffled_island_numbers = list(self.island_number_to_chart_name.keys())
-        if options.randomize_charts:
+        if options.randomize_charts and not skip_randomization:
             self.world.random.shuffle(shuffled_island_numbers)
 
         for original_item_name in reversed(original_item_names):

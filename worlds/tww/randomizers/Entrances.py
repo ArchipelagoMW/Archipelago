@@ -1,12 +1,13 @@
 from collections import defaultdict
 from collections.abc import Generator
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, ClassVar, Optional
+from typing import TYPE_CHECKING, ClassVar
 
 from Fill import FillError
 from Options import OptionError
 
 from .. import Macros
+from ..Enums import SectorName
 from ..Locations import LOCATION_TABLE, TWWFlag, split_location_name_by_zone
 
 if TYPE_CHECKING:
@@ -20,8 +21,8 @@ class ZoneEntrance:
     """
 
     entrance_name: str
-    island_name: Optional[str] = None
-    nested_in: Optional["ZoneExit"] = None
+    island_name: str | None = None
+    nested_in: "ZoneExit | None" = None
 
     @property
     def is_nested(self) -> bool:
@@ -56,7 +57,7 @@ class ZoneExit:
     """
 
     unique_name: str
-    zone_name: Optional[str] = None
+    zone_name: str | None = None
 
     def __repr__(self) -> str:
         """
@@ -73,11 +74,11 @@ class ZoneExit:
 
 
 DUNGEON_ENTRANCES: list[ZoneEntrance] = [
-    ZoneEntrance("Dungeon Entrance on Dragon Roost Island", "Dragon Roost Island"),
-    ZoneEntrance("Dungeon Entrance in Forest Haven Sector", "Forest Haven"),
-    ZoneEntrance("Dungeon Entrance in Tower of the Gods Sector", "Tower of the Gods Sector"),
-    ZoneEntrance("Dungeon Entrance on Headstone Island", "Headstone Island"),
-    ZoneEntrance("Dungeon Entrance on Gale Isle", "Gale Isle"),
+    ZoneEntrance("Dungeon Entrance on Dragon Roost Island", SectorName.DRAGON_ROOST_ISLAND.value),
+    ZoneEntrance("Dungeon Entrance in Forest Haven Sector", SectorName.FOREST_HAVEN.value),
+    ZoneEntrance("Dungeon Entrance in Tower of the Gods Sector", SectorName.TOWER_OF_THE_GODS_SECTOR.value),
+    ZoneEntrance("Dungeon Entrance on Headstone Island", SectorName.HEADSTONE_ISLAND.value),
+    ZoneEntrance("Dungeon Entrance on Gale Isle", SectorName.GALE_ISLE.value),
 ]
 DUNGEON_EXITS: list[ZoneExit] = [
     ZoneExit("Dragon Roost Cavern", "Dragon Roost Cavern"),
@@ -92,7 +93,7 @@ MINIBOSS_ENTRANCES: list[ZoneEntrance] = [
     ZoneEntrance("Miniboss Entrance in Tower of the Gods", nested_in=ZoneExit.all["Tower of the Gods"]),
     ZoneEntrance("Miniboss Entrance in Earth Temple", nested_in=ZoneExit.all["Earth Temple"]),
     ZoneEntrance("Miniboss Entrance in Wind Temple", nested_in=ZoneExit.all["Wind Temple"]),
-    ZoneEntrance("Miniboss Entrance in Hyrule Castle", "Tower of the Gods Sector"),
+    ZoneEntrance("Miniboss Entrance in Hyrule Castle", SectorName.TOWER_OF_THE_GODS_SECTOR.value),
 ]
 MINIBOSS_EXITS: list[ZoneExit] = [
     ZoneExit("Forbidden Woods Miniboss Arena"),
@@ -106,7 +107,7 @@ BOSS_ENTRANCES: list[ZoneEntrance] = [
     ZoneEntrance("Boss Entrance in Dragon Roost Cavern", nested_in=ZoneExit.all["Dragon Roost Cavern"]),
     ZoneEntrance("Boss Entrance in Forbidden Woods", nested_in=ZoneExit.all["Forbidden Woods"]),
     ZoneEntrance("Boss Entrance in Tower of the Gods", nested_in=ZoneExit.all["Tower of the Gods"]),
-    ZoneEntrance("Boss Entrance in Forsaken Fortress", "Forsaken Fortress Sector"),
+    ZoneEntrance("Boss Entrance in Forsaken Fortress", SectorName.FORSAKEN_FORTRESS_SECTOR.value),
     ZoneEntrance("Boss Entrance in Earth Temple", nested_in=ZoneExit.all["Earth Temple"]),
     ZoneEntrance("Boss Entrance in Wind Temple", nested_in=ZoneExit.all["Wind Temple"]),
 ]
@@ -120,48 +121,48 @@ BOSS_EXITS: list[ZoneExit] = [
 ]
 
 SECRET_CAVE_ENTRANCES: list[ZoneEntrance] = [
-    ZoneEntrance("Secret Cave Entrance on Outset Island", "Outset Island"),
-    ZoneEntrance("Secret Cave Entrance on Dragon Roost Island", "Dragon Roost Island"),
-    ZoneEntrance("Secret Cave Entrance on Fire Mountain", "Fire Mountain"),
-    ZoneEntrance("Secret Cave Entrance on Ice Ring Isle", "Ice Ring Isle"),
-    ZoneEntrance("Secret Cave Entrance on Private Oasis", "Private Oasis"),
-    ZoneEntrance("Secret Cave Entrance on Needle Rock Isle", "Needle Rock Isle"),
-    ZoneEntrance("Secret Cave Entrance on Angular Isles", "Angular Isles"),
-    ZoneEntrance("Secret Cave Entrance on Boating Course", "Boating Course"),
-    ZoneEntrance("Secret Cave Entrance on Stone Watcher Island", "Stone Watcher Island"),
-    ZoneEntrance("Secret Cave Entrance on Overlook Island", "Overlook Island"),
-    ZoneEntrance("Secret Cave Entrance on Bird's Peak Rock", "Bird's Peak Rock"),
-    ZoneEntrance("Secret Cave Entrance on Pawprint Isle", "Pawprint Isle"),
-    ZoneEntrance("Secret Cave Entrance on Pawprint Isle Side Isle", "Pawprint Isle"),
-    ZoneEntrance("Secret Cave Entrance on Diamond Steppe Island", "Diamond Steppe Island"),
-    ZoneEntrance("Secret Cave Entrance on Bomb Island", "Bomb Island"),
-    ZoneEntrance("Secret Cave Entrance on Rock Spire Isle", "Rock Spire Isle"),
-    ZoneEntrance("Secret Cave Entrance on Shark Island", "Shark Island"),
-    ZoneEntrance("Secret Cave Entrance on Cliff Plateau Isles", "Cliff Plateau Isles"),
-    ZoneEntrance("Secret Cave Entrance on Horseshoe Island", "Horseshoe Island"),
-    ZoneEntrance("Secret Cave Entrance on Star Island", "Star Island"),
+    ZoneEntrance("Secret Cave Entrance on Outset Island", SectorName.OUTSET_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Dragon Roost Island", SectorName.DRAGON_ROOST_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Fire Mountain", SectorName.FIRE_MOUNTAIN.value),
+    ZoneEntrance("Secret Cave Entrance on Ice Ring Isle", SectorName.ICE_RING_ISLE.value),
+    ZoneEntrance("Secret Cave Entrance on Private Oasis", SectorName.PRIVATE_OASIS.value),
+    ZoneEntrance("Secret Cave Entrance on Needle Rock Isle", SectorName.NEEDLE_ROCK_ISLE.value),
+    ZoneEntrance("Secret Cave Entrance on Angular Isles", SectorName.ANGULAR_ISLES.value),
+    ZoneEntrance("Secret Cave Entrance on Boating Course", SectorName.BOATING_COURSE.value),
+    ZoneEntrance("Secret Cave Entrance on Stone Watcher Island", SectorName.STONE_WATCHER_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Overlook Island", SectorName.OVERLOOK_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Bird's Peak Rock", SectorName.BIRD_S_PEAK_ROCK.value),
+    ZoneEntrance("Secret Cave Entrance on Pawprint Isle", SectorName.PAWPRINT_ISLE.value),
+    ZoneEntrance("Secret Cave Entrance on Pawprint Isle Side Isle", SectorName.PAWPRINT_ISLE.value),
+    ZoneEntrance("Secret Cave Entrance on Diamond Steppe Island", SectorName.DIAMOND_STEPPE_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Bomb Island", SectorName.BOMB_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Rock Spire Isle", SectorName.ROCK_SPIRE_ISLE.value),
+    ZoneEntrance("Secret Cave Entrance on Shark Island", SectorName.SHARK_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Cliff Plateau Isles", SectorName.CLIFF_PLATEAU_ISLES.value),
+    ZoneEntrance("Secret Cave Entrance on Horseshoe Island", SectorName.HORSESHOE_ISLAND.value),
+    ZoneEntrance("Secret Cave Entrance on Star Island", SectorName.STAR_ISLAND.value),
 ]
 SECRET_CAVE_EXITS: list[ZoneExit] = [
-    ZoneExit("Savage Labyrinth", zone_name="Outset Island"),
-    ZoneExit("Dragon Roost Island Secret Cave", zone_name="Dragon Roost Island"),
-    ZoneExit("Fire Mountain Secret Cave", zone_name="Fire Mountain"),
-    ZoneExit("Ice Ring Isle Secret Cave", zone_name="Ice Ring Isle"),
-    ZoneExit("Cabana Labyrinth", zone_name="Private Oasis"),
-    ZoneExit("Needle Rock Isle Secret Cave", zone_name="Needle Rock Isle"),
-    ZoneExit("Angular Isles Secret Cave", zone_name="Angular Isles"),
-    ZoneExit("Boating Course Secret Cave", zone_name="Boating Course"),
-    ZoneExit("Stone Watcher Island Secret Cave", zone_name="Stone Watcher Island"),
-    ZoneExit("Overlook Island Secret Cave", zone_name="Overlook Island"),
-    ZoneExit("Bird's Peak Rock Secret Cave", zone_name="Bird's Peak Rock"),
-    ZoneExit("Pawprint Isle Chuchu Cave", zone_name="Pawprint Isle"),
+    ZoneExit("Savage Labyrinth", zone_name=SectorName.OUTSET_ISLAND.value),
+    ZoneExit("Dragon Roost Island Secret Cave", zone_name=SectorName.DRAGON_ROOST_ISLAND.value),
+    ZoneExit("Fire Mountain Secret Cave", zone_name=SectorName.FIRE_MOUNTAIN.value),
+    ZoneExit("Ice Ring Isle Secret Cave", zone_name=SectorName.ICE_RING_ISLE.value),
+    ZoneExit("Cabana Labyrinth", zone_name=SectorName.PRIVATE_OASIS.value),
+    ZoneExit("Needle Rock Isle Secret Cave", zone_name=SectorName.NEEDLE_ROCK_ISLE.value),
+    ZoneExit("Angular Isles Secret Cave", zone_name=SectorName.ANGULAR_ISLES.value),
+    ZoneExit("Boating Course Secret Cave", zone_name=SectorName.BOATING_COURSE.value),
+    ZoneExit("Stone Watcher Island Secret Cave", zone_name=SectorName.STONE_WATCHER_ISLAND.value),
+    ZoneExit("Overlook Island Secret Cave", zone_name=SectorName.OVERLOOK_ISLAND.value),
+    ZoneExit("Bird's Peak Rock Secret Cave", zone_name=SectorName.BIRD_S_PEAK_ROCK.value),
+    ZoneExit("Pawprint Isle Chuchu Cave", zone_name=SectorName.PAWPRINT_ISLE.value),
     ZoneExit("Pawprint Isle Wizzrobe Cave"),
-    ZoneExit("Diamond Steppe Island Warp Maze Cave", zone_name="Diamond Steppe Island"),
-    ZoneExit("Bomb Island Secret Cave", zone_name="Bomb Island"),
-    ZoneExit("Rock Spire Isle Secret Cave", zone_name="Rock Spire Isle"),
-    ZoneExit("Shark Island Secret Cave", zone_name="Shark Island"),
-    ZoneExit("Cliff Plateau Isles Secret Cave", zone_name="Cliff Plateau Isles"),
-    ZoneExit("Horseshoe Island Secret Cave", zone_name="Horseshoe Island"),
-    ZoneExit("Star Island Secret Cave", zone_name="Star Island"),
+    ZoneExit("Diamond Steppe Island Warp Maze Cave", zone_name=SectorName.DIAMOND_STEPPE_ISLAND.value),
+    ZoneExit("Bomb Island Secret Cave", zone_name=SectorName.BOMB_ISLAND.value),
+    ZoneExit("Rock Spire Isle Secret Cave", zone_name=SectorName.ROCK_SPIRE_ISLE.value),
+    ZoneExit("Shark Island Secret Cave", zone_name=SectorName.SHARK_ISLAND.value),
+    ZoneExit("Cliff Plateau Isles Secret Cave", zone_name=SectorName.CLIFF_PLATEAU_ISLES.value),
+    ZoneExit("Horseshoe Island Secret Cave", zone_name=SectorName.HORSESHOE_ISLAND.value),
+    ZoneExit("Star Island Secret Cave", zone_name=SectorName.STAR_ISLAND.value),
 ]
 
 SECRET_CAVE_INNER_ENTRANCES: list[ZoneEntrance] = [
@@ -176,20 +177,20 @@ SECRET_CAVE_INNER_EXITS: list[ZoneExit] = [
 ]
 
 FAIRY_FOUNTAIN_ENTRANCES: list[ZoneEntrance] = [
-    ZoneEntrance("Fairy Fountain Entrance on Outset Island", "Outset Island"),
-    ZoneEntrance("Fairy Fountain Entrance on Thorned Fairy Island", "Thorned Fairy Island"),
-    ZoneEntrance("Fairy Fountain Entrance on Eastern Fairy Island", "Eastern Fairy Island"),
-    ZoneEntrance("Fairy Fountain Entrance on Western Fairy Island", "Western Fairy Island"),
-    ZoneEntrance("Fairy Fountain Entrance on Southern Fairy Island", "Southern Fairy Island"),
-    ZoneEntrance("Fairy Fountain Entrance on Northern Fairy Island", "Northern Fairy Island"),
+    ZoneEntrance("Fairy Fountain Entrance on Outset Island", SectorName.OUTSET_ISLAND.value),
+    ZoneEntrance("Fairy Fountain Entrance on Thorned Fairy Island", SectorName.THORNED_FAIRY_ISLAND.value),
+    ZoneEntrance("Fairy Fountain Entrance on Eastern Fairy Island", SectorName.EASTERN_FAIRY_ISLAND.value),
+    ZoneEntrance("Fairy Fountain Entrance on Western Fairy Island", SectorName.WESTERN_FAIRY_ISLAND.value),
+    ZoneEntrance("Fairy Fountain Entrance on Southern Fairy Island", SectorName.SOUTHERN_FAIRY_ISLAND.value),
+    ZoneEntrance("Fairy Fountain Entrance on Northern Fairy Island", SectorName.NORTHERN_FAIRY_ISLAND.value),
 ]
 FAIRY_FOUNTAIN_EXITS: list[ZoneExit] = [
     ZoneExit("Outset Fairy Fountain"),
-    ZoneExit("Thorned Fairy Fountain", zone_name="Thorned Fairy Island"),
-    ZoneExit("Eastern Fairy Fountain", zone_name="Eastern Fairy Island"),
-    ZoneExit("Western Fairy Fountain", zone_name="Western Fairy Island"),
-    ZoneExit("Southern Fairy Fountain", zone_name="Southern Fairy Island"),
-    ZoneExit("Northern Fairy Fountain", zone_name="Northern Fairy Island"),
+    ZoneExit("Thorned Fairy Fountain", zone_name=SectorName.THORNED_FAIRY_ISLAND.value),
+    ZoneExit("Eastern Fairy Fountain", zone_name=SectorName.EASTERN_FAIRY_ISLAND.value),
+    ZoneExit("Western Fairy Fountain", zone_name=SectorName.WESTERN_FAIRY_ISLAND.value),
+    ZoneExit("Southern Fairy Fountain", zone_name=SectorName.SOUTHERN_FAIRY_ISLAND.value),
+    ZoneExit("Northern Fairy Fountain", zone_name=SectorName.NORTHERN_FAIRY_ISLAND.value),
 ]
 
 DUNGEON_INNER_EXITS: list[ZoneExit] = (
@@ -343,10 +344,22 @@ class EntranceRandomizer:
         self.banned_exits: list[ZoneExit] = []
         self.islands_with_a_banned_dungeon: set[str] = set()
 
-    def randomize_entrances(self) -> None:
+    def randomize_entrances(self, skip_randomization: bool = False) -> None:
         """
         Randomize entrances for The Wind Waker.
+
+        If skip_randomization is True, entrances will not be randomized but will still be
+        finalized to connect regions. This is used when entrances were pre-loaded from
+        UT slot_data to preserve the server's original mappings.
+
+        :param skip_randomization: Whether to skip randomization and only finalize existing mappings.
         """
+        # If entrances were pre-loaded from server (UT mode), skip randomization but still finalize
+        if skip_randomization:
+            # Still need to finalize to actually connect regions, even though we're not randomizing
+            self.finalize_all_randomized_sets_of_entrances()
+            return
+
         self.init_banned_exits()
 
         for relevant_entrances, relevant_exits in self.get_all_entrance_sets_to_be_randomized():
@@ -760,7 +773,7 @@ class EntranceRandomizer:
             relevant_exits += FAIRY_FOUNTAIN_EXITS
         return relevant_entrances, relevant_exits
 
-    def get_outermost_entrance_for_exit(self, zone_exit: ZoneExit) -> Optional[ZoneEntrance]:
+    def get_outermost_entrance_for_exit(self, zone_exit: ZoneExit) -> ZoneEntrance | None:
         """
         Unrecurses nested dungeons to determine a given exit's outermost (island) entrance.
 
@@ -770,7 +783,7 @@ class EntranceRandomizer:
         zone_entrance = self.done_exits_to_entrances[zone_exit]
         return self.get_outermost_entrance_for_entrance(zone_entrance)
 
-    def get_outermost_entrance_for_entrance(self, zone_entrance: ZoneEntrance) -> Optional[ZoneEntrance]:
+    def get_outermost_entrance_for_entrance(self, zone_entrance: ZoneEntrance) -> ZoneEntrance | None:
         """
         Unrecurses nested dungeons to determine a given entrance's outermost (island) entrance.
 
@@ -784,7 +797,7 @@ class EntranceRandomizer:
         outermost_entrance = seen_entrances[-1]
         return outermost_entrance
 
-    def get_all_entrances_on_path_to_entrance(self, zone_entrance: ZoneEntrance) -> Optional[list[ZoneEntrance]]:
+    def get_all_entrances_on_path_to_entrance(self, zone_entrance: ZoneEntrance) -> list[ZoneEntrance] | None:
         """
         Unrecurses nested dungeons to build a list of all entrances leading to a given entrance.
 
@@ -837,7 +850,7 @@ class EntranceRandomizer:
 
         return False
 
-    def get_zone_exit_for_item_location(self, location_name: str) -> Optional[ZoneExit]:
+    def get_zone_exit_for_item_location(self, location_name: str) -> ZoneExit | None:
         """
         Retrieve the zone exit for a given location.
 
