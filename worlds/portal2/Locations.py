@@ -58,7 +58,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
     "Chapter 3: Laser Vs. Turret Completion": Portal2LocationData("sp_a2_laser_vs_turret", LocationType.MAP_COMPLETION, [ portal_gun_2, turrets, laser, laser_catcher, weighted_cube, reflection_cube]),
     "Chapter 3: Pull The Rug Completion": Portal2LocationData("sp_a2_pull_the_rug", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, weighted_cube, floor_button, laser, laser_catcher]),
     # Chapter 4
-    "Chapter 4: Column Blocker Completion": Portal2LocationData("sp_a2_column_blocker", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, laser, laser_catcher, laser_relays, button, reflection_cube, turrets]),
+    "Chapter 4: Column Blocker Completion": Portal2LocationData("sp_a2_column_blocker", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, laser, laser_catcher, laser_relays, button, reflection_cube, turrets, faith_plate]),
     "Chapter 4: Laser Chaining Completion": Portal2LocationData("sp_a2_laser_chaining", LocationType.MAP_COMPLETION, [ portal_gun_2, laser, laser_catcher, laser_relays, reflection_cube, faith_plate, turrets]),
     "Chapter 4: Triple Laser Completion": Portal2LocationData("sp_a2_triple_laser", LocationType.MAP_COMPLETION, [ portal_gun_2, laser, laser_catcher, reflection_cube]),
     "Chapter 4: Jailbreak Completion": Portal2LocationData("sp_a2_bts1", LocationType.MAP_COMPLETION, [ portal_gun_2, bridge, button, weighted_cube]),
