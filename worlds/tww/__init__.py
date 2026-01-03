@@ -1,3 +1,4 @@
+import logging
 import os
 import zipfile
 from base64 import b64encode
@@ -5,6 +6,17 @@ from collections.abc import Mapping
 from typing import Any, ClassVar
 
 import yaml
+
+logger = logging.getLogger(__name__)
+
+def _log_to_file(message: str) -> None:
+    """Write a message to the rando log file."""
+    try:
+        log_path = "logs/tww_rando.log"
+        with open(log_path, "a") as f:
+            f.write(f"{message}\n")
+    except:
+        pass
 
 from BaseClasses import Item
 from BaseClasses import ItemClassification as IC
@@ -221,6 +233,16 @@ class TWWWorld(World):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        
+        try:
+            is_fake_gen = hasattr(self.multiworld, "generation_is_fake")
+            try:
+                progression_misc = self.options.progression_misc
+            except:
+                progression_misc = "unavailable"
+            _log_to_file(f"TWWWorld.__init__: is_fake_gen={is_fake_gen}, progression_misc={progression_misc}")
+        except:
+            pass
 
         self.progress_locations: set[str] = set()
         self.nonprogress_locations: set[str] = set()
@@ -319,6 +341,7 @@ class TWWWorld(World):
         enabled_flags |= add_flag(options.progression_expensive_purchases, TWWFlag.XPENSVE)
         enabled_flags |= add_flag(options.progression_island_puzzles, TWWFlag.ISLND_P)
         enabled_flags |= add_flag(options.progression_misc, TWWFlag.MISCELL)
+        _log_to_file(f"create_options: progression_misc={options.progression_misc}, enabled_flags has MISCELL: {bool(enabled_flags & TWWFlag.MISCELL)}")
 
         progress_locations: set[str] = set()
         nonprogress_locations: set[str] = set()
@@ -403,6 +426,8 @@ class TWWWorld(World):
         player = self.player
         options = self.options
         is_real_gen = not hasattr(self.multiworld, "generation_is_fake")
+        
+        _log_to_file(f"create_regions called: is_real_gen={is_real_gen}, progression_misc={options.progression_misc}")
 
 
         # "The Great Sea" region contains all locations that are not in a randomizable region.
@@ -427,8 +452,11 @@ class TWWWorld(World):
 
         # Assign each location to their region.
         # Progress locations are sorted for deterministic results.
+        _log_to_file(f"create_regions: Creating {len(self.progress_locations)} progress locations")
         for location_name in sorted(self.progress_locations):
             data = LOCATION_TABLE[location_name]
+            if "Crescent Island" in location_name:
+                _log_to_file(f"  Creating location: {location_name}")
 
             region = self.get_region(data.region)
             location = TWWLocation(player, location_name, region, data)
@@ -512,31 +540,34 @@ class TWWWorld(World):
         """
         Connect entrances with deferred entrance support for Universal Tracker.
 
-        During UT generation with enforce_deferred_connections enabled, entrances
+        During UT generation with enforce_deferred_entrances enabled, entrances
         are disconnected so they're not revealed until the player visits regions.
         """
-        # Check if we're in UT generation with deferred connections enabled
-        if (hasattr(self.multiworld, "generation_is_fake") and
-            hasattr(self.multiworld, "enforce_deferred_connections") and
-            self.multiworld.enforce_deferred_connections in ("on", "default") and
-            self._is_any_entrance_randomized()):
+        is_fake_gen = hasattr(self.multiworld, "generation_is_fake")
+        
+        # Don't do deferred entrance disconnection during UT generation
+        # UT worlds use default options which don't match the server's actual options,
+        # so it's not reliable to disconnect entrances there
+        if is_fake_gen:
+            _log_to_file(f"connect_entrances: Skipping entrance disconnection during UT generation")
+            return
+        
+        has_deferred_attr = hasattr(self.multiworld, "enforce_deferred_entrances")
+        deferred_value = getattr(self.multiworld, "enforce_deferred_entrances", None) if has_deferred_attr else None
+        is_randomized = bool(self.entrances.done_entrances_to_exits)
+        
+        _log_to_file(f"connect_entrances: has_deferred={has_deferred_attr}, value={deferred_value}, randomized={is_randomized}")
+        
+        # Debug: list some attributes on multiworld to understand the context
+        _log_to_file(f"  multiworld attributes: {[a for a in dir(self.multiworld) if 'defer' in a.lower() or 'entrance' in a.lower()]}")
+        
+        # Check if deferred connections are enabled
+        if (has_deferred_attr and
+            deferred_value in ("on", "default") and
+            is_randomized):
+            _log_to_file("Calling _disconnect_entrances")
             self._disconnect_entrances()
-
-    def _is_any_entrance_randomized(self) -> bool:
-        """
-        Check if any of the entrance randomization options are enabled.
-
-        :return: True if any entrance randomization option is enabled, False otherwise.
-        """
-        options = self.options
-        return (
-            options.randomize_dungeon_entrances
-            or options.randomize_secret_cave_entrances
-            or options.randomize_miniboss_entrances
-            or options.randomize_boss_entrances
-            or options.randomize_secret_cave_inner_entrances
-            or options.randomize_fairy_fountain_entrances
-        )
+            _log_to_file(f"After disconnect: {len(self.disconnected_entrances)} entrances disconnected")
 
     def _disconnect_entrances(self) -> None:
         """
@@ -550,18 +581,36 @@ class TWWWorld(World):
         self.disconnected_entrances = {}
         self.entrance_to_region = {}
 
-        # Build a set of randomized entrance names
-        randomized_entrance_names = {zone_entrance.entrance_name
+        # Build a set of randomized entrance names from the done entrances
+        randomized_entrance_names = {zone_entrance.entrance_name 
                                      for zone_entrance in self.entrances.done_entrances_to_exits.keys()}
-
+        
+        _log_to_file(f"_disconnect_entrances: {len(randomized_entrance_names)} randomized names to match")
+        
+        # Get all actual entrances
+        all_entrances = self.get_entrances()
+        _log_to_file(f"  Available entrances from get_entrances: {len(all_entrances)}")
+        
+        if len(all_entrances) == 0:
+            _log_to_file("  No entrances available yet (UT generation?), storing mapping for later use")
+            # During UT generation, entrances don't exist yet, but we can store the mapping
+            # from randomized names to let fill_slot_data know which ones should be deferred
+            for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items():
+                # Create a placeholder mapping with None as the entrance object
+                # We'll use the zone_entrance name as the key instead
+                self.entrance_to_region[zone_entrance.entrance_name] = zone_exit.unique_name
+            _log_to_file(f"  Stored mapping for {len(self.entrance_to_region)} randomized entrances")
+            return
+        
         # Disconnect matching entrances and store mappings
-        for entrance in self.get_entrances():
-            if entrance.connected_region and any(entrance.name.startswith(ent_name)
-                                                   for ent_name in randomized_entrance_names):
+        for entrance in all_entrances:
+            if entrance.connected_region and entrance.name in randomized_entrance_names:
                 original_region = entrance.connected_region
                 self.disconnected_entrances[entrance] = original_region
                 self.entrance_to_region[entrance] = original_region
                 entrance.connected_region = None
+        
+        _log_to_file(f"_disconnect_entrances: {len(self.disconnected_entrances)} entrances disconnected")
 
     @classmethod
     def stage_pre_fill(cls, multiworld: MultiWorld) -> None:
@@ -573,73 +622,6 @@ class TWWWorld(World):
         from .randomizers.Dungeons import fill_dungeons_restrictive
 
         fill_dungeons_restrictive(multiworld)
-
-    def generate_output(self, output_directory: str) -> None:
-        """
-        Create the output APTWW file that is used to randomize the ISO.
-
-        :param output_directory: The output directory for the APTWW file.
-        """
-        multiworld = self.multiworld
-        player = self.player
-
-        # Determine the current arrangement for charts.
-        # Create a list where the original island number is the index, and the value is the new island number.
-        # Without randomized charts, this array would be just an ordered list of the numbers 1 to 49.
-        # With randomized charts, the new island number is where the chart for the original island now leads.
-        chart_name_to_island_number = {
-            chart_name: island_number for island_number, chart_name in self.charts.island_number_to_chart_name.items()
-        }
-        charts_mapping: list[int] = []
-        for i in range(1, 49 + 1):
-            original_chart_name = ISLAND_NUMBER_TO_CHART_NAME[i]
-            new_island_number = chart_name_to_island_number[original_chart_name]
-            charts_mapping.append(new_island_number)
-
-        # Output seed name and slot number to seed RNG in randomizer client.
-        output_data = {
-            "Version": list(VERSION),
-            "Seed": multiworld.seed_name,
-            "Slot": player,
-            "Name": self.player_name,
-            "Options": self.options.get_output_dict(),
-            "Required Bosses": self.boss_reqs.required_boss_item_locations,
-            "Locations": {},
-            "Entrances": {},
-            "Charts": charts_mapping,
-        }
-
-        # Output which item has been placed at each location.
-        output_locations = output_data["Locations"]
-        locations = multiworld.get_locations(player)
-        for location in locations:
-            if location.name != "Defeat Ganondorf":
-                if location.item:
-                    item_info = {
-                        "player": location.item.player,
-                        "name": location.item.name,
-                        "game": location.item.game,
-                        "classification": self._get_classification_name(location.item.classification),
-                    }
-                else:
-                    item_info = {"name": "Nothing", "game": "The Wind Waker", "classification": "filler"}
-                output_locations[location.name] = item_info
-
-        # Output the mapping of entrances to exits.
-        output_entrances = output_data["Entrances"]
-        for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items():
-            output_entrances[zone_entrance.entrance_name] = zone_exit.unique_name
-
-        # Output the plando details to file.
-        aptww = TWWContainer(
-            path=os.path.join(
-                output_directory, f"{multiworld.get_out_file_name_base(player)}{TWWContainer.patch_file_ending}"
-            ),
-            player=player,
-            player_name=self.player_name,
-            data=output_data,
-        )
-        aptww.write()
 
     def extend_hint_information(self, hint_data: dict[int, dict[int, str]]) -> None:
         """
@@ -737,15 +719,21 @@ class TWWWorld(World):
 
         # If entrances are disconnected for deferred spoilers, include the mapping
         # so the client/tracker can reconnect them when regions are visited
-        if self.disconnected_entrances:
-            # Build a mapping of entrance names to their original destination regions
-            deferred_entrances = {
-                entrance.name: region.name
-                for entrance, region in self.entrance_to_region.items()
-            }
-            slot_data["deferred_entrances"] = deferred_entrances
-            # Include the stage name to exit mapping so PopTracker can map visited stages to entrances
-            slot_data["stage_name_to_exit"] = self.stage_name_to_exit
+        if self.disconnected_entrances or self.entrance_to_region:
+            # Handle both real disconnects (Entrance objects) and UT mapping (string keys)
+            deferred_entrances = {}
+            for entrance, region in self.entrance_to_region.items():
+                if isinstance(entrance, str):
+                    # UT generation case: entrance is a string entrance name
+                    deferred_entrances[entrance] = region
+                else:
+                    # Real generation case: entrance is an Entrance object
+                    deferred_entrances[entrance.name] = region.name if hasattr(region, 'name') else region
+            
+            if deferred_entrances:
+                slot_data["deferred_entrances"] = deferred_entrances
+                # Include the stage name to exit mapping so PopTracker can map visited stages to entrances
+                slot_data["stage_name_to_exit"] = self.stage_name_to_exit
 
         return slot_data
 
@@ -757,16 +745,45 @@ class TWWWorld(World):
         has been created. It reads the entrance mappings from slot_data and connects the
         parent regions to their destination regions with appropriate access rules.
 
+        During deferred entrance mode, this skips connecting entrances that are in the
+        deferred_entrances list, leaving them disconnected for PopTracker to handle.
+
         :param slot_data: The slot data containing entrance mappings
         :return: The modified slot_data
         """
+        # During UT generation, note the server's actual options
+        if hasattr(self.multiworld, "generation_is_fake"):
+            _log_to_file(f"interpret_slot_data: UT generation detected")
+            _log_to_file(f"  UT used {len(self.progress_locations)} locations (may differ from server)")
+            if "progression_misc" in slot_data:
+                _log_to_file(f"  Server has progression_misc={slot_data.get('progression_misc')}")
+            if "entrances" in slot_data:
+                _log_to_file(f"  Server provided {len(slot_data['entrances'])} entrance mappings")
+        
+        # If we have disconnected entrances during UT generation, add them to slot_data
+        # so clients/trackers can use the mapping
+        if self.disconnected_entrances and "deferred_entrances" not in slot_data:
+            deferred_entrances = {
+                entrance.name: region.name
+                for entrance, region in self.entrance_to_region.items()
+            }
+            slot_data["deferred_entrances"] = deferred_entrances
+            slot_data["stage_name_to_exit"] = self.stage_name_to_exit
+        
         if "entrances" not in slot_data:
             return slot_data
 
         entrance_mappings = slot_data["entrances"]
         great_sea_region = self.get_region("The Great Sea")
+        
+        # If we have deferred entrances, don't reconnect them
+        deferred_entrance_names = set(slot_data.get("deferred_entrances", {}).keys())
 
         for entrance_name, exit_name in entrance_mappings.items():
+            # Skip deferred entrances - leave them disconnected
+            if entrance_name in deferred_entrance_names:
+                continue
+                
             # Find the ZoneEntrance object
             zone_entrance = ZoneEntrance.all.get(entrance_name)
             if zone_entrance is None:
