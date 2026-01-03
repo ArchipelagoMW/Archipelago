@@ -50,8 +50,8 @@ class AbilityShuffling(DefaultOnToggle):
 
 class Lanternless(Toggle):
     """
-    Choose whether you require the Lantern for dark areas.
-    When enabled, the Lantern is marked as Useful instead of Progression.
+    When enabled, you may be required to navigate dark areas without the Lantern.
+    The Lantern is marked as Useful instead of Progression.
     """
     internal_name = "lanternless"
     display_name = "Lanternless"
@@ -59,8 +59,8 @@ class Lanternless(Toggle):
 
 class Maskless(Toggle):
     """
-    Choose whether you require the Scavenger's Mask for Lower Quarry.
-    When enabled, the Scavenger's Mask is marked as Useful instead of Progression.
+    When enabled, you may be required to traverse Lower Quarry without the Scavenger's Mask.
+    The Scavenger's Mask is marked as Useful instead of Progression.
     """
     internal_name = "maskless"
     display_name = "Maskless"
@@ -200,8 +200,8 @@ class ShuffleLadders(Toggle):
 
 class ShuffleFuses(Toggle):
     """
-    Praying at a fuse will reward a check instead of turning on the power. The power from each fuse gets turned into an
-    item that must be found in order to restore power for that part of the path.
+    Praying at a fuse will reward a check instead of turning on the power.
+    The power from each fuse gets turned into an item that must be found in order to restore power for that part of the path.
     """
     internal_name = "shuffle_fuses"
     display_name = "Shuffle Fuses"
