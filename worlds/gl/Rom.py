@@ -426,7 +426,7 @@ class GLProcedurePatch(APProcedurePatch, APTokenMixin):
     result_file_ending = ".z64"
 
     procedure = [
-        ("apply_basepatch", []),
+        ("apply_bsdiff4", ["basepatch.bsdiff4"]),
         ("patch_bins", []),
         ("patch_items", []),
         ("finalize_crc", [])
