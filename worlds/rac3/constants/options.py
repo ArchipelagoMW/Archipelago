@@ -31,3 +31,4 @@ class RAC3OPTION:
     SEWER_LIMITATION = "sewer_limitation"
     NANOTECH_LIMITATION = "nanotech_limitation"
     WEAPON_VENDORS = "weapon_vendors"
+    FILLER_WEIGHT = "filler_weight"
