@@ -56,10 +56,9 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
     modifiers: list[str]
 
-    def __init__(self, technology_name: str, factorio_id: int, progressive: Tuple[str, ...] = (),
+    def __init__(self, technology_name: str, progressive: Tuple[str, ...] = (),
                  modifiers: list[str] = None, unlocks: Union[Set[str], bool] = None):
         self.name = technology_name
-        self.factorio_id = factorio_id
         self.progressive = progressive
         if modifiers is None:
             modifiers = []
@@ -107,12 +106,9 @@ class CustomTechnology(Technology):
 for technology_name, data in sorted(techs_future.result().items()):
     technology = Technology(
         technology_name,
-        factorio_tech_id,
         modifiers=data.get("modifiers", []),
         unlocks=set(data["unlocks"]) - start_unlocked_recipes,
     )
-    factorio_tech_id += 1
-    tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
     for recipe_name in technology.unlocks:
         recipe_sources.setdefault(recipe_name, set()).add(technology_name)

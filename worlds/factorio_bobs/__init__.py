@@ -5,6 +5,13 @@ import logging
 import random
 import typing
 
+
+from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
+    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
+    get_ordered_items, base_technology_table, technology_table
+
+from .FactorioModpack import FactorioModpack
+from .APModpackManager import get_items, get_locations
 import Utils
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from NetUtils import JSONMessagePart
@@ -19,9 +26,6 @@ from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, 
                               TechCostDistribution, option_groups)
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
 from .Shapes import get_shapes
-from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
-    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
-    get_ordered_items, base_technology_table, technology_table
 from .FactorioSettings import FactorioSettings
 
 
@@ -83,8 +87,8 @@ class FactorioBobs(World):
     options_dataclass = FactorioOptions
     options: FactorioOptions
 
-    item_name_to_id = all_items
-    location_name_to_id = location_table
+    item_name_to_id = get_items()
+    location_name_to_id = get_locations()
     item_name_groups = {
         "Progressive": set(progressive_tech_table.keys()),
     }
