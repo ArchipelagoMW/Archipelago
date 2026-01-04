@@ -4,7 +4,7 @@
     "item_name": "Key",
     "progression": 0,
     "rom_id": "0x0000",
-    "frequency": 650
+    "frequency": 700
   },
   {
     "id": 77780001,
@@ -214,14 +214,14 @@
     "item_name": "Fruit",
     "progression": 0,
     "rom_id": "0x0401",
-    "frequency": 300
+    "frequency": 250
   },
   {
     "id": 77780031,
     "item_name": "Meat",
     "progression": 0,
     "rom_id": "0x0403",
-    "frequency": 250
+    "frequency": 200
   },
   {
     "id": 77780032,
@@ -360,7 +360,7 @@
     "item_name": "Gold",
     "progression": 0,
     "rom_id": "0x0302",
-    "frequency": 750
+    "frequency": 800
   },
   {
     "id": 77780055,
