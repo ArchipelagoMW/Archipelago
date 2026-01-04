@@ -381,14 +381,14 @@ class TWWWorld(World):
         if "charts" in slot_data:
             self._restore_chart_mappings_from_slot_data(slot_data["charts"])
 
-        if "required_bosses" in slot_data:
-            self._restore_required_bosses_from_slot_data(slot_data["required_bosses"])
+        if "required_boss_item_locations" in slot_data:
+            self._restore_required_bosses_from_slot_data(slot_data["required_boss_item_locations"])
 
         options_restored = []
         options_failed = []
 
         for key, value in slot_data.items():
-            if key == "charts" or key == "entrances" or key == "required_bosses":
+            if key == "charts" or key == "entrances" or key == "required_boss_item_locations":
                 continue
 
             try:
@@ -868,7 +868,7 @@ class TWWWorld(World):
         slot_data["charts"] = charts_mapping
 
         # Add required bosses information.
-        slot_data["required_bosses"] = self.boss_reqs.required_boss_item_locations
+        slot_data["required_boss_item_locations"] = self.boss_reqs.required_boss_item_locations
         return slot_data
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
