@@ -358,8 +358,9 @@ class GauntletLegendsContext(CommonContext):
             return []
 
         if len(self.queued_traps) > 0:
-            for i, trap_name, index, triggered in enumerate(self.queued_traps):
-                if not triggered:
+            for i, trap in enumerate(self.queued_traps):
+                trap_name, index, given = trap
+                if not given:
                     await self.give_item(trap_name, self.players[0])
                     self.queued_traps[i] = (trap_name, index, True)
 
