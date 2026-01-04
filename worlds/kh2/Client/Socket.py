@@ -91,7 +91,7 @@ class KH2Socket:
                     msgStr = raw_msg.decode("utf-8")
 
                     values = msgStr.split(";")
-                    print("Received message: "+msgStr)
+                    print("Received message: " + msgStr)
                     self.handle_message(values)
             except asyncio.TimeoutError:
                 continue
@@ -129,7 +129,7 @@ class KH2Socket:
             else:
                 msg += "\n"
                 self.client_socket.sendall(msg.encode("utf-8"))
-                print("Sent message: "+msg)
+                print("Sent message: " + msg)
         except (OSError, ConnectionResetError, BrokenPipeError) as e:
             print(f"Error sending message {msg_id}: {e}; connection may be lost")
             self.is_connected = False
@@ -140,7 +140,7 @@ class KH2Socket:
         if message[0] == '':
             return
 
-        print("Handling message: "+str(message))
+        print("Handling message: " + str(message))
         msg_type = MessageType(int(message[0]))
 
         if msg_type == MessageType.WorldLocationChecked:

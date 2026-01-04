@@ -484,7 +484,6 @@ class KH2Context(CommonContext):
             if self.exit_event.is_set():
                 return
 
-            print("sending slot data")
             self.socket.send(MessageType.NotificationType, ["R", self.client_settings["receive_popup_type"]])
             self.socket.send(MessageType.NotificationType, ["S", self.client_settings["send_popup_type"]])
             self.socket.send(MessageType.Deathlink, [str(self.deathlink_toggle)])
