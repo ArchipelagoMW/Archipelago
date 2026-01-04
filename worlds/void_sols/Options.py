@@ -12,16 +12,16 @@ class StartingWeapon(Choice):
 
     display_name = "Starting Weapon"
     option_sword = 0
-    option_dagger: 1
-    option_great_hammer: 2
-    option_pickaxe: 3
-    option_halberd: 4
-    option_katana: 5
-    option_gauntlets: 6
-    option_morningstar: 7
-    option_dual_handaxes: 8
-    option_scythe: 9
-    option_frying_pan: 10
+    option_dagger = 1
+    option_great_hammer = 2
+    option_pickaxe = 3
+    option_halberd = 4
+    option_katana = 5
+    option_gauntlets = 6
+    option_morningstar = 7
+    option_dual_handaxes = 8
+    option_scythe = 9
+    option_frying_pan = 10
     option_random = 11
     default = option_random
 

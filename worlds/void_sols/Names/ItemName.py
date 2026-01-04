@@ -155,3 +155,5 @@ strange_totem = "Strange Totem"
 relics_improved = "Relics Improved"
 fish_tokens_x2 = "Fish Tokens x2"
 strange_curio = "Strange Curio"
+
+victory = "Victory"

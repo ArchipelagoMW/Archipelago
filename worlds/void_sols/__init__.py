@@ -1,7 +1,11 @@
-from BaseClasses import Tutorial
+from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 
 from .Options import VoidSolsOptions
+from .Items import all_items, item_data_table, VoidSolsItem
+from .Locations import all_locations, setup_locations
+from .Regions import create_regions, connect_regions
+from .Rules import set_rules
 
 class VoidSolsWeb(WebWorld):
     theme = "party"
@@ -24,3 +28,39 @@ class VoidSolsWorld(World):
 
     options = VoidSolsOptions
     options_dataclass = VoidSolsOptions
+    
+    item_name_to_id = all_items
+    location_name_to_id = all_locations
+    
+    def create_item(self, name: str) -> VoidSolsItem:
+        data = item_data_table[name]
+        return VoidSolsItem(name, data.classification, data.code, self.player)
+
+    def create_regions(self):
+        active_locations = setup_locations(self)
+        create_regions(self, active_locations)
+        connect_regions(self)
+
+    def set_rules(self):
+        set_rules(self)
+
+    def create_items(self):
+        itempool = []
+        for name, data in item_data_table.items():
+            if data.classification != ItemClassification.filler:
+                for _ in range(data.quantity):
+                    itempool.append(self.create_item(name))
+
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        needed_fillers = total_locations - len(itempool)
+        
+        filler_items = [name for name, data in item_data_table.items() if data.classification == ItemClassification.filler]
+        
+        if needed_fillers > 0:
+            for _ in range(needed_fillers):
+                filler_name = self.random.choice(filler_items)
+                itempool.append(self.create_item(filler_name))
+        elif needed_fillers < 0:
+            raise Exception(f"Too many items! {len(itempool)} items for {total_locations} locations.")
+
+        self.multiworld.itempool += itempool
