@@ -20,7 +20,7 @@ def finishedGame(ctx: KH2Context):
     elif ctx.kh2slotdata['Goal'] == 1:
         if ctx.lucky_emblems >= ctx.kh2slotdata['LuckyEmblemsRequired']:
             if not ctx.give_proofs:
-                ctx.socket.send(MessageType.GiveProofs, ())
+                ctx.socket.send(MessageType.SendProofs, ())
                 ctx.give_proofs = True
                 logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
@@ -30,7 +30,7 @@ def finishedGame(ctx: KH2Context):
     elif ctx.kh2slotdata['Goal'] == 2:
         if len(ctx.bounties) >= ctx.kh2slotdata["BountyRequired"]:
             if not ctx.give_proofs:
-                ctx.socket.send(MessageType.GiveProofs, ())
+                ctx.socket.send(MessageType.SendProofs, ())
                 ctx.give_proofs = True
                 logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
@@ -40,7 +40,7 @@ def finishedGame(ctx: KH2Context):
     elif ctx.kh2slotdata["Goal"] == 3:
         if len(ctx.bounties) >= ctx.kh2slotdata["BountyRequired"] and ctx.lucky_emblems >= ctx.kh2slotdata['LuckyEmblemsRequired']:
             if not ctx.give_proofs:
-                ctx.socket.send(MessageType.GiveProofs, ())
+                ctx.socket.send(MessageType.SendProofs, ())
                 ctx.give_proofs = True
                 logger.info("The Final Door is now Open")
             if ctx.kh2slotdata['FinalXemnas'] == 1:
@@ -64,9 +64,9 @@ async def checkWorldLocations(self):
             for location, data in curworldid.items():
                 if location in self.kh2_loc_name_to_id.keys():
                     locationId = self.kh2_loc_name_to_id[location]
-                    if location in self.world_locations_checked:
+                    if locationId in self.world_locations_checked:
                         self.sending.append(int(locationId))
-                        self.world_locations_checked.discard(location)
+                        self.world_locations_checked.discard(locationId)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False
@@ -107,15 +107,15 @@ async def checkSlots(self):
         for location, data in weaponSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
             if locationId not in self.checked_locations:
-                if location in self.keyblade_ability_checked:
+                if locationId in self.keyblade_ability_checked:
                     self.sending.append(int(locationId))
-                    self.keyblade_ability_checked.discard(location)
+                    self.keyblade_ability_checked.discard(locationId)
 
         for location, data in formSlots.items():
             locationId = self.kh2_loc_name_to_id[location]
-            if locationId not in self.checked_locations and location in self.keyblade_ability_checked:
+            if locationId not in self.checked_locations and locationId in self.keyblade_ability_checked:
                 self.sending.append(int(locationId))
-                self.keyblade_ability_checked.discard(location)
+                self.keyblade_ability_checked.discard(locationId)
     except Exception as e:
         if self.kh2connected:
             self.kh2connected = False

@@ -220,8 +220,8 @@ class KH2Context(CommonContext):
         await super(KH2Context, self).shutdown()
 
     def on_package(self, cmd: str, args: dict):
-        if self.disconnect_from_server:
-            if cmd != "RoomInfo":
+        if self.disconnect_from_server or not self.serverconnected:
+            if cmd != "RoomInfo" and cmd != "Connected":
                 return
 
         if cmd == "RoomInfo":
@@ -334,9 +334,9 @@ class KH2Context(CommonContext):
                 checked = args["checked_locations"]
                 for location in checked:
                     chest = self.lookup_id_to_location[location]
-                    if chest in self.chest_set and chest not in self.checked_chests:
-                        self.socket.send(MessageType.ChestsOpened, [str(chest)])
-                        self.checked_chests.add(chest)
+                    if chest in self.chest_set and location not in self.checked_chests:
+                        self.socket.send(MessageType.ChestsOpened, [str(location)])
+                        self.checked_chests.add(location)
 
         if cmd == "DataPackage":
             if "Kingdom Hearts 2" in args["data"]["games"]:
@@ -493,8 +493,10 @@ class KH2Context(CommonContext):
             for location in self.checked_locations:
                 chest = self.lookup_id_to_location[location]
                 if chest in self.chest_set:
-                    self.socket.send(MessageType.ChestsOpened, [str(chest)])
-                    self.checked_chests.add(chest)
+                    self.socket.send(MessageType.ChestsOpened, [str(location)])
+                    self.checked_chests.add(location)
+            if self.give_proofs:
+                self.socket.send(MessageType.SendProofs, ())
 
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():

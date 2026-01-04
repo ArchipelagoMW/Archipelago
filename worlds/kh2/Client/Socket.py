@@ -11,22 +11,19 @@ else:
     KH2Context = object
 
 class MessageType(IntEnum):
-    Invalid = -1
-    Test = 0
     WorldLocationChecked = 1
     LevelChecked = 2
-    KeybladeChecked = 3
-    BountyList = 4
-    SlotData = 5
-    Deathlink = 6
+    KeybladeSlotChecked = 3
+    CurrentWorldInt = 4
+    FinalXemnasDefeated = 5
+    SendProofs = 6
     SoldItems = 7
-    NotificationType = 8
-    NotificationMessage = 9
-    ChestsOpened = 10
-    ReceiveItem = 11
-    RequestAllItems = 12
-    GiveProofs = 17
-    FinalXemnasDefeated = 18
+    ChestsOpened = 8
+    Deathlink = 9
+    NotificationType = 10
+    NotificationMessage = 11
+    GiveItem = 12
+    RequestAllItems = 13
     Handshake = 19
     Closed = 20
 
@@ -147,15 +144,15 @@ class KH2Socket:
         msg_type = MessageType(int(message[0]))
 
         if msg_type == MessageType.WorldLocationChecked:
-            self.client.world_locations_checked.add(message[1])
+            self.client.world_locations_checked.add(int(message[1]))
 
         elif msg_type == MessageType.LevelChecked:
             self.client.sora_levels[message[2]] = int(message[1])
 
-        elif msg_type == MessageType.KeybladeChecked:
-            self.client.keyblade_ability_checked.add(message[1])
+        elif msg_type == MessageType.KeybladeSlotChecked:
+            self.client.keyblade_ability_checked.add(int(message[1]))
 
-        elif msg_type == MessageType.SlotData:
+        elif msg_type == MessageType.CurrentWorldInt:
             self.client.current_world_int = int(message[1])
 
         elif msg_type == MessageType.Deathlink:
@@ -180,10 +177,7 @@ class KH2Socket:
 
 
     def send_item(self, msg: list) -> None:
-        self.send(MessageType.ReceiveItem, msg)
-
-    def send_slot_data(self, data: str) -> None:
-        self.send(MessageType.SlotData, [data])
+        self.send(MessageType.GiveItem, msg)
 
     def shutdown_server(self) -> None:
         self.closing = True
