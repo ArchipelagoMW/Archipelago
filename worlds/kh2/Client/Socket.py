@@ -191,9 +191,9 @@ class KH2Socket:
                 self.listen_task.cancel()
             except Exception:
                 pass
-        self._safe_close_client()
         try:
             if self.server_socket:
                 self.server_socket.close()
         except Exception:
             pass
+        self._safe_close_client()
