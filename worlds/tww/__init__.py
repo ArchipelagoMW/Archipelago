@@ -2,32 +2,36 @@ import os
 import zipfile
 from base64 import b64encode
 from collections.abc import Mapping
-from typing import Any, ClassVar
+from typing import Any, ClassVar, NamedTuple
 
 import yaml
 
-from BaseClasses import Item
-from BaseClasses import ItemClassification as IC
-from BaseClasses import MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification as IC, MultiWorld, Region, Tutorial
 from Options import Toggle
 from worlds.AutoWorld import WebWorld, World
 from worlds.Files import APPlayerContainer
-from worlds.generic.Rules import add_item_rule
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components, icon_paths, launch_subprocess
+from worlds.generic.Rules import add_item_rule
 
 from .Items import ISLAND_NUMBER_TO_CHART_NAME, ITEM_TABLE, TWWItem, item_name_groups
 from .Locations import LOCATION_TABLE, TWWFlag, TWWLocation
 from .Options import TWWOptions, tww_option_groups
 from .Presets import tww_options_presets
+from .Rules import set_rules
 from .randomizers.Charts import ISLAND_NUMBER_TO_NAME, ChartRandomizer
 from .randomizers.Dungeons import Dungeon, create_dungeons
 from .randomizers.Entrances import ALL_EXITS, BOSS_EXIT_TO_DUNGEON, MINIBOSS_EXIT_TO_DUNGEON, EntranceRandomizer
 from .randomizers.ItemPool import generate_itempool
 from .randomizers.RequiredBosses import RequiredBossesRandomizer
-from .Rules import set_rules
+
+class DatastorageParsed(NamedTuple):
+    """Parsed datastorage key for deferred entrance tracking."""
+    team: int
+    player: int
+    stage_name: str
+
 
 VERSION: tuple[int, int, int] = (3, 0, 0)
-
 
 def run_client() -> None:
     """
@@ -149,6 +153,75 @@ class TWWWorld(World):
     logic_precise_3: bool
     logic_tuner_logic_enabled: bool
 
+    # Universal Tracker stuff, does not do anything in normal gen
+    using_ut: bool # A way to check if Universal Tracker is active via early setting and forgetting
+    glitches_item_name = "Glitched"
+    ut_can_gen_without_yaml = True # class var that tells it to ignore the player yaml
+
+    # Deferred entrances support for Universal Tracker
+    # Mapping from game stage names (from memory) to region/exit names
+    # This is used for deferred entrance tracking - when the client sends a visited stage,
+    # we can map it to the corresponding entrance exit using this mapping.
+    # Only includes stages that are actual entrance exit destinations from the 44 randomized entrances.
+    # Based on stage names from https://github.com/LagoLunatic/wwrando/blob/master/data/stage_names.txt
+    stage_name_to_exit: ClassVar[dict[str, str]] = {
+        # Boss arenas (6 boss entrances)
+        "M_DragB": "Gohma Boss Arena",
+        "kinBOSS": "Kalle Demos Boss Arena",
+        "SirenB": "Gohdan Boss Arena",
+        "M2tower": "Helmaroc King Boss Arena",
+        "M_DaiB": "Jalhalla Boss Arena",
+        "kazeB": "Molgera Boss Arena",
+        # Dungeon entrances (5)
+        "M_NewD2": "Dragon Roost Cavern",
+        "kindan": "Forbidden Woods",
+        "Siren": "Tower of the Gods",
+        "M_Dai": "Earth Temple",
+        "kaze": "Wind Temple",
+        # Miniboss arenas (5 miniboss entrances)
+        "kinMB": "Forbidden Woods Miniboss Arena",
+        "SirenMB": "Tower of the Gods Miniboss Arena",
+        "M_DaiMB": "Earth Temple Miniboss Arena",
+        "kazeMB": "Wind Temple Miniboss Arena",
+        "kenroom": "Master Sword Chamber",
+        # Secret cave entrances (20)
+        "Cave09": "Savage Labyrinth",
+        "Cave01": "Bomb Island Secret Cave",
+        "Cave02": "Star Island Secret Cave",
+        "Cave03": "Cliff Plateau Isles Secret Cave",
+        "Cave04": "Rock Spire Isle Secret Cave",
+        "Cave05": "Horseshoe Island Secret Cave",
+        "Cave07": "Pawprint Isle Wizzrobe Cave",
+        "TyuTyu": "Pawprint Isle Chuchu Cave",
+        "SubD42": "Needle Rock Isle Secret Cave",
+        "SubD43": "Angular Isles Secret Cave",
+        "SubD71": "Boating Course Secret Cave",
+        "TF_01": "Stone Watcher Island Secret Cave",
+        "TF_02": "Overlook Island Secret Cave",
+        "TF_03": "Bird's Peak Rock Secret Cave",
+        "TF_06": "Dragon Roost Island Secret Cave",
+        "MiniKaz": "Fire Mountain Secret Cave",
+        "MiniHyo": "Ice Ring Isle Secret Cave",
+        "ITest63": "Shark Island Secret Cave",
+        "Cave03": "Cliff Plateau Isles Secret Cave",
+        "WarpD": "Diamond Steppe Island Warp Maze Cave",
+        # Secret cave inner entrances (2)
+        "ITest62": "Ice Ring Isle Inner Cave",
+        "CliPlaH": "Cliff Plateau Isles Inner Cave",
+        # Fairy fountain entrances (6)
+        "Fairy01": "Northern Fairy Fountain",
+        "Fairy02": "Eastern Fairy Fountain",
+        "Fairy03": "Western Fairy Fountain",
+        "Fairy04": "Outset Fairy Fountain",
+        "Fairy05": "Thorned Fairy Fountain",
+        "Fairy06": "Southern Fairy Fountain",
+    }
+
+    # List of datastorage keys that UT will track for deferred entrance reconnection
+    # Format: tww_{team}_{player}_{stagename}
+    # This is populated dynamically when entrances are disconnected
+    found_entrances_datastorage_key: list[str] = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -167,6 +240,14 @@ class TWWWorld(World):
         self.charts = ChartRandomizer(self)
         self.entrances = EntranceRandomizer(self)
         self.boss_reqs = RequiredBossesRandomizer(self)
+
+        # Deferred entrance tracking
+        self.disconnected_entrances: dict[Any, Any] = {}
+
+        # Track whether charts/entrances/required bosses were restored from UT slot_data
+        self._charts_restored_from_ut = False
+        self._entrances_restored_from_ut = False
+        self._required_bosses_restored_from_ut = False
 
     def _determine_item_classification_overrides(self) -> None:
         """
@@ -277,10 +358,147 @@ class TWWWorld(World):
         else:
             return "filler"
 
+    def _restore_options_from_ut_slot_data(self, slot_data: dict[str, Any]) -> None:
+        """
+        Restore all seed-affecting options from slot_data during UT regeneration.
+
+        This method is called during UT's internal regeneration to restore the options
+        that were used in the original seed generation. This must happen before any
+        option-dependent logic runs in generate_early().
+
+        NOTE: This method restores both OPTIONS and chart mappings from slot_data.
+        The entrances and required_bosses will be recalculated during the current regeneration
+        since UT's random state differs from the original generation.
+
+        :param slot_data: The slot_data dictionary from re_gen_passthrough.
+        """
+        # NOTE: required_bosses, charts, and entrances must be restored from the original generation
+        # to keep UT in sync with the server's world state.
+
+        if "entrances" in slot_data:
+            self._restore_entrance_mappings_from_slot_data(slot_data["entrances"])
+
+        if "charts" in slot_data:
+            self._restore_chart_mappings_from_slot_data(slot_data["charts"])
+
+        if "required_bosses" in slot_data:
+            self._restore_required_bosses_from_slot_data(slot_data["required_bosses"])
+
+        options_restored = []
+        options_failed = []
+
+        for key, value in slot_data.items():
+            if key == "charts" or key == "entrances" or key == "required_bosses":
+                continue
+
+            try:
+                # Get the option from the options dataclass
+                opt: Any | None = getattr(self.options, key, None)
+                if opt is not None:
+                    # Use from_any() to properly deserialize the value
+                    # This works for both regular options and OptionSets
+                    setattr(self.options, key, opt.from_any(value))
+                    options_restored.append(key)
+                else:
+                    options_failed.append(key)
+            except Exception as e:
+                options_failed.append(key)
+
+    def _restore_entrance_mappings_from_slot_data(self, entrances_mapping: dict[str, str]) -> None:
+        """
+        Restore entrance mappings from the server's original generation.
+
+        This prevents UT from re-randomizing entrances with its own random state, which would
+        cause the tracker to show different entrance destinations than the actual game world.
+
+        The entrances_mapping dict maps entrance names to exit names from the server's generation.
+        We apply these to done_entrances_to_exits before create_regions() randomizes them.
+
+        :param entrances_mapping: Dict from slot_data["entrances"]
+        """
+        try:
+            from .randomizers.Entrances import ZoneEntrance, ZoneExit
+
+            # Apply the server's entrance mappings to override the default mappings
+            for entrance_name, exit_name in entrances_mapping.items():
+                zone_entrance = ZoneEntrance.all.get(entrance_name)
+                zone_exit = ZoneExit.all.get(exit_name)
+
+                if zone_entrance and zone_exit:
+                    self.entrances.done_entrances_to_exits[zone_entrance] = zone_exit
+                    self.entrances.done_exits_to_entrances[zone_exit] = zone_entrance
+
+            # Mark that entrances have been pre-loaded from UT so we won't re-randomize them
+            self._entrances_restored_from_ut = True
+            self.entrances.skip_randomization = True
+        except Exception as e:
+            pass
+
+    def _restore_chart_mappings_from_slot_data(self, charts_mapping: list[int]) -> None:
+        """
+        Restore chart mappings from the server's original generation.
+
+        This prevents UT from re-randomizing charts with its own random state, which would
+        cause the tracker to show different locations than the actual game world.
+
+        The charts_mapping is a list where charts_mapping[i-1] is the island that the chart
+        originally at island i now points to (after the server's randomization).
+
+        We invert this to set island_number_to_chart_name correctly.
+
+        :param charts_mapping: List from slot_data["charts"]
+        """
+        try:
+            # Reset to default state first
+            self.charts.island_number_to_chart_name = ISLAND_NUMBER_TO_CHART_NAME.copy()
+
+            # For each original island position, find which island its chart ended up at
+            for original_island in range(1, 50):  # Islands 1-49
+                original_chart_name = ISLAND_NUMBER_TO_CHART_NAME[original_island]
+                new_island = charts_mapping[original_island - 1]
+
+                # Restore the mapping: the chart originally at original_island is now at new_island
+                self.charts.island_number_to_chart_name[new_island] = original_chart_name
+
+            # Mark that charts were restored from UT so we skip randomization
+            self._charts_restored_from_ut = True
+            self.charts.skip_randomization = True
+        except Exception as e:
+            pass
+
+    def _restore_required_bosses_from_slot_data(self, required_boss_item_locations: dict[str, str]) -> None:
+        """
+        Restore required boss item locations from the server's original generation.
+
+        This prevents UT from re-randomizing required bosses with its own random state, which would
+        cause the tracker to show different boss locations than the actual game world.
+
+        :param required_boss_item_locations: Dict from slot_data["required_bosses"]
+        """
+        try:
+            # Directly restore the required boss locations from the server
+            self.boss_reqs.required_boss_item_locations = required_boss_item_locations
+
+            # Mark that required bosses have been pre-loaded from UT so we won't re-randomize them
+            self._required_bosses_restored_from_ut = True
+            self.boss_reqs.skip_randomization = True
+        except Exception as e:
+            pass
+
     def generate_early(self) -> None:
         """
         Run before any general steps of the MultiWorld other than options.
         """
+        # Handle Universal Tracker Support FIRST - before any option-dependent logic
+        re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
+        self.using_ut = re_gen_passthrough and self.game in re_gen_passthrough
+
+        if self.using_ut:
+            # Restore options from slot_data during UT regeneration
+            slot_data: dict[str, Any] = re_gen_passthrough[self.game]
+            self._restore_options_from_ut_slot_data(slot_data)
+
+        # Now continue with normal generation using the restored (or default) options
         options = self.options
 
         # Only randomize secret cave inner entrances if both puzzle secret caves and combat secret caves are enabled.
@@ -380,6 +598,9 @@ class TWWWorld(World):
 
         # Connect the regions in the multiworld. Randomize entrances to exits if the option is set.
         self.entrances.randomize_entrances()
+
+        # Handle deferred entrance disconnection for Universal Tracker if enabled
+        self.connect_entrances()
 
     def set_rules(self) -> None:
         """
@@ -592,15 +813,315 @@ class TWWWorld(World):
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
+        For Universal Tracker integration, this method includes:
+        - All seed-affecting options via self.options.get_slot_data_dict()
+        - Entrance mappings for entrance randomization
+        - Deferred entrance datastorage keys (for Universal Tracker to hide unrevealed entrances)
+        - Chart mappings for sunken treasure location tracking
+        - Required boss locations for required bosses mode
+
         :return: A dictionary to be sent to the client when it connects to the server.
         """
         slot_data = self.options.get_slot_data_dict()
 
         # Add entrances to `slot_data`. This is the same data that is written to the .aptww file.
+        # For deferred entrances, exclude them from slot_data so Universal Tracker doesn't
+        # display them initially.
+        deferred_entrance_names = set()
+        if hasattr(self, 'disconnected_entrances'):
+            # Build set of entrance names that are deferred
+            # Extract deferred entrance names from disconnected_entrances
+            disconnected_entrance_names_only = {
+                entrance.name.split(" -> ")[0] if " -> " in entrance.name else entrance.name
+                for entrance in self.disconnected_entrances.keys()
+            }
+
+            deferred_entrance_names = {
+                zone_entrance.entrance_name
+                for zone_entrance in self.entrances.done_entrances_to_exits.keys()
+                if zone_entrance.entrance_name in disconnected_entrance_names_only
+            }
+
         entrances = {
             zone_entrance.entrance_name: zone_exit.unique_name
             for zone_entrance, zone_exit in self.entrances.done_entrances_to_exits.items()
+            if zone_entrance.entrance_name not in deferred_entrance_names
         }
         slot_data["entrances"] = entrances
 
+        # Add deferred entrance tracking keys for Universal Tracker
+        # These keys should be initially hidden from the tracker until the datastorage key is revealed
+        if hasattr(self, 'found_entrances_datastorage_key') and self.found_entrances_datastorage_key:
+            slot_data["deferred_entrance_keys"] = self.found_entrances_datastorage_key
+
+        # Add chart mapping for sunken treasure randomization.
+        # Create a list where the original island number is the index, and the value is the new island number.
+        # This is needed for UT to correctly track sunken treasure locations.
+        chart_name_to_island_number = {
+            chart_name: island_number for island_number, chart_name in self.charts.island_number_to_chart_name.items()
+        }
+        charts_mapping: list[int] = []
+        for i in range(1, 49 + 1):
+            original_chart_name = ISLAND_NUMBER_TO_CHART_NAME[i]
+            new_island_number = chart_name_to_island_number[original_chart_name]
+            charts_mapping.append(new_island_number)
+        slot_data["charts"] = charts_mapping
+
+        # Add required bosses information.
+        slot_data["required_bosses"] = self.boss_reqs.required_boss_item_locations
         return slot_data
+
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Interpret the slot data from the server and return it for UT regeneration.
+
+        This method is called when UT connects to the server and receives slot data.
+        By returning the slot_data dict, we tell UT to do a regeneration, which will then
+        call generate_early() with the slot_data available in re_gen_passthrough.
+
+        :param slot_data: The slot data dictionary from the server.
+        :return: The slot_data unchanged, for UT's regeneration.
+        """
+        return slot_data
+
+    @staticmethod
+    def _extract_entrance_name(full_entrance_name: str) -> str:
+        """
+        Extract just the entrance name, removing the '-> Region' part.
+
+        :param full_entrance_name: The full entrance name (e.g., "Entrance -> Region").
+        :return: Just the entrance name part (e.g., "Entrance").
+        """
+        separator = " -> "
+        return full_entrance_name.split(separator)[0] if separator in full_entrance_name else full_entrance_name
+
+    @staticmethod
+    def _format_datastorage_key(team: int, player: int, stage_name: str) -> str:
+        """
+        Format a datastorage key for deferred entrance tracking.
+
+        :param team: The team number.
+        :param player: The player number.
+        :param stage_name: The stage name visited by the player.
+        :return: The formatted datastorage key.
+        """
+        return f"tww_{team}_{player}_{stage_name}"
+
+    @staticmethod
+    def _parse_datastorage_key(key: str) -> DatastorageParsed | None:
+        """
+        Parse a datastorage key and return parsed components or None if invalid.
+
+        Expected format: tww_<team>_<player>_<stagename>
+
+        :param key: The datastorage key to parse.
+        :return: DatastorageParsed with team, player, stage_name, or None if invalid.
+        """
+        parts = key.split("_")
+        min_parts = 4
+        if len(parts) < min_parts or parts[0] != "tww":
+            return None
+        try:
+            team = int(parts[1])
+            player = int(parts[2])
+            stage_name = "_".join(parts[3:])
+            return DatastorageParsed(team=team, player=player, stage_name=stage_name)
+        except (ValueError, IndexError):
+            return None
+
+    def connect_entrances(self) -> None:
+        """
+        Connect entrances with deferred entrance support for Universal Tracker.
+
+        During UT regeneration with enforce_deferred_connections enabled on the server,
+        entrances are disconnected so they're not revealed until the player visits areas.
+        """
+        if self._should_defer_entrances():
+            self._disconnect_entrances()
+
+    def _should_defer_entrances(self) -> bool:
+        """
+        Check if entrances should be deferred based on UT and server settings.
+
+        :return: True if entrances should be deferred, False otherwise.
+        """
+        # Only defer entrances during UT regeneration
+        if not hasattr(self.multiworld, "generation_is_fake"):
+            return False
+
+        # Check if server has deferred connections enabled
+        deferred_enabled = getattr(
+            self.multiworld,
+            "enforce_deferred_connections",
+            None
+        ) in ("on", "default")
+
+        # Only defer if entrances are actually randomized
+        has_randomized_entrances = bool(self.entrances.done_entrances_to_exits)
+
+        return deferred_enabled and has_randomized_entrances
+
+    def _disconnect_entrances(self) -> None:
+        """
+        Disconnect all randomized entrances to enable deferred spoilers.
+
+        When entrances are disconnected, existing trackers will either display nothing or a fallback
+        to indicate that an entrance has not been found yet. The use of reconnect_found_entrances
+        will restore these connections.
+
+        Only entrances from enabled entrance pools will be disconnected. If a pool is not shuffled
+        (e.g., secret caves when only dungeons are randomized), those entrances remain connected
+        and fully visible in the tracker.
+
+        This method populates:
+        - self.disconnected_entrances: Dict mapping entrance objects to their original regions
+        - self.found_entrances_datastorage_key: List of datastorage keys for UT tracking
+        """
+        from .randomizers.Entrances import (
+            DUNGEON_ENTRANCES, MINIBOSS_ENTRANCES, BOSS_ENTRANCES,
+            SECRET_CAVE_ENTRANCES, SECRET_CAVE_INNER_ENTRANCES, FAIRY_FOUNTAIN_ENTRANCES
+        )
+
+        # Only initialize on first call; if already disconnected, don't reinitialize
+        if not hasattr(self, 'disconnected_entrances'):
+            self.disconnected_entrances = {}
+        if not hasattr(self, 'found_entrances_datastorage_key'):
+            self.found_entrances_datastorage_key = []
+        # If we've already disconnected entrances in this generation, skip re-disconnecting
+        if len(self.disconnected_entrances) > 0:
+            return
+
+        # Determine which entrance pools are enabled based on options
+        # Use DRY approach to avoid code repetition
+        entrance_pool_config = [
+            (self.options.randomize_dungeon_entrances, DUNGEON_ENTRANCES),
+            (self.options.randomize_miniboss_entrances, MINIBOSS_ENTRANCES),
+            (self.options.randomize_boss_entrances, BOSS_ENTRANCES),
+            (self.options.randomize_secret_cave_entrances, SECRET_CAVE_ENTRANCES),
+            (self.options.randomize_secret_cave_inner_entrances, SECRET_CAVE_INNER_ENTRANCES),
+            (self.options.randomize_fairy_fountain_entrances, FAIRY_FOUNTAIN_ENTRANCES),
+        ]
+        enabled_pools = {
+            e.entrance_name
+            for option_enabled, entrance_pool in entrance_pool_config
+            if option_enabled
+            for e in entrance_pool
+        }
+
+        # Build a set of randomized entrance names that are in ENABLED pools only
+        randomized_entrance_names = {zone_entrance.entrance_name
+                                     for zone_entrance in self.entrances.done_entrances_to_exits.keys()
+                                     if zone_entrance.entrance_name in enabled_pools}
+
+        # Get all actual entrances
+        all_entrances = list(self.get_entrances())
+        if len(all_entrances) == 0:
+            return
+
+        # Get team and player info for datastorage keys
+        team = getattr(self.multiworld, "team", 0)
+        player = self.player
+
+        # Disconnect matching entrances and store mappings
+        for entrance in all_entrances:
+            # Extract just the entrance name (before the "->") for matching
+            # Entrance objects have names like "Dungeon Entrance on Dragon Roost Island -> Forbidden Woods"
+            entrance_name_only = self._extract_entrance_name(entrance.name)
+
+            if entrance.connected_region and entrance_name_only in randomized_entrance_names:
+                original_region = entrance.connected_region
+                self.disconnected_entrances[entrance] = original_region
+
+                # Extract stage name from entrance's destination region
+                # We need to find which stage_name maps to this destination
+                destination_region_name = original_region.name
+                stage_name = None
+
+                try:
+                    for stage, region_name in self.stage_name_to_exit.items():
+                        if region_name == destination_region_name:
+                            stage_name = stage
+                            break
+
+                    if stage_name:
+                        # Format datastorage key via standard means: "game_team_player_stagename"
+                        datastorage_key = self._format_datastorage_key(team, player, stage_name)
+                        self.found_entrances_datastorage_key.append(datastorage_key)
+                except (KeyError, AttributeError):
+                    # Skip if stage mapping fails
+                    pass
+
+                # Disconnect the entrance
+                entrance.connected_region = None
+
+                # Update the entrance name to remove the "-> Region" part so Universal Tracker
+                # doesn't display the connection prematurely, keeping spoilers hidden until
+                # the entrance is reconnected
+                entrance.name = entrance_name_only
+
+
+    def reconnect_found_entrances(self, key: str, value: Any) -> None:
+        """
+        Reconnect entrances when the player physically enters a stage in the game.
+
+        This is called by UT when a datastorage key is triggered, indicating the player has visited
+        a specific stage. The key format is: tww_team_player_stagename. We extract the stage name
+        and reconnect all entrances that lead to that stage.
+
+        :param key: The datastorage key (format: tww_team_player_stagename).
+        :param value: The value associated with the datastorage key.
+        """
+        if not value:
+            return
+
+        parsed = self._parse_datastorage_key(key)
+        if parsed is None:
+            return
+
+        self._reconnect_entrance_for_stage(parsed.stage_name)
+
+    def _reconnect_entrance_for_stage(self, stage_name: str) -> int:
+        """
+        Reconnect all entrances leading to the given stage.
+
+        :param stage_name: The stage name from the datastorage key.
+        :return: The number of entrances reconnected.
+        """
+        exit_region_name = self.stage_name_to_exit.get(stage_name)
+        if exit_region_name is None:
+            return 0
+
+        exit_region = self.get_region(exit_region_name)
+        if exit_region is None:
+            return 0
+
+        return self._reconnect_matching_entrances(exit_region, exit_region_name)
+
+    def _reconnect_matching_entrances(self, target_region: Region, region_name: str) -> int:
+        """
+        Reconnect all entrances that lead to the target region.
+
+        :param target_region: The region to reconnect entrances to.
+        :param region_name: The display name of the region.
+        :return: The number of entrances reconnected.
+        """
+        if not hasattr(self, 'disconnected_entrances'):
+            return 0
+
+        count = 0
+        for entrance, original_region in self.disconnected_entrances.items():
+            if original_region == target_region:
+                self._reconnect_entrance(entrance, region_name)
+                count += 1
+        return count
+
+    def _reconnect_entrance(self, entrance: Any, region_name: str) -> None:
+        """
+        Reconnect a single entrance to its region, restoring the connection display.
+
+        :param entrance: The entrance object to reconnect.
+        :param region_name: The name of the region being reconnected to.
+        """
+        entrance.connected_region = self.get_region(region_name)
+        entrance_name = self._extract_entrance_name(entrance.name)
+        entrance.name = f"{entrance_name} -> {region_name}"

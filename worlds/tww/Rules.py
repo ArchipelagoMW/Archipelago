@@ -54,22 +54,22 @@ class TWWLogic(LogicMixin):
         return not self.multiworld.worlds[player].logic_in_required_bosses_mode
 
     def _tww_obscure_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_1
+        return self.multiworld.worlds[player].logic_obscure_1 or self.has("Glitched", player, 1)
 
     def _tww_obscure_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_2
+        return self.multiworld.worlds[player].logic_obscure_2 or self.has("Glitched", player, 1)
 
     def _tww_obscure_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_obscure_3
+        return self.multiworld.worlds[player].logic_obscure_3 or self.has("Glitched", player, 1)
 
     def _tww_precise_1(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_1
+        return self.multiworld.worlds[player].logic_precise_1 or self.has("Glitched", player, 1)
 
     def _tww_precise_2(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_2
+        return self.multiworld.worlds[player].logic_precise_2 or self.has("Glitched", player, 1)
 
     def _tww_precise_3(self, player: int) -> bool:
-        return self.multiworld.worlds[player].logic_precise_3
+        return self.multiworld.worlds[player].logic_precise_3 or self.has("Glitched", player, 1)
 
     def _tww_tuner_logic_enabled(self, player: int) -> bool:
         return self.multiworld.worlds[player].logic_tuner_logic_enabled
