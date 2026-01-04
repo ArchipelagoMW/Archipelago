@@ -55,6 +55,7 @@ async def lock(ctx) -> None
 async def unlock(ctx) -> None
 
 async def get_hash(ctx) -> str
+async def get_memory_size(ctx, domain: str) -> int
 async def get_system(ctx) -> str
 async def get_cores(ctx) -> dict[str, str]
 async def ping(ctx) -> None
@@ -168,9 +169,10 @@ select dialog and they will be associated with BizHawkClient. This does not affe
 associate the file extension with Archipelago.
 
 `validate_rom` is called to figure out whether a given ROM belongs to your client. It will only be called when a ROM is
-running on a system you specified in your `system` class variable. In most cases, that will be a single system and you
-can be sure that you're not about to try to read from nonexistent domains or out of bounds. If you decide to claim this
-ROM as yours, this is where you should do setup for things like `items_handling`.
+running on a system you specified in your `system` class variable. Take extra care here, because your code will run
+against ROMs that you have no control over. If you're reading an address deep in ROM, you might want to check the size
+of ROM before you attempt to read it using `get_memory_size`. If you decide to claim this ROM as yours, this is where
+you should do setup for things like `items_handling`.
 
 `game_watcher` is the "main loop" of your client where you should be checking memory and sending new items to the ROM.
 `BizHawkClient` will make sure that your `game_watcher` only runs when your client has validated the ROM, and will do
@@ -268,6 +270,8 @@ server connection before trying to interact with it.
 - By default, the player will be asked to provide their slot name after connecting to the server and validating, and
 that input will be used to authenticate with the `Connect` command. You can override `set_auth` in your own client to
 set it automatically based on data in the ROM or on your client instance.
+- Use `get_memory_size` inside `validate_rom` if you need to read at large addresses, in case some other game has a
+smaller ROM size.
 - You can override `on_package` in your client to watch raw packages, but don't forget you also have access to a
 subclass of `CommonContext` and its API.
 - You can import `BizHawkClientContext` for type hints using `typing.TYPE_CHECKING`. Importing it without conditions at

@@ -1,4 +1,3 @@
-from typing import cast
 from . import ZillionTestBase
 
 from .. import ZillionWorld
@@ -9,7 +8,8 @@ class SeedTest(ZillionTestBase):
 
     def test_reproduce_seed(self) -> None:
         self.world_setup(42)
-        z_world = cast(ZillionWorld, self.multiworld.worlds[1])
+        z_world = self.multiworld.worlds[1]
+        assert isinstance(z_world, ZillionWorld)
         r = z_world.zz_system.randomizer
         assert r
         randomized_requirements_first = tuple(
@@ -18,7 +18,8 @@ class SeedTest(ZillionTestBase):
         )
 
         self.world_setup(42)
-        z_world = cast(ZillionWorld, self.multiworld.worlds[1])
+        z_world = self.multiworld.worlds[1]
+        assert isinstance(z_world, ZillionWorld)
         r = z_world.zz_system.randomizer
         assert r
         randomized_requirements_second = tuple(

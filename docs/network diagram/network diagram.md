@@ -117,14 +117,6 @@ flowchart LR
     %% Java Based Games
     subgraph Java
         JM[Mod with Archipelago.MultiClient.Java]
-        STS[Slay the Spire]
-        JM <-- Mod the Spire --> STS
-        subgraph Minecraft
-            MCS[Minecraft Forge Server]
-            JMC[Any Java Minecraft Clients]
-            MCS <-- TCP --> JMC
-        end
-        JM <-- Forge Mod Loader --> MCS
     end
     AS <-- WebSockets --> JM
 
@@ -133,10 +125,8 @@ flowchart LR
         NM[Mod with Archipelago.MultiClient.Net]
         subgraph FNA/XNA
             TS[Timespinner]
-            RL[Rogue Legacy]
         end
         NM <-- TsRandomizer --> TS
-        NM <-- RogueLegacyRandomizer --> RL
         subgraph Unity
             ROR[Risk of Rain 2]
             SN[Subnautica]

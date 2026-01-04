@@ -35,17 +35,13 @@ def has_requirements_for_level_star(
         state: CollectionState, level: Overcooked2GenericLevel, stars: int, player: int) -> bool:
     assert 0 <= stars <= 3
 
-    # First ensure that previous stars are obtainable
-    if stars > 1:
-        if not has_requirements_for_level_star(state, level, stars-1, player):
-            return False
-
-    # Second, ensure that global requirements are met
+    # First, ensure that global requirements for this many stars are met.
+    # Lower numbers of stars are implied meetable if this level is meetable.
     if not meets_requirements(state, "*", stars, player):
         return False
 
-    # Finally, return success only if this level's requirements are met
-    return meets_requirements(state, level.shortname, stars, player)
+    # Then return success only if this level's requirements are met at all stars up through this one
+    return all(meets_requirements(state, level.shortname, s, player) for s in range(1, stars + 1))
 
 
 def meets_requirements(state: CollectionState, name: str, stars: int, player: int):
@@ -421,6 +417,7 @@ level_logic = {
             },
         ),
         (  # 3-star
+            # Necessarily implies 2-star
             [  # Exclusive
                 "Progressive Dash",
                 "Spare Plate",

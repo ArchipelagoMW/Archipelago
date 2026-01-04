@@ -74,13 +74,6 @@ register_mod_content_pack(ContentPack(
 ))
 
 register_mod_content_pack(ContentPack(
-    ModNames.alecto,
-    villagers=(
-        villagers_data.alecto,
-    )
-))
-
-register_mod_content_pack(ContentPack(
     ModNames.lacey,
     villagers=(
         villagers_data.lacey,

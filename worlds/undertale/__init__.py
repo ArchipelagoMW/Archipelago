@@ -67,12 +67,15 @@ class UndertaleWorld(World):
             "only_flakes": bool(self.options.only_flakes.value),
             "no_equips": bool(self.options.no_equips.value),
             "key_hunt": bool(self.options.key_hunt.value),
-            "key_pieces": self.options.key_pieces.value,
-            "rando_love": bool(self.options.rando_love.value),
-            "rando_stats": bool(self.options.rando_stats.value),
+            "key_pieces": int(self.options.key_pieces.value),
+            "rando_love": bool(self.options.rando_love and (self.options.route_required == "genocide" or self.options.route_required == "all_routes")),
+            "rando_stats": bool(self.options.rando_stats and (self.options.route_required == "genocide" or self.options.route_required == "all_routes")),
             "prog_armor": bool(self.options.prog_armor.value),
             "prog_weapons": bool(self.options.prog_weapons.value),
-            "rando_item_button": bool(self.options.rando_item_button.value)
+            "rando_item_button": bool(self.options.rando_item_button.value),
+            "route_required": int(self.options.route_required.value),
+            "temy_include": int(self.options.temy_include.value)
+
         }
 
     def get_filler_item_name(self):
@@ -220,16 +223,7 @@ class UndertaleWorld(World):
         link_undertale_areas(self.multiworld, self.player)
 
     def fill_slot_data(self):
-        slot_data = self._get_undertale_data()
-        for option_name in self.options.as_dict():
-            option = getattr(self.multiworld, option_name)[self.player]
-            if (option_name == "rando_love" or option_name == "rando_stats") and \
-                    self.options.route_required != "genocide" and \
-                    self.options.route_required != "all_routes":
-                option.value = False
-            if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
-                slot_data[option_name] = int(option.value)
-        return slot_data
+        return self._get_undertale_data()
 
     def create_item(self, name: str) -> Item:
         item_data = item_table[name]

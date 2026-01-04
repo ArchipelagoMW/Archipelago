@@ -56,7 +56,7 @@ def addBank3E(rom, seed, player_id, player_name_list):
     """))
 
     def get_asm(name):
-        return pkgutil.get_data(__name__, os.path.join("bank3e.asm", name)).decode().replace("\r", "")
+        return pkgutil.get_data(__name__, "bank3e.asm/" + name).decode().replace("\r", "")
 
     rom.patch(0x3E, 0x0000, 0x2F00, ASM("""
         call MainJumpTable
@@ -96,7 +96,9 @@ StartGameMarinMessage:
         ldi  [hl], a ;hour counter
 
         ld   hl, $B010
+        ld   a, $01  ;tarin's gift gets skipped for some reason, so inflate count by 1
         ldi  [hl], a ;check counter low
+        xor  a
         ldi  [hl], a ;check counter high
 
         ; Show the normal message

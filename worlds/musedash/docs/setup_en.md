@@ -20,7 +20,7 @@
 2. Choose the automated tab, click the select button and browse to `MuseDash.exe`.
   - You can find the folder in steam by finding the game in your library, right clicking it and choosing *Manage→Browse Local Files*.
   - If you click the bar at the top telling you your current folder, this will give you a path you can copy. If you paste that into the window popped up by **MelonLoader**, it will automatically go to the same folder.
-3. Uncheck "Latest" and select v0.6.1. Then click install.
+3. Select v0.7.0. Then click install.
 4. Run the game once, and wait until you get to the Muse Dash start screen before exiting.
 5. Download the latest [Muse Dash Archipelago Mod](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) and then extract that into the newly created `/Mods/` folder in MuseDash's install location.
   - All files must be under the `/Mods/` folder and not within a sub folder inside of `/Mods/`

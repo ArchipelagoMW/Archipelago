@@ -637,52 +637,35 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.filler}
 ]
 
-event_table: Dict[str, str] = {
-    "OpenedDCGateW": "D01Z05S24",
-    "OpenedDCGateE": "D01Z05S12",
-    "OpenedDCLadder": "D01Z05S20",
-    "OpenedWOTWCave": "D02Z01S06",
-    "RodeGOTPElevator": "D02Z02S11",
-    "OpenedConventLadder": "D02Z03S11",
-    "BrokeJondoBellW": "D03Z02S09",
-    "BrokeJondoBellE": "D03Z02S05",
-    "OpenedMOMLadder": "D04Z02S06",
-    "OpenedTSCGate": "D05Z02S11",
-    "OpenedARLadder": "D06Z01S23",
-    "BrokeBOTTCStatue": "D08Z01S02",
-    "OpenedWOTHPGate": "D09Z01S05",
-    "OpenedBOTSSLadder": "D17Z01S04"
-}
-
 group_table: Dict[str, Set[str]] = {
-    "wounds"  : ["Holy Wound of Attrition",
+    "wounds"  : {"Holy Wound of Attrition",
                  "Holy Wound of Contrition",
-                 "Holy Wound of Compunction"],
+                 "Holy Wound of Compunction"},
 
-    "masks"   : ["Deformed Mask of Orestes",
+    "masks"   : {"Deformed Mask of Orestes",
                  "Mirrored Mask of Dolphos",
-                 "Embossed Mask of Crescente"],
+                 "Embossed Mask of Crescente"},
 
-    "marks"   : ["Mark of the First Refuge",
+    "marks"   : {"Mark of the First Refuge",
                  "Mark of the Second Refuge",
-                 "Mark of the Third Refuge"],
+                 "Mark of the Third Refuge"},
 
-    "tirso"   : ["Bouquet of Rosemary",
+    "tirso"   : {"Bouquet of Rosemary",
                  "Incense Garlic",
                  "Olive Seeds",
                  "Dried Clove",
                  "Sooty Garlic",
-                 "Bouquet of Thyme"],
+                 "Bouquet of Thyme"},
 
-    "tentudia": ["Tentudia's Carnal Remains",
+    "tentudia": {"Tentudia's Carnal Remains",
                  "Remains of Tentudia's Hair",
-                 "Tentudia's Skeletal Remains"],
+                 "Tentudia's Skeletal Remains"},
 
-    "egg"     : ["Melted Golden Coins",
+    "egg"     : {"Melted Golden Coins",
                  "Torn Bridal Ribbon",
-                 "Black Grieving Veil"],
+                 "Black Grieving Veil"},
 
-    "bones"   : ["Parietal bone of Lasser, the Inquisitor",
+    "bones"   : {"Parietal bone of Lasser, the Inquisitor",
                  "Jaw of Ashgan, the Inquisitor",
                  "Cervical vertebra of Zicher, the Brewmaster",
                  "Clavicle of Dalhuisen, the Schoolchild",
@@ -725,14 +708,14 @@ group_table: Dict[str, Set[str]] = {
                  "Scaphoid of Fierce, the Leper",
                  "Anklebone of Weston, the Pilgrim",
                  "Calcaneum of Persian, the Bandit",
-                 "Navicular of Kahnnyhoo, the Murderer"],
+                 "Navicular of Kahnnyhoo, the Murderer"},
     
-    "power"   : ["Life Upgrade",
+    "power"   : {"Life Upgrade",
                  "Fervour Upgrade",
                  "Empty Bile Vessel",
-                 "Quicksilver"],
+                 "Quicksilver"},
 
-    "prayer"  : ["Seguiriya to your Eyes like Stars",
+    "prayer"  : {"Seguiriya to your Eyes like Stars",
                  "Debla of the Lights",
                  "Saeta Dolorosa",
                  "Campanillero to the Sons of the Aurora",
@@ -746,10 +729,17 @@ group_table: Dict[str, Set[str]] = {
                  "Romance to the Crimson Mist",
                  "Zambra to the Resplendent Crown",
                  "Cantina of the Blue Rose",
-                 "Mirabras of the Return to Port"]
+                 "Mirabras of the Return to Port"},
+
+    "toe"     : {"Little Toe made of Limestone",
+                 "Big Toe made of Limestone",
+                 "Fourth Toe made of Limestone"},
+    
+    "eye"     : {"Severed Right Eye of the Traitor",
+                 "Broken Left Eye of the Traitor"}
 }
 
-tears_set: Set[str] = [
+tears_list: List[str] = [
     "Tears of Atonement (500)",
     "Tears of Atonement (625)",
     "Tears of Atonement (750)",
@@ -772,16 +762,16 @@ tears_set: Set[str] = [
     "Tears of Atonement (30000)"
 ]
 
-reliquary_set: Set[str] = [
+reliquary_set: Set[str] = {
     "Reliquary of the Fervent Heart",
     "Reliquary of the Suffering Heart",
     "Reliquary of the Sorrowful Heart"
-]
+}
 
-skill_set: Set[str] = [
+skill_set: Set[str] = {
     "Combo Skill",
     "Charged Skill",
     "Ranged Skill",
     "Dive Skill",
     "Lunge Skill"
-]
+}

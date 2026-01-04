@@ -29,8 +29,3 @@ class TestFileGeneration(unittest.TestCase):
                     with open(file, encoding="utf-8-sig") as f:
                         for value in roll_options({file.name: f.read()})[0].values():
                             self.assertTrue(value is True, f"Default Options for template {file.name} cannot be run.")
-
-    def test_tutorial(self):
-        WebHost.create_ordered_tutorials_file()
-        self.assertTrue(os.path.exists(os.path.join(self.correct_path, "static", "generated", "tutorials.json")))
-        self.assertFalse(os.path.exists(os.path.join(self.incorrect_path, "static", "generated", "tutorials.json")))

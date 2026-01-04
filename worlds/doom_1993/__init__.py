@@ -42,7 +42,7 @@ class DOOM1993World(World):
     options: DOOM1993Options
     game = "DOOM 1993"
     web = DOOM1993Web()
-    required_client_version = (0, 3, 9)
+    required_client_version = (0, 5, 0)  # 1.2.0-prerelease or higher
 
     item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
     item_name_groups = Items.item_name_groups
@@ -50,14 +50,14 @@ class DOOM1993World(World):
     location_name_to_id = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
     location_name_groups = Locations.location_name_groups
 
-    starting_level_for_episode: List[str] = [
-        "Hangar (E1M1)",
-        "Deimos Anomaly (E2M1)",
-        "Hell Keep (E3M1)",
-        "Hell Beneath (E4M1)"
-    ]
+    starting_level_for_episode: Dict[int, str] = {
+        1: "Hangar (E1M1)",
+        2: "Deimos Anomaly (E2M1)",
+        3: "Hell Keep (E3M1)",
+        4: "Hell Beneath (E4M1)"
+    }
 
-    boss_level_for_espidoes: List[str] = [
+    all_boss_levels: List[str] = [
         "Phobos Anomaly (E1M8)",
         "Tower of Babel (E2M8)",
         "Dis (E3M8)",
@@ -82,6 +82,7 @@ class DOOM1993World(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         self.included_episodes = [1, 1, 1, 0]
         self.location_count = 0
+        self.starting_levels = []
 
         super().__init__(multiworld, player)
 
@@ -98,6 +99,16 @@ class DOOM1993World(World):
         # If no episodes selected, select Episode 1
         if self.get_episode_count() == 0:
             self.included_episodes[0] = 1
+
+        self.starting_levels = [level_name for (episode, level_name) in self.starting_level_for_episode.items()
+                                if self.included_episodes[episode - 1]]
+
+        # Solo Episode 3 presents a problem, because Hell Keep has only two locations.
+        # We have to give the player Slough of Despair (E3M2), and also mark a weapon early.
+        if self.get_episode_count() == 1 and self.included_episodes[2]:
+            early_weapon = self.random.choice(["Shotgun", "Chaingun"])
+            self.multiworld.early_items[self.player][early_weapon] = 1
+            self.starting_levels.append("Slough of Despair (E3M2)")
 
     def create_regions(self):
         pro = self.options.pro.value
@@ -152,7 +163,7 @@ class DOOM1993World(World):
     def completion_rule(self, state: CollectionState):
         goal_levels = Maps.map_names
         if self.options.goal.value:
-            goal_levels = self.boss_level_for_espidoes
+            goal_levels = self.all_boss_levels
 
         for map_name in goal_levels:
             if map_name + " - Exit" not in self.location_name_to_id:
@@ -201,8 +212,17 @@ class DOOM1993World(World):
             if item["episode"] != -1 and not self.included_episodes[item["episode"] - 1]:
                 continue
 
-            count = item["count"] if item["name"] not in self.starting_level_for_episode else item["count"] - 1
+            count = item["count"] if item["name"] not in self.starting_levels else item["count"] - 1
             itempool += [self.create_item(item["name"]) for _ in range(count)]
+
+        # Backpack(s) based on options
+        if self.options.split_backpack.value:
+            itempool += [self.create_item("Bullet capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Shell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Energy cell capacity") for _ in range(self.options.backpack_count.value)]
+            itempool += [self.create_item("Rocket capacity") for _ in range(self.options.backpack_count.value)]
+        else:
+            itempool += [self.create_item("Backpack") for _ in range(self.options.backpack_count.value)]
 
         # Place end level items in locked locations
         for map_name in Maps.map_names:
@@ -223,9 +243,8 @@ class DOOM1993World(World):
             self.location_count -= 1
 
         # Give starting levels right away
-        for i in range(len(self.included_episodes)):
-            if self.included_episodes[i]:
-                self.multiworld.push_precollected(self.create_item(self.starting_level_for_episode[i]))
+        for map_name in self.starting_levels:
+            self.multiworld.push_precollected(self.create_item(map_name))
         
         # Give Computer area maps if option selected
         if self.options.start_with_computer_area_maps.value:
@@ -265,7 +284,7 @@ class DOOM1993World(World):
         # Was balanced for 3 episodes (We added 4th episode, but keep same ratio)
         count = min(remaining_loc, max(1, int(round(self.items_ratio[item_name] * ep_count / 3))))
         if count == 0:
-            logger.warning("Warning, no ", item_name, " will be placed.")
+            logger.warning(f"Warning, no {item_name} will be placed.")
             return
 
         for i in range(count):
@@ -280,5 +299,15 @@ class DOOM1993World(World):
         # rest. The client needs to know about this so it can modify the door. If the multiworld was generated with
         # an older version, the player would end up stuck.
         slot_data["two_ways_keydoors"] = True
+
+        # Send slot data for ammo capacity values; this must be generic because Heretic uses it too
+        slot_data["ammo1start"] = self.options.max_ammo_bullets.value
+        slot_data["ammo2start"] = self.options.max_ammo_shells.value
+        slot_data["ammo3start"] = self.options.max_ammo_energy_cells.value
+        slot_data["ammo4start"] = self.options.max_ammo_rockets.value
+        slot_data["ammo1add"] = self.options.added_ammo_bullets.value
+        slot_data["ammo2add"] = self.options.added_ammo_shells.value
+        slot_data["ammo3add"] = self.options.added_ammo_energy_cells.value
+        slot_data["ammo4add"] = self.options.added_ammo_rockets.value
 
         return slot_data

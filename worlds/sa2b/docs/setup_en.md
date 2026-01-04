@@ -5,7 +5,7 @@
 - Sonic Adventure 2: Battle from: [Sonic Adventure 2: Battle Steam Store Page](https://store.steampowered.com/app/213610/Sonic_Adventure_2/)
 	- The Battle DLC is required if you choose to add Chao Karate locations to the randomizer
 - SA Mod Manager from: [SA Mod Manager GitHub Releases Page](https://github.com/X-Hax/SA-Mod-Manager/releases)
-- .NET Desktop Runtime 7.0 from: [.NET Desktop Runtime 7.0 Download Page](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.9-windows-x64-installer)
+- .NET Desktop Runtime 8.0 from: [.NET Desktop Runtime 8.0 Download Page](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.12-windows-x64-installer)
 - Archipelago Mod for Sonic Adventure 2: Battle
   from: [Sonic Adventure 2: Battle Archipelago Randomizer Mod Releases Page](https://github.com/PoryGone/SA2B_Archipelago/releases/)
 
@@ -36,27 +36,23 @@
 
 1. Install Sonic Adventure 2: Battle from Steam.
 
-2. In the properties for Sonic Adventure 2 on Steam, force the use of Proton Experimental as the compatibility tool.
+2. Launch the game at least once without mods.
 
-3. Launch the game at least once without mods.
+3. Create both a `/mods` directory and a `/SAManager` directory in the folder into which you installed Sonic Adventure 2: Battle.
 
-4. Create both a `/mods` directory and a `/SAManager` directory in the folder into which you installed Sonic Adventure 2: Battle.
+4. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
 
-5. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Specifically, extract SAModManager.exe file to the folder that Sonic Adventure 2: Battle is installed to. To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
+5. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
 
-6. Run SAModManager.exe from Steam once. It should produce an error popup for a missing dependency, close the error.
+6. Install SA Mod Manager as per [its instructions](https://github.com/X-Hax/SA-Mod-Manager/tree/master?tab=readme-ov-file). Specifically, extract SAModManager.exe file to the folder that Sonic Adventure 2: Battle is installed to. To launch it, add ``SAModManager.exe`` as a non-Steam game. In the properties on Steam for SA Mod Manager, set it to use Proton as the compatibility tool.
 
-7. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
+7. Run SAModManager.exe from Steam once. It should produce an error popup saying you need .NET Desktop Runtime and ask you if you'd like to download it. Say yes and it will download through your browser.
 
-8. Download the [.NET 7 Desktop Runtime for x64 Windows](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-7.0.17-windows-x64-installer). If this link does not work, the download can be found on [this page](https://dotnet.microsoft.com/en-us/download/dotnet/7.0).
+8. Install protontricks, on the Steam Deck this can be done via the Discover store, on other distros instructions vary, [see its github page](https://github.com/Matoking/protontricks).
 
-9. Right click the .NET 7 Desktop Runtime exe, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET 7 Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
+9. Right click the .NET Desktop Runtime exe that was downloaded in step 6, and assuming protontricks was installed correctly, the option to "Open with Protontricks Launcher" should be available. Click that, and in the popup window that opens, select SAModManager.exe. Follow the prompts after this to install the .NET Desktop Runtime for SAModManager. Once it is done, you should be able to successfully launch SAModManager to steam.
 
-6. Unpack the Archipelago Mod into this folder, so that `/mods/SA2B_Archipelago` is a valid path.
-
-7. In the SA2B_Archipelago folder, copy the `APCpp.dll` file and paste it in the Sonic Adventure 2 install folder (where `sonic2app.exe` is).
-
-8. Launch `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
+10. Launch `SAModManager.exe` from Steam and make sure the SA2B_Archipelago mod is listed and enabled.
 
 Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rather than launching using the `Save & Play` button in SA Mod Manager.
 
@@ -77,7 +73,7 @@ Note: Ensure that you launch Sonic Adventure 2 from Steam directly on Linux, rat
 ## Additional Options
 
 Some additional settings related to the Archipelago messages in game can be adjusted in the SAModManager if you select `Configure Mod` on the SA2B_Archipelago mod. This settings will be under a `General Settings` tab.
-	
+
 - Message Display Count: This is the maximum number of Archipelago messages that can be displayed on screen at any given time.
 - Message Display Duration: This dictates how long Archipelago messages are displayed on screen (in seconds).
 - Message Font Size: The is the size of the font used to display the messages from Archipelago.
@@ -94,7 +90,7 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 
 - "The following mods didn't load correctly: SA2B_Archipelago: DLL error - The specified module could not be found."
 	- Make sure the `APCpp.dll` is in the same folder as the `sonic2app.exe`. (See Installation Procedures step 6)
-	
+
 - "sonic2app.exe - Entry Point Not Found"
 	- Make sure the `APCpp.dll` is up to date. Follow Installation Procedures step 6 to update the dll.
 
@@ -116,7 +112,7 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 	1. Run the Launcher.exe which should be in the same folder as the your Sonic Adventure 2: Battle install.
 	2. Select the `Player` tab and reselect the controller for the player 1 input method.
 	3. Click the `Save settings and launch SONIC ADVENTURE 2` button. (Any mod manager settings will apply even if the game is launched this way rather than through the mod manager)
-	
+
 - Game crashes after display logos.
 	- This may be caused by a high monitor refresh rate.
 		- Change the monitor refresh rate to 60 Hz [Change display refresh rate on Windows] (https://support.microsoft.com/en-us/windows/change-your-display-refresh-rate-in-windows-c8ea729e-0678-015c-c415-f806f04aae5a)
@@ -125,15 +121,18 @@ If you wish to use the `SADX Music` option of the Randomizer, you must own a cop
 		2. Select the `Compatibility` tab.
 		3. Check the `Run this program in compatility mode for:` box and select Windows 7 in the drop down.
 		4. Click the `Apply` button.
-		
+
 - No resolution options in the Launcher.exe.
 	- In the `Graphics device` dropdown, select the device and display you plan to run the game on. The `Resolution` dropdown should populate once a graphics device is selected.
-	
+
 - No music is playing in the game.
 	- If you enabled an `SADX Music` option, then most likely the music data was not copied properly into the mod folder (See Additional Options for instructions).
-	
+
 - Mission 1 is missing a texture in the stage select UI.
-	- Most likely another mod is conflicting and overwriting the texture pack. It is recommeded to have the SA2B Archipelago mod load last in the mod manager.
+	- Most likely another mod is conflicting and overwriting the texture pack. It is recommended to have the SA2B Archipelago mod load last in the mod manager.
+
+- Minigame trap is un-winnable
+	- If you are using the SA2 Input Controls mod, it conflicts with certain minigames such as the Input Sequence Trap and medium difficulty Fishing Trap. Disabling the SA2 Input Controls mod should resolve the issue.
 
 ## Save File Safeguard (Advanced Option)
 

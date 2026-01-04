@@ -4,7 +4,7 @@ from typing import List
 
 from .bundle import Bundle, BundleTemplate
 from ..content import StardewContent
-from ..options import BundlePrice, StardewValleyOptions
+from ..options import StardewValleyOptions
 
 
 @dataclass

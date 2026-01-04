@@ -246,10 +246,10 @@ def create_regions(world: MultiWorld, options: SM64Options, player: int):
     regBitS.subregions = [bits_top]
 
 
-def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None):
+def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None) -> Entrance:
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
-    sourceRegion.connect(targetRegion, rule=rule)
+    return sourceRegion.connect(targetRegion, rule=rule)
 
 
 def create_region(name: str, player: int, world: MultiWorld) -> SM64Region:

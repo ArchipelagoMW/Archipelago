@@ -22,12 +22,14 @@ class TimeLogicMixin(BaseLogicMixin):
         self.time = TimeLogic(*args, **kwargs)
 
 
-class TimeLogic(BaseLogic[Union[TimeLogicMixin, HasLogicMixin]]):
+class TimeLogic(BaseLogic):
 
     @cache_self1
     def has_lived_months(self, number: int) -> StardewRule:
+        assert isinstance(number, int), "Can't have lived a fraction of a month. Use // instead of / when dividing."
         if number <= 0:
             return self.logic.true_
+
         number = min(number, MAX_MONTHS)
         return HasProgressionPercent(self.player, number * MONTH_COEFFICIENT)
 

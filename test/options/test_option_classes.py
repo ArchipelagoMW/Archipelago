@@ -33,6 +33,15 @@ class TestNumericOptions(unittest.TestCase):
             self.assertEqual(choice_option_alias, TestChoice.alias_three)
             self.assertEqual(choice_option_attr, TestChoice.non_option_attr)
 
+            self.assertLess(choice_option_string, "two")
+            self.assertGreater(choice_option_string, "zero")
+            self.assertLessEqual(choice_option_string, "one")
+            self.assertLessEqual(choice_option_string, "two")
+            self.assertGreaterEqual(choice_option_string, "one")
+            self.assertGreaterEqual(choice_option_string, "zero")
+
+            self.assertGreaterEqual(choice_option_alias, "three")
+
             self.assertRaises(KeyError, TestChoice.from_any, "four")
             
             self.assertIn(choice_option_int, [1, 2, 3])

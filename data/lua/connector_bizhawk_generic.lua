@@ -121,6 +121,14 @@ Response:
 
     Expected Response Type: `HASH_RESPONSE`
 
+- `MEMORY_SIZE`  
+    Returns the size in bytes of the specified memory domain.
+
+    Expected Response Type: `MEMORY_SIZE_RESPONSE`
+
+    Additional Fields:
+    - `domain` (`string`): The name of the memory domain to check
+
 - `GUARD`  
     Checks a section of memory against `expected_data`. If the bytes starting
     at `address` do not match `expected_data`, the response will have `value`
@@ -215,6 +223,12 @@ Response:
 
     Additional Fields:
     - `value` (`string`): The returned hash
+
+- `MEMORY_SIZE_RESPONSE`  
+    Contains the size in bytes of the specified memory domain.
+
+    Additional Fields:
+    - `value` (`number`): The size of the domain in bytes
 
 - `GUARD_RESPONSE`  
     The result of an attempted `GUARD` request.
@@ -351,18 +365,14 @@ request_handlers = {
     ["PREFERRED_CORES"] = function (req)
         local res = {}
         local preferred_cores = client.getconfig().PreferredCores
+        local systems_enumerator = preferred_cores.Keys:GetEnumerator()
 
         res["type"] = "PREFERRED_CORES_RESPONSE"
         res["value"] = {}
-        res["value"]["NES"] = preferred_cores.NES
-        res["value"]["SNES"] = preferred_cores.SNES
-        res["value"]["GB"] = preferred_cores.GB
-        res["value"]["GBC"] = preferred_cores.GBC
-        res["value"]["DGB"] = preferred_cores.DGB
-        res["value"]["SGB"] = preferred_cores.SGB
-        res["value"]["PCE"] = preferred_cores.PCE
-        res["value"]["PCECD"] = preferred_cores.PCECD
-        res["value"]["SGX"] = preferred_cores.SGX
+
+        while systems_enumerator:MoveNext() do
+            res["value"][systems_enumerator.Current] = preferred_cores[systems_enumerator.Current]
+        end
 
         return res
     end,
@@ -372,6 +382,15 @@ request_handlers = {
 
         res["type"] = "HASH_RESPONSE"
         res["value"] = rom_hash
+
+        return res
+    end,
+
+    ["MEMORY_SIZE"] = function (req)
+        local res = {}
+
+        res["type"] = "MEMORY_SIZE_RESPONSE"
+        res["value"] = memory.getmemorydomainsize(req["domain"])
 
         return res
     end,
@@ -613,9 +632,11 @@ end)
 
 if bizhawk_major < 2 or (bizhawk_major == 2 and bizhawk_minor < 7) then
     print("Must use BizHawk 2.7.0 or newer")
-elseif bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 9) then
-    print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.9.")
 else
+    if bizhawk_major > 2 or (bizhawk_major == 2 and bizhawk_minor > 10) then
+        print("Warning: This version of BizHawk is newer than this script. If it doesn't work, consider downgrading to 2.10.")
+    end
+
     if emu.getsystemid() == "NULL" then
         print("No ROM is loaded. Please load a ROM.")
         while emu.getsystemid() == "NULL" do

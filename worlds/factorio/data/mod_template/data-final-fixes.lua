@@ -1,48 +1,52 @@
 {% from "macros.lua" import dict_to_recipe, variable_to_lua %}
 -- this file gets written automatically by the Archipelago Randomizer and is in its raw form a Jinja2 Template
 require('lib')
+data.raw["item"]["rocket-part"].hidden = false
 data.raw["rocket-silo"]["rocket-silo"].fluid_boxes = {
     {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { 0, 5 } },
-            { type = "input", position = { 0, -5 } },
-            { type = "input", position = { 5, 0 } },
-            { type = "input", position = { -5, 0 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { 0, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { 0, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, 0 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, 0 } }
         }
     },
     {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { -3, 5 } },
-            { type = "input", position = { -3, -5 } },
-            { type = "input", position = { 5, -3 } },
-            { type = "input", position = { -5, -3 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { -3, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { -3, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, -3 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, -3 } }
         }
     },
     {
         production_type = "input",
         pipe_picture = assembler2pipepictures(),
         pipe_covers = pipecoverspictures(),
+        volume = 1000,
         base_area = 10,
         base_level = -1,
         pipe_connections = {
-            { type = "input", position = { 3, 5 } },
-            { type = "input", position = { 3, -5 } },
-            { type = "input", position = { 5, 3 } },
-            { type = "input", position = { -5, 3 } }
+            { flow_direction = "input", direction = defines.direction.south, position = { 3, 4.2 } },
+            { flow_direction = "input", direction = defines.direction.north, position = { 3, -4.2 } },
+            { flow_direction = "input", direction = defines.direction.east, position = { 4.2, 3 } },
+            { flow_direction = "input", direction = defines.direction.west, position = { -4.2, 3 } }
         }
-    },
-    off_when_no_fluid_recipe = true
+    }
 }
+data.raw["rocket-silo"]["rocket-silo"].fluid_boxes_off_when_no_fluid_recipe = true
 
 {%- for recipe_name, recipe in custom_recipes.items() %}
 data.raw["recipe"]["{{recipe_name}}"].category = "{{recipe.category}}"
@@ -59,22 +63,6 @@ template_tech.upgrade = false
 template_tech.effects = {}
 template_tech.prerequisites = {}
 
-{%- if max_science_pack < 6 %}
-    technologies["space-science-pack"].effects = {}
-    {%- if max_science_pack == 0 %}
-        table.insert (technologies["automation"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 1 %}
-        table.insert (technologies["logistic-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 2 %}
-        table.insert (technologies["military-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 3 %}
-        table.insert (technologies["chemical-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 4 %}
-        table.insert (technologies["production-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {%- elif max_science_pack == 5 %}
-        table.insert (technologies["utility-science-pack"].effects, {type = "unlock-recipe", recipe = "satellite"})
-    {% endif %}
-{% endif %}
 {%- if silo == 2 %}
     data.raw["recipe"]["rocket-silo"].enabled = true
 {% endif %}
@@ -159,14 +147,22 @@ data.raw["ammo"]["artillery-shell"].stack_size = 10
 {# each randomized tech gets set to be invisible, with new nodes added that trigger those #}
 {%- for original_tech_name in base_tech_table -%}
 technologies["{{ original_tech_name }}"].hidden = true
+technologies["{{ original_tech_name }}"].hidden_in_factoriopedia = true
 {% endfor %}
 {%- for location, item in locations %}
 {#- the tech researched by the local player #}
 new_tree_copy = table.deepcopy(template_tech)
 new_tree_copy.name = "ap-{{ location.address }}-"{# use AP ID #}
+{% if location.crafted_item is not none %}
+new_tree_copy.research_trigger = {
+    type = "{{ 'craft-fluid' if location.crafted_item in liquids else 'craft-item' }}",
+    {{ 'fluid' if location.crafted_item in liquids else 'item' }} = {{ variable_to_lua(location.crafted_item) }}
+}
+new_tree_copy.unit = nil
+{% else %}
 new_tree_copy.unit.count = {{ location.count }}
 new_tree_copy.unit.ingredients = {{ variable_to_lua(location.factorio_ingredients) }}
-
+{% endif %}
 {%- if location.revealed and item.name in base_tech_table -%}
 {#- copy Factorio Technology Icon #}
 copy_factorio_icon(new_tree_copy, "{{ item.name }}")

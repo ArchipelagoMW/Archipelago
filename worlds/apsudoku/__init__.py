@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from ..AutoWorld import WebWorld, World
 
 class AP_SudokuWebWorld(WebWorld):
-    options_page = "games/Sudoku/info/en"
+    options_page = False
     theme = 'partyTime'
 
     setup_en = Tutorial(

@@ -102,6 +102,7 @@ class SVEMeal:
     void_delight = "Void Delight"
     void_salmon_sushi = "Void Salmon Sushi"
     grampleton_orange_chicken = "Grampleton Orange Chicken"
+    stamina_capsule = "Stamina Capsule"
 
 
 class TrashyMeal:

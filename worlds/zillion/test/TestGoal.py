@@ -104,7 +104,7 @@ class TestGoalAppleStart(ZillionTestBase):
         "start_char": "Apple",
         "jump_levels": "balanced",
         "gun_levels": "low",
-        "zillion_count": 5
+        "zillion_count": 5,
     }
 
     def test_guns_jj_first(self) -> None:
@@ -131,7 +131,7 @@ class TestGoalChampStart(ZillionTestBase):
         "jump_levels": "low",
         "gun_levels": "balanced",
         "opa_opa_count": 5,
-        "opas_per_level": 1
+        "opas_per_level": 1,
     }
 
     def test_jump_jj_first(self) -> None:

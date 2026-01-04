@@ -1,6 +1,6 @@
+from ..bases import SVTestBase
 from ... import options
 from ...options import BuildingProgression, ExcludeGingerIsland, Chefsanity
-from ...test import SVTestBase
 
 
 class TestRecipeLearnLogic(SVTestBase):
@@ -14,18 +14,17 @@ class TestRecipeLearnLogic(SVTestBase):
 
     def test_can_learn_qos_recipe(self):
         location = "Cook Radish Salad"
-        rule = self.world.logic.region.can_reach_location(location)
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
-        self.multiworld.state.collect(self.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.create_item("Radish Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Spring"), event=False)
-        self.multiworld.state.collect(self.create_item("Summer"), event=False)
+        self.multiworld.state.collect(self.create_item("Progressive House"))
+        self.multiworld.state.collect(self.create_item("Radish Seeds"))
+        self.multiworld.state.collect(self.create_item("Spring"))
+        self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
-        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), event=False)
-        self.assert_rule_true(rule, self.multiworld.state)
+        self.multiworld.state.collect(self.create_item("The Queen of Sauce"))
+        self.assert_can_reach_location(location)
 
 
 class TestRecipeReceiveLogic(SVTestBase):
@@ -39,45 +38,43 @@ class TestRecipeReceiveLogic(SVTestBase):
 
     def test_can_learn_qos_recipe(self):
         location = "Cook Radish Salad"
-        rule = self.world.logic.region.can_reach_location(location)
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
-        self.multiworld.state.collect(self.create_item("Progressive House"), event=False)
-        self.multiworld.state.collect(self.create_item("Radish Seeds"), event=False)
-        self.multiworld.state.collect(self.create_item("Summer"), event=False)
+        self.multiworld.state.collect(self.create_item("Progressive House"))
+        self.multiworld.state.collect(self.create_item("Radish Seeds"))
+        self.multiworld.state.collect(self.create_item("Summer"))
         self.collect_lots_of_money()
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
         spring = self.create_item("Spring")
         qos = self.create_item("The Queen of Sauce")
-        self.multiworld.state.collect(spring, event=False)
-        self.multiworld.state.collect(qos, event=False)
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.multiworld.state.collect(spring)
+        self.multiworld.state.collect(qos)
+        self.assert_cannot_reach_location(location)
         self.multiworld.state.remove(spring)
         self.multiworld.state.remove(qos)
 
-        self.multiworld.state.collect(self.create_item("Radish Salad Recipe"), event=False)
-        self.assert_rule_true(rule, self.multiworld.state)
+        self.multiworld.state.collect(self.create_item("Radish Salad Recipe"))
+        self.assert_can_reach_location(location)
 
     def test_get_chefsanity_check_recipe(self):
         location = "Radish Salad Recipe"
-        rule = self.world.logic.region.can_reach_location(location)
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
-        self.multiworld.state.collect(self.create_item("Spring"), event=False)
+        self.multiworld.state.collect(self.create_item("Spring"))
         self.collect_lots_of_money()
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.assert_cannot_reach_location(location)
 
         seeds = self.create_item("Radish Seeds")
         summer = self.create_item("Summer")
         house = self.create_item("Progressive House")
-        self.multiworld.state.collect(seeds, event=False)
-        self.multiworld.state.collect(summer, event=False)
-        self.multiworld.state.collect(house, event=False)
-        self.assert_rule_false(rule, self.multiworld.state)
+        self.multiworld.state.collect(seeds)
+        self.multiworld.state.collect(summer)
+        self.multiworld.state.collect(house)
+        self.assert_cannot_reach_location(location)
         self.multiworld.state.remove(seeds)
         self.multiworld.state.remove(summer)
         self.multiworld.state.remove(house)
 
-        self.multiworld.state.collect(self.create_item("The Queen of Sauce"), event=False)
-        self.assert_rule_true(rule, self.multiworld.state)
+        self.multiworld.state.collect(self.create_item("The Queen of Sauce"))
+        self.assert_can_reach_location(location)

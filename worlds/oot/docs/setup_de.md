@@ -7,13 +7,13 @@ Da wir BizHawk benutzen, gilt diese Anleitung nur für Windows und Linux.
 ## Benötigte Software
 
 - BizHawk: [BizHawk Veröffentlichungen von TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
-  - Version 2.3.1 und später werden unterstützt. Version 2.9 ist empfohlen.
+  - Version 2.3.1 und später werden unterstützt. Version 2.10 ist empfohlen.
   - Detailierte Installtionsanweisungen für BizHawk können über den obrigen Link gefunden werden.
   - Windows-Benutzer müssen die Prerequisiten installiert haben. Diese können ebenfalls über
     den obrigen Link gefunden werden.
 - Der integrierte Archipelago-Client, welcher [hier](https://github.com/ArchipelagoMW/Archipelago/releases) installiert
   werden kann.
-- Eine `Ocarina of Time v1.0 US(?) ROM`. (Nicht aus Europa und keine Master-Quest oder Debug-Rom!)
+- Eine `Ocarina of Time v1.0 US ROM`. (Nicht aus Europa und keine Master-Quest oder Debug-Rom!)
 
 ## Konfigurieren von BizHawk
 
@@ -84,7 +84,7 @@ Wenn du einer Multiworld beitrittst, wirst du gefordert eine YAML-Datei bei dem 
 erhälst du (in der Regel) einen Link vom Host der Multiworld. Dieser führt dich zu einem Raum, in dem alle
 teilnehmenden Spieler (bzw. Welten) aufgelistet sind. Du solltest dich dann auf **deine** Welt konzentrieren
 und klicke dann auf `Download APZ5 File...`.
-![Screenshot of a Multiworld Room with an Ocarina of Time Player](/static/generated/docs/Ocarina%20of%20Time/MultiWorld-room_oot.png)
+![Screenshot of a Multiworld Room with an Ocarina of Time Player](MultiWorld-Room_oot.png)
 
 Führe die `.apz5`-Datei mit einem Doppelklick aus, um deinen Ocarina Of Time-Client zu starten, sowie das patchen
 deiner ROM. Ist dieser Prozess fertig (kann etwas dauern), startet sich der Client und der Emulator automatisch

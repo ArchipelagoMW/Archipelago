@@ -16,9 +16,14 @@ rules = pyevermizer.get_logic()
 # Logic.items are all items and extra items excluding non-progression items and duplicates
 # NOTE: we are skipping sniff items here because none of them is supposed to provide progression
 item_names: Set[str] = set()
-items = [item for item in filter(lambda item: item.progression,  # type: ignore[arg-type]
-                                 chain(pyevermizer.get_items(), pyevermizer.get_extra_items()))
-         if item.name not in item_names and not item_names.add(item.name)]  # type: ignore[func-returns-value]
+items = [
+    item
+    for item in filter(
+        lambda item: item.progression,
+        chain(pyevermizer.get_items(), pyevermizer.get_extra_items()),
+    )
+    if item.name not in item_names and not item_names.add(item.name)  # type: ignore[func-returns-value]
+]
 
 
 class SoEPlayerLogic:

@@ -8,7 +8,7 @@ from ..items import item_table
 from ..stardew_rule import StardewRule, Received, TotalReceived
 
 
-class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
+class ReceivedLogicMixin(BaseLogic, BaseLogicMixin):
     def received(self, item: str, count: Optional[int] = 1) -> StardewRule:
         assert count >= 0, "Can't receive a negative amount of item."
 

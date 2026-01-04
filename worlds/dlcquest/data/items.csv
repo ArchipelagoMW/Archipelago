@@ -22,7 +22,7 @@ id,name,classification,groups
 20,Wall Jump Pack,progression,"DLC,Freemium"
 21,Health Bar Pack,useful,"DLC,Freemium"
 22,Parallax Pack,filler,"DLC,Freemium"
-23,Harmless Plants Pack,progression,"DLC,Freemium"
+23,Harmless Plants Pack,"progression,trap","DLC,Freemium"
 24,Death of Comedy Pack,progression,"DLC,Freemium"
 25,Canadian Dialog Pack,filler,"DLC,Freemium"
 26,DLC NPC Pack,progression,"DLC,Freemium"

@@ -1,11 +1,6 @@
 import math
-from typing import Union
 
 from .base_logic import BaseLogicMixin, BaseLogic
-from .received_logic import ReceivedLogicMixin
-from .region_logic import RegionLogicMixin
-from .time_logic import TimeLogicMixin
-from .tool_logic import ToolLogicMixin
 from ..content.feature.friendsanity import pet_heart_item_name
 from ..stardew_rule import StardewRule, True_
 from ..strings.region_names import Region
@@ -17,7 +12,7 @@ class PetLogicMixin(BaseLogicMixin):
         self.pet = PetLogic(*args, **kwargs)
 
 
-class PetLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, TimeLogicMixin, ToolLogicMixin]]):
+class PetLogic(BaseLogic):
     def has_pet_hearts(self, hearts: int = 1) -> StardewRule:
         assert hearts >= 0, "You can't have negative hearts with a pet."
         if hearts == 0:

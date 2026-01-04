@@ -40,10 +40,10 @@ jobs:
       run: |
         wget https://apt.llvm.org/llvm.sh
         chmod +x ./llvm.sh
-        sudo ./llvm.sh 17
+        sudo ./llvm.sh 19
     - name: Install scan-build command
       run: |
-        sudo apt install clang-tools-17
+        sudo apt install clang-tools-19
     - name: Get a recent python
       uses: actions/setup-python@v5
       with:
@@ -56,7 +56,7 @@ jobs:
     - name: scan-build
       run: |
         source venv/bin/activate
-        scan-build-17 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
+        scan-build-19 --status-bugs -o scan-build-reports -disable-checker deadcode.DeadStores python setup.py build -y
     - name: Store report
       if: failure()
       uses: actions/upload-artifact@v4

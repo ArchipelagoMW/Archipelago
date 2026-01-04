@@ -1,4 +1,4 @@
-import copy, random
+import copy
 
 from ..utils import log
 from ..utils.utils import randGaussBounds
@@ -16,8 +16,9 @@ from ..rom.rom_patches import RomPatches
 # checks init conditions for the randomizer: processes super fun settings, graph, start location, special restrictions
 # the entry point is createItemLocContainer
 class RandoSetup(object):
-    def __init__(self, graphSettings, locations, services, player):
+    def __init__(self, graphSettings, locations, services, player, random):
         self.sm = SMBoolManager(player, services.settings.maxDiff)
+        self.random = random
         self.settings = services.settings
         self.graphSettings = graphSettings
         self.startAP = graphSettings.startAP
@@ -31,7 +32,7 @@ class RandoSetup(object):
 #        print("nLocs Setup: "+str(len(self.locations)))
         # in minimizer we can have some missing boss locs
         bossesItems = [loc.BossItemType for loc in self.locations if loc.isBoss()]
-        self.itemManager = self.settings.getItemManager(self.sm, len(self.locations), bossesItems)
+        self.itemManager = self.settings.getItemManager(self.sm, len(self.locations), bossesItems, random)
         self.forbiddenItems = []
         self.restrictedLocs = []
         self.lastRestricted = []
@@ -165,7 +166,7 @@ class RandoSetup(object):
             return True
         self.log.debug("********* PRE RANDO START")
         container = copy.copy(self.container)
-        filler = FrontFiller(self.startAP, self.areaGraph, self.restrictions, container)
+        filler = FrontFiller(self.startAP, self.areaGraph, self.restrictions, container, random=self.random)
         condition = filler.createStepCountCondition(4)
         (isStuck, itemLocations, progItems) = filler.generateItems(condition)
         self.log.debug("********* PRE RANDO END")
@@ -345,9 +346,9 @@ class RandoSetup(object):
     def getForbiddenItemsFromList(self, itemList):
         self.log.debug('getForbiddenItemsFromList: ' + str(itemList))
         remove = []
-        n = randGaussBounds(len(itemList))
+        n = randGaussBounds(self.random, len(itemList))
         for i in range(n):
-            idx = random.randint(0, len(itemList) - 1)
+            idx = self.random.randint(0, len(itemList) - 1)
             item = itemList.pop(idx)
             if item is not None:
                 remove.append(item)

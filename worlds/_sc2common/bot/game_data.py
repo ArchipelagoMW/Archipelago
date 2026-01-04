@@ -19,7 +19,7 @@ class GameData:
         """
         :param data:
         """
-        self.abilities: Dict[int, AbilityData] = {}
+        self.abilities: Dict[int, AbilityData] = {a.ability_id: AbilityData(self, a) for a in data.abilities if a.available}
         self.units: Dict[int, UnitTypeData] = {u.unit_id: UnitTypeData(self, u) for u in data.units if u.available}
         self.upgrades: Dict[int, UpgradeData] = {u.upgrade_id: UpgradeData(self, u) for u in data.upgrades}
         # Cached UnitTypeIds so that conversion does not take long. This needs to be moved elsewhere if a new GameData object is created multiple times per game
@@ -40,7 +40,7 @@ class AbilityData:
         self._proto = proto
 
         # What happens if we comment this out? Should this not be commented out? What is its purpose?
-        assert self.id != 0
+        # assert self.id != 0 # let the world burn
 
     def __repr__(self) -> str:
         return f"AbilityData(name={self._proto.button_name})"

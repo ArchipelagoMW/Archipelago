@@ -18,7 +18,7 @@ class SeasonLogicMixin(BaseLogicMixin):
         self.season = SeasonLogic(*args, **kwargs)
 
 
-class SeasonLogic(BaseLogic[Union[HasLogicMixin, SeasonLogicMixin, TimeLogicMixin, ReceivedLogicMixin]]):
+class SeasonLogic(BaseLogic):
 
     @cached_property
     def has_spring(self) -> StardewRule:

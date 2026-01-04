@@ -288,6 +288,11 @@ const applyPresets = (presetName) => {
         }
       });
       namedRangeSelect.value = trueValue;
+      // It is also possible for a preset to use an unnamed value. If this happens, set the dropdown to "Custom"
+      if (namedRangeSelect.selectedIndex == -1)
+      {
+        namedRangeSelect.value = "custom";
+      }
     }
 
     // Handle options whose presets are "random"

@@ -14,7 +14,7 @@ import tkinter as tk
 from argparse import Namespace
 from concurrent.futures import as_completed, ThreadPoolExecutor
 from glob import glob
-from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, TOP, LabelFrame, \
+from tkinter import Tk, Frame, Label, StringVar, Entry, filedialog, messagebox, Button, Radiobutton, LEFT, X, BOTH, TOP, LabelFrame, \
     IntVar, Checkbutton, E, W, OptionMenu, Toplevel, BOTTOM, RIGHT, font as font, PhotoImage
 from tkinter.constants import DISABLED, NORMAL
 from urllib.parse import urlparse
@@ -29,19 +29,26 @@ from Utils import output_path, local_path, user_path, open_file, get_cert_none_s
 
 
 GAME_ALTTP = "A Link to the Past"
+WINDOW_MIN_HEIGHT = 525
+WINDOW_MIN_WIDTH = 425
 
 
 class AdjusterWorld(object):
+    class AdjusterSubWorld(object):
+        def __init__(self, random):
+            self.random = random
+
     def __init__(self, sprite_pool):
         import random
         self.sprite_pool = {1: sprite_pool}
-        self.per_slot_randoms = {1: random}
+        self.worlds = {1: self.AdjusterSubWorld(random)}
 
 
 class ArgumentDefaultsHelpFormatter(argparse.RawTextHelpFormatter):
 
     def _get_help_string(self, action):
         return textwrap.dedent(action.help)
+
 
 # See argparse.BooleanOptionalAction
 class BooleanOptionalActionWithDisable(argparse.Action):
@@ -242,16 +249,17 @@ def adjustGUI():
     from argparse import Namespace
     from Utils import __version__ as MWVersion
     adjustWindow = Tk()
+    adjustWindow.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
     adjustWindow.wm_title("Archipelago %s LttP Adjuster" % MWVersion)
     set_icon(adjustWindow)
 
     rom_options_frame, rom_vars, set_sprite = get_rom_options_frame(adjustWindow)
 
-    bottomFrame2 = Frame(adjustWindow)
+    bottomFrame2 = Frame(adjustWindow, padx=8, pady=2)
 
     romFrame, romVar = get_rom_frame(adjustWindow)
 
-    romDialogFrame = Frame(adjustWindow)
+    romDialogFrame = Frame(adjustWindow, padx=8, pady=2)
     baseRomLabel2 = Label(romDialogFrame, text='Rom to adjust')
     romVar2 = StringVar()
     romEntry2 = Entry(romDialogFrame, textvariable=romVar2)
@@ -261,9 +269,9 @@ def adjustGUI():
         romVar2.set(rom)
 
     romSelectButton2 = Button(romDialogFrame, text='Select Rom', command=RomSelect2)
-    romDialogFrame.pack(side=TOP, expand=True, fill=X)
-    baseRomLabel2.pack(side=LEFT)
-    romEntry2.pack(side=LEFT, expand=True, fill=X)
+    romDialogFrame.pack(side=TOP, expand=False, fill=X)
+    baseRomLabel2.pack(side=LEFT, expand=False, fill=X, padx=(0, 8))
+    romEntry2.pack(side=LEFT, expand=True, fill=BOTH, pady=1)
     romSelectButton2.pack(side=LEFT)
 
     def adjustRom():
@@ -331,12 +339,11 @@ def adjustGUI():
         messagebox.showinfo(title="Success", message="Settings saved to persistent storage")
 
     adjustButton = Button(bottomFrame2, text='Adjust Rom', command=adjustRom)
-    rom_options_frame.pack(side=TOP)
+    rom_options_frame.pack(side=TOP, padx=8, pady=8, fill=BOTH, expand=True)
     adjustButton.pack(side=LEFT, padx=(5,5))
 
     saveButton = Button(bottomFrame2, text='Save Settings', command=saveGUISettings)
     saveButton.pack(side=LEFT, padx=(5,5))
-
     bottomFrame2.pack(side=TOP, pady=(5,5))
 
     tkinter_center_window(adjustWindow)
@@ -358,10 +365,10 @@ def run_sprite_update():
     logging.info("Done updating sprites")
 
 
-def update_sprites(task, on_finish=None):
+def update_sprites(task, on_finish=None, repository_url: str = "https://alttpr.com/sprites"):
     resultmessage = ""
     successful = True
-    sprite_dir = user_path("data", "sprites", "alttpr")
+    sprite_dir = user_path("data", "sprites", "alttp", "remote")
     os.makedirs(sprite_dir, exist_ok=True)
     ctx = get_cert_none_ssl_context()
 
@@ -371,11 +378,11 @@ def update_sprites(task, on_finish=None):
             on_finish(successful, resultmessage)
 
     try:
-        task.update_status("Downloading alttpr sprites list")
-        with urlopen('https://alttpr.com/sprites', context=ctx) as response:
+        task.update_status("Downloading remote sprites list")
+        with urlopen(repository_url, context=ctx) as response:
             sprites_arr = json.loads(response.read().decode("utf-8"))
     except Exception as e:
-        resultmessage = "Error getting list of alttpr sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
+        resultmessage = "Error getting list of remote sprites. Sprites not updated.\n\n%s: %s" % (type(e).__name__, e)
         successful = False
         task.queue_event(finished)
         return
@@ -383,13 +390,13 @@ def update_sprites(task, on_finish=None):
     try:
         task.update_status("Determining needed sprites")
         current_sprites = [os.path.basename(file) for file in glob(sprite_dir + '/*')]
-        alttpr_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
+        remote_sprites = [(sprite['file'], os.path.basename(urlparse(sprite['file']).path))
                           for sprite in sprites_arr if sprite["author"] != "Nintendo"]
-        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in alttpr_sprites if
+        needed_sprites = [(sprite_url, filename) for (sprite_url, filename) in remote_sprites if
                           filename not in current_sprites]
 
-        alttpr_filenames = [filename for (_, filename) in alttpr_sprites]
-        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in alttpr_filenames]
+        remote_filenames = [filename for (_, filename) in remote_sprites]
+        obsolete_sprites = [sprite for sprite in current_sprites if sprite not in remote_filenames]
     except Exception as e:
         resultmessage = "Error Determining which sprites to update. Sprites not updated.\n\n%s: %s" % (
         type(e).__name__, e)
@@ -441,7 +448,7 @@ def update_sprites(task, on_finish=None):
                 successful = False
 
     if successful:
-        resultmessage = "alttpr sprites updated successfully"
+        resultmessage = "Remote sprites updated successfully"
 
     task.queue_event(finished)
 
@@ -576,7 +583,7 @@ class AttachTooltip(object):
 def get_rom_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
 
-    romFrame = Frame(parent)
+    romFrame = Frame(parent, padx=8, pady=8)
     baseRomLabel = Label(romFrame, text='LttP Base Rom: ')
     romVar = StringVar(value=adjuster_settings.baserom)
     romEntry = Entry(romFrame, textvariable=romVar)
@@ -596,20 +603,19 @@ def get_rom_frame(parent=None):
     romSelectButton = Button(romFrame, text='Select Rom', command=RomSelect)
 
     baseRomLabel.pack(side=LEFT)
-    romEntry.pack(side=LEFT, expand=True, fill=X)
+    romEntry.pack(side=LEFT, expand=True, fill=BOTH, pady=1)
     romSelectButton.pack(side=LEFT)
-    romFrame.pack(side=TOP, expand=True, fill=X)
+    romFrame.pack(side=TOP, fill=X)
 
     return romFrame, romVar
 
 def get_rom_options_frame(parent=None):
     adjuster_settings = get_adjuster_settings(GAME_ALTTP)
 
-    romOptionsFrame = LabelFrame(parent, text="Rom options")
-    romOptionsFrame.columnconfigure(0, weight=1)
-    romOptionsFrame.columnconfigure(1, weight=1)
+    romOptionsFrame = LabelFrame(parent, text="Rom options", padx=8, pady=8)
+
     for i in range(5):
-        romOptionsFrame.rowconfigure(i, weight=1)
+        romOptionsFrame.rowconfigure(i, weight=0, pad=4)
     vars = Namespace()
 
     vars.MusicVar = IntVar()
@@ -660,7 +666,7 @@ def get_rom_options_frame(parent=None):
     spriteSelectButton = Button(spriteDialogFrame, text='...', command=SpriteSelect)
 
     baseSpriteLabel.pack(side=LEFT)
-    spriteEntry.pack(side=LEFT)
+    spriteEntry.pack(side=LEFT, expand=True, fill=X)
     spriteSelectButton.pack(side=LEFT)
 
     oofDialogFrame = Frame(romOptionsFrame)
@@ -863,7 +869,7 @@ class SpriteSelector():
         def open_custom_sprite_dir(_evt):
             open_file(self.custom_sprite_dir)
 
-        alttpr_frametitle = Label(self.window, text='ALTTPR Sprites')
+        remote_frametitle = Label(self.window, text='Remote Sprites')
 
         custom_frametitle = Frame(self.window)
         title_text = Label(custom_frametitle, text="Custom Sprites")
@@ -872,8 +878,8 @@ class SpriteSelector():
         title_link.pack(side=LEFT)
         title_link.bind("<Button-1>", open_custom_sprite_dir)
 
-        self.icon_section(alttpr_frametitle, self.alttpr_sprite_dir,
-                          'ALTTPR sprites not found. Click "Update alttpr sprites" to download them.')
+        self.icon_section(remote_frametitle, self.remote_sprite_dir,
+                          'Remote sprites not found. Click "Update remote sprites" to download them.')
         self.icon_section(custom_frametitle, self.custom_sprite_dir,
                           'Put sprites in the custom sprites folder (see open link above) to have them appear here.')
         if not randomOnEvent:
@@ -886,11 +892,18 @@ class SpriteSelector():
             button = Button(frame, text="Browse for file...", command=self.browse_for_sprite)
             button.pack(side=RIGHT, padx=(5, 0))
 
-        button = Button(frame, text="Update alttpr sprites", command=self.update_alttpr_sprites)
+        button = Button(frame, text="Update remote sprites", command=self.update_remote_sprites)
         button.pack(side=RIGHT, padx=(5, 0))
+
+        repository_label = Label(frame, text='Sprite Repository:')
+        self.repository_url = StringVar(frame, "https://alttpr.com/sprites")
+        repository_entry = Entry(frame, textvariable=self.repository_url)
         
+        repository_entry.pack(side=RIGHT, expand=True, fill=BOTH, pady=1)
+        repository_label.pack(side=RIGHT, expand=False, padx=(0, 5))
+
         button = Button(frame, text="Do not adjust sprite",command=self.use_default_sprite)
-        button.pack(side=LEFT,padx=(0,5))
+        button.pack(side=LEFT, padx=(0, 5))
 
         button = Button(frame, text="Default Link sprite", command=self.use_default_link_sprite)
         button.pack(side=LEFT, padx=(0, 5))
@@ -1050,7 +1063,7 @@ class SpriteSelector():
         for i, button in enumerate(frame.buttons):
             button.grid(row=i // self.spritesPerRow, column=i % self.spritesPerRow)
 
-    def update_alttpr_sprites(self):
+    def update_remote_sprites(self):
         # need to wrap in try catch. We don't want errors getting the json or downloading the files to break us.
         self.window.destroy()
         self.parent.update()
@@ -1063,7 +1076,8 @@ class SpriteSelector():
                 messagebox.showerror("Sprite Updater", resultmessage)
             SpriteSelector(self.parent, self.callback, self.adjuster)
 
-        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites", on_finish)
+        BackgroundTaskProgress(self.parent, update_sprites, "Updating Sprites",
+                               on_finish, self.repository_url.get())
 
     def browse_for_sprite(self):
         sprite = filedialog.askopenfilename(
@@ -1153,12 +1167,13 @@ class SpriteSelector():
             os.makedirs(self.custom_sprite_dir)
 
     @property
-    def alttpr_sprite_dir(self):
-        return user_path("data", "sprites", "alttpr")
+    def remote_sprite_dir(self):
+        return user_path("data", "sprites", "alttp", "remote")
 
     @property
     def custom_sprite_dir(self):
-        return user_path("data", "sprites", "custom")
+        return user_path("data", "sprites", "alttp", "custom")
+
 
 def get_image_for_sprite(sprite, gif_only: bool = False):
     if not sprite.valid:

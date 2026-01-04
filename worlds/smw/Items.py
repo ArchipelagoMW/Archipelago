@@ -75,3 +75,49 @@ item_table = {
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
+
+
+trap_value_to_name: typing.Dict[int, str] = {
+    0xBC0013: ItemName.ice_trap,
+    0xBC0014: ItemName.stun_trap,
+    0xBC0015: ItemName.literature_trap,
+    0xBC0016: ItemName.timer_trap,
+    0xBC001C: ItemName.reverse_controls_trap,
+    0xBC001D: ItemName.thwimp_trap,
+}
+
+trap_name_to_value: typing.Dict[str, int] = {
+    # Our native Traps
+    ItemName.ice_trap:              0xBC0013,
+    ItemName.stun_trap:             0xBC0014,
+    ItemName.literature_trap:       0xBC0015,
+    ItemName.timer_trap:            0xBC0016,
+    ItemName.reverse_controls_trap: 0xBC001C,
+    ItemName.thwimp_trap:           0xBC001D,
+
+    # Common other trap names
+    "Chaos Control Trap": 0xBC0014,  # Stun Trap
+    "Confuse Trap":       0xBC001C,  # Reverse Trap
+    "Exposition Trap":    0xBC0015,  # Literature Trap
+    "Cutscene Trap":      0xBC0015,  # Literature Trap
+    "Freeze Trap":        0xBC0014,  # Stun Trap
+    "Frozen Trap":        0xBC0014,  # Stun Trap
+    "Paralyze Trap":      0xBC0014,  # Stun Trap
+    "Reversal Trap":      0xBC001C,  # Reverse Trap
+    "Fuzzy Trap":         0xBC001C,  # Reverse Trap
+    "Confound Trap":      0xBC001C,  # Reverse Trap
+    "Confusion Trap":     0xBC001C,  # Reverse Trap
+    "Police Trap":        0xBC001D,  # Thwimp Trap
+    "Buyon Trap":         0xBC001D,  # Thwimp Trap
+    "Gooey Bag":          0xBC001D,  # Thwimp Trap
+    "TNT Barrel Trap":    0xBC001D,  # Thwimp Trap
+    "Honey Trap":         0xBC0014,  # Stun Trap
+    "Screen Flip Trap":   0xBC001C,  # Reverse Trap
+    "Banana Trap":        0xBC0013,  # Ice Trap
+    "Bomb":               0xBC001D,  # Thwimp Trap
+    "Bonk Trap":          0xBC0014,  # Stun Trap
+    "Ghost":              0xBC001D,  # Thwimp Trap
+    "Fast Trap":          0xBC0016,  # Timer Trap
+    "Nut Trap":           0xBC001D,  # Thwimp Trap
+    "Army Trap":          0xBC001D,  # Thwimp Trap
+}

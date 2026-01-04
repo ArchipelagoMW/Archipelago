@@ -26,7 +26,7 @@ jobs:
 
       - name: "Install dependencies"
         run: |
-          python -m pip install --upgrade pip pyright==1.1.358
+          python -m pip install --upgrade pip pyright==1.1.392.post0
           python ModuleUpdate.py --append "WebHostLib/requirements.txt" --force --yes
 
       - name: "pyright: strict check on specific files"
