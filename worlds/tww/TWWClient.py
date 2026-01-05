@@ -16,18 +16,12 @@ from .randomizers.Charts import ISLAND_NUMBER_TO_NAME
 if TYPE_CHECKING:
     import kvui
 
-CONNECTION_REFUSED_GAME_STATUS = (
+# Dolphin connection status messages.
+DOLPHIN_STATUS_CONNECTED = "Dolphin connected successfully."
+DOLPHIN_STATUS_INVALID_GAME = (
     "Dolphin failed to connect. Please load a randomized ROM for The Wind Waker. Trying again in 5 seconds..."
 )
-CONNECTION_REFUSED_SAVE_STATUS = (
-    "Dolphin failed to connect. Please load into the save file. Trying again in 5 seconds..."
-)
-CONNECTION_LOST_STATUS = (
-    "Dolphin connection was lost. Please restart your emulator and make sure The Wind Waker is running."
-)
-CONNECTION_CONNECTED_STATUS = "Dolphin connected successfully."
-CONNECTION_INITIAL_STATUS = "Dolphin connection has not been initiated."
-
+DOLPHIN_STATUS_INVALID_SAVE = "Seed identifier mismatch! You may have loaded the wrong save file for this slot."
 
 # This address is used to check/set the player's health for DeathLink.
 CURR_HEALTH_ADDR = 0x803C4C0A
@@ -45,6 +39,9 @@ CURR_STAGE_CHESTS_BITFLD_ADDR = 0x803C5380
 CURR_STAGE_SWITCHES_BITFLD_ADDR = 0x803C5384
 CURR_STAGE_PICKUPS_BITFLD_ADDR = 0x803C5394
 
+# The save file's seed identifier. Uses event bits 0x5E and 0x5F.
+SAVE_SEED_IDENTIFIER_ADDR = 0x803C528A
+
 # The expected index for the following item that should be received. Uses event bits 0x60 and 0x61.
 EXPECTED_INDEX_ADDR = 0x803C528C
 
@@ -58,19 +55,23 @@ CURR_STAGE_ID_ADDR = 0x803C53A4
 # This address is used to check the stage name to verify that the player is in-game before sending items.
 CURR_STAGE_NAME_ADDR = 0x803C9D3C
 
+# The expected seed identifier is stored at this address (2 bytes).
+# This is set by the patcher and should match the save file's identifier.
+EXPECTED_SEED_IDENTIFIER_ADDR = 0x803FDCE1
+
 # This is an array of length 0x10 where each element is a byte and contains item IDs for items to give the player.
 # 0xFF represents no item. The array is read and cleared every frame.
-GIVE_ITEM_ARRAY_ADDR = 0x803FE87C
+GIVE_ITEM_ARRAY_ADDR = 0x803FE894
 
 # This is the address that holds the player's slot name.
 # This way, the player does not have to manually authenticate their slot name.
-SLOT_NAME_ADDR = 0x803FE8A0
+SLOT_NAME_ADDR = 0x803FE8B8
 
 # This address is the start of an array that we use to inform us of which charts lead where.
 # The array is of length 49, and each element is two bytes. The index represents the chart's original destination, and
 # the value represents the new destination.
 # The chart name is inferrable from the chart's original destination.
-CHARTS_MAPPING_ADDR = 0x803FE8E0
+CHARTS_MAPPING_ADDR = 0x803FE8F8
 
 # This address contains the most recent spawn ID from which the player spawned.
 MOST_RECENT_SPAWN_ID_ADDR = 0x803C9D44
@@ -109,7 +110,7 @@ class TWWCommandProcessor(ClientCommandProcessor):
         Display the current Dolphin emulator connection status.
         """
         if isinstance(self.ctx, TWWContext):
-            logger.info(f"Dolphin Status: {self.ctx.dolphin_status}")
+            logger.info(f"Dolphin Status: {'Connected' if self.ctx.dolphin_connected else 'Disconnected'}")
 
 
 class TWWContext(CommonContext):
@@ -133,7 +134,7 @@ class TWWContext(CommonContext):
 
         super().__init__(server_address, password)
         self.dolphin_sync_task: Optional[asyncio.Task[None]] = None
-        self.dolphin_status: str = CONNECTION_INITIAL_STATUS
+        self.dolphin_connected: bool = False
         self.awaiting_rom: bool = False
         self.has_send_death: bool = False
 
@@ -320,12 +321,7 @@ def _give_death(ctx: TWWContext) -> None:
 
     :param ctx: The Wind Waker client context.
     """
-    if (
-        ctx.slot is not None
-        and dolphin_memory_engine.is_hooked()
-        and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS
-        and check_ingame()
-    ):
+    if ctx.slot is not None and dolphin_memory_engine.is_hooked() and ctx.dolphin_connected and check_ingame():
         ctx.has_send_death = True
         write_short(CURR_HEALTH_ADDR, 0)
 
@@ -625,6 +621,17 @@ def check_ingame() -> bool:
     return read_string(CURR_STAGE_NAME_ADDR, 8) not in ["", "sea_T", "Name"]
 
 
+def check_seed_identifier() -> bool:
+    """
+    Check that the save file's seed identifier matches the expected identifier from the loaded ISO.
+
+    :return: `True` if the identifiers match, otherwise `False`.
+    """
+    expected_identifier = read_short(EXPECTED_SEED_IDENTIFIER_ADDR)
+    save_identifier = read_short(SAVE_SEED_IDENTIFIER_ADDR)
+    return expected_identifier == save_identifier
+
+
 async def dolphin_sync_task(ctx: TWWContext) -> None:
     """
     The task loop for managing the connection to Dolphin.
@@ -646,13 +653,22 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
         ctx.watcher_event.clear()
 
         try:
-            if dolphin_memory_engine.is_hooked() and ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+            if dolphin_memory_engine.is_hooked() and ctx.dolphin_connected:
                 if not check_ingame():
                     # Reset the give item array while not in the game.
                     dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
                     sleep_time = 0.1
                     continue
+
                 if ctx.slot is not None:
+                    if not check_seed_identifier():
+                        logger.error(DOLPHIN_STATUS_INVALID_SAVE)
+
+                        # Disconnect the player from the server if the save identifiers don't match.
+                        await ctx.disconnect()
+                        sleep_time = 0.1
+                        continue
+
                     if "DeathLink" in ctx.tags:
                         await check_death(ctx)
                     await give_items(ctx)
@@ -665,32 +681,30 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
                         await ctx.server_auth()
                 sleep_time = 0.1
             else:
-                if ctx.dolphin_status == CONNECTION_CONNECTED_STATUS:
+                if ctx.dolphin_connected:
                     logger.info("Connection to Dolphin lost, reconnecting...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
+                    ctx.dolphin_connected = False
+
                 logger.info("Attempting to connect to Dolphin...")
                 dolphin_memory_engine.hook()
                 if dolphin_memory_engine.is_hooked():
                     if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
-                        logger.info(CONNECTION_REFUSED_GAME_STATUS)
-                        ctx.dolphin_status = CONNECTION_REFUSED_GAME_STATUS
+                        logger.info(DOLPHIN_STATUS_INVALID_GAME)
                         dolphin_memory_engine.un_hook()
                         sleep_time = 5
                     else:
-                        logger.info(CONNECTION_CONNECTED_STATUS)
-                        ctx.dolphin_status = CONNECTION_CONNECTED_STATUS
+                        logger.info(DOLPHIN_STATUS_CONNECTED)
+                        ctx.dolphin_connected = True
                         ctx.locations_checked = set()
                 else:
                     logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
-                    ctx.dolphin_status = CONNECTION_LOST_STATUS
                     await ctx.disconnect()
                     sleep_time = 5
                     continue
         except Exception:
-            dolphin_memory_engine.un_hook()
             logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
             logger.error(traceback.format_exc())
-            ctx.dolphin_status = CONNECTION_LOST_STATUS
+            ctx.dolphin_connected = False
             await ctx.disconnect()
             sleep_time = 5
             continue
