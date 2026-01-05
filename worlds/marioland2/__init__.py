@@ -56,6 +56,9 @@ class MarioLand2World(World):
 
     web = MarioLand2WebWorld()
 
+    ut_can_gen_without_yaml = True
+    glitches_item_name = "ut_glitch"
+
     item_name_groups = {
         "Level Progression": {
             item_name for item_name in items if item_name.endswith(("Progression", "Secret", "Secret 1", "Secret 2"))
@@ -94,42 +97,55 @@ class MarioLand2World(World):
         self.max_coin_locations = {}
         self.sprite_data = {}
         self.coin_fragments_required = 0
+        self.ut = False
 
     def generate_early(self):
-        self.sprite_data = deepcopy(level_sprites)
-        if self.options.randomize_enemies:
-            randomize_enemies(self.sprite_data, self.random)
-        if self.options.randomize_platforms:
-            randomize_platforms(self.sprite_data, self.random)
+        import logging
+        if hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
+            self.ut = True
+            for key, value in self.multiworld.re_gen_passthrough[self.game].items():
+                if hasattr(self.options, key):
+                    getattr(self.options, key).value = value
+                    logging.info(f"Option {key} = {value}")
+                else:
+                    logging.info(f"world {key} = {value}")
+                    setattr(self, key, value)
 
-        if self.options.marios_castle_midway_bell:
-            self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
-
-        if self.options.auto_scroll_chances == "vanilla":
-            self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
         else:
-            self.auto_scroll_levels = [int(self.random.randint(1, 100) <= self.options.auto_scroll_chances)
-                                       for _ in range(32)]
+            self.sprite_data = deepcopy(level_sprites)
 
-        self.auto_scroll_levels[level_name_to_id["Mario's Castle"]] = 0
-        unbeatable_scroll_levels = ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
-        if not self.options.shuffle_midway_bells:
-            unbeatable_scroll_levels.append("Pumpkin Zone 1")
-        for level, i in enumerate(self.auto_scroll_levels):
-            if i == 1:
-                if self.options.auto_scroll_mode in ("global_cancel_item", "level_cancel_items"):
-                    self.auto_scroll_levels[level] = 2
-                elif self.options.auto_scroll_mode == "chaos":
-                    if (self.options.accessibility == "full"
-                            and level_id_to_name[level] in unbeatable_scroll_levels):
+            if self.options.marios_castle_midway_bell:
+                self.sprite_data["Mario's Castle"][35]["sprite"] = "Midway Bell"
+            if self.options.randomize_enemies:
+                randomize_enemies(self.sprite_data, self.random)
+            if self.options.randomize_platforms:
+                randomize_platforms(self.sprite_data, self.random)
+
+            if self.options.auto_scroll_chances == "vanilla":
+                self.auto_scroll_levels = [int(i in [19, 25, 30]) for i in range(32)]
+            else:
+                self.auto_scroll_levels = [int(self.random.randint(1, 100) <= self.options.auto_scroll_chances)
+                                           for _ in range(32)]
+
+            self.auto_scroll_levels[level_name_to_id["Mario's Castle"]] = 0
+            unbeatable_scroll_levels = ["Tree Zone 3", "Macro Zone 2", "Space Zone 1", "Turtle Zone 2", "Pumpkin Zone 2"]
+            if not self.options.shuffle_midway_bells:
+                unbeatable_scroll_levels.append("Pumpkin Zone 1")
+            for level, i in enumerate(self.auto_scroll_levels):
+                if i == 1:
+                    if self.options.auto_scroll_mode in ("global_cancel_item", "level_cancel_items"):
                         self.auto_scroll_levels[level] = 2
-                    else:
-                        self.auto_scroll_levels[level] = self.random.randint(1, 3)
-                elif (self.options.accessibility == "full"
-                      and level_id_to_name[level] in unbeatable_scroll_levels):
-                    self.auto_scroll_levels[level] = 0
-                if self.auto_scroll_levels[level] == 1 and "trap" in self.options.auto_scroll_mode.current_key:
-                    self.auto_scroll_levels[level] = 3
+                    elif self.options.auto_scroll_mode == "chaos":
+                        if (self.options.accessibility == "full"
+                                and level_id_to_name[level] in unbeatable_scroll_levels):
+                            self.auto_scroll_levels[level] = 2
+                        else:
+                            self.auto_scroll_levels[level] = self.random.randint(1, 3)
+                    elif (self.options.accessibility == "full"
+                          and level_id_to_name[level] in unbeatable_scroll_levels):
+                        self.auto_scroll_levels[level] = 0
+                    if self.auto_scroll_levels[level] == 1 and "trap" in self.options.auto_scroll_mode.current_key:
+                        self.auto_scroll_levels[level] = 3
 
     def create_regions(self):
         menu_region = Region("Menu", self.player, self.multiworld)
@@ -177,8 +193,10 @@ class MarioLand2World(World):
         castle.locations.append(wario)
         wario.place_locked_item(MarioLand2Item("Wario Defeated", ItemClassification.progression, None, self.player))
 
-        if self.options.coinsanity:
+        if self.options.coinsanity or hasattr(self.multiworld, "generation_is_fake"):
             coinsanity_checks = self.options.coinsanity_checks.value
+            if hasattr(self.multiworld, "generation_is_fake"):
+                coinsanity_checks = self.options.coinsanity_checks.range_end
             self.num_coin_locations = [[region, 1] for region in created_regions if region != "Mario's Castle"]
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions
                                        if region != "Mario's Castle"}
@@ -450,8 +468,13 @@ class MarioLand2World(World):
         })
         return options_dict
 
+    @staticmethod
+    def interpret_slot_data(slot_data):
+        return slot_data
+
     def create_item(self, name: str) -> Item:
-        return MarioLand2Item(name, items[name], self.item_name_to_id[name], self.player)
+        return MarioLand2Item(name, items[name] if name in items else ItemClassification.progression,
+                              self.item_name_to_id[name] if name in self.item_name_to_id else None, self.player)
 
     def get_filler_item_name(self):
         return "1 Coin"
