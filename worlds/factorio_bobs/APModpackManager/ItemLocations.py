@@ -16,7 +16,7 @@ item_groups: defaultdict[str, set[str]] = defaultdict(set)
 item groups for all loaded packs
 """
 
-def add_item(name: str, item_id: int | None = None, bump = 0, groups: list[str] | None = None) -> int:
+def add_item(name: str, item_id: int | None = None, bump = 0, groups: set[str] | None = None) -> int:
     """
     adds a new item to the global item table
 
@@ -57,7 +57,7 @@ location_groups: defaultdict[str, set[str]] = defaultdict(set)
 location groups for all loaded packs
 """
 
-def add_location(name: str, location_id: int | None = None, bump = 0, groups: list[str] | None = None) -> int:
+def add_location(name: str, location_id: int | None = None, bump = 0, groups: set[str] | None = None) -> int:
     """
     adds a new location to the global location table
 

@@ -39,12 +39,12 @@ class BaseModpack:
         logger.debug(f'PackWorld subclass: {cls.__name__}, starting import of packs')
         init_modpacks(cls)
 
-    def _add_item(self, name: str, item_id: int | None = None) -> None:
-        item_id = add_item(name, item_id)
+    def _add_item(self, name: str, item_id: int | None = None, groups: set[str] | None = None) -> None:
+        item_id = add_item(name, item_id=item_id, groups=groups)
         self.items_to_id[name] = item_id
 
-    def _add_location(self, name: str, location_id: int | None = None) -> None:
-        location_id = add_location(name, location_id)
+    def _add_location(self, name: str, location_id: int | None = None, groups: set[str] | None = None) -> None:
+        location_id = add_location(name, location_id=location_id, groups=groups)
         self.locations_to_id[name] = location_id
 
     def open_file(self, relative_path: str) -> TextIOWrapper:
