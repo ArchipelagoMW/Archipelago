@@ -688,11 +688,12 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
                 # If Dolphin is not hooked, attempt to connect to Dolphin.
                 await _attempt_dolphin_connection(ctx)
             else:
+                # If the player is not in-game (e.g., on file select), clear the give item array
+                # This prevents title-screen Link from being given any items.
                 if not check_ingame():
-                    # If the player is not in-game (e.g., on file select), clear the give item array
-                    # This prevents title-screen Link from being given any items.
                     dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
-                elif ctx.slot is None:
+
+                if ctx.slot is None:
                     # If the player has not authenticated their slot name, attempt to do so.
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
