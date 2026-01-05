@@ -322,7 +322,7 @@ swamp_item_pickup_map = "Swamp - Map Item Pickup"
 swamp_item_pickup_minor_sol_shard_24 = "Swamp - Minor Sol Shard #24 Item Pickup"
 
 apex_item_pickup_golden_clover = "Apex - Golden Clover Item Pickup"
-apex_item_pickup_strange_curio = "Apex - Strange Curio Item Pickup"
+apex_item_pickup_strange_curio_3 = "Apex - Strange Curio #3 Item Pickup"
 apex_item_pickup_map_outskirts = "Apex - Outskirts Map Item Pickup"
 apex_item_pickup_relic_power_plus = "Apex - Relic Of Power+ Item Pickup"
 apex_item_pickup_morningstar = "Apex - Morningstar Item Pickup"

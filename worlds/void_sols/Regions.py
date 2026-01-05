@@ -16,8 +16,10 @@ def create_regions(world: World, active_locations):
         "Menu",
         "Prison",
         "Prison Yard",
+        "Prison Portal Room",
         "Forest",
         "Village",
+        "Village Undercroft Forgotten Reliquary",
         "Mountain",
         "Mountain Underpass",
         "Mines",
@@ -25,7 +27,11 @@ def create_regions(world: World, active_locations):
         "Supermax Prison",
         "Factory",
         "Swamp",
-        "Apex"
+
+        # Apex Split (Massive area broken down by access keys)
+        "Apex Outskirts",
+        "Apex Town",
+        "Apex Hub",
     ]
 
     # Initialize location buckets
@@ -33,33 +39,74 @@ def create_regions(world: World, active_locations):
 
     # Sort locations into regions
     for location_name in active_locations:
-        if location_name.startswith("Prison Yard - "):
+        # -- PRISON AREA --
+        # These specific checks are not accessible until the player has made it to the village
+        if location_name in [
+            LocationName.prison_wall_portal_1,
+            LocationName.prison_wall_portal_2,
+            LocationName.prison_wall_portal_3,
+            LocationName.prison_item_pickup_caltrops
+        ]:
+            locations_by_region["Prison Portal Room"].append(location_name)
+        elif location_name.startswith("Prison Yard - "):
             locations_by_region["Prison Yard"].append(location_name)
         elif location_name.startswith("Prison - "):
             locations_by_region["Prison"].append(location_name)
+
+        # -- FOREST AREA --
         elif location_name.startswith("Forest - "):
             locations_by_region["Forest"].append(location_name)
+
+        # -- VILLAGE AREA --
+        elif location_name in [
+            LocationName.village_torch_forgotten_reliquary,
+            LocationName.village_relics_improved_1,
+            LocationName.village_relics_improved_2,
+            LocationName.village_relics_improved_3,
+            LocationName.village_relics_improved_4,
+            LocationName.village_relics_improved_5,
+        ]:
+            locations_by_region["Village Undercroft Forgotten Reliquary"].append(location_name)
         elif location_name.startswith("Village - "):
             locations_by_region["Village"].append(location_name)
+
+        # -- MOUNTAIN AREA --
         elif location_name.startswith("Mountain Underpass - "):
             locations_by_region["Mountain Underpass"].append(location_name)
         elif location_name.startswith("Mountain - "):
             locations_by_region["Mountain"].append(location_name)
+
+        # -- MINES AREA --
         elif location_name.startswith("Mines - "):
             locations_by_region["Mines"].append(location_name)
+
+        # -- CULTIST AREA --
         elif location_name.startswith("Cultist - ") or location_name.startswith("Cultist Compound - "):
             locations_by_region["Cultist Compound"].append(location_name)
+
+        # -- SUPERMAX AREA --
         elif location_name.startswith("Supermax Prison - "):
             locations_by_region["Supermax Prison"].append(location_name)
+
+        # -- FACTORY & SWAMP --
         elif location_name.startswith("Factory - "):
             locations_by_region["Factory"].append(location_name)
         elif location_name.startswith("Swamp - "):
             locations_by_region["Swamp"].append(location_name)
+
+        # -- APEX AREA (Split logic) --
         elif location_name.startswith("Apex - "):
-            locations_by_region["Apex"].append(location_name)
+            if "Outskirts" in location_name:
+                locations_by_region["Apex Outskirts"].append(location_name)
+            elif "Town" in location_name or "Residential" in location_name or "Slums" in location_name:
+                locations_by_region["Apex Town"].append(location_name)
+            else:
+                # Default everything else (Hub, Castle, King, etc.) to the main Hub
+                locations_by_region["Apex Hub"].append(location_name)
+
         else:
-            # Fallback for any unclassified locations
-            pass
+            # Fallback (Hidden rooms, etc.)
+            locations_by_region["Menu"].append(location_name)
 
     # Create regions
     regions = []
@@ -75,13 +122,34 @@ def connect_regions(world: World):
 
     # Basic connections
     connect(world, "Menu", "Prison")
-    connect(world, "Prison", "Prison Yard")
+    connect(world, "Prison", "Prison Yard", lambda state: state.has(ItemName.prison_key, player))
 
     connect(world, "Prison Yard", "Forest", lambda state: state.has(ItemName.gate_key, player))
 
-    connect(world, "Forest", "Village", lambda state: state.has(ItemName.forest_bridge_key, player))
+    # Forest -> Village (Open, no locks)
+    connect(world, "Forest", "Village")
+    
+    # Village -> Prison Portal Room (One way)
+    connect(world, "Village", "Prison Portal Room")
 
-    connect(world, "Village", "Mountain", lambda state: state.has(ItemName.mountain_outpost_key, player))
+    # Village -> Village Undercroft Forgotten Reliquary (Locked by Greater Void Worm Defeated)
+    connect(world, "Village", "Village Undercroft Forgotten Reliquary",
+            lambda state: state.has(ItemName.greater_void_worm_defeated, player))
+
+    # Forest -> Mountain (Locked by Outpost Key)
+    connect(world, "Forest", "Mountain", lambda state: state.has(ItemName.mountain_outpost_key, player))
+    # Forest -> Mines (Locked by Entrance Lift Key)
+    connect(world, "Forest", "Mines", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
+
+    # Forest -> Apex Outskirts (Two methods from Forest)
+    # 1. Key, 2. Dynamite
+    connect(world, "Forest", "Apex Outskirts",
+            lambda state: state.has(ItemName.apex_outskirts_key, player) or
+                          state.has(ItemName.dynamite_x1, player))
+    
+    # Mines -> Apex Outskirts (Barrel explosion, accessible if in Mines)
+    connect(world, "Mines", "Apex Outskirts")
+
     connect(world, "Mountain", "Mountain Underpass")
     
     connect(world, "Village", "Mines", lambda state: state.has(ItemName.mine_entrance_lift_key, player))

@@ -157,3 +157,4 @@ fish_tokens_x2 = "Fish Tokens x2"
 strange_curio = "Strange Curio"
 
 victory = "Victory"
+greater_void_worm_defeated = "Greater Void Worm Defeated"
