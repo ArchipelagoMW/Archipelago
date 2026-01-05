@@ -888,23 +888,22 @@ class Rac3Interface(GameInterface):
             character = RAC3PLAYERTYPE.RATCHET # Treat Tyhrranoid as Ratchet for one HP challenge
         # Check for one HP challenge for current character
         if self.one_hp_challenge.get(character, False):
-            if character == RAC3PLAYERTYPE.RATCHET:
-                # Ban shield charger usage if one HP challenge is active for Ratchet
-                self._write8(non_prog_weapon_data[RAC3ITEM.SHIELD_CHARGER].AMMO_ADDRESS, 0)
-                if self._read8(RAC3STATUS.HEALTH) > 1:
-                    self._write8(RAC3STATUS.HEALTH, 1)
-                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-                if self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
-                    # Patch out sleeping gas health reduction to prevent death
-                    self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000) # addiu v0,v0,0x0
-                    self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000) # nop
-            elif character in (RAC3PLAYERTYPE.CLANK, RAC3PLAYERTYPE.QWARK):
-                if self._read8(RAC3STATUS.HEALTH) > 1:
-                    self._write8(RAC3STATUS.HEALTH, 1)
-                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
-            elif character == RAC3PLAYERTYPE.GIANT:
+            if character == RAC3PLAYERTYPE.GIANT:
                 if self._read32(RAC3STATUS.GIANT_CLANK_HEALTH) > 1:
                     self._write32(RAC3STATUS.GIANT_CLANK_HEALTH, 1)
+            else:
+                # Applies to Ratchet, Clank, Qwark
+                # Ban shield charger usage if one HP challenge is active for Ratchet
+                if character == RAC3PLAYERTYPE.RATCHET:
+                    self._write8(non_prog_weapon_data[RAC3ITEM.SHIELD_CHARGER].AMMO_ADDRESS, 0)
+                if self._read8(RAC3STATUS.HEALTH) > 1:
+                    self._write8(RAC3STATUS.HEALTH, 1)
+                    self._write8(RAC3STATUS.NANOPAK_HEALTH, 0)
+                if character == RAC3PLAYERTYPE.RATCHET and self.planet == RAC3REGION.ANNIHILATION_NATION and not self.pause_state:
+                    # Patch out sleeping gas health reduction to prevent death
+                    self._write32(RAC3INSTRUCTION.NATION_SLEEP_GAS_HEALTH_UPDATE, 0x24420000) # addiu v0,v0,0x0
+                    # Patch out health refill to prevent auto losing One Hit Wonder challenge
+                    self._write32(RAC3INSTRUCTION.NATION_HEALTH_REFILL, 0x00000000) # nop
 
         # Vehicle one HP challenge is independent of player_type
         if self.vehicle and self.one_hp_challenge.get(RAC3PLAYERTYPE.VEHICLE, False):
