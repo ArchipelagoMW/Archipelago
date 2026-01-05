@@ -138,7 +138,7 @@ class FactorioModpack(APModpackManager.BaseModpack):
     @cached_property
     def ordered_science_packs(self) -> list[str]:
         with self.open_file("sciencePacks.json") as file:
-            packs = json.load(file)["sciencePacks"]
+            packs = list(json.load(file))
         return packs
 
     @cached_property
