@@ -1,15 +1,12 @@
 from __future__ import annotations
 
-import string
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Set, FrozenSet, Tuple, Union, List
+from typing import Set, Tuple, Union, List
 
-import Utils
 from . import FactorioOptions
-from .FactorioUtils import FactorioElement, load_json_data
-from .InternalItem import raw_recipes, InternalItem, recipe_sources, mining_with_fluid_sources, \
-    all_ingredients, valid_ingredients, artifacts, invalid_ingredients
+from .FactorioUtils import FactorioElement
+from .InternalItem import InternalItem, valid_ingredients, artifacts, invalid_ingredients
+
 
 def always(state) -> bool:
     return True
@@ -55,13 +52,13 @@ class CustomTechnology(Technology):
         if origin.name not in world.special_nodes:
             ingredients = set(world.random.sample(list(ingredients), world.random.randint(1, len(ingredients))))
         self.ingredients = ingredients
-        super(CustomTechnology, self).__init__(origin.name, origin.factorio_id)
+        super(CustomTechnology, self).__init__(origin.name, origin.modpack)
 
     def get_prior_technologies(self) -> Set[Technology]:
         """Get Technologies that have to precede this one to resolve tree connections."""
         technologies = set()
         for ingredient in self.ingredients:
-            technologies |= required_technologies[ingredient]  # technologies that unlock the recipes
+            technologies |= self.modpack.required_technologies[ingredient]  # technologies that unlock the recipes
         return technologies
 
 excluded_automation_ingredients: Set[str] = {"bob-diamond-ore",
