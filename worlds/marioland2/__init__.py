@@ -100,17 +100,13 @@ class MarioLand2World(World):
         self.ut = False
 
     def generate_early(self):
-        import logging
         if hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
             self.ut = True
             for key, value in self.multiworld.re_gen_passthrough[self.game].items():
                 if hasattr(self.options, key):
                     getattr(self.options, key).value = value
-                    logging.info(f"Option {key} = {value}")
                 else:
-                    logging.info(f"world {key} = {value}")
                     setattr(self, key, value)
-
         else:
             self.sprite_data = deepcopy(level_sprites)
 
