@@ -27,6 +27,8 @@ class BaseModpack:
             raise Exception(f"Occurred loading pack in: {self.__packPath}") from e
         self.logger = logging.getLogger(f"APModpackManager - factorio with modpacks: {self.packName}")
 
+        self.__has_fully_initialized = False
+
         self.items_to_id: dict[str, int] | None = None
         self.locations_to_id: dict[str, int] | None = None
 
@@ -48,10 +50,54 @@ class BaseModpack:
         self.locations_to_id[name] = location_id
 
     def open_file(self, relative_path: str) -> TextIOWrapper:
+        """
+        Use to access files in the pack
+
+        It is suggested to use this with context manager e.g.
+        ```
+        with self.open_file("file_name") as file:
+            #do file stuff
+            pass
+        ```
+        """
         return open(self.__packPath/relative_path, "r")
 
     def init_items(self):
+        """
+        Use to register all the items the pack uses
+        Use self._add_item to add the items to the pack
+
+        This might be ran every time ap is loaded (no matter the context) so keep code fast and minimal
+        This is also the last time a pack can add items
+        """
         raise NotImplementedError("init_items must be implemented by subclass")
 
     def init_locations(self):
+        """
+        Use to register all the locations the pack uses
+        Use self._add_locations to add the items to the pack
+
+        This might be ran every time ap is loaded (no matter the context) so keep code fast and minimal
+        This is also the last time a pack can add locations
+        """
         raise NotImplementedError("init_locations must be implemented by subclass")
+
+    def _init_pack(self) -> None:
+        """
+        Ran once the first time the pack is loaded
+
+        Can be overridden by subclass
+        """
+        pass
+
+    def init_pack_check(self) -> None:
+        """
+        Runs _init_pack only once
+
+        Can be overridden by subclass if you want something to happen every time the pack is used
+        Do ensure to run `super()` though
+        """
+        if self.__has_fully_initialized:
+            return
+        self._init_pack()
+        self.__has_fully_initialized = True

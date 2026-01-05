@@ -23,3 +23,4 @@ class PackWorld(World):
         if modpack_name not in modpacks:
             raise Exception(f"Modpack name '{modpack_name}' not found.")
         self.modpack = modpacks[modpack_name]
+        self.modpack.init_pack_check()
