@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     import kvui
 
 # Dolphin connection status messages.
-DOLPHIN_STATUS_CONNECTED = "Dolphin connected successfully."
+DOLPHIN_STATUS_CONNECTED = "Dolphin connected successfully!"
 DOLPHIN_STATUS_INVALID_GAME = (
     "Dolphin failed to connect. Please load a randomized ROM for The Wind Waker. Trying again in 5 seconds..."
 )
@@ -632,6 +632,47 @@ def check_seed_identifier() -> bool:
     return expected_identifier == save_identifier
 
 
+async def _sleep_for(ctx: TWWContext, duration: float) -> None:
+    """
+    Sleep for the specified duration.
+
+    :param ctx: The Wind Waker client context.
+    :param duration: The duration to sleep in seconds.
+    """
+    try:
+        await asyncio.wait_for(ctx.watcher_event.wait(), duration)
+    except TimeoutError:
+        pass
+    ctx.watcher_event.clear()
+
+
+async def _attempt_dolphin_connection(ctx: TWWContext) -> None:
+    """
+    Attempt to establish a connection to Dolphin.
+
+    :param ctx: The Wind Waker client context.
+    """
+    if ctx.dolphin_connected:
+        logger.error("Connection to Dolphin lost, reconnecting...")
+        ctx.dolphin_connected = False
+
+    logger.info("Attempting to connect to Dolphin...")
+    dolphin_memory_engine.hook()
+
+    if not dolphin_memory_engine.is_hooked():
+        logger.error("Connection to Dolphin failed, attempting again in 5 seconds...")
+        await ctx.disconnect()
+        await _sleep_for(ctx, 5)
+    elif dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
+        logger.error(DOLPHIN_STATUS_INVALID_GAME)
+        dolphin_memory_engine.un_hook()
+        await _sleep_for(ctx, 5)
+    else:
+        logger.info(DOLPHIN_STATUS_CONNECTED)
+        ctx.dolphin_connected = True
+        ctx.locations_checked = set()
+
+
 async def dolphin_sync_task(ctx: TWWContext) -> None:
     """
     The task loop for managing the connection to Dolphin.
@@ -641,73 +682,43 @@ async def dolphin_sync_task(ctx: TWWContext) -> None:
     :param ctx: The Wind Waker client context.
     """
     logger.info("Starting Dolphin connector. Use /dolphin for status information.")
-    sleep_time = 0.0
     while not ctx.exit_event.is_set():
-        if sleep_time > 0.0:
-            try:
-                # ctx.watcher_event gets set when receiving ReceivedItems or LocationInfo, or when shutting down.
-                await asyncio.wait_for(ctx.watcher_event.wait(), sleep_time)
-            except asyncio.TimeoutError:
-                pass
-            sleep_time = 0.0
-        ctx.watcher_event.clear()
-
         try:
-            if dolphin_memory_engine.is_hooked() and ctx.dolphin_connected:
+            if not dolphin_memory_engine.is_hooked() or not ctx.dolphin_connected:
+                # If Dolphin is not hooked, attempt to connect to Dolphin.
+                await _attempt_dolphin_connection(ctx)
+            else:
                 if not check_ingame():
-                    # Reset the give item array while not in the game.
+                    # If the player is not in-game (e.g., on file select), clear the give item array
+                    # This prevents title-screen Link from being given any items.
                     dolphin_memory_engine.write_bytes(GIVE_ITEM_ARRAY_ADDR, bytes([0xFF] * ctx.len_give_item_array))
-                    sleep_time = 0.1
-                    continue
-
-                if ctx.slot is not None:
-                    if not check_seed_identifier():
-                        logger.error(DOLPHIN_STATUS_INVALID_SAVE)
-
-                        # Disconnect the player from the server if the save identifiers don't match.
-                        await ctx.disconnect()
-                        sleep_time = 0.1
-                        continue
-
-                    if "DeathLink" in ctx.tags:
-                        await check_death(ctx)
-                    await give_items(ctx)
-                    await check_locations(ctx)
-                    await check_current_stage_changed(ctx)
-                else:
+                elif ctx.slot is None:
+                    # If the player has not authenticated their slot name, attempt to do so.
                     if not ctx.auth:
                         ctx.auth = read_string(SLOT_NAME_ADDR, 0x40)
                     if ctx.awaiting_rom:
                         await ctx.server_auth()
-                sleep_time = 0.1
-            else:
-                if ctx.dolphin_connected:
-                    logger.info("Connection to Dolphin lost, reconnecting...")
-                    ctx.dolphin_connected = False
-
-                logger.info("Attempting to connect to Dolphin...")
-                dolphin_memory_engine.hook()
-                if dolphin_memory_engine.is_hooked():
-                    if dolphin_memory_engine.read_bytes(0x80000000, 6) != b"GZLE99":
-                        logger.info(DOLPHIN_STATUS_INVALID_GAME)
-                        dolphin_memory_engine.un_hook()
-                        sleep_time = 5
-                    else:
-                        logger.info(DOLPHIN_STATUS_CONNECTED)
-                        ctx.dolphin_connected = True
-                        ctx.locations_checked = set()
                 else:
-                    logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
-                    await ctx.disconnect()
-                    sleep_time = 5
-                    continue
+                    # Validate seed identifier before main game loop to avoid loads from wrong save files.
+                    if not check_seed_identifier():
+                        logger.error(DOLPHIN_STATUS_INVALID_SAVE)
+                        await ctx.disconnect()
+                    else:
+                        # Main game loop: process DeathLink, items, locations, and stage changes.
+                        if "DeathLink" in ctx.tags:
+                            await check_death(ctx)
+                        await give_items(ctx)
+                        await check_locations(ctx)
+                        await check_current_stage_changed(ctx)
+
+                await _sleep_for(ctx, 0.1)
+
         except Exception:
-            logger.info("Connection to Dolphin failed, attempting again in 5 seconds...")
+            logger.error("Connection to Dolphin failed, attempting again in 5 seconds...")
             logger.error(traceback.format_exc())
             ctx.dolphin_connected = False
             await ctx.disconnect()
-            sleep_time = 5
-            continue
+            await _sleep_for(ctx, 5)
 
 
 def main(connect: Optional[str] = None, password: Optional[str] = None) -> None:
