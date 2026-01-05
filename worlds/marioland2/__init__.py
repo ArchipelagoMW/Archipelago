@@ -189,10 +189,11 @@ class MarioLand2World(World):
         castle.locations.append(wario)
         wario.place_locked_item(MarioLand2Item("Wario Defeated", ItemClassification.progression, None, self.player))
 
-        if self.options.coinsanity or hasattr(self.multiworld, "generation_is_fake"):
-            coinsanity_checks = self.options.coinsanity_checks.value
+        if self.options.coinsanity:
             if hasattr(self.multiworld, "generation_is_fake"):
                 coinsanity_checks = self.options.coinsanity_checks.range_end
+            else:
+                coinsanity_checks = self.options.coinsanity_checks.value
             self.num_coin_locations = [[region, 1] for region in created_regions if region != "Mario's Castle"]
             self.max_coin_locations = {region: len(coins_coords[region]) for region in created_regions
                                        if region != "Mario's Castle"}
