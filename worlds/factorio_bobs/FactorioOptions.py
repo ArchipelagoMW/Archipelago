@@ -8,6 +8,7 @@ from schema import Schema, Optional, And, Or, SchemaError
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool, PerGameCommonOptions, OptionGroup, OptionList, Visibility
 from worlds.factorio_bobs import FactorioRules
+from worlds.factorio_bobs.APModpackManager.PackOptions import PackOptions
 
 
 # schema helpers
@@ -561,7 +562,7 @@ class CustomAdditionalLogic(OptionDict):
 
 
 @dataclass
-class FactorioOptions(PerGameCommonOptions):
+class FactorioOptions(PackOptions):
     max_science_pack: MaxSciencePack
     additional_rocket_pool: AdditionalRocketPool
     percent_items_in_game: PercentItemsInGame
