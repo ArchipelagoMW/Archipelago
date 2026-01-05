@@ -1,0 +1,258 @@
+item_number,item_category,id,name
+0,consumable,0,Potion
+1,consumable,1,High Potion
+2,consumable,2,Super Potion
+3,consumable,3,Meat Strip
+4,consumable,4,Tasty Meat
+5,consumable,5,Mind Up
+6,consumable,6,High Mind Up
+7,consumable,7,Mana Prism
+8,consumable,8,Anti-Venom
+9,consumable,9,Uncurse Potion
+10,consumable,10,Potato Pancake
+11,consumable,11,Beef Curry
+12,consumable,12,Ramen
+13,consumable,13,Cream Soda
+14,consumable,14,Cream Puff
+15,consumable,15,Milk
+16,consumable,16,Coffee
+17,consumable,17,Tea
+18,consumable,18,Pudding
+19,consumable,19,Strawberry
+20,consumable,20,Melon
+21,consumable,21,Grapes
+22,consumable,22,Persimmon
+23,consumable,23,Rotten Meat
+24,consumable,24,Spoiled Milk
+25,consumable,25,Skull Key
+26,consumable,26,Ancient Book 1
+27,consumable,27,Ancient Book 2
+28,consumable,28,Ancient Book 3
+29,consumable,29,CASTLE MAP 1
+30,consumable,30,CASTLE MAP 2
+31,consumable,31,CASTLE MAP 3
+32,weapon,0,Knife
+33,weapon,1,Baselard
+34,weapon,2,Combat Knife
+35,weapon,3,Short Sword
+36,weapon,4,Bastard Sword
+37,weapon,5,Whip Sword
+38,weapon,6,Gladius
+39,weapon,7,Gram
+40,weapon,8,Milican's Sword
+41,weapon,9,Hrunting
+42,weapon,10,Mystletain
+43,weapon,11,Rahab's Sword
+44,weapon,12,Durandal
+45,weapon,13,Laevatain
+46,weapon,14,Burtgang
+47,weapon,15,Kaladbolg
+48,weapon,16,Vjaya
+49,weapon,17,Balmung
+50,weapon,18,Broadsword
+51,weapon,19,Scimitar
+52,weapon,20,Claymore
+53,weapon,21,Great Sword
+54,weapon,22,Joyeuse
+55,weapon,23,Dainslef
+56,weapon,24,Ascalon
+57,weapon,25,Claimh Solais
+58,weapon,26,Final Sword
+59,weapon,27,Bamboo Sword
+60,weapon,28,Katana
+61,weapon,29,Osafune
+62,weapon,30,Onikiri
+63,weapon,31,Kunitsuna
+64,weapon,32,Yasutsuna
+65,weapon,33,Muramasa
+66,weapon,34,Hammer
+67,weapon,35,Warhammer
+68,weapon,36,Excalibur
+69,weapon,37,Tallhammer
+70,weapon,38,Battle Axe
+71,weapon,39,Death's Sickle
+72,weapon,40,Rapier
+73,weapon,41,Estoc
+74,weapon,42,Cutall
+75,weapon,43,Spear
+76,weapon,44,Trident
+77,weapon,45,Lance
+78,weapon,46,Partizan
+79,weapon,47,Gabolg
+80,weapon,48,Gungner
+81,weapon,49,Ronginus' Spear
+82,weapon,50,Cestus
+83,weapon,51,Kaiser Knuckle
+84,weapon,52,Mach Punch
+85,weapon,53,Whip Knuckle
+86,weapon,54,Poison Fist
+87,weapon,55,Handgun
+88,weapon,56,Silver Gun
+89,weapon,57,Positron Rifle
+90,weapon,58,Valmanway
+91,armor,0,Casual Clothes
+92,armor,1,Cloth Tunic
+93,armor,2,Gym Clothes
+94,armor,3,War Fatigues
+95,armor,4,Ninja Suit
+96,armor,5,Soldier Uniform
+97,armor,6,Pitch Black Suit
+98,armor,7,Olrox's Suit
+99,armor,8,Dracula's Tunic
+100,armor,9,Leather Plate
+101,armor,10,Copper Plate
+102,armor,11,Iron Plate
+103,armor,12,Steel Plate
+104,armor,13,Silver Plate
+105,armor,14,Gold Plate
+106,armor,15,Eversing
+107,armor,16,Samurai Armor
+108,armor,17,Silk Robe
+109,armor,18,Elfin Robe
+110,armor,19,Death's Robe
+111,armor,20,Demon's Mail
+112,armor,21,Armor of Fire
+113,armor,22,Armor of Water
+114,armor,23,Blocking Mail
+115,armor,24,Army Jacket
+116,accessory,0,Cape
+117,accessory,1,Crimson Cloak
+118,accessory,2,Black Cloak
+119,accessory,3,Pendant
+120,accessory,4,Heart Pendant
+121,accessory,5,Scarf
+122,accessory,6,Red Scarf
+123,accessory,7,Ancient Belt
+124,accessory,8,Black Belt
+125,accessory,9,Skull Necklace
+126,accessory,10,Flame Necklace
+127,accessory,11,Satan's Ring
+128,accessory,12,Tear Of Blood
+129,accessory,13,Lucky Charm
+130,accessory,14,Rare Ring
+131,accessory,15,Soul Eater Ring
+132,accessory,16,Rune Ring
+133,accessory,17,Sherman Ring
+134,accessory,18,Gold Ring
+135,accessory,19,Chaos Ring
+136,red_soul,0,Winged Skeleton
+137,red_soul,1,Bat
+138,red_soul,2,Skeleton
+139,red_soul,3,Merman
+140,red_soul,4,Axe Armor
+141,red_soul,5,Skull Archer
+142,red_soul,6,Killer Fish
+143,red_soul,7,Blue Crow
+144,red_soul,8,Zombie Soldier
+145,red_soul,9,Ghost
+146,red_soul,10,Siren
+147,red_soul,11,Tiny Devil
+148,red_soul,12,Durga
+149,red_soul,13,Rock Armor
+150,red_soul,14,Student Witch
+151,red_soul,15,Arachne
+152,red_soul,16,Fleaman
+153,red_soul,17,Evil Butcher
+154,red_soul,18,Waiter Skeleton
+155,red_soul,19,Altair
+156,red_soul,20,Mudman
+157,red_soul,21,Cockatrice
+158,red_soul,22,Werewolf
+159,red_soul,23,Harpy
+160,red_soul,24,Une
+161,red_soul,25,Needles
+162,red_soul,26,Man-Eater
+163,red_soul,27,Ukoback
+164,red_soul,28,Fish Head
+165,red_soul,29,Disc Armor
+166,red_soul,30,Nightmare
+167,red_soul,31,Slime
+168,red_soul,32,Dryad
+169,red_soul,33,Ripper
+170,red_soul,34,Werejaguar
+171,red_soul,35,Weretiger
+172,red_soul,36,Biphron
+173,red_soul,37,Mandragora
+174,red_soul,38,Beam Skeleton
+175,red_soul,39,Skull Millione
+176,red_soul,40,Giant Skeleton
+177,red_soul,41,Gladiator
+178,red_soul,42,Demon Lord
+179,red_soul,43,Flame Demon
+180,red_soul,44,Lightning Doll
+181,red_soul,45,Valkyrie
+182,red_soul,46,Bomber Armor
+183,red_soul,47,Red Minotaur
+184,red_soul,48,Legion
+185,red_soul,49,Balore
+186,red_soul,50,Killer Doll
+187,red_soul,51,Nemesis
+188,red_soul,52,Killer Mantle
+189,red_soul,53,Kyoma Demon
+190,red_soul,54,Chronomage
+191,red_soul,55,Cagnazzo
+192,blue_soul,0,Flying Armor
+193,blue_soul,1,Giant Bat
+194,blue_soul,2,Black Panther
+195,blue_soul,3,Buer
+196,blue_soul,4,Witch
+197,blue_soul,5,Giant Ghost
+198,blue_soul,6,Final Guard
+199,blue_soul,7,Great Armor
+200,blue_soul,8,Catoblepas
+201,blue_soul,9,Bone Pillar
+202,blue_soul,10,Cagnazzo
+203,blue_soul,11,Big Golem
+204,blue_soul,12,Shadow Knight
+205,blue_soul,13,Creaking Skull
+206,blue_soul,14,Medusa Head
+207,blue_soul,15,Persephone
+208,blue_soul,16,Alura Une
+209,blue_soul,17,Devil
+210,blue_soul,18,Manticore
+211,blue_soul,19,Curly
+212,blue_soul,20,Sky Fish
+213,blue_soul,21,Imp
+214,blue_soul,22,Alastor
+215,blue_soul,23,Death
+216,yellow_soul,0,Undine
+217,yellow_soul,1,Skula
+218,yellow_soul,2,Zombie Officer
+219,yellow_soul,3,Iron Golem
+220,yellow_soul,4,Dead Warrior
+221,yellow_soul,5,Peeping Eye
+222,yellow_soul,6,Succubus
+223,yellow_soul,7,Flesh Golem
+224,yellow_soul,8,Tsuchinoko
+225,yellow_soul,9,Giant Worm
+226,yellow_soul,10,Wooden Golem
+227,yellow_soul,11,Zombie
+228,yellow_soul,12,Lubicant
+229,yellow_soul,13,Headhunter
+230,yellow_soul,14,Basilisk
+231,yellow_soul,15,Erinys
+232,yellow_soul,16,Mimic
+233,yellow_soul,17,Arc Demon
+234,yellow_soul,18,Poison Worm
+235,yellow_soul,19,Ectoplasm
+236,yellow_soul,20,Gargoyle
+237,yellow_soul,21,Skeleton Knight
+238,yellow_soul,22,Minotaur
+239,yellow_soul,23,Golem
+240,yellow_soul,24,Triton
+241,yellow_soul,25,White Dragon
+242,yellow_soul,26,Quezlcoatl
+243,yellow_soul,27,Gorgon
+244,yellow_soul,28,Dead Crusader
+245,yellow_soul,29,Red Crow
+246,yellow_soul,30,Lilith
+247,yellow_soul,31,Bael
+248,yellow_soul,32,Stolas
+249,yellow_soul,33,Ghost Dancer
+250,yellow_soul,34,Gremlin
+251,ability_soul,0,Grave Keeper
+252,ability_soul,1,Skeleton Blaze
+253,ability_soul,2,Malphas
+254,ability_soul,3,Kicker Skeleton
+255,ability_soul,4,Hippogryph
+256,ability_soul,5,Galamoth
