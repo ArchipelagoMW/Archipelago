@@ -3,10 +3,18 @@ import logging
 from io import TextIOWrapper
 from pathlib import Path
 
+from . import logger
 from .ItemLocations import add_item, add_location
+from .PackLoader import init_modpacks
 
 
 class BaseModpack:
+    modpack_directories: list[Path] = [(Path(__file__).parent.parent / "InternalPacks").resolve()]
+    """
+    all paths that should be checked for modpacks should be in modpack_directories
+    relative paths should be relative to ap root but should not be within an ap world
+    """
+
     def __init__(self, packPath: Path):
         self.__packPath = packPath
         self.__is_zip = False
@@ -23,6 +31,13 @@ class BaseModpack:
         self.locations_to_id: dict[str, int] | None = None
 
         self.logger.info(f"Initialised pack: {self.packName}")
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__()
+        if cls.__name__ == 'BaseModpack':
+            return
+        logger.debug(f'PackWorld subclass: {cls.__name__}, starting import of packs')
+        init_modpacks(cls)
 
     def _add_item(self, name: str, item_id: int | None = None) -> None:
         item_id = add_item(name, item_id)

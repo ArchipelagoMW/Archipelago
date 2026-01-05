@@ -1,4 +1,5 @@
 import hashlib
+from collections import defaultdict
 
 items_to_id: dict[str, int] = {}
 """
@@ -10,12 +11,19 @@ id_to_items: dict[int, str] = {}
 id to items for all loaded packs
 """
 
-def add_item(name: str, item_id: int | None = None, bump = 0) -> int:
+item_groups: defaultdict[str, set[str]] = defaultdict(set)
+"""
+item groups for all loaded packs
+"""
+
+def add_item(name: str, item_id: int | None = None, bump = 0, groups: list[str] | None = None) -> int:
     """
     adds a new item to the global item table
 
     if item_id is None, the hash of the name will be used
     returns item_id
+
+    is added to all item groups supplied in `groups`
 
     raises ValueError if item_id is the same as already registered item with different name
     implement and use bump to avoid this
@@ -28,6 +36,11 @@ def add_item(name: str, item_id: int | None = None, bump = 0) -> int:
                          "discover which packs implement them and report the error to their creators ")
     id_to_items[item_id] = name
     items_to_id[name] = item_id
+
+    if groups is not None:
+        for group in groups:
+            item_groups[group].add(name)
+
     return item_id
 
 locations_to_id: dict[str, int] = {}
@@ -39,8 +52,12 @@ id_to_locations: dict[int, str] = {}
 """
 id to locations for all loaded packs
 """
+location_groups: defaultdict[str, set[str]] = defaultdict(set)
+"""
+location groups for all loaded packs
+"""
 
-def add_location(name: str, location_id: int | None = None, bump = 0) -> int:
+def add_location(name: str, location_id: int | None = None, bump = 0, groups: list[str] | None = None) -> int:
     """
     adds a new location to the global location table
 
@@ -58,4 +75,9 @@ def add_location(name: str, location_id: int | None = None, bump = 0) -> int:
                          "discover which packs implement them and report the error to their creators ")
     id_to_locations[location_id] = name
     locations_to_id[name] = location_id
+
+    if groups is not None:
+        for group in groups:
+            location_groups[group].add(name)
+
     return location_id
