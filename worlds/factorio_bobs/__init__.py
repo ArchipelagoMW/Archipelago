@@ -5,11 +5,7 @@ import logging
 import random
 import typing
 
-
-from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
-    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
-    get_ordered_items, base_technology_table, technology_table
-
+from .APModpackManager.PackWorld import PackWorld
 from .FactorioModpack import FactorioModpack
 from .APModpackManager import get_items, get_locations
 import Utils
@@ -27,6 +23,9 @@ from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, 
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
 from .Shapes import get_shapes
 from .FactorioSettings import FactorioSettings
+from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
+    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
+    get_ordered_items, base_technology_table, technology_table
 
 
 def launch_client(*args: str):
@@ -53,19 +52,7 @@ class FactorioItem(Item):
     game = "Factorio Bob's"
 
 
-all_items = tech_table.copy()
-all_items["Attack Trap"] = factorio_base_id - 1
-all_items["Evolution Trap"] = factorio_base_id - 2
-all_items["Teleport Trap"] = factorio_base_id - 3
-all_items["Grenade Trap"] = factorio_base_id - 4
-all_items["Cluster Grenade Trap"] = factorio_base_id - 5
-all_items["Artillery Trap"] = factorio_base_id - 6
-all_items["Atomic Rocket Trap"] = factorio_base_id - 7
-all_items["Atomic Cliff Remover Trap"] = factorio_base_id - 8
-all_items["Inventory Spill Trap"] = factorio_base_id - 9
-
-
-class FactorioBobs(World):
+class FactorioBobs(PackWorld):
     """
     Factorio is a game about automation. You play as an engineer who has crash landed on the planet
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
@@ -80,18 +67,14 @@ class FactorioBobs(World):
 
     game = "Factorio Bob's"
     special_nodes = {"automation", "electronics", "rocket-silo"}
-    location_pool: typing.List[FactorioScienceLocation]
-    advancement_technologies: typing.Set[str]
+    location_pool: list[FactorioScienceLocation]
+
+    modpack: FactorioModpack
 
     web = FactorioBobsWeb()
     options_dataclass = FactorioOptions
     options: FactorioOptions
 
-    item_name_to_id = get_items()
-    location_name_to_id = get_locations()
-    item_name_groups = {
-        "Progressive": set(progressive_tech_table.keys()),
-    }
     required_client_version = (0, 6, 0)
     if Utils.version_tuple < required_client_version:
         raise Exception(f"Update Archipelago to use this world ({game}).")
@@ -113,7 +96,7 @@ class FactorioBobs(World):
         super(FactorioBobs, self).__init__(world, player)
         self.additional_logic: dict[int, AndRule] = {}
         self.removed_technologies = useless_technologies.copy()
-        self.advancement_technologies: set[Technology] = set()
+        self.progression_technologies: set[Technology] = set()
         self.custom_recipes : typing.Dict[str, Recipe] = {}
         self.custom_products: dict[str, InternalItem] = {}
         self.science_locations = []
@@ -250,14 +233,14 @@ class FactorioBobs(World):
         for complexity, rule in self.additional_logic.items():
             if complexity <= self.options.max_science_pack.value + 1:
                 for tech in rule.needed_items():
-                    self.advancement_technologies.add(technology_table[tech])
+                    self.progression_technologies.add(technology_table[tech])
 
         # handle marking progressive techs as advancement
         prog_add = set()
-        for tech in self.advancement_technologies:
+        for tech in self.progression_technologies:
             if tech.name in tech_to_progressive_lookup:
                 prog_add.add(technology_table[tech_to_progressive_lookup[tech.name]])
-        self.advancement_technologies |= prog_add
+        self.progression_technologies |= prog_add
 
     def create_regions(self):
         player = self.player
@@ -720,12 +703,12 @@ class FactorioBobs(World):
             needed_items.add(self.get_internal_item("satellite"))
 
         for item in needed_items:
-            self.advancement_technologies |= item.all_unlocking_technologies()
+            self.progression_technologies |= item.all_unlocking_technologies()
 
 
     def create_item(self, name: str) -> FactorioItem:
         if name in tech_table:  # is a Technology
-            if technology_table[name] in self.advancement_technologies:
+            if technology_table[name] in self.progression_technologies:
                 classification = ItemClassification.progression
             else:
                 classification = ItemClassification.filler
