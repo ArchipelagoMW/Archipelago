@@ -22,7 +22,10 @@ def create_regions(world: World, active_locations):
         "Village Undercroft Forgotten Reliquary",
         "Mountain",
         "Mountain Underpass",
-        "Mines",
+        "Mines Floor 1",
+        "Mines Floor 2",
+        "Mines Floor 3",
+        "Mines Floor 4",
         "Cultist Compound",
         "Supermax Prison",
         "Factory",
@@ -77,8 +80,14 @@ def create_regions(world: World, active_locations):
             locations_by_region["Mountain"].append(location_name)
 
         # -- MINES AREA --
-        elif location_name.startswith("Mines - "):
-            locations_by_region["Mines"].append(location_name)
+        elif location_name.startswith("Mines 0F - ") or location_name.startswith("Mines 1F - "):
+            locations_by_region["Mines Floor 1"].append(location_name)
+        elif location_name.startswith("Mines 2F - "):
+            locations_by_region["Mines Floor 2"].append(location_name)
+        elif location_name.startswith("Mines 3F - "):
+            locations_by_region["Mines Floor 3"].append(location_name)
+        elif location_name.startswith("Mines 4F - "):
+            locations_by_region["Mines Floor 4"].append(location_name)
 
         # -- CULTIST AREA --
         elif location_name.startswith("Cultist - ") or location_name.startswith("Cultist Compound - "):
@@ -139,7 +148,7 @@ def connect_regions(world: World):
     # Forest -> Mountain (Locked by Outpost Key)
     connect(world, "Forest", "Mountain", lambda state: state.has(ItemName.mountain_outpost_key, player))
     # Forest -> Mines (Locked by Entrance Lift Key)
-    connect(world, "Forest", "Mines", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
+    connect(world, "Forest", "Mines Floor 1", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
 
     # Forest -> Apex Outskirts (Two methods from Forest)
     # 1. Key, 2. Dynamite
@@ -148,12 +157,34 @@ def connect_regions(world: World):
                           state.has(ItemName.dynamite_x1, player))
     
     # Mines -> Apex Outskirts (Barrel explosion, accessible if in Mines)
-    connect(world, "Mines", "Apex Outskirts")
+    connect(world, "Mines Floor 1", "Apex Outskirts")
 
     connect(world, "Mountain", "Mountain Underpass")
     
-    connect(world, "Village", "Mines", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
-    connect(world, "Mines", "Cultist Compound")
+    connect(world, "Village", "Mines Floor 1", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
+    
+    # Mines Progression
+    # Floor 1 -> Floor 2 (Locked by Minecart Wheel)
+    connect(world, "Mines Floor 1", "Mines Floor 2", lambda state: state.has(ItemName.minecart_wheel, player))
+    
+    # Floor 2 -> Floor 3 (Locked by Lift Key)
+    connect(world, "Mines Floor 2", "Mines Floor 3", lambda state: state.has(ItemName.lift_key, player))
+    
+    # Floor 3 -> Floor 4 (Locked by Pit Catwalk Key)
+    connect(world, "Mines Floor 3", "Mines Floor 4", lambda state: state.has(ItemName.pit_catwalk_key, player))
+    
+    # Floor 4 -> Cultist Compound (Locked by Boss)
+    connect(world, "Mines Floor 4", "Cultist Compound", lambda state: state.has(ItemName.greater_void_worm_defeated, player))
+    
+    # Mines 4F -> Mountain Underpass (Locked by Temple of the Deep Key)
+    connect(world, "Mines Floor 4", "Mountain Underpass", lambda state: state.has(ItemName.temple_of_the_deep_key, player))
+
+    # Mountain Underpass -> Mountain (Elevator)
+    connect(world, "Mountain Underpass", "Mountain")
+
+    # Mountain Underpass -> Cultist Compound
+    connect(world, "Mountain Underpass", "Cultist Compound")
+
     connect(world, "Cultist Compound", "Supermax Prison")
     
     connect(world, "Village", "Swamp")

@@ -219,3 +219,41 @@ def set_rules(world: World):
     # ItemName.greater_void_worm_defeated is the item.
     world.multiworld.get_location(LocationName.mines_worm_defeated, player).place_locked_item(
         world.create_item(ItemName.greater_void_worm_defeated))
+
+    # Mines 1F Map requires Minecart Wheel
+    set_rule(world.multiworld.get_location(LocationName.mines_item_pickup_map_1, player),
+             lambda state: state.has(ItemName.minecart_wheel, player))
+
+    # Mines 3F Pit Catwalk Key Rules
+    # These locations are locked behind the door requiring the Pit Catwalk Key
+    mines_pit_catwalk_locked_locations = [
+        LocationName.mines_item_pickup_courage_hero,
+        LocationName.mines_item_pickup_map_3,
+        LocationName.mines_item_pickup_crossbow,
+        LocationName.mines_item_pickup_lightning_talisman,
+        LocationName.mines_fish_star,
+        LocationName.mines_torch_condemned_lift,
+        LocationName.mines_torch_mining_frontier,
+    ]
+
+    for loc_name in mines_pit_catwalk_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.pit_catwalk_key, player))
+
+    # Mines 4F Temple of the Deep Key Rules
+    mines_temple_locked_locations = [
+        LocationName.mines_wall_puzzle_half,
+        LocationName.mines_torch_restricted_cultist_reliquary,
+    ]
+    for loc_name in mines_temple_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.temple_of_the_deep_key, player))
+
+    # Mushroom Access Rules
+    # These locations require at least one mushroom to access
+    mushroom_access_locations = [
+        LocationName.mountain_item_pickup_mushroom,
+        LocationName.mines_item_pickup_mushroom,
+        LocationName.swamp_item_pickup_mushroom,
+    ]
+
+    for loc_name in mushroom_access_locations:
+        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.mysterious_mushroom_x1, player))
