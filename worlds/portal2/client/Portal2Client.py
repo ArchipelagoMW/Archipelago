@@ -61,10 +61,10 @@ class Portal2Context(CommonContext):
     death_link_active = False
     goal_map_code = ""
 
-    item_list = []
-    item_remove_commands = []
-    command_queue = []
-    game_message_queue = []
+    item_list: list[str] = []
+    item_remove_commands: list[str] = []
+    command_queue: list[str] = []
+    game_message_queue: list[str] = []
 
     sender_active : bool = False
     listener_active : bool = False
@@ -257,7 +257,7 @@ class Portal2Context(CommonContext):
             self.location_name_to_id = slot_data["location_name_to_id"]
 
         if "chapter_dict" in slot_data:
-            self.menu = Menu(slot_data["chapter_dict"])
+            self.menu = Menu(slot_data["chapter_dict"], self)
             self.refresh_menu()
         else:
             raise Exception("chapter_dict not found in slot data")
@@ -267,6 +267,7 @@ class Portal2Context(CommonContext):
             # Update item list to only include items not collected
             items_received_names = [self.item_names.lookup_in_game(i.item, self.game) for i in self.items_received]
             self.item_list = list(set(self.item_list) - set(items_received_names))
+            self.refresh_menu()
 
         # Add item names to list
         if cmd == "Retrieved":

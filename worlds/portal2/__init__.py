@@ -68,6 +68,7 @@ class Portal2World(World):
     item_count= 0
 
     maps_in_use: list[str] = list(map_complete_table.keys())
+    chapter_maps_dict = {}
     
     for key, value in item_table.items():
         item_name_to_id[key] = value.id
