@@ -20,7 +20,7 @@ from .StateHelpers import (can_extend_magic, can_kill_most_things,
                            has_fire_source, has_hearts, has_melee_weapon,
                            has_misery_mire_medallion, has_sword, has_turtle_rock_medallion,
                            has_triforce_pieces, can_use_bombs, can_bomb_or_bonk,
-                           can_activate_crystal_switch)
+                           can_activate_crystal_switch, can_kill_standard_start)
 from .UnderworldGlitchRules import underworld_glitches_rules
 
 
@@ -1093,22 +1093,23 @@ def standard_rules(world, player):
     if world.worlds[player].options.small_key_shuffle != small_key_shuffle.option_universal:
         set_rule(world.get_location('Hyrule Castle - Boomerang Guard Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_kill_most_things(state, player, 2))
+                               and can_kill_standard_start(state, player, 2))
         set_rule(world.get_location('Hyrule Castle - Boomerang Chest', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 1)
-                               and can_kill_most_things(state, player, 1))
-
+                               and can_kill_standard_start(state, player, 1))
+        set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
+                 lambda state: can_kill_standard_start(state, player, 1))
         set_rule(world.get_location('Hyrule Castle - Big Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2))
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 2)
                                and state.has('Big Key (Hyrule Castle)', player)
                                and (world.worlds[player].options.enemy_health in ("easy", "default")
-                                    or can_kill_most_things(state, player, 1)))
+                                    or can_kill_standard_start(state, player, 1)))
 
         set_rule(world.get_location('Sewers - Key Rat Key Drop', player),
                  lambda state: state._lttp_has_key('Small Key (Hyrule Castle)', player, 3)
-                               and can_kill_most_things(state, player, 1))
+                               and can_kill_standard_start(state, player, 1))
     else:
         set_rule(world.get_location('Hyrule Castle - Zelda\'s Chest', player),
                  lambda state: state.has('Big Key (Hyrule Castle)', player))

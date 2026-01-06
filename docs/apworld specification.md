@@ -44,9 +44,9 @@ These get automatically added to the `archipelago.json` of an .apworld if it is 
 ["Build apworlds" launcher component](#build-apworlds-launcher-component),
 which is the correct way to package your `.apworld` as a world developer. Do not write these fields yourself.
 
-### "Build apworlds" Launcher Component
+### "Build APWorlds" Launcher Component
 
-In the Archipelago Launcher, there is a "Build apworlds" component that will package all world folders to `.apworld`,
+In the Archipelago Launcher, there is a "Build APWorlds" component that will package all world folders to `.apworld`,
 and add `archipelago.json` manifest files to them.  
 These .apworld files will be output to `build/apworlds` (relative to the Archipelago root directory).  
 The `archipelago.json` file in each .apworld will automatically include the appropriate

@@ -13,6 +13,7 @@ from Utils import local_path
 from worlds.AutoWorld import AutoWorldRegister
 from . import app, cache
 from .generate import get_meta
+from .misc import get_world_theme
 
 
 def create() -> None:
@@ -20,12 +21,6 @@ def create() -> None:
     yaml_folder = os.path.join(target_folder, "configs")
 
     Options.generate_yaml_templates(yaml_folder)
-
-
-def get_world_theme(game_name: str) -> str:
-    if game_name in AutoWorldRegister.world_types:
-        return AutoWorldRegister.world_types[game_name].web.theme
-    return 'grass'
 
 
 def render_options_page(template: str, world_name: str, is_complex: bool = False) -> Union[Response, str]:

@@ -30,7 +30,7 @@ the White Jewels.
 
 1. Create your options file (YAML). You can make one on the
 [Castlevania 64 options page](../../../games/Castlevania%2064/player-options).
-2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
+2. Follow the general Archipelago instructions for [generating a game](/tutorial/Archipelago/setup_en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apcv64` file extension.
 3. Open `ArchipelagoLauncher.exe`
 4. Select "Open Patch" on the left side and select your patch file.

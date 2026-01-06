@@ -84,7 +84,7 @@ Enter The room's port number into the top box <b> where the x's are</b> and pres
     - To fix this look over the guide at [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/). Specifically the Panacea and Lua Backend Steps.
 
 -  Using a seed from the standalone KH2 Randomizer Seed Generator.
-    - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](https://archipelago.gg/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
+    - The Archipelago version of the KH2 Randomizer does not use this Seed Generator; refer to the [Archipelago Setup](/tutorial/Archipelago/setup/en) to learn how to generate and play a seed through Archipelago. 
 
 ## Best Practices
 

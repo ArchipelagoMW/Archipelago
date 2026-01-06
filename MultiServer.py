@@ -69,6 +69,12 @@ def remove_from_list(container, value):
 
 
 def pop_from_container(container, value):
+    if isinstance(container, list) and isinstance(value, int) and len(container) <= value:
+        return container
+
+    if isinstance(container, dict) and value not in container:
+        return container
+
     try:
         container.pop(value)
     except ValueError:
@@ -493,7 +499,7 @@ class Context:
         self.read_data["race_mode"] = lambda: decoded_obj.get("race_mode", 0)
         mdata_ver = decoded_obj["minimum_versions"]["server"]
         if mdata_ver > version_tuple:
-            raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver},"
+            raise RuntimeError(f"Supplied Multidata (.archipelago) requires a server of at least version {mdata_ver}, "
                                f"however this server is of version {version_tuple}")
         self.generator_version = Version(*decoded_obj["version"])
         clients_ver = decoded_obj["minimum_versions"].get("clients", {})

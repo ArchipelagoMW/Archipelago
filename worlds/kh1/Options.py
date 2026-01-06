@@ -589,7 +589,7 @@ class OrichalcumInPool(Range):
     
     You need 17 to synth every recipe that requires it.
     """
-    display_name = "Mythril In Pool"
+    display_name = "Orichalcum In Pool"
     default = 20
     range_start = 17
     range_end = 30
