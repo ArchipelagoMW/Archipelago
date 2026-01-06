@@ -140,6 +140,17 @@ factory_immaculate_defeated = "Factory - Immaculate Defeated"
 apex_gatekeeper_defeated = "Apex - Gatekeeper Defeated"
 apex_zenith_defeated = "Apex - Zenith Defeated"
 
+# Boss Events (Logic Only)
+prison_warden_defeated_event = "Prison - Warden Defeated Event"
+forest_poacher_defeated_event = "Forest - Poacher Defeated Event"
+mountain_groundskeeper_defeated_event = "Mountain - Groundskeeper Defeated Event"
+mines_worm_defeated_event = "Mines 4F - Greater Void Worm Defeated Event"
+cultist_amalgamate_defeated_event = "Cultist - Amalgamate Defeated Event"
+supermax_prison_infernal_warden_defeated_event = "Supermax Prison - Infernal Warden Defeated Event"
+factory_immaculate_defeated_event = "Factory - Immaculate Defeated Event"
+apex_gatekeeper_defeated_event = "Apex - Gatekeeper Defeated Event"
+apex_zenith_defeated_event = "Apex - Zenith Defeated Event"
+
 # Item Pickups
 prison_item_pickup_ruby_phial = "Prison - Ruby Phial Item Pickup"
 prison_item_pickup_potions_increased_1 = "Prison - Potions Increased #1 Item Pickup"

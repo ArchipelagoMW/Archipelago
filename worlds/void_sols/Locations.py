@@ -156,6 +156,19 @@ bosses_table = {
     LocationName.apex_zenith_defeated: 1308,
 }
 
+# Boss Events
+boss_events_table = {
+    LocationName.prison_warden_defeated_event: None,
+    LocationName.forest_poacher_defeated_event: None,
+    LocationName.mountain_groundskeeper_defeated_event: None,
+    LocationName.mines_worm_defeated_event: None,
+    LocationName.cultist_amalgamate_defeated_event: None,
+    LocationName.supermax_prison_infernal_warden_defeated_event: None,
+    LocationName.factory_immaculate_defeated_event: None,
+    LocationName.apex_gatekeeper_defeated_event: None,
+    LocationName.apex_zenith_defeated_event: None,
+}
+
 # Item Pickups
 item_pickups_table = {
     LocationName.prison_item_pickup_ruby_phial: 1400,
@@ -468,12 +481,14 @@ misc_table = {
     LocationName.cultist_tamper_armament: 2007,
     LocationName.factory_misc_brute_encounter: 2008,
     LocationName.apex_blow_horn: 2009,
+     LocationName.apex_world_spark_interacted: 2010,
 }
 
 all_locations = {
     **sparks_table,
     **torches_table,
     **bosses_table,
+    **boss_events_table,
     **item_pickups_table,
     **fish_table,
     **trader_items_table,
@@ -488,6 +503,7 @@ def setup_locations(world):
     location_table = {}
 
     location_table.update(bosses_table)
+    location_table.update(boss_events_table)
     location_table.update(item_pickups_table)
     location_table.update(fish_table)
     location_table.update(trader_items_table)

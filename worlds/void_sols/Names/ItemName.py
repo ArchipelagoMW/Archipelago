@@ -157,4 +157,14 @@ fish_tokens_x2 = "Fish Tokens x2"
 strange_curio = "Strange Curio"
 
 victory = "Victory"
-greater_void_worm_defeated = "Greater Void Worm Defeated"
+
+# Boss Events (Logic Only)
+prison_warden_defeated_event = "Prison Warden Defeated Event"
+forest_poacher_defeated_event = "Forest Poacher Defeated Event"
+mountain_groundskeeper_defeated_event = "Mountain Groundskeeper Defeated Event"
+greater_void_worm_defeated_event = "Greater Void Worm Defeated Event"
+cultist_amalgamate_defeated_event = "Cultist Amalgamate Defeated Event"
+supermax_prison_infernal_warden_defeated_event = "Supermax Prison Infernal Warden Defeated Event"
+factory_immaculate_defeated_event = "Factory Immaculate Defeated Event"
+apex_gatekeeper_defeated_event = "Apex Gatekeeper Defeated Event"
+apex_zenith_defeated_event = "Apex Zenith Defeated Event"

@@ -131,7 +131,7 @@ def connect_regions(world: World):
 
     # Basic connections
     connect(world, "Menu", "Prison")
-    connect(world, "Prison", "Prison Yard", lambda state: state.has(ItemName.prison_key, player))
+    connect(world, "Prison", "Prison Yard", lambda state: state.has(ItemName.prison_warden_defeated_event, player))
 
     connect(world, "Prison Yard", "Forest", lambda state: state.has(ItemName.gate_key, player))
 
@@ -143,7 +143,7 @@ def connect_regions(world: World):
 
     # Village -> Village Undercroft Forgotten Reliquary (Locked by Greater Void Worm Defeated)
     connect(world, "Village", "Village Undercroft Forgotten Reliquary",
-            lambda state: state.has(ItemName.greater_void_worm_defeated, player))
+            lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
 
     # Forest -> Mountain (Locked by Outpost Key)
     connect(world, "Forest", "Mountain", lambda state: state.has(ItemName.mountain_outpost_key, player))
@@ -172,10 +172,7 @@ def connect_regions(world: World):
     
     # Floor 3 -> Floor 4 (Locked by Pit Catwalk Key)
     connect(world, "Mines Floor 3", "Mines Floor 4", lambda state: state.has(ItemName.pit_catwalk_key, player))
-    
-    # Floor 4 -> Cultist Compound (Locked by Boss)
-    connect(world, "Mines Floor 4", "Cultist Compound", lambda state: state.has(ItemName.greater_void_worm_defeated, player))
-    
+        
     # Mines 4F -> Mountain Underpass (Locked by Temple of the Deep Key)
     connect(world, "Mines Floor 4", "Mountain Underpass", lambda state: state.has(ItemName.temple_of_the_deep_key, player))
 
@@ -185,13 +182,12 @@ def connect_regions(world: World):
     # Mountain Underpass -> Cultist Compound
     connect(world, "Mountain Underpass", "Cultist Compound")
 
-    connect(world, "Cultist Compound", "Supermax Prison")
+    connect(world, "Forest", "Supermax Prison", lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
     
-    connect(world, "Village", "Swamp")
-    connect(world, "Village", "Factory")
+    connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
+    connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     
-    connect(world, "Forest", "Apex")
-    connect(world, "Factory", "Apex", lambda state: state.has(ItemName.apex_outskirts_key, player))
+    connect(world, "Forest", "Apex", lambda state: state.has(ItemName.apex_outskirts_key, player))
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

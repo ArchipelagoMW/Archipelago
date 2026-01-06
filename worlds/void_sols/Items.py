@@ -180,6 +180,17 @@ item_data_table = {
     ItemName.strange_curio: ItemData(909, ItemClassification.useful, quantity=4),
     
     ItemName.victory: ItemData(1000, ItemClassification.progression),
+    
+    # Boss Events (Logic Only)
+    ItemName.prison_warden_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.forest_poacher_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.mountain_groundskeeper_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.greater_void_worm_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.cultist_amalgamate_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.supermax_prison_infernal_warden_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.factory_immaculate_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.apex_gatekeeper_defeated_event: ItemData(None, ItemClassification.progression),
+    ItemName.apex_zenith_defeated_event: ItemData(None, ItemClassification.progression),
 }
 
 all_items = {name: data.code for name, data in item_data_table.items()}
