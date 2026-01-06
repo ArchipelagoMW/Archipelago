@@ -64,6 +64,7 @@ Output Logs/
 /data/user.kv
 /datapackage
 /custom_worlds
+/factorio_mods
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
