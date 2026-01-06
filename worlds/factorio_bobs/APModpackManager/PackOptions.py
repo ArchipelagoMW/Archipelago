@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from Options import PerGameCommonOptions, FreeText
 
 
@@ -9,7 +11,7 @@ class PackName(FreeText): #todo autopopulate with loaded packs
     display_name = "Modpack"
     default = "Bob's"
 
-
+@dataclass
 class PackOptions(PerGameCommonOptions):
     """
     This options adds options for pack selection
