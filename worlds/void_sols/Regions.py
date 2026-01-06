@@ -172,7 +172,7 @@ def connect_regions(world: World):
     
     # Floor 3 -> Floor 4 (Locked by Pit Catwalk Key)
     connect(world, "Mines Floor 3", "Mines Floor 4", lambda state: state.has(ItemName.pit_catwalk_key, player))
-        
+
     # Mines 4F -> Mountain Underpass (Locked by Temple of the Deep Key)
     connect(world, "Mines Floor 4", "Mountain Underpass", lambda state: state.has(ItemName.temple_of_the_deep_key, player))
 
@@ -182,6 +182,7 @@ def connect_regions(world: World):
     # Mountain Underpass -> Cultist Compound
     connect(world, "Mountain Underpass", "Cultist Compound")
 
+    # Forest -> Supermax Prison (Locked by Greater Void Worm Defeated)
     connect(world, "Forest", "Supermax Prison", lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
     
     connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))

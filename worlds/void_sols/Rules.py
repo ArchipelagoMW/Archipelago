@@ -246,7 +246,7 @@ def set_rules(world: World):
     # Amalgamate
     world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player).place_locked_item(
         world.create_item(ItemName.cultist_amalgamate_defeated_event))
-    # Rule: Can reach the physical boss location (Central Cell Key + Minor Cell Key)
+    # Rule: Can reach the physical boss location (Central Cell Key + Minor Cell Key + False Book)
     set_rule(world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player),
              lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player)
                            and state.has(ItemName.false_book, player))
@@ -254,9 +254,9 @@ def set_rules(world: World):
     # Infernal Warden
     world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player).place_locked_item(
         world.create_item(ItemName.supermax_prison_infernal_warden_defeated_event))
-    # Rule: Can reach the physical boss location (Greater Void Worm Defeated)
+    # Rule: Can reach the physical boss location (East Wing Key)
     set_rule(world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player),
-             lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
+             lambda state: state.has(ItemName.east_wing_key, player))
 
     # Immaculate
     world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player).place_locked_item(
