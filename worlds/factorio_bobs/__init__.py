@@ -15,7 +15,7 @@ from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
-from .InternalItem import recipes, Recipe, all_ingredients, artifacts, load_precalc, InternalItem
+from .InternalItem import recipes, Recipe, all_ingredients, load_precalc, InternalItem
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,

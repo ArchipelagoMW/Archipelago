@@ -60,30 +60,3 @@ class CustomTechnology(Technology):
         for ingredient in self.ingredients:
             technologies |= self.modpack.required_technologies[ingredient]  # technologies that unlock the recipes
         return technologies
-
-excluded_automation_ingredients: Set[str] = {"bob-diamond-ore",
-                                            "bob-amethyst-ore",
-                                            "bob-emerald-ore",
-                                            "bob-topaz-ore",
-                                            "bob-sapphire-ore",
-                                            "bob-ruby-ore",
-                                            "bob-bauxite-ore",
-                                            "bob-silver-ore",
-                                            "bob-gold-ore",
-                                            "bob-zinc-ore",
-                                            "bob-tungsten-ore",
-                                            "bob-nickel-ore",
-                                            "bob-rutile-ore", }.union(artifacts)
-
-def get_ordered_items(key: Callable[[InternalItem], int] = lambda item: item.get_score()) -> tuple[set[InternalItem], List[InternalItem]]:
-    science_packs = FactorioOptions.MaxSciencePack.get_ordered_science_packs()
-    valid_items = set(x for x in valid_ingredients.values() if all(raw.name not in invalid_ingredients for raw in x.get_raw_ingredients().keys())
-                                                            and x.name not in science_packs)
-    starting_pool = set()
-    for item in valid_items:
-        if not item.all_unlocking_technologies() and not item.is_fluid and all(raw.name not in excluded_automation_ingredients for raw in item.get_raw_ingredients().keys()):
-            starting_pool.add(item)
-
-    valid_items.difference_update(starting_pool)
-    ordered_items: list[InternalItem] = list(sorted(valid_items, key=key))
-    return starting_pool, ordered_items

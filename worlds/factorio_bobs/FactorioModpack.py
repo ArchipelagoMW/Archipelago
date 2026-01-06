@@ -4,7 +4,8 @@ from pathlib import Path
 from typing import FrozenSet
 
 import Utils
-from . import APModpackManager, Technology, InternalItem
+from . import APModpackManager, Technology
+from .InternalItem import RecipeEngine
 
 MAX_LOCATIONS_PER_SCIENCE_PACK = 999
 
@@ -20,13 +21,12 @@ class FactorioModpack(APModpackManager.BaseModpack):
         self.__useless_technologies: set[str] | None = None
         self.__required_technologies: dict[str, FrozenSet[Technology]] | None = None
 
-        self.__all_ingredients: dict[str, InternalItem] | None = None
-        self.__valid_ingredients: dict[str, InternalItem] | None = None
-        self.__fluids: set[str] | None = None
-        self.__recipe_sources: dict[str, set[str]] | None = None
-        self.__mining_with_fluid_sources: set[str] | None = None
+        self.__recipe_engine: RecipeEngine | None = None
 
         self.location_pools: list[list[str]] | None = None
+
+    def _init_pack(self):
+        self.recipe_engine.full_init()
 
     def init_items(self):
         self._add_item("Attack Trap")
@@ -51,32 +51,26 @@ class FactorioModpack(APModpackManager.BaseModpack):
 
     def consistency_checks(self) -> None:
         is_consistent = True
-        if any(recipe_name not in raw_recipes for recipe_name in self.start_unlocked_recipes):
+        if any(recipe_name not in self.recipe_engine.recipes.keys() for recipe_name in self.start_unlocked_recipes):
             is_consistent = False
             self.logger.exception(f"Unknown Recipe defined. \n"
-                                  f"Missing: {tuple(recipe_name for recipe_name in self.start_unlocked_recipes if recipe_name not in raw_recipes)}")
+                                  f"Missing: {tuple(recipe_name for recipe_name in self.start_unlocked_recipes if recipe_name not in self.recipe_engine.recipes.keys())}")
 
         if not is_consistent:
             raise Exception(f"Modpack {self.packName} consistency check failed.")
 
     def __init_technologies(self) -> None:
         self.__technology_table: dict[str, Technology] = {}
-        self.__recipe_sources: dict[str, set[str]] = {}
-        self.__mining_with_fluid_sources: set[str] = set()
         with self.open_file("techs.json") as file:
             raw_technologies = json.load(file)
-            for technology_name, data in sorted(raw_technologies.items()):
-                technology = Technology(
-                    technology_name,
-                    self,
-                    modifiers=data.get("modifiers", []),
-                    unlocks=set(data["unlocks"]) - self.start_unlocked_recipes,
-                )
-                self.__technology_table[technology_name] = technology
-                for recipe_name in technology.unlocks:
-                    self.__recipe_sources.setdefault(recipe_name, set()).add(technology_name)
-                if "mining-with-fluid" in technology.modifiers:
-                    self.__mining_with_fluid_sources.add(technology_name)
+        for technology_name, data in sorted(raw_technologies.items()):
+            technology = Technology(
+                technology_name,
+                self,
+                modifiers=data.get("modifiers", []),
+                unlocks=set(data["unlocks"]) - self.start_unlocked_recipes,
+            )
+            self.__technology_table[technology_name] = technology
 
         self.__required_technologies: dict[str, FrozenSet[Technology]] = (
             Utils.KeyedDefaultDict(lambda ingredient_name:
@@ -125,6 +119,12 @@ class FactorioModpack(APModpackManager.BaseModpack):
             self.__init_technologies()
         return self.__technology_table
 
+    @property
+    def base_technology_table(self) -> dict[str, Technology]:
+        if self.__base_technology_table is None:
+            self.__init_technologies()
+        return self.__base_technology_table
+
     @cached_property
     def start_unlocked_recipes(self) -> set[str]:
         with self.open_file("startingItems.json") as file:
@@ -162,3 +162,9 @@ class FactorioModpack(APModpackManager.BaseModpack):
             if "useless" in overrides:
                 useless_overrides[tech_name] = overrides["useless"]
         return useless_overrides
+
+    @property
+    def recipe_engine(self) -> RecipeEngine:
+        if self.__recipe_engine is None:
+            self.__recipe_engine = RecipeEngine(self)
+        return self.__recipe_engine
