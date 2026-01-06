@@ -346,6 +346,29 @@ def set_rules(world: World):
     set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key , player),
              lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
 
+    # --- Supermax Prison Rules ---
+    # Codebearer Puzzle
+    # Entry to the puzzle area requires the Infernal Key.
+    set_rule(world.multiworld.get_location(LocationName.supermax_prison_spark_hidden, player),
+             lambda state: state.has(ItemName.infernal_key, player))
+
+    # The puzzle itself requires either a sword, dagger, or hammer to complete.
+    codebearer_puzzle_locations = [
+        LocationName.supermax_prison_item_pickup_pet_worm,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_18,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_19,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_20,
+    ]
+
+    def can_solve_codebearer_puzzle(state):
+        return state.has(ItemName.sword, player) and \
+               state.has(ItemName.dagger, player) and \
+               state.has(ItemName.great_hammer, player)
+
+    for loc_name in codebearer_puzzle_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.infernal_key, player) and can_solve_codebearer_puzzle(state))
+
     # Mushroom Access Rules
     # These locations require at least one mushroom to access
     mushroom_access_locations = [
