@@ -18,7 +18,7 @@ class FactorioModpack(APModpackManager.BaseModpack):
         self.__base_technology_table: dict[str, Technology] | None = None
         self.__progressive_technology_table: dict[str, Technology] | None = None
         self.__tech_to_progressive_lookup: dict[str, str] | None = None
-        self.__useless_technologies: set[str] | None = None
+        self.__removed_technologies: set[str] | None = None
         self.__required_technologies: dict[str, FrozenSet[Technology]] | None = None
 
         self.__recipe_engine: RecipeEngine | None = None
@@ -74,18 +74,18 @@ class FactorioModpack(APModpackManager.BaseModpack):
 
         self.__required_technologies: dict[str, FrozenSet[Technology]] = (
             Utils.KeyedDefaultDict(lambda ingredient_name:
-                                   frozenset(self.__all_ingredients[ingredient_name].all_unlocking_technologies())))
+                                   frozenset(self.recipe_engine.all_ingredients[ingredient_name].all_unlocking_technologies())))
         self.__required_technologies["water"] = frozenset()
 
         self.__base_technology_table = self.__technology_table.copy()
         self.__progressive_technology_table: dict[str, Technology] = {}
 
-        self.__useless_technologies: set[str] = {tech_name for tech_name, tech in self.__base_technology_table.items()
+        self.__removed_technologies: set[str] = {tech_name for tech_name, tech in self.__base_technology_table.items()
                                                  if not tech.useful()}
 
         for root in self.progressive_rows:
             progressive = tuple(
-                tech_name for tech_name in self.progressive_rows[root] if tech_name not in self.__useless_technologies)
+                tech_name for tech_name in self.progressive_rows[root] if tech_name not in self.__removed_technologies)
             if not progressive:
                 self.logger.error(f"Useless progressive skipping: {root}, {self.progressive_rows[root]}")
                 continue
@@ -124,6 +124,24 @@ class FactorioModpack(APModpackManager.BaseModpack):
         if self.__base_technology_table is None:
             self.__init_technologies()
         return self.__base_technology_table
+
+    @property
+    def progressive_technology_table(self) -> dict[str, Technology]:
+        if self.__progressive_technology_table is None:
+            self.__init_technologies()
+        return self.__progressive_technology_table
+
+    @property
+    def tech_to_progressive_lookup(self) -> dict[str, str]:
+        if self.__tech_to_progressive_lookup is None:
+            self.__init_technologies()
+        return self.__tech_to_progressive_lookup
+
+    @property
+    def removed_technologies(self) -> set[str]:
+        if self.__removed_technologies is None:
+            self.__init_technologies()
+        return self.__removed_technologies
 
     @cached_property
     def start_unlocked_recipes(self) -> set[str]:

@@ -7,7 +7,7 @@ import typing
 
 from .APModpackManager.PackWorld import PackWorld
 from .FactorioModpack import FactorioModpack
-from .APModpackManager import get_items, get_locations
+from .APModpackManager import get_items, get_locations, items_to_id
 import Utils
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from NetUtils import JSONMessagePart
@@ -15,7 +15,7 @@ from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
-from .InternalItem import recipes, Recipe, all_ingredients, load_precalc, InternalItem
+from .InternalItem import Recipe, InternalItem
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
@@ -23,10 +23,7 @@ from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, 
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
 from .Shapes import get_shapes
 from .FactorioSettings import FactorioSettings
-from .Technologies import tech_table, factorio_base_id, progressive_tech_table, useless_technologies, Technology, \
-    base_tech_table, tech_to_progressive_lookup, progressive_technology_table, \
-    get_ordered_items, base_technology_table, technology_table
-
+from .Technologies import Technology
 
 def launch_client(*args: str):
     from .Client import launch
@@ -95,7 +92,6 @@ class FactorioBobs(PackWorld):
     def __init__(self, world, player: int):
         super(FactorioBobs, self).__init__(world, player)
         self.additional_logic: dict[int, AndRule] = {}
-        self.removed_technologies = useless_technologies.copy()
         self.progression_technologies: set[Technology] = set()
         self.custom_recipes : typing.Dict[str, Recipe] = {}
         self.custom_products: dict[str, InternalItem] = {}
@@ -128,6 +124,7 @@ class FactorioBobs(PackWorld):
     ut_can_gen_without_yaml = True
 
     def generate_early(self) -> None:
+        self.super().generate_early()
         # if max < min, then swap max and min
         if self.options.max_tech_cost < self.options.min_tech_cost:
             self.options.min_tech_cost.value, self.options.max_tech_cost.value = \
@@ -136,7 +133,6 @@ class FactorioBobs(PackWorld):
         self.want_progressives = collections.defaultdict(
             lambda: self.options.progressive.want_progressives(self.random))
 
-        load_precalc()
         if not hasattr(self.multiworld, "generation_is_fake"):
             self.set_custom_recipes()
         elif hasattr(self.multiworld, "re_gen_passthrough") and self.game in self.multiworld.re_gen_passthrough:
@@ -149,17 +145,17 @@ class FactorioBobs(PackWorld):
                 new_ingredients = {}
                 liquids_used = 0
                 for ingredient_name in ingredients_name:
-                    ingredient = all_ingredients[ingredient_name]
+                    ingredient = self.modpack.recipe_engine.all_ingredients[ingredient_name]
                     if ingredient.is_fluid:
                         liquids_used += 1
                     new_ingredients[ingredient] = 1
 
                 custom_products = {}
                 if product_name not in self.custom_products:
-                    self.custom_products[product_name] = InternalItem(product_name, False)
+                    self.custom_products[product_name] = InternalItem(product_name, False, self.modpack.recipe_engine)
                 custom_products[self.custom_products[product_name]] = 1
                 self.custom_recipes[product_name] = Recipe(product_name, self.get_category("crafting", liquids_used), new_ingredients,
-                                                           custom_products, 1)
+                                                           custom_products, 1, self.modpack.recipe_engine)
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
             self.options.additional_logic.value = self.options.additional_logic.option_none
             if FactorioBobs.SLOT_OPTIONS_KEY in slot_data:
@@ -233,20 +229,20 @@ class FactorioBobs(PackWorld):
         for complexity, rule in self.additional_logic.items():
             if complexity <= self.options.max_science_pack.value + 1:
                 for tech in rule.needed_items():
-                    self.progression_technologies.add(technology_table[tech])
+                    self.progression_technologies.add(self.modpack.technology_table[tech])
 
         # handle marking progressive techs as advancement
         prog_add = set()
         for tech in self.progression_technologies:
-            if tech.name in tech_to_progressive_lookup:
-                prog_add.add(technology_table[tech_to_progressive_lookup[tech.name]])
+            if tech.name in self.modpack.tech_to_progressive_lookup:
+                prog_add.add(self.modpack.technology_table[self.modpack.tech_to_progressive_lookup[tech.name]])
         self.progression_technologies |= prog_add
 
     def create_regions(self):
         player = self.player
         nauvis = Region(self.origin_region_name, player, self.multiworld)
 
-        location_count = len(base_tech_table) - len(useless_technologies) - self.skip_silo
+        location_count = len(self.modpack.base_technology_table) - len(self.modpack.removed_technologies) - self.skip_silo
 
         for name in self.trap_names:
             name = name.replace(" ", "_").lower()+"_traps"
@@ -328,9 +324,9 @@ class FactorioBobs(PackWorld):
                 loc.revealed = True
         if self.skip_silo:
             self.removed_technologies |= {"rocket-silo"}
-        for tech_name in base_tech_table:
+        for tech_name in self.modpack.base_technology_table.keys():
             if tech_name not in self.removed_technologies:
-                progressive_item_name = tech_to_progressive_lookup.get(tech_name, tech_name)
+                progressive_item_name = self.modpack.tech_to_progressive_lookup.get(tech_name, tech_name)
                 want_progressive = self.want_progressives[progressive_item_name]
                 item_name = progressive_item_name if want_progressive else tech_name
                 tech_item = self.create_item(item_name)
@@ -347,8 +343,8 @@ class FactorioBobs(PackWorld):
                     loc.revealed = True
 
     def get_filler_item_name(self) -> str:
-        tech_name: str = self.random.choice(tuple(tech_table))
-        progressive_item_name: str = tech_to_progressive_lookup.get(tech_name, tech_name)
+        tech_name: str = self.random.choice(tuple(self.modpack.technology_table.keys()))
+        progressive_item_name: str = self.modpack.tech_to_progressive_lookup.get(tech_name, tech_name)
         want_progressive: bool = self.want_progressives[progressive_item_name]
         return progressive_item_name if want_progressive else tech_name
 
@@ -403,7 +399,7 @@ class FactorioBobs(PackWorld):
 
     def get_internal_item(self, name: str) -> InternalItem:
         return self.custom_products[name] if name in self.custom_products \
-            else all_ingredients[name]
+            else self.modpack.recipe_engine.all_ingredients[name]
 
     def generate_basic(self):
         map_basic_settings = self.options.world_gen.value["basic"]
@@ -422,8 +418,8 @@ class FactorioBobs(PackWorld):
                 start_location_hints.add(loc.name)
 
     def collect_item(self, state, item, remove=False):
-        if item.advancement and item.name in progressive_technology_table:
-            prog_table = progressive_technology_table[item.name].progressive
+        if item.advancement and item.name in self.modpack.progressive_technology_table:
+            prog_table = self.modpack.progressive_technology_table[item.name].progressive
             if remove:
                 for item_name in reversed(prog_table):
                     if state.has(item_name, item.player):
@@ -471,10 +467,10 @@ class FactorioBobs(PackWorld):
         custom_products = {}
         for product, amount in products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid)
+                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
         return Recipe(name, self.get_category(category, liquids_used), new_ingredients,
-                      custom_products, energy)
+                      custom_products, energy, self.modpack.recipe_engine)
 
     def make_quick_recipe(self, original: Recipe, pool: set[InternalItem], allow_liquids: int = 2,
                           ingredients_offset: int = 0) -> Recipe:
@@ -499,10 +495,10 @@ class FactorioBobs(PackWorld):
         custom_products = {}
         for product, amount in original.products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid)
+                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
-                      custom_products, original.energy)
+                      custom_products, original.energy, self.modpack.recipe_engine)
 
     def make_balanced_recipe(self, original: Recipe, pool: list[InternalItem], factor: float = 1,
                              allow_liquids: int = 2, ingredients_offset: int = 0) -> Recipe:
@@ -523,7 +519,7 @@ class FactorioBobs(PackWorld):
             if liquids_used == allow_liquids and ingredient.is_fluid:
                 continue  # can't use this lambda_ingredient as we already have maximum liquid in our recipe.
             ingredient_raw = 0
-            if ingredient.name in all_ingredients:
+            if ingredient.name in self.modpack.recipe_engine.all_ingredients:
                 ingredient_recipe = ingredient.best_recipe
                 if ingredient_recipe:
                     ingredient_raw = sum((count for ingredient, count in ingredient_recipe.get_raw_ingredients().items()))
@@ -600,14 +596,14 @@ class FactorioBobs(PackWorld):
         custom_products = {}
         for product, amount in original.products.items():
             if product.name not in self.custom_products:
-                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid)
+                self.custom_products[product.name] = InternalItem(product.name, product.is_fluid, self.modpack.recipe_engine)
             custom_products[self.custom_products[product.name]] = amount
 
         return Recipe(original.name, self.get_category(original.category, liquids_used), new_ingredients,
-                      custom_products, original.energy)
+                      custom_products, original.energy, self.modpack.recipe_engine)
 
     def get_internal_item_pools(self) -> dict[str, list[InternalItem]]:
-        automation_pool, ordered_items = get_ordered_items()
+        automation_pool, ordered_items = self.modpack.recipe_engine.get_ordered_items()
         item_pools: dict[str, list[InternalItem]] = {"automation-science-pack":
                                                          list(sorted(automation_pool, key=lambda item: item.name))}
 
@@ -626,7 +622,7 @@ class FactorioBobs(PackWorld):
     def set_custom_technologies(self):
         custom_technologies = {}
         allowed_packs = self.options.max_science_pack.get_allowed_packs()
-        for technology_name, technology in base_technology_table.items():
+        for technology_name, technology in self.modpack.base_technology_table.items():
             custom_technologies[technology_name] = technology.get_custom(self, allowed_packs, self.player)
         return custom_technologies
 
@@ -642,8 +638,8 @@ class FactorioBobs(PackWorld):
                 valid_pool = science_pack_pools[pack]
             else:
                 valid_pool += science_pack_pools[pack]
-            if self.options.recipe_ingredients or all_ingredients[pack].best_recipe is None:
-                pack_item = all_ingredients[pack]
+            if self.options.recipe_ingredients or self.modpack.recipe_engine.all_ingredients[pack].best_recipe is None:
+                pack_item = self.modpack.recipe_engine.all_ingredients[pack]
                 return_amount = index//2 + 1
                 new_recipe = self.make_custom_recipe(pack, {pack_item: return_amount},
                                                      index//2 + 2 + ingredients_offset.value,
@@ -651,17 +647,17 @@ class FactorioBobs(PackWorld):
                 new_recipe.productivity = True
                 self.custom_recipes[pack] = new_recipe
 
-        original_rocket_part = recipes["rocket-part"]
+        original_rocket_part = self.modpack.recipe_engine.recipes["rocket-part"]
         if self.options.additional_rocket_pool.value:
             rocket_pool = science_pack_pools["rocket"]
         else:
             rocket_pool = science_pack_pools[self.options.max_science_pack.get_max_pack()]
-        custom_rocket_part = InternalItem("rocket-part", False)
+        custom_rocket_part = InternalItem("rocket-part", False, self.modpack.recipe_engine)
         self.custom_products[custom_rocket_part.name] = custom_rocket_part
         self.custom_recipes["rocket-part"] = Recipe("rocket-part", original_rocket_part.category,
                                                      {item: 10 for item in self.random.sample(rocket_pool, 3 + ingredients_offset)},
                                                      {custom_rocket_part: 1},
-                                                     original_rocket_part.energy)
+                                                     original_rocket_part.energy, self.modpack.recipe_engine)
         self.custom_recipes["rocket-part"].productivity = True
 
         if self.options.silo.value == Silo.option_randomize_recipe \
@@ -672,7 +668,7 @@ class FactorioBobs(PackWorld):
                 valid_pool += rocket_pool
 
             if self.options.silo.value == Silo.option_randomize_recipe:
-                old_recipe = recipes["rocket-silo"]
+                old_recipe = self.modpack.recipe_engine.recipes["rocket-silo"]
                 new_recipe = self.make_balanced_recipe(
                     old_recipe, valid_pool,
                     factor=(self.options.max_science_pack.value + 1) / 7,
@@ -680,13 +676,13 @@ class FactorioBobs(PackWorld):
                 self.custom_recipes["rocket-silo"] = new_recipe
 
             if self.options.satellite.value == Satellite.option_randomize_recipe:
-                old_recipe = recipes["satellite"]
+                old_recipe = self.modpack.recipe_engine.recipes["satellite"]
                 new_recipe = self.make_balanced_recipe(
                     old_recipe, valid_pool,
                     factor=(self.options.max_science_pack.value + 1) / 7,
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["satellite"] = new_recipe
-        bridge = InternalItem("ap-energy-bridge", False)
+        bridge = InternalItem("ap-energy-bridge", False, self.modpack.recipe_engine)
         self.custom_products["ap-energy-bridge"] = bridge
         new_recipe = self.make_custom_recipe(bridge.name, {bridge: 1}, 6+ingredients_offset.value, 10,
             science_pack_pools[self.options.max_science_pack.get_ordered_science_packs()[0]])
@@ -707,18 +703,18 @@ class FactorioBobs(PackWorld):
 
 
     def create_item(self, name: str) -> FactorioItem:
-        if name in tech_table:  # is a Technology
-            if technology_table[name] in self.progression_technologies:
+        if name in self.modpack.technology_table.keys():  # is a Technology
+            if self.modpack.technology_table[name] in self.progression_technologies:
                 classification = ItemClassification.progression
             else:
                 classification = ItemClassification.filler
             return FactorioItem(name,
                                 classification,
-                                tech_table[name], self.player)
+                                items_to_id[name], self.player)
 
         item = FactorioItem(name,
                             ItemClassification.trap if name.endswith("Trap") else ItemClassification.filler,
-                            all_items[name], self.player)
+                            items_to_id[name], self.player)
         return item
 
     def fill_slot_data(self):
