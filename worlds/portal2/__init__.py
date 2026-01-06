@@ -67,7 +67,7 @@ class Portal2World(World):
     location_count = 0
     item_count= 0
 
-    maps_in_use: list[str] = list(map_complete_table.keys())
+    maps_in_use: set[str] = set()
     chapter_maps_dict = {}
     
     for key, value in item_table.items():
@@ -103,18 +103,29 @@ class Portal2World(World):
         used_maps: list[str] = []
 
         possible_maps = [name for name in self.maps_in_use if not name.startswith("Chapter 9")]
+        print(f"Possible Maps: {possible_maps}")
+        print()
 
         # Maps with no requirements
         map_pool += [name for name in possible_maps if len(all_locations_table[name].required_items) == 0]
+        print(f"Map pool after round 1: {map_pool}")
         pick_maps(3)
+        print(f"Used maps after round 1: {used_maps}")
+        print()
 
         # Maps with just portal gun upgrade
         map_pool += [name for name in possible_maps if all_locations_table[name].required_items == [portal_gun_2]]
+        print(f"Map pool after round 2: {map_pool}")
         pick_maps(3)
+        print(f"Used maps after round 2: {used_maps}")
+        print()
+       
 
         # All other maps
         map_pool += [name for name in possible_maps if name not in used_maps and name not in map_pool]
+        print(f"Map pool after round 3: {map_pool}")
         pick_maps(len(map_pool))
+        print(f"Used maps after round 3: {used_maps}")
 
         return chapter_maps
 
@@ -151,9 +162,10 @@ class Portal2World(World):
     # Overridden methods called by Main.py in execution order
 
     def generate_early(self):
+        self.maps_in_use = set(map_complete_table.keys())
         # Cutscene sanity option
-        if self.options.cutscenesanity.value:
-            self.maps_in_use += list(cutscene_completion_table.keys())
+        if self.options.cutscenesanity:
+            self.maps_in_use.update(cutscene_completion_table.keys())
 
         # Universal Tracker Support
         re_gen_passthrough = getattr(self.multiworld, "re_gen_passthrough", {})
@@ -202,11 +214,11 @@ class Portal2World(World):
             self.multiworld.itempool.append(self.create_item(item))
 
         fill_count = self.location_count - self.item_count
-        trap_percentage = self.options.trap_fill_percentage.value
+        trap_percentage = self.options.trap_fill_percentage
         trap_fill_number = round(trap_percentage/100 * fill_count)
-        trap_weights = [self.options.motion_blur_trap_weight.value, 
-                        self.options.fizzle_portal_trap_weight.value, 
-                        self.options.butter_fingers_trap_weight.value] # in the same order as the traps appear in trap_items list
+        trap_weights = [self.options.motion_blur_trap_weight, 
+                        self.options.fizzle_portal_trap_weight, 
+                        self.options.butter_fingers_trap_weight] # in the same order as the traps appear in trap_items list
 
         if sum(trap_weights) > 0 and trap_fill_number > 0:
             traps = self.random.choices(trap_items, weights=trap_weights, k=trap_fill_number)
