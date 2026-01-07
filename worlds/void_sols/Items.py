@@ -166,6 +166,8 @@ item_data_table = {
     ItemName.data_disc_b: ItemData(824, ItemClassification.progression),
     ItemName.master_bedroom_key: ItemData(825, ItemClassification.progression),
     ItemName.apex_east_wing_key: ItemData(826, ItemClassification.progression),
+    ItemName.corroded_key: ItemData(827, ItemClassification.progression),
+    ItemName.guard_captains_key: ItemData(828, ItemClassification.progression),
 
     # Misc
     ItemName.potion_mixing_unlocked: ItemData(900, ItemClassification.progression),

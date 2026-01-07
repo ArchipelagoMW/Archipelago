@@ -471,3 +471,30 @@ def set_rules(world: World):
     for loc_name in apex_east_wing_locked_locations:
         set_rule(world.multiworld.get_location(loc_name, player),
                  lambda state: state.has(ItemName.apex_east_wing_key, player))
+
+    # Apex Restricted Access Key Rules
+    restricted_access_locked_locations = [
+        LocationName.apex_item_pickup_minor_sol_shard_30,
+        LocationName.apex_item_pickup_minor_sol_shard_33,
+        LocationName.apex_item_pickup_brass_knuckles_plus,
+        LocationName.apex_torch_sparring_hall,
+    ]
+
+    for loc_name in restricted_access_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.restricted_access_key, player))
+
+    # Apex Guard Captain's Key Rules
+    guard_captains_locked_locations = [
+        LocationName.apex_item_pickup_corroded_key,
+        LocationName.apex_wall_immunity_torch_1,
+        LocationName.apex_wall_immunity_torch_2,
+    ]
+
+    for loc_name in guard_captains_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.guard_captains_key, player))
+
+    # Apex Corroded Key Rules
+    set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_kings_emblem_left, player),
+             lambda state: state.has(ItemName.corroded_key, player))
