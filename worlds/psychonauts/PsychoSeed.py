@@ -8,6 +8,7 @@ from .Items import ITEM_DICTIONARY, AP_ITEM_OFFSET
 from .Locations import ALL_LOCATIONS, PSYCHOSEED_LOCATION_IDS
 from .Options import Goal
 from .PsychoRandoItems import PSYCHORANDO_BASE_ITEM_IDS, PSYCHORANDO_ITEM_TABLE, MAX_PSY_ITEM_ID
+from .WorldVersion import AP_WORLD_VERSION, PSYCHORANDO_VERSION
 
 if TYPE_CHECKING:
     from . import PSYWorld
@@ -140,6 +141,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
 
     # append rando_display_name 
     randoseed_parts.append(f"       Ob.seedname = '{rando_display_name}'\n")
+
+    # append apworldVersion
+    randoseed_parts.append(f"       Ob.apworldVersion = '{AP_WORLD_VERSION}'\n")
+
+    # append psychorandoVersion
+    randoseed_parts.append(f"       Ob.expectedPsychoRandoVersion = '{PSYCHORANDO_VERSION}'\n")
 
     # append mentalmagnet setting
     randoseed_parts.append(f"           Ob.mentalmagnet = {_lua_bool(self.options.StartingMentalMagnet)}\n")
