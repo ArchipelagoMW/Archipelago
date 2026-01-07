@@ -259,6 +259,7 @@ def generate_item_groups() -> dict[str, list[str]]:
         "Blue Bubbles":   [ItemName.blue_boosters],
         "Red Bubbles":    [ItemName.red_boosters],
         "Touch Switches": [ItemName.coins],
+        "Shields":        [ItemName.coins],
     }
 
     return item_groups
