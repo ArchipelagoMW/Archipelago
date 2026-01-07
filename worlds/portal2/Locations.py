@@ -103,7 +103,7 @@ map_complete_table: dict[str, Portal2LocationData] = {
 
 cutscene_completion_table: dict[str, Portal2LocationData] = {
     "Chapter 5: Tube Ride Completion": Portal2LocationData("sp_a2_bts6", LocationType.CUTSCENE_COMPLETION),
-    "Chapter 6: Unknown Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
+    "Chapter 6: Long Fall Completion": Portal2LocationData("sp_a3_00", LocationType.CUTSCENE_COMPLETION),
 }
 
 story_achievements_table: dict[str, Portal2LocationData] = {
