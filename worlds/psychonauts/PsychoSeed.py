@@ -118,6 +118,26 @@ def _lua_bool(option):
     return "TRUE" if option else "FALSE"
 
 
+def get_psiball_color(option):
+    psiball_color_map = {
+        0: "red",
+        1: "white",
+        2: "pink",
+        3: "yellow",
+        4: "purple",
+        5: "blue",
+        6: "light_purple",
+        7: "cyan",
+        8: "green",
+        9: "orange",
+        10: "light_green",
+        11: "light_peach",
+        12: "light_pink",
+        13: "lighter_pink",
+    }
+    return psiball_color_map.get(option, "unknown")
+
+
 def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # Mod name for Zip Folder
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
@@ -150,6 +170,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
 
     # append mentalmagnet setting
     randoseed_parts.append(f"           Ob.mentalmagnet = {_lua_bool(self.options.StartingMentalMagnet)}\n")
+
+    # append startingcolorizer setting
+    randoseed_parts.append(f"           Ob.startingcolorizer = {_lua_bool(self.options.StartingColorizer)}\n")
+
+    # append psiballColor setting
+    randoseed_parts.append(f"           Ob.psiballColor = '{get_psiball_color(self.options.PsiBallColor.value)}'\n")
 
     # append vaultHints setting
     randoseed_parts.append(f"           Ob.vaultHints = {_lua_bool(self.options.VaultHints)}\n")

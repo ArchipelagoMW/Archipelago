@@ -18,6 +18,11 @@ class StartingMentalMagnet(DefaultOnToggle):
     display_name = "Start with Mental Magnet"
 
 
+class StartingColorizer(DefaultOnToggle):
+    """Start with the Colorizer, allowing you to change the color of your Psiball using the Bacon."""
+    display_name = "Start with Colorizer"
+
+
 class RandomStartingMinds(Range):
     """Start with a random number of mind/area unlocking items."""
     display_name = "Random Starting Minds"
@@ -61,6 +66,26 @@ class OtherItemsModel(Choice):
     option_archipelago = 0
     option_classic = 1
     option_present = 2
+    default = 0
+
+
+class PsiBallColor(Choice):
+    """Choose the starting color of your PsiBall."""
+    display_name = "PsiBall Color"
+    option_red = 0
+    option_white = 1
+    option_pink = 2
+    option_yellow = 3
+    option_purple = 4
+    option_blue = 5
+    option_lightpurple = 6
+    option_cyan = 7
+    option_green = 8
+    option_orange = 9
+    option_lightgreen = 10
+    option_lightpeach = 11
+    option_lightpink = 12
+    option_lighterpink = 13
     default = 0
 
 
@@ -175,6 +200,8 @@ class PsychonautsOptions(PerGameCommonOptions):
     StartingLevitation: StartingLevitation
     StartingCobwebDuster: StartingCobwebDuster
     StartingMentalMagnet: StartingMentalMagnet
+    StartingColorizer: StartingColorizer
+    PsiBallColor: PsiBallColor
     RandomStartingMinds: RandomStartingMinds
     VaultHints: VaultHints
     VaultCount: VaultCount
@@ -221,8 +248,12 @@ OPTION_GROUPS: list [OptionGroup] = [
         StartingLevitation,
         StartingCobwebDuster,
         StartingMentalMagnet,
+        StartingColorizer,
         RandomStartingMinds,
+    ]),
+    OptionGroup("Cosmetic Options", [
         OtherItemsModel,
+        PsiBallColor,
     ]),
     OptionGroup("Goal Options", [
         Goal,
