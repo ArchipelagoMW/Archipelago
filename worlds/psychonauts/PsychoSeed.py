@@ -208,19 +208,12 @@ def gen_psy_seed(self: "PSYWorld", output_directory: str):
     # adding new settings will remove from this list
     default_seed_settings = '''
         Ob.isAP = TRUE
-        Ob.startcobweb = FALSE
-        Ob.startlevitation = FALSE
         Ob.randomizecobwebduster = TRUE
-        Ob.everylocationpossible = FALSE
-        Ob.harderbutton = FALSE
         Ob.beatalllevels = FALSE
         Ob.rank101 = FALSE
         Ob.scavengerhunt = FALSE
         Ob.fasterLO = TRUE
-        Ob.earlyelevator = FALSE
         Ob.removetutorials = TRUE
-        Ob.createhints = FALSE
-        Ob.spoilerlog = FALSE
     '''
     randoseed_parts.append(default_seed_settings)
 

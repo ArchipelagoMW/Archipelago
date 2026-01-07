@@ -1,15 +1,17 @@
 from dataclasses import dataclass
 from typing import List
 
-from Options import Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool
+from Options import Choice, Range, Toggle, DefaultOnToggle, PerGameCommonOptions, StartInventoryPool, OptionGroup
 
 class StartingLevitation(Toggle):
     """Start with Progressive Levitation level 1."""
     display_name = "Start with Levitation"
 
+
 class StartingCobwebDuster(Toggle):
     """Start with the Cobweb Duster."""
     display_name = "Start with Cobweb Duster"
+
 
 class StartingMentalMagnet(DefaultOnToggle):
     """Start with Mental Magnet, pulling health, ammo, and arrowhead drops towards you."""
@@ -144,10 +146,12 @@ class MentalCobwebShuffle(Toggle):
     Raz's inventory, so the loom in Ford's Sanctuary will have no use."""
     display_name = "Mental Cobweb Shuffle"
 
+
 class HintUnclaimedBaggage(DefaultOnToggle):
     """When interacting with Baggage that you don't have a matching tag for yet, automatically creates a hint for 
     the location in the client."""
     display_name = "Hint Unclaimed Baggage"
+
 
 class ProgressiveBaggage(Toggle):
     """Turns Emotional Baggage into Progressive Locations
@@ -209,4 +213,41 @@ SLOT_DATA_OPTIONS: List[str] = [
     "MentalCobwebShuffle",
     "ProgressiveBaggage",
     "MaximumProgressiveBaggage",
+]
+
+
+OPTION_GROUPS: list [OptionGroup] = [
+    OptionGroup("Starting Options", [
+        StartingLevitation,
+        StartingCobwebDuster,
+        StartingMentalMagnet,
+        RandomStartingMinds,
+        OtherItemsModel,
+    ]),
+    OptionGroup("Goal Options", [
+        Goal,
+        BrainsRequired,
+        RequireMeatCircus,
+    ]),
+    OptionGroup("Location Options", [
+        RankSanity,
+        FigmentPercentageChecks,
+        DeepArrowheadShuffle,
+        MentalCobwebShuffle,       
+    ]),
+    OptionGroup("Baggage Options", [
+        HintUnclaimedBaggage,
+        ProgressiveBaggage,
+        MaximumProgressiveBaggage, 
+    ]),
+    OptionGroup("Vault Options", [
+        VaultHints,
+        VaultCount,
+    ]),
+    OptionGroup("Difficulty Options", [
+        EasyFlightMode,
+        EasyMillaRace,
+        EnemyDamageMultiplier,
+        InstantDeathMode,        
+    ]),
 ]

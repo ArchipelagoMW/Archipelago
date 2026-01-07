@@ -25,7 +25,7 @@ from .Items import (
 )
 from .Locations import ALL_LOCATIONS, AP_LOCATION_OFFSET, DEEP_ARROWHEAD_LOCATIONS, MENTAL_COBWEB_LOCATIONS, RANK_LOCATIONS
 from .Names import ItemName, LocationName
-from .Options import Goal, PsychonautsOptions, SLOT_DATA_OPTIONS
+from .Options import Goal, PsychonautsOptions, SLOT_DATA_OPTIONS, OPTION_GROUPS
 from .PsychoSeed import gen_psy_seed
 from .Subclasses import PSYItem
 
@@ -55,6 +55,7 @@ class PsychonautsSettings(settings.Group):
 
 
 class PsychonautsWeb(WebWorld):
+    option_groups = OPTION_GROUPS
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Psychonauts with Archipelago.",
