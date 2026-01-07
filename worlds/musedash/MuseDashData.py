@@ -671,4 +671,10 @@ SONG_DATA: Dict[str, SongData] = {
     "Temptation": SongData(2900795, "89-3", "Legendary Voyage, Mystic Treasure", False, 5, 8, 10),
     "PwP": SongData(2900796, "89-4", "Legendary Voyage, Mystic Treasure", True, 3, 6, 9),
     "I Can Show You": SongData(2900797, "89-5", "Legendary Voyage, Mystic Treasure", False, 5, 7, 9),
+    "An Artificial Flower Has No Right to Wilt": SongData(2900798, "90-0", "MEDIUM5 Echoes", True, 3, 5, 7),
+    "Time Stopped": SongData(2900799, "90-1", "MEDIUM5 Echoes", True, 5, 7, 9),
+    "Stranded Siren": SongData(2900800, "90-2", "MEDIUM5 Echoes", True, 6, 8, 10),
+    "City Lights": SongData(2900801, "90-3", "MEDIUM5 Echoes", True, 4, 6, 9),
+    "Polaris Wandering Night": SongData(2900802, "90-4", "MEDIUM5 Echoes", True, 5, 8, 10),
+    "Chasing the Moonlight": SongData(2900803, "90-5", "MEDIUM5 Echoes", True, 4, 6, 8),
 }
