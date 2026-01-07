@@ -8,6 +8,7 @@ from worlds.rac3.constants.locations.sewers import RAC3SEWER
 from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
+from worlds.rac3.constants.locations.trophies import RAC3TROPHY
 from worlds.rac3.constants.options import RAC3OPTION
 from worlds.rac3.constants.region import RAC3REGION
 from worlds.rac3.rac3options import RaC3Options
@@ -522,7 +523,10 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if not options.trophies.value:  # Skip trophy locations if trophies are disabled
                     return True
             case RAC3TAG.LONG_TROPHY:
+                all_skill_points = all(options.skill_points.values())
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
+                    return True
+                elif not all_skill_points and LOCATION_FROM_AP_CODE[data.AP_CODE] is RAC3TROPHY.PHOENIX_SKILL_MASTER:
                     return True
             case RAC3TAG.SKILLPOINT:
                 key = LOCATION_FROM_AP_CODE[data.AP_CODE]
