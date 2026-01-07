@@ -5,9 +5,8 @@ import logging
 import random
 import typing
 
-from .APModpackManager.PackWorld import PackWorld
 from .FactorioModpack import FactorioModpack
-from .APModpackManager import get_items, get_locations, items_to_id
+from .APModpackManager import get_items, get_locations, items_to_id, get_item_groups, get_location_groups, modpacks
 import Utils
 from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, CollectionState
 from NetUtils import JSONMessagePart
@@ -16,7 +15,6 @@ from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch as launch_component
 from worlds.generic import Rules
 from .InternalItem import Recipe, InternalItem
-from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
@@ -49,7 +47,7 @@ class FactorioItem(Item):
     game = "Factorio Bob's"
 
 
-class FactorioBobs(PackWorld):
+class FactorioBobs(World):
     """
     Factorio is a game about automation. You play as an engineer who has crash landed on the planet
     Nauvis, an inhospitable world filled with dangerous creatures called biters. Build a factory,
@@ -66,7 +64,10 @@ class FactorioBobs(PackWorld):
     special_nodes = {"automation", "electronics", "rocket-silo"}
     location_pool: list[FactorioScienceLocation]
 
-    modpack: FactorioModpack
+    item_name_to_id = get_items()
+    location_name_to_id = get_locations()
+    item_name_groups = get_item_groups()
+    location_name_groups = get_location_groups()
 
     web = FactorioBobsWeb()
     options_dataclass = FactorioOptions
@@ -97,6 +98,7 @@ class FactorioBobs(PackWorld):
         self.custom_products: dict[str, InternalItem] = {}
         self.science_locations = []
         self.tech_tree_layout_prerequisites = {}
+        self.modpack: FactorioModpack | None = None
 
         self.logger = logging.getLogger(f"{self.game}:{self.player}")
 
@@ -124,7 +126,12 @@ class FactorioBobs(PackWorld):
     ut_can_gen_without_yaml = True
 
     def generate_early(self) -> None:
-        self.super().generate_early()
+        modpack_name = self.options.packname.value
+        if modpack_name not in modpacks:
+            raise Exception(f"Modpack name '{modpack_name}' not found.")
+        self.modpack = modpacks[modpack_name]
+        self.modpack.init_pack_check()
+
         # if max < min, then swap max and min
         if self.options.max_tech_cost < self.options.min_tech_cost:
             self.options.min_tech_cost.value, self.options.max_tech_cost.value = \
@@ -250,8 +257,8 @@ class FactorioBobs(PackWorld):
 
         location_pool = []
 
-        for pack in sorted(self.options.max_science_pack.get_allowed_packs()):
-            location_pool.extend(location_pools[pack])
+        for pack in range(self.options.max_science_pack.value):
+            location_pool.extend(self.modpack.location_pools[pack])
 
         if (hasattr(self.multiworld, "re_gen_passthrough") # if regen and have location count
                 and FactorioBobs.SLOT_LOCATION_COUNT_KEY in self.multiworld.re_gen_passthrough[self.game]):

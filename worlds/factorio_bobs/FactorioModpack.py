@@ -4,12 +4,13 @@ from pathlib import Path
 from typing import FrozenSet
 
 import Utils
-from . import APModpackManager, Technology
 from .InternalItem import RecipeEngine
+from .Technologies import Technology
+from .APModpackManager import BaseModpack
 
 MAX_LOCATIONS_PER_SCIENCE_PACK = 999
 
-class FactorioModpack(APModpackManager.BaseModpack):
+class FactorioModpack(BaseModpack):
 
     def __init__(self, packPath: Path):
         super().__init__(packPath)
@@ -41,13 +42,16 @@ class FactorioModpack(APModpackManager.BaseModpack):
 
         for technology_name, tech in self.technology_table.items():
             self._add_item(technology_name, groups={"Progressive"} if tech.progressive else None)
+        self.logger.debug(f"Loaded {len(self.items_to_id)} items")
 
     def init_locations(self):
+        self.location_pools: list[list[str]] = []
         for complexity in range(1, len(self.ordered_science_packs)+1):
             pool = [f"AP-{complexity}-{i}" for i in range(1, MAX_LOCATIONS_PER_SCIENCE_PACK + 1)]
             for location in pool:
                 self._add_location(location, groups={f"AP-{complexity}"})
             self.location_pools.append(pool)
+        self.logger.debug(f"Loaded {len(self.locations_to_id)} locations")
 
     def consistency_checks(self) -> None:
         is_consistent = True
@@ -145,8 +149,11 @@ class FactorioModpack(APModpackManager.BaseModpack):
 
     @cached_property
     def start_unlocked_recipes(self) -> set[str]:
-        with self.open_file("startingItems.json") as file:
-            startingItems = json.load(file)
+        try:
+            with self.open_file("startingItems.json") as file:
+                startingItems = json.load(file)
+        except FileNotFoundError:
+            return set()
         return set(startingItems["recipes"])
 
     @property
@@ -186,3 +193,6 @@ class FactorioModpack(APModpackManager.BaseModpack):
         if self.__recipe_engine is None:
             self.__recipe_engine = RecipeEngine(self)
         return self.__recipe_engine
+
+
+print(f"Class defined: {FactorioModpack}")

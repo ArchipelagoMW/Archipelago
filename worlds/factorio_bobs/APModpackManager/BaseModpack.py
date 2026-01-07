@@ -3,7 +3,6 @@ import logging
 from io import TextIOWrapper
 from pathlib import Path
 
-from . import logger
 from .ItemLocations import add_item, add_location
 from .PackLoader import init_modpacks
 
@@ -29,15 +28,15 @@ class BaseModpack:
 
         self.__has_fully_initialized = False
 
-        self.items_to_id: dict[str, int] | None = None
-        self.locations_to_id: dict[str, int] | None = None
+        self.items_to_id: dict[str, int] = {}
+        self.locations_to_id: dict[str, int] = {}
 
         self.logger.info(f"Initialised pack: {self.packName}")
 
     def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__()
         if cls.__name__ == 'BaseModpack':
             return
+        logger = logging.getLogger(f"APModpackManager - factorio with modpacks")
         logger.debug(f'PackWorld subclass: {cls.__name__}, starting import of packs')
         init_modpacks(cls)
 

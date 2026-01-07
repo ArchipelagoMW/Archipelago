@@ -4,8 +4,7 @@ from typing import TYPE_CHECKING
 
 from worlds.AutoWorld import World
 
-from . import Technologies
-from .InternalItem import all_ingredients, recipes
+from . import Technologies, FactorioModpack
 
 if TYPE_CHECKING:
     from . import FactorioBobs, InternalItem, Recipe
@@ -85,7 +84,6 @@ class TechRule(FactorioRule):
     def __init__(self, tech: str | Technologies.Technology):
         super().__init__()
         if type(tech) is str:
-            assert tech in Technologies.base_technology_table, f"{tech} is not a valid tech for rules"
             self.tech_name = tech
         else:
             self.tech_name = tech.name
@@ -97,34 +95,29 @@ class TechRule(FactorioRule):
         return {self.tech_name,}
 
 class InternalItemRule(AndRule, FactorioRule):
-    def __init__(self, internal_item: InternalItem | str):
-        if type(internal_item) is str:
-            assert internal_item in all_ingredients, f"{InternalItem} is not a valid item for rules"
-            self.internalItem = all_ingredients[internal_item]
-        else:
-            self.internalItem = internal_item
+    def __init__(self, internal_item: InternalItem):
+        self.internalItem = internal_item
         super().__init__(*(TechRule(tech) for tech in self.internalItem.all_unlocking_technologies()))
 
 class RecipeRule(AndRule, FactorioRule):
-    def __init__(self, recipe: Recipe | str):
-        if type(recipe) is str:
-            assert recipe in recipes, f"{recipe} is not a valid recipe for rules"
-            self.recipe = recipes[recipe]
-        else:
-            self.recipe = recipe
+    def __init__(self, recipe: Recipe):
+        self.recipe = recipe
         super().__init__(*(TechRule(tech) for tech in self.recipe.all_unlocking_technologies()))
 
 
-def process_yaml_rule(rule_pair: dict[str, str | list]) -> Rule:
+def process_yaml_rule(rule_pair: dict[str, str | list], modpack: FactorioModpack) -> Rule:
     rule_type, rule_value = next(iter(rule_pair.items()))
     if rule_type == "and":
-        return AndRule(*(process_yaml_rule(rule) for rule in rule_value))
+        return AndRule(*(process_yaml_rule(rule, modpack) for rule in rule_value))
     if rule_type == "or":
-        return OrRule(*(process_yaml_rule(rule) for rule in rule_value))
+        return OrRule(*(process_yaml_rule(rule, modpack) for rule in rule_value))
     if rule_type == "tech":
+        assert rule_value in modpack.base_technology_table.keys(), f"{rule_value} is not a valid tech for rules"
         return TechRule(rule_value)
     if rule_type == "item":
-        return InternalItemRule(rule_value)
+        assert rule_value in modpack.recipe_engine.all_ingredients.keys(), f"{rule_value} is not a valid item in rules"
+        return InternalItemRule(modpack.recipe_engine.all_ingredients[rule_value])
     if rule_type == "recipe":
-        return RecipeRule(rule_value)
+        assert rule_value in modpack.recipe_engine.recipes.keys(), f"{rule_value} is not a valid recipe in rules"
+        return RecipeRule(modpack.recipe_engine.recipes[rule_value])
     raise ValueError(f"Unknown rule type {rule_type}")

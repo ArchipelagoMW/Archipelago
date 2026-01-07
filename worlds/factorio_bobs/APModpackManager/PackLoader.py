@@ -1,12 +1,14 @@
+import logging
 from pathlib import Path
 
-from . import logger, BaseModpack
+from . import BaseModpack
+
+logger = logging.getLogger(f"APModpackManager - factorio with modpacks: PackLoader")
 
 modpacks: dict[str, BaseModpack] = {}
 """
 all the initializes modpacks
 """
-
 def init_modpacks(modpackType: type[BaseModpack]) -> None:
     """
     This initializes all mod packs it can find

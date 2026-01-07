@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Set, Tuple, Union, List
+from typing import Set, Tuple, Union
 
-from . import FactorioOptions
 from .FactorioUtils import FactorioElement
-from .InternalItem import InternalItem, valid_ingredients, artifacts, invalid_ingredients
 
 
 def always(state) -> bool:

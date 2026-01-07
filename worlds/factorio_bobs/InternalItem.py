@@ -152,6 +152,7 @@ class RecipeEngine:
         with self.modpack.open_file("customRecipes.json") as file:
             raw_custom = json.load(file)
 
+        self.__pack_custom_recipes: dict[str, Recipe] = {}
         for recipe_name, recipe_data in raw_custom.items():
             # TODO add optional crafting_machine_tints
             # TODO add group for AP recipes
@@ -218,10 +219,22 @@ class RecipeEngine:
         return self.__valid_ingredients
 
     @property
+    def fluids(self) -> set[str]:
+        if self.__fluids is None:
+            self.__register_iternal_items()
+        return self.__fluids
+
+    @property
     def recipes(self) -> dict[str, Recipe]:
         if self.__recipes is None:
             self.__register_recipes()
         return self.__recipes
+
+    @property
+    def pack_custom_recipes(self) -> dict[str, Recipe]:
+        if self.__pack_custom_recipes is None:
+            self.__register_recipes()
+        return self.__pack_custom_recipes
 
     @property
     def root_categories(self) -> set[str]:
