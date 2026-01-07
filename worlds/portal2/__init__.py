@@ -103,29 +103,18 @@ class Portal2World(World):
         used_maps: list[str] = []
 
         possible_maps = [name for name in self.maps_in_use if not name.startswith("Chapter 9")]
-        print(f"Possible Maps: {possible_maps}")
-        print()
 
         # Maps with no requirements
         map_pool += [name for name in possible_maps if len(all_locations_table[name].required_items) == 0]
-        print(f"Map pool after round 1: {map_pool}")
         pick_maps(3)
-        print(f"Used maps after round 1: {used_maps}")
-        print()
-
+        
         # Maps with just portal gun upgrade
         map_pool += [name for name in possible_maps if all_locations_table[name].required_items == [portal_gun_2]]
-        print(f"Map pool after round 2: {map_pool}")
         pick_maps(3)
-        print(f"Used maps after round 2: {used_maps}")
-        print()
-       
 
         # All other maps
         map_pool += [name for name in possible_maps if name not in used_maps and name not in map_pool]
-        print(f"Map pool after round 3: {map_pool}")
         pick_maps(len(map_pool))
-        print(f"Used maps after round 3: {used_maps}")
 
         return chapter_maps
 
