@@ -1,5 +1,4 @@
-﻿from BaseClasses import MultiWorld
-from .Names import LocationName, ItemName
+﻿from .Names import LocationName, ItemName
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule, set_rule
 
@@ -87,7 +86,7 @@ def set_rules(world: World):
                  lambda state: state.has(ItemName.forest_bridge_key, player))
         
     # Apex Horn Rule
-    set_rule(world.multiworld.get_location(LocationName.apex_blow_horn, player), lambda state: state.has(ItemName.blizzard_talisman))
+    set_rule(world.multiworld.get_location(LocationName.apex_blow_horn, player), lambda state: state.has(ItemName.blizzard_talisman, player))
 
     # Trader Rules
     # Trader appears when the campfire is lit.

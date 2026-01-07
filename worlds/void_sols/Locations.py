@@ -511,13 +511,13 @@ def setup_locations(world):
     location_table.update(upgrades_table)
     location_table.update(misc_table)
 
-    if world.options.sparks_checks:
+    if world.options.sparks_checks.value:
         location_table.update(sparks_table)
 
-    if world.options.torch_checks:
+    if world.options.torch_checks.value:
         location_table.update(torches_table)
 
-    if world.options.hidden_walls_checks:
+    if world.options.hidden_walls_checks.value:
         location_table.update(walls_table)
 
     return location_table

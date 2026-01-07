@@ -6,6 +6,7 @@ from .Items import all_items, item_data_table, VoidSolsItem
 from .Locations import all_locations, setup_locations
 from .Regions import create_regions, connect_regions
 from .Rules import set_rules
+from .Names import ItemName
 
 class VoidSolsWeb(WebWorld):
     theme = "party"
@@ -45,10 +46,44 @@ class VoidSolsWorld(World):
         set_rules(self)
 
     def create_items(self):
+        # Handle Starting Weapon
+        starting_weapon_option = self.options.starting_weapon.value
+        
+        weapon_map = {
+            0: ItemName.sword,
+            1: ItemName.dagger,
+            2: ItemName.great_hammer,
+            3: ItemName.pickaxe,
+            4: ItemName.halberd,
+            5: ItemName.katana,
+            6: ItemName.gauntlets,
+            7: ItemName.morningstar,
+            8: ItemName.dual_handaxes,
+            9: ItemName.scythe,
+            10: ItemName.frying_pan,
+        }
+
+        if starting_weapon_option == 11: # Random
+            starting_weapon_name = self.random.choice(list(weapon_map.values()))
+        else:
+            starting_weapon_name = weapon_map.get(starting_weapon_option)
+        
+        # Store the actual starting weapon ID for slot_data
+        self.starting_weapon_id = next((k for k, v in weapon_map.items() if v == starting_weapon_name), 0)
+
+        if starting_weapon_name:
+            self.multiworld.push_precollected(self.create_item(starting_weapon_name))
+
         itempool = []
         for name, data in item_data_table.items():
+            quantity = data.quantity
+            
+            # If this is the starting weapon, reduce quantity by 1
+            if name == starting_weapon_name:
+                quantity -= 1
+            
             if data.classification != ItemClassification.filler:
-                for _ in range(data.quantity):
+                for _ in range(quantity):
                     itempool.append(self.create_item(name))
 
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
@@ -64,3 +99,12 @@ class VoidSolsWorld(World):
             raise Exception(f"Too many items! {len(itempool)} items for {total_locations} locations.")
 
         self.multiworld.itempool += itempool
+
+    def fill_slot_data(self) -> dict:
+        return {
+            "enemy_randomization": self.options.enemy_randomization.value,
+            "starting_weapon": self.starting_weapon_id,
+            "sparks_checks": self.options.sparks_checks.value,
+            "torch_checks": self.options.torch_checks.value,
+            "hidden_walls_checks": self.options.hidden_walls_checks.value,
+        }
