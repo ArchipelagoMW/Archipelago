@@ -3,6 +3,7 @@
 from BaseClasses import MultiWorld, Region, Entrance
 from .Locations import VoidSolsLocation
 from .Names import LocationName, ItemName
+from .Rules import can_blow_up_wall
 from worlds.generic.Rules import add_rule, set_rule
 from worlds.AutoWorld import World
 
@@ -151,10 +152,9 @@ def connect_regions(world: World):
     connect(world, "Forest", "Mines Floor 1", lambda state: state.has(ItemName.mine_entrance_lift_key, player))
 
     # Forest -> Apex Outskirts (Two methods from Forest)
-    # 1. Key, 2. Dynamite
+    # 1. Key, 2. Dynamite (or Mine Entrance Lift Key which implies access to mines/explosives)
     connect(world, "Forest", "Apex Outskirts",
-            lambda state: state.has(ItemName.apex_outskirts_key, player) or
-                          state.has(ItemName.dynamite_x1, player))
+            lambda state: state.has(ItemName.apex_outskirts_key, player) or can_blow_up_wall(state, player))
     
     # Mines -> Apex Outskirts (Barrel explosion, accessible if in Mines)
     connect(world, "Mines Floor 1", "Apex Outskirts")
@@ -188,7 +188,9 @@ def connect_regions(world: World):
     connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     
-    connect(world, "Forest", "Apex", lambda state: state.has(ItemName.apex_outskirts_key, player))
+    # Apex Connections
+    connect(world, "Apex Outskirts", "Apex Town")
+    connect(world, "Apex Town", "Apex Hub")
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):

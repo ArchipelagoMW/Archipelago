@@ -3,15 +3,18 @@ from .Names import LocationName, ItemName
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule, set_rule
 
+# Helper functions
+def can_light_fire(state, player):
+    return state.has(ItemName.flaming_torch_x1, player) or \
+           state.has(ItemName.flaming_torch_x2, player) or \
+           state.has(ItemName.fire_talisman, player)
+
+def can_blow_up_wall(state, player):
+    return state.has(ItemName.dynamite_x1, player) or state.has(ItemName.mine_entrance_lift_key, player)
+
 def set_rules(world: World):
     player = world.player
     
-    # Helper functions
-    def can_light_fire(state):
-        return state.has(ItemName.flaming_torch_x1, player) or \
-               state.has(ItemName.flaming_torch_x2, player) or \
-               state.has(ItemName.fire_talisman, player)
-
     # Victory condition: Defeat Zenith and interact with world light spark
     world.multiworld.completion_condition[player] = lambda state: state.has(ItemName.victory, player)
 
@@ -56,7 +59,7 @@ def set_rules(world: World):
         set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.prison_key, player))
 
     # Furnace Rule
-    set_rule(world.multiworld.get_location(LocationName.prison_yard_misc_furnace, player), can_light_fire)
+    set_rule(world.multiworld.get_location(LocationName.prison_yard_misc_furnace, player), lambda state: can_light_fire(state, player))
 
     # Gate Key Rule
     gate_locked_items = [
@@ -104,7 +107,7 @@ def set_rules(world: World):
 
     for loc, fish_item in fish_trades.items():
         set_rule(world.multiworld.get_location(loc, player),
-                 lambda state: can_light_fire(state) and state.has(fish_item, player))
+                 lambda state: can_light_fire(state, player) and state.has(fish_item, player))
 
     # 2. Trader Items (Require Fire + Fish Tokens)
     # Fish Tokens come in packs of 2 (ItemName.fish_tokens_x2)
@@ -130,7 +133,7 @@ def set_rules(world: World):
         # Since the item is "Fish Tokens x2", state.count(ItemName.fish_tokens_x2, player) returns the number of items,
         # so total tokens = count * 2.
         set_rule(world.multiworld.get_location(loc, player),
-                 lambda state, c=cost: can_light_fire(state) and (state.count(ItemName.fish_tokens_x2, player) * 2) >= c)
+                 lambda state, c=cost: can_light_fire(state, player) and (state.count(ItemName.fish_tokens_x2, player) * 2) >= c)
 
     # --- Village Rules ---
 
@@ -369,6 +372,35 @@ def set_rules(world: World):
         set_rule(world.multiworld.get_location(loc_name, player),
                  lambda state: state.has(ItemName.infernal_key, player) and can_solve_codebearer_puzzle(state))
 
+    # Infernal Key Pickup Rule
+    # The infernal key pickup is dropped by the infernal warden boss
+    set_rule(world.multiworld.get_location(LocationName.supermax_prison_item_pickup_infernal_key, player),
+             lambda state: state.has(ItemName.supermax_prison_infernal_warden_defeated_event, player))
+
+    # East Wing Key Rules
+    # These locations are locked behind the door requiring the East Wing Key
+    east_wing_locked_locations = [
+        LocationName.supermax_prison_item_pickup_relic_dousing,
+        LocationName.supermax_prison_item_pickup_stale_bread,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_13,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_14,
+        LocationName.supermax_prison_item_pickup_metamorphic_alloy,
+        LocationName.supermax_prison_item_pickup_major_sol_shard_15,
+        LocationName.supermax_prison_item_pickup_map_b,
+        LocationName.supermax_prison_item_pickup_map_c,
+        LocationName.supermax_prison_wall_security_corridor,
+        LocationName.supermax_prison_torch_torture_chamber,
+        LocationName.supermax_prison_torch_east_wing_office,
+        LocationName.supermax_prison_torch_security_corridor,
+        LocationName.supermax_prison_torch_north_storage_room,
+        LocationName.supermax_prison_torch_prison_rear_entrance,
+        LocationName.supermax_prison_torch_improvised_camp,
+        LocationName.supermax_prison_infernal_warden_defeated,
+    ]
+
+    for loc_name in east_wing_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.east_wing_key, player))
+
     # Mushroom Access Rules
     # These locations require at least one mushroom to access
     mushroom_access_locations = [
@@ -379,3 +411,23 @@ def set_rules(world: World):
 
     for loc_name in mushroom_access_locations:
         set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.mysterious_mushroom_x1, player))
+
+    # Breakable Wall Rules
+    # Factory Dual Handaxes and Cracked Wall Outside Factory require blowing up the wall
+    breakable_wall_locations = [
+        LocationName.factory_item_pickup_dual_handaxes,
+        LocationName.factory_wall_cracked_outside,
+        LocationName.mines_wall_cracked_entrance,
+    ]
+
+    for loc_name in breakable_wall_locations:
+        set_rule(world.multiworld.get_location(loc_name, player), lambda state: can_blow_up_wall(state, player))
+
+    # Apex Outskirts Key Pickup Rule
+    # The apex outskirts key pickup is dropped by the immaculate boss
+    set_rule(world.multiworld.get_location(LocationName.factory_item_pickup_apex_outskirts_key, player),
+             lambda state: state.has(ItemName.factory_immaculate_defeated_event, player))
+
+    # Apex Relic of Power Plus Rule
+    set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_relic_power_plus, player),
+             lambda state: state.has(ItemName.apex_outskirts_key, player))
