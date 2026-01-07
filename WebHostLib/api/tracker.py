@@ -221,7 +221,13 @@ def static_tracker_data(tracker: UUID) -> dict[str, Any]:
     """The played game per player slot."""
     for team, players in all_players.items():
         for player in players:
-            players_info.append({"team": team, "player": player, "player_name": tracker_data.get_player_name(player), "game": tracker_data.get_player_game(player)})
+            players_info.append(
+                {
+                    "team": team,
+                    "player": player,
+                    "player_name": tracker_data.get_player_name(player),
+                    "game": tracker_data.get_player_game(player)
+                })
 
     return {
         "groups": groups,
