@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import typing
+from dataclasses import dataclass
 
 from schema import Schema, Optional, And, Or, SchemaError
 
 from Options import Choice, OptionDict, OptionSet, DefaultOnToggle, Range, DeathLink, Toggle, \
-    StartInventoryPool, PerGameCommonOptions, OptionGroup, OptionList, Visibility
-from worlds.factorio_bobs import FactorioRules
-from worlds.factorio_bobs.APModpackManager.PackOptions import PackOptions
+    StartInventoryPool, OptionGroup, Visibility
+from .APModpackManager.PackLoader import modpacks
+from .APModpackManager.PackOptions import PackOptions
 
 
 # schema helpers
@@ -46,39 +46,14 @@ class RuleSchema:
             return value
         raise SchemaError(f"key should be value of and, or, item, recipe, tech but was {value}")
 
-
-class MaxSciencePack(Choice):
-    """Maximum level of science pack required to complete the game.
-    This only affects the number of science packs in the game
-    and lowering can increase the difficulty of crafting them."""
-    display_name = "Maximum Required Science Pack"
-    option_automation_science_pack = 0
-    option_logistic_science_pack = 1
-    option_military_science_pack = 2
-    option_chemical_science_pack = 3
-    option_bob_advanced_logistic_science_pack = 4
-    option_production_science_pack = 5
-    option_utility_science_pack = 6
-    option_bob_science_pack_gold = 7
-    option_bob_alien_science_pack = 8
-    option_bob_alien_science_pack_blue = 9
-    option_bob_alien_science_pack_orange = 10
-    option_bob_alien_science_pack_purple = 11
-    option_bob_alien_science_pack_yellow = 12
-    option_bob_alien_science_pack_green = 13
-    option_bob_alien_science_pack_red = 14
-    option_space_science_pack = 15
-    default = 7
-
-    def get_allowed_packs(self):
-        return {option.replace("_", "-") for option, value in self.options.items() if value <= self.value}
-
-    @classmethod
-    def get_ordered_science_packs(cls):
-        return [option.replace("_", "-") for option, value in sorted(cls.options.items(), key=lambda pair: pair[1])]
-
-    def get_max_pack(self):
-        return self.get_ordered_science_packs()[self.value].replace("_", "-")
+class NumberOfSciencePacks(Range):
+    """Number of science packs required for research and to complete the game.
+    Gets caped by the maximum number of science packs in the game.
+    """
+    display_name = "Number of science packs"
+    range_start = 1
+    range_end = max(len(modpack.ordered_science_packs) for modpack in modpacks.values())
+    default = 8
 
 class AdditionalRocketPool(DefaultOnToggle):
     """Adds a pool to draw items from specifically for the rocket, silo and satellite randomized recipes.
@@ -557,13 +532,13 @@ class CustomAdditionalLogic(OptionDict):
     """
     display_name = "Custom Additional Logic"
     visibility = Visibility.spoiler
-    schema = Schema({Optional(Or(num+1, name)): RuleSchema()
-                     for name, num in MaxSciencePack.options.items() if num != 0})
+    schema = Schema({Optional(num): RuleSchema()
+                     for num in range(NumberOfSciencePacks.range_end + 1)})
 
 
 @dataclass
 class FactorioOptions(PackOptions):
-    max_science_pack: MaxSciencePack
+    number_of_science_packs: NumberOfSciencePacks
     additional_rocket_pool: AdditionalRocketPool
     percent_items_in_game: PercentItemsInGame
     no_earlier_pools: NoEarlierPools

@@ -1,7 +1,7 @@
 import json
 from functools import cached_property
 from pathlib import Path
-from typing import FrozenSet
+from typing import FrozenSet, Any
 
 import Utils
 from .InternalItem import RecipeEngine
@@ -194,5 +194,17 @@ class FactorioModpack(BaseModpack):
             self.__recipe_engine = RecipeEngine(self)
         return self.__recipe_engine
 
-
-print(f"Class defined: {FactorioModpack}")
+    @cached_property
+    def defaultOptions(self):
+        try:
+            with self.open_file("defaultOptions.json") as file:
+                default_raw = json.load(file)
+        except FileNotFoundError:
+            self.logger.debug("No default options file")
+            return {"additional_logic": {}}
+        defaults: dict[str, Any] = {"additional_logic": {}}
+        if "additional_logic" in defaults:
+            raw_additional_logic = default_raw["additional_logic"]
+            for complexity, rules in raw_additional_logic.values():
+                defaults["additional_logic"][int(complexity)] = rules
+        return defaults

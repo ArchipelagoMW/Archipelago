@@ -16,7 +16,7 @@ from worlds.LauncherComponents import Component, components, Type, launch as lau
 from worlds.generic import Rules
 from .InternalItem import Recipe, InternalItem
 from .Mod import generate_mod
-from .FactorioOptions import (FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal,
+from .FactorioOptions import (FactorioOptions, Silo, Satellite, TechTreeInformation, Goal,
                               TechCostDistribution, option_groups)
 from .FactorioRules import RecipeRule, InternalItemRule, TechRule, AndRule, OrRule, process_yaml_rule
 from .Shapes import get_shapes
@@ -76,7 +76,6 @@ class FactorioBobs(World):
     required_client_version = (0, 6, 0)
     if Utils.version_tuple < required_client_version:
         raise Exception(f"Update Archipelago to use this world ({game}).")
-    ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     skip_silo: bool = False
     origin_region_name = "Nauvis"
@@ -90,6 +89,8 @@ class FactorioBobs(World):
     seeded_random_seed: int
     seeded_random: random.Random
 
+    modpack: FactorioModpack
+
     def __init__(self, world, player: int):
         super(FactorioBobs, self).__init__(world, player)
         self.additional_logic: dict[int, AndRule] = {}
@@ -99,6 +100,7 @@ class FactorioBobs(World):
         self.science_locations = []
         self.tech_tree_layout_prerequisites = {}
         self.modpack: FactorioModpack | None = None
+        self.removed_technologies: set[str] = set()
 
         self.logger = logging.getLogger(f"{self.game}:{self.player}")
 
@@ -107,6 +109,9 @@ class FactorioBobs(World):
     def set_seeded_random_seed(self, seed: int):
         self.seeded_random_seed = seed
         self.seeded_random = random.Random(self.seeded_random_seed)
+
+    def get_allowed_packs(self) -> set[str]:
+        return set(self.modpack.ordered_science_packs[:self.options.number_of_science_packs.value])
 
     generate_output = generate_mod
 
@@ -131,6 +136,9 @@ class FactorioBobs(World):
             raise Exception(f"Modpack name '{modpack_name}' not found.")
         self.modpack = modpacks[modpack_name]
         self.modpack.init_pack_check()
+
+        self.removed_technologies = self.modpack.removed_technologies.copy()
+        self.options.number_of_science_packs.value = min(len(self.modpack.ordered_science_packs), self.options.number_of_science_packs.value)
 
         # if max < min, then swap max and min
         if self.options.max_tech_cost < self.options.min_tech_cost:
@@ -165,76 +173,26 @@ class FactorioBobs(World):
                                                            custom_products, 1, self.modpack.recipe_engine)
                 # print(f"{[x for x in self.custom_recipes[product_name].products]}: {[x for x in self.custom_recipes[product_name].ingredients]}")
             self.options.additional_logic.value = self.options.additional_logic.option_none
-            if FactorioBobs.SLOT_OPTIONS_KEY in slot_data:
-                slot_options = slot_data[FactorioBobs.SLOT_OPTIONS_KEY]
-                self.options.tech_cost_mix.value = slot_options[self.options.tech_cost_mix.display_name]
-                self.options.max_science_pack.value = slot_options[self.options.max_science_pack.display_name]
-            else:
-                self.options.max_science_pack.value = len([x for x in self.custom_products.keys()
-                                                          if x in MaxSciencePack.get_ordered_science_packs()]) - 1
+            slot_options = slot_data[FactorioBobs.SLOT_OPTIONS_KEY]
+            self.options.tech_cost_mix.value = slot_options[self.options.tech_cost_mix.display_name]
+            self.options.number_of_science_packs.value = slot_options[self.options.number_of_science_packs.display_name]
 
         if self.options.additional_logic.value == self.options.additional_logic.option_none:
             self.additional_logic = {}
         elif self.options.additional_logic.value == self.options.additional_logic.option_default:
-            self.additional_logic = {
-                2: InternalItemRule("gun-turret"),
-                3: AndRule(InternalItemRule("lab"),
-                           InternalItemRule("transport-belt"),
-                           InternalItemRule("electric-mining-drill"),
-                           InternalItemRule("bob-void-pump"),
-                           RecipeRule("bob-basic-greenhouse-cycle"),
-                           TechRule("bob-long-inserters-1")
-                           ),
-                5: AndRule(InternalItemRule("modular-armor"),
-                           InternalItemRule("personal-roboport-equipment"),
-                           InternalItemRule("solar-panel-equipment"),
-                           InternalItemRule("battery-equipment"),
-                           InternalItemRule("construction-robot"),
-                           InternalItemRule("constant-combinator"),
-                           TechRule("bob-long-inserters-2"),
-                           OrRule(AndRule(InternalItemRule("train-stop"),
-                                          InternalItemRule("rail-signal"),
-                                          InternalItemRule("rail"),
-                                          InternalItemRule("locomotive"),
-                                          InternalItemRule("cargo-wagon"),
-                                          InternalItemRule("fluid-wagon")
-                                          ),
-                                  AndRule(InternalItemRule("roboport"),
-                                          InternalItemRule("logistic-robot"),
-                                          InternalItemRule("storage-chest"), # yes a chest is for storage
-                                          InternalItemRule("requester-chest"),
-                                          InternalItemRule("passive-provider-chest"),
-                                          InternalItemRule("buffer-chest"),
-                                          InternalItemRule("active-provider-chest")
-                                          )
-                                  )
-                           ),
-                7: AndRule(InternalItemRule("train-stop"),
-                           InternalItemRule("rail-signal"),
-                           InternalItemRule("rail"),
-                           InternalItemRule("locomotive"),
-                           InternalItemRule("cargo-wagon"),
-                           InternalItemRule("fluid-wagon"),
-                           InternalItemRule("roboport"),
-                           InternalItemRule("logistic-robot"),
-                           InternalItemRule("storage-chest"), # yes a chest is for storage
-                           InternalItemRule("requester-chest"),
-                           InternalItemRule("passive-provider-chest"),
-                           InternalItemRule("buffer-chest"),
-                           InternalItemRule("active-provider-chest")
-                           )
-            }
+            self.additional_logic = {complexity:
+                                        process_yaml_rule(yaml_rule, self.modpack)
+                                     for complexity, yaml_rule in self.modpack.defaultOptions["additional_logic"].items()}
         elif self.options.additional_logic.value == self.options.additional_logic.option_custom:
-            self.additional_logic = {complexity if type(complexity) is int else
-                                     self.options.max_science_pack.aliases[complexity] + 1:
-                                        process_yaml_rule(yaml_rule)
+            self.additional_logic = {complexity:
+                                        process_yaml_rule(yaml_rule, self.modpack)
                                      for complexity, yaml_rule in self.options.custom_additional_logic.value.items()}
         else:
             raise OptionError("additional_logic is invalid type")
 
 
         for complexity, rule in self.additional_logic.items():
-            if complexity <= self.options.max_science_pack.value + 1:
+            if complexity <= self.options.number_of_science_packs.value:
                 for tech in rule.needed_items():
                     self.progression_technologies.add(self.modpack.technology_table[tech])
 
@@ -257,7 +215,7 @@ class FactorioBobs(World):
 
         location_pool = []
 
-        for pack in range(self.options.max_science_pack.value):
+        for pack in range(self.options.number_of_science_packs.value):
             location_pool.extend(self.modpack.location_pools[pack])
 
         if (hasattr(self.multiworld, "re_gen_passthrough") # if regen and have location count
@@ -277,7 +235,7 @@ class FactorioBobs(World):
                 raise Exception("Too many traps for too few locations. Either decrease the trap count, "
                                 f"or increase the location count (higher max science pack). (Player {self.player})") from e
 
-        self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis)
+        self.science_locations = [FactorioScienceLocation(player, loc_name, self.location_name_to_id[loc_name], nauvis, self.modpack)
                                   for loc_name in location_names]
         distribution: TechCostDistribution = self.options.tech_cost_distribution
         min_cost = self.options.min_tech_cost.value
@@ -305,7 +263,7 @@ class FactorioBobs(World):
         event = FactorioItem("Victory", ItemClassification.progression, None, player)
         location.place_locked_item(event)
 
-        for ingredient in sorted(self.options.max_science_pack.get_allowed_packs()):
+        for ingredient in sorted(self.get_allowed_packs()):
             location = FactorioLocation(player, f"Automate {ingredient}", None, nauvis)
             nauvis.locations.append(location)
             event = FactorioItem(f"Automated {ingredient}", ItemClassification.progression, None, player)
@@ -359,7 +317,7 @@ class FactorioBobs(World):
         player = self.player
         shapes = get_shapes(self)
 
-        science_packs = self.options.max_science_pack.get_ordered_science_packs()[:self.options.max_science_pack.value+1]
+        science_packs = self.modpack.ordered_science_packs[:self.options.number_of_science_packs]
         for complexity, science_pack in enumerate(science_packs, start=1):
             if science_pack == "automation-science-pack":
                 continue
@@ -396,7 +354,7 @@ class FactorioBobs(World):
         self.multiworld.completion_condition[player] = lambda state: state.has('Victory', player)
 
     def get_science_pack_rule(self, complexity: int) -> FactorioRules.Rule:
-        science_pack = self.options.max_science_pack.get_ordered_science_packs()[complexity-1]
+        science_pack = self.modpack.ordered_science_packs[complexity-1]
         science_pack_item: InternalItem = self.get_internal_item(science_pack)
         if complexity in self.additional_logic:
             rule = AndRule(InternalItemRule(science_pack_item), self.additional_logic[complexity])
@@ -616,7 +574,7 @@ class FactorioBobs(World):
 
         ordered_items = ordered_items[:int(len(ordered_items) * (self.options.percent_items_in_game.value / 100))]
 
-        pool_names = self.options.max_science_pack.get_ordered_science_packs()[1:self.options.max_science_pack.value+1]
+        pool_names = self.modpack.ordered_science_packs[1:self.options.number_of_science_packs.value]
         if self.options.additional_rocket_pool.value:
             pool_names.append("rocket")
 
@@ -628,7 +586,7 @@ class FactorioBobs(World):
 
     def set_custom_technologies(self):
         custom_technologies = {}
-        allowed_packs = self.options.max_science_pack.get_allowed_packs()
+        allowed_packs = self.get_allowed_packs()
         for technology_name, technology in self.modpack.base_technology_table.items():
             custom_technologies[technology_name] = technology.get_custom(self, allowed_packs, self.player)
         return custom_technologies
@@ -640,7 +598,7 @@ class FactorioBobs(World):
         science_pack_pools = self.get_internal_item_pools()
 
         valid_pool = []
-        for index, pack in enumerate(self.options.max_science_pack.get_ordered_science_packs()[:self.options.max_science_pack.value+1]):
+        for index, pack in enumerate(self.modpack.ordered_science_packs[:self.options.number_of_science_packs.value]):
             if self.options.no_earlier_pools.value:
                 valid_pool = science_pack_pools[pack]
             else:
@@ -658,7 +616,7 @@ class FactorioBobs(World):
         if self.options.additional_rocket_pool.value:
             rocket_pool = science_pack_pools["rocket"]
         else:
-            rocket_pool = science_pack_pools[self.options.max_science_pack.get_max_pack()]
+            rocket_pool = science_pack_pools[self.modpack.ordered_science_packs[self.options.number_of_science_packs.value-1]]
         custom_rocket_part = InternalItem("rocket-part", False, self.modpack.recipe_engine)
         self.custom_products[custom_rocket_part.name] = custom_rocket_part
         self.custom_recipes["rocket-part"] = Recipe("rocket-part", original_rocket_part.category,
@@ -678,7 +636,7 @@ class FactorioBobs(World):
                 old_recipe = self.modpack.recipe_engine.recipes["rocket-silo"]
                 new_recipe = self.make_balanced_recipe(
                     old_recipe, valid_pool,
-                    factor=(self.options.max_science_pack.value + 1) / 7,
+                    factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["rocket-silo"] = new_recipe
 
@@ -686,18 +644,18 @@ class FactorioBobs(World):
                 old_recipe = self.modpack.recipe_engine.recipes["satellite"]
                 new_recipe = self.make_balanced_recipe(
                     old_recipe, valid_pool,
-                    factor=(self.options.max_science_pack.value + 1) / 7,
+                    factor=self.options.number_of_science_packs.value / len(self.modpack.ordered_science_packs),
                     ingredients_offset=ingredients_offset.value)
                 self.custom_recipes["satellite"] = new_recipe
         bridge = InternalItem("ap-energy-bridge", False, self.modpack.recipe_engine)
         self.custom_products["ap-energy-bridge"] = bridge
         new_recipe = self.make_custom_recipe(bridge.name, {bridge: 1}, 6+ingredients_offset.value, 10,
-            science_pack_pools[self.options.max_science_pack.get_ordered_science_packs()[0]])
+            science_pack_pools[self.modpack.ordered_science_packs[0]])
         for ingredient_name in new_recipe.ingredients:
             new_recipe.ingredients[ingredient_name] = self.random.randint(50, 500)
         self.custom_recipes[bridge.name] = new_recipe
 
-        needed_items = {self.get_internal_item(pack) for pack in self.options.max_science_pack.get_allowed_packs()}
+        needed_items = {self.get_internal_item(pack) for pack in self.get_allowed_packs()}
         needed_items.add(self.custom_products["rocket-part"])
         if self.options.silo != Silo.option_spawn:
             needed_items.add(self.get_internal_item("rocket-silo"))
@@ -729,7 +687,7 @@ class FactorioBobs(World):
                                             FactorioBobs.SLOT_LOCATION_COUNT_KEY: len(self.science_locations),
                                             FactorioBobs.SLOT_OPTIONS_KEY: {
                                             self.options.tech_cost_mix.display_name: self.options.tech_cost_mix.value,
-                                            self.options.max_science_pack.display_name: self.options.max_science_pack.value,
+                                            self.options.number_of_science_packs.display_name: self.options.number_of_science_packs.value,
                                             },
                                             FactorioBobs.SLOT_RANDOM_RECIPES_KEY: {}}
         for recipe in self.custom_recipes.values():
@@ -743,7 +701,7 @@ class FactorioBobs(World):
         split_arg = argument.split("-")
         if len(split_arg) == 2:
             complexity = int(split_arg[1])
-            science_pack_name = self.options.max_science_pack.get_ordered_science_packs()[complexity]
+            science_pack_name = self.modpack.ordered_science_packs[complexity]
             rule = self.get_science_pack_rule(complexity)
             needed_items = {item for item in rule.needed_items() if not state.has(item, self.player)}
             ingredients = self.get_internal_item(science_pack_name).best_recipe.ingredients
@@ -757,7 +715,7 @@ class FactorioBobs(World):
             if argument not in locations:
                 return [{"text": "Unknown location\n"}] # todo add fuzzy
             packs_required = [(complexity, pack)
-                              for complexity, pack in enumerate(self.options.max_science_pack.get_ordered_science_packs())
+                              for complexity, pack in enumerate(self.modpack.ordered_science_packs)
                               if pack in locations[argument].ingredients]
             packs_needed = [(complexity, pack) for complexity, pack in packs_required
                             if not state.has(f"Automated {pack}", self.player)]
@@ -778,21 +736,21 @@ class FactorioScienceLocation(FactorioLocation):
     ingredients: typing.Dict[str, int]
     count: int = 0
 
-    def __init__(self, player: int, name: str, address: int, parent: Region):
+    def __init__(self, player: int, name: str, address: int, parent: Region, modpack: FactorioModpack):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
         # "AP-{Complexity}-{Cost}"
         split_name = self.name.split("-")
         self.complexity = int(split_name[1]) - 1
         self.rel_cost = int(split_name[2])
 
-        self.ingredients = {FactorioBobs.ordered_science_packs[self.complexity]: 1}
+        self.ingredients = {modpack.ordered_science_packs[self.complexity]: 1}
         world: World = parent.multiworld.worlds[self.player]
         assert type(world) is FactorioBobs
         world: FactorioBobs
         for complexity in range(self.complexity):
             if (world.options.tech_cost_mix >
                     world.seeded_random.randint(0, 99)):
-                self.ingredients[FactorioBobs.ordered_science_packs[complexity]] = 1
+                self.ingredients[modpack.ordered_science_packs[complexity]] = 1
 
     @property
     def factorio_ingredients(self) -> typing.List[typing.Tuple[str, int]]:

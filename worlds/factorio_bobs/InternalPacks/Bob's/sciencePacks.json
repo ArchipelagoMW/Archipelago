@@ -1,5 +1,4 @@
-{
-  "sciencePacks": ["automation-science-pack",
+["automation-science-pack",
 "logistic-science-pack",
 "military-science-pack",
 "chemical-science-pack",
@@ -15,4 +14,3 @@
 "bob-alien-science-pack-green",
 "bob-alien-science-pack-red",
 "space-science-pack"]
-}

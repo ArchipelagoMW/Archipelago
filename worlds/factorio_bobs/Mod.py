@@ -11,7 +11,7 @@ import jinja2
 
 import Utils
 import worlds.Files
-from . import FactorioOptions
+from .FactorioOptions import RecipeTime, FactorioOptions, Silo, Satellite
 
 if TYPE_CHECKING:
     from . import FactorioBobs
@@ -61,19 +61,19 @@ base_info = {
 
 recipe_time_scales = {
     # using random.triangular
-    FactorioOptions.RecipeTime.option_fast: (0.25, 1),
+    RecipeTime.option_fast: (0.25, 1),
     # 0.5, 2, 0.5 average -> 1.0
-    FactorioOptions.RecipeTime.option_normal: (0.5, 2, 0.5),
-    FactorioOptions.RecipeTime.option_slow: (1, 4),
+    RecipeTime.option_normal: (0.5, 2, 0.5),
+    RecipeTime.option_slow: (1, 4),
     # 0.25, 4, 0.25 average -> 1.5
-    FactorioOptions.RecipeTime.option_chaos: (0.25, 4, 0.25),
-    FactorioOptions.RecipeTime.option_vanilla: None
+    RecipeTime.option_chaos: (0.25, 4, 0.25),
+    RecipeTime.option_vanilla: None
 }
 
 recipe_time_ranges = {
-    FactorioOptions.RecipeTime.option_new_fast: (0.25, 2),
-    FactorioOptions.RecipeTime.option_new_normal: (0.25, 10),
-    FactorioOptions.RecipeTime.option_slow: (5, 10)
+    RecipeTime.option_new_fast: (0.25, 2),
+    RecipeTime.option_new_normal: (0.25, 10),
+    RecipeTime.option_slow: (5, 10)
 }
 
 
@@ -148,8 +148,8 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
         "base_tech_table": world.modpack.base_technology_table,
         "tech_to_progressive_lookup": world.modpack.tech_to_progressive_lookup,
         "mod_name": mod_name,
-        "allowed_science_packs": world.options.max_science_pack.get_allowed_packs(),
-        "ordered_science_packs": FactorioOptions.MaxSciencePack.get_ordered_science_packs(),
+        "allowed_science_packs": world.get_allowed_packs(),
+        "ordered_science_packs": world.modpack.ordered_science_packs,
         "custom_technologies": world.custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
         "slot_name": world.player_name,
@@ -177,10 +177,10 @@ def generate_mod(world: "FactorioBobs", output_directory: str):
             continue
         template_data[factorio_option] = factorio_option_instance.value
 
-    if world.options.silo == FactorioOptions.Silo.option_randomize_recipe:
+    if world.options.silo == Silo.option_randomize_recipe:
         template_data["free_sample_blacklist"]["rocket-silo"] = 1
 
-    if world.options.satellite == FactorioOptions.Satellite.option_randomize_recipe:
+    if world.options.satellite == Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
 
     template_data["free_sample_blacklist"].update({item: 1 for item in world.options.free_sample_blacklist.value})

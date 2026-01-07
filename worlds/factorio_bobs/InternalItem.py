@@ -91,7 +91,7 @@ class RecipeEngine:
                 continue
             ingredient = InternalItem(item, False, self)
             self.__all_ingredients[item] = ingredient
-            if stack_size > 1:
+            if stack_size > 1 and ingredient.name not in self.modpack.ordered_science_packs:
                 self.__valid_ingredients[item] = ingredient
 
         self.__all_ingredients["rocket-part"] = InternalItem("rocket-part", False, self)
@@ -192,10 +192,13 @@ class RecipeEngine:
 
     def get_ordered_items(self, key: Callable[[InternalItem], int] = lambda item: item.get_score()) -> tuple[
         set[InternalItem], list[InternalItem]]:
-        science_packs = self.modpack.ordered_science_packs
-        valid_items = set(x for x in self.valid_ingredients.values() if
-                          all(raw.name not in self.valid_ingredients.keys() for raw in x.get_raw_ingredients().keys())
-                          and x.name not in science_packs)
+        valid_items: set[InternalItem] = set()
+        for ingredient in self.valid_ingredients.values():
+            raw_ingredients = ingredient.get_raw_ingredients()
+            if any(raw.name in self.invalid_ingredients for raw in raw_ingredients.keys()):
+                continue
+            valid_items.add(ingredient)
+
         starting_pool = set()
         for item in valid_items:
             if not item.all_unlocking_technologies() and not item.is_fluid and all(
@@ -295,6 +298,12 @@ class RecipeEngine:
                 machines[name] = Machine(name, categories, self)
 
         return machines
+
+    @property
+    def invalid_ingredients(self) -> set[str]:
+        if self.__invalid_ingredients is None:
+            self.__load_settings()
+        return self.__invalid_ingredients
 
 
 class InternalItem(FactorioElement):
