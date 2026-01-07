@@ -5,7 +5,7 @@ from worlds.rac3.constants.data.location import LOCATION_FROM_AP_CODE, RAC3_LOCA
 from worlds.rac3.constants.items import RAC3ITEM
 from worlds.rac3.constants.locations.nanotech import RAC3NANOTECH
 from worlds.rac3.constants.locations.sewers import RAC3SEWER
-from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT
+from worlds.rac3.constants.locations.skillpoints import RAC3SKILLPOINT, SKILLPOINT_LOCATION_TO_NAME
 from worlds.rac3.constants.locations.tags import RAC3TAG
 from worlds.rac3.constants.locations.tbolts import RAC3TBOLT
 from worlds.rac3.constants.locations.trophies import RAC3TROPHY
@@ -530,7 +530,7 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True
             case RAC3TAG.SKILLPOINT:
                 key = LOCATION_FROM_AP_CODE[data.AP_CODE]
-                if not options.skill_points[key]:
+                if not options.skill_points[SKILLPOINT_LOCATION_TO_NAME[key]]:
                     return True # Skips the skill points which the player didn't choose
            # case RAC3TAG.HARD_SKILLPOINT:
            #     if options.skill_points.value == 1:  # Skip skill points not in the simple list
