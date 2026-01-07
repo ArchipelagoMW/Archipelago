@@ -280,7 +280,10 @@ def set_rules(world: World):
         world.create_item(ItemName.apex_zenith_defeated_event))
     # Rule: Can reach the physical boss location (Gatekeeper Defeated)
     set_rule(world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player),
-             lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player))
+             lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player) and
+                           state.has(ItemName.data_disc_r, player) and
+                           state.has(ItemName.data_disc_g, player) and
+                           state.has(ItemName.data_disc_b, player))
 
 
     # Mines 1F Map requires Minecart Wheel
@@ -431,3 +434,40 @@ def set_rules(world: World):
     # Apex Relic of Power Plus Rule
     set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_relic_power_plus, player),
              lambda state: state.has(ItemName.apex_outskirts_key, player))
+
+    # Apex King's Emblem Rules
+    # Data Disc G and Potions Increased #6 require both halves of the King's Emblem
+    kings_emblem_locked_locations = [
+        LocationName.apex_item_pickup_data_disc_g,
+        LocationName.apex_item_pickup_potions_increased_6,
+    ]
+
+    for loc_name in kings_emblem_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.kings_emblem_left_half, player) and
+                               state.has(ItemName.kings_emblem_right_half, player))
+
+    # Apex Master Bedroom Key Rules
+    # Restricted Access Key and Data Disc R require Master Bedroom Key
+    master_bedroom_locked_locations = [
+        LocationName.apex_item_pickup_restricted_access_key,
+        LocationName.apex_item_pickup_data_disc_r,
+    ]
+
+    for loc_name in master_bedroom_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.master_bedroom_key, player))
+
+    # Apex East Wing Key Rules
+    apex_east_wing_locked_locations = [
+        LocationName.apex_item_pickup_master_bedroom_key,
+        LocationName.apex_item_pickup_minor_sol_shard_31,
+        LocationName.apex_item_pickup_minor_sol_shard_32,
+        LocationName.apex_torch_dav1phlfyz,
+        LocationName.apex_torch_acwis58fl9,
+        LocationName.apex_torch_m4upnnpvqe,
+    ]
+
+    for loc_name in apex_east_wing_locked_locations:
+        set_rule(world.multiworld.get_location(loc_name, player),
+                 lambda state: state.has(ItemName.apex_east_wing_key, player))

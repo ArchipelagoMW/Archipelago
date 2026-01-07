@@ -28,14 +28,14 @@ def create_regions(world: World, active_locations):
         "Mines Floor 3",
         "Mines Floor 4",
         "Cultist Compound",
-        "Supermax Prison",
+        "Supermax Prison West",
+        "Supermax Prison East",
         "Factory",
         "Swamp",
 
         # Apex Split (Massive area broken down by access keys)
         "Apex Outskirts",
-        "Apex Town",
-        "Apex Hub",
+        "Apex",
     ]
 
     # Initialize location buckets
@@ -95,8 +95,10 @@ def create_regions(world: World, active_locations):
             locations_by_region["Cultist Compound"].append(location_name)
 
         # -- SUPERMAX AREA --
-        elif location_name.startswith("Supermax Prison - "):
-            locations_by_region["Supermax Prison"].append(location_name)
+        elif location_name.startswith("Supermax Prison West - "):
+            locations_by_region["Supermax Prison West"].append(location_name)
+        elif location_name.startswith("Supermax Prison East - "):
+            locations_by_region["Supermax Prison East"].append(location_name)
 
         # -- FACTORY & SWAMP --
         elif location_name.startswith("Factory - "):
@@ -108,11 +110,9 @@ def create_regions(world: World, active_locations):
         elif location_name.startswith("Apex - "):
             if "Outskirts" in location_name:
                 locations_by_region["Apex Outskirts"].append(location_name)
-            elif "Town" in location_name or "Residential" in location_name or "Slums" in location_name:
-                locations_by_region["Apex Town"].append(location_name)
             else:
                 # Default everything else (Hub, Castle, King, etc.) to the main Hub
-                locations_by_region["Apex Hub"].append(location_name)
+                locations_by_region["Apex"].append(location_name)
 
         else:
             # Fallback (Hidden rooms, etc.)
@@ -183,14 +183,16 @@ def connect_regions(world: World):
     connect(world, "Mountain Underpass", "Cultist Compound")
 
     # Forest -> Supermax Prison (Locked by Greater Void Worm Defeated)
-    connect(world, "Forest", "Supermax Prison", lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
+    connect(world, "Forest", "Supermax Prison West", lambda state: state.has(ItemName.greater_void_worm_defeated_event, player))
+
+    # Supermax Prison West -> Supermax Prison East (Locked by East Wing Key)
+    connect(world, "Supermax Prison West", "Supermax Prison East", lambda state: state.has(ItemName.east_wing_key, player))
     
     connect(world, "Village", "Swamp", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     connect(world, "Village", "Factory", lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
     
     # Apex Connections
-    connect(world, "Apex Outskirts", "Apex Town")
-    connect(world, "Apex Town", "Apex Hub")
+    connect(world, "Apex Outskirts", "Apex", lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player))
 
 
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
