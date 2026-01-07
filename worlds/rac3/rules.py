@@ -496,7 +496,8 @@ def set_rules(world: "RaC3World"):
         # RAC3TBOLT.CRASH_SITE
         # RAC3TROPHY.CRASH_NEFARIOUS
         RAC3SKILLPOINT.CRASH_SITE_SUCK:
-            lambda state: state.has_any([RAC3ITEM.SUCK_CANNON, RAC3ITEM.PROGRESSIVE_SUCK_CANNON], world.player),
+            lambda state: state.has(RAC3ITEM.SUCK_CANNON, world.player)
+                          or state.has(RAC3ITEM.PROGRESSIVE_SUCK_CANNON, world.player,3),
         RAC3SKILLPOINT.CRASH_SITE_AIM_HIGH:
             lambda state: state.has_any([RAC3ITEM.FLUX_RIFLE, RAC3ITEM.PROGRESSIVE_FLUX_RIFLE], world.player),
         RAC3LOCATION.CRASH_SITE_NANO_PAK:

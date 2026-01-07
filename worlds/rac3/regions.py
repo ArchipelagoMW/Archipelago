@@ -525,11 +525,12 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                 if options.trophies.value < 2:  # Skip long term trophies if not set to every trophy
                     return True
             case RAC3TAG.SKILLPOINT:
-                if not options.skill_points.value:  # Skip skill point locations if not set to every skill point
-                    return True
-            case RAC3TAG.HARD_SKILLPOINT:
-                if options.skill_points.value == 1:  # Skip skill points not in the simple list
-                    return True
+                key = LOCATION_FROM_AP_CODE[data.AP_CODE]
+                if not options.skill_points[key]:
+                    return True # Skips the skill points which the player didn't choose
+           # case RAC3TAG.HARD_SKILLPOINT:
+           #     if options.skill_points.value == 1:  # Skip skill points not in the simple list
+           #         return True
             case RAC3TAG.T_BOLT:
                 if options.titanium_bolts.value == 0:
                     return True  # Skip titanium bolt locations if titanium bolt option is disabled
@@ -581,6 +582,6 @@ def should_skip_location(data: RAC3LOCATIONDATA, options: type[RaC3Options]) -> 
                     return True  # Skip sewer crystal locations that are not in every 5
             case RAC3TAG.WEAPONS:
                 if options.weapon_vendors.value == 0 and LOCATION_FROM_AP_CODE[data.AP_CODE] not in veldin_weapons:
-                    return True #Skips every weapon vendor checks except the Veldin ones
+                    return True # Skips every weapon vendor checks except the Veldin ones
             # Add more conditions here if needed in the future
     return False
