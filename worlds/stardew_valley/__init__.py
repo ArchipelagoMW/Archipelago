@@ -490,7 +490,7 @@ class StardewValleyWorld(World):
             for bundle in room.bundles:
                 bundles[room.name][bundle.name] = {"number_required": bundle.number_required}
                 for i, item in enumerate(bundle.items):
-                    bundles[room.name][bundle.name][i] = f"{item.get_item()}|{item.amount}|{item.quality}"
+                    bundles[room.name][bundle.name][str(i)] = f"{item.get_item()}|{item.amount}|{item.quality}"
 
         excluded_options = [BundleRandomization, BundlePerRoom, NumberOfMovementBuffs,
                             EnabledFillerBuffs, TrapDistribution, BundleWhitelist, BundleBlacklist, JojaAreYouSure]
