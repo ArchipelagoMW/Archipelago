@@ -91,7 +91,7 @@ class KH2Socket:
                     msgStr = raw_msg.decode("utf-8")
 
                     values = msgStr.split(";")
-                    print("Received message: " + msgStr)
+                    logger.debug("Received message: " + msgStr)
                     self.handle_message(values)
             except asyncio.TimeoutError:
                 continue
@@ -119,28 +119,28 @@ class KH2Socket:
                     part = msg[i: i + CHUNK_SIZE]
                     if i + CHUNK_SIZE < len(msg):
                         part += ";MOR\n"
-                        print("Sending message in parts due to length: " + part)
+                        logger.debug("Sending message in parts due to length: " + part)
                     else:
                         part += ";FIN\n"
-                        print("Finished sending message in parts due to length: " + part)
+                        logger.debug("Finished sending message in parts due to length: " + part)
 
                     self.client_socket.sendall(part.encode("utf-8"))
                     i += CHUNK_SIZE
             else:
                 msg += "\n"
                 self.client_socket.sendall(msg.encode("utf-8"))
-                print("Sent message: " + msg)
+                logger.debug("Sent message: " + msg)
         except (OSError, ConnectionResetError, BrokenPipeError) as e:
-            print(f"Error sending message {msg_id}: {e}; connection may be lost")
+            logger.debug(f"Error sending message {msg_id}: {e}; connection may be lost")
             self.is_connected = False
         except Exception as e:
-            print(f"Error sending message {msg_id}: {e}")
+            logger.debug(f"Error sending message {msg_id}: {e}")
 
     def handle_message(self, message: list[str]) -> None:
         if message[0] == '':
             return
 
-        print("Handling message: " + str(message))
+        logger.debug("Handling message: " + str(message))
         msg_type = MessageType(int(message[0]))
 
         if msg_type == MessageType.WorldLocationChecked:
@@ -173,7 +173,7 @@ class KH2Socket:
         elif msg_type == MessageType.Handshake:
             self.client.kh2connectionconfirmed = True
             self.send(MessageType.Handshake, [str(self.client.serverconnected)])
-            print("Responded to Handshake")
+            logger.debug("Responded to Handshake")
 
 
     def send_item(self, msg: list) -> None:
