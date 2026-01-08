@@ -18,7 +18,12 @@ def set_rules(world: World):
     world.multiworld.completion_condition[player] = lambda state: state.has(ItemName.victory, player)
 
     # Place Victory item at world spark beyond Zenith
-    world.multiworld.get_location(LocationName.apex_world_spark_interacted, player).place_locked_item(world.create_item(ItemName.victory))
+    try:
+        world.multiworld.get_location(LocationName.apex_world_spark_interacted, player).place_locked_item(world.create_item(ItemName.victory))
+        set_rule(world.multiworld.get_location(LocationName.apex_world_spark_interacted, player),
+                 lambda state: state.has(ItemName.apex_zenith_defeated_event, player))
+    except KeyError:
+        pass
 
     # Fishing Rules
     fish_locations = [
@@ -34,13 +39,19 @@ def set_rules(world: World):
     ]
 
     for fish_loc in fish_locations:
-        set_rule(world.multiworld.get_location(fish_loc, player), lambda state: state.has(ItemName.fishing_rod, player))
+        try:
+            set_rule(world.multiworld.get_location(fish_loc, player), lambda state: state.has(ItemName.fishing_rod, player))
+        except KeyError:
+            pass
 
     # Relic of Mycology Rule
     # Requires 5 mushrooms to access. Silver Pouch acts as +1 mushroom count.
-    set_rule(world.multiworld.get_location(LocationName.forest_item_pickup_relic_mycology, player),
-             lambda state: state.has(ItemName.mysterious_mushroom_x1, player, 5) or
-                           (state.has(ItemName.mysterious_mushroom_x1, player, 4) and state.has(ItemName.silver_pouch, player)))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.forest_item_pickup_relic_mycology, player),
+                 lambda state: state.has(ItemName.mysterious_mushroom_x1, player, 5) or
+                               (state.has(ItemName.mysterious_mushroom_x1, player, 4) and state.has(ItemName.silver_pouch, player)))
+    except KeyError:
+        pass
 
     # Prison Key Rules
     # The Prison Key unlocks a door in the Prison.
@@ -55,24 +66,39 @@ def set_rules(world: World):
     ]
 
     for loc_name in prison_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.prison_key, player))
+        # Check if location exists (it might be disabled by options)
+        try:
+            location = world.multiworld.get_location(loc_name, player)
+            set_rule(location, lambda state: state.has(ItemName.prison_key, player))
+        except KeyError:
+            pass
 
     # Furnace Rule
-    set_rule(world.multiworld.get_location(LocationName.prison_yard_misc_furnace, player), lambda state: can_light_fire(state, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.prison_yard_misc_furnace, player), lambda state: can_light_fire(state, player))
+    except KeyError:
+        pass
 
     # Gate Key Rule
     gate_locked_items = [
         LocationName.prison_yard_torch_prisoner_intake,
         LocationName.prison_yard_torch_stables,
+        LocationName.prison_yard_item_pickup_gate_key,
     ]
 
     for loc in gate_locked_items:
-        set_rule(world.multiworld.get_location(loc, player), lambda state: state.has(ItemName.gate_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc, player), lambda state: state.has(ItemName.gate_key, player))
+        except KeyError:
+            pass
 
     # --- Forest Rules ---
     # Riverside Shack (Fishing Rod)
-    set_rule(world.multiworld.get_location(LocationName.forest_item_pickup_fishing_rod, player),
-             lambda state: state.has(ItemName.riverside_shack_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.forest_item_pickup_fishing_rod, player),
+                 lambda state: state.has(ItemName.riverside_shack_key, player))
+    except KeyError:
+        pass
 
     # Items locked behind the forest bridge (Forest Bridge Key Needed)
     forest_bridge_locations = [
@@ -82,11 +108,17 @@ def set_rules(world: World):
     ]
 
     for loc in forest_bridge_locations:
-        set_rule(world.multiworld.get_location(loc, player),
-                 lambda state: state.has(ItemName.forest_bridge_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state: state.has(ItemName.forest_bridge_key, player))
+        except KeyError:
+            pass
         
     # Apex Horn Rule
-    set_rule(world.multiworld.get_location(LocationName.apex_blow_horn, player), lambda state: state.has(ItemName.blizzard_talisman, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.apex_blow_horn, player), lambda state: state.has(ItemName.blizzard_talisman, player))
+    except KeyError:
+        pass
 
     # Trader Rules
     # Trader appears when the campfire is lit.
@@ -105,8 +137,11 @@ def set_rules(world: World):
     }
 
     for loc, fish_item in fish_trades.items():
-        set_rule(world.multiworld.get_location(loc, player),
-                 lambda state: can_light_fire(state, player) and state.has(fish_item, player))
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state: can_light_fire(state, player) and state.has(fish_item, player))
+        except KeyError:
+            pass
 
     # 2. Trader Items (Require Fire + Fish Tokens)
     # Fish Tokens come in packs of 2 (ItemName.fish_tokens_x2)
@@ -131,8 +166,11 @@ def set_rules(world: World):
         # Note: fish_tokens_x2 gives 2 tokens. We need to check if player has enough tokens.
         # Since the item is "Fish Tokens x2", state.count(ItemName.fish_tokens_x2, player) returns the number of items,
         # so total tokens = count * 2.
-        set_rule(world.multiworld.get_location(loc, player),
-                 lambda state, c=cost: can_light_fire(state, player) and (state.count(ItemName.fish_tokens_x2, player) * 2) >= c)
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state, c=cost: can_light_fire(state, player) and (state.count(ItemName.fish_tokens_x2, player) * 2) >= c)
+        except KeyError:
+            pass
 
     # --- Village Rules ---
 
@@ -144,8 +182,11 @@ def set_rules(world: World):
         LocationName.forest_item_pickup_alchemist_cage_key
     ]
     for loc in poacher_rewards:
-        set_rule(world.multiworld.get_location(loc, player),
-                 lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
+        except KeyError:
+            pass
 
     # Condemned Shack (Iron Pineapple, Strange Totem)
     condemned_shack_items = [
@@ -153,13 +194,19 @@ def set_rules(world: World):
         LocationName.village_item_pickup_strange_totem,
     ]
     for loc in condemned_shack_items:
-        set_rule(world.multiworld.get_location(loc, player),
-                 lambda state: state.has(ItemName.condemned_shack_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc, player),
+                     lambda state: state.has(ItemName.condemned_shack_key, player))
+        except KeyError:
+            pass
 
     # Quiver of Holding (Village)
     # Locked by getting to the first level of the mines (Mines Lift Key)
-    set_rule(world.multiworld.get_location(LocationName.village_item_pickup_quiver_of_holding, player),
-             lambda state: state.has(ItemName.mine_entrance_lift_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.village_item_pickup_quiver_of_holding, player),
+                 lambda state: state.has(ItemName.mine_entrance_lift_key, player))
+    except KeyError:
+        pass
 
     # Alchemist Upgrades (Village)
     # Requires freeing the alchemist (Forest Bridge Key + Alchemist Cage Key) AND Potion Mixing Unlocked
@@ -170,13 +217,16 @@ def set_rules(world: World):
     ]
     
     for loc in alchemist_upgrades:
-        location = world.multiworld.get_location(loc, player)
-        set_rule(location,
-                 lambda state: state.has(ItemName.forest_bridge_key, player) and
-                               state.has(ItemName.alchemist_cage_key, player) and
-                               state.has(ItemName.potion_mixing_unlocked, player))
-        # Item Restriction: Cannot be Sol Alembic
-        location.item_rule = lambda item: item.name != ItemName.sol_alembic
+        try:
+            location = world.multiworld.get_location(loc, player)
+            set_rule(location,
+                     lambda state: state.has(ItemName.forest_bridge_key, player) and
+                                   state.has(ItemName.alchemist_cage_key, player) and
+                                   state.has(ItemName.potion_mixing_unlocked, player))
+            # Item Restriction: Cannot be Sol Alembic
+            location.item_rule = lambda item: item.name != ItemName.sol_alembic
+        except KeyError:
+            pass
 
     # Blacksmith Upgrades (Village)
     # Item Restriction: Cannot be Metamorphic Alloy
@@ -187,8 +237,11 @@ def set_rules(world: World):
     ]
 
     for loc in blacksmith_upgrades:
-        location = world.multiworld.get_location(loc, player)
-        location.item_rule = lambda item: item.name != ItemName.metamorphic_alloy
+        try:
+            location = world.multiworld.get_location(loc, player)
+            location.item_rule = lambda item: item.name != ItemName.metamorphic_alloy
+        except KeyError:
+            pass
 
     # Relics Improved (Village Undercroft Forgotten Reliquary)
     # Requires Strange Curios.
@@ -206,88 +259,121 @@ def set_rules(world: World):
     }
 
     for loc, count in relics_improved_map.items():
-        location = world.multiworld.get_location(loc, player)
-        set_rule(location, lambda state, c=count: state.has(ItemName.strange_curio, player, c))
-        
-        # Prevent Strange Curio from being placed in locations requiring 4 Curios
-        if count == 4:
-            add_rule(location, lambda state: True)
-            location.item_rule = lambda item: item.name != ItemName.strange_curio
+        try:
+            location = world.multiworld.get_location(loc, player)
+            set_rule(location, lambda state, c=count: state.has(ItemName.strange_curio, player, c))
+            
+            # Prevent Strange Curio from being placed in locations requiring 4 Curios
+            if count == 4:
+                add_rule(location, lambda state: True)
+                location.item_rule = lambda item: item.name != ItemName.strange_curio
+        except KeyError:
+            pass
 
     # --- Boss Events ---
     # Place Event Items on Event Locations
     
     # Warden
-    world.multiworld.get_location(LocationName.prison_warden_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.prison_warden_defeated_event))
-    # Rule: Can reach the physical boss location (which requires Prison Key)
-    set_rule(world.multiworld.get_location(LocationName.prison_warden_defeated_event, player),
-             lambda state: state.has(ItemName.prison_key, player))
+    try:
+        world.multiworld.get_location(LocationName.prison_warden_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.prison_warden_defeated_event))
+        # Rule: Can reach the physical boss location (which requires Prison Key)
+        set_rule(world.multiworld.get_location(LocationName.prison_warden_defeated_event, player),
+                 lambda state: state.has(ItemName.prison_key, player))
+    except KeyError:
+        pass
 
     # Poacher
-    world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.forest_poacher_defeated_event))
-    # Rule: Can reach the physical boss location (which requires Forest Bridge Key)
-    set_rule(world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player),
-             lambda state: state.has(ItemName.forest_bridge_key, player))
+    try:
+        world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.forest_poacher_defeated_event))
+        # Rule: Can reach the physical boss location (which requires Forest Bridge Key)
+        set_rule(world.multiworld.get_location(LocationName.forest_poacher_defeated_event, player),
+                 lambda state: state.has(ItemName.forest_bridge_key, player))
+    except KeyError:
+        pass
 
     # Groundskeeper
-    world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.mountain_groundskeeper_defeated_event))
-    # Rule: Can reach the physical boss location (Mountain Outpost Key)
-    set_rule(world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player),
-             lambda state: state.has(ItemName.mountain_outpost_key, player))
+    try:
+        world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.mountain_groundskeeper_defeated_event))
+        # Rule: Can reach the physical boss location (Mountain Outpost Key)
+        set_rule(world.multiworld.get_location(LocationName.mountain_groundskeeper_defeated_event, player),
+                 lambda state: state.has(ItemName.mountain_outpost_key, player))
+    except KeyError:
+        pass
 
     # Greater Void Worm
-    world.multiworld.get_location(LocationName.mines_worm_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.greater_void_worm_defeated_event))
-    # Rule: Can reach the physical boss location (Pit Catwalk Key)
-    set_rule(world.multiworld.get_location(LocationName.mines_worm_defeated_event, player),
-             lambda state: state.has(ItemName.pit_catwalk_key, player))
+    try:
+        world.multiworld.get_location(LocationName.mines_worm_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.greater_void_worm_defeated_event))
+        # Rule: Can reach the physical boss location (Pit Catwalk Key)
+        set_rule(world.multiworld.get_location(LocationName.mines_worm_defeated_event, player),
+                 lambda state: state.has(ItemName.pit_catwalk_key, player))
+    except KeyError:
+        pass
 
     # Amalgamate
-    world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.cultist_amalgamate_defeated_event))
-    # Rule: Can reach the physical boss location (Central Cell Key + Minor Cell Key + False Book)
-    set_rule(world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player),
-             lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player)
-                           and state.has(ItemName.false_book, player))
+    try:
+        world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.cultist_amalgamate_defeated_event))
+        # Rule: Can reach the physical boss location (Central Cell Key + Minor Cell Key + False Book)
+        set_rule(world.multiworld.get_location(LocationName.cultist_amalgamate_defeated_event, player),
+                 lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player)
+                               and state.has(ItemName.false_book, player))
+    except KeyError:
+        pass
 
     # Infernal Warden
-    world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.supermax_prison_infernal_warden_defeated_event))
-    # Rule: Can reach the physical boss location (East Wing Key)
-    set_rule(world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player),
-             lambda state: state.has(ItemName.east_wing_key, player))
+    try:
+        world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.supermax_prison_infernal_warden_defeated_event))
+        # Rule: Can reach the physical boss location (East Wing Key)
+        set_rule(world.multiworld.get_location(LocationName.supermax_prison_infernal_warden_defeated_event, player),
+                 lambda state: state.has(ItemName.east_wing_key, player))
+    except KeyError:
+        pass
 
     # Immaculate
-    world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.factory_immaculate_defeated_event))
-    # Rule: Can reach the physical boss location (Poacher Defeated)
-    set_rule(world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player),
-             lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
+    try:
+        world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.factory_immaculate_defeated_event))
+        # Rule: Can reach the physical boss location (Poacher Defeated)
+        set_rule(world.multiworld.get_location(LocationName.factory_immaculate_defeated_event, player),
+                 lambda state: state.has(ItemName.forest_poacher_defeated_event, player))
+    except KeyError:
+        pass
 
     # Gatekeeper
-    world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.apex_gatekeeper_defeated_event))
-    # Rule: Can reach the physical boss location (Apex Outskirts Key)
-    set_rule(world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player),
-             lambda state: state.has(ItemName.apex_outskirts_key, player))
+    try:
+        world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.apex_gatekeeper_defeated_event))
+        # Rule: Can reach the physical boss location (Apex Outskirts Key)
+        set_rule(world.multiworld.get_location(LocationName.apex_gatekeeper_defeated_event, player),
+                 lambda state: state.has(ItemName.apex_outskirts_key, player))
+    except KeyError:
+        pass
 
     # Zenith
-    world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player).place_locked_item(
-        world.create_item(ItemName.apex_zenith_defeated_event))
-    # Rule: Can reach the physical boss location (Gatekeeper Defeated)
-    set_rule(world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player),
-             lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player) and
-                           state.has(ItemName.data_disc_r, player) and
-                           state.has(ItemName.data_disc_g, player) and
-                           state.has(ItemName.data_disc_b, player))
+    try:
+        world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player).place_locked_item(
+            world.create_item(ItemName.apex_zenith_defeated_event))
+        # Rule: Can reach the physical boss location (Gatekeeper Defeated)
+        set_rule(world.multiworld.get_location(LocationName.apex_zenith_defeated_event, player),
+                 lambda state: state.has(ItemName.apex_gatekeeper_defeated_event, player) and
+                               state.has(ItemName.data_disc_r, player) and
+                               state.has(ItemName.data_disc_g, player) and
+                               state.has(ItemName.data_disc_b, player))
+    except KeyError:
+        pass
 
 
     # Mines 1F Map requires Minecart Wheel
-    set_rule(world.multiworld.get_location(LocationName.mines_item_pickup_map_1, player),
-                 lambda state: state.has(ItemName.minecart_wheel, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.mines_item_pickup_map_1, player),
+                     lambda state: state.has(ItemName.minecart_wheel, player))
+    except KeyError:
+        pass
 
     # Mines 3F Pit Catwalk Key Rules
     # These locations are locked behind the door requiring the Pit Catwalk Key
@@ -302,7 +388,10 @@ def set_rules(world: World):
     ]
 
     for loc_name in mines_pit_catwalk_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.pit_catwalk_key, player))
+        try:
+            add_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.pit_catwalk_key, player))
+        except KeyError:
+            pass
 
     # Mines 4F Temple of the Deep Key Rules
     mines_temple_locked_locations = [
@@ -310,7 +399,10 @@ def set_rules(world: World):
         LocationName.mines_torch_restricted_cultist_reliquary,
     ]
     for loc_name in mines_temple_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.temple_of_the_deep_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.temple_of_the_deep_key, player))
+        except KeyError:
+            pass
 
     # Cultist Compound False Book Rules
     cultist_false_book_locked_locations = [
@@ -318,7 +410,10 @@ def set_rules(world: World):
         LocationName.cultist_compound_item_pickup_brass_knuckles,
     ]
     for loc_name in cultist_false_book_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.false_book, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.false_book, player))
+        except KeyError:
+            pass
 
     # Cultist Compound Central Cell Key Rules
     cultist_central_cell_locked_locations = [
@@ -326,7 +421,10 @@ def set_rules(world: World):
         LocationName.cultist_compound_item_pickup_purifying_needle,
     ]
     for loc_name in cultist_central_cell_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.central_cell_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.central_cell_key, player))
+        except KeyError:
+            pass
 
     # Cultist Compound Minor Cell Key Rules
     cultist_minor_cell_locked_locations = [
@@ -337,25 +435,40 @@ def set_rules(world: World):
         LocationName.cultist_compound_item_pickup_garnet_aegis,
     ]
     for loc_name in cultist_minor_cell_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.minor_cell_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.minor_cell_key, player))
+        except KeyError:
+            pass
 
     # Cultist Compound Sol Forge Lab Key Rule
-    set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key, player),
-             lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key, player),
+                 lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
+    except KeyError:
+        pass
 
     # Cultist Tamper Armament Rule
-    set_rule(world.multiworld.get_location(LocationName.cultist_tamper_armament, player),
-             lambda state: state.has(ItemName.sol_forge_lab_key, player) and state.has(ItemName.minor_cell_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.cultist_tamper_armament, player),
+                 lambda state: state.has(ItemName.sol_forge_lab_key, player) and state.has(ItemName.minor_cell_key, player))
+    except KeyError:
+        pass
 
     # Cultist Amalgamate Defeated Rule
-    set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key , player),
-             lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.cultist_compound_item_pickup_sol_forge_lab_key , player),
+                 lambda state: state.has(ItemName.central_cell_key, player) and state.has(ItemName.minor_cell_key, player))
+    except KeyError:
+        pass
 
     # --- Supermax Prison Rules ---
     # Codebearer Puzzle
     # Entry to the puzzle area requires the Infernal Key.
-    set_rule(world.multiworld.get_location(LocationName.supermax_prison_spark_hidden, player),
-             lambda state: state.has(ItemName.infernal_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.supermax_prison_spark_hidden, player),
+                 lambda state: state.has(ItemName.infernal_key, player))
+    except KeyError:
+        pass
 
     # The puzzle itself requires either a sword, dagger, or hammer to complete.
     codebearer_puzzle_locations = [
@@ -371,13 +484,19 @@ def set_rules(world: World):
                state.has(ItemName.great_hammer, player)
 
     for loc_name in codebearer_puzzle_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.infernal_key, player) and can_solve_codebearer_puzzle(state))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.infernal_key, player) and can_solve_codebearer_puzzle(state))
+        except KeyError:
+            pass
 
     # Infernal Key Pickup Rule
     # The infernal key pickup is dropped by the infernal warden boss
-    set_rule(world.multiworld.get_location(LocationName.supermax_prison_item_pickup_infernal_key, player),
-             lambda state: state.has(ItemName.supermax_prison_infernal_warden_defeated_event, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.supermax_prison_item_pickup_infernal_key, player),
+                 lambda state: state.has(ItemName.supermax_prison_infernal_warden_defeated_event, player))
+    except KeyError:
+        pass
 
     # East Wing Key Rules
     # These locations are locked behind the door requiring the East Wing Key
@@ -401,7 +520,10 @@ def set_rules(world: World):
     ]
 
     for loc_name in east_wing_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.east_wing_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.east_wing_key, player))
+        except KeyError:
+            pass
 
     # Mushroom Access Rules
     # These locations require at least one mushroom to access
@@ -412,7 +534,10 @@ def set_rules(world: World):
     ]
 
     for loc_name in mushroom_access_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.mysterious_mushroom_x1, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: state.has(ItemName.mysterious_mushroom_x1, player))
+        except KeyError:
+            pass
 
     # Breakable Wall Rules
     # Factory Dual Handaxes and Cracked Wall Outside Factory require blowing up the wall
@@ -423,16 +548,25 @@ def set_rules(world: World):
     ]
 
     for loc_name in breakable_wall_locations:
-        set_rule(world.multiworld.get_location(loc_name, player), lambda state: can_blow_up_wall(state, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player), lambda state: can_blow_up_wall(state, player))
+        except KeyError:
+            pass
 
     # Apex Outskirts Key Pickup Rule
     # The apex outskirts key pickup is dropped by the immaculate boss
-    set_rule(world.multiworld.get_location(LocationName.factory_item_pickup_apex_outskirts_key, player),
-             lambda state: state.has(ItemName.factory_immaculate_defeated_event, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.factory_item_pickup_apex_outskirts_key, player),
+                 lambda state: state.has(ItemName.factory_immaculate_defeated_event, player))
+    except KeyError:
+        pass
 
     # Apex Relic of Power Plus Rule
-    set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_relic_power_plus, player),
-             lambda state: state.has(ItemName.apex_outskirts_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.apex_outskirts_item_pickup_relic_power_plus, player),
+                 lambda state: state.has(ItemName.apex_outskirts_key, player))
+    except KeyError:
+        pass
 
     # Apex King's Emblem Rules
     # Data Disc G and Potions Increased #6 require both halves of the King's Emblem
@@ -442,9 +576,12 @@ def set_rules(world: World):
     ]
 
     for loc_name in kings_emblem_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.kings_emblem_left_half, player) and
-                               state.has(ItemName.kings_emblem_right_half, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.kings_emblem_left_half, player) and
+                                   state.has(ItemName.kings_emblem_right_half, player))
+        except KeyError:
+            pass
 
     # Apex Master Bedroom Key Rules
     # Restricted Access Key and Data Disc R require Master Bedroom Key
@@ -454,8 +591,11 @@ def set_rules(world: World):
     ]
 
     for loc_name in master_bedroom_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.master_bedroom_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.master_bedroom_key, player))
+        except KeyError:
+            pass
 
     # Apex East Wing Key Rules
     apex_east_wing_locked_locations = [
@@ -468,8 +608,11 @@ def set_rules(world: World):
     ]
 
     for loc_name in apex_east_wing_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.apex_east_wing_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.apex_east_wing_key, player))
+        except KeyError:
+            pass
 
     # Apex Restricted Access Key Rules
     restricted_access_locked_locations = [
@@ -480,8 +623,11 @@ def set_rules(world: World):
     ]
 
     for loc_name in restricted_access_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.restricted_access_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.restricted_access_key, player))
+        except KeyError:
+            pass
 
     # Apex Guard Captain's Key Rules
     guard_captains_locked_locations = [
@@ -491,9 +637,15 @@ def set_rules(world: World):
     ]
 
     for loc_name in guard_captains_locked_locations:
-        set_rule(world.multiworld.get_location(loc_name, player),
-                 lambda state: state.has(ItemName.guard_captains_key, player))
+        try:
+            set_rule(world.multiworld.get_location(loc_name, player),
+                     lambda state: state.has(ItemName.guard_captains_key, player))
+        except KeyError:
+            pass
 
     # Apex Corroded Key Rules
-    set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_kings_emblem_left, player),
-             lambda state: state.has(ItemName.corroded_key, player))
+    try:
+        set_rule(world.multiworld.get_location(LocationName.apex_item_pickup_kings_emblem_left, player),
+                 lambda state: state.has(ItemName.corroded_key, player))
+    except KeyError:
+        pass

@@ -178,8 +178,8 @@ item_data_table = {
     ItemName.major_sol_shard: ItemData(905, ItemClassification.filler, quantity=12),
     ItemName.strange_totem: ItemData(906, ItemClassification.progression),
     ItemName.relics_improved: ItemData(907, ItemClassification.useful, quantity=5),
-    ItemName.fish_tokens_x2: ItemData(908, ItemClassification.filler),
-    ItemName.strange_curio: ItemData(909, ItemClassification.useful, quantity=4),
+    ItemName.fish_tokens_x2: ItemData(908, ItemClassification.progression, quantity=9),
+    ItemName.strange_curio: ItemData(909, ItemClassification.progression, quantity=4),
     
     ItemName.victory: ItemData(1000, ItemClassification.progression),
     

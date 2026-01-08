@@ -22,8 +22,8 @@ class StartingWeapon(Choice):
     option_dual_handaxes = 8
     option_scythe = 9
     option_frying_pan = 10
-    option_random = 11
-    default = option_random
+    option_randomized = 11
+    default = option_randomized
 
 class SparksChecks(Toggle):
     """ Toggle if Sparks of Light count as checks"""

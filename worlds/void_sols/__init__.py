@@ -82,7 +82,7 @@ class VoidSolsWorld(World):
             if name == starting_weapon_name:
                 quantity -= 1
             
-            if data.classification != ItemClassification.filler:
+            if data.classification != ItemClassification.filler and data.code is not None:
                 for _ in range(quantity):
                     itempool.append(self.create_item(name))
 

@@ -107,8 +107,10 @@ def create_regions(world: World, active_locations):
             locations_by_region["Swamp"].append(location_name)
 
         # -- APEX AREA (Split logic) --
+        elif location_name.startswith("Apex Outskirts - "):
+            locations_by_region["Apex Outskirts"].append(location_name)
         elif location_name.startswith("Apex - "):
-            if "Outskirts" in location_name:
+            if "Outskirts" in location_name or location_name == LocationName.apex_gatekeeper_defeated_event:
                 locations_by_region["Apex Outskirts"].append(location_name)
             else:
                 # Default everything else (Hub, Castle, King, etc.) to the main Hub
@@ -199,8 +201,8 @@ def create_region(multiworld: MultiWorld, player: int, active_locations, name: s
     ret = Region(name, player, multiworld)
     if locations:
         for locationName in locations:
-            loc_id = active_locations.get(locationName, 0)
-            if loc_id:
+            if locationName in active_locations:
+                loc_id = active_locations[locationName]
                 location = VoidSolsLocation(player, locationName, loc_id, ret)
                 ret.locations.append(location)
 
@@ -209,8 +211,8 @@ def create_region(multiworld: MultiWorld, player: int, active_locations, name: s
 def add_location_to_region(multiworld: MultiWorld, player: int, active_locations, region_name: str, location_name: str,
                            rule: typing.Optional[typing.Callable] = None):
     region = multiworld.get_region(region_name, player)
-    loc_id = active_locations.get(location_name, 0)
-    if loc_id:
+    if location_name in active_locations:
+        loc_id = active_locations[location_name]
         location = VoidSolsLocation(player, location_name, loc_id, region)
         region.locations.append(location)
         if rule:
