@@ -225,10 +225,16 @@ class PsychonautsOptions(PerGameCommonOptions):
 
 SLOT_DATA_OPTIONS: List[str] = [
     "StartingLevitation",
+    "StartingCobwebDuster",
     "StartingMentalMagnet",
+    "StartingColorizer",
+    "PsiBallColor",
+    "RandomStartingMinds",
     "VaultHints",
+    "VaultCount",
     "EasyMillaRace",
     "EasyFlightMode",
+    "OtherItemsModel",
     "EnemyDamageMultiplier",
     "InstantDeathMode",
     "Goal",
@@ -238,6 +244,7 @@ SLOT_DATA_OPTIONS: List[str] = [
     "FigmentPercentageChecks",
     "DeepArrowheadShuffle",
     "MentalCobwebShuffle",
+    "HintUnclaimedBaggage",
     "ProgressiveBaggage",
     "MaximumProgressiveBaggage",
 ]
@@ -248,12 +255,12 @@ OPTION_GROUPS: list [OptionGroup] = [
         StartingLevitation,
         StartingCobwebDuster,
         StartingMentalMagnet,
-        StartingColorizer,
         RandomStartingMinds,
     ]),
     OptionGroup("Cosmetic Options", [
         OtherItemsModel,
         PsiBallColor,
+        StartingColorizer,
     ]),
     OptionGroup("Goal Options", [
         Goal,

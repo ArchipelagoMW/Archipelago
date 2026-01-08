@@ -28,6 +28,7 @@ from .Names import ItemName, LocationName
 from .Options import Goal, PsychonautsOptions, SLOT_DATA_OPTIONS, OPTION_GROUPS
 from .PsychoSeed import gen_psy_seed
 from .Subclasses import PSYItem
+from .WorldVersion import AP_WORLD_VERSION
 
 
 def launch_client():
@@ -91,6 +92,8 @@ class PSYWorld(World):
 
     skip_balancing_if_duplicate: Set[str]
 
+    ut_can_gen_without_yaml = True
+
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self.item_classifications = BASE_ITEM_CLASSIFICATIONS.copy()
@@ -125,6 +128,33 @@ class PSYWorld(World):
                 item_classifications[name] = ItemClassification.progression_skip_balancing
             for name in BAGGAGE_TAGS:
                 item_classifications[name] = ItemClassification.progression_skip_balancing
+
+        # Universal tracker stuff, shouldn't do anything in standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "Psychonauts" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["Psychonauts"]
+
+                self.options.Goal.value = passthrough["Goal"]
+                self.options.RequireMeatCircus.value = passthrough["RequireMeatCircus"]
+                self.options.BrainsRequired.value = passthrough["BrainsRequired"]
+                self.options.RankSanity.value = passthrough["RankSanity"]
+                self.options.FigmentPercentageChecks.value = passthrough["FigmentPercentageChecks"]
+                self.options.DeepArrowheadShuffle.value = passthrough["DeepArrowheadShuffle"]
+                self.options.MentalCobwebShuffle.value = passthrough["MentalCobwebShuffle"]
+                self.options.ProgressiveBaggage.value = passthrough["ProgressiveBaggage"]
+                self.options.MaximumProgressiveBaggage.value = passthrough["MaximumProgressiveBaggage"]
+
+
+    # For the universal tracker, doesn't get called in standard gen
+    # Returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        slot_data_version = tuple(slot_data["apworld_version"])
+        if slot_data_version != AP_WORLD_VERSION:
+            raise RuntimeError(f"Psychonauts version error: The version of the apworld used to generate this world"
+                               f" ({slot_data_version}) does not match the version of your installed apworld"
+                               f" ({AP_WORLD_VERSION}).")
+        return slot_data            
 
     def create_item(self, name: str) -> Item:
         """
@@ -341,4 +371,8 @@ class PSYWorld(World):
         gen_psy_seed(self, output_directory)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        return self.options.as_dict(*SLOT_DATA_OPTIONS)
+        return {
+            "apworld_version": AP_WORLD_VERSION,
+
+            **self.options.as_dict(*SLOT_DATA_OPTIONS)
+        }
