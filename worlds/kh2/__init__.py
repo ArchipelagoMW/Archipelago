@@ -117,6 +117,7 @@ class KH2World(World):
                 "SuperBosses",
                 "Cups",
                 "AtlanticaToggle",
+                "SummonLevelLocationToggle",
         )
         slot_data.update({
             "hitlist":                [],  # remove this after next update
